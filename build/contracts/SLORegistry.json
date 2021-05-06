@@ -5040,7 +5040,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-05-06T22:43:19.066Z",
+  "updatedAt": "2021-05-06T23:54:19.574Z",
   "devdoc": {
     "details": "SLORegistry is a contract for handling creation of service level objectives and querying those service level objectives",
     "methods": {

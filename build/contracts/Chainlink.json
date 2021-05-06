@@ -6266,7 +6266,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-05-06T22:43:18.992Z",
+  "updatedAt": "2021-05-06T23:54:19.491Z",
   "devdoc": {
     "details": "Uses imported CBOR library for encoding to buffer",
     "methods": {},

@@ -13315,7 +13315,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-05-06T22:43:18.997Z",
+  "updatedAt": "2021-05-06T23:54:19.496Z",
   "devdoc": {
     "methods": {
       "cancelOracleRequest(bytes32,uint256,bytes4,uint256)": {
