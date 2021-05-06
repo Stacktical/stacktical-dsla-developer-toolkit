@@ -38,10 +38,10 @@ module.exports = {
     [networkNames.KOVAN]: {
       provider() {
         return new HDWalletProvider(
-            TESTNET_MNEMONIC,
-            `https://kovan.infura.io/v3/${INFURA_PROJECT_ID}`,
-            0,
-            10,
+          TESTNET_MNEMONIC,
+          `https://kovan.infura.io/v3/${INFURA_PROJECT_ID}`,
+          0,
+          10,
         );
       },
       network_id: '42',
@@ -54,8 +54,8 @@ module.exports = {
       network_id: '2', // Any network (default: none)
       provider: () => {
         const truffleProvider = new TruffleProvider(
-            'https://api.s0.b.hmny.io',
-            TESTNET_MNEMONIC,
+          'https://api.s0.b.hmny.io',
+          TESTNET_MNEMONIC,
         );
         const newAcc = truffleProvider.addByPrivateKey(TESTNET_PRIVATE_KEY_1);
         truffleProvider.setSigner(newAcc);
@@ -77,7 +77,7 @@ module.exports = {
       settings: {
         optimizer: {
           enabled: true,
-          runs: 200,
+          runs: 100,
         },
       },
     },
