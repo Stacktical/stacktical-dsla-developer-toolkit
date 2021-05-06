@@ -10,3 +10,5 @@ lastAddress
 ipfs
 .DS_Store
 .env
+dev-env/chainlink/tempkeys
+dev-env/chainlink/secret

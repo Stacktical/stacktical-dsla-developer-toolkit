@@ -3,7 +3,7 @@
  * @type import('hardhat/config').HardhatUserConfig
  */
 require('dotenv').config();
-require('hardhat-docgen');
+// require('hardhat-docgen');
 // require('hardhat-deploy');
 require('@nomiclabs/hardhat-ethers');
 require('@nomiclabs/hardhat-etherscan');
@@ -24,7 +24,7 @@ module.exports = {
         settings: {
           optimizer: {
             enabled: true,
-            runs: 100,
+            runs: 200,
           },
         },
       },
@@ -33,17 +33,17 @@ module.exports = {
         settings: {
           optimizer: {
             enabled: true,
-            runs: 100,
+            runs: 200,
           },
         },
       },
     ],
   },
-  docgen: {
-    path: './docs',
-    clear: true,
-    runOnCompile: true,
-  },
+  // docgen: {
+  //   path: './docs',
+  //   clear: true,
+  //   runOnCompile: true,
+  // },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
   },

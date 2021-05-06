@@ -1,9 +1,9 @@
 #! /bin/sh
 export NODE_ENV=develop
-docker-compose -f docker-compose.develop.yaml -- down
-rm -rf postgres/develop/db chainlink/tempkeys chainlink/secret
-docker-compose -f docker-compose.develop.yaml -- up -d
+docker-compose -f dev-env/docker-compose.develop.yaml -- down
+rm -rf dev-env/postgres/develop/db dev-env/chainlink/tempkeys dev-env/chainlink/secret
+docker-compose -f dev-env/docker-compose.develop.yaml -- up -d
 truffle deploy --reset --network develop
-truffle exec --network develop scripts/prepare-node.js
-truffle exec --network develop scripts/post-bridge.js
-truffle exec --network develop scripts/post-job.js
+truffle exec --network develop scripts/dev-env/chores/prepare-node.js
+truffle exec --network develop scripts/dev-env/chores/post-bridge.js
+truffle exec --network develop scripts/dev-env/chores/post-job.js
