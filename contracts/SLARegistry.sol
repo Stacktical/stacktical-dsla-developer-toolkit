@@ -1,3 +1,3 @@
 // Entrypoint
-pragma solidity >=0.4.24 <0.7.0;
+pragma solidity 0.6.6;
 import "@stacktical/dsla-protocol/contracts/SLARegistry.sol";
