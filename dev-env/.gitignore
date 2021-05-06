@@ -1,0 +1,11 @@
+node_modules/
+.idea
+ganache/db/
+chainlink/tempkeys/
+chainlink/secret
+chainlink/log.jsonl
+postgres/develop/
+postgres/harmonytestnet/
+lastAddress
+ipfs
+.DS_Store
