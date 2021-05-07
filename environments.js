@@ -12,7 +12,7 @@ export const networkNames = {
 export const environments = {
   [networkNames.MAINNET]: {
     web3WebsocketProviderUrl: `wss://mainnet.infura.io/ws/v3/${INFURA_PROJECT_ID}`,
-    preCoordinatorConfiguration: {
+    productionChainlinkNode: {
       oracles: [
         '0x972614782a893ad3139418Ef00e17fE95896A7c6',
         '0x972614782a893ad3139418Ef00e17fE95896A7c6',
@@ -38,7 +38,7 @@ export const environments = {
   },
   [networkNames.KOVAN]: {
     web3WebsocketProviderUrl: `wss://kovan.infura.io/ws/v3/${INFURA_PROJECT_ID}`,
-    preCoordinatorConfiguration: {
+    productionChainlinkNode: {
       oracles: [
         '0x182DCdA18Da4aB8E7eC8dC6B0F7cE517805c3779',
         '0x182DCdA18Da4aB8E7eC8dC6B0F7cE517805c3779',
@@ -56,25 +56,14 @@ export const environments = {
     daiTokenAddress: null,
     usdcTokenAddress: null,
     checkPastPeriods: false,
-    localChainlinkNode: null,
   },
   [networkNames.HARMONYTESTNET]: {
     web3WebsocketProviderUrl: 'wss://ws.s0.b.hmny.io',
-    preCoordinatorConfiguration: {
-      preCoordinatorConfiguration: null,
-      payments: [
-        String(0.1 * 10 ** 18),
-        String(0.1 * 10 ** 18),
-        String(0.1 * 10 ** 18),
-      ],
-    },
+    productionChainlinkNode: null,
     dslaTokenAddress: null,
     daiTokenAddress: null,
     usdcTokenAddress: null,
     checkPastPeriods: false,
-    localChainlinkNode: {
-      chainlinkOracleAddress: '0x9b1f7F645351AF3631a656421eD2e40f2802E6c0',
-    },
     oracleAddress: '0x9b1f7F645351AF3631a656421eD2e40f2802E6c0',
     linkTokenAddress: '0x0290FB167208Af455bB137780163b7B7a9a10C16',
     chainlinkNodeFunds: '1',
@@ -82,17 +71,14 @@ export const environments = {
   },
   [networkNames.DEVELOP]: {
     web3WebsocketProviderUrl: 'ws://localhost:8545',
-    preCoordinatorConfiguration: null,
+    productionChainlinkNode: null,
     dslaTokenAddress: null,
     daiTokenAddress: null,
     usdcTokenAddress: null,
     checkPastPeriods: false,
-    localChainlinkNode: {
-      chainlinkOracleAddress: '0x254dffcd3277C0b1660F6d42EFbB754edaBAbC2B',
-    },
-    oracleAddress: '0x5b1869D9A4C187F2EAa108f3062412ecf0526b24',
-    linkTokenAddress: '0xe78A0F7E598Cc8b0Bb87894B0F60dD2a88d6a8Ab',
-    chainlinkNodeFunds: '1000',
+    oracleAddress: '0xFD3C3E25E7E30921Bf1B4D1D55fbb97Bc43Ac8B8',
+    linkTokenAddress: '0xC4bC1f775dB36c07b0bC506cbB83fCe12E182053',
+    chainlinkNodeFunds: '10',
     gas: undefined,
   },
 };

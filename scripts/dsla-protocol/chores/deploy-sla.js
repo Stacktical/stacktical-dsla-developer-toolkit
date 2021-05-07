@@ -41,7 +41,7 @@ module.exports = async (callback) => {
     const sloValue = 50 * 10 ** 3;
     const sloType = 4;
     const periodType = 2;
-    const slaNetworkBytes32 = SENetworkNamesBytes32[0];
+    const slaNetworkBytes32 = SENetworkNamesBytes32[1];
     const initialPeriodId = 0;
     const finalPeriodId = 10;
     const dslaDepositByPeriod = 20000;

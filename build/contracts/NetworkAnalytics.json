@@ -15098,14 +15098,14 @@
         }
       },
       "links": {
-        "StringUtils": "0x32B283164B5A283A01208CA894b534b9eA9C4632"
+        "StringUtils": "0x2958897D76861ad299D668ebFddB064d9947A023"
       },
-      "address": "0xC4ad46B3Fc9bB81D3AcD5B9f853315D6bB2C537E",
-      "transactionHash": "0x46d09f7f6f4867552dd36c4d40142f9253d273c148ebdbcc0c4ab10bee183aa6"
+      "address": "0xAc9198b9ccCCa76b69AB64d10513667a49C7d3bD",
+      "transactionHash": "0x23b853d5e152359c50bc58aa603593af728cd021e17a6582edc527aa02ad9949"
     }
   },
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-05-07T02:53:40.558Z",
+  "updatedAt": "2021-05-07T06:51:22.171Z",
   "networkType": "ethereum",
   "devdoc": {
     "details": "contract to get the network analytics for the staking efficiency use case",

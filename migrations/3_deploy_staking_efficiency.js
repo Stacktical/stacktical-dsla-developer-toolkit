@@ -27,14 +27,13 @@ module.exports = (deployer, network) => {
     );
 
     const minResponses = 1;
-    const preCoordinatorConfiguration = envParameters.localChainlinkNode !== null
+    const preCoordinatorConfiguration = envParameters.productionChainlinkNode === null
       ? {
-        oracles: [envParameters.localChainlinkNode.chainlinkOracleAddress],
+        oracles: [envParameters.oracleAddress],
         jobIds: [await getChainlinkJobId()],
         payments: [toWei('0.1')],
       }
-      : envParameters.preCoordinatorConfiguration;
-
+      : envParameters.productionChainlinkNode;
     const receipt = await preCoordinator.createServiceAgreement(
       minResponses,
       preCoordinatorConfiguration.oracles,

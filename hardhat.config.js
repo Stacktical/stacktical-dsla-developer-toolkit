@@ -20,6 +20,10 @@ module.exports = {
       },
       saveDeployments: true,
       tags: ['LinkToken', 'Oracle'],
+      mining: {
+        auto: true,
+        interval: 5000,
+      },
     },
     [networkNames.DEVELOP]: {
       chainId: 1337,

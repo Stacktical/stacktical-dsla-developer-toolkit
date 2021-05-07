@@ -5044,12 +5044,12 @@
     "1337": {
       "events": {},
       "links": {},
-      "address": "0xa6bdC6E136DDA9362a65f86A6441CaCf8571F9f9",
-      "transactionHash": "0xab925c21da27dc2769d589dc7b7be06cbfabe68b9a2e0cefedb4337a62a1b171"
+      "address": "0xB247a2fcBe1223C24374a27966952491CA56c800",
+      "transactionHash": "0x0ba744587fb2446c1204e2ab1b86f77d9c4b71e929ddd543a6061f25d6405a9a"
     }
   },
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-05-07T02:53:40.524Z",
+  "updatedAt": "2021-05-07T06:51:22.132Z",
   "networkType": "ethereum",
   "devdoc": {
     "details": "SLORegistry is a contract for handling creation of service level objectives and querying those service level objectives",

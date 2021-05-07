@@ -21709,12 +21709,12 @@
         }
       },
       "links": {},
-      "address": "0x1FCE6Ad3a48168BBA8214aB40ddEa9257C294c9C",
-      "transactionHash": "0x5f4c0bad2d4d255b4195940eba6dba7c8d4a8b8433dd2bee68852af97a4aef77"
+      "address": "0x2830E4110C99c988694f86d737956305F489B26d",
+      "transactionHash": "0x3d87fe69c9a1a7d5473561e1c36cb3b85cb6ab23d0db075bbf4d3909b855d790"
     }
   },
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-05-07T02:53:40.552Z",
+  "updatedAt": "2021-05-07T06:51:22.164Z",
   "networkType": "ethereum",
   "devdoc": {
     "details": "This contract accepts requests as service agreement IDs and loops over the corresponding list of oracles to create distinct requests to each one.",

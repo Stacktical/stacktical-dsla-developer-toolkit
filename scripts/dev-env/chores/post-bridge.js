@@ -31,7 +31,7 @@ module.exports = async (callback) => {
       },
       data: {
         name: 'dsla-protocol',
-        url: 'http://host.docker.internal:8080',
+        url: 'http://host.docker.internal:6060',
       },
       withCredentials: true,
     });

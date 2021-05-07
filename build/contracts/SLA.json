@@ -16736,12 +16736,12 @@
     "1337": {
       "events": {},
       "links": {
-        "StringUtils": "0x32B283164B5A283A01208CA894b534b9eA9C4632"
+        "StringUtils": "0x2958897D76861ad299D668ebFddB064d9947A023"
       }
     }
   },
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-05-07T02:53:24.294Z",
+  "updatedAt": "2021-05-07T06:50:54.313Z",
   "networkType": "ethereum",
   "devdoc": {
     "details": "SLA is a service level agreement contract used for service downtime compensation",

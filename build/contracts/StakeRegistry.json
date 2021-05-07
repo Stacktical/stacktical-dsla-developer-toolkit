@@ -28429,12 +28429,12 @@
         }
       },
       "links": {},
-      "address": "0xB4022333ef008CA170Bd944aF2a2DB90F9b931A5",
-      "transactionHash": "0x1d5aae6b8cf671bf941e1634d6d5deab5e3cf2ee9b776c11f2e233ba3fc9fbc4"
+      "address": "0xee19c2Dab9f17ED759d82e6A47473B93E24265a1",
+      "transactionHash": "0xe5363bfdf7978615de271c56eb6def653e67107c549c1cbc1222b2507cc41192"
     }
   },
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-05-07T02:53:40.530Z",
+  "updatedAt": "2021-05-07T06:51:22.138Z",
   "networkType": "ethereum",
   "devdoc": {
     "details": "StakeRegistry is a contract to register the staking activity of the platform, along with controlling certain admin privileged parameters",
