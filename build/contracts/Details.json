@@ -18614,12 +18614,12 @@
     "1337": {
       "events": {},
       "links": {},
-      "address": "0x9e90054F4B6730cffAf1E6f6ea10e1bF9dD26dbb",
-      "transactionHash": "0x3d0c35cef817cc253dea695ae14c23967ceb42c964edf251a23d86ace660dc51"
+      "address": "0xbF5b1e4C21Fb2fd9075cAE924f4C4Fa9BC9fa486",
+      "transactionHash": "0xcd39aac6327d56af929ccd2099af2f7327c882bb04e3ec89b2e90e82ed61b1d9"
     }
   },
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-05-07T00:10:18.650Z",
+  "updatedAt": "2021-05-07T02:53:40.544Z",
   "networkType": "ethereum",
   "devdoc": {
     "details": "Details is a contract to fetch details of contracts with a single RPC endpoint",

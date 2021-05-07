@@ -2415,7 +2415,7 @@
   },
   "networks": {},
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-05-07T00:08:43.728Z",
+  "updatedAt": "2021-05-07T02:21:20.490Z",
   "devdoc": {
     "details": "Interface to create new Messenger contract to add lo Messenger lists",
     "methods": {
