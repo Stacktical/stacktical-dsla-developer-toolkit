@@ -10,7 +10,6 @@ export const networkNames = {
 };
 
 export const environments = {
-
   [networkNames.MAINNET]: {
     web3WebsocketProviderUrl: `wss://mainnet.infura.io/ws/v3/${INFURA_PROJECT_ID}`,
     preCoordinatorConfiguration: {
@@ -30,7 +29,7 @@ export const environments = {
         String(0.1 * 10 ** 18),
       ],
     },
-    chainlinkTokenAddress: '0x514910771af9ca656af840dff83e8264ecf986ca',
+    linkTokenAddress: '0x514910771af9ca656af840dff83e8264ecf986ca',
     dslaTokenAddress: '0x3affcca64c2a6f4e3b6bd9c64cd2c969efd1ecbe',
     daiTokenAddress: '0x6b175474e89094c44da98b954eedeac495271d0f',
     usdcTokenAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
@@ -52,7 +51,7 @@ export const environments = {
       ],
       payments: [String(0.1 * 10 ** 18), String(0.1 * 10 ** 18), String(0.1 * 10 ** 18)],
     },
-    chainlinkTokenAddress: '0xa36085F69e2889c224210F603D836748e7dC0088',
+    linkTokenAddress: '0xa36085F69e2889c224210F603D836748e7dC0088',
     dslaTokenAddress: null,
     daiTokenAddress: null,
     usdcTokenAddress: null,
@@ -69,7 +68,6 @@ export const environments = {
         String(0.1 * 10 ** 18),
       ],
     },
-    chainlinkTokenAddress: '0x0290FB167208Af455bB137780163b7B7a9a10C16',
     dslaTokenAddress: null,
     daiTokenAddress: null,
     usdcTokenAddress: null,
@@ -85,7 +83,6 @@ export const environments = {
   [networkNames.DEVELOP]: {
     web3WebsocketProviderUrl: 'ws://localhost:8545',
     preCoordinatorConfiguration: null,
-    chainlinkTokenAddress: '0xCfEB869F69431e42cdB54A4F4f105C19C080A601',
     dslaTokenAddress: null,
     daiTokenAddress: null,
     usdcTokenAddress: null,
@@ -93,8 +90,8 @@ export const environments = {
     localChainlinkNode: {
       chainlinkOracleAddress: '0x254dffcd3277C0b1660F6d42EFbB754edaBAbC2B',
     },
-    oracleAddress: '0x254dffcd3277C0b1660F6d42EFbB754edaBAbC2B',
-    linkTokenAddress: '0xCfEB869F69431e42cdB54A4F4f105C19C080A601',
+    oracleAddress: '0x5b1869D9A4C187F2EAa108f3062412ecf0526b24',
+    linkTokenAddress: '0xe78A0F7E598Cc8b0Bb87894B0F60dD2a88d6a8Ab',
     chainlinkNodeFunds: '1000',
     gas: undefined,
   },

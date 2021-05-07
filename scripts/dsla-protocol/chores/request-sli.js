@@ -1,4 +1,4 @@
-const { eventListener } = require('../../utils');
+const { eventListener } = require('../../../utils');
 
 const SLARegistry = artifacts.require('SLARegistry');
 const SLA = artifacts.require('SLA');

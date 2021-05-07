@@ -54,7 +54,7 @@ module.exports = async (callback) => {
     'Starting automated job 4: Increasing allowance for NetworkAnalytics and SEMessenger with 10 link tokens',
   );
   const seMessenger = await SEMessenger.deployed();
-  const linkToken = await IERC20.at(envParameters.chainlinkTokenAddress);
+  const linkToken = await IERC20.at(envParameters.linkTokenAddress);
   await linkToken.approve(networkAnalytics.address, web3.utils.toWei('10'));
   await linkToken.approve(seMessenger.address, web3.utils.toWei('10'));
 

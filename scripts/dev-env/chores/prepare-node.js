@@ -49,10 +49,14 @@ function wait(timeout) {
  * @returns {string|boolean}
  */
 const updatedAddress = async () => {
-  const addresses = await getAccounts();
-  if (addresses.length === 0) return false;
-  const { attributes: { address } } = addresses[0];
-  return web3.utils.toChecksumAddress(address);
+  try {
+    const addresses = await getAccounts();
+    if (addresses.length === 0) return false;
+    const { attributes: { address } } = addresses[0];
+    return web3.utils.toChecksumAddress(address);
+  } catch {
+    return false;
+  }
 };
 
 /*
@@ -66,6 +70,7 @@ module.exports = async (callback) => {
     let chainlinkNodeAddress = await updatedAddress();
     while (!chainlinkNodeAddress) {
       await wait(5000);
+      console.log('Address fetch from Chainlink node failed, reattempting in 5 seconds');
       chainlinkNodeAddress = await updatedAddress();
     }
     console.log(`Chainlink Node Address: ${chainlinkNodeAddress}`);

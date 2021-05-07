@@ -1,9 +1,9 @@
 const { Account, Wallet } = require('@harmony-js/account');
 const { Messenger, HttpProvider } = require('@harmony-js/network');
 const { ChainType, ChainID } = require('@harmony-js/utils');
-const { SENetworkNamesBytes32, SENetworkNames } = require('../../constants');
-const { networkNames } = require('../../environments');
-const { getIPFSHash } = require('../../utils');
+const { SENetworkNamesBytes32, SENetworkNames } = require('../../../constants');
+const { networkNames } = require('../../../environments');
+const { getIPFSHash } = require('../../../utils');
 
 const { toWei, fromWei } = web3.utils;
 
@@ -34,7 +34,7 @@ const getHarmonyAccounts = async () => {
 module.exports = async (callback) => {
   try {
     console.log('Starting SLA deployment process');
-    console.log('Starting process 1: Allowance on Stake registry to deploy SLA');
+    console.log('Starting process 1: Allowance on Stake registry to contracts-deploy SLA');
     const initialTokenSupply = '10000000';
     const stakeAmount = initialTokenSupply / 100;
     const stakeAmountTimesWei = (times) => toWei(String(stakeAmount * times));

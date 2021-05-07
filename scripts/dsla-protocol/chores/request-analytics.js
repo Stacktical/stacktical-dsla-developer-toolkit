@@ -1,5 +1,5 @@
-const { SENetworkNamesBytes32 } = require('../../constants');
-const { eventListener } = require('../../utils');
+const { SENetworkNamesBytes32 } = require('../../../constants');
+const { eventListener } = require('../../../utils');
 
 const NetworkAnalytics = artifacts.require('NetworkAnalytics');
 const periodType = 2;

@@ -23,7 +23,7 @@ module.exports = (deployer, network) => {
 
     const preCoordinator = await deployer.deploy(
       PreCoordinator,
-      envParameters.chainlinkTokenAddress,
+      envParameters.linkTokenAddress,
     );
 
     const minResponses = 1;
@@ -46,7 +46,7 @@ module.exports = (deployer, network) => {
     const networkAnalytics = await deployer.deploy(
       NetworkAnalytics,
       preCoordinator.address,
-      envParameters.chainlinkTokenAddress,
+      envParameters.linkTokenAddress,
       saId,
       periodRegistry.address,
       stakeRegistry.address,
@@ -56,7 +56,7 @@ module.exports = (deployer, network) => {
     await deployer.deploy(
       SEMessenger,
       preCoordinator.address,
-      envParameters.chainlinkTokenAddress,
+      envParameters.linkTokenAddress,
       saId,
       networkAnalytics.address,
       feeMultiplier,
