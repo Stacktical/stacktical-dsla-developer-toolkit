@@ -2,11 +2,10 @@ require('babel-polyfill');
 require('babel-register');
 
 const fs = require('fs');
-const path = require('path');
-const { getIPFSHash } = require('../../utils');
-const { SENetworkNamesBytes32 } = require('../../constants');
-const { getEnvFromNodeEnv } = require('../../environments');
-const { generateWeeklyPeriods } = require('../../utils');
+const appRoot = require('app-root-path');
+
+const { getIPFSHash, getChainlinkLinkToken, generateWeeklyPeriods } = require('../../../utils');
+const { SENetworkNamesBytes32 } = require('../../../constants');
 
 const NetworkAnalytics = artifacts.require('NetworkAnalytics');
 const IERC20 = artifacts.require('IERC20');
@@ -19,12 +18,9 @@ const USDC = artifacts.require('USDC');
 
 const periodType = 2;
 const [periodStarts, periodEnds] = generateWeeklyPeriods(52, 7);
-const seMessengerSpec = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, '../../semessenger.develop.spec.json')),
-);
+const seMessengerSpec = JSON.parse(fs.readFileSync(`${appRoot.path}/messenger-specs/semessenger.develop.spec.json`));
 
 module.exports = async (callback) => {
-  const envParameters = getEnvFromNodeEnv();
   console.log('Starting automated jobs to bootstrap protocol correctly');
 
   console.log(
@@ -54,7 +50,8 @@ module.exports = async (callback) => {
     'Starting automated job 4: Increasing allowance for NetworkAnalytics and SEMessenger with 10 link tokens',
   );
   const seMessenger = await SEMessenger.deployed();
-  const linkToken = await IERC20.at(envParameters.linkTokenAddress);
+  const linkTokenAddress = await getChainlinkLinkToken();
+  const linkToken = await IERC20.at(linkTokenAddress);
   await linkToken.approve(networkAnalytics.address, web3.utils.toWei('10'));
   await linkToken.approve(seMessenger.address, web3.utils.toWei('10'));
 

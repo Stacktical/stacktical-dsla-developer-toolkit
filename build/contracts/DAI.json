@@ -1604,12 +1604,12 @@
         }
       },
       "links": {},
-      "address": "0xb09bCc172050fBd4562da8b229Cf3E45Dc3045A6",
-      "transactionHash": "0x7fc1f6a828142230aa1e4d8ec1101255c4279ecf47f29aa595c0490dd50015e2"
+      "address": "0xa7ed470Dd9f1e2B656708D87e64e9ddCc79583c0",
+      "transactionHash": "0x780994e2325c00f6dbb5347644d4a9e442aeca08862a7a424912eb22ae7da8bb"
     }
   },
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-05-07T16:52:11.974Z",
+  "updatedAt": "2021-05-08T01:00:15.274Z",
   "networkType": "ethereum",
   "devdoc": {
     "details": "{DAI} Dummy test token, for development purposes only",

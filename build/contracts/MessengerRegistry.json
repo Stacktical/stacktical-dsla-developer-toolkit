@@ -9999,12 +9999,12 @@
     "1337": {
       "events": {},
       "links": {},
-      "address": "0x67B5656d60a809915323Bf2C40A8bEF15A152e3e",
-      "transactionHash": "0x93950c274e42a145ced5b215cfeb149a98e3be4bb58c9ac1f7dcd6c0e26be85f"
+      "address": "0x12F2df43A6385B8D5D6730822A09a2D6c42b61c0",
+      "transactionHash": "0x86404824ef1821f3730e8d1b2fae410f71747138b610e57a0e4e49c12a2c4a49"
     }
   },
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-05-07T16:52:11.939Z",
+  "updatedAt": "2021-05-08T01:00:15.243Z",
   "networkType": "ethereum",
   "devdoc": {
     "details": "MessengerRegistry is a contract to register openly distributed Messengers",

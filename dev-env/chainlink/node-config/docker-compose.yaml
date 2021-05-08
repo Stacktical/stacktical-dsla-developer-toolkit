@@ -4,7 +4,7 @@ services:
     container_name: postgres-dsla-env
     image: postgres:13.1
     volumes:
-      - ./postgres/develop/db:/var/lib/postgresql/data
+      - ../../postgres/develop/db:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: chainlink
@@ -16,16 +16,16 @@ services:
     ports:
       - '6688:6688'
     volumes:
-      - ./chainlink:/chainlink
-      - ./chainlink/.api:/chainlink/.api
-      - ./chainlink/.password:/chainlink/.password
+      - ..:/chainlink
+      - ../.api:/chainlink/.api
+      - ../.password:/chainlink/.password
     environment:
       - ROOT=/chainlink
       - ETH_CHAIN_ID=1337
       - LOG_LEVEL=info
       - MIN_INCOMING_CONFIRMATIONS=0
       - MIN_OUTGOING_CONFIRMATIONS=0
-      - LINK_CONTRACT_ADDRESS=0xFF6049B87215476aBf744eaA3a476cBAd46fB1cA
+      - LINK_CONTRACT_ADDRESS=0xe78A0F7E598Cc8b0Bb87894B0F60dD2a88d6a8Ab
       - CHAINLINK_TLS_PORT=0
       - SECURE_COOKIES=false
       - GAS_UPDATER_ENABLED=true

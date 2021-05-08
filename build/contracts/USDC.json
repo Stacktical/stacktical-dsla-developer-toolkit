@@ -1604,12 +1604,12 @@
         }
       },
       "links": {},
-      "address": "0xFC628dd79137395F3C9744e33b1c5DE554D94882",
-      "transactionHash": "0xe04d5009bd240a853e09cf864e8e9c4390e7ad69edd1017eeadd2953457723bc"
+      "address": "0x4bE79425D3A40eBeCDfF4B7A393F879185F6E96d",
+      "transactionHash": "0x2381d7fa0727028821b3bd43a4fb1ceef44fa2a1bf66911b06b53b515bd9d084"
     }
   },
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-05-07T16:52:11.975Z",
+  "updatedAt": "2021-05-08T01:00:15.276Z",
   "networkType": "ethereum",
   "devdoc": {
     "details": "{USDC} Dummy test token, for development purposes only",

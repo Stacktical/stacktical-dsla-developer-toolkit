@@ -30754,12 +30754,12 @@
     "1337": {
       "events": {},
       "links": {
-        "StringUtils": "0xe982E462b094850F12AF94d21D470e21bE9D0E9C"
+        "StringUtils": "0x1a8b7FD8EC04ab1586753cB1614E54De2269104F"
       }
     }
   },
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-05-07T16:51:56.178Z",
+  "updatedAt": "2021-05-08T00:59:49.871Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {
