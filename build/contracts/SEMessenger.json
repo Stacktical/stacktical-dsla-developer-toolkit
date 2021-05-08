@@ -17437,14 +17437,14 @@
         }
       },
       "links": {
-        "StringUtils": "0x2958897D76861ad299D668ebFddB064d9947A023"
+        "StringUtils": "0xe982E462b094850F12AF94d21D470e21bE9D0E9C"
       },
-      "address": "0xf2362FB814015A95ffe5E6C0BE51359803ede1cA",
-      "transactionHash": "0xda07c80fdaf326d26189b862039b8fe8213913b48bab8a5c3251ea515ffa75c4"
+      "address": "0xA94B7f0465E98609391C623d0560C5720a3f2D33",
+      "transactionHash": "0x665febdc5350bcde246f786ba9a97759a499ab06ff1a1b8f1bec61935ef140ca"
     }
   },
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-05-07T06:51:22.178Z",
+  "updatedAt": "2021-05-07T16:52:11.963Z",
   "networkType": "ethereum",
   "devdoc": {
     "details": "Staking efficiency Messenger",

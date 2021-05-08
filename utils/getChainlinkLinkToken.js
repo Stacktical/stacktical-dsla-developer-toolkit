@@ -4,18 +4,18 @@ import getChainlinkSessionCookie from './getChainlinkSessionCookie';
 
 const url = getChainlinkNodeUrl();
 
-const getChainlinkJobId = async () => {
+const getChainlinkLinkToken = async () => {
   const sessionCookie = await getChainlinkSessionCookie();
-  const { data } = await axios({
+  const { data: { data: { attributes: { linkContractAddress } } } } = await axios({
     method: 'get',
-    url: `${url}/v2/specs`,
+    url: `${url}/v2/config`,
     headers: {
       Cookie: sessionCookie,
       'Content-Type': 'application/json',
     },
     withCredentials: true,
   });
-  return `0x${data.data[0].id}`;
+  return linkContractAddress;
 };
 
-export default getChainlinkJobId;
+export default getChainlinkLinkToken;

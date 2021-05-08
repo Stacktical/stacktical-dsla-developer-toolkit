@@ -1604,12 +1604,12 @@
         }
       },
       "links": {},
-      "address": "0x47EF76991DD3C561BaB1504C48C0eB55a6e61025",
-      "transactionHash": "0xbe10d5bc03e039f4edf39592461c99b0797a8079b35ce7852e245704cd74a7d3"
+      "address": "0x59d3631c86BbE35EF041872d502F218A39FBa150",
+      "transactionHash": "0x63eff5b2415e737d907abd6e1b3bae7a42548715dee58675be0efa86a8ad3cd7"
     }
   },
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-05-07T06:51:22.185Z",
+  "updatedAt": "2021-05-07T16:52:11.972Z",
   "networkType": "ethereum",
   "devdoc": {
     "details": "{bDSLA} Dummy test token, for development purposes only",

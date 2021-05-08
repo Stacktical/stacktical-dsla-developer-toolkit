@@ -14,7 +14,6 @@ const StringUtils = artifacts.require('StringUtils');
 
 module.exports = (deployer, network) => {
   deployer.then(async () => {
-    if (!!process.env.ONLY_DETAILS === true) return;
     deployer.link(StringUtils, [NetworkAnalytics, SEMessenger]);
 
     const envParameters = getEnvFromNetwork(network);

@@ -4,18 +4,18 @@ import getChainlinkSessionCookie from './getChainlinkSessionCookie';
 
 const url = getChainlinkNodeUrl();
 
-const getChainlinkJobId = async () => {
+const getChainlinkAccounts = async () => {
   const sessionCookie = await getChainlinkSessionCookie();
-  const { data } = await axios({
+  const { data: { data } } = await axios({
     method: 'get',
-    url: `${url}/v2/specs`,
+    url: `${url}/v2/user/balances`,
     headers: {
       Cookie: sessionCookie,
       'Content-Type': 'application/json',
     },
     withCredentials: true,
   });
-  return `0x${data.data[0].id}`;
+  return data;
 };
 
-export default getChainlinkJobId;
+export default getChainlinkAccounts;
