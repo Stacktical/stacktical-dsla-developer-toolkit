@@ -19,7 +19,6 @@ const bDSLA = artifacts.require('bDSLA');
 module.exports = (deployer, network) => {
   deployer.then(async () => {
     await deployer.deploy(Details);
-    if (!!process.env.ONLY_DETAILS === true) return;
     await deployer.deploy(StringUtils);
     deployer.link(StringUtils, [SLARegistry, Staking, SLA]);
 
