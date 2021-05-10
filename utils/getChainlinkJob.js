@@ -2,9 +2,12 @@ import axios from 'axios';
 import getChainlinkNodeUrl from './getChainlinkNodeUrl';
 import getChainlinkSessionCookie from './getChainlinkSessionCookie';
 
+const appRoot = require('app-root-path');
+const fs = require('fs');
+
 const url = getChainlinkNodeUrl();
 
-const getChainlinkJobId = async () => {
+const getChainlinkJob = async () => {
   const sessionCookie = await getChainlinkSessionCookie();
   const { data } = await axios({
     method: 'get',
@@ -15,7 +18,11 @@ const getChainlinkJobId = async () => {
     },
     withCredentials: true,
   });
-  return `0x${data.data[0].id}`;
+  const filePath = `${appRoot.path}/dev-env/chainlink/node-config/dsla-protocol.json`;
+  const jobJson = JSON.parse(fs.readFileSync(filePath));
+  return data.data.find(
+    (job) => job.attributes.tasks.some((task) => task.type === jobJson.tasks[0].type),
+  );
 };
 
-export default getChainlinkJobId;
+export default getChainlinkJob;

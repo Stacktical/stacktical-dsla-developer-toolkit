@@ -2,7 +2,7 @@ require('babel-polyfill');
 require('babel-register');
 
 const { toWei } = require('web3-utils');
-const { getChainlinkJobId } = require('../utils');
+const { getChainlinkJob, getChainlinkLinkToken } = require('../utils');
 const { getEnvFromNetwork } = require('../environments');
 
 const PeriodRegistry = artifacts.require('PeriodRegistry');
@@ -14,23 +14,24 @@ const StringUtils = artifacts.require('StringUtils');
 
 module.exports = (deployer, network) => {
   deployer.then(async () => {
-    if (!!process.env.ONLY_DETAILS === true) return;
     deployer.link(StringUtils, [NetworkAnalytics, SEMessenger]);
 
     const envParameters = getEnvFromNetwork(network);
     const periodRegistry = await PeriodRegistry.deployed();
     const stakeRegistry = await StakeRegistry.deployed();
 
+    const postedJob = await getChainlinkJob();
+    const linkToken = await getChainlinkLinkToken();
+
     const preCoordinator = await deployer.deploy(
       PreCoordinator,
-      envParameters.linkTokenAddress,
+      linkToken,
     );
-
     const minResponses = 1;
     const preCoordinatorConfiguration = envParameters.productionChainlinkNode === null
       ? {
-        oracles: [envParameters.oracleAddress],
-        jobIds: [await getChainlinkJobId()],
+        oracles: [postedJob.attributes.initiators[0].params.address],
+        jobIds: [`0x${postedJob.id}`],
         payments: [toWei('0.1')],
       }
       : envParameters.productionChainlinkNode;
@@ -45,7 +46,7 @@ module.exports = (deployer, network) => {
     const networkAnalytics = await deployer.deploy(
       NetworkAnalytics,
       preCoordinator.address,
-      envParameters.linkTokenAddress,
+      linkToken,
       saId,
       periodRegistry.address,
       stakeRegistry.address,
@@ -55,7 +56,7 @@ module.exports = (deployer, network) => {
     await deployer.deploy(
       SEMessenger,
       preCoordinator.address,
-      envParameters.linkTokenAddress,
+      linkToken,
       saId,
       networkAnalytics.address,
       feeMultiplier,

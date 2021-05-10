@@ -1,0 +1,35 @@
+{
+  "initiators": [
+    {
+      "type": "RunLog",
+      "params": {
+        "address": "0x5b1869D9A4C187F2EAa108f3062412ecf0526b24"
+      }
+    }
+  ],
+  "tasks": [
+    {
+      "type": "dsla-protocol"
+    },
+    {
+      "type": "copy",
+      "params": {
+        "copyPath": ["result"]
+      }
+    },
+    {
+      "type": "ethtx"
+    }
+  ],
+  "startAt": "2020-02-09T15:13:03Z",
+  "endAt": null,
+  "minPayment": "10000000000",
+  "environmentsdevelop": [
+    {
+      "type": "RunLog",
+      "params": {
+        "address": "0x5b1869D9A4C187F2EAa108f3062412ecf0526b24"
+      }
+    }
+  ]
+}

@@ -1,21 +1,23 @@
-import axios from 'axios';
 import getChainlinkNodeUrl from './getChainlinkNodeUrl';
 import getChainlinkSessionCookie from './getChainlinkSessionCookie';
 
+const axios = require('axios');
+
 const url = getChainlinkNodeUrl();
 
-const getChainlinkJobId = async () => {
+const postChainlinkJob = async (job) => {
   const sessionCookie = await getChainlinkSessionCookie();
   const { data } = await axios({
-    method: 'get',
+    method: 'post',
     url: `${url}/v2/specs`,
     headers: {
       Cookie: sessionCookie,
       'Content-Type': 'application/json',
     },
+    data: job,
     withCredentials: true,
   });
-  return `0x${data.data[0].id}`;
+  return data;
 };
 
-export default getChainlinkJobId;
+export default postChainlinkJob;
