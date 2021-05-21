@@ -30,6 +30,7 @@ module.exports = async ({ getNamedAccounts, deployments, network }) => {
   const stringUtils = await get(CONTRACT_NAMES.StringUtils);
   await deploy(CONTRACT_NAMES.SLARegistry, {
     ...baseOptions,
+    ...(network.config.gas && { gasLimit: network.config.gas }),
     args: [
       sloRegistry.address,
       periodRegistry.address,
