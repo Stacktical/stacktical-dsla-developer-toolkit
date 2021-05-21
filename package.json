@@ -1,6 +1,6 @@
 {
   "name": "stacktical-developer-toolkit",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Toolkit to deploy develop Chainlink Node, Graph Node, IPFS node, dev blockhain and DSLA contracts to multiple networks seamlessly",
   "main": "truffle-config.js",
   "scripts": {
