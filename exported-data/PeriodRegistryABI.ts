@@ -59,39 +59,53 @@ export const PeriodRegistryABI: AbiItem[] = [
     type: 'event',
   },
   {
+    inputs: [
+      {
+        internalType: 'enum PeriodRegistry.PeriodType',
+        name: '_periodType',
+        type: 'uint8',
+      },
+      { internalType: 'uint256[]', name: '_periodStarts', type: 'uint256[]' },
+      { internalType: 'uint256[]', name: '_periodEnds', type: 'uint256[]' },
+    ],
+    name: 'addPeriodsToPeriodType',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     inputs: [],
-    name: 'owner',
-    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    name: 'getPeriodDefinitions',
+    outputs: [
+      {
+        components: [
+          { internalType: 'bool', name: 'initialized', type: 'bool' },
+          { internalType: 'uint256[]', name: 'starts', type: 'uint256[]' },
+          { internalType: 'uint256[]', name: 'ends', type: 'uint256[]' },
+        ],
+        internalType: 'struct PeriodRegistry.PeriodDefinition[]',
+        name: '',
+        type: 'tuple[]',
+      },
+    ],
     stateMutability: 'view',
     type: 'function',
-    constant: true,
   },
   {
     inputs: [
       {
         internalType: 'enum PeriodRegistry.PeriodType',
-        name: '',
+        name: '_periodType',
         type: 'uint8',
       },
+      { internalType: 'uint256', name: '_periodId', type: 'uint256' },
     ],
-    name: 'periodDefinitions',
-    outputs: [{ internalType: 'bool', name: 'initialized', type: 'bool' }],
+    name: 'getPeriodStartAndEnd',
+    outputs: [
+      { internalType: 'uint256', name: 'start', type: 'uint256' },
+      { internalType: 'uint256', name: 'end', type: 'uint256' },
+    ],
     stateMutability: 'view',
-    type: 'function',
-    constant: true,
-  },
-  {
-    inputs: [],
-    name: 'renounceOwnership',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'address', name: 'newOwner', type: 'address' }],
-    name: 'transferOwnership',
-    outputs: [],
-    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -116,45 +130,11 @@ export const PeriodRegistryABI: AbiItem[] = [
         name: '_periodType',
         type: 'uint8',
       },
-      { internalType: 'uint256[]', name: '_periodStarts', type: 'uint256[]' },
-      { internalType: 'uint256[]', name: '_periodEnds', type: 'uint256[]' },
-    ],
-    name: 'addPeriodsToPeriodType',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'enum PeriodRegistry.PeriodType',
-        name: '_periodType',
-        type: 'uint8',
-      },
-      { internalType: 'uint256', name: '_periodId', type: 'uint256' },
-    ],
-    name: 'getPeriodStartAndEnd',
-    outputs: [
-      { internalType: 'uint256', name: 'start', type: 'uint256' },
-      { internalType: 'uint256', name: 'end', type: 'uint256' },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-    constant: true,
-  },
-  {
-    inputs: [
-      {
-        internalType: 'enum PeriodRegistry.PeriodType',
-        name: '_periodType',
-        type: 'uint8',
-      },
     ],
     name: 'isInitializedPeriod',
     outputs: [{ internalType: 'bool', name: 'initialized', type: 'bool' }],
     stateMutability: 'view',
     type: 'function',
-    constant: true,
   },
   {
     inputs: [
@@ -169,22 +149,26 @@ export const PeriodRegistryABI: AbiItem[] = [
     outputs: [{ internalType: 'bool', name: 'valid', type: 'bool' }],
     stateMutability: 'view',
     type: 'function',
-    constant: true,
+  },
+  {
+    inputs: [],
+    name: 'owner',
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     inputs: [
       {
         internalType: 'enum PeriodRegistry.PeriodType',
-        name: '_periodType',
+        name: '',
         type: 'uint8',
       },
-      { internalType: 'uint256', name: '_periodId', type: 'uint256' },
     ],
-    name: 'periodIsFinished',
-    outputs: [{ internalType: 'bool', name: 'finished', type: 'bool' }],
+    name: 'periodDefinitions',
+    outputs: [{ internalType: 'bool', name: 'initialized', type: 'bool' }],
     stateMutability: 'view',
     type: 'function',
-    constant: true,
   },
   {
     inputs: [
@@ -199,25 +183,33 @@ export const PeriodRegistryABI: AbiItem[] = [
     outputs: [{ internalType: 'bool', name: 'started', type: 'bool' }],
     stateMutability: 'view',
     type: 'function',
-    constant: true,
+  },
+  {
+    inputs: [
+      {
+        internalType: 'enum PeriodRegistry.PeriodType',
+        name: '_periodType',
+        type: 'uint8',
+      },
+      { internalType: 'uint256', name: '_periodId', type: 'uint256' },
+    ],
+    name: 'periodIsFinished',
+    outputs: [{ internalType: 'bool', name: 'finished', type: 'bool' }],
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     inputs: [],
-    name: 'getPeriodDefinitions',
-    outputs: [
-      {
-        components: [
-          { internalType: 'bool', name: 'initialized', type: 'bool' },
-          { internalType: 'uint256[]', name: 'starts', type: 'uint256[]' },
-          { internalType: 'uint256[]', name: 'ends', type: 'uint256[]' },
-        ],
-        internalType: 'struct PeriodRegistry.PeriodDefinition[]',
-        name: '',
-        type: 'tuple[]',
-      },
-    ],
-    stateMutability: 'view',
+    name: 'renounceOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
-    constant: true,
+  },
+  {
+    inputs: [{ internalType: 'address', name: 'newOwner', type: 'address' }],
+    name: 'transferOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
 ];

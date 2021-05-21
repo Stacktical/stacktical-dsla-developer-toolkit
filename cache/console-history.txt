@@ -1,0 +1,22 @@
+await hre.ethers.provider.send('debug_traceTransaction',['0x161781d93bf84ca93bd9907b4ef25c6282763d00a808d5573e5a62f14f310aa9'])
+hre.ethers.provider.send('debug_traceTransaction','0x161781d93bf84ca93bd9907b4ef25c6282763d00a808d5573e5a62f14f310aa9')
+await stakeRegistry.slaRegistry()
+stakeRegistry.slaRegistry()
+let stakeRegistry = await StakeRegistry__factory.connect(stakeRegistryArtifact.address,await ethers.getSigner(deployer))
+const stakeRegistryArtifact = await hre.deployments.get('StakeRegistry')
+const stakeRegistryArtifact = await get('StakeRegistry')
+const {StakeRegistry__factory}= require('./typechain/')
+const {StakeRegistry__factory}= require('./typechain/)
+const {deployer} = await hre.getNamedAccounts()
+await oracle.setFulfillmentPermission('0xe7A305a58f6f36D11500346cd0549EBb2c0E35eA',true)
+await ethers.getSigners()
+await oracle.setFulfillmentPermission('0xe7A305a58f6f36D11500346cd0549EBb2c0E35eA',true)
+await oracle.getAuthorizationStatus('0xe7A305a58f6f36D11500346cd0549EBb2c0E35eA')
+oracle.getAuthorizationStatus('0xe7A305a58f6f36D11500346cd0549EBb2c0E35eA')
+let oracle = await ethers.getContract('Oracle')
+const oracle1 = await ethers.getContract('Oracle')
+oracle
+const oracle = ethers.getContract('Oracle')
+network
+config
+ethers

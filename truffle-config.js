@@ -50,6 +50,19 @@ module.exports = {
       timeoutBlocks: 200,
       skipDryRun: true,
     },
+    [networkNames.MUMBAI]: {
+      provider() {
+        return new HDWalletProvider(
+          TESTNET_MNEMONIC,
+          'http://paris.mumbai.sentry.polygon.node.dsla.network:26657',
+          0,
+          10,
+        );
+      },
+      network_id: 80001,
+      timeoutBlocks: 200,
+      skipDryRun: true,
+    },
     [networkNames.HARMONYTESTNET]: {
       network_id: '2', // Any network (default: none)
       provider: () => {

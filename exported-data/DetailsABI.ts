@@ -2,88 +2,6 @@ import { AbiItem } from 'web3-utils/types';
 
 export const DetailsABI: AbiItem[] = [
   {
-    inputs: [{ internalType: 'address', name: '_slaAddress', type: 'address' }],
-    name: 'getSLADynamicDetails',
-    outputs: [
-      { internalType: 'bool', name: 'breachedContract', type: 'bool' },
-      { internalType: 'uint256', name: 'stakersCount', type: 'uint256' },
-      {
-        internalType: 'uint256',
-        name: 'nextVerifiablePeriod',
-        type: 'uint256',
-      },
-      { internalType: 'uint64', name: 'leverage', type: 'uint64' },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-    constant: true,
-  },
-  {
-    inputs: [
-      { internalType: 'address', name: '_slaAddress', type: 'address' },
-      {
-        internalType: 'contract SLORegistry',
-        name: '_sloRegistry',
-        type: 'address',
-      },
-    ],
-    name: 'getSLAStaticDetails',
-    outputs: [
-      { internalType: 'address', name: 'slaOwner', type: 'address' },
-      { internalType: 'address', name: 'messengerAddress', type: 'address' },
-      { internalType: 'uint256', name: 'sloValue', type: 'uint256' },
-      { internalType: 'uint256', name: 'creationBlockNumber', type: 'uint256' },
-      { internalType: 'uint256', name: 'slaId', type: 'uint256' },
-      { internalType: 'uint128', name: 'initialPeriodId', type: 'uint128' },
-      { internalType: 'uint128', name: 'finalPeriodId', type: 'uint128' },
-      { internalType: 'bool', name: 'whiteListed', type: 'bool' },
-      {
-        internalType: 'enum PeriodRegistry.PeriodType',
-        name: 'periodType',
-        type: 'uint8',
-      },
-      {
-        internalType: 'enum SLORegistry.SLOType',
-        name: 'sloType',
-        type: 'uint8',
-      },
-      { internalType: 'string', name: 'ipfsHash', type: 'string' },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-    constant: true,
-  },
-  {
-    inputs: [{ internalType: 'address', name: '_slaAddress', type: 'address' }],
-    name: 'getSLADetailsArrays',
-    outputs: [
-      {
-        components: [
-          { internalType: 'uint256', name: 'timestamp', type: 'uint256' },
-          { internalType: 'uint256', name: 'sli', type: 'uint256' },
-          { internalType: 'enum SLA.Status', name: 'status', type: 'uint8' },
-        ],
-        internalType: 'struct SLA.PeriodSLI[]',
-        name: 'periodSLIs',
-        type: 'tuple[]',
-      },
-      {
-        components: [
-          { internalType: 'address', name: 'tokenAddress', type: 'address' },
-          { internalType: 'uint256', name: 'totalStake', type: 'uint256' },
-          { internalType: 'uint256', name: 'usersPool', type: 'uint256' },
-          { internalType: 'uint256', name: 'providerPool', type: 'uint256' },
-        ],
-        internalType: 'struct Details.TokenStake[]',
-        name: 'tokensStake',
-        type: 'tuple[]',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-    constant: true,
-  },
-  {
     inputs: [
       { internalType: 'address', name: '_slaAddress', type: 'address' },
       { internalType: 'address', name: '_owner', type: 'address' },
@@ -121,6 +39,84 @@ export const DetailsABI: AbiItem[] = [
     ],
     stateMutability: 'view',
     type: 'function',
-    constant: true,
+  },
+  {
+    inputs: [{ internalType: 'address', name: '_slaAddress', type: 'address' }],
+    name: 'getSLADetailsArrays',
+    outputs: [
+      {
+        components: [
+          { internalType: 'uint256', name: 'timestamp', type: 'uint256' },
+          { internalType: 'uint256', name: 'sli', type: 'uint256' },
+          { internalType: 'enum SLA.Status', name: 'status', type: 'uint8' },
+        ],
+        internalType: 'struct SLA.PeriodSLI[]',
+        name: 'periodSLIs',
+        type: 'tuple[]',
+      },
+      {
+        components: [
+          { internalType: 'address', name: 'tokenAddress', type: 'address' },
+          { internalType: 'uint256', name: 'totalStake', type: 'uint256' },
+          { internalType: 'uint256', name: 'usersPool', type: 'uint256' },
+          { internalType: 'uint256', name: 'providerPool', type: 'uint256' },
+        ],
+        internalType: 'struct Details.TokenStake[]',
+        name: 'tokensStake',
+        type: 'tuple[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'address', name: '_slaAddress', type: 'address' }],
+    name: 'getSLADynamicDetails',
+    outputs: [
+      { internalType: 'bool', name: 'breachedContract', type: 'bool' },
+      { internalType: 'uint256', name: 'stakersCount', type: 'uint256' },
+      {
+        internalType: 'uint256',
+        name: 'nextVerifiablePeriod',
+        type: 'uint256',
+      },
+      { internalType: 'uint64', name: 'leverage', type: 'uint64' },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'address', name: '_slaAddress', type: 'address' },
+      {
+        internalType: 'contract SLORegistry',
+        name: '_sloRegistry',
+        type: 'address',
+      },
+    ],
+    name: 'getSLAStaticDetails',
+    outputs: [
+      { internalType: 'address', name: 'slaOwner', type: 'address' },
+      { internalType: 'address', name: 'messengerAddress', type: 'address' },
+      { internalType: 'uint256', name: 'sloValue', type: 'uint256' },
+      { internalType: 'uint256', name: 'creationBlockNumber', type: 'uint256' },
+      { internalType: 'uint256', name: 'slaId', type: 'uint256' },
+      { internalType: 'uint128', name: 'initialPeriodId', type: 'uint128' },
+      { internalType: 'uint128', name: 'finalPeriodId', type: 'uint128' },
+      { internalType: 'bool', name: 'whiteListed', type: 'bool' },
+      {
+        internalType: 'enum PeriodRegistry.PeriodType',
+        name: 'periodType',
+        type: 'uint8',
+      },
+      {
+        internalType: 'enum SLORegistry.SLOType',
+        name: 'sloType',
+        type: 'uint8',
+      },
+      { internalType: 'string', name: 'ipfsHash', type: 'string' },
+    ],
+    stateMutability: 'view',
+    type: 'function',
   },
 ];
