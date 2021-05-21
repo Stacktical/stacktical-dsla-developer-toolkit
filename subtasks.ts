@@ -235,12 +235,17 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODE, undefined).setAction(
       oracle.address,
       await ethers.getSigner(deployer)
     );
-    const tx = await oracleContract.setFulfillmentPermission(
-      chainlinkNodeAddress,
-      true
+    let permissions = await oracleContract.getAuthorizationStatus(
+      chainlinkNodeAddress
     );
-    await tx.wait();
-    const permissions = await oracleContract.getAuthorizationStatus(
+    if (!permissions) {
+      const tx = await oracleContract.setFulfillmentPermission(
+        chainlinkNodeAddress,
+        true
+      );
+      await tx.wait();
+    }
+    permissions = await oracleContract.getAuthorizationStatus(
       chainlinkNodeAddress
     );
     console.log(`Chainlink Node Fullfillment permissions: ${permissions}`);
