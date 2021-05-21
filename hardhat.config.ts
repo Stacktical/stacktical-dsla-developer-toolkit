@@ -203,62 +203,81 @@ const config: HardhatUserConfig = {
         },
       },
     },
-    // [NETWORKS.MUMBAI]: {
-    //   chainId: 80001,
-    //   accounts: {
-    //     mnemonic: process.env.TEST_MNEMONIC,
-    //   },
-    //   tags: ['Oracle'],
-    //   url: process.env.MUMBAI_URI,
-    //   stacktical: {
-    //     web3WebsocketProviderUrl: process.env.MUMBAI_WS_URI,
-    //     productionChainlinkNode: null,
-    //     developChainlinkNode: {
-    //       funds: '0.001',
-    //       gasLimit: undefined,
-    //       externalAdapterUrL: null,
-    //       ethUrl: process.env.MUMBAI_WS_URI,
-    //     },
-    //     addresses: {
-    //       tokens: {
-    //         LINK: null,
-    //         DSLA: null,
-    //         DAI: null,
-    //         USDC: null,
-    //       },
-    //       oracle: null,
-    //     },
-    //     checkPastPeriods: false,
-    //   },
-    // },
-    // [NETWORKS.POLYGON]: {
-    //   chainId: 137,
-    //   accounts: {
-    //     mnemonic: process.env.TEST_MNEMONIC,
-    //   },
-    //   tags: ['Oracle'],
-    //   url: process.env.POLYGON_URI,
-    //   stacktical: {
-    //     web3WebsocketProviderUrl: process.env.POLYGON_WS_URI,
-    //     productionChainlinkNode: null,
-    //     developChainlinkNode: {
-    //       funds: '0.001',
-    //       gasLimit: undefined,
-    //       externalAdapterUrL: null,
-    //       ethUrl: process.env.POLYGON_WS_URI,
-    //     },
-    //     addresses: {
-    //       tokens: {
-    //         LINK: '0xb0897686c545045afc77cf20ec7a532e3120e0f1',
-    //         DSLA: null,
-    //         DAI: null,
-    //         USDC: null,
-    //       },
-    //       oracle: '0x99f4e62a317cc666589c9e370c73c15b158f3c61',
-    //     },
-    //     checkPastPeriods: false,
-    //   },
-    // },
+    [NETWORKS.HARMONYTESTNET]: {
+      chainId: 1666700000,
+      gas: 12000000,
+      gasPrice: 1000000000,
+      accounts: {
+        mnemonic: process.env.TESTNET_MNEMONIC,
+      },
+      url: process.env.HARMONYTESTNET_URI,
+      saveDeployments: true,
+      stacktical: {
+        web3WebsocketProviderUrl: process.env.HARMONYTESTNET_WS_URI,
+        productionChainlinkNode: null,
+        developChainlinkNode: {
+          funds: '0.001',
+          gasLimit: undefined,
+          externalAdapterUrL: null,
+          ethUrl: process.env.HARMONYTESTNET_WS_URI,
+        },
+        addresses: {
+          tokens: {
+            LINK: null,
+            DSLA: null,
+            DAI: null,
+            USDC: null,
+          },
+          oracle: null,
+        },
+        checkPastPeriods: false,
+        bootstrap: {
+          periods: [
+            {
+              periodType: PERIOD_TYPE.HOURLY,
+              amountOfPeriods: 5,
+              expiredPeriods: 2,
+            },
+            {
+              periodType: PERIOD_TYPE.DAILY,
+              amountOfPeriods: 5,
+              expiredPeriods: 2,
+            },
+            {
+              periodType: PERIOD_TYPE.WEEKLY,
+              amountOfPeriods: 52,
+              expiredPeriods: 10,
+            },
+          ],
+          messengersLinkTokenAllowance: '10',
+        },
+        scripts: {
+          deploy_sla: {
+            sloValue: 50 * 10 ** 3,
+            sloType: SLO_TYPE.GreaterThan,
+            whitelisted: false,
+            periodType: PERIOD_TYPE.WEEKLY,
+            initialPeriodId: 0,
+            finalPeriodId: 10,
+            extraData: [SENetworkNamesBytes32[SENetworks.DOT]],
+            initialTokenSupply: '10000000',
+            initialTokenSupplyDivisor: 100,
+            leverage: 50,
+            deployerStakeTimes: 100,
+            notDeployerStakeTimes: 2,
+            serviceMetadata: {
+              serviceName: 'P-OPS',
+              serviceDescription: 'Official bDSLA Beta Partner.',
+              serviceImage:
+                'https://storage.googleapis.com/bdsla-incentivized-beta/validators/chainode.svg',
+              serviceURL: 'https://bdslaToken.network',
+              serviceAddress: 'validator-address',
+              serviceTicker: SENetworkNames[SENetworks.DOT],
+            },
+          },
+        },
+      },
+    },
   },
   solidity: {
     compilers: [
