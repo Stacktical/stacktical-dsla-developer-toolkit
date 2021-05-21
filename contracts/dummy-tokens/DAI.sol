@@ -14,7 +14,9 @@ contract DAI is ERC20PresetMinterPauser {
      * a default value of 18.
      * @notice token name: DAI , token symbol: DAI
      */
-    constructor() public ERC20PresetMinterPauser("DAI", "DAI") {}
+    constructor() public ERC20PresetMinterPauser("DAI", "DAI") {
+        mint(msg.sender, 10**27);
+    }
 
     /**
      * @dev Creates `amount` new tokens for `to`.

@@ -14,7 +14,9 @@ contract USDC is ERC20PresetMinterPauser {
      * a default value of 18.
      * @notice token name: USDC , token symbol: USDC
      */
-    constructor() public ERC20PresetMinterPauser("USDC", "USDC") {}
+    constructor() public ERC20PresetMinterPauser("USDC", "USDC") {
+        mint(msg.sender, 10**27);
+    }
 
     /**
      * @dev Creates `amount` new tokens for `to`.

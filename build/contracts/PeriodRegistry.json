@@ -13943,12 +13943,12 @@
         }
       },
       "links": {},
-      "address": "0x45F97e4bEe19580807501C32a71D06f7F7c72f4f",
-      "transactionHash": "0x785c419b880552e2474561eec0d3af31011602e17037f418aa5cd95aa6ceb428"
+      "address": "0x04d62488Da62903eAe5cd03815d7819337230c87",
+      "transactionHash": "0xfad276afd4e27e303c0663fee8a781ec887220b9903033efb7b3acd8af177ed3"
     }
   },
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-05-08T01:00:15.220Z",
+  "updatedAt": "2021-05-10T21:42:09.184Z",
   "networkType": "ethereum",
   "devdoc": {
     "details": "SLARegistry is a contract for handling creation of service level agreements and keeping track of the created agreements",

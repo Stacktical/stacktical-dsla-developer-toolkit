@@ -87,7 +87,13 @@ export const SLARegistryABI: AbiItem[] = [
     outputs: [{ internalType: 'contract SLA', name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function',
-    constant: true,
+  },
+  {
+    inputs: [],
+    name: 'allSLAs',
+    outputs: [{ internalType: 'contract SLA[]', name: '', type: 'address[]' }],
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     inputs: [],
@@ -95,47 +101,6 @@ export const SLARegistryABI: AbiItem[] = [
     outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
     stateMutability: 'view',
     type: 'function',
-    constant: true,
-  },
-  {
-    inputs: [],
-    name: 'messengerRegistry',
-    outputs: [
-      { internalType: 'contract MessengerRegistry', name: '', type: 'address' },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-    constant: true,
-  },
-  {
-    inputs: [],
-    name: 'periodRegistry',
-    outputs: [
-      { internalType: 'contract PeriodRegistry', name: '', type: 'address' },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-    constant: true,
-  },
-  {
-    inputs: [],
-    name: 'sloRegistry',
-    outputs: [
-      { internalType: 'contract SLORegistry', name: '', type: 'address' },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-    constant: true,
-  },
-  {
-    inputs: [],
-    name: 'stakeRegistry',
-    outputs: [
-      { internalType: 'contract StakeRegistry', name: '', type: 'address' },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-    constant: true,
   },
   {
     inputs: [
@@ -164,6 +129,41 @@ export const SLARegistryABI: AbiItem[] = [
     type: 'function',
   },
   {
+    inputs: [{ internalType: 'address', name: '_slaAddress', type: 'address' }],
+    name: 'isRegisteredSLA',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'messengerRegistry',
+    outputs: [
+      { internalType: 'contract MessengerRegistry', name: '', type: 'address' },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'periodRegistry',
+    outputs: [
+      { internalType: 'contract PeriodRegistry', name: '', type: 'address' },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'address', name: '_messengerAddress', type: 'address' },
+      { internalType: 'string', name: '_specificationUrl', type: 'string' },
+    ],
+    name: 'registerMessenger',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     inputs: [
       { internalType: 'uint256', name: '_periodId', type: 'uint256' },
       { internalType: 'contract SLA', name: '_sla', type: 'address' },
@@ -182,13 +182,21 @@ export const SLARegistryABI: AbiItem[] = [
     type: 'function',
   },
   {
-    inputs: [
-      { internalType: 'address', name: '_messengerAddress', type: 'address' },
-      { internalType: 'string', name: '_specificationUrl', type: 'string' },
+    inputs: [],
+    name: 'sloRegistry',
+    outputs: [
+      { internalType: 'contract SLORegistry', name: '', type: 'address' },
     ],
-    name: 'registerMessenger',
-    outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'stakeRegistry',
+    outputs: [
+      { internalType: 'contract StakeRegistry', name: '', type: 'address' },
+    ],
+    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -197,22 +205,5 @@ export const SLARegistryABI: AbiItem[] = [
     outputs: [{ internalType: 'contract SLA[]', name: '', type: 'address[]' }],
     stateMutability: 'view',
     type: 'function',
-    constant: true,
-  },
-  {
-    inputs: [],
-    name: 'allSLAs',
-    outputs: [{ internalType: 'contract SLA[]', name: '', type: 'address[]' }],
-    stateMutability: 'view',
-    type: 'function',
-    constant: true,
-  },
-  {
-    inputs: [{ internalType: 'address', name: '_slaAddress', type: 'address' }],
-    name: 'isRegisteredSLA',
-    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
-    stateMutability: 'view',
-    type: 'function',
-    constant: true,
   },
 ];

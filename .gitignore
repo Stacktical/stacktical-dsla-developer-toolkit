@@ -12,3 +12,8 @@ ipfs
 .env
 dev-env/chainlink/tempkeys
 dev-env/chainlink/secret
+dev-env/chainlink/log.jsonl
+dev-env/postgres/
+deployments/develop
+exported-data/networks/develop.ts
+

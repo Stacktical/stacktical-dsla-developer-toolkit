@@ -1,0 +1,48 @@
+version: '3.5'
+services:
+  postgres:
+    container_name: postgres-dsla-env
+    image: postgres:13.1
+    volumes:
+      - ./postgres/develop/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: chainlink
+    networks:
+      - dsla-test
+  chainlink:
+    container_name: chainlink-dsla-env
+    image: smartcontract/chainlink:0.10.6
+    ports:
+      - '6688:6688'
+    volumes:
+      - ./chainlink:/chainlink
+      - ./chainlink/.api:/chainlink/.api
+      - ./chainlink/.password:/chainlink/.password
+    environment:
+      - ROOT=/chainlink
+      - ETH_CHAIN_ID=1337
+      - LOG_LEVEL=info
+      - MIN_INCOMING_CONFIRMATIONS=1
+      - MIN_OUTGOING_CONFIRMATIONS=1
+      - LINK_CONTRACT_ADDRESS=0x718e1497188318aDdf7e38b8318747006541F888
+      - CHAINLINK_TLS_PORT=0
+      - SECURE_COOKIES=false
+      - GAS_UPDATER_ENABLED=true
+      - ALLOW_ORIGINS=*
+      - ETH_URL=ws://host.docker.internal:8545
+      - DEFAULT_HTTP_TIMEOUT=200s
+      - >-
+        DATABASE_URL=postgresql://postgres:password@postgres:5432/chainlink?sslmode=disable
+    command: local n -p /chainlink/.password -a /chainlink/.api
+    networks:
+      - dsla-test
+    depends_on:
+      - postgres
+    restart: on-failure
+networks:
+  dsla-test:
+    name: dsla-local-environment
+volumes:
+  postgres: null
+  chainlink: null

@@ -4,7 +4,7 @@ module.exports = {
     node: true,
     'truffle/globals': true,
   },
-  extends: ['airbnb-base'],
+  extends: ['airbnb-base', 'prettier'],
   parserOptions: {
     ecmaVersion: 12,
     sourceType: 'module',
@@ -17,6 +17,7 @@ module.exports = {
     'no-restricted-syntax': 'off',
     'no-param-reassign': 'off',
     'no-unused-vars': 'warn',
+    'import/no-extraneous-dependencies': 'off',
   },
   plugins: ['truffle'],
 };

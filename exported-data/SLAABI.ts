@@ -310,6 +310,20 @@ export const SLAABI: AbiItem[] = [
   },
   {
     inputs: [],
+    name: 'breachedContract',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'contractFinished',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'creationBlockNumber',
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
@@ -370,6 +384,13 @@ export const SLAABI: AbiItem[] = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'getStakersLength',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       { internalType: 'address', name: '_staker', type: 'address' },
       { internalType: 'uint256', name: '_allowedTokenIndex', type: 'uint256' },
@@ -393,6 +414,13 @@ export const SLAABI: AbiItem[] = [
     inputs: [],
     name: 'ipfsHash',
     outputs: [{ internalType: 'string', name: '', type: 'string' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'uint256', name: '_periodId', type: 'uint256' }],
+    name: 'isAllowedPeriod',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
     stateMutability: 'view',
     type: 'function',
   },
@@ -465,6 +493,16 @@ export const SLAABI: AbiItem[] = [
     type: 'function',
   },
   {
+    inputs: [
+      { internalType: 'uint256', name: '_sli', type: 'uint256' },
+      { internalType: 'uint256', name: '_periodId', type: 'uint256' },
+    ],
+    name: 'registerSLI',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     inputs: [{ internalType: 'address', name: '', type: 'address' }],
     name: 'registeredStakers',
     outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
@@ -504,6 +542,16 @@ export const SLAABI: AbiItem[] = [
     type: 'function',
   },
   {
+    inputs: [
+      { internalType: 'uint256', name: '_amount', type: 'uint256' },
+      { internalType: 'address', name: '_token', type: 'address' },
+    ],
+    name: 'stakeTokens',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     name: 'stakers',
     outputs: [{ internalType: 'address', name: '', type: 'address' }],
@@ -540,40 +588,6 @@ export const SLAABI: AbiItem[] = [
   },
   {
     inputs: [
-      { internalType: 'uint256', name: '_sli', type: 'uint256' },
-      { internalType: 'uint256', name: '_periodId', type: 'uint256' },
-    ],
-    name: 'registerSLI',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'uint256', name: '_periodId', type: 'uint256' }],
-    name: 'isAllowedPeriod',
-    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'contractFinished',
-    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { internalType: 'uint256', name: '_amount', type: 'uint256' },
-      { internalType: 'address', name: '_token', type: 'address' },
-    ],
-    name: 'stakeTokens',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
       { internalType: 'uint256', name: '_amount', type: 'uint256' },
       { internalType: 'address', name: '_tokenAddress', type: 'address' },
     ],
@@ -590,20 +604,6 @@ export const SLAABI: AbiItem[] = [
     name: 'withdrawUserTokens',
     outputs: [],
     stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'getStakersLength',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'breachedContract',
-    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
-    stateMutability: 'view',
     type: 'function',
   },
 ];
