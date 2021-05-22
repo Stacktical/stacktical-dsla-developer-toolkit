@@ -1,39 +1,28 @@
 import axios from 'axios';
+import { ChainlinkNodeConfiguration } from './types';
 
 const fs = require('fs');
 
 const appRoot = require('app-root-path');
 const dslaProtocolJsonPath = `${appRoot.path}/dev-env/dsla-protocol.json`;
 
-let chainlinkEnv;
-let url;
+let chainlinkNode: ChainlinkNodeConfiguration;
 let cookie;
 
-function setChainlinkEnv(env) {
-  chainlinkEnv = env;
-  url =
-    (chainlinkEnv.productionChainlinkNode &&
-      chainlinkEnv.productionChainlinkNode.url) ||
-    process.env.LOCAL_CHAINLINK_URL ||
-    'http://localhost:6688';
+function setChainlinkNode(chainlinkNodeConfig: ChainlinkNodeConfiguration) {
+  chainlinkNode = chainlinkNodeConfig;
 }
 
 const getChainlinkSessionCookie = async () => {
   const resp = await axios({
     method: 'post',
-    url: `${url}/sessions`,
+    url: `${chainlinkNode.restApiUrl}/sessions`,
     headers: {
       'Content-Type': 'application/json',
     },
     data: {
-      email:
-        (chainlinkEnv.productionChainlinkNode &&
-          chainlinkEnv.productionChainlinkNode.email) ||
-        'test@stacktical.com',
-      password:
-        (chainlinkEnv.productionChainlinkNode &&
-          chainlinkEnv.productionChainlinkNode.password) ||
-        'PaSSword123456',
+      email: chainlinkNode.email,
+      password: chainlinkNode.password,
     },
   });
   cookie = resp.headers['set-cookie'];
@@ -46,7 +35,7 @@ const getChainlinkAccounts = async () => {
     data: { data },
   } = await axios({
     method: 'get',
-    url: `${url}/v2/keys/eth`,
+    url: `${chainlinkNode.restApiUrl}/v2/keys/eth`,
     headers: {
       Cookie: sessionCookie,
       'Content-Type': 'application/json',
@@ -60,7 +49,7 @@ const getChainlinkBridge = async () => {
   const sessionCookie = cookie || (await getChainlinkSessionCookie());
   const { data } = await axios({
     method: 'get',
-    url: `${url}/v2/bridge_types`,
+    url: `${chainlinkNode.restApiUrl}/v2/bridge_types`,
     headers: {
       Cookie: sessionCookie,
       'Content-Type': 'application/json',
@@ -77,7 +66,7 @@ const getChainlinkJob = async () => {
   const sessionCookie = cookie || (await getChainlinkSessionCookie());
   const { data } = await axios({
     method: 'get',
-    url: `${url}/v2/specs`,
+    url: `${chainlinkNode.restApiUrl}/v2/specs`,
     headers: {
       Cookie: sessionCookie,
       'Content-Type': 'application/json',
@@ -94,7 +83,7 @@ const getChainlinkJobId = async () => {
   const sessionCookie = cookie || (await getChainlinkSessionCookie());
   const { data } = await axios({
     method: 'get',
-    url: `${url}/v2/specs`,
+    url: `${chainlinkNode.restApiUrl}/v2/specs`,
     headers: {
       Cookie: sessionCookie,
       'Content-Type': 'application/json',
@@ -108,7 +97,7 @@ const postChainlinkJob = async () => {
   const sessionCookie = cookie || (await getChainlinkSessionCookie());
   const { data } = await axios({
     method: 'post',
-    url: `${url}/v2/specs`,
+    url: `${chainlinkNode.restApiUrl}/v2/specs`,
     headers: {
       Cookie: sessionCookie,
       'Content-Type': 'application/json',
@@ -130,7 +119,7 @@ const getChainlinkLinkToken = async () => {
     },
   } = await axios({
     method: 'get',
-    url: `${url}/v2/config`,
+    url: `${chainlinkNode.restApiUrl}/v2/config`,
     headers: {
       Cookie: sessionCookie,
       'Content-Type': 'application/json',
@@ -146,17 +135,14 @@ const postChainlinkBridge = async () => {
   const sessionCookie = cookie || (await getChainlinkSessionCookie());
   const { data } = await axios({
     method: 'post',
-    url: `${url}/v2/bridge_types`,
+    url: `${chainlinkNode.restApiUrl}/v2/bridge_types`,
     headers: {
       Cookie: sessionCookie,
       'Content-Type': 'application/json',
     },
     data: {
       name: jobJson.tasks[0].type,
-      url:
-        (chainlinkEnv.productionChainlinkNode &&
-          chainlinkEnv.productionChainlinkNode.externalAdapterUrL) ||
-        'http://host.docker.internal:6060',
+      url: chainlinkNode.externalAdapterUrl,
     },
     withCredentials: true,
   });
@@ -167,7 +153,7 @@ const deleteJob = async (jobId) => {
   const sessionCookie = cookie || (await getChainlinkSessionCookie());
   const { data } = await axios({
     method: 'delete',
-    url: `${url}/v2/specs/${jobId}`,
+    url: `${chainlinkNode.restApiUrl}/v2/specs/${jobId}`,
     headers: {
       Cookie: sessionCookie,
       'Content-Type': 'application/json',
@@ -179,7 +165,7 @@ const deleteJob = async (jobId) => {
 
 export {
   deleteJob,
-  setChainlinkEnv,
+  setChainlinkNode,
   postChainlinkJob,
   postChainlinkBridge,
   getChainlinkJob,

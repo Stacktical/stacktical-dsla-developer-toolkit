@@ -49,7 +49,7 @@ export enum DEPLOYMENT_TAGS {
 export enum NETWORKS {
   DEVELOP = 'develop',
   MUMBAI = 'mumbai',
-  POLYGON = 'polygon',
+  HARMONYTESTNET = 'harmonytestnet',
 }
 
 export enum PERIOD_TYPE {
