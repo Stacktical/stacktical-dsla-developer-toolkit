@@ -1,14 +1,36 @@
-import { PreCoordinatorConfiguration, StackticalConfiguration } from '../types';
-import { DeployOptionsBase } from 'hardhat-deploy/dist/types';
 import {
-  getChainlinkJob,
-  getChainlinkLinkToken,
-  setChainlinkEnv,
-} from '../chainlinkUtils';
+  ChainlinkNodeConfiguration,
+  PreCoordinatorConfiguration,
+  StackticalConfiguration,
+} from '../types';
+import { DeployOptionsBase } from 'hardhat-deploy/dist/types';
+import { getChainlinkJob, setChainlinkNode } from '../chainlinkUtils';
 import { toWei } from 'web3-utils';
 import { PreCoordinator__factory } from '../typechain';
 import { CONTRACT_NAMES, DEPLOYMENT_TAGS } from '../constants';
-import { SUB_TASK_NAMES } from '../subtasks';
+
+const getPreCoordinatorConfiguration = async (
+  nodes: Array<ChainlinkNodeConfiguration>,
+  web3
+) => {
+  const preCoordinatorConfiguration: PreCoordinatorConfiguration = {
+    oracles: [],
+    jobIds: [],
+    payments: [],
+  };
+  for (let node of nodes) {
+    setChainlinkNode(node);
+    const job = await getChainlinkJob();
+    preCoordinatorConfiguration.payments.push(toWei('0.1'));
+    preCoordinatorConfiguration.jobIds.push(
+      web3.utils.padRight('0x' + job.id, 64)
+    );
+    preCoordinatorConfiguration.oracles.push(
+      job.attributes.initiators[0].params.address
+    );
+  }
+  return preCoordinatorConfiguration;
+};
 
 module.exports = async ({
   getNamedAccounts,
@@ -20,7 +42,6 @@ module.exports = async ({
 }) => {
   const { stacktical }: { stacktical: StackticalConfiguration } =
     network.config;
-  await run(SUB_TASK_NAMES.SET_CHAINLINK_ENV);
   const { deployer } = await getNamedAccounts();
   const { deploy, get } = deployments;
   const stringUtils = await get(CONTRACT_NAMES.StringUtils);
@@ -32,22 +53,17 @@ module.exports = async ({
     from: deployer,
     log: true,
   };
-  const linkToken = await getChainlinkLinkToken();
+  const linkToken = await get(CONTRACT_NAMES.LinkToken);
   await deploy(CONTRACT_NAMES.PreCoordinator, {
     ...baseOptions,
-    args: [linkToken],
+    args: [linkToken.address],
   });
 
   const minResponses = 1;
-  const job = await getChainlinkJob();
-  const preCoordinatorConfiguration: PreCoordinatorConfiguration =
-    stacktical.productionChainlinkNode === null
-      ? {
-          oracles: [job.attributes.initiators[0].params.address],
-          jobIds: [web3.utils.padRight('0x' + job.id, 64)],
-          payments: [toWei('0.1')],
-        }
-      : stacktical.productionChainlinkNode.preCoordinatorConfiguration;
+  const preCoordinatorConfiguration = await getPreCoordinatorConfiguration(
+    stacktical.chainlink.nodesConfiguration,
+    web3
+  );
   const pc = await get(CONTRACT_NAMES.PreCoordinator);
   const preCoordinator = await PreCoordinator__factory.connect(
     pc.address,
@@ -67,7 +83,7 @@ module.exports = async ({
     ...baseOptions,
     args: [
       preCoordinator.address,
-      linkToken,
+      linkToken.address,
       saId,
       periodRegistry.address,
       stakeRegistry.address,
@@ -82,7 +98,7 @@ module.exports = async ({
     ...baseOptions,
     args: [
       preCoordinator.address,
-      linkToken,
+      linkToken.address,
       saId,
       networkAnalytics.address,
       feeMultiplier,

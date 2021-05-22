@@ -4,7 +4,7 @@ services:
     container_name: postgres-dsla-env
     image: postgres:13.1
     volumes:
-      - ./postgres/harmonytestnet/db:/var/lib/postgresql/data
+      - ./postgres/develop/db:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: chainlink
@@ -16,21 +16,22 @@ services:
     ports:
       - '6688:6688'
     volumes:
-      - ./chainlink:/chainlink
+      - ./chainlink/develop:/chain
       - ./chainlink/.api:/chainlink/.api
       - ./chainlink/.password:/chainlink/.password
     environment:
       - ROOT=/chainlink
-      - ETH_CHAIN_ID=1666700000
+      - ETH_CHAIN_ID=1337
       - LOG_LEVEL=info
       - MIN_INCOMING_CONFIRMATIONS=1
       - MIN_OUTGOING_CONFIRMATIONS=1
-      - LINK_CONTRACT_ADDRESS=0xCAcAf3C1A7F884556A7d21757a0C7EDf4b06bf46
+      - LINK_CONTRACT_ADDRESS=0x254dffcd3277C0b1660F6d42EFbB754edaBAbC2B
       - CHAINLINK_TLS_PORT=0
       - SECURE_COOKIES=false
-      - GAS_UPDATER_ENABLED=true
+      - GAS_UPDATER_ENABLED=false
       - ALLOW_ORIGINS=*
-      - ETH_URL=wss://ws.s0.b.hmny.io
+      - ETH_URL=ws://host.docker.internal:8545
+      - ETH_HTTP_URL=http://host.docker.internal:8545
       - DEFAULT_HTTP_TIMEOUT=200s
       - >-
         DATABASE_URL=postgresql://postgres:password@postgres:5432/chainlink?sslmode=disable

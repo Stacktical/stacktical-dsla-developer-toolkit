@@ -1,9 +1,7 @@
 import { PERIOD_TYPE, SLO_TYPE } from './constants';
 
 export type StackticalConfiguration = {
-  web3WebsocketProviderUrl: string;
-  productionChainlinkNode?: ChainlinkNodeConfiguration;
-  developChainlinkNode?: ChainlinkNodeConfiguration;
+  chainlink?: ChainlinkConfiguration;
   checkPastPeriods: boolean;
   addresses: {
     tokens: {
@@ -29,12 +27,22 @@ export type PeriodBootstrapDefinition = {
   expiredPeriods: number;
 };
 
-export type ChainlinkNodeConfiguration = {
-  funds: string;
-  ethUrl: string;
+export type ChainlinkConfiguration = {
+  isProduction: boolean;
+  nodeFunds: string;
+  ethWsUrl: string;
+  ethHttpUrl?: string;
   gasLimit?: string;
   externalAdapterUrL?: string;
-  preCoordinatorConfiguration?: PreCoordinatorConfiguration;
+  nodesConfiguration: Array<ChainlinkNodeConfiguration>;
+};
+
+export type ChainlinkNodeConfiguration = {
+  name: string;
+  restApiUrl: string;
+  email: string;
+  password: string;
+  externalAdapterUrl: string;
 };
 
 export type PreCoordinatorConfiguration = {
