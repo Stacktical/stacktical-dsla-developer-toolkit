@@ -487,9 +487,7 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_DSLA_PROTOCOL, undefined).setAction(
     const { periods, messengersLinkTokenAllowance } = bootstrap;
 
     console.log('Starting automated jobs to bootstrap protocol correctly');
-    console.log(
-      'Starting automated job 1: allowing DAI and USDC on StakeRegistry'
-    );
+
     const { deployments, ethers, getNamedAccounts } = hre;
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
@@ -526,7 +524,12 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_DSLA_PROTOCOL, undefined).setAction(
       ).address,
       signer
     );
-    let tx = await stakeRegistry.addAllowedTokens(daiToken.address);
+
+    let tx;
+    console.log(
+      'Starting automated job 1: allowing DAI and USDC on StakeRegistry'
+    );
+    tx = await stakeRegistry.addAllowedTokens(daiToken.address);
     await tx.wait();
     tx = await stakeRegistry.addAllowedTokens(usdcToken.address);
     await tx.wait();
@@ -730,7 +733,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(async (_, hre: any) => {
 
 subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
   async (taskArgs, hre: any) => {
-    const { deployments, ethers, getNamedAccounts } = hre;
+    const { deployments, ethers, getNamedAccounts, network } = hre;
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
     const { get } = deployments;
@@ -757,7 +760,8 @@ subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
     let tx = await slaRegistry.requestSLI(
       Number(nextVerifiablePeriod),
       sla.address,
-      ownerApproval
+      ownerApproval,
+      { ...(network.config.gas !== 'auto' && { gasLimit: network.config.gas }) }
     );
     await tx.wait();
     await new Promise((resolve) => sla.on('SLICreated', () => resolve(null)));
@@ -800,7 +804,8 @@ subtask(SUB_TASK_NAMES.REQUEST_ANALYTICS, undefined).setAction(
       taskArgs.periodId,
       deploy_sla.periodType,
       deploy_sla.extraData[0],
-      ownerApproval
+      ownerApproval,
+      { ...(network.config.gas !== 'auto' && { gasLimit: network.config.gas }) }
     );
     await tx.wait();
     await new Promise((resolve) =>

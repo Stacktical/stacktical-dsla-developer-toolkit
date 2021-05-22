@@ -179,7 +179,6 @@ const config: HardhatUserConfig = {
       saveDeployments: true,
       mining: {
         auto: true,
-        // interval: 5000,
       },
       stacktical: developStacktical,
     },
