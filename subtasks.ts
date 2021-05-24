@@ -30,15 +30,18 @@ import {
   StakeRegistry__factory,
   USDC__factory,
 } from './typechain';
-import { getIPFSHash, generateBootstrapPeriods, eventListener } from './utils';
 import {
   CONTRACT_NAMES,
   PERIOD_STATUS,
   PERIOD_TYPE,
   SENetworkNamesBytes32,
 } from './constants';
-import { string } from 'hardhat/internal/core/params/argumentTypes';
-import { BigNumber } from 'ethers';
+import {
+  generateBootstrapPeriods,
+  getIPFSHash,
+  getPreCoordinatorConfiguration,
+  printSeparator,
+} from './utils';
 
 const prettier = require('prettier');
 const { DataFile } = require('edit-config');
