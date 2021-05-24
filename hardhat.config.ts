@@ -38,6 +38,7 @@ enum TASK_NAMES {
   REQUEST_SLI = 'script:request-sli',
   REQUEST_ANALYTICS = 'script:request-analytics',
   RESTART_SERVICES = 'script:restart-services',
+  GET_SERVICE_AGREEMENT = 'script:get-service-agreements',
 }
 
 task(
@@ -93,6 +94,13 @@ task(
   await run(SUB_TASK_NAMES.START_LOCAL_SERVICES);
 });
 
+task(
+  TASK_NAMES.GET_SERVICE_AGREEMENT,
+  'Get the PreCoordinator service agreement configuration'
+).setAction(async (_, { run }) => {
+  await run(SUB_TASK_NAMES.GET_SERVICE_AGREEMENT);
+});
+
 const developStacktical: StackticalConfiguration = {
   chainlink: {
     isProduction: false,
@@ -104,6 +112,13 @@ const developStacktical: StackticalConfiguration = {
     nodesConfiguration: [
       {
         name: 'Local Chainlink Node',
+        restApiUrl: 'http://localhost:6688',
+        email: 'test@stacktical.com',
+        password: 'PaSSword123456',
+        externalAdapterUrl: 'http://host.docker.internal:6060',
+      },
+      {
+        name: 'Local Chainlink Node 2',
         restApiUrl: 'http://localhost:6688',
         email: 'test@stacktical.com',
         password: 'PaSSword123456',

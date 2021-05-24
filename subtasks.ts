@@ -17,17 +17,18 @@ import {
   StackticalConfiguration,
 } from './types';
 import {
-    DAI__factory,
-    DSLA__factory,
-    LinkToken__factory,
-    NetworkAnalytics__factory,
-    Oracle__factory,
-    PeriodRegistry__factory, PreCoordinator__factory,
-    SEMessenger__factory,
-    SLA__factory,
-    SLARegistry__factory,
-    StakeRegistry__factory,
-    USDC__factory,
+  DAI__factory,
+  DSLA__factory,
+  LinkToken__factory,
+  NetworkAnalytics__factory,
+  Oracle__factory,
+  PeriodRegistry__factory,
+  PreCoordinator__factory,
+  SEMessenger__factory,
+  SLA__factory,
+  SLARegistry__factory,
+  StakeRegistry__factory,
+  USDC__factory,
 } from './typechain';
 import { getIPFSHash, generateBootstrapPeriods, eventListener } from './utils';
 import {
@@ -36,6 +37,8 @@ import {
   PERIOD_TYPE,
   SENetworkNamesBytes32,
 } from './constants';
+import { string } from 'hardhat/internal/core/params/argumentTypes';
+import { BigNumber } from 'ethers';
 
 const prettier = require('prettier');
 const { DataFile } = require('edit-config');
@@ -58,6 +61,7 @@ export enum SUB_TASK_NAMES {
   BOOTSTRAP_DSLA_PROTOCOL = 'BOOTSTRAP_DSLA_PROTOCOL',
   REQUEST_SLI = 'REQUEST_SLI',
   REQUEST_ANALYTICS = 'REQUEST_ANALYTICS',
+  GET_SERVICE_AGREEMENT = 'GET_SERVICE_AGREEMENT',
 }
 
 subtask(SUB_TASK_NAMES.STOP_LOCAL_SERVICES, undefined).setAction(async () => {
@@ -819,5 +823,55 @@ subtask(SUB_TASK_NAMES.REQUEST_ANALYTICS, undefined).setAction(
     );
     console.log('Analytics result: ', analyticsResult);
     console.log('Analytics request process finished');
+  }
+);
+
+subtask(SUB_TASK_NAMES.GET_SERVICE_AGREEMENT, undefined).setAction(
+  async (taskArgs, hre: any) => {
+    const { deployments, ethers, getNamedAccounts, network } = hre;
+    const { stacktical }: { stacktical: StackticalConfiguration } =
+      network.config;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    const { get } = deployments;
+
+    console.log('Getting Chainlink config from PreCoordinator contract');
+
+    const precoordinator = await PreCoordinator__factory.connect(
+      (
+        await get(CONTRACT_NAMES.PreCoordinator)
+      ).address,
+      signer
+    );
+    const eventsFilter = precoordinator.filters.NewServiceAgreement();
+    const events = await precoordinator.queryFilter(eventsFilter);
+    for (let event of events) {
+      console.log(
+        '----------------------------------------------------------------------------------------------------------------'
+      );
+      const { saId, payment, minresponses } = event.args;
+      console.log('Service agreement blockNumber: ' + event.blockNumber);
+      console.log('Service agreement ID: ' + saId);
+      console.log(
+        'Service agreement payment: ' +
+          ethers.utils.formatEther(payment) +
+          ' LINK'
+      );
+      console.log('Service agreement minresponses: ' + minresponses);
+      const serviceAgreement = await precoordinator.getServiceAgreement(saId);
+      console.log('Service agreement jobIds array: ');
+      console.log(serviceAgreement.jobIds);
+      console.log('Service agreement oracles array: ');
+      console.log(serviceAgreement.oracles);
+      console.log('Service agreement payments array: ');
+      console.log(
+        serviceAgreement.payments.map((payment) => payment.toString())
+      );
+      console.log(
+        '----------------------------------------------------------------------------------------------------------------'
+      );
+    }
+
+    console.log('Service agreements requested');
   }
 );
