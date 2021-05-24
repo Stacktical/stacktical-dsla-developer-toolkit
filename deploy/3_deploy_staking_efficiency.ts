@@ -4,7 +4,7 @@ import {
   StackticalConfiguration,
 } from '../types';
 import { DeployOptionsBase } from 'hardhat-deploy/dist/types';
-import { getChainlinkJob, setChainlinkNode } from '../chainlinkUtils';
+import { getChainlinkJob } from '../chainlinkUtils';
 import { toWei } from 'web3-utils';
 import { PreCoordinator__factory } from '../typechain';
 import { CONTRACT_NAMES, DEPLOYMENT_TAGS } from '../constants';
@@ -19,8 +19,7 @@ const getPreCoordinatorConfiguration = async (
     payments: [],
   };
   for (let node of nodes) {
-    setChainlinkNode(node);
-    const job = await getChainlinkJob();
+    const job = await getChainlinkJob(node);
     preCoordinatorConfiguration.payments.push(toWei('0.1'));
     preCoordinatorConfiguration.jobIds.push(
       web3.utils.padRight('0x' + job.id, 64)

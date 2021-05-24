@@ -7,25 +7,27 @@ import {
   getChainlinkAccounts,
   getChainlinkBridge,
   getChainlinkJob,
-  getChainlinkLinkToken,
   postChainlinkBridge,
   postChainlinkJob,
-  setChainlinkNode,
 } from './chainlinkUtils';
 import { subtask } from 'hardhat/config';
-import { DeploySLAConfiguration, StackticalConfiguration } from './types';
 import {
-  DAI__factory,
-  DSLA__factory,
-  LinkToken__factory,
-  NetworkAnalytics__factory,
-  Oracle__factory,
-  PeriodRegistry__factory,
-  SEMessenger__factory,
-  SLA__factory,
-  SLARegistry__factory,
-  StakeRegistry__factory,
-  USDC__factory,
+  ChainlinkNodeConfiguration,
+  DeploySLAConfiguration,
+  StackticalConfiguration,
+} from './types';
+import {
+    DAI__factory,
+    DSLA__factory,
+    LinkToken__factory,
+    NetworkAnalytics__factory,
+    Oracle__factory,
+    PeriodRegistry__factory, PreCoordinator__factory,
+    SEMessenger__factory,
+    SLA__factory,
+    SLARegistry__factory,
+    StakeRegistry__factory,
+    USDC__factory,
 } from './typechain';
 import { getIPFSHash, generateBootstrapPeriods, eventListener } from './utils';
 import {
@@ -136,33 +138,33 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
       });
     }
 
-    const updatedBridge = async () => {
+    const updatedBridge = async (node: ChainlinkNodeConfiguration) => {
       try {
-        const postedBridge = await getChainlinkBridge();
+        const postedBridge = await getChainlinkBridge(node);
         if (postedBridge) return postedBridge;
-        const httpRequestJobRes = await postChainlinkBridge();
+        const httpRequestJobRes = await postChainlinkBridge(node);
         return httpRequestJobRes.data;
       } catch (error) {
         return false;
       }
     };
 
-    const updatedJob = async () => {
+    const updatedJob = async (node: ChainlinkNodeConfiguration) => {
       try {
-        const postedJob = await getChainlinkJob();
+        const postedJob = await getChainlinkJob(node);
         if (postedJob) {
-          await deleteJob(postedJob.id);
+          await deleteJob(node, postedJob.id);
         }
-        const httpRequestJobRes = await postChainlinkJob();
+        const httpRequestJobRes = await postChainlinkJob(node);
         return httpRequestJobRes.data;
       } catch (error) {
         return false;
       }
     };
 
-    const updatedAddress = async () => {
+    const updatedAddress = async (node: ChainlinkNodeConfiguration) => {
       try {
-        const addresses = await getChainlinkAccounts();
+        const addresses = await getChainlinkAccounts(node);
         if (addresses.length === 0) return false;
         const {
           attributes: { address },
@@ -182,8 +184,7 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
     for (let node of stacktical.chainlink.nodesConfiguration) {
       console.log('Preparing node:' + node.name);
       console.log('Creating dsla-protocol bridge in Chainlink nodes...');
-      setChainlinkNode(node);
-      let bridge = await updatedBridge();
+      let bridge = await updatedBridge(node);
       while (!bridge) {
         // eslint-disable-next-line no-await-in-loop
         await wait(5000);
@@ -191,14 +192,14 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
           'Bridge creation in Chainlink node failed, reattempting in 5 seconds'
         );
         // eslint-disable-next-line no-await-in-loop
-        bridge = await updatedBridge();
+        bridge = await updatedBridge(node);
       }
       console.log(`Bridge created! Bridge ID: ${bridge.id}.`);
 
       // Create job
       console.log('Creating staking efficiency job on Chainlink node...');
       // eslint-disable-next-line global-require
-      let job = await updatedJob();
+      let job = await updatedJob(node);
       while (!job) {
         // eslint-disable-next-line no-await-in-loop
         await wait(5000);
@@ -206,18 +207,18 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
           'Job creation in Chainlink node failed, reattempting in 5 seconds'
         );
         // eslint-disable-next-line no-await-in-loop
-        job = await updatedJob();
+        job = await updatedJob(node);
       }
       console.log(`Job created! Job ID: ${job.id}.`);
 
       // Fund node
-      let chainlinkNodeAddress = await updatedAddress();
+      let chainlinkNodeAddress = await updatedAddress(node);
       while (!chainlinkNodeAddress) {
         await wait(5000);
         console.log(
           'Address fetch from Chainlink node failed, reattempting in 5 seconds'
         );
-        chainlinkNodeAddress = await updatedAddress();
+        chainlinkNodeAddress = await updatedAddress(node);
       }
       console.log(`Chainlink Node Address: ${chainlinkNodeAddress}`);
       const { nodeFunds, gasLimit } = stacktical.chainlink;
