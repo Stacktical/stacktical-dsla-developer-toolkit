@@ -37,6 +37,8 @@ services:
       - >-
         DATABASE_URL=postgresql://postgres:password@postgres:5432/chainlink?sslmode=disable
     command: local n -p /chainlink/.password -a /chainlink/.api
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     networks:
       - dsla-test
     depends_on:
