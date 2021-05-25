@@ -1,17 +1,7 @@
-import { CONTRACT_NAMES, DEPLOYMENT_TAGS } from '../constants';
+import { DEPLOYMENT_TAGS } from '../constants';
+import { SUB_TASK_NAMES } from '../subtasks';
 
-module.exports = async ({ deployments, getNamedAccounts }) => {
-  const { deploy, get } = deployments;
-  const { deployer } = await getNamedAccounts();
-  await deploy(CONTRACT_NAMES.LinkToken, {
-    from: deployer,
-    log: true,
-  });
-  const linkToken = await get(CONTRACT_NAMES.LinkToken);
-  await deploy(CONTRACT_NAMES.Oracle, {
-    from: deployer,
-    args: [linkToken.address],
-    log: true,
-  });
+module.exports = async ({ run }) => {
+  await run(SUB_TASK_NAMES.DEPLOY_CHAINLINK_CONTRACTS);
 };
 module.exports.tags = [DEPLOYMENT_TAGS.Chainlink];
