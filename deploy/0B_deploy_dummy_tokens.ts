@@ -7,6 +7,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   const baseOptions: DeployOptionsBase = {
     from: deployer,
     log: true,
+    skipIfAlreadyDeployed: true,
   };
   await deploy(CONTRACT_NAMES.DSLA, baseOptions);
   await deploy(CONTRACT_NAMES.DAI, baseOptions);

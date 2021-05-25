@@ -11,7 +11,7 @@ enum TASK_NAMES {
   RESTART_SERVICES = 'stacktical:restart-services',
   GET_PRECOORDINATOR = 'stacktical:get-precoordinator',
   SET_PRECOORDINATOR = 'stacktical:set-precoordinator',
-  PREPARE_CHAINLINK_NODES = 'stacktical:prepare-chainlink-nodes',
+  PREPARE_PRODUCTION_CHAINLINK_NODES = 'stacktical:production-chainlink',
 }
 
 task(
@@ -81,15 +81,17 @@ task(
   TASK_NAMES.SET_PRECOORDINATOR,
   'Set the PreCoordinator service configuration from stacktical configuration'
 ).setAction(async (_, { run }) => {
-  await run(SUB_TASK_NAMES.GET_PRECOORDINATOR);
+  await run(SUB_TASK_NAMES.SET_PRECOORDINATOR);
   await run(SUB_TASK_NAMES.GET_PRECOORDINATOR);
 });
 
 task(
-  TASK_NAMES.PREPARE_CHAINLINK_NODES,
-  'Creates the jobs, transfer funds, and set the fulfillment permissions for Chainlink nodes'
+  TASK_NAMES.PREPARE_PRODUCTION_CHAINLINK_NODES,
+  'Deploys Oracle and LinkToken contracts and creates the proper docker-compose files'
 ).setAction(async (_, { run }) => {
-  await run(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES);
+  await run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
+  await run(SUB_TASK_NAMES.DEPLOY_CHAINLINK_CONTRACTS);
+  await run(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE);
 });
 
 module.exports = {};

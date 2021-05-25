@@ -67,6 +67,7 @@ export enum SUB_TASK_NAMES {
   GET_PRECOORDINATOR = 'GET_PRECOORDINATOR',
   SET_PRECOORDINATOR = 'SET_PRECOORDINATOR',
   DEPLOY_LOCAL_SERVICES = 'DEPLOY_LOCAL_SERVICES',
+  DEPLOY_CHAINLINK_CONTRACTS = 'DEPLOY_CHAINLINK_CONTRACTS',
 }
 
 subtask(SUB_TASK_NAMES.STOP_LOCAL_SERVICES, undefined).setAction(
@@ -977,5 +978,24 @@ subtask(SUB_TASK_NAMES.SET_PRECOORDINATOR, undefined).setAction(
       preCoordinatorConfiguration.payments
     );
     await tx.wait();
+  }
+);
+
+subtask(SUB_TASK_NAMES.DEPLOY_CHAINLINK_CONTRACTS, undefined).setAction(
+  async (taskArgs, hre: any) => {
+    const { deploy, get } = hre.deployments;
+    const { deployer } = await hre.getNamedAccounts();
+    await deploy(CONTRACT_NAMES.LinkToken, {
+      from: deployer,
+      log: true,
+      skipIfAlreadyDeployed: true,
+    });
+    const linkToken = await get(CONTRACT_NAMES.LinkToken);
+    await deploy(CONTRACT_NAMES.Oracle, {
+      from: deployer,
+      args: [linkToken.address],
+      log: true,
+      skipIfAlreadyDeployed: true,
+    });
   }
 );

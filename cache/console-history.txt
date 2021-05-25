@@ -1,4 +1,6 @@
 await ethers.provider.send('evm_mine')
+await ethers.provider.send
+await ethers.provider.send('evm_mine')
 await ethers.provider.send('evm_min')
 await ethers.provider.send()
 await preCoordinator.queryFilter({topic:'NewServiceAgreement'})

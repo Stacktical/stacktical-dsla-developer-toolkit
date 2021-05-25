@@ -29,7 +29,7 @@ import {
 
 const developStacktical: StackticalConfiguration = {
   chainlink: {
-    isProduction: false,
+    isProduction: true,
     nodeFunds: '10',
     gasLimit: undefined,
     externalAdapterUrL: null,
@@ -131,7 +131,6 @@ const config: HardhatUserConfig = {
         mnemonic: process.env.DEVELOP_MNEMONIC,
       },
       url: 'http://localhost:8545',
-      saveDeployments: true,
       stacktical: developStacktical,
     },
     [NETWORKS.HARMONYTESTNET]: {

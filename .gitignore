@@ -17,3 +17,4 @@ services/postgres/
 deployments/develop
 exported-data/networks/develop.ts
 services/environments/**
+services/dsla-protocol.json
