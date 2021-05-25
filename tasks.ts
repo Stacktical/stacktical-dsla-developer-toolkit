@@ -81,6 +81,7 @@ task(
   TASK_NAMES.SET_PRECOORDINATOR,
   'Set the PreCoordinator service configuration from stacktical configuration'
 ).setAction(async (_, { run }) => {
+  await run(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES);
   await run(SUB_TASK_NAMES.SET_PRECOORDINATOR);
   await run(SUB_TASK_NAMES.GET_PRECOORDINATOR);
 });
