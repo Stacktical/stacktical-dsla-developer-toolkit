@@ -19,6 +19,7 @@ import {
 import {
   DAI__factory,
   DSLA__factory,
+  ERC20__factory,
   IMessenger__factory,
   LinkToken__factory,
   MessengerRegistry__factory,
@@ -1007,6 +1008,45 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_NETWORK_ANALYTICS, undefined).setAction(
     console.log('Networks allowed on the NetworkAnalytics contract: ');
     console.log(naNetworks);
     console.log(finishBootstrap);
+  }
+);
+
+subtask(SUB_TASK_NAMES.SET_CONTRACTS_ALLOWANCE, undefined).setAction(
+  async (_, hre: any) => {
+    const {
+      stacktical: { bootstrap },
+    }: { stacktical: StackticalConfiguration } = hre.network.config;
+    const { allowance } = bootstrap;
+    const { deployments, ethers, getNamedAccounts } = hre;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    const { get } = deployments;
+
+    console.log('Setting allowance to contracts');
+    for (let tokenAllowance of allowance) {
+      console.log(
+        'Setting allowance of ' +
+          tokenAllowance.allowance +
+          ' ' +
+          tokenAllowance.token +
+          ' for ' +
+          tokenAllowance.contract +
+          '  '
+      );
+      const token = await ERC20__factory.connect(
+        (
+          await get(tokenAllowance.token)
+        ).address,
+        signer
+      );
+      const contract = await get(tokenAllowance.contract);
+      let tx = await token.approve(
+        contract.address,
+        toWei(tokenAllowance.allowance)
+      );
+      await tx.wait();
+    }
+    console.log('Alowance setted to contracts');
   }
 );
 
