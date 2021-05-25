@@ -1,4 +1,4 @@
-import { PERIOD_TYPE } from './constants';
+import { CONTRACT_NAMES, PERIOD_TYPE } from './constants';
 import {
   ChainlinkNodeConfiguration,
   PreCoordinatorConfiguration,
@@ -86,3 +86,10 @@ export const printSeparator = () => {
     '----------------------------------------------------------------------------------------------------------------'
   );
 };
+
+export const bootstrapStrings = (contractName: string) => [
+  'Starting automated jobs to bootstrap ' +
+    contractName +
+    ' contract correctly',
+  'Automated jobs to bootstrap ' + contractName + ' finished correctly',
+];

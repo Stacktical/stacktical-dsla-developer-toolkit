@@ -1,5 +1,6 @@
 import { task } from 'hardhat/config';
 import { SUB_TASK_NAMES } from './subtasks';
+import { printSeparator } from './utils';
 
 enum TASK_NAMES {
   EXPORT_DATA = 'stacktical:export-data',
@@ -36,7 +37,19 @@ task(TASK_NAMES.CREATE_DOCKER_COMPOSE, 'Create docker compose').setAction(
 
 task(TASK_NAMES.BOOTSTRAP_DSLA_PROTOCOL, 'Bootstrap DSLA protocol').setAction(
   async (_, { run }) => {
-    await run(SUB_TASK_NAMES.BOOTSTRAP_DSLA_PROTOCOL);
+    const bootstrapSubtasks = [
+      SUB_TASK_NAMES.BOOTSTRAP_MESSENGER_REGISTRY,
+      SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY,
+      SUB_TASK_NAMES.BOOTSTRAP_PERIOD_REGISTRY,
+      SUB_TASK_NAMES.BOOTSTRAP_NETWORK_ANALYTICS,
+      SUB_TASK_NAMES.SET_CONTRACTS_ALLOWANCE,
+    ];
+    for (let subtask of bootstrapSubtasks) {
+      printSeparator();
+      console.log(subtask);
+      await run(subtask);
+      printSeparator();
+    }
   }
 );
 
@@ -81,8 +94,15 @@ task(
   TASK_NAMES.SET_PRECOORDINATOR,
   'Set the PreCoordinator service configuration from stacktical configuration'
 ).setAction(async (_, { run }) => {
+  printSeparator();
+  await run(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES);
+  printSeparator();
   await run(SUB_TASK_NAMES.SET_PRECOORDINATOR);
+  printSeparator();
+  await run(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR);
+  printSeparator();
   await run(SUB_TASK_NAMES.GET_PRECOORDINATOR);
+  printSeparator();
 });
 
 task(

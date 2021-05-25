@@ -17,9 +17,9 @@ import {
   StackticalConfiguration,
 } from './types';
 import {
-  DAI__factory,
   DSLA__factory,
-  LinkToken__factory,
+  ERC20__factory,
+  MessengerRegistry__factory,
   NetworkAnalytics__factory,
   Oracle__factory,
   PeriodRegistry__factory,
@@ -28,7 +28,6 @@ import {
   SLA__factory,
   SLARegistry__factory,
   StakeRegistry__factory,
-  USDC__factory,
 } from './typechain';
 import {
   CONTRACT_NAMES,
@@ -37,11 +36,13 @@ import {
   SENetworkNamesBytes32,
 } from './constants';
 import {
+  bootstrapStrings,
   generateBootstrapPeriods,
   getIPFSHash,
   getPreCoordinatorConfiguration,
   printSeparator,
 } from './utils';
+import { formatBytes32String } from 'ethers/lib/utils';
 
 const prettier = require('prettier');
 const { DataFile } = require('edit-config');
@@ -61,13 +62,18 @@ export enum SUB_TASK_NAMES {
   SAVE_CONTRACTS_ADDRESSES = 'SAVE_CONTRACTS_ADDRESSES',
   EXPORT_ABIS = 'EXPORT_ABIS',
   DEPLOY_SLA = 'DEPLOY_SLA',
-  BOOTSTRAP_DSLA_PROTOCOL = 'BOOTSTRAP_DSLA_PROTOCOL',
+  BOOTSTRAP_MESSENGER_REGISTRY = 'BOOTSTRAP_MESSENGER_REGISTRY',
+  BOOTSTRAP_PERIOD_REGISTRY = 'BOOTSTRAP_PERIOD_REGISTRY',
+  BOOTSTRAP_STAKE_REGISTRY = 'BOOTSTRAP_STAKE_REGISTRY',
+  BOOTSTRAP_NETWORK_ANALYTICS = 'BOOTSTRAP_NETWORK_ANALYTICS',
+  SET_CONTRACTS_ALLOWANCE = 'SET_CONTRACTS_ALLOWANCE',
   REQUEST_SLI = 'REQUEST_SLI',
   REQUEST_ANALYTICS = 'REQUEST_ANALYTICS',
   GET_PRECOORDINATOR = 'GET_PRECOORDINATOR',
   SET_PRECOORDINATOR = 'SET_PRECOORDINATOR',
   DEPLOY_LOCAL_SERVICES = 'DEPLOY_LOCAL_SERVICES',
   DEPLOY_CHAINLINK_CONTRACTS = 'DEPLOY_CHAINLINK_CONTRACTS',
+  UPDATE_PRECOORDINATOR = 'UPDATE_PRECOORDINATOR',
 }
 
 subtask(SUB_TASK_NAMES.STOP_LOCAL_SERVICES, undefined).setAction(
@@ -562,45 +568,287 @@ subtask(SUB_TASK_NAMES.EXPORT_ABIS, undefined).setAction(
   }
 );
 
-subtask(SUB_TASK_NAMES.BOOTSTRAP_DSLA_PROTOCOL, undefined).setAction(
+// subtask(SUB_TASK_NAMES.BOOTSTRAP_DSLA_PROTOCOL, undefined).setAction(
+//   async (_, hre: any) => {
+//     const {
+//       stacktical: { bootstrap },
+//     }: { stacktical: StackticalConfiguration } = hre.network.config;
+//     const {
+//       registry: {
+//         periods,
+//         messengers: { linkTokenAllowance },
+//       },
+//     } = bootstrap;
+//
+//     console.log('Starting automated jobs to bootstrap protocol correctly');
+//
+//     const { deployments, ethers, getNamedAccounts } = hre;
+//     const { deployer } = await getNamedAccounts();
+//     const signer = await ethers.getSigner(deployer);
+//     const { get } = deployments;
+//
+//     const daiArtifact = await get(CONTRACT_NAMES.DAI);
+//     const usdcArtifact = await get(CONTRACT_NAMES.USDC);
+//     const stakeRegistryArtifact = await get(CONTRACT_NAMES.StakeRegistry);
+//     const periodRegistryArtifact = await get(CONTRACT_NAMES.PeriodRegistry);
+//     const networkAnalyticsArtifact = await get(CONTRACT_NAMES.NetworkAnalytics);
+//     const networkAnalytics = await NetworkAnalytics__factory.connect(
+//       networkAnalyticsArtifact.address,
+//       signer
+//     );
+//     const daiToken = await DAI__factory.connect(daiArtifact.address, signer);
+//     const usdcToken = await USDC__factory.connect(usdcArtifact.address, signer);
+//     const stakeRegistry = await StakeRegistry__factory.connect(
+//       stakeRegistryArtifact.address,
+//       signer
+//     );
+//     const periodRegistry = await PeriodRegistry__factory.connect(
+//       periodRegistryArtifact.address,
+//       signer
+//     );
+//     const seMessenger = await SEMessenger__factory.connect(
+//       (
+//         await get(CONTRACT_NAMES.SEMessenger)
+//       ).address,
+//       signer
+//     );
+//     const slaRegistry = await SLARegistry__factory.connect(
+//       (
+//         await get(CONTRACT_NAMES.SLARegistry)
+//       ).address,
+//       signer
+//     );
+//
+//     let tx;
+//     console.log(
+//       'Starting automated job 1: allowing DAI and USDC on StakeRegistry'
+//     );
+//     tx = await stakeRegistry.addAllowedTokens(daiToken.address);
+//     await tx.wait();
+//     tx = await stakeRegistry.addAllowedTokens(usdcToken.address);
+//     await tx.wait();
+//
+//     console.log('Starting automated job 2: periods initialization');
+//     for (let period of periods) {
+//       const { periodType, amountOfPeriods, expiredPeriods } = period;
+//       const [periodStarts, periodEnds] = generateBootstrapPeriods(
+//         periodType,
+//         amountOfPeriods,
+//         expiredPeriods
+//       );
+//       const periodStartsDate = periodStarts.map((date) =>
+//         moment(date * 1000)
+//           .utc(0)
+//           .format('DD/MM/YYYY HH:mm:ss')
+//       );
+//       const periodEndsDate = periodEnds.map((date) =>
+//         moment(date * 1000)
+//           .utc(0)
+//           .format('DD/MM/YYYY HH:mm:ss')
+//       );
+//       console.log(
+//         'Periods generated for ' + PERIOD_TYPE[periodType] + ' period type:'
+//       );
+//       console.log(periodStartsDate, periodEndsDate);
+//       console.log(periodStarts, periodEnds);
+//       tx = await periodRegistry.initializePeriod(
+//         periodType,
+//         periodStarts,
+//         periodEnds
+//       );
+//       await tx.wait();
+//     }
+//
+//     console.log(
+//       'Starting automated job 3: Adding the network names to the NetworkAnalytics contract'
+//     );
+//     tx = await networkAnalytics.addMultipleNetworks(SENetworkNamesBytes32);
+//     await tx.wait();
+//
+//     console.log(
+//       'Starting automated job 4: Increasing allowance for NetworkAnalytics and SEMessenger with 10 link tokens'
+//     );
+//     const linkTokenAddress = (await get(CONTRACT_NAMES.LinkToken)).address;
+//     const linkToken = await LinkToken__factory.connect(
+//       linkTokenAddress,
+//       signer
+//     );
+//     tx = await linkToken.approve(
+//       networkAnalytics.address,
+//       ethers.utils.parseEther(linkTokenAllowance)
+//     );
+//     await tx.wait();
+//     tx = await linkToken.approve(
+//       seMessenger.address,
+//       ethers.utils.parseEther(linkTokenAllowance)
+//     );
+//     await tx.wait();
+//
+//     console.log(
+//       'Starting automated job 5: Registering messenger on the SLARegistry'
+//     );
+//     const seMessengerSpec = JSON.parse(
+//       fs.readFileSync(`${appRoot.path}/messenger-specs/SEMessenger.json`)
+//     );
+//
+//     const updatedSpec = {
+//       ...seMessengerSpec,
+//       timestamp: new Date().toISOString(),
+//     };
+//     const seMessengerSpecIPFS = await getIPFSHash(updatedSpec);
+//
+//     tx = await slaRegistry.registerMessenger(
+//       seMessenger.address,
+//       `https://ipfs.dsla.network/ipfs/${seMessengerSpecIPFS}`
+//     );
+//     await tx.wait();
+//     console.log('Bootstrap process completed');
+//   }
+// );
+
+subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
   async (_, hre: any) => {
     const {
       stacktical: { bootstrap },
     }: { stacktical: StackticalConfiguration } = hre.network.config;
-    const { periods, messengersLinkTokenAllowance } = bootstrap;
-
-    console.log('Starting automated jobs to bootstrap protocol correctly');
-
+    const {
+      registry: {
+        stake: { allowedTokens, stakingParameters },
+      },
+    } = bootstrap;
     const { deployments, ethers, getNamedAccounts } = hre;
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
     const { get } = deployments;
 
-    const daiArtifact = await get(CONTRACT_NAMES.DAI);
-    const usdcArtifact = await get(CONTRACT_NAMES.USDC);
-    const stakeRegistryArtifact = await get(CONTRACT_NAMES.StakeRegistry);
-    const periodRegistryArtifact = await get(CONTRACT_NAMES.PeriodRegistry);
-    const networkAnalyticsArtifact = await get(CONTRACT_NAMES.NetworkAnalytics);
-    const networkAnalytics = await NetworkAnalytics__factory.connect(
-      networkAnalyticsArtifact.address,
-      signer
+    const [startBootstrap, finishBootstrap] = bootstrapStrings(
+      CONTRACT_NAMES.StakeRegistry
     );
-    const daiToken = await DAI__factory.connect(daiArtifact.address, signer);
-    const usdcToken = await USDC__factory.connect(usdcArtifact.address, signer);
+    console.log(startBootstrap);
+
+    const stakeRegistryArtifact = await get(CONTRACT_NAMES.StakeRegistry);
     const stakeRegistry = await StakeRegistry__factory.connect(
       stakeRegistryArtifact.address,
       signer
     );
-    const periodRegistry = await PeriodRegistry__factory.connect(
-      periodRegistryArtifact.address,
-      signer
+
+    console.log('Allowing tokens on StakeRegistry');
+    for (let tokenName of allowedTokens) {
+      console.log('Allowing ' + tokenName + ' token');
+      const tokenArtifact = await get(tokenName);
+      const allowedToken = await stakeRegistry.isAllowedToken(
+        tokenArtifact.address
+      );
+      if (allowedToken) {
+        console.log(tokenName + ' token already allowed');
+      } else {
+        const tx = await stakeRegistry.addAllowedTokens(tokenArtifact.address);
+        await tx.wait();
+        console.log(tokenName + ' token successfully allowed');
+      }
+    }
+
+    const currentStakingParameters = await stakeRegistry.getStakingParameters();
+    if (stakingParameters && Object.keys(stakingParameters).length > 0) {
+      // this parameters are represented in Wei, and the options are specified in Ether i.e. 10^18 wei
+      const normalizedParameters = [
+        'dslaDepositByPeriod',
+        'dslaPlatformReward',
+        'dslaMessengerReward',
+        'dslaUserReward',
+        'dslaBurnedByVerification',
+      ];
+      const parametersToUpdate = [];
+      for (let parameter of Object.keys(stakingParameters)) {
+        let normalizedStakingParameter = normalizedParameters.includes(
+          parameter
+        )
+          ? fromWei(currentStakingParameters[parameter].toString())
+          : currentStakingParameters[parameter].toString();
+        if (normalizedStakingParameter !== stakingParameters[parameter]) {
+          parametersToUpdate.push({
+            parameter,
+            oldValue: normalizedStakingParameter,
+            newValue: stakingParameters[parameter],
+          });
+        }
+      }
+      // if only 1 parameter is different, then set the parameters and break the loop
+      if (parametersToUpdate.length > 0) {
+        for (let parameterToUpdate of parametersToUpdate) {
+          console.log(
+            parameterToUpdate.parameter + ' needs an update on StakeRegistry'
+          );
+          console.log('Old value: ' + parameterToUpdate.oldValue);
+          console.log('New value: ' + parameterToUpdate.newValue);
+        }
+        console.log('Updating staking parameters');
+        const tx = await stakeRegistry.setStakingParameters(
+          stakingParameters.DSLAburnRate ||
+            currentStakingParameters.DSLAburnRate,
+          toWei(stakingParameters.dslaDepositByPeriod) ||
+            currentStakingParameters.dslaDepositByPeriod,
+          toWei(stakingParameters.dslaPlatformReward) ||
+            currentStakingParameters.dslaPlatformReward,
+          toWei(stakingParameters.dslaMessengerReward) ||
+            currentStakingParameters.dslaMessengerReward,
+          toWei(stakingParameters.dslaUserReward) ||
+            currentStakingParameters.dslaUserReward,
+          toWei(stakingParameters.dslaBurnedByVerification) ||
+            currentStakingParameters.dslaBurnedByVerification,
+          stakingParameters.maxTokenLength ||
+            currentStakingParameters.maxTokenLength,
+          stakingParameters.maxLeverage || currentStakingParameters.maxLeverage
+        );
+        await tx.wait();
+        const newParameters = await stakeRegistry.getStakingParameters();
+        console.log('DSLAburnRate: ' + newParameters.DSLAburnRate.toString());
+        console.log(
+          'dslaDepositByPeriod: ' +
+            fromWei(newParameters.dslaDepositByPeriod.toString())
+        );
+        console.log(
+          'dslaPlatformReward: ' +
+            fromWei(newParameters.dslaPlatformReward.toString())
+        );
+        console.log(
+          'dslaMessengerReward: ' +
+            fromWei(newParameters.dslaMessengerReward.toString())
+        );
+        console.log(
+          'dslaUserReward: ' + fromWei(newParameters.dslaUserReward.toString())
+        );
+        console.log(
+          'dslaBurnedByVerification: ' +
+            fromWei(newParameters.dslaBurnedByVerification.toString())
+        );
+        console.log(
+          'maxTokenLength: ' + newParameters.maxTokenLength.toString()
+        );
+        console.log('maxLeverage: ' + newParameters.maxLeverage.toString());
+      }
+    }
+    console.log(finishBootstrap);
+  }
+);
+
+subtask(SUB_TASK_NAMES.BOOTSTRAP_MESSENGER_REGISTRY, undefined).setAction(
+  async (_, hre: any) => {
+    const { deployments, ethers, getNamedAccounts } = hre;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    const { get } = deployments;
+    const {
+      stacktical: { bootstrap },
+    }: { stacktical: StackticalConfiguration } = hre.network.config;
+    const {
+      registry: { messengers },
+    } = bootstrap;
+    const [startBootstrap, finishBootstrap] = bootstrapStrings(
+      CONTRACT_NAMES.MessengerRegistry
     );
-    const seMessenger = await SEMessenger__factory.connect(
-      (
-        await get(CONTRACT_NAMES.SEMessenger)
-      ).address,
-      signer
-    );
+
+    console.log(startBootstrap);
     const slaRegistry = await SLARegistry__factory.connect(
       (
         await get(CONTRACT_NAMES.SLARegistry)
@@ -608,18 +856,83 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_DSLA_PROTOCOL, undefined).setAction(
       signer
     );
 
-    let tx;
-    console.log(
-      'Starting automated job 1: allowing DAI and USDC on StakeRegistry'
+    const messengerRegistry = await MessengerRegistry__factory.connect(
+      (
+        await get(CONTRACT_NAMES.MessengerRegistry)
+      ).address,
+      signer
     );
-    tx = await stakeRegistry.addAllowedTokens(daiToken.address);
-    await tx.wait();
-    tx = await stakeRegistry.addAllowedTokens(usdcToken.address);
-    await tx.wait();
 
-    console.log('Starting automated job 2: periods initialization');
+    for (let messenger of messengers) {
+      console.log('Registering ' + messenger.contract + ' on the SLARegistry');
+      const messengerArtifact = await get(messenger.contract);
+
+      const messengerSpec = JSON.parse(
+        fs.readFileSync(messenger.specificationPath)
+      );
+
+      const updatedSpec = {
+        ...messengerSpec,
+        timestamp: new Date().toISOString(),
+      };
+      const seMessengerSpecIPFS = await getIPFSHash(updatedSpec);
+      const registeredMessenger = await messengerRegistry.registeredMessengers(
+        messengerArtifact.address
+      );
+      if (!registeredMessenger) {
+        const tx = await slaRegistry.registerMessenger(
+          messengerArtifact.address,
+          `https://ipfs.dsla.network/ipfs/${seMessengerSpecIPFS}`
+        );
+        await tx.wait();
+      } else {
+        console.log(
+          messenger.contract + ' already registered on the SLARegistry'
+        );
+      }
+    }
+    console.log(finishBootstrap);
+  }
+);
+
+subtask(SUB_TASK_NAMES.BOOTSTRAP_PERIOD_REGISTRY, undefined).setAction(
+  async (_, hre: any) => {
+    const {
+      stacktical: { bootstrap },
+    }: { stacktical: StackticalConfiguration } = hre.network.config;
+    const {
+      registry: { periods },
+    } = bootstrap;
+    const { deployments, ethers, getNamedAccounts } = hre;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    const { get } = deployments;
+
+    const [startBootstrap, finishBootstrap] = bootstrapStrings(
+      CONTRACT_NAMES.PeriodRegistry
+    );
+    console.log(startBootstrap);
+
+    const periodRegistryArtifact = await get(CONTRACT_NAMES.PeriodRegistry);
+    const periodRegistry = await PeriodRegistry__factory.connect(
+      periodRegistryArtifact.address,
+      signer
+    );
+
+    console.log('Initializing periods');
     for (let period of periods) {
       const { periodType, amountOfPeriods, expiredPeriods } = period;
+      let initializedPeriod = await periodRegistry.isInitializedPeriod(
+        periodType
+      );
+
+      if (initializedPeriod) {
+        console.log(
+          PERIOD_TYPE[periodType] + ' period type already initialized'
+        );
+        continue;
+      }
+
       const [periodStarts, periodEnds] = generateBootstrapPeriods(
         periodType,
         amountOfPeriods,
@@ -640,7 +953,7 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_DSLA_PROTOCOL, undefined).setAction(
       );
       console.log(periodStartsDate, periodEndsDate);
       console.log(periodStarts, periodEnds);
-      tx = await periodRegistry.initializePeriod(
+      let tx = await periodRegistry.initializePeriod(
         periodType,
         periodStarts,
         periodEnds
@@ -648,50 +961,88 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_DSLA_PROTOCOL, undefined).setAction(
       await tx.wait();
     }
 
-    console.log(
-      'Starting automated job 3: Adding the network names to the NetworkAnalytics contract'
-    );
-    tx = await networkAnalytics.addMultipleNetworks(SENetworkNamesBytes32);
-    await tx.wait();
+    console.log(finishBootstrap);
+  }
+);
 
-    console.log(
-      'Starting automated job 4: Increasing allowance for NetworkAnalytics and SEMessenger with 10 link tokens'
+subtask(SUB_TASK_NAMES.BOOTSTRAP_NETWORK_ANALYTICS, undefined).setAction(
+  async (_, hre: any) => {
+    const {
+      stacktical: { bootstrap },
+    }: { stacktical: StackticalConfiguration } = hre.network.config;
+    const {
+      messengers: {
+        networkAnalytics: { allowedNetworks },
+      },
+    } = bootstrap;
+    const { deployments, ethers, getNamedAccounts } = hre;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    const { get } = deployments;
+
+    const [startBootstrap, finishBootstrap] = bootstrapStrings(
+      CONTRACT_NAMES.NetworkAnalytics
     );
-    const linkTokenAddress = (await get(CONTRACT_NAMES.LinkToken)).address;
-    const linkToken = await LinkToken__factory.connect(
-      linkTokenAddress,
+    console.log(startBootstrap);
+
+    const networkAnalyticsArtifact = await get(CONTRACT_NAMES.NetworkAnalytics);
+    const networkAnalytics = await NetworkAnalytics__factory.connect(
+      networkAnalyticsArtifact.address,
       signer
     );
-    tx = await linkToken.approve(
-      networkAnalytics.address,
-      ethers.utils.parseEther(messengersLinkTokenAllowance)
+
+    console.log('Adding the network names to the NetworkAnalytics contract');
+    let tx = await networkAnalytics.addMultipleNetworks(
+      allowedNetworks.map(formatBytes32String)
     );
     await tx.wait();
-    tx = await linkToken.approve(
-      seMessenger.address,
-      ethers.utils.parseEther(messengersLinkTokenAllowance)
-    );
-    await tx.wait();
+    const naNetworks = await networkAnalytics.getNetworkNames();
+    console.log('Networks to add: ');
+    console.log(allowedNetworks);
+    console.log('Networks to add in bytes32: ');
+    console.log(allowedNetworks.map(formatBytes32String));
+    console.log('Networks allowed on the NetworkAnalytics contract: ');
+    console.log(naNetworks);
+    console.log(finishBootstrap);
+  }
+);
 
-    console.log(
-      'Starting automated job 5: Registering messenger on the SLARegistry'
-    );
-    const seMessengerSpec = JSON.parse(
-      fs.readFileSync(`${appRoot.path}/messenger-specs/semessenger.spec.json`)
-    );
+subtask(SUB_TASK_NAMES.SET_CONTRACTS_ALLOWANCE, undefined).setAction(
+  async (_, hre: any) => {
+    const {
+      stacktical: { bootstrap },
+    }: { stacktical: StackticalConfiguration } = hre.network.config;
+    const { allowance } = bootstrap;
+    const { deployments, ethers, getNamedAccounts } = hre;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    const { get } = deployments;
 
-    const updatedSpec = {
-      ...seMessengerSpec,
-      timestamp: new Date().toISOString(),
-    };
-    const seMessengerSpecIPFS = await getIPFSHash(updatedSpec);
-
-    tx = await slaRegistry.registerMessenger(
-      seMessenger.address,
-      `https://ipfs.dsla.network/ipfs/${seMessengerSpecIPFS}`
-    );
-    await tx.wait();
-    console.log('Bootstrap process completed');
+    console.log('Setting allowance to contracts');
+    for (let tokenAllowance of allowance) {
+      console.log(
+        'Setting allowance of ' +
+          tokenAllowance.allowance +
+          ' ' +
+          tokenAllowance.token +
+          ' for ' +
+          tokenAllowance.contract +
+          '  '
+      );
+      const token = await ERC20__factory.connect(
+        (
+          await get(tokenAllowance.token)
+        ).address,
+        signer
+      );
+      const contract = await get(tokenAllowance.contract);
+      let tx = await token.approve(
+        contract.address,
+        toWei(tokenAllowance.allowance)
+      );
+      await tx.wait();
+    }
+    console.log('Alowance setted to contracts');
   }
 );
 
@@ -997,5 +1348,51 @@ subtask(SUB_TASK_NAMES.DEPLOY_CHAINLINK_CONTRACTS, undefined).setAction(
       log: true,
       skipIfAlreadyDeployed: true,
     });
+  }
+);
+
+subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
+  async (taskArgs, hre: any) => {
+    const { get } = hre.deployments;
+    const { deployer } = await hre.getNamedAccounts();
+    const signer = await hre.ethers.getSigner(deployer);
+    const precoordinator = await PreCoordinator__factory.connect(
+      (
+        await get(CONTRACT_NAMES.PreCoordinator)
+      ).address,
+      signer
+    );
+    let eventFilter = precoordinator.filters.NewServiceAgreement();
+    let events = await precoordinator.queryFilter(eventFilter);
+    const lastEvent = events.slice(-1)[0];
+    const { saId } = lastEvent.args;
+    const serviceAgreement = await precoordinator.getServiceAgreement(saId);
+    const networkAnalytics = await NetworkAnalytics__factory.connect(
+      (
+        await get(CONTRACT_NAMES.NetworkAnalytics)
+      ).address,
+      signer
+    );
+    const seMessenger = await SEMessenger__factory.connect(
+      (
+        await get(CONTRACT_NAMES.SEMessenger)
+      ).address,
+      signer
+    );
+    let tx = await networkAnalytics.setChainlinkJobID(
+      saId,
+      serviceAgreement.payments.length
+    );
+    await tx.wait();
+
+    tx = await seMessenger.setChainlinkJobID(
+      saId,
+      serviceAgreement.payments.length
+    );
+    await tx.wait();
+    console.log(
+      'Service agreeement id updated in SEMessenger and NetworkAnalytics contracts: '
+    );
+    console.log(saId);
   }
 );

@@ -39,6 +39,12 @@ export enum CONTRACT_NAMES {
   PreCoordinator = 'PreCoordinator',
 }
 
+export enum TOKEN_NAMES {
+  DSLA = 'DSLA',
+  DAI = 'DAI',
+  USDC = 'USDC',
+}
+
 export enum DEPLOYMENT_TAGS {
   DSLA = 'dsla',
   Chainlink = 'chainlink',
