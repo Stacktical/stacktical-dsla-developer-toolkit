@@ -1357,7 +1357,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_CHAINLINK_CONTRACTS, undefined).setAction(
 
 subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
   async (taskArgs, hre: any) => {
-    const { deploy, get } = hre.deployments;
+    const { get } = hre.deployments;
     const { deployer } = await hre.getNamedAccounts();
     const signer = await hre.ethers.getSigner(deployer);
     const precoordinator = await PreCoordinator__factory.connect(
@@ -1394,15 +1394,9 @@ subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
       serviceAgreement.payments.length
     );
     await tx.wait();
-    eventFilter = networkAnalytics.filters.JobIdModified();
-    events = await networkAnalytics.queryFilter(eventFilter);
-    // for (let event of events) {
-    //   console.log(event);
-    // }
-    // eventFilter = seMessenger.filters.JobIdModified();
-    // events = await seMessenger.queryFilter(eventFilter);
-    // for (let event of events) {
-    //   console.log(event);
-    // }
+    console.log(
+      'Service agreeement id updated in SEMessenger and NetworkAnalytics contracts: '
+    );
+    console.log(saId);
   }
 );
