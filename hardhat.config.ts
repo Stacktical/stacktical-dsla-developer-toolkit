@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
+require('dotenv').config({ path: './.env' });
 import { StackticalConfiguration } from './types';
 import './tasks';
-require('dotenv').config();
 import {
   NETWORKS,
   PERIOD_TYPE,
