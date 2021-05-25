@@ -39,6 +39,7 @@ import {
   SENetworkNamesBytes32,
 } from './constants';
 import {
+  bootstrapStrings,
   generateBootstrapPeriods,
   getIPFSHash,
   getPreCoordinatorConfiguration,
@@ -706,6 +707,125 @@ subtask(SUB_TASK_NAMES.EXPORT_ABIS, undefined).setAction(
 //   }
 // );
 
+subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
+  async (_, hre: any) => {
+    const {
+      stacktical: { bootstrap },
+    }: { stacktical: StackticalConfiguration } = hre.network.config;
+    const {
+      registry: {
+        stake: { allowedTokens, stakingParameters },
+      },
+    } = bootstrap;
+    const { deployments, ethers, getNamedAccounts } = hre;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    const { get } = deployments;
+
+    const [startBootstrap, finishBootstrap] = bootstrapStrings(
+      CONTRACT_NAMES.StakeRegistry
+    );
+    console.log(startBootstrap);
+
+    const stakeRegistryArtifact = await get(CONTRACT_NAMES.StakeRegistry);
+    const stakeRegistry = await StakeRegistry__factory.connect(
+      stakeRegistryArtifact.address,
+      signer
+    );
+
+    console.log('Allowing tokens on StakeRegistry');
+    for (let tokenName of allowedTokens) {
+      console.log('Allowing ' + tokenName + ' token');
+      const tokenArtifact = await get(tokenName);
+      const allowedToken = await stakeRegistry.isAllowedToken(
+        tokenArtifact.address
+      );
+      if (allowedToken) {
+        console.log(tokenName + ' token already allowed');
+      } else {
+        const tx = await stakeRegistry.addAllowedTokens(tokenArtifact.address);
+        await tx.wait();
+        console.log(tokenName + ' token successfully allowed');
+      }
+    }
+
+    const currentStakingParameters = await stakeRegistry.getStakingParameters();
+    if (stakingParameters && Object.keys(stakingParameters).length > 0) {
+      // this parameters are represented in Wei, and the options are specified in Ether i.e. 10^18 wei
+      const normalizedParameters = [
+        'dslaDepositByPeriod',
+        'dslaPlatformReward',
+        'dslaMessengerReward',
+        'dslaUserReward',
+        'dslaBurnedByVerification',
+      ];
+      const parametersToUpdate = [];
+      for (let parameter of Object.keys(stakingParameters)) {
+        let normalizedStakingParameter = normalizedParameters.includes(
+          parameter
+        )
+          ? fromWei(currentStakingParameters[parameter].toString())
+          : currentStakingParameters[parameter].toString();
+        if (normalizedStakingParameter !== stakingParameters[parameter]) {
+          parametersToUpdate.push({
+            parameter,
+            oldValue: normalizedStakingParameter,
+            newValue: stakingParameters[parameter],
+          });
+        }
+      }
+      // if only 1 parameter is different, then set the parameters and break the loop
+      if (parametersToUpdate.length > 0) {
+        for (let parameterToUpdate of parametersToUpdate) {
+          console.log(
+            parameterToUpdate.parameter + ' needs an update on StakeRegistry'
+          );
+          console.log('Old value: ' + parameterToUpdate.oldValue);
+          console.log('New value: ' + parameterToUpdate.newValue);
+        }
+        console.log('Updating staking parameters');
+        const tx = await stakeRegistry.setStakingParameters(
+          stakingParameters.DSLAburnRate,
+          toWei(stakingParameters.dslaDepositByPeriod),
+          toWei(stakingParameters.dslaPlatformReward),
+          toWei(stakingParameters.dslaMessengerReward),
+          toWei(stakingParameters.dslaUserReward),
+          toWei(stakingParameters.dslaBurnedByVerification),
+          stakingParameters.maxTokenLength,
+          stakingParameters.maxLeverage
+        );
+        await tx.wait();
+        const newParameters = await stakeRegistry.getStakingParameters();
+        console.log('DSLAburnRate: ' + newParameters.DSLAburnRate.toString());
+        console.log(
+          'dslaDepositByPeriod: ' +
+            fromWei(newParameters.dslaDepositByPeriod.toString())
+        );
+        console.log(
+          'dslaPlatformReward: ' +
+            fromWei(newParameters.dslaPlatformReward.toString())
+        );
+        console.log(
+          'dslaMessengerReward: ' +
+            fromWei(newParameters.dslaMessengerReward.toString())
+        );
+        console.log(
+          'dslaUserReward: ' + fromWei(newParameters.dslaUserReward.toString())
+        );
+        console.log(
+          'dslaBurnedByVerification: ' +
+            fromWei(newParameters.dslaBurnedByVerification.toString())
+        );
+        console.log(
+          'maxTokenLength: ' + newParameters.maxTokenLength.toString()
+        );
+        console.log('maxLeverage: ' + newParameters.maxLeverage.toString());
+      }
+    }
+    console.log(finishBootstrap);
+  }
+);
+
 subtask(SUB_TASK_NAMES.BOOTSTRAP_MESSENGER_REGISTRY, undefined).setAction(
   async (_, hre: any) => {
     const { deployments, ethers, getNamedAccounts } = hre;
@@ -718,13 +838,11 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_MESSENGER_REGISTRY, undefined).setAction(
     const {
       registry: { messengers },
     } = bootstrap;
-
-    console.log(
-      'Starting automated jobs to bootstrap ' +
-        CONTRACT_NAMES.MessengerRegistry +
-        ' contract correctly'
+    const [startBootstrap, finishBootstrap] = bootstrapStrings(
+      CONTRACT_NAMES.MessengerRegistry
     );
 
+    console.log(startBootstrap);
     const slaRegistry = await SLARegistry__factory.connect(
       (
         await get(CONTRACT_NAMES.SLARegistry)
@@ -767,11 +885,7 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_MESSENGER_REGISTRY, undefined).setAction(
         );
       }
     }
-    console.log(
-      'Automated jobs to bootstrap ' +
-        CONTRACT_NAMES.MessengerRegistry +
-        ' finished correctly'
-    );
+    console.log(finishBootstrap);
   }
 );
 

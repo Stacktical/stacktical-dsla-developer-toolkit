@@ -99,7 +99,22 @@ const developStacktical: StackticalConfiguration = {
         },
       ],
       stake: {
-        allowedTokens: [CONTRACT_NAMES.DAI, CONTRACT_NAMES.USDC],
+        allowedTokens: [
+          CONTRACT_NAMES.DAI,
+          CONTRACT_NAMES.USDC,
+          CONTRACT_NAMES.LinkToken,
+          CONTRACT_NAMES.SEMessenger,
+        ],
+        stakingParameters: {
+          DSLAburnRate: '3',
+          dslaDepositByPeriod: '1000',
+          dslaPlatformReward: '250',
+          dslaMessengerReward: '250',
+          dslaUserReward: '250',
+          dslaBurnedByVerification: '250',
+          maxTokenLength: '2',
+          maxLeverage: '100',
+        },
       },
       messengers: [
         {
