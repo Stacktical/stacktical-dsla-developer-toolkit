@@ -786,14 +786,21 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
         }
         console.log('Updating staking parameters');
         const tx = await stakeRegistry.setStakingParameters(
-          stakingParameters.DSLAburnRate,
-          toWei(stakingParameters.dslaDepositByPeriod),
-          toWei(stakingParameters.dslaPlatformReward),
-          toWei(stakingParameters.dslaMessengerReward),
-          toWei(stakingParameters.dslaUserReward),
-          toWei(stakingParameters.dslaBurnedByVerification),
-          stakingParameters.maxTokenLength,
-          stakingParameters.maxLeverage
+          stakingParameters.DSLAburnRate ||
+            currentStakingParameters.DSLAburnRate,
+          toWei(stakingParameters.dslaDepositByPeriod) ||
+            currentStakingParameters.dslaDepositByPeriod,
+          toWei(stakingParameters.dslaPlatformReward) ||
+            currentStakingParameters.dslaPlatformReward,
+          toWei(stakingParameters.dslaMessengerReward) ||
+            currentStakingParameters.dslaMessengerReward,
+          toWei(stakingParameters.dslaUserReward) ||
+            currentStakingParameters.dslaUserReward,
+          toWei(stakingParameters.dslaBurnedByVerification) ||
+            currentStakingParameters.dslaBurnedByVerification,
+          stakingParameters.maxTokenLength ||
+            currentStakingParameters.maxTokenLength,
+          stakingParameters.maxLeverage || currentStakingParameters.maxLeverage
         );
         await tx.wait();
         const newParameters = await stakeRegistry.getStakingParameters();

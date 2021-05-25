@@ -106,9 +106,8 @@ const developStacktical: StackticalConfiguration = {
           CONTRACT_NAMES.SEMessenger,
         ],
         stakingParameters: {
-          DSLAburnRate: '3',
-          dslaDepositByPeriod: '1000',
-          dslaPlatformReward: '250',
+          dslaDepositByPeriod: '1001',
+          dslaPlatformReward: '251',
           dslaMessengerReward: '250',
           dslaUserReward: '250',
           dslaBurnedByVerification: '250',
