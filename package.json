@@ -5,7 +5,7 @@
   "main": "truffle-config.js",
   "scripts": {
     "hardhat-node": "hardhat node",
-    "custom-ganache": "ganache-cli --accounts 10 --defaultBalanceEther 100000 -d -i 1337 -l 12000000",
+    "custom-ganache": "ganache-cli --accounts 10 --defaultBalanceEther 100000 -d -i 1337 -l 12000000 -h 0.0.0.0",
     "external-adapter": "pm2 start services/external-adapter/index.js --name external-adapter --watch ./external-adapter --no-daemon",
     "postinstall": "hardhat typechain",
     "truffle:debug:develop": "truffle debug --network develop",
