@@ -14,6 +14,11 @@ export type StackticalConfiguration = {
   };
   bootstrap: {
     allowance: Array<TokenAllowance>;
+    messengers: {
+      networkAnalytics: {
+        allowedNetworks: Array<string>;
+      };
+    };
     registry: {
       periods: Array<PeriodBootstrapDefinition>;
       messengers: Array<MessengerDefinition>;

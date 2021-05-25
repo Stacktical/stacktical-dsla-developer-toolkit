@@ -80,6 +80,11 @@ const developStacktical: StackticalConfiguration = {
         allowance: '10',
       },
     ],
+    messengers: {
+      networkAnalytics: {
+        allowedNetworks: SENetworkNames,
+      },
+    },
     registry: {
       periods: [
         {
@@ -201,6 +206,11 @@ const config: HardhatUserConfig = {
         },
         checkPastPeriods: false,
         bootstrap: {
+          messengers: {
+            networkAnalytics: {
+              allowedNetworks: SENetworkNames,
+            },
+          },
           allowance: [
             {
               contract: CONTRACT_NAMES.NetworkAnalytics,

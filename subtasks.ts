@@ -45,6 +45,7 @@ import {
   getPreCoordinatorConfiguration,
   printSeparator,
 } from './utils';
+import { formatBytes32String } from 'ethers/lib/utils';
 
 const prettier = require('prettier');
 const { DataFile } = require('edit-config');
@@ -963,6 +964,48 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_PERIOD_REGISTRY, undefined).setAction(
       await tx.wait();
     }
 
+    console.log(finishBootstrap);
+  }
+);
+
+subtask(SUB_TASK_NAMES.BOOTSTRAP_NETWORK_ANALYTICS, undefined).setAction(
+  async (_, hre: any) => {
+    const {
+      stacktical: { bootstrap },
+    }: { stacktical: StackticalConfiguration } = hre.network.config;
+    const {
+      messengers: {
+        networkAnalytics: { allowedNetworks },
+      },
+    } = bootstrap;
+    const { deployments, ethers, getNamedAccounts } = hre;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    const { get } = deployments;
+
+    const [startBootstrap, finishBootstrap] = bootstrapStrings(
+      CONTRACT_NAMES.NetworkAnalytics
+    );
+    console.log(startBootstrap);
+
+    const networkAnalyticsArtifact = await get(CONTRACT_NAMES.NetworkAnalytics);
+    const networkAnalytics = await NetworkAnalytics__factory.connect(
+      networkAnalyticsArtifact.address,
+      signer
+    );
+
+    console.log('Adding the network names to the NetworkAnalytics contract');
+    let tx = await networkAnalytics.addMultipleNetworks(
+      allowedNetworks.map(formatBytes32String)
+    );
+    await tx.wait();
+    const naNetworks = await networkAnalytics.getNetworkNames();
+    console.log('Networks to add: ');
+    console.log(allowedNetworks);
+    console.log('Networks to add in bytes32: ');
+    console.log(allowedNetworks.map(formatBytes32String));
+    console.log('Networks allowed on the NetworkAnalytics contract: ');
+    console.log(naNetworks);
     console.log(finishBootstrap);
   }
 );
