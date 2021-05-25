@@ -105,6 +105,7 @@ const developStacktical: StackticalConfiguration = {
       ],
       stake: {
         allowedTokens: [CONTRACT_NAMES.DAI, CONTRACT_NAMES.USDC],
+        stakingParameters: {},
       },
       messengers: [
         {
