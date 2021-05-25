@@ -17,11 +17,8 @@ import {
   StackticalConfiguration,
 } from './types';
 import {
-  DAI__factory,
   DSLA__factory,
   ERC20__factory,
-  IMessenger__factory,
-  LinkToken__factory,
   MessengerRegistry__factory,
   NetworkAnalytics__factory,
   Oracle__factory,
@@ -31,7 +28,6 @@ import {
   SLA__factory,
   SLARegistry__factory,
   StakeRegistry__factory,
-  USDC__factory,
 } from './typechain';
 import {
   CONTRACT_NAMES,

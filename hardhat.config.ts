@@ -104,21 +104,7 @@ const developStacktical: StackticalConfiguration = {
         },
       ],
       stake: {
-        allowedTokens: [
-          CONTRACT_NAMES.DAI,
-          CONTRACT_NAMES.USDC,
-          CONTRACT_NAMES.LinkToken,
-          CONTRACT_NAMES.SEMessenger,
-        ],
-        stakingParameters: {
-          dslaDepositByPeriod: '1001',
-          dslaPlatformReward: '251',
-          dslaMessengerReward: '250',
-          dslaUserReward: '250',
-          dslaBurnedByVerification: '250',
-          maxTokenLength: '2',
-          maxLeverage: '100',
-        },
+        allowedTokens: [CONTRACT_NAMES.DAI, CONTRACT_NAMES.USDC],
       },
       messengers: [
         {
@@ -243,6 +229,7 @@ const config: HardhatUserConfig = {
             ],
             stake: {
               allowedTokens: [CONTRACT_NAMES.DAI, CONTRACT_NAMES.USDC],
+              stakingParameters: {},
             },
             messengers: [
               {

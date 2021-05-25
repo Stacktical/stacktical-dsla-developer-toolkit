@@ -24,7 +24,7 @@ export type StackticalConfiguration = {
       messengers: Array<MessengerDefinition>;
       stake: {
         allowedTokens: Array<CONTRACT_NAMES>;
-        stakingParameters?: {
+        stakingParameters: {
           DSLAburnRate?: string;
           dslaDepositByPeriod?: string;
           dslaPlatformReward?: string;
