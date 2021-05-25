@@ -1,8 +1,11 @@
 /* eslint-disable import/no-extraneous-dependencies */
 require('dotenv').config({ path: './.env' });
+const appRoot = require('app-root-path');
+
 import { StackticalConfiguration } from './types';
 import './tasks';
 import {
+  CONTRACT_NAMES,
   NETWORKS,
   PERIOD_TYPE,
   SENetworkNames,
@@ -65,24 +68,46 @@ const developStacktical: StackticalConfiguration = {
   },
   checkPastPeriods: false,
   bootstrap: {
-    periods: [
+    allowance: [
       {
-        periodType: PERIOD_TYPE.HOURLY,
-        amountOfPeriods: 5,
-        expiredPeriods: 2,
+        contract: CONTRACT_NAMES.NetworkAnalytics,
+        token: CONTRACT_NAMES.LinkToken,
+        allowance: '10',
       },
       {
-        periodType: PERIOD_TYPE.DAILY,
-        amountOfPeriods: 5,
-        expiredPeriods: 2,
-      },
-      {
-        periodType: PERIOD_TYPE.WEEKLY,
-        amountOfPeriods: 52,
-        expiredPeriods: 10,
+        contract: CONTRACT_NAMES.SEMessenger,
+        token: CONTRACT_NAMES.LinkToken,
+        allowance: '10',
       },
     ],
-    messengersLinkTokenAllowance: '10',
+    registry: {
+      periods: [
+        {
+          periodType: PERIOD_TYPE.HOURLY,
+          amountOfPeriods: 5,
+          expiredPeriods: 2,
+        },
+        {
+          periodType: PERIOD_TYPE.DAILY,
+          amountOfPeriods: 5,
+          expiredPeriods: 2,
+        },
+        {
+          periodType: PERIOD_TYPE.WEEKLY,
+          amountOfPeriods: 52,
+          expiredPeriods: 10,
+        },
+      ],
+      stake: {
+        allowedTokens: [CONTRACT_NAMES.DAI, CONTRACT_NAMES.USDC],
+      },
+      messengers: [
+        {
+          contract: CONTRACT_NAMES.SEMessenger,
+          specificationPath: `${appRoot.path}/messenger-specs/${CONTRACT_NAMES.SEMessenger}.json`,
+        },
+      ],
+    },
   },
   scripts: {
     deploy_sla: {
@@ -162,24 +187,46 @@ const config: HardhatUserConfig = {
         },
         checkPastPeriods: false,
         bootstrap: {
-          periods: [
+          allowance: [
             {
-              periodType: PERIOD_TYPE.HOURLY,
-              amountOfPeriods: 5,
-              expiredPeriods: 2,
+              contract: CONTRACT_NAMES.NetworkAnalytics,
+              token: CONTRACT_NAMES.LinkToken,
+              allowance: '10',
             },
             {
-              periodType: PERIOD_TYPE.DAILY,
-              amountOfPeriods: 5,
-              expiredPeriods: 2,
-            },
-            {
-              periodType: PERIOD_TYPE.WEEKLY,
-              amountOfPeriods: 52,
-              expiredPeriods: 10,
+              contract: CONTRACT_NAMES.SEMessenger,
+              token: CONTRACT_NAMES.LinkToken,
+              allowance: '10',
             },
           ],
-          messengersLinkTokenAllowance: '10',
+          registry: {
+            periods: [
+              {
+                periodType: PERIOD_TYPE.HOURLY,
+                amountOfPeriods: 5,
+                expiredPeriods: 2,
+              },
+              {
+                periodType: PERIOD_TYPE.DAILY,
+                amountOfPeriods: 5,
+                expiredPeriods: 2,
+              },
+              {
+                periodType: PERIOD_TYPE.WEEKLY,
+                amountOfPeriods: 52,
+                expiredPeriods: 10,
+              },
+            ],
+            stake: {
+              allowedTokens: [CONTRACT_NAMES.DAI, CONTRACT_NAMES.USDC],
+            },
+            messengers: [
+              {
+                contract: CONTRACT_NAMES.SEMessenger,
+                specificationPath: `${appRoot.path}/messenger-specs/${CONTRACT_NAMES.SEMessenger}`,
+              },
+            ],
+          },
         },
         scripts: {
           deploy_sla: developStacktical.scripts.deploy_sla,

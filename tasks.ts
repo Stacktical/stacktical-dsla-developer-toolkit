@@ -36,7 +36,16 @@ task(TASK_NAMES.CREATE_DOCKER_COMPOSE, 'Create docker compose').setAction(
 
 task(TASK_NAMES.BOOTSTRAP_DSLA_PROTOCOL, 'Bootstrap DSLA protocol').setAction(
   async (_, { run }) => {
-    await run(SUB_TASK_NAMES.BOOTSTRAP_DSLA_PROTOCOL);
+    const bootstrapSubtasks = [
+      SUB_TASK_NAMES.BOOTSTRAP_MESSENGER_REGISTRY,
+      // SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY,
+      // SUB_TASK_NAMES.BOOTSTRAP_PERIOD_REGISTRY,
+      // SUB_TASK_NAMES.BOOTSTRAP_NETWORK_ANALYTICS,
+    ];
+    for (let subtask of bootstrapSubtasks) {
+      console.log(subtask);
+      await run(subtask);
+    }
   }
 );
 

@@ -1,20 +1,36 @@
-import { PERIOD_TYPE, SLO_TYPE } from './constants';
+import { CONTRACT_NAMES, PERIOD_TYPE, SLO_TYPE } from './constants';
 
 export type StackticalConfiguration = {
   chainlink?: ChainlinkConfiguration;
   checkPastPeriods: boolean;
   addresses: {
     tokens: {
-      LINK?: string | null;
-      DSLA?: string | null;
-      DAI?: string | null;
-      USDC?: string | null;
+      LINK: string | null;
+      DSLA: string | null;
+      DAI: string | null;
+      USDC: string | null;
     };
-    oracle?: string | null;
+    oracle: string | null;
   };
   bootstrap: {
-    periods: Array<PeriodBootstrapDefinition>;
-    messengersLinkTokenAllowance: string;
+    allowance: Array<TokenAllowance>;
+    registry: {
+      periods: Array<PeriodBootstrapDefinition>;
+      messengers: Array<MessengerDefinition>;
+      stake: {
+        allowedTokens: Array<CONTRACT_NAMES>;
+        stakingParameters?: {
+          DSLAburnRate?: string;
+          dslaDepositByPeriod?: string;
+          dslaPlatformReward?: string;
+          dslaMessengerReward?: string;
+          dslaUserReward?: string;
+          dslaBurnedByVerification?: string;
+          maxTokenLength?: string;
+          maxLeverage?: string;
+        };
+      };
+    };
   };
   scripts?: {
     deploy_sla?: DeploySLAConfiguration;
@@ -50,6 +66,17 @@ export type PreCoordinatorConfiguration = {
   oracles: Array<string>;
   jobIds: Array<string>;
   payments: Array<string>;
+};
+
+export type TokenAllowance = {
+  contract: CONTRACT_NAMES;
+  token: CONTRACT_NAMES;
+  allowance: string;
+};
+
+export type MessengerDefinition = {
+  contract: CONTRACT_NAMES;
+  specificationPath: string;
 };
 
 export type DeploySLAConfiguration = {

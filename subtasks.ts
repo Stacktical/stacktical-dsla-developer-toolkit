@@ -19,7 +19,9 @@ import {
 import {
   DAI__factory,
   DSLA__factory,
+  IMessenger__factory,
   LinkToken__factory,
+  MessengerRegistry__factory,
   NetworkAnalytics__factory,
   Oracle__factory,
   PeriodRegistry__factory,
@@ -61,7 +63,10 @@ export enum SUB_TASK_NAMES {
   SAVE_CONTRACTS_ADDRESSES = 'SAVE_CONTRACTS_ADDRESSES',
   EXPORT_ABIS = 'EXPORT_ABIS',
   DEPLOY_SLA = 'DEPLOY_SLA',
-  BOOTSTRAP_DSLA_PROTOCOL = 'BOOTSTRAP_DSLA_PROTOCOL',
+  BOOTSTRAP_MESSENGER_REGISTRY = 'BOOTSTRAP_MESSENGER_REGISTRY',
+  BOOTSTRAP_PERIOD_REGISTRY = 'BOOTSTRAP_PERIOD_REGISTRY',
+  BOOTSTRAP_STAKE_REGISTRY = 'BOOTSTRAP_STAKE_REGISTRY',
+  BOOTSTRAP_NETWORK_ANALYTICS = 'BOOTSTRAP_NETWORK_ANALYTICS',
   REQUEST_SLI = 'REQUEST_SLI',
   REQUEST_ANALYTICS = 'REQUEST_ANALYTICS',
   GET_PRECOORDINATOR = 'GET_PRECOORDINATOR',
@@ -563,45 +568,163 @@ subtask(SUB_TASK_NAMES.EXPORT_ABIS, undefined).setAction(
   }
 );
 
-subtask(SUB_TASK_NAMES.BOOTSTRAP_DSLA_PROTOCOL, undefined).setAction(
+// subtask(SUB_TASK_NAMES.BOOTSTRAP_DSLA_PROTOCOL, undefined).setAction(
+//   async (_, hre: any) => {
+//     const {
+//       stacktical: { bootstrap },
+//     }: { stacktical: StackticalConfiguration } = hre.network.config;
+//     const {
+//       registry: {
+//         periods,
+//         messengers: { linkTokenAllowance },
+//       },
+//     } = bootstrap;
+//
+//     console.log('Starting automated jobs to bootstrap protocol correctly');
+//
+//     const { deployments, ethers, getNamedAccounts } = hre;
+//     const { deployer } = await getNamedAccounts();
+//     const signer = await ethers.getSigner(deployer);
+//     const { get } = deployments;
+//
+//     const daiArtifact = await get(CONTRACT_NAMES.DAI);
+//     const usdcArtifact = await get(CONTRACT_NAMES.USDC);
+//     const stakeRegistryArtifact = await get(CONTRACT_NAMES.StakeRegistry);
+//     const periodRegistryArtifact = await get(CONTRACT_NAMES.PeriodRegistry);
+//     const networkAnalyticsArtifact = await get(CONTRACT_NAMES.NetworkAnalytics);
+//     const networkAnalytics = await NetworkAnalytics__factory.connect(
+//       networkAnalyticsArtifact.address,
+//       signer
+//     );
+//     const daiToken = await DAI__factory.connect(daiArtifact.address, signer);
+//     const usdcToken = await USDC__factory.connect(usdcArtifact.address, signer);
+//     const stakeRegistry = await StakeRegistry__factory.connect(
+//       stakeRegistryArtifact.address,
+//       signer
+//     );
+//     const periodRegistry = await PeriodRegistry__factory.connect(
+//       periodRegistryArtifact.address,
+//       signer
+//     );
+//     const seMessenger = await SEMessenger__factory.connect(
+//       (
+//         await get(CONTRACT_NAMES.SEMessenger)
+//       ).address,
+//       signer
+//     );
+//     const slaRegistry = await SLARegistry__factory.connect(
+//       (
+//         await get(CONTRACT_NAMES.SLARegistry)
+//       ).address,
+//       signer
+//     );
+//
+//     let tx;
+//     console.log(
+//       'Starting automated job 1: allowing DAI and USDC on StakeRegistry'
+//     );
+//     tx = await stakeRegistry.addAllowedTokens(daiToken.address);
+//     await tx.wait();
+//     tx = await stakeRegistry.addAllowedTokens(usdcToken.address);
+//     await tx.wait();
+//
+//     console.log('Starting automated job 2: periods initialization');
+//     for (let period of periods) {
+//       const { periodType, amountOfPeriods, expiredPeriods } = period;
+//       const [periodStarts, periodEnds] = generateBootstrapPeriods(
+//         periodType,
+//         amountOfPeriods,
+//         expiredPeriods
+//       );
+//       const periodStartsDate = periodStarts.map((date) =>
+//         moment(date * 1000)
+//           .utc(0)
+//           .format('DD/MM/YYYY HH:mm:ss')
+//       );
+//       const periodEndsDate = periodEnds.map((date) =>
+//         moment(date * 1000)
+//           .utc(0)
+//           .format('DD/MM/YYYY HH:mm:ss')
+//       );
+//       console.log(
+//         'Periods generated for ' + PERIOD_TYPE[periodType] + ' period type:'
+//       );
+//       console.log(periodStartsDate, periodEndsDate);
+//       console.log(periodStarts, periodEnds);
+//       tx = await periodRegistry.initializePeriod(
+//         periodType,
+//         periodStarts,
+//         periodEnds
+//       );
+//       await tx.wait();
+//     }
+//
+//     console.log(
+//       'Starting automated job 3: Adding the network names to the NetworkAnalytics contract'
+//     );
+//     tx = await networkAnalytics.addMultipleNetworks(SENetworkNamesBytes32);
+//     await tx.wait();
+//
+//     console.log(
+//       'Starting automated job 4: Increasing allowance for NetworkAnalytics and SEMessenger with 10 link tokens'
+//     );
+//     const linkTokenAddress = (await get(CONTRACT_NAMES.LinkToken)).address;
+//     const linkToken = await LinkToken__factory.connect(
+//       linkTokenAddress,
+//       signer
+//     );
+//     tx = await linkToken.approve(
+//       networkAnalytics.address,
+//       ethers.utils.parseEther(linkTokenAllowance)
+//     );
+//     await tx.wait();
+//     tx = await linkToken.approve(
+//       seMessenger.address,
+//       ethers.utils.parseEther(linkTokenAllowance)
+//     );
+//     await tx.wait();
+//
+//     console.log(
+//       'Starting automated job 5: Registering messenger on the SLARegistry'
+//     );
+//     const seMessengerSpec = JSON.parse(
+//       fs.readFileSync(`${appRoot.path}/messenger-specs/SEMessenger.json`)
+//     );
+//
+//     const updatedSpec = {
+//       ...seMessengerSpec,
+//       timestamp: new Date().toISOString(),
+//     };
+//     const seMessengerSpecIPFS = await getIPFSHash(updatedSpec);
+//
+//     tx = await slaRegistry.registerMessenger(
+//       seMessenger.address,
+//       `https://ipfs.dsla.network/ipfs/${seMessengerSpecIPFS}`
+//     );
+//     await tx.wait();
+//     console.log('Bootstrap process completed');
+//   }
+// );
+
+subtask(SUB_TASK_NAMES.BOOTSTRAP_MESSENGER_REGISTRY, undefined).setAction(
   async (_, hre: any) => {
-    const {
-      stacktical: { bootstrap },
-    }: { stacktical: StackticalConfiguration } = hre.network.config;
-    const { periods, messengersLinkTokenAllowance } = bootstrap;
-
-    console.log('Starting automated jobs to bootstrap protocol correctly');
-
     const { deployments, ethers, getNamedAccounts } = hre;
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
     const { get } = deployments;
+    const {
+      stacktical: { bootstrap },
+    }: { stacktical: StackticalConfiguration } = hre.network.config;
+    const {
+      registry: { messengers },
+    } = bootstrap;
 
-    const daiArtifact = await get(CONTRACT_NAMES.DAI);
-    const usdcArtifact = await get(CONTRACT_NAMES.USDC);
-    const stakeRegistryArtifact = await get(CONTRACT_NAMES.StakeRegistry);
-    const periodRegistryArtifact = await get(CONTRACT_NAMES.PeriodRegistry);
-    const networkAnalyticsArtifact = await get(CONTRACT_NAMES.NetworkAnalytics);
-    const networkAnalytics = await NetworkAnalytics__factory.connect(
-      networkAnalyticsArtifact.address,
-      signer
+    console.log(
+      'Starting automated jobs to bootstrap ' +
+        CONTRACT_NAMES.MessengerRegistry +
+        ' contract correctly'
     );
-    const daiToken = await DAI__factory.connect(daiArtifact.address, signer);
-    const usdcToken = await USDC__factory.connect(usdcArtifact.address, signer);
-    const stakeRegistry = await StakeRegistry__factory.connect(
-      stakeRegistryArtifact.address,
-      signer
-    );
-    const periodRegistry = await PeriodRegistry__factory.connect(
-      periodRegistryArtifact.address,
-      signer
-    );
-    const seMessenger = await SEMessenger__factory.connect(
-      (
-        await get(CONTRACT_NAMES.SEMessenger)
-      ).address,
-      signer
-    );
+
     const slaRegistry = await SLARegistry__factory.connect(
       (
         await get(CONTRACT_NAMES.SLARegistry)
@@ -609,90 +732,46 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_DSLA_PROTOCOL, undefined).setAction(
       signer
     );
 
-    let tx;
-    console.log(
-      'Starting automated job 1: allowing DAI and USDC on StakeRegistry'
-    );
-    tx = await stakeRegistry.addAllowedTokens(daiToken.address);
-    await tx.wait();
-    tx = await stakeRegistry.addAllowedTokens(usdcToken.address);
-    await tx.wait();
-
-    console.log('Starting automated job 2: periods initialization');
-    for (let period of periods) {
-      const { periodType, amountOfPeriods, expiredPeriods } = period;
-      const [periodStarts, periodEnds] = generateBootstrapPeriods(
-        periodType,
-        amountOfPeriods,
-        expiredPeriods
-      );
-      const periodStartsDate = periodStarts.map((date) =>
-        moment(date * 1000)
-          .utc(0)
-          .format('DD/MM/YYYY HH:mm:ss')
-      );
-      const periodEndsDate = periodEnds.map((date) =>
-        moment(date * 1000)
-          .utc(0)
-          .format('DD/MM/YYYY HH:mm:ss')
-      );
-      console.log(
-        'Periods generated for ' + PERIOD_TYPE[periodType] + ' period type:'
-      );
-      console.log(periodStartsDate, periodEndsDate);
-      console.log(periodStarts, periodEnds);
-      tx = await periodRegistry.initializePeriod(
-        periodType,
-        periodStarts,
-        periodEnds
-      );
-      await tx.wait();
-    }
-
-    console.log(
-      'Starting automated job 3: Adding the network names to the NetworkAnalytics contract'
-    );
-    tx = await networkAnalytics.addMultipleNetworks(SENetworkNamesBytes32);
-    await tx.wait();
-
-    console.log(
-      'Starting automated job 4: Increasing allowance for NetworkAnalytics and SEMessenger with 10 link tokens'
-    );
-    const linkTokenAddress = (await get(CONTRACT_NAMES.LinkToken)).address;
-    const linkToken = await LinkToken__factory.connect(
-      linkTokenAddress,
+    const messengerRegistry = await MessengerRegistry__factory.connect(
+      (
+        await get(CONTRACT_NAMES.MessengerRegistry)
+      ).address,
       signer
     );
-    tx = await linkToken.approve(
-      networkAnalytics.address,
-      ethers.utils.parseEther(messengersLinkTokenAllowance)
-    );
-    await tx.wait();
-    tx = await linkToken.approve(
-      seMessenger.address,
-      ethers.utils.parseEther(messengersLinkTokenAllowance)
-    );
-    await tx.wait();
 
+    for (let messenger of messengers) {
+      console.log('Registering ' + messenger.contract + ' on the SLARegistry');
+      const messengerArtifact = await get(messenger.contract);
+
+      const messengerSpec = JSON.parse(
+        fs.readFileSync(messenger.specificationPath)
+      );
+
+      const updatedSpec = {
+        ...messengerSpec,
+        timestamp: new Date().toISOString(),
+      };
+      const seMessengerSpecIPFS = await getIPFSHash(updatedSpec);
+      const registeredMessenger = await messengerRegistry.registeredMessengers(
+        messengerArtifact.address
+      );
+      if (!registeredMessenger) {
+        const tx = await slaRegistry.registerMessenger(
+          messengerArtifact.address,
+          `https://ipfs.dsla.network/ipfs/${seMessengerSpecIPFS}`
+        );
+        await tx.wait();
+      } else {
+        console.log(
+          messenger.contract + ' already registered on the SLARegistry'
+        );
+      }
+    }
     console.log(
-      'Starting automated job 5: Registering messenger on the SLARegistry'
+      'Automated jobs to bootstrap ' +
+        CONTRACT_NAMES.MessengerRegistry +
+        ' finished correctly'
     );
-    const seMessengerSpec = JSON.parse(
-      fs.readFileSync(`${appRoot.path}/messenger-specs/semessenger.spec.json`)
-    );
-
-    const updatedSpec = {
-      ...seMessengerSpec,
-      timestamp: new Date().toISOString(),
-    };
-    const seMessengerSpecIPFS = await getIPFSHash(updatedSpec);
-
-    tx = await slaRegistry.registerMessenger(
-      seMessenger.address,
-      `https://ipfs.dsla.network/ipfs/${seMessengerSpecIPFS}`
-    );
-    await tx.wait();
-    console.log('Bootstrap process completed');
   }
 );
 
