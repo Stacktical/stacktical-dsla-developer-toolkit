@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { StackticalConfiguration } from './types';
-
+import './tasks';
 require('dotenv').config();
 import {
   NETWORKS,
@@ -26,80 +26,6 @@ import {
   HardhatUserConfig,
   Network,
 } from 'hardhat/types';
-
-const { task } = require('hardhat/config');
-const { SUB_TASK_NAMES } = require('./subtasks');
-
-enum TASK_NAMES {
-  EXPORT_DATA = 'script:export-data',
-  DEPLOY_SLA = 'script:deploy-sla',
-  CREATE_DOCKER_COMPOSE = 'script:docker-compose',
-  BOOTSTRAP_DSLA_PROTOCOL = 'bootstrap',
-  REQUEST_SLI = 'script:request-sli',
-  REQUEST_ANALYTICS = 'script:request-analytics',
-  RESTART_SERVICES = 'script:restart-services',
-  GET_SERVICE_AGREEMENT = 'script:get-service-agreements',
-}
-
-task(
-  TASK_NAMES.DEPLOY_SLA,
-  'Deploy customized SLA from stacktical config'
-).setAction(async (_, { run }) => {
-  await run(SUB_TASK_NAMES.DEPLOY_SLA);
-});
-
-task(TASK_NAMES.EXPORT_DATA, 'Export data to exported-data folder').setAction(
-  async (_, { run }) => {
-    await run(SUB_TASK_NAMES.SAVE_CONTRACTS_ADDRESSES);
-    await run(SUB_TASK_NAMES.EXPORT_ABIS);
-  }
-);
-
-task(TASK_NAMES.CREATE_DOCKER_COMPOSE, 'Create docker compose').setAction(
-  async (_, { run }) => {
-    await run(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE);
-  }
-);
-
-task(TASK_NAMES.BOOTSTRAP_DSLA_PROTOCOL, 'Bootstrap DSLA protocol').setAction(
-  async (_, { run }) => {
-    await run(SUB_TASK_NAMES.BOOTSTRAP_DSLA_PROTOCOL);
-  }
-);
-
-task(
-  TASK_NAMES.REQUEST_SLI,
-  'Request a SLI verification for next verifiable period'
-)
-  .addOptionalParam(
-    'address',
-    '(optional) The SLA address. Defaults to last deployed SLA by deployer address'
-  )
-  .setAction(async (taskArgs, { run }) => {
-    await run(SUB_TASK_NAMES.REQUEST_SLI, taskArgs);
-  });
-
-task(TASK_NAMES.REQUEST_ANALYTICS, 'Request network analytics')
-  .addParam('periodId', 'Period id to request network analytics')
-  .setAction(async (taskArgs, { run }) => {
-    await run(SUB_TASK_NAMES.REQUEST_ANALYTICS, taskArgs);
-  });
-
-task(
-  TASK_NAMES.RESTART_SERVICES,
-  'Deploy or reset the local services (Chainlink NODE, IPFS, Graph protocol node)'
-).setAction(async (_, { run }) => {
-  await run(SUB_TASK_NAMES.STOP_LOCAL_SERVICES);
-  await run(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE);
-  await run(SUB_TASK_NAMES.START_LOCAL_SERVICES);
-});
-
-task(
-  TASK_NAMES.GET_SERVICE_AGREEMENT,
-  'Get the PreCoordinator service agreement configuration'
-).setAction(async (_, { run }) => {
-  await run(SUB_TASK_NAMES.GET_SERVICE_AGREEMENT);
-});
 
 const developStacktical: StackticalConfiguration = {
   chainlink: {
