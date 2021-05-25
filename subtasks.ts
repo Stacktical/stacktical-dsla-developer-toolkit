@@ -68,6 +68,7 @@ export enum SUB_TASK_NAMES {
   SET_PRECOORDINATOR = 'SET_PRECOORDINATOR',
   DEPLOY_LOCAL_SERVICES = 'DEPLOY_LOCAL_SERVICES',
   DEPLOY_CHAINLINK_CONTRACTS = 'DEPLOY_CHAINLINK_CONTRACTS',
+  UPDATE_PRECOORDINATOR = 'UPDATE_PRECOORDINATOR',
 }
 
 subtask(SUB_TASK_NAMES.STOP_LOCAL_SERVICES, undefined).setAction(
@@ -997,5 +998,57 @@ subtask(SUB_TASK_NAMES.DEPLOY_CHAINLINK_CONTRACTS, undefined).setAction(
       log: true,
       skipIfAlreadyDeployed: true,
     });
+  }
+);
+
+subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
+  async (taskArgs, hre: any) => {
+    const { deploy, get } = hre.deployments;
+    const { deployer } = await hre.getNamedAccounts();
+    const signer = await hre.ethers.getSigner(deployer);
+    const precoordinator = await PreCoordinator__factory.connect(
+      (
+        await get(CONTRACT_NAMES.PreCoordinator)
+      ).address,
+      signer
+    );
+    let eventFilter = precoordinator.filters.NewServiceAgreement();
+    let events = await precoordinator.queryFilter(eventFilter);
+    const lastEvent = events.slice(-1)[0];
+    const { saId } = lastEvent.args;
+    const serviceAgreement = await precoordinator.getServiceAgreement(saId);
+    const networkAnalytics = await NetworkAnalytics__factory.connect(
+      (
+        await get(CONTRACT_NAMES.NetworkAnalytics)
+      ).address,
+      signer
+    );
+    const seMessenger = await SEMessenger__factory.connect(
+      (
+        await get(CONTRACT_NAMES.SEMessenger)
+      ).address,
+      signer
+    );
+    let tx = await networkAnalytics.setChainlinkJobID(
+      saId,
+      serviceAgreement.payments.length
+    );
+    await tx.wait();
+
+    tx = await seMessenger.setChainlinkJobID(
+      saId,
+      serviceAgreement.payments.length
+    );
+    await tx.wait();
+    eventFilter = networkAnalytics.filters.JobIdModified();
+    events = await networkAnalytics.queryFilter(eventFilter);
+    // for (let event of events) {
+    //   console.log(event);
+    // }
+    // eventFilter = seMessenger.filters.JobIdModified();
+    // events = await seMessenger.queryFilter(eventFilter);
+    // for (let event of events) {
+    //   console.log(event);
+    // }
   }
 );

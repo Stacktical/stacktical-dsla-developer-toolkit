@@ -83,6 +83,7 @@ task(
 ).setAction(async (_, { run }) => {
   await run(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES);
   await run(SUB_TASK_NAMES.SET_PRECOORDINATOR);
+  await run(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR);
   await run(SUB_TASK_NAMES.GET_PRECOORDINATOR);
 });
 
