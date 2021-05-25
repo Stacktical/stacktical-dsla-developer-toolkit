@@ -68,6 +68,7 @@ export enum SUB_TASK_NAMES {
   BOOTSTRAP_PERIOD_REGISTRY = 'BOOTSTRAP_PERIOD_REGISTRY',
   BOOTSTRAP_STAKE_REGISTRY = 'BOOTSTRAP_STAKE_REGISTRY',
   BOOTSTRAP_NETWORK_ANALYTICS = 'BOOTSTRAP_NETWORK_ANALYTICS',
+  SET_CONTRACTS_ALLOWANCE = 'SET_CONTRACTS_ALLOWANCE',
   REQUEST_SLI = 'REQUEST_SLI',
   REQUEST_ANALYTICS = 'REQUEST_ANALYTICS',
   GET_PRECOORDINATOR = 'GET_PRECOORDINATOR',
@@ -885,6 +886,76 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_MESSENGER_REGISTRY, undefined).setAction(
         );
       }
     }
+    console.log(finishBootstrap);
+  }
+);
+
+subtask(SUB_TASK_NAMES.BOOTSTRAP_PERIOD_REGISTRY, undefined).setAction(
+  async (_, hre: any) => {
+    const {
+      stacktical: { bootstrap },
+    }: { stacktical: StackticalConfiguration } = hre.network.config;
+    const {
+      registry: { periods },
+    } = bootstrap;
+    const { deployments, ethers, getNamedAccounts } = hre;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    const { get } = deployments;
+
+    const [startBootstrap, finishBootstrap] = bootstrapStrings(
+      CONTRACT_NAMES.PeriodRegistry
+    );
+    console.log(startBootstrap);
+
+    const periodRegistryArtifact = await get(CONTRACT_NAMES.PeriodRegistry);
+    const periodRegistry = await PeriodRegistry__factory.connect(
+      periodRegistryArtifact.address,
+      signer
+    );
+
+    console.log('Initializing periods');
+    for (let period of periods) {
+      const { periodType, amountOfPeriods, expiredPeriods } = period;
+      let initializedPeriod = await periodRegistry.isInitializedPeriod(
+        periodType
+      );
+
+      if (initializedPeriod) {
+        console.log(
+          PERIOD_TYPE[periodType] + ' period type already initialized'
+        );
+        continue;
+      }
+
+      const [periodStarts, periodEnds] = generateBootstrapPeriods(
+        periodType,
+        amountOfPeriods,
+        expiredPeriods
+      );
+      const periodStartsDate = periodStarts.map((date) =>
+        moment(date * 1000)
+          .utc(0)
+          .format('DD/MM/YYYY HH:mm:ss')
+      );
+      const periodEndsDate = periodEnds.map((date) =>
+        moment(date * 1000)
+          .utc(0)
+          .format('DD/MM/YYYY HH:mm:ss')
+      );
+      console.log(
+        'Periods generated for ' + PERIOD_TYPE[periodType] + ' period type:'
+      );
+      console.log(periodStartsDate, periodEndsDate);
+      console.log(periodStarts, periodEnds);
+      let tx = await periodRegistry.initializePeriod(
+        periodType,
+        periodStarts,
+        periodEnds
+      );
+      await tx.wait();
+    }
+
     console.log(finishBootstrap);
   }
 );

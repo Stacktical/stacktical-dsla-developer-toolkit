@@ -40,8 +40,9 @@ task(TASK_NAMES.BOOTSTRAP_DSLA_PROTOCOL, 'Bootstrap DSLA protocol').setAction(
     const bootstrapSubtasks = [
       SUB_TASK_NAMES.BOOTSTRAP_MESSENGER_REGISTRY,
       SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY,
-      // SUB_TASK_NAMES.BOOTSTRAP_PERIOD_REGISTRY,
+      SUB_TASK_NAMES.BOOTSTRAP_PERIOD_REGISTRY,
       // SUB_TASK_NAMES.BOOTSTRAP_NETWORK_ANALYTICS,
+      // SUB_TASK_NAMES.SET_CONTRACTS_ALLOWANCE,
     ];
     for (let subtask of bootstrapSubtasks) {
       printSeparator();
