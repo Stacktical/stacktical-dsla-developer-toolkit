@@ -29,7 +29,7 @@ import {
 
 const developStacktical: StackticalConfiguration = {
   chainlink: {
-    isProduction: true,
+    isProduction: false,
     nodeFunds: '10',
     gasLimit: undefined,
     externalAdapterUrL: null,
