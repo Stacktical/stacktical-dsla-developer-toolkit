@@ -1,3 +1,30 @@
+await ethers.provider.send('evm_mine')
+await ethers.provider.send
+await ethers.provider.send('evm_mine')
+await ethers.provider.send('evm_min')
+await ethers.provider.send()
+await preCoordinator.queryFilter({topic:'NewServiceAgreement'})
+preCoordinator.queryFilter({topic:'NewServiceAgreement'})
+preCoordinator.queryFilter({topic:'NewServiceAgreement'}))
+await preCoordinator.queryFilter({topic:'NewServiceAgreement'}))
+preCoordinator.queryFilter({topic:'NewServiceAgreement'})
+preCoordinator.queryFilter({topic:'NewServiceAgreement'}))
+preCoordinator.queryFilter()
+preCoordinator.queryFilter
+preCoordinator.queryFilterç
+await preCoordinator.getServiceAgreement('hola')
+await preCoordinator.getServiceAgreement()
+preCoordinator
+let preCoordinator = await ethers.getContract('PreCoordinator')
+await networkAnalytics.getNetworkNames()
+networkAnalytics.getNetworkNames()
+networkAnalytics = await ethers.getContract('NetworkAnalytics')
+ethers.getContract('NetworkAnalytics')
+ethers.getContract('NetworkAnalytics'))
+ethers.getContract()
+ethers.getContract
+networkAnalytics = await NetworkAnalytics_factory
+let networkAnalytics = await hre.deployments.get('NetworkAnalytics')
 await hre.ethers.provider.send('debug_traceTransaction',['0x161781d93bf84ca93bd9907b4ef25c6282763d00a808d5573e5a62f14f310aa9'])
 hre.ethers.provider.send('debug_traceTransaction','0x161781d93bf84ca93bd9907b4ef25c6282763d00a808d5573e5a62f14f310aa9')
 await stakeRegistry.slaRegistry()

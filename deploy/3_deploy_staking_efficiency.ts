@@ -1,11 +1,5 @@
-import { PreCoordinatorConfiguration, StackticalConfiguration } from '../types';
+import { StackticalConfiguration } from '../types';
 import { DeployOptionsBase } from 'hardhat-deploy/dist/types';
-import {
-  getChainlinkJob,
-  getChainlinkLinkToken,
-  setChainlinkEnv,
-} from '../chainlinkUtils';
-import { toWei } from 'web3-utils';
 import { PreCoordinator__factory } from '../typechain';
 import { CONTRACT_NAMES, DEPLOYMENT_TAGS } from '../constants';
 import { SUB_TASK_NAMES } from '../subtasks';
@@ -15,12 +9,10 @@ module.exports = async ({
   deployments,
   network,
   ethers,
-  web3,
   run,
 }) => {
   const { stacktical }: { stacktical: StackticalConfiguration } =
     network.config;
-  await run(SUB_TASK_NAMES.SET_CHAINLINK_ENV);
   const { deployer } = await getNamedAccounts();
   const { deploy, get } = deployments;
   const stringUtils = await get(CONTRACT_NAMES.StringUtils);
@@ -32,42 +24,27 @@ module.exports = async ({
     from: deployer,
     log: true,
   };
-  const linkToken = await getChainlinkLinkToken();
+  const linkToken = await get(CONTRACT_NAMES.LinkToken);
   await deploy(CONTRACT_NAMES.PreCoordinator, {
     ...baseOptions,
-    args: [linkToken],
+    args: [linkToken.address],
   });
-
-  const minResponses = 1;
-  const job = await getChainlinkJob();
-  const preCoordinatorConfiguration: PreCoordinatorConfiguration =
-    stacktical.productionChainlinkNode === null
-      ? {
-          oracles: [job.attributes.initiators[0].params.address],
-          jobIds: [web3.utils.padRight('0x' + job.id, 64)],
-          payments: [toWei('0.1')],
-        }
-      : stacktical.productionChainlinkNode.preCoordinatorConfiguration;
-  const pc = await get(CONTRACT_NAMES.PreCoordinator);
+  await run(SUB_TASK_NAMES.SET_PRECOORDINATOR);
   const preCoordinator = await PreCoordinator__factory.connect(
-    pc.address,
+    (
+      await get(CONTRACT_NAMES.PreCoordinator)
+    ).address,
     await ethers.getSigner(deployer)
   );
-
-  const tx = await preCoordinator.createServiceAgreement(
-    minResponses,
-    preCoordinatorConfiguration.oracles,
-    preCoordinatorConfiguration.jobIds,
-    preCoordinatorConfiguration.payments
-  );
-  const receipt = await tx.wait();
-  const { saId } = receipt.events[0].args;
-  const feeMultiplier = preCoordinatorConfiguration.payments.length;
+  const eventFilter = preCoordinator.filters.NewServiceAgreement();
+  const events = await preCoordinator.queryFilter(eventFilter);
+  const { saId } = events[0].args;
+  const feeMultiplier = stacktical.chainlink.nodesConfiguration.length;
   await deploy(CONTRACT_NAMES.NetworkAnalytics, {
     ...baseOptions,
     args: [
       preCoordinator.address,
-      linkToken,
+      linkToken.address,
       saId,
       periodRegistry.address,
       stakeRegistry.address,
@@ -82,7 +59,7 @@ module.exports = async ({
     ...baseOptions,
     args: [
       preCoordinator.address,
-      linkToken,
+      linkToken.address,
       saId,
       networkAnalytics.address,
       feeMultiplier,

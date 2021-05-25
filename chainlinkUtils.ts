@@ -1,52 +1,41 @@
 import axios from 'axios';
+import { ChainlinkNodeConfiguration } from './types';
 
 const fs = require('fs');
 
 const appRoot = require('app-root-path');
-const dslaProtocolJsonPath = `${appRoot.path}/dev-env/dsla-protocol.json`;
+const dslaProtocolJsonPath = `${appRoot.path}/services/dsla-protocol.json`;
 
-let chainlinkEnv;
-let url;
-let cookie;
+let cookies = {};
 
-function setChainlinkEnv(env) {
-  chainlinkEnv = env;
-  url =
-    (chainlinkEnv.productionChainlinkNode &&
-      chainlinkEnv.productionChainlinkNode.url) ||
-    process.env.LOCAL_CHAINLINK_URL ||
-    'http://localhost:6688';
-}
-
-const getChainlinkSessionCookie = async () => {
+const getChainlinkSessionCookie = async (node: ChainlinkNodeConfiguration) => {
+  if (cookies[node.name] !== undefined) return cookies[node.name];
   const resp = await axios({
     method: 'post',
-    url: `${url}/sessions`,
+    url: `${node.restApiUrl}${
+      node.restApiPort ? ':' + node.restApiPort : undefined
+    }/sessions`,
     headers: {
       'Content-Type': 'application/json',
     },
     data: {
-      email:
-        (chainlinkEnv.productionChainlinkNode &&
-          chainlinkEnv.productionChainlinkNode.email) ||
-        'test@stacktical.com',
-      password:
-        (chainlinkEnv.productionChainlinkNode &&
-          chainlinkEnv.productionChainlinkNode.password) ||
-        'PaSSword123456',
+      email: node.email,
+      password: node.password,
     },
   });
-  cookie = resp.headers['set-cookie'];
-  return cookie;
+  cookies[node.name] = resp.headers['set-cookie'];
+  return cookies[node.name];
 };
 
-const getChainlinkAccounts = async () => {
-  const sessionCookie = cookie || (await getChainlinkSessionCookie());
+const getChainlinkAccounts = async (node: ChainlinkNodeConfiguration) => {
+  const sessionCookie = await getChainlinkSessionCookie(node);
   const {
     data: { data },
   } = await axios({
     method: 'get',
-    url: `${url}/v2/keys/eth`,
+    url: `${node.restApiUrl}${
+      node.restApiPort ? ':' + node.restApiPort : undefined
+    }/v2/keys/eth`,
     headers: {
       Cookie: sessionCookie,
       'Content-Type': 'application/json',
@@ -56,11 +45,13 @@ const getChainlinkAccounts = async () => {
   return data;
 };
 
-const getChainlinkBridge = async () => {
-  const sessionCookie = cookie || (await getChainlinkSessionCookie());
+const getChainlinkBridge = async (node: ChainlinkNodeConfiguration) => {
+  const sessionCookie = await getChainlinkSessionCookie(node);
   const { data } = await axios({
     method: 'get',
-    url: `${url}/v2/bridge_types`,
+    url: `${node.restApiUrl}${
+      node.restApiPort ? ':' + node.restApiPort : undefined
+    }/v2/bridge_types`,
     headers: {
       Cookie: sessionCookie,
       'Content-Type': 'application/json',
@@ -73,11 +64,13 @@ const getChainlinkBridge = async () => {
   );
 };
 
-const getChainlinkJob = async () => {
-  const sessionCookie = cookie || (await getChainlinkSessionCookie());
+const getChainlinkJob = async (node: ChainlinkNodeConfiguration) => {
+  const sessionCookie = await getChainlinkSessionCookie(node);
   const { data } = await axios({
     method: 'get',
-    url: `${url}/v2/specs`,
+    url: `${node.restApiUrl}${
+      node.restApiPort ? ':' + node.restApiPort : undefined
+    }/v2/specs`,
     headers: {
       Cookie: sessionCookie,
       'Content-Type': 'application/json',
@@ -90,11 +83,13 @@ const getChainlinkJob = async () => {
   );
 };
 
-const getChainlinkJobId = async () => {
-  const sessionCookie = cookie || (await getChainlinkSessionCookie());
+const getChainlinkJobId = async (node: ChainlinkNodeConfiguration) => {
+  const sessionCookie = await getChainlinkSessionCookie(node);
   const { data } = await axios({
     method: 'get',
-    url: `${url}/v2/specs`,
+    url: `${node.restApiUrl}${
+      node.restApiPort ? ':' + node.restApiPort : undefined
+    }/v2/specs`,
     headers: {
       Cookie: sessionCookie,
       'Content-Type': 'application/json',
@@ -104,11 +99,13 @@ const getChainlinkJobId = async () => {
   return `0x${data.data[0].id}`;
 };
 
-const postChainlinkJob = async () => {
-  const sessionCookie = cookie || (await getChainlinkSessionCookie());
+const postChainlinkJob = async (node: ChainlinkNodeConfiguration) => {
+  const sessionCookie = await getChainlinkSessionCookie(node);
   const { data } = await axios({
     method: 'post',
-    url: `${url}/v2/specs`,
+    url: `${node.restApiUrl}${
+      node.restApiPort ? ':' + node.restApiPort : undefined
+    }/v2/specs`,
     headers: {
       Cookie: sessionCookie,
       'Content-Type': 'application/json',
@@ -120,8 +117,8 @@ const postChainlinkJob = async () => {
   return data;
 };
 
-const getChainlinkLinkToken = async () => {
-  const sessionCookie = cookie || (await getChainlinkSessionCookie());
+const getChainlinkLinkToken = async (node: ChainlinkNodeConfiguration) => {
+  const sessionCookie = await getChainlinkSessionCookie(node);
   const {
     data: {
       data: {
@@ -130,7 +127,9 @@ const getChainlinkLinkToken = async () => {
     },
   } = await axios({
     method: 'get',
-    url: `${url}/v2/config`,
+    url: `${node.restApiUrl}${
+      node.restApiPort ? ':' + node.restApiPort : undefined
+    }/v2/config`,
     headers: {
       Cookie: sessionCookie,
       'Content-Type': 'application/json',
@@ -140,34 +139,35 @@ const getChainlinkLinkToken = async () => {
   return LINK_CONTRACT_ADDRESS;
 };
 
-const postChainlinkBridge = async () => {
+const postChainlinkBridge = async (node: ChainlinkNodeConfiguration) => {
   const jobJson = JSON.parse(fs.readFileSync(dslaProtocolJsonPath));
 
-  const sessionCookie = cookie || (await getChainlinkSessionCookie());
+  const sessionCookie = await getChainlinkSessionCookie(node);
   const { data } = await axios({
     method: 'post',
-    url: `${url}/v2/bridge_types`,
+    url: `${node.restApiUrl}${
+      node.restApiPort ? ':' + node.restApiPort : undefined
+    }/v2/bridge_types`,
     headers: {
       Cookie: sessionCookie,
       'Content-Type': 'application/json',
     },
     data: {
       name: jobJson.tasks[0].type,
-      url:
-        (chainlinkEnv.productionChainlinkNode &&
-          chainlinkEnv.productionChainlinkNode.externalAdapterUrL) ||
-        'http://host.docker.internal:6060',
+      url: node.externalAdapterUrl,
     },
     withCredentials: true,
   });
   return data;
 };
 
-const deleteJob = async (jobId) => {
-  const sessionCookie = cookie || (await getChainlinkSessionCookie());
+const deleteJob = async (node, jobId) => {
+  const sessionCookie = await getChainlinkSessionCookie(node);
   const { data } = await axios({
     method: 'delete',
-    url: `${url}/v2/specs/${jobId}`,
+    url: `${node.restApiUrl}${
+      node.restApiPort ? ':' + node.restApiPort : undefined
+    }/v2/specs/${jobId}`,
     headers: {
       Cookie: sessionCookie,
       'Content-Type': 'application/json',
@@ -179,7 +179,6 @@ const deleteJob = async (jobId) => {
 
 export {
   deleteJob,
-  setChainlinkEnv,
   postChainlinkJob,
   postChainlinkBridge,
   getChainlinkJob,

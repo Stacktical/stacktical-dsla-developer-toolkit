@@ -7,13 +7,15 @@ import {
   getChainlinkAccounts,
   getChainlinkBridge,
   getChainlinkJob,
-  getChainlinkLinkToken,
   postChainlinkBridge,
   postChainlinkJob,
-  setChainlinkEnv,
 } from './chainlinkUtils';
 import { subtask } from 'hardhat/config';
-import { DeploySLAConfiguration, StackticalConfiguration } from './types';
+import {
+  ChainlinkNodeConfiguration,
+  DeploySLAConfiguration,
+  StackticalConfiguration,
+} from './types';
 import {
   DAI__factory,
   DSLA__factory,
@@ -21,19 +23,25 @@ import {
   NetworkAnalytics__factory,
   Oracle__factory,
   PeriodRegistry__factory,
+  PreCoordinator__factory,
   SEMessenger__factory,
   SLA__factory,
   SLARegistry__factory,
   StakeRegistry__factory,
   USDC__factory,
 } from './typechain';
-import { getIPFSHash, generateBootstrapPeriods, eventListener } from './utils';
 import {
   CONTRACT_NAMES,
   PERIOD_STATUS,
   PERIOD_TYPE,
   SENetworkNamesBytes32,
 } from './constants';
+import {
+  generateBootstrapPeriods,
+  getIPFSHash,
+  getPreCoordinatorConfiguration,
+  printSeparator,
+} from './utils';
 
 const prettier = require('prettier');
 const { DataFile } = require('edit-config');
@@ -45,11 +53,10 @@ const compose = require('docker-compose');
 const moment = require('moment');
 
 export enum SUB_TASK_NAMES {
-  PREPARE_CHAINLINK_NODE = 'PREPARE_CHAINLINK_NODE',
+  PREPARE_CHAINLINK_NODES = 'PREPARE_CHAINLINK_NODES',
   SETUP_DOCKER_COMPOSE = 'SETUP_DOCKER_COMPOSE',
-  SET_CHAINLINK_ENV = 'SET_CHAINLINK_ENV',
-  STOP_CHAINLINK_NODE = 'STOP_CHAINLINK_NODE',
-  START_CHAINLINK_NODE = 'START_CHAINLINK_NODE',
+  STOP_LOCAL_SERVICES = 'STOP_LOCAL_SERVICES',
+  START_LOCAL_SERVICES = 'START_LOCAL_SERVICES',
   INITIALIZE_DEFAULT_ADDRESSES = 'INITIALIZE_DEFAULT_ADDRESSES',
   SAVE_CONTRACTS_ADDRESSES = 'SAVE_CONTRACTS_ADDRESSES',
   EXPORT_ABIS = 'EXPORT_ABIS',
@@ -57,37 +64,49 @@ export enum SUB_TASK_NAMES {
   BOOTSTRAP_DSLA_PROTOCOL = 'BOOTSTRAP_DSLA_PROTOCOL',
   REQUEST_SLI = 'REQUEST_SLI',
   REQUEST_ANALYTICS = 'REQUEST_ANALYTICS',
+  GET_PRECOORDINATOR = 'GET_PRECOORDINATOR',
+  SET_PRECOORDINATOR = 'SET_PRECOORDINATOR',
+  DEPLOY_LOCAL_SERVICES = 'DEPLOY_LOCAL_SERVICES',
+  DEPLOY_CHAINLINK_CONTRACTS = 'DEPLOY_CHAINLINK_CONTRACTS',
 }
 
-subtask(SUB_TASK_NAMES.SET_CHAINLINK_ENV, undefined).setAction(
+subtask(SUB_TASK_NAMES.STOP_LOCAL_SERVICES, undefined).setAction(
   async (_, hre: any) => {
-    setChainlinkEnv(hre.network.config.stacktical);
+    const { stacktical }: { stacktical: StackticalConfiguration } =
+      hre.network.config;
+    for (let node of stacktical.chainlink.nodesConfiguration) {
+      await compose.down({
+        cwd: path.join(`${appRoot.path}/services/environments/${node.name}/`),
+        log: true,
+      });
+    }
   }
 );
 
-subtask(SUB_TASK_NAMES.STOP_CHAINLINK_NODE, undefined).setAction(async () => {
-  await compose.down({
-    cwd: path.join(`${appRoot}/dev-env/`),
-    log: true,
-  });
-});
-
-subtask(SUB_TASK_NAMES.START_CHAINLINK_NODE, undefined).setAction(async () => {
-  await compose.upAll({
-    cwd: path.join(`${appRoot}/dev-env/`),
-    log: true,
-  });
-});
+subtask(SUB_TASK_NAMES.START_LOCAL_SERVICES, undefined).setAction(
+  async (_, hre: any) => {
+    const { stacktical }: { stacktical: StackticalConfiguration } =
+      hre.network.config;
+    for (let node of stacktical.chainlink.nodesConfiguration) {
+      await compose.upAll({
+        cwd: path.join(`${appRoot.path}/services/environments/${node.name}/`),
+        log: true,
+      });
+    }
+  }
+);
 
 subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
   async (_, hre: any) => {
     const { deployments, network } = hre;
     const { get } = deployments;
+    const { stacktical }: { stacktical: StackticalConfiguration } =
+      network.config;
     const oracle = await get(CONTRACT_NAMES.Oracle);
     const linkToken = await get(CONTRACT_NAMES.LinkToken);
 
     const jobSpec = await DataFile.load(
-      `${appRoot.path}/dev-env/dsla-protocol.json`
+      `${appRoot.path}/services/dsla-protocol.json`
     );
     jobSpec.set('initiators', [
       {
@@ -98,33 +117,84 @@ subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
 
     await jobSpec.save();
 
-    const dockerComposePath = `${appRoot.path}/dev-env/docker-compose.yaml`;
-    const fileContents = fs.readFileSync(dockerComposePath, 'utf8');
-    const data = yaml.load(fileContents);
-    data.services.chainlink.environment =
-      data.services.chainlink.environment.map((envVariable) => {
-        switch (true) {
-          case /LINK_CONTRACT_ADDRESS/.test(envVariable):
-            return `LINK_CONTRACT_ADDRESS=${
-              network.config.stacktical.linkTokenAddress || linkToken.address
-            }`;
-          case /ETH_CHAIN_ID/.test(envVariable):
-            return `ETH_CHAIN_ID=${network.config.chainId}`;
-          case /ETH_URL/.test(envVariable):
-            return `ETH_URL=${network.config.stacktical.developChainlinkNode.ethUrl}`;
-          default:
-            return envVariable;
-        }
+    for (let node of stacktical.chainlink.nodesConfiguration) {
+      const fileContents = fs.readFileSync(
+        `${appRoot.path}/services/docker-compose.yaml`,
+        'utf8'
+      );
+      const data = yaml.load(fileContents);
+      data.services.chainlink.environment =
+        data.services.chainlink.environment.map((envVariable) => {
+          switch (true) {
+            case /LINK_CONTRACT_ADDRESS/.test(envVariable):
+              return `LINK_CONTRACT_ADDRESS=${linkToken.address}`;
+            case /ETH_CHAIN_ID/.test(envVariable):
+              return `ETH_CHAIN_ID=${network.config.chainId}`;
+            case /ETH_URL/.test(envVariable):
+              return `ETH_URL=${stacktical.chainlink.ethWsUrl}`;
+            case /ETH_HTTP_URL/.test(envVariable):
+              return `ETH_HTTP_URL=${
+                stacktical.chainlink.ethHttpUrl || network.config.url
+              }`;
+            case /CHAINLINK_PORT/.test(envVariable):
+              return `CHAINLINK_PORT=${node.restApiPort}`;
+            default:
+              return envVariable;
+          }
+        });
+      data.services.postgres.container_name = `postgres-${node.name}`;
+      data.services.postgres.networks = [`${node.name}-network`];
+
+      data.services.chainlink.container_name = `chainlink-${node.name}`;
+      data.services.chainlink.networks = [`${node.name}-network`];
+
+      data.services.chainlink.ports = [
+        `${node.restApiPort}:${node.restApiPort}`,
+      ];
+
+      data.networks = {
+        [`${node.name}-network`]: {
+          name: `${node.name}-developer-toolkit-network`,
+        },
+      };
+
+      const yamlStr = yaml.dump(data);
+      fs.mkdirSync(`${appRoot.path}/services/environments/${node.name}/`, {
+        recursive: true,
       });
-    data.services.postgres.volumes = [
-      `./postgres/${network.name}/db:/var/lib/postgresql/data`,
-    ];
-    const yamlStr = yaml.dump(data);
-    fs.writeFileSync(dockerComposePath, yamlStr, 'utf8');
+      fs.mkdirSync(
+        `${appRoot.path}/services/environments/${node.name}/chainlink`,
+        {
+          recursive: true,
+        }
+      );
+      fs.mkdirSync(
+        `${appRoot.path}/services/environments/${node.name}/postgres`,
+        {
+          recursive: true,
+        }
+      );
+
+      fs.copyFileSync(
+        `${appRoot.path}/services/.api`,
+        `${appRoot.path}/services/environments/${node.name}/chainlink/.api`
+      );
+
+      fs.copyFileSync(
+        `${appRoot.path}/services/.password`,
+        `${appRoot.path}/services/environments/${node.name}/chainlink/.password`
+      );
+
+      fs.writeFileSync(
+        `${appRoot.path}/services/environments/${node.name}/docker-compose.yaml`,
+        yamlStr,
+        'utf8'
+      );
+    }
   }
 );
 
-subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODE, undefined).setAction(
+subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
   async (_, hre: any) => {
     function wait(timeout) {
       return new Promise((resolve) => {
@@ -132,33 +202,33 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODE, undefined).setAction(
       });
     }
 
-    const updatedBridge = async () => {
+    const updatedBridge = async (node: ChainlinkNodeConfiguration) => {
       try {
-        const postedBridge = await getChainlinkBridge();
+        const postedBridge = await getChainlinkBridge(node);
         if (postedBridge) return postedBridge;
-        const httpRequestJobRes = await postChainlinkBridge();
+        const httpRequestJobRes = await postChainlinkBridge(node);
         return httpRequestJobRes.data;
       } catch (error) {
         return false;
       }
     };
 
-    const updatedJob = async () => {
+    const updatedJob = async (node: ChainlinkNodeConfiguration) => {
       try {
-        const postedJob = await getChainlinkJob();
+        const postedJob = await getChainlinkJob(node);
         if (postedJob) {
-          await deleteJob(postedJob.id);
+          await deleteJob(node, postedJob.id);
         }
-        const httpRequestJobRes = await postChainlinkJob();
+        const httpRequestJobRes = await postChainlinkJob(node);
         return httpRequestJobRes.data;
       } catch (error) {
         return false;
       }
     };
 
-    const updatedAddress = async () => {
+    const updatedAddress = async (node: ChainlinkNodeConfiguration) => {
       try {
-        const addresses = await getChainlinkAccounts();
+        const addresses = await getChainlinkAccounts(node);
         if (addresses.length === 0) return false;
         const {
           attributes: { address },
@@ -171,79 +241,110 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODE, undefined).setAction(
     const { deployments, network, ethers, getNamedAccounts, web3 } = hre;
     const { deployer } = await getNamedAccounts();
     const { get } = deployments;
+    const { stacktical }: { stacktical: StackticalConfiguration } =
+      network.config;
     // Create bridge
-    console.log('Creating dsla-protocol bridge in Chainlink node...');
-    let bridge = await updatedBridge();
-    while (!bridge) {
-      // eslint-disable-next-line no-await-in-loop
-      await wait(5000);
-      console.log(
-        'Bridge creation in Chainlink node failed, reattempting in 5 seconds'
-      );
-      // eslint-disable-next-line no-await-in-loop
-      bridge = await updatedBridge();
-    }
-    console.log(`Bridge created! Bridge ID: ${bridge.id}.`);
+    console.log('Starting automated configuration for Chainlink nodes...');
+    for (let node of stacktical.chainlink.nodesConfiguration) {
+      printSeparator();
+      console.log('Preparing node: ' + node.name);
+      console.log('Creating dsla-protocol bridge in Chainlink nodes...');
+      let bridge = await updatedBridge(node);
+      while (!bridge) {
+        // eslint-disable-next-line no-await-in-loop
+        await wait(5000);
+        console.log(
+          'Bridge creation in Chainlink node failed, reattempting in 5 seconds'
+        );
+        // eslint-disable-next-line no-await-in-loop
+        bridge = await updatedBridge(node);
+      }
+      console.log(`Bridge created! Bridge ID: ${bridge.id}.`);
 
-    // Create job
-    console.log('Creating staking efficiency job on Chainlink node...');
-    // eslint-disable-next-line global-require
-    let job = await updatedJob();
-    while (!job) {
-      // eslint-disable-next-line no-await-in-loop
-      await wait(5000);
-      console.log(
-        'Job creation in Chainlink node failed, reattempting in 5 seconds'
-      );
-      // eslint-disable-next-line no-await-in-loop
-      job = await updatedJob();
-    }
-    console.log(`Job created! Job ID: ${job.id}.`);
+      // Create job
+      console.log('Creating staking efficiency job on Chainlink node...');
+      // eslint-disable-next-line global-require
+      let job = await updatedJob(node);
+      while (!job) {
+        // eslint-disable-next-line no-await-in-loop
+        await wait(5000);
+        console.log(
+          'Job creation in Chainlink node failed, reattempting in 5 seconds'
+        );
+        // eslint-disable-next-line no-await-in-loop
+        job = await updatedJob(node);
+      }
+      console.log(`Job created! Job ID: ${job.id}.`);
 
-    // Fund node
-    let chainlinkNodeAddress = await updatedAddress();
-    while (!chainlinkNodeAddress) {
-      await wait(5000);
+      // Fund node
+      let chainlinkNodeAddress = await updatedAddress(node);
+      while (!chainlinkNodeAddress) {
+        await wait(5000);
+        console.log(
+          'Address fetch from Chainlink node failed, reattempting in 5 seconds'
+        );
+        chainlinkNodeAddress = await updatedAddress(node);
+      }
+      console.log(`Chainlink Node Address: ${chainlinkNodeAddress}`);
+      const { nodeFunds, gasLimit } = stacktical.chainlink;
+      const [defaultAccount] = await web3.eth.getAccounts();
+      let balance = await web3.eth.getBalance(chainlinkNodeAddress);
+      if (web3.utils.fromWei(balance) < nodeFunds) {
+        await web3.eth.sendTransaction({
+          from: defaultAccount,
+          to: chainlinkNodeAddress,
+          value: web3.utils.toWei(
+            String(Number(nodeFunds) - web3.utils.fromWei(balance)),
+            'ether'
+          ),
+          gas: gasLimit,
+        });
+      }
+      balance = await web3.eth.getBalance(chainlinkNodeAddress);
       console.log(
-        'Address fetch from Chainlink node failed, reattempting in 5 seconds'
+        `Chainlink Node balance: ${web3.utils.fromWei(balance)} ether`
       );
-      chainlinkNodeAddress = await updatedAddress();
-    }
-    console.log(`Chainlink Node Address: ${chainlinkNodeAddress}`);
-    const { productionChainlinkNode, developChainlinkNode } =
-      network.config.stacktical;
-    const { funds, gasLimit } = productionChainlinkNode || developChainlinkNode;
-    const [defaultAccount] = await web3.eth.getAccounts();
-    let balance = await web3.eth.getBalance(chainlinkNodeAddress);
-    if (web3.utils.fromWei(balance) < funds) {
-      await web3.eth.sendTransaction({
-        from: defaultAccount,
-        to: chainlinkNodeAddress,
-        value: web3.utils.toWei(
-          String(funds - web3.utils.fromWei(balance)),
-          'ether'
-        ),
-        gas: gasLimit,
-      });
-    }
-    balance = await web3.eth.getBalance(chainlinkNodeAddress);
-    console.log(`Chainlink Node balance: ${web3.utils.fromWei(balance)} ether`);
 
-    // Authorize node
-    const oracle = await get(CONTRACT_NAMES.Oracle);
-    const oracleContract = Oracle__factory.connect(
-      oracle.address,
-      await ethers.getSigner(deployer)
-    );
-    const tx = await oracleContract.setFulfillmentPermission(
-      chainlinkNodeAddress,
-      true
-    );
-    await tx.wait();
-    const permissions = await oracleContract.getAuthorizationStatus(
-      chainlinkNodeAddress
-    );
-    console.log(`Chainlink Node Fullfillment permissions: ${permissions}`);
+      // Authorize node
+      const oracle = await get(CONTRACT_NAMES.Oracle);
+      const oracleContract = Oracle__factory.connect(
+        oracle.address,
+        await ethers.getSigner(deployer)
+      );
+      let permissions = await oracleContract.getAuthorizationStatus(
+        chainlinkNodeAddress
+      );
+      if (!permissions) {
+        const tx = await oracleContract.setFulfillmentPermission(
+          chainlinkNodeAddress,
+          true
+        );
+        await tx.wait();
+      }
+      permissions = await oracleContract.getAuthorizationStatus(
+        chainlinkNodeAddress
+      );
+      console.log(`Chainlink Node Fullfillment permissions: ${permissions}`);
+      console.log('Automated configuration finished for node:' + node.name);
+      printSeparator();
+    }
+    console.log('Automated configuration finished for all nodes');
+  }
+);
+
+subtask(SUB_TASK_NAMES.DEPLOY_LOCAL_SERVICES, undefined).setAction(
+  async (_, hre: any) => {
+    const localServicesSubtasks = [
+      SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE,
+      SUB_TASK_NAMES.STOP_LOCAL_SERVICES,
+      SUB_TASK_NAMES.START_LOCAL_SERVICES,
+      SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES,
+    ];
+    const { run } = hre;
+    for (let subtask of localServicesSubtasks) {
+      console.log(subtask);
+      await run(subtask);
+    }
   }
 );
 
@@ -469,9 +570,7 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_DSLA_PROTOCOL, undefined).setAction(
     const { periods, messengersLinkTokenAllowance } = bootstrap;
 
     console.log('Starting automated jobs to bootstrap protocol correctly');
-    console.log(
-      'Starting automated job 1: allowing DAI and USDC on StakeRegistry'
-    );
+
     const { deployments, ethers, getNamedAccounts } = hre;
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
@@ -508,7 +607,12 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_DSLA_PROTOCOL, undefined).setAction(
       ).address,
       signer
     );
-    let tx = await stakeRegistry.addAllowedTokens(daiToken.address);
+
+    let tx;
+    console.log(
+      'Starting automated job 1: allowing DAI and USDC on StakeRegistry'
+    );
+    tx = await stakeRegistry.addAllowedTokens(daiToken.address);
     await tx.wait();
     tx = await stakeRegistry.addAllowedTokens(usdcToken.address);
     await tx.wait();
@@ -553,7 +657,7 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_DSLA_PROTOCOL, undefined).setAction(
     console.log(
       'Starting automated job 4: Increasing allowance for NetworkAnalytics and SEMessenger with 10 link tokens'
     );
-    const linkTokenAddress = await getChainlinkLinkToken();
+    const linkTokenAddress = (await get(CONTRACT_NAMES.LinkToken)).address;
     const linkToken = await LinkToken__factory.connect(
       linkTokenAddress,
       signer
@@ -606,9 +710,6 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(async (_, hre: any) => {
   const signer = await ethers.getSigner(deployer);
   const { get } = deployments;
   console.log('Starting SLA deployment process');
-  console.log(
-    'Starting process 1: Allowance on Stake registry to contracts-deploy SLA'
-  );
   const { deploy_sla }: { deploy_sla: DeploySLAConfiguration } = scripts;
   const {
     serviceMetadata,
@@ -648,6 +749,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(async (_, hre: any) => {
     slaRegistryArtifact.address,
     signer
   );
+  console.log('Starting process 1: Allowance on Stake registry to deploy SLA');
   const { dslaDepositByPeriod } =
     await stakeRegistry.callStatic.getStakingParameters();
   const dslaDeposit = toWei(
@@ -709,20 +811,12 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(async (_, hre: any) => {
   await tx.wait();
   tx = await sla.stakeTokens(notDeployerStake, dslaToken.address);
   await tx.wait();
+  console.log('SLA deployment process finished');
 });
 
 subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
   async (taskArgs, hre: any) => {
-    const {
-      deployments,
-      ethers,
-      getNamedAccounts,
-      network: {
-        config: {
-          stacktical: { scripts, web3WebsocketProviderUrl },
-        },
-      },
-    } = hre;
+    const { deployments, ethers, getNamedAccounts, network } = hre;
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
     const { get } = deployments;
@@ -749,7 +843,8 @@ subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
     let tx = await slaRegistry.requestSLI(
       Number(nextVerifiablePeriod),
       sla.address,
-      ownerApproval
+      ownerApproval,
+      { ...(network.config.gas !== 'auto' && { gasLimit: network.config.gas }) }
     );
     await tx.wait();
     await new Promise((resolve) => sla.on('SLICreated', () => resolve(null)));
@@ -792,7 +887,8 @@ subtask(SUB_TASK_NAMES.REQUEST_ANALYTICS, undefined).setAction(
       taskArgs.periodId,
       deploy_sla.periodType,
       deploy_sla.extraData[0],
-      ownerApproval
+      ownerApproval,
+      { ...(network.config.gas !== 'auto' && { gasLimit: network.config.gas }) }
     );
     await tx.wait();
     await new Promise((resolve) =>
@@ -805,5 +901,101 @@ subtask(SUB_TASK_NAMES.REQUEST_ANALYTICS, undefined).setAction(
     );
     console.log('Analytics result: ', analyticsResult);
     console.log('Analytics request process finished');
+  }
+);
+
+subtask(SUB_TASK_NAMES.GET_PRECOORDINATOR, undefined).setAction(
+  async (taskArgs, hre: any) => {
+    const { deployments, ethers, getNamedAccounts } = hre;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    const { get } = deployments;
+
+    console.log('Getting Chainlink config from PreCoordinator contract');
+
+    const precoordinator = await PreCoordinator__factory.connect(
+      (
+        await get(CONTRACT_NAMES.PreCoordinator)
+      ).address,
+      signer
+    );
+    const eventsFilter = precoordinator.filters.NewServiceAgreement();
+    const events = await precoordinator.queryFilter(eventsFilter);
+    for (let event of events) {
+      printSeparator();
+      const { saId, payment, minresponses } = event.args;
+      console.log('Service agreement blockNumber: ' + event.blockNumber);
+      console.log('Service agreement ID: ' + saId);
+      console.log(
+        'Service agreement payment: ' +
+          ethers.utils.formatEther(payment) +
+          ' LINK'
+      );
+      console.log('Service agreement minresponses: ' + minresponses);
+      const serviceAgreement = await precoordinator.getServiceAgreement(saId);
+      console.log('Service agreement jobIds array: ');
+      console.log(serviceAgreement.jobIds);
+      console.log('Service agreement oracles array: ');
+      console.log(serviceAgreement.oracles);
+      console.log('Service agreement payments array: ');
+      console.log(
+        serviceAgreement.payments.map((payment) =>
+          ethers.utils.formatEther(payment)
+        )
+      );
+      printSeparator();
+    }
+  }
+);
+
+subtask(SUB_TASK_NAMES.SET_PRECOORDINATOR, undefined).setAction(
+  async (taskArgs, hre: any) => {
+    const { deployments, ethers, getNamedAccounts, network, web3, run } = hre;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    const { get } = deployments;
+    const { stacktical }: { stacktical: StackticalConfiguration } =
+      network.config;
+    console.log('Setting Chainlink config on PreCoordinator contract');
+    console.log('Nodes configuration from stacktical config:');
+    console.log(stacktical.chainlink.nodesConfiguration);
+    const preCoordinatorConfiguration = await getPreCoordinatorConfiguration(
+      stacktical.chainlink.nodesConfiguration
+    );
+    console.log('PreCoordinator configuration from nodes information:');
+    console.log(preCoordinatorConfiguration);
+    const precoordinator = await PreCoordinator__factory.connect(
+      (
+        await get(CONTRACT_NAMES.PreCoordinator)
+      ).address,
+      signer
+    );
+    const minResponses = 1;
+    const tx = await precoordinator.createServiceAgreement(
+      minResponses,
+      preCoordinatorConfiguration.oracles,
+      preCoordinatorConfiguration.jobIds,
+      preCoordinatorConfiguration.payments
+    );
+    await tx.wait();
+  }
+);
+
+subtask(SUB_TASK_NAMES.DEPLOY_CHAINLINK_CONTRACTS, undefined).setAction(
+  async (taskArgs, hre: any) => {
+    const { deploy, get } = hre.deployments;
+    const { deployer } = await hre.getNamedAccounts();
+    await deploy(CONTRACT_NAMES.LinkToken, {
+      from: deployer,
+      log: true,
+      skipIfAlreadyDeployed: true,
+    });
+    const linkToken = await get(CONTRACT_NAMES.LinkToken);
+    await deploy(CONTRACT_NAMES.Oracle, {
+      from: deployer,
+      args: [linkToken.address],
+      log: true,
+      skipIfAlreadyDeployed: true,
+    });
   }
 );
