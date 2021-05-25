@@ -40,6 +40,7 @@ export type ChainlinkConfiguration = {
 export type ChainlinkNodeConfiguration = {
   name: string;
   restApiUrl: string;
+  restApiPort: string;
   email: string;
   password: string;
   externalAdapterUrl: string;

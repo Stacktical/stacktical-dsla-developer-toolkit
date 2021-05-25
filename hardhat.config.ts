@@ -37,15 +37,17 @@ const developStacktical: StackticalConfiguration = {
     ethHttpUrl: 'http://host.docker.internal:8545',
     nodesConfiguration: [
       {
-        name: 'Local Chainlink Node',
-        restApiUrl: 'http://localhost:6688',
+        name: 'develop-1',
+        restApiUrl: 'http://localhost',
+        restApiPort: '6688',
         email: 'test@stacktical.com',
         password: 'PaSSword123456',
         externalAdapterUrl: 'http://host.docker.internal:6060',
       },
       {
-        name: 'Local Chainlink Node 2',
-        restApiUrl: 'http://localhost:6688',
+        name: 'develop-2',
+        restApiUrl: 'http://localhost',
+        restApiPort: '6689',
         email: 'test@stacktical.com',
         password: 'PaSSword123456',
         externalAdapterUrl: 'http://host.docker.internal:6060',

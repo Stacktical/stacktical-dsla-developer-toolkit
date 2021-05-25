@@ -10,9 +10,10 @@ lastAddress
 ipfs
 .DS_Store
 .env
-dev-env/chainlink/tempkeys
-dev-env/chainlink/secret
-dev-env/chainlink/log.jsonl
-dev-env/postgres/
+services/chainlink/tempkeys
+services/chainlink/secret
+services/chainlink/log.jsonl
+services/postgres/
 deployments/develop
 exported-data/networks/develop.ts
+services/environments/**

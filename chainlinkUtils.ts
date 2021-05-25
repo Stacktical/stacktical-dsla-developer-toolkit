@@ -4,7 +4,7 @@ import { ChainlinkNodeConfiguration } from './types';
 const fs = require('fs');
 
 const appRoot = require('app-root-path');
-const dslaProtocolJsonPath = `${appRoot.path}/dev-env/dsla-protocol.json`;
+const dslaProtocolJsonPath = `${appRoot.path}/services/dsla-protocol.json`;
 
 let cookies = {};
 
@@ -12,7 +12,9 @@ const getChainlinkSessionCookie = async (node: ChainlinkNodeConfiguration) => {
   if (cookies[node.name] !== undefined) return cookies[node.name];
   const resp = await axios({
     method: 'post',
-    url: `${node.restApiUrl}/sessions`,
+    url: `${node.restApiUrl}${
+      node.restApiPort ? ':' + node.restApiPort : undefined
+    }/sessions`,
     headers: {
       'Content-Type': 'application/json',
     },
@@ -31,7 +33,9 @@ const getChainlinkAccounts = async (node: ChainlinkNodeConfiguration) => {
     data: { data },
   } = await axios({
     method: 'get',
-    url: `${node.restApiUrl}/v2/keys/eth`,
+    url: `${node.restApiUrl}${
+      node.restApiPort ? ':' + node.restApiPort : undefined
+    }/v2/keys/eth`,
     headers: {
       Cookie: sessionCookie,
       'Content-Type': 'application/json',
@@ -45,7 +49,9 @@ const getChainlinkBridge = async (node: ChainlinkNodeConfiguration) => {
   const sessionCookie = await getChainlinkSessionCookie(node);
   const { data } = await axios({
     method: 'get',
-    url: `${node.restApiUrl}/v2/bridge_types`,
+    url: `${node.restApiUrl}${
+      node.restApiPort ? ':' + node.restApiPort : undefined
+    }/v2/bridge_types`,
     headers: {
       Cookie: sessionCookie,
       'Content-Type': 'application/json',
@@ -62,7 +68,9 @@ const getChainlinkJob = async (node: ChainlinkNodeConfiguration) => {
   const sessionCookie = await getChainlinkSessionCookie(node);
   const { data } = await axios({
     method: 'get',
-    url: `${node.restApiUrl}/v2/specs`,
+    url: `${node.restApiUrl}${
+      node.restApiPort ? ':' + node.restApiPort : undefined
+    }/v2/specs`,
     headers: {
       Cookie: sessionCookie,
       'Content-Type': 'application/json',
@@ -79,7 +87,9 @@ const getChainlinkJobId = async (node: ChainlinkNodeConfiguration) => {
   const sessionCookie = await getChainlinkSessionCookie(node);
   const { data } = await axios({
     method: 'get',
-    url: `${node.restApiUrl}/v2/specs`,
+    url: `${node.restApiUrl}${
+      node.restApiPort ? ':' + node.restApiPort : undefined
+    }/v2/specs`,
     headers: {
       Cookie: sessionCookie,
       'Content-Type': 'application/json',
@@ -93,7 +103,9 @@ const postChainlinkJob = async (node: ChainlinkNodeConfiguration) => {
   const sessionCookie = await getChainlinkSessionCookie(node);
   const { data } = await axios({
     method: 'post',
-    url: `${node.restApiUrl}/v2/specs`,
+    url: `${node.restApiUrl}${
+      node.restApiPort ? ':' + node.restApiPort : undefined
+    }/v2/specs`,
     headers: {
       Cookie: sessionCookie,
       'Content-Type': 'application/json',
@@ -115,7 +127,9 @@ const getChainlinkLinkToken = async (node: ChainlinkNodeConfiguration) => {
     },
   } = await axios({
     method: 'get',
-    url: `${node.restApiUrl}/v2/config`,
+    url: `${node.restApiUrl}${
+      node.restApiPort ? ':' + node.restApiPort : undefined
+    }/v2/config`,
     headers: {
       Cookie: sessionCookie,
       'Content-Type': 'application/json',
@@ -131,7 +145,9 @@ const postChainlinkBridge = async (node: ChainlinkNodeConfiguration) => {
   const sessionCookie = await getChainlinkSessionCookie(node);
   const { data } = await axios({
     method: 'post',
-    url: `${node.restApiUrl}/v2/bridge_types`,
+    url: `${node.restApiUrl}${
+      node.restApiPort ? ':' + node.restApiPort : undefined
+    }/v2/bridge_types`,
     headers: {
       Cookie: sessionCookie,
       'Content-Type': 'application/json',
@@ -149,7 +165,9 @@ const deleteJob = async (node, jobId) => {
   const sessionCookie = await getChainlinkSessionCookie(node);
   const { data } = await axios({
     method: 'delete',
-    url: `${node.restApiUrl}/v2/specs/${jobId}`,
+    url: `${node.restApiUrl}${
+      node.restApiPort ? ':' + node.restApiPort : undefined
+    }/v2/specs/${jobId}`,
     headers: {
       Cookie: sessionCookie,
       'Content-Type': 'application/json',

@@ -4,7 +4,7 @@ services:
     container_name: postgres-dsla-env
     image: postgres:13.1
     volumes:
-      - ./postgres/develop/db:/var/lib/postgresql/data
+      - ./postgres:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: chainlink
@@ -16,7 +16,7 @@ services:
     ports:
       - '6688:6688'
     volumes:
-      - ./chainlink/develop:/chain
+      - ./chainlink:/chainlink
       - ./chainlink/.api:/chainlink/.api
       - ./chainlink/.password:/chainlink/.password
     environment:
@@ -30,6 +30,7 @@ services:
       - SECURE_COOKIES=false
       - GAS_UPDATER_ENABLED=false
       - ALLOW_ORIGINS=*
+      - CHAINLINK_PORT=6688
       - ETH_URL=ws://host.docker.internal:8545
       - ETH_HTTP_URL=http://host.docker.internal:8545
       - DEFAULT_HTTP_TIMEOUT=200s

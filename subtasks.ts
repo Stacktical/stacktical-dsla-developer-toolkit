@@ -64,22 +64,36 @@ export enum SUB_TASK_NAMES {
   BOOTSTRAP_DSLA_PROTOCOL = 'BOOTSTRAP_DSLA_PROTOCOL',
   REQUEST_SLI = 'REQUEST_SLI',
   REQUEST_ANALYTICS = 'REQUEST_ANALYTICS',
-  GET_SERVICE_AGREEMENT = 'GET_SERVICE_AGREEMENT',
+  GET_PRECOORDINATOR = 'GET_PRECOORDINATOR',
+  SET_PRECOORDINATOR = 'SET_PRECOORDINATOR',
+  DEPLOY_LOCAL_SERVICES = 'DEPLOY_LOCAL_SERVICES',
 }
 
-subtask(SUB_TASK_NAMES.STOP_LOCAL_SERVICES, undefined).setAction(async () => {
-  await compose.down({
-    cwd: path.join(`${appRoot}/dev-env/`),
-    log: true,
-  });
-});
+subtask(SUB_TASK_NAMES.STOP_LOCAL_SERVICES, undefined).setAction(
+  async (_, hre: any) => {
+    const { stacktical }: { stacktical: StackticalConfiguration } =
+      hre.network.config;
+    for (let node of stacktical.chainlink.nodesConfiguration) {
+      await compose.down({
+        cwd: path.join(`${appRoot.path}/services/environments/${node.name}/`),
+        log: true,
+      });
+    }
+  }
+);
 
-subtask(SUB_TASK_NAMES.START_LOCAL_SERVICES, undefined).setAction(async () => {
-  await compose.upAll({
-    cwd: path.join(`${appRoot}/dev-env/`),
-    log: true,
-  });
-});
+subtask(SUB_TASK_NAMES.START_LOCAL_SERVICES, undefined).setAction(
+  async (_, hre: any) => {
+    const { stacktical }: { stacktical: StackticalConfiguration } =
+      hre.network.config;
+    for (let node of stacktical.chainlink.nodesConfiguration) {
+      await compose.upAll({
+        cwd: path.join(`${appRoot.path}/services/environments/${node.name}/`),
+        log: true,
+      });
+    }
+  }
+);
 
 subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
   async (_, hre: any) => {
@@ -91,7 +105,7 @@ subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
     const linkToken = await get(CONTRACT_NAMES.LinkToken);
 
     const jobSpec = await DataFile.load(
-      `${appRoot.path}/dev-env/dsla-protocol.json`
+      `${appRoot.path}/services/dsla-protocol.json`
     );
     jobSpec.set('initiators', [
       {
@@ -102,38 +116,80 @@ subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
 
     await jobSpec.save();
 
-    const dockerComposePath = `${appRoot.path}/dev-env/docker-compose.yaml`;
-    const fileContents = fs.readFileSync(dockerComposePath, 'utf8');
-    const data = yaml.load(fileContents);
-    data.services.chainlink.environment =
-      data.services.chainlink.environment.map((envVariable) => {
-        switch (true) {
-          case /LINK_CONTRACT_ADDRESS/.test(envVariable):
-            return `LINK_CONTRACT_ADDRESS=${
-              network.config.stacktical.linkTokenAddress || linkToken.address
-            }`;
-          case /ETH_CHAIN_ID/.test(envVariable):
-            return `ETH_CHAIN_ID=${network.config.chainId}`;
-          case /ETH_URL/.test(envVariable):
-            return `ETH_URL=${stacktical.chainlink.ethWsUrl}`;
-          case /ETH_HTTP_URL/.test(envVariable):
-            return `ETH_HTTP_URL=${
-              stacktical.chainlink.ethHttpUrl || network.config.url
-            }`;
-          default:
-            return envVariable;
-        }
+    for (let node of stacktical.chainlink.nodesConfiguration) {
+      const fileContents = fs.readFileSync(
+        `${appRoot.path}/services/docker-compose.yaml`,
+        'utf8'
+      );
+      const data = yaml.load(fileContents);
+      data.services.chainlink.environment =
+        data.services.chainlink.environment.map((envVariable) => {
+          switch (true) {
+            case /LINK_CONTRACT_ADDRESS/.test(envVariable):
+              return `LINK_CONTRACT_ADDRESS=${linkToken.address}`;
+            case /ETH_CHAIN_ID/.test(envVariable):
+              return `ETH_CHAIN_ID=${network.config.chainId}`;
+            case /ETH_URL/.test(envVariable):
+              return `ETH_URL=${stacktical.chainlink.ethWsUrl}`;
+            case /ETH_HTTP_URL/.test(envVariable):
+              return `ETH_HTTP_URL=${
+                stacktical.chainlink.ethHttpUrl || network.config.url
+              }`;
+            case /CHAINLINK_PORT/.test(envVariable):
+              return `CHAINLINK_PORT=${node.restApiPort}`;
+            default:
+              return envVariable;
+          }
+        });
+      data.services.postgres.container_name = `postgres-${node.name}`;
+      data.services.postgres.networks = [`${node.name}-network`];
+
+      data.services.chainlink.container_name = `chainlink-${node.name}`;
+      data.services.chainlink.networks = [`${node.name}-network`];
+
+      data.services.chainlink.ports = [
+        `${node.restApiPort}:${node.restApiPort}`,
+      ];
+
+      data.networks = {
+        [`${node.name}-network`]: {
+          name: `${node.name}-developer-toolkit-network`,
+        },
+      };
+
+      const yamlStr = yaml.dump(data);
+      fs.mkdirSync(`${appRoot.path}/services/environments/${node.name}/`, {
+        recursive: true,
       });
-    data.services.postgres.volumes = [
-      `./postgres/${network.name}/db:/var/lib/postgresql/data`,
-    ];
-    data.services.chainlink.volumes = [
-      `./chainlink/${network.name}:/chain`,
-      './chainlink/.api:/chainlink/.api',
-      './chainlink/.password:/chainlink/.password',
-    ];
-    const yamlStr = yaml.dump(data);
-    fs.writeFileSync(dockerComposePath, yamlStr, 'utf8');
+      fs.mkdirSync(
+        `${appRoot.path}/services/environments/${node.name}/chainlink`,
+        {
+          recursive: true,
+        }
+      );
+      fs.mkdirSync(
+        `${appRoot.path}/services/environments/${node.name}/postgres`,
+        {
+          recursive: true,
+        }
+      );
+
+      fs.copyFileSync(
+        `${appRoot.path}/services/.api`,
+        `${appRoot.path}/services/environments/${node.name}/chainlink/.api`
+      );
+
+      fs.copyFileSync(
+        `${appRoot.path}/services/.password`,
+        `${appRoot.path}/services/environments/${node.name}/chainlink/.password`
+      );
+
+      fs.writeFileSync(
+        `${appRoot.path}/services/environments/${node.name}/docker-compose.yaml`,
+        yamlStr,
+        'utf8'
+      );
+    }
   }
 );
 
@@ -189,7 +245,8 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
     // Create bridge
     console.log('Starting automated configuration for Chainlink nodes...');
     for (let node of stacktical.chainlink.nodesConfiguration) {
-      console.log('Preparing node:' + node.name);
+      printSeparator();
+      console.log('Preparing node: ' + node.name);
       console.log('Creating dsla-protocol bridge in Chainlink nodes...');
       let bridge = await updatedBridge(node);
       while (!bridge) {
@@ -268,8 +325,25 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
       );
       console.log(`Chainlink Node Fullfillment permissions: ${permissions}`);
       console.log('Automated configuration finished for node:' + node.name);
+      printSeparator();
     }
     console.log('Automated configuration finished for all nodes');
+  }
+);
+
+subtask(SUB_TASK_NAMES.DEPLOY_LOCAL_SERVICES, undefined).setAction(
+  async (_, hre: any) => {
+    const localServicesSubtasks = [
+      SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE,
+      SUB_TASK_NAMES.STOP_LOCAL_SERVICES,
+      SUB_TASK_NAMES.START_LOCAL_SERVICES,
+      SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES,
+    ];
+    const { run } = hre;
+    for (let subtask of localServicesSubtasks) {
+      console.log(subtask);
+      await run(subtask);
+    }
   }
 );
 
@@ -829,11 +903,9 @@ subtask(SUB_TASK_NAMES.REQUEST_ANALYTICS, undefined).setAction(
   }
 );
 
-subtask(SUB_TASK_NAMES.GET_SERVICE_AGREEMENT, undefined).setAction(
+subtask(SUB_TASK_NAMES.GET_PRECOORDINATOR, undefined).setAction(
   async (taskArgs, hre: any) => {
-    const { deployments, ethers, getNamedAccounts, network } = hre;
-    const { stacktical }: { stacktical: StackticalConfiguration } =
-      network.config;
+    const { deployments, ethers, getNamedAccounts } = hre;
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
     const { get } = deployments;
@@ -849,9 +921,7 @@ subtask(SUB_TASK_NAMES.GET_SERVICE_AGREEMENT, undefined).setAction(
     const eventsFilter = precoordinator.filters.NewServiceAgreement();
     const events = await precoordinator.queryFilter(eventsFilter);
     for (let event of events) {
-      console.log(
-        '----------------------------------------------------------------------------------------------------------------'
-      );
+      printSeparator();
       const { saId, payment, minresponses } = event.args;
       console.log('Service agreement blockNumber: ' + event.blockNumber);
       console.log('Service agreement ID: ' + saId);
@@ -868,13 +938,44 @@ subtask(SUB_TASK_NAMES.GET_SERVICE_AGREEMENT, undefined).setAction(
       console.log(serviceAgreement.oracles);
       console.log('Service agreement payments array: ');
       console.log(
-        serviceAgreement.payments.map((payment) => payment.toString())
+        serviceAgreement.payments.map((payment) =>
+          ethers.utils.formatEther(payment)
+        )
       );
-      console.log(
-        '----------------------------------------------------------------------------------------------------------------'
-      );
+      printSeparator();
     }
+  }
+);
 
-    console.log('Service agreements requested');
+subtask(SUB_TASK_NAMES.SET_PRECOORDINATOR, undefined).setAction(
+  async (taskArgs, hre: any) => {
+    const { deployments, ethers, getNamedAccounts, network, web3, run } = hre;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    const { get } = deployments;
+    const { stacktical }: { stacktical: StackticalConfiguration } =
+      network.config;
+    console.log('Setting Chainlink config on PreCoordinator contract');
+    console.log('Nodes configuration from stacktical config:');
+    console.log(stacktical.chainlink.nodesConfiguration);
+    const preCoordinatorConfiguration = await getPreCoordinatorConfiguration(
+      stacktical.chainlink.nodesConfiguration
+    );
+    console.log('PreCoordinator configuration from nodes information:');
+    console.log(preCoordinatorConfiguration);
+    const precoordinator = await PreCoordinator__factory.connect(
+      (
+        await get(CONTRACT_NAMES.PreCoordinator)
+      ).address,
+      signer
+    );
+    const minResponses = 1;
+    const tx = await precoordinator.createServiceAgreement(
+      minResponses,
+      preCoordinatorConfiguration.oracles,
+      preCoordinatorConfiguration.jobIds,
+      preCoordinatorConfiguration.payments
+    );
+    await tx.wait();
   }
 );
