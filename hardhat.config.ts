@@ -35,7 +35,6 @@ const developStacktical: StackticalConfiguration = {
     isProduction: false,
     nodeFunds: '10',
     gasLimit: undefined,
-    externalAdapterUrL: null,
     ethWsUrl: 'ws://host.docker.internal:8545',
     ethHttpUrl: 'http://host.docker.internal:8545',
     nodesConfiguration: [
@@ -178,7 +177,6 @@ const config: HardhatUserConfig = {
           isProduction: false,
           nodeFunds: '0.001',
           gasLimit: undefined,
-          externalAdapterUrL: null,
           ethWsUrl: process.env.HARMONYTESTNET_WS_URI,
           nodesConfiguration: developStacktical.chainlink.nodesConfiguration,
         },

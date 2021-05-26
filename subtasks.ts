@@ -29,12 +29,7 @@ import {
   SLARegistry__factory,
   StakeRegistry__factory,
 } from './typechain';
-import {
-  CONTRACT_NAMES,
-  PERIOD_STATUS,
-  PERIOD_TYPE,
-  SENetworkNamesBytes32,
-} from './constants';
+import { CONTRACT_NAMES, PERIOD_STATUS, PERIOD_TYPE } from './constants';
 import {
   bootstrapStrings,
   generateBootstrapPeriods,

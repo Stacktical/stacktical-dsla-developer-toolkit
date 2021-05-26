@@ -54,7 +54,6 @@ export type ChainlinkConfiguration = {
   ethWsUrl: string;
   ethHttpUrl?: string;
   gasLimit?: string;
-  externalAdapterUrL?: string;
   nodesConfiguration: Array<ChainlinkNodeConfiguration>;
 };
 
