@@ -291,14 +291,11 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
       const { nodeFunds, gasLimit } = stacktical.chainlink;
       const [defaultAccount] = await web3.eth.getAccounts();
       let balance = await web3.eth.getBalance(chainlinkNodeAddress);
-      if (web3.utils.fromWei(balance) < nodeFunds) {
+      if (web3.utils.fromWei(balance) < Number(nodeFunds)) {
         await web3.eth.sendTransaction({
           from: defaultAccount,
           to: chainlinkNodeAddress,
-          value: web3.utils.toWei(
-            String(Number(nodeFunds) - web3.utils.fromWei(balance)),
-            'ether'
-          ),
+          value: web3.utils.toWei(String(nodeFunds), 'ether'),
           gas: gasLimit,
         });
       }
