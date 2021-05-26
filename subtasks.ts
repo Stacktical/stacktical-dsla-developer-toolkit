@@ -218,7 +218,8 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
       try {
         const postedJob = await getChainlinkJob(node);
         if (postedJob) {
-          await deleteJob(node, postedJob.id);
+          // await deleteJob(node, postedJob.id);
+          return postedJob;
         }
         const httpRequestJobRes = await postChainlinkJob(node);
         return httpRequestJobRes.data;
