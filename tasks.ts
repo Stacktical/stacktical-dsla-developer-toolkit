@@ -107,7 +107,7 @@ task(
 });
 
 task(
-  TASK_NAMES.PREPARE_PRODUCTION_CHAINLINK_NODES,
+  TASK_NAMES.CHAINLINK_DOCKER_COMPOSE,
   'Deploys Oracle and LinkToken contracts and creates the proper docker-compose files'
 ).setAction(async (_, { run }) => {
   await run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
