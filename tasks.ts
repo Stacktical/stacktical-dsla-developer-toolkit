@@ -5,14 +5,14 @@ import { printSeparator } from './utils';
 enum TASK_NAMES {
   EXPORT_DATA = 'stacktical:export-data',
   DEPLOY_SLA = 'stacktical:deploy-sla',
-  CREATE_DOCKER_COMPOSE = 'stacktical:docker-compose',
   BOOTSTRAP_DSLA_PROTOCOL = 'stacktical:bootstrap',
   REQUEST_SLI = 'stacktical:request-sli',
   REQUEST_ANALYTICS = 'stacktical:request-analytics',
   RESTART_SERVICES = 'stacktical:restart-services',
   GET_PRECOORDINATOR = 'stacktical:get-precoordinator',
   SET_PRECOORDINATOR = 'stacktical:set-precoordinator',
-  PREPARE_PRODUCTION_CHAINLINK_NODES = 'stacktical:production-chainlink',
+  CHAINLINK_DOCKER_COMPOSE = 'stacktical:chainlink-docker-compose',
+  PREPARE_CHAINLINK_NODES = 'stacktical:prepare-chainlink-nodes',
 }
 
 task(
@@ -26,12 +26,6 @@ task(TASK_NAMES.EXPORT_DATA, 'Export data to exported-data folder').setAction(
   async (_, { run }) => {
     await run(SUB_TASK_NAMES.SAVE_CONTRACTS_ADDRESSES);
     await run(SUB_TASK_NAMES.EXPORT_ABIS);
-  }
-);
-
-task(TASK_NAMES.CREATE_DOCKER_COMPOSE, 'Create docker compose').setAction(
-  async (_, { run }) => {
-    await run(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE);
   }
 );
 
@@ -70,6 +64,13 @@ task(TASK_NAMES.REQUEST_ANALYTICS, 'Request network analytics')
   .setAction(async (taskArgs, { run }) => {
     await run(SUB_TASK_NAMES.REQUEST_ANALYTICS, taskArgs);
   });
+
+task(
+  TASK_NAMES.PREPARE_CHAINLINK_NODES,
+  'Prepare the Chainlink nodes with job config, funds and permissions'
+).setAction(async (taskArgs, { run }) => {
+  await run(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES);
+});
 
 task(
   TASK_NAMES.RESTART_SERVICES,
