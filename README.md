@@ -15,33 +15,8 @@ Use [this instruccions](https://hardhat.org/guides/shorthand.html#shorthand-hh-a
 
 ### Configuration
 
-To set up a new network, you need to fill the `stacktical` field in the corresponding network of the hardhat config file:
-
-```typescript
-export type StackticalConfiguration = {
-  chainlink?: ChainlinkConfiguration;
-  checkPastPeriods: 'if true, then SLARegistry will not allow the deployment of SLAs with a current or past periods, only future periods';
-  addresses: {
-    tokens: {
-      LINK: 'null, or the LINK token address already deployed.';
-      DSLA: 'null, or the DSLA token address already deployed.';
-      DAI: 'null, or the DAI token address already deployed.';
-      USDC: 'null, or the USDC token address already deployed.';
-    };
-    oracle: 'null, or the Oracle contract address already deployed.';
-  };
-  bootstrap: {
-    periods: Array<PeriodBootstrapDefinition>;
-    messengers: {
-      allowanceContract: '';
-      linkTokenAllowance: 'LINK token allowance for messengers i.e. SEMessenger and NetworkAnalytics';
-    };
-  };
-  scripts?: {
-    deploy_sla?: DeploySLAConfiguration;
-  };
-};
-```
+To set up a new network, you need to fill the `stacktical` field in the corresponding network of the hardhat config file.
+More information about it can be found in the [developer-toolkit documentation](https://readme.stacktical.com/dsla-protocol-developer-guide/developer-toolkit)
 
 ### Scripts
 

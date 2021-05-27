@@ -1,4 +1,4 @@
-import { CONTRACT_NAMES, PERIOD_TYPE } from './constants';
+import { PERIOD_TYPE } from './constants';
 import {
   ChainlinkNodeConfiguration,
   PreCoordinatorConfiguration,
