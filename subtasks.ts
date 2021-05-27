@@ -777,8 +777,7 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
         }
         console.log('Updating staking parameters');
         const tx = await stakeRegistry.setStakingParameters(
-          stakingParameters.DSLAburnRate ||
-            currentStakingParameters.DSLAburnRate,
+          currentStakingParameters.DSLAburnRate,
           toWei(stakingParameters.dslaDepositByPeriod) ||
             currentStakingParameters.dslaDepositByPeriod,
           toWei(stakingParameters.dslaPlatformReward) ||
