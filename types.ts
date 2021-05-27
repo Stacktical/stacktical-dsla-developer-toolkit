@@ -1,66 +1,46 @@
 import { CONTRACT_NAMES, PERIOD_TYPE, SLO_TYPE } from './constants';
 
 export type StackticalConfiguration = {
-  chainlink?: ChainlinkConfiguration;
+  chainlink: ChainlinkConfiguration;
   checkPastPeriods: boolean;
-  addresses: {
-    tokens: {
-      LINK: string | null;
-      DSLA: string | null;
-      DAI: string | null;
-      USDC: string | null;
-    };
-    oracle: string | null;
-  };
-  bootstrap: {
-    allowance: Array<TokenAllowance>;
-    messengers: {
-      networkAnalytics: {
-        allowedNetworks: Array<string>;
-      };
-    };
-    registry: {
-      periods: Array<PeriodBootstrapDefinition>;
-      messengers: Array<MessengerDefinition>;
-      stake: {
-        allowedTokens: Array<CONTRACT_NAMES>;
-        stakingParameters: {
-          DSLAburnRate?: string;
-          dslaDepositByPeriod?: string;
-          dslaPlatformReward?: string;
-          dslaMessengerReward?: string;
-          dslaUserReward?: string;
-          dslaBurnedByVerification?: string;
-          maxTokenLength?: string;
-          maxLeverage?: string;
-        };
-      };
-    };
-  };
-  scripts?: {
-    deploy_sla?: DeploySLAConfiguration;
-  };
+  addresses: DeployedContractAddresses;
+  bootstrap: BootstrapConfiguration;
+  scripts?: ScriptsConfiguration;
 };
 
 export type PeriodBootstrapDefinition = {
-  periodType: number;
+  periodType: PERIOD_TYPE;
   amountOfPeriods: number;
   expiredPeriods: number;
+};
+
+export type ScriptsConfiguration = {
+  deploy_sla?: DeploySLAConfiguration;
+};
+
+export type DeployedContractAddresses = {
+  tokens: {
+    LINK: string | null;
+    DSLA: string | null;
+    DAI: string | null;
+    USDC: string | null;
+  };
+  oracle: string | null;
 };
 
 export type ChainlinkConfiguration = {
   isProduction: boolean;
   nodeFunds: string;
+  gasLimit?: string;
   ethWsUrl: string;
   ethHttpUrl?: string;
-  gasLimit?: string;
   nodesConfiguration: Array<ChainlinkNodeConfiguration>;
 };
 
 export type ChainlinkNodeConfiguration = {
   name: string;
   restApiUrl: string;
-  restApiPort: string;
+  restApiPort?: string;
   email: string;
   password: string;
   externalAdapterUrl: string;
@@ -70,6 +50,33 @@ export type PreCoordinatorConfiguration = {
   oracles: Array<string>;
   jobIds: Array<string>;
   payments: Array<string>;
+};
+
+export type BootstrapConfiguration = {
+  allowance: Array<TokenAllowance>;
+  registry: {
+    periods: Array<PeriodBootstrapDefinition>;
+    messengers: Array<MessengerDefinition>;
+    stake: StakeBootstrapDefinition;
+  };
+  messengers: {
+    networkAnalytics: {
+      allowedNetworks: Array<string>;
+    };
+  };
+};
+
+export type StakeBootstrapDefinition = {
+  allowedTokens: Array<CONTRACT_NAMES>;
+  stakingParameters: {
+    dslaDepositByPeriod?: string;
+    dslaPlatformReward?: string;
+    dslaMessengerReward?: string;
+    dslaUserReward?: string;
+    dslaBurnedByVerification?: string;
+    maxTokenLength?: string;
+    maxLeverage?: string;
+  };
 };
 
 export type TokenAllowance = {
