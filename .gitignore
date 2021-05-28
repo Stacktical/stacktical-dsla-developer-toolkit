@@ -11,4 +11,3 @@ exported-data/networks/develop.ts
 services/chainlink-nodes/**
 services/ipfs/data
 services/graph-protocol/postgres
-services/dsla-protocol.json

@@ -76,10 +76,8 @@ task(
 
 task(
   TASK_NAMES.RESTART_SERVICES,
-  'Deploy or reset the local chainlink-nodes (Chainlink NODE, IPFS, Graph protocol node)'
+  'Deploy or reset the local services (IPFS, Ganache, Graph protocol node)'
 ).setAction(async (_, { run }) => {
-  console.log(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES);
-  await run(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES);
   console.log(SUB_TASK_NAMES.STOP_LOCAL_GANACHE);
   await run(SUB_TASK_NAMES.STOP_LOCAL_GANACHE);
   console.log(SUB_TASK_NAMES.STOP_LOCAL_IPFS);
@@ -87,13 +85,8 @@ task(
   console.log(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
   await run(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
 
-  console.log(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE);
-  await run(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE);
-
   console.log(SUB_TASK_NAMES.START_LOCAL_GANACHE);
   await run(SUB_TASK_NAMES.START_LOCAL_GANACHE);
-  console.log(SUB_TASK_NAMES.START_LOCAL_CHAINLINK_NODES);
-  await run(SUB_TASK_NAMES.START_LOCAL_CHAINLINK_NODES);
   console.log(SUB_TASK_NAMES.START_LOCAL_IPFS);
   await run(SUB_TASK_NAMES.START_LOCAL_IPFS);
   console.log(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE);
