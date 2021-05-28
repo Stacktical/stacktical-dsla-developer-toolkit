@@ -117,28 +117,6 @@ const postChainlinkJob = async (node: ChainlinkNodeConfiguration) => {
   return data;
 };
 
-const getChainlinkLinkToken = async (node: ChainlinkNodeConfiguration) => {
-  const sessionCookie = await getChainlinkSessionCookie(node);
-  const {
-    data: {
-      data: {
-        attributes: { LINK_CONTRACT_ADDRESS },
-      },
-    },
-  } = await axios({
-    method: 'get',
-    url: `${node.restApiUrl}${
-      node.restApiPort ? ':' + node.restApiPort : undefined
-    }/v2/config`,
-    headers: {
-      Cookie: sessionCookie,
-      'Content-Type': 'application/json',
-    },
-    withCredentials: true,
-  });
-  return LINK_CONTRACT_ADDRESS;
-};
-
 const postChainlinkBridge = async (node: ChainlinkNodeConfiguration) => {
   const jobJson = JSON.parse(fs.readFileSync(dslaProtocolJsonPath));
 
@@ -185,6 +163,5 @@ export {
   getChainlinkJobId,
   getChainlinkBridge,
   getChainlinkAccounts,
-  getChainlinkLinkToken,
   getChainlinkSessionCookie,
 };

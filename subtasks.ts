@@ -29,12 +29,7 @@ import {
   SLARegistry__factory,
   StakeRegistry__factory,
 } from './typechain';
-import {
-  CONTRACT_NAMES,
-  PERIOD_STATUS,
-  PERIOD_TYPE,
-  SENetworkNamesBytes32,
-} from './constants';
+import { CONTRACT_NAMES, PERIOD_STATUS, PERIOD_TYPE } from './constants';
 import {
   bootstrapStrings,
   generateBootstrapPeriods,
@@ -56,8 +51,14 @@ const moment = require('moment');
 export enum SUB_TASK_NAMES {
   PREPARE_CHAINLINK_NODES = 'PREPARE_CHAINLINK_NODES',
   SETUP_DOCKER_COMPOSE = 'SETUP_DOCKER_COMPOSE',
-  STOP_LOCAL_SERVICES = 'STOP_LOCAL_SERVICES',
-  START_LOCAL_SERVICES = 'START_LOCAL_SERVICES',
+  STOP_LOCAL_CHAINLINK_NODES = 'STOP_LOCAL_CHAINLINK_NODES',
+  START_LOCAL_CHAINLINK_NODES = 'START_LOCAL_CHAINLINK_NODES',
+  STOP_LOCAL_IPFS = 'STOP_LOCAL_IPFS',
+  START_LOCAL_IPFS = 'START_LOCAL_IPFS',
+  STOP_LOCAL_GANACHE = 'STOP_LOCAL_GANACHE',
+  START_LOCAL_GANACHE = 'START_LOCAL_GANACHE',
+  STOP_LOCAL_GRAPH_NODE = 'STOP_LOCAL_GRAPH_NODE',
+  START_LOCAL_GRAPH_NODE = 'START_LOCAL_GRAPH_NODE',
   INITIALIZE_DEFAULT_ADDRESSES = 'INITIALIZE_DEFAULT_ADDRESSES',
   SAVE_CONTRACTS_ADDRESSES = 'SAVE_CONTRACTS_ADDRESSES',
   EXPORT_ABIS = 'EXPORT_ABIS',
@@ -76,29 +77,87 @@ export enum SUB_TASK_NAMES {
   UPDATE_PRECOORDINATOR = 'UPDATE_PRECOORDINATOR',
 }
 
-subtask(SUB_TASK_NAMES.STOP_LOCAL_SERVICES, undefined).setAction(
+subtask(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES, undefined).setAction(
   async (_, hre: any) => {
     const { stacktical }: { stacktical: StackticalConfiguration } =
       hre.network.config;
     for (let node of stacktical.chainlink.nodesConfiguration) {
       await compose.down({
-        cwd: path.join(`${appRoot.path}/services/environments/${node.name}/`),
+        cwd: path.join(
+          `${appRoot.path}/services/chainlink-nodes/${node.name}/`
+        ),
         log: true,
       });
     }
   }
 );
 
-subtask(SUB_TASK_NAMES.START_LOCAL_SERVICES, undefined).setAction(
+subtask(SUB_TASK_NAMES.START_LOCAL_CHAINLINK_NODES, undefined).setAction(
   async (_, hre: any) => {
     const { stacktical }: { stacktical: StackticalConfiguration } =
       hre.network.config;
     for (let node of stacktical.chainlink.nodesConfiguration) {
       await compose.upAll({
-        cwd: path.join(`${appRoot.path}/services/environments/${node.name}/`),
+        cwd: path.join(
+          `${appRoot.path}/services/chainlink-nodes/${node.name}/`
+        ),
         log: true,
       });
     }
+  }
+);
+
+subtask(SUB_TASK_NAMES.START_LOCAL_GANACHE, undefined).setAction(
+  async (_, hre: any) => {
+    await compose.upAll({
+      cwd: path.join(`${appRoot.path}/services/ganache/`),
+      log: true,
+    });
+  }
+);
+
+subtask(SUB_TASK_NAMES.STOP_LOCAL_GANACHE, undefined).setAction(
+  async (_, hre: any) => {
+    await compose.down({
+      cwd: path.join(`${appRoot.path}/services/ganache/`),
+      log: true,
+    });
+  }
+);
+
+subtask(SUB_TASK_NAMES.START_LOCAL_IPFS, undefined).setAction(
+  async (_, hre: any) => {
+    await compose.upAll({
+      cwd: path.join(`${appRoot.path}/services/ipfs/`),
+      log: true,
+    });
+  }
+);
+
+subtask(SUB_TASK_NAMES.STOP_LOCAL_IPFS, undefined).setAction(
+  async (_, hre: any) => {
+    await compose.down({
+      cwd: path.join(`${appRoot.path}/services/ipfs/`),
+      log: true,
+    });
+  }
+);
+
+subtask(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE, undefined).setAction(
+  async (_, hre: any) => {
+    await compose.upAll({
+      cwd: path.join(`${appRoot.path}/services/graph-protocol/`),
+      log: true,
+    });
+  }
+);
+
+subtask(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE, undefined).setAction(
+  async (_, hre: any) => {
+    await compose.down({
+      cwd: path.join(`${appRoot.path}/services/graph-protocol/`),
+      log: true,
+    });
   }
 );
 
@@ -165,17 +224,17 @@ subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
       };
 
       const yamlStr = yaml.dump(data);
-      fs.mkdirSync(`${appRoot.path}/services/environments/${node.name}/`, {
+      fs.mkdirSync(`${appRoot.path}/services/chainlink-nodes/${node.name}/`, {
         recursive: true,
       });
       fs.mkdirSync(
-        `${appRoot.path}/services/environments/${node.name}/chainlink`,
+        `${appRoot.path}/services/chainlink-nodes/${node.name}/chainlink`,
         {
           recursive: true,
         }
       );
       fs.mkdirSync(
-        `${appRoot.path}/services/environments/${node.name}/postgres`,
+        `${appRoot.path}/services/chainlink-nodes/${node.name}/postgres`,
         {
           recursive: true,
         }
@@ -183,16 +242,16 @@ subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
 
       fs.copyFileSync(
         `${appRoot.path}/services/.api`,
-        `${appRoot.path}/services/environments/${node.name}/chainlink/.api`
+        `${appRoot.path}/services/chainlink-nodes/${node.name}/chainlink/.api`
       );
 
       fs.copyFileSync(
         `${appRoot.path}/services/.password`,
-        `${appRoot.path}/services/environments/${node.name}/chainlink/.password`
+        `${appRoot.path}/services/chainlink-nodes/${node.name}/chainlink/.password`
       );
 
       fs.writeFileSync(
-        `${appRoot.path}/services/environments/${node.name}/docker-compose.yaml`,
+        `${appRoot.path}/services/chainlink-nodes/${node.name}/docker-compose.yaml`,
         yamlStr,
         'utf8'
       );
@@ -223,7 +282,8 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
       try {
         const postedJob = await getChainlinkJob(node);
         if (postedJob) {
-          await deleteJob(node, postedJob.id);
+          // await deleteJob(node, postedJob.id);
+          return postedJob;
         }
         const httpRequestJobRes = await postChainlinkJob(node);
         return httpRequestJobRes.data;
@@ -295,14 +355,11 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
       const { nodeFunds, gasLimit } = stacktical.chainlink;
       const [defaultAccount] = await web3.eth.getAccounts();
       let balance = await web3.eth.getBalance(chainlinkNodeAddress);
-      if (web3.utils.fromWei(balance) < nodeFunds) {
+      if (web3.utils.fromWei(balance) < Number(nodeFunds)) {
         await web3.eth.sendTransaction({
           from: defaultAccount,
           to: chainlinkNodeAddress,
-          value: web3.utils.toWei(
-            String(Number(nodeFunds) - web3.utils.fromWei(balance)),
-            'ether'
-          ),
+          value: web3.utils.toWei(String(nodeFunds), 'ether'),
           gas: gasLimit,
         });
       }
@@ -342,8 +399,8 @@ subtask(SUB_TASK_NAMES.DEPLOY_LOCAL_SERVICES, undefined).setAction(
   async (_, hre: any) => {
     const localServicesSubtasks = [
       SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE,
-      SUB_TASK_NAMES.STOP_LOCAL_SERVICES,
-      SUB_TASK_NAMES.START_LOCAL_SERVICES,
+      SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES,
+      SUB_TASK_NAMES.START_LOCAL_CHAINLINK_NODES,
       SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES,
     ];
     const { run } = hre;
@@ -784,8 +841,7 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
         }
         console.log('Updating staking parameters');
         const tx = await stakeRegistry.setStakingParameters(
-          stakingParameters.DSLAburnRate ||
-            currentStakingParameters.DSLAburnRate,
+          currentStakingParameters.DSLAburnRate,
           toWei(stakingParameters.dslaDepositByPeriod) ||
             currentStakingParameters.dslaDepositByPeriod,
           toWei(stakingParameters.dslaPlatformReward) ||

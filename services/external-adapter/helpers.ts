@@ -3,7 +3,7 @@ require('dotenv').config();
 const createClient = require('ipfs-http-client');
 const bs58 = require('bs58');
 const axios = require('axios');
-const crypto = require('crypto');
+import * as crypto from 'crypto';
 const Web3 = require('web3');
 const { toChecksumAddress, fromAscii } = require('web3-utils');
 const { NetworkAnalyticsABI } = require('./abis');
@@ -72,12 +72,12 @@ async function getIPFSDataFromCID(cid) {
 async function getAnalyticsFromNetworkAnalyticsContract(
   params,
   networkName,
-  periodType,
+  periodType
 ) {
   const web3 = new Web3(process.env.WEB3_URI);
   const networkAnalyticsContract = new web3.eth.Contract(
     NetworkAnalyticsABI,
-    params.network_analytics_address,
+    params.network_analytics_address
   );
   const ipfsBytes32 = await networkAnalyticsContract.methods
     .periodAnalytics(fromAscii(networkName), periodType, params.period_id)

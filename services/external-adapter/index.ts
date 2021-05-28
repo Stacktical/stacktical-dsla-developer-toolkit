@@ -20,7 +20,7 @@ async function getValidatorAPR(params) {
   const analyticsData = await getAnalyticsFromNetworkAnalyticsContract(
     params,
     hexToUtf8(slaData.networkName),
-    slaData.periodType,
+    slaData.periodType
   );
   console.log('Analytics data:');
   console.log(analyticsData);
@@ -54,7 +54,6 @@ async function getNetworkAnalytics(params) {
  * @param {Object} res Cloud Function response context.
  *                     More info: https://expressjs.com/en/api.html#res
  */
-
 const app = express();
 app.use(express.json());
 const port = 6060;
@@ -98,6 +97,4 @@ app.post('/', async (req, res) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`External adapter initialized at  http://localhost:${port}`);
-});
+export default app;
