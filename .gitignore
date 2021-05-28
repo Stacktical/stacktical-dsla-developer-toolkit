@@ -1,13 +1,5 @@
 node_modules/
 .idea
-ganache/db/
-chainlink/tempkeys/
-chainlink/secret
-chainlink/log.jsonl
-postgres/develop/
-postgres/harmonytestnet/
-lastAddress
-ipfs
 .DS_Store
 .env
 services/chainlink/tempkeys
@@ -17,4 +9,6 @@ services/postgres/
 deployments/develop
 exported-data/networks/develop.ts
 services/environments/**
+services/ipfs/data
+services/graph-protocol/postgres
 services/dsla-protocol.json
