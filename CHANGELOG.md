@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v1.2.0...v1.3.0) (2021-05-28)
+
+
+### Features
+
+* chainlink docker compose task ([2023614](https://github.com/Stacktical/stacktical-developer-toolkit/commit/20236147dab90bd21a45f25a0212c65b766163ee))
+* compose services ([4a61ff9](https://github.com/Stacktical/stacktical-developer-toolkit/commit/4a61ff96c49fab19c215d058b30bf5a989d7fd89))
+* config types trimmed ([96c8ba5](https://github.com/Stacktical/stacktical-developer-toolkit/commit/96c8ba521c900678ba0db536a2fdc3e7838ef8b0))
+* dockerized local services ([84f8581](https://github.com/Stacktical/stacktical-developer-toolkit/commit/84f8581c94fa18225e80cbda88531fc57f89c385))
+* external adapter running as task ([ecf76cd](https://github.com/Stacktical/stacktical-developer-toolkit/commit/ecf76cdf0af417bf36114271f5e80d6513de9907))
+* prepare chainlink nodes task ([2804110](https://github.com/Stacktical/stacktical-developer-toolkit/commit/28041104b555e0f6fd840efd498bc50f1cc84414))
+* readme pointing to gitbook ([193cbe7](https://github.com/Stacktical/stacktical-developer-toolkit/commit/193cbe7e66b4d8e3046a6ab0accd0f1252a70445))
+* running all local services from task ([3817e06](https://github.com/Stacktical/stacktical-developer-toolkit/commit/3817e0618709aa85264bc598ccbe05ec9e075d82))
+* web3 uri for external adapter ([6bd47bf](https://github.com/Stacktical/stacktical-developer-toolkit/commit/6bd47bf34557401a402e736b52e92af76036a6ed))
+
+
+### Bug Fixes
+
+* chainlink config without externalAdapterUrl ([cad2f52](https://github.com/Stacktical/stacktical-developer-toolkit/commit/cad2f52f5bc222c3a8cbe2805282159a37045b54))
+* DSLAburnRate reference deleted ([4c283b4](https://github.com/Stacktical/stacktical-developer-toolkit/commit/4c283b4edc729db183f953420180e3db01d9cea9))
+* etherscan service disabled ([8d0f568](https://github.com/Stacktical/stacktical-developer-toolkit/commit/8d0f5686b540d15ec3e899754cd31ddc5f5ad564))
+* external adapter to ts ([35098ea](https://github.com/Stacktical/stacktical-developer-toolkit/commit/35098ea284fe24c4ced6c34b27de77ed71b0ba12))
+* ipfs client to env ([b6f646e](https://github.com/Stacktical/stacktical-developer-toolkit/commit/b6f646e532d1566806f58f90e4b71a12b27498db))
+* protocol json ([fbe0725](https://github.com/Stacktical/stacktical-developer-toolkit/commit/fbe0725315e626cd392b4f1765f99b7d117b73fc))
+* staking parameters in develop config ([e54f283](https://github.com/Stacktical/stacktical-developer-toolkit/commit/e54f28322935b4612a0972b043decf12d3106e22))
+* transfer nodeFunds correctly ([8b8db62](https://github.com/Stacktical/stacktical-developer-toolkit/commit/8b8db62ae0ff1e1fbc8044fc066585e108f8009f))
+* update job keeps old job ([7d70531](https://github.com/Stacktical/stacktical-developer-toolkit/commit/7d7053180da67bdf56cb7a0d662da99f60c2d6d5))
+
 ## [1.2.0](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v1.1.0...v1.2.0) (2021-05-25)
 
 
