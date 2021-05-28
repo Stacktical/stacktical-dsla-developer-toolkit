@@ -27,3 +27,4 @@ The developer toolkit is loaded with multiple scripts:
 
 - Update Chainlink to 0.8
 - Create troubleshooting guide.
+- External adapter hot reload
