@@ -1,7 +1,7 @@
 import { task } from 'hardhat/config';
 import { SUB_TASK_NAMES } from './subtasks';
 import { printSeparator } from './utils';
-import app from './services/external-adapter';
+import externalAdapter from './services/external-adapter';
 
 enum TASK_NAMES {
   EXPORT_DATA = 'stacktical:export-data',
@@ -119,12 +119,13 @@ task(
 
 task(
   TASK_NAMES.EXTERNAL_ADAPTER,
-  'Deploys Oracle and LinkToken contracts and creates the proper docker-compose files'
-).setAction(async (_, { run }) => {
-  app.listen(6060, () => {
-    console.log(`External adapter initialized at  http://localhost:${6060}`);
+  'Runs an external adapter from path services/external-adapter'
+).setAction(async (_, hre: any) => {
+  process.env.WEB3_URI = hre.network.config.url;
+  externalAdapter.listen(6060, () => {
+    console.log(`External adapter initialized at http://localhost:${6060}`);
   });
-  return new Promise(() => {});
+  return new Promise((resolve, reject) => {});
 });
 
 module.exports = {};

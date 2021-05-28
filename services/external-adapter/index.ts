@@ -54,7 +54,6 @@ async function getNetworkAnalytics(params) {
  * @param {Object} res Cloud Function response context.
  *                     More info: https://expressjs.com/en/api.html#res
  */
-
 const app = express();
 app.use(express.json());
 const port = 6060;
@@ -97,4 +96,5 @@ app.post('/', async (req, res) => {
     },
   });
 });
+
 export default app;
