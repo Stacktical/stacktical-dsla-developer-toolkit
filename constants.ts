@@ -56,6 +56,7 @@ export enum NETWORKS {
   DEVELOP = 'develop',
   MUMBAI = 'mumbai',
   HARMONYTESTNET = 'harmonytestnet',
+  ETHEREUM = 'ethereum',
 }
 
 export enum PERIOD_TYPE {

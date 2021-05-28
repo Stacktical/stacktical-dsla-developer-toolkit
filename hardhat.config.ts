@@ -162,6 +162,73 @@ const config: HardhatUserConfig = {
       url: 'http://localhost:8545',
       stacktical: developStacktical,
     },
+    [NETWORKS.ETHEREUM]: {
+      chainId: 1,
+      accounts: {
+        mnemonic: process.env.MAINNET_MNEMONIC,
+      },
+      url: process.env.ETHEREUM_URI,
+      stacktical: {
+        chainlink: {
+          isProduction: true,
+          nodeFunds: '1',
+          gasLimit: undefined,
+          ethWsUrl: process.env.ETHEREUM_WS_URI,
+          nodesConfiguration: developStacktical.chainlink.nodesConfiguration,
+        },
+        addresses: {
+          tokens: {
+            LINK: '0x514910771af9ca656af840dff83e8264ecf986ca',
+            DSLA: '0x3affcca64c2a6f4e3b6bd9c64cd2c969efd1ecbe',
+            DAI: '0x6b175474e89094c44da98b954eedeac495271d0f',
+            USDC: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+          },
+          oracle: '0x972614782a893ad3139418Ef00e17fE95896A7c6',
+        },
+        checkPastPeriods: true,
+        bootstrap: {
+          messengers: {
+            networkAnalytics: {
+              allowedNetworks: SENetworkNames,
+            },
+          },
+          allowance: [
+            {
+              contract: CONTRACT_NAMES.NetworkAnalytics,
+              token: CONTRACT_NAMES.LinkToken,
+              allowance: '10',
+            },
+            {
+              contract: CONTRACT_NAMES.SEMessenger,
+              token: CONTRACT_NAMES.LinkToken,
+              allowance: '10',
+            },
+          ],
+          registry: {
+            periods: [
+              {
+                periodType: PERIOD_TYPE.WEEKLY,
+                amountOfPeriods: 52,
+                expiredPeriods: 0,
+              },
+            ],
+            stake: {
+              allowedTokens: [CONTRACT_NAMES.DAI, CONTRACT_NAMES.USDC],
+              stakingParameters: {},
+            },
+            messengers: [
+              {
+                contract: CONTRACT_NAMES.SEMessenger,
+                specificationPath: `${appRoot.path}/messenger-specs/${CONTRACT_NAMES.SEMessenger}`,
+              },
+            ],
+          },
+        },
+        scripts: {
+          deploy_sla: developStacktical.scripts.deploy_sla,
+        },
+      },
+    },
     [NETWORKS.HARMONYTESTNET]: {
       chainId: 1666700000,
       gas: 12000000,
