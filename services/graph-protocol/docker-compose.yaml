@@ -1,0 +1,38 @@
+version: "3.5"
+services:
+  postgres-graph-service:
+    container_name: postgres-graph-service
+    image: postgres:13.1-alpine
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: graph-service
+    networks:
+      - graph-service-network
+
+  graph-service:
+    container_name: graph-service
+    image: graphprotocol/graph-node
+    networks:
+      - graph-service-network
+    ports:
+      - '8000:8000'
+      - '8001:8001'
+      - '8020:8020'
+      - '8030:8030'
+      - '8040:8040'
+    depends_on:
+      - postgres-graph-service
+    environment:
+      postgres_host: postgres
+      postgres_user: postgres
+      postgres_pass: password
+      postgres_db: graph-service
+      ipfs: 'ipfs:5001'
+      ethereum: 'mainnet:http://ganache:8545'
+      RUST_LOG: info
+
+networks:
+  graph-service-network:
+    name: graph-service-network

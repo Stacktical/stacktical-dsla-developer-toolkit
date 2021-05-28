@@ -1,0 +1,17 @@
+version: "3.5"
+services:
+  ipfs-service:
+    container_name: ipfs-service
+    image: ipfs/go-ipfs:v0.4.23
+    ports:
+      - '5001:5001'
+    networks:
+      - ipfs-service-network
+    volumes:
+      - ./data:/data/ipfs
+networks:
+  ipfs-service-network:
+    name: ipfs-service-network
+
+volumes:
+  ipfs:
