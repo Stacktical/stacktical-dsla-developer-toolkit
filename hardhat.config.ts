@@ -45,25 +45,9 @@ const developStacktical: StackticalConfiguration = {
         password: 'PaSSword123456',
         externalAdapterUrl: 'http://host.docker.internal:6060',
       },
-      {
-        name: 'develop-2',
-        restApiUrl: 'http://localhost',
-        restApiPort: '6689',
-        email: 'test@stacktical.com',
-        password: 'PaSSword123456',
-        externalAdapterUrl: 'http://host.docker.internal:6060',
-      },
     ],
   },
-  addresses: {
-    tokens: {
-      LINK: null,
-      DSLA: null,
-      DAI: null,
-      USDC: null,
-    },
-    oracle: null,
-  },
+  addresses: {},
   checkPastPeriods: false,
   bootstrap: {
     allowance: [
@@ -177,13 +161,28 @@ const config: HardhatUserConfig = {
           nodesConfiguration: developStacktical.chainlink.nodesConfiguration,
         },
         addresses: {
-          tokens: {
-            LINK: '0x514910771af9ca656af840dff83e8264ecf986ca',
-            DSLA: '0x3affcca64c2a6f4e3b6bd9c64cd2c969efd1ecbe',
-            DAI: '0x6b175474e89094c44da98b954eedeac495271d0f',
-            USDC: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-          },
-          oracle: '0x972614782a893ad3139418Ef00e17fE95896A7c6',
+          [CONTRACT_NAMES.DSLA]: '0x3aFfCCa64c2A6f4e3B6Bd9c64CD2C969EFd1ECBe',
+          [CONTRACT_NAMES.DAI]: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+          [CONTRACT_NAMES.USDC]: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+          [CONTRACT_NAMES.Oracle]: '0x972614782a893ad3139418Ef00e17fE95896A7c6',
+          [CONTRACT_NAMES.LinkToken]:
+            '0x514910771af9ca656af840dff83e8264ecf986ca',
+          [CONTRACT_NAMES.SLORegistry]:
+            '0x1bE60A36Ba9De2eCeFe8be8d2720B67f932EC487',
+          [CONTRACT_NAMES.SLARegistry]:
+            '0xB63a13825e129fBa2f2205847158461bec5f265A',
+          [CONTRACT_NAMES.MessengerRegistry]:
+            '0x766C0b52fADC43Bc3EEAe8BC64536404981951bE',
+          [CONTRACT_NAMES.PeriodRegistry]:
+            '0x5Da279bE9D6CeB11e7D7117915075066909357bc',
+          [CONTRACT_NAMES.StakeRegistry]:
+            '0x4b48AdDd838A11061cE285106f4a30cc5636735C',
+          [CONTRACT_NAMES.SEMessenger]:
+            '0xFB29aFC3F4B78755f07faD5B86448595D2EEC86C',
+          [CONTRACT_NAMES.NetworkAnalytics]:
+            '0xC33492F8D76918A9527165A9fD71089980656357',
+          [CONTRACT_NAMES.Details]:
+            '0x38b0cd8BB4C4608E32EE75b25A8846459cEAd513',
         },
         checkPastPeriods: true,
         bootstrap: {
@@ -246,15 +245,7 @@ const config: HardhatUserConfig = {
           ethWsUrl: process.env.HARMONYTESTNET_WS_URI,
           nodesConfiguration: developStacktical.chainlink.nodesConfiguration,
         },
-        addresses: {
-          tokens: {
-            LINK: null,
-            DSLA: null,
-            DAI: null,
-            USDC: null,
-          },
-          oracle: null,
-        },
+        addresses: {},
         checkPastPeriods: false,
         bootstrap: {
           messengers: {

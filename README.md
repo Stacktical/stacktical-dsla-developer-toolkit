@@ -29,3 +29,4 @@ The developer toolkit is loaded with multiple scripts:
 - Create troubleshooting guide.
 - External adapter hot reload
 - Automate graph protocol
+- dsla-protocol job name as stacktical config

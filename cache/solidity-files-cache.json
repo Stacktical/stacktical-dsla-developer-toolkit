@@ -44,7 +44,7 @@
       "artifacts": []
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/chainlink/Oracle.sol": {
-      "lastModificationDate": 1621349557502,
+      "lastModificationDate": 1621908941152,
       "contentHash": "89579ad0ca621fcf3e08e3e1ccfe5a1d",
       "sourceName": "contracts/chainlink/Oracle.sol",
       "solcConfig": {
@@ -87,7 +87,7 @@
       "artifacts": []
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/DSLA.sol": {
-      "lastModificationDate": 1620697881010,
+      "lastModificationDate": 1621908941154,
       "contentHash": "c180c2213f237d070ab599b42ef27b7a",
       "sourceName": "contracts/DSLA.sol",
       "solcConfig": {
@@ -525,8 +525,8 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@chainlink/contracts/src/v0.6/Oracle.sol": {
-      "lastModificationDate": 1620345004086,
-      "contentHash": "19ace193216613d46c2bf54bc55c9012",
+      "lastModificationDate": 1622236260154,
+      "contentHash": "1e915a011c46d916d478e403faa2b5d4",
       "sourceName": "@chainlink/contracts/src/v0.6/Oracle.sol",
       "solcConfig": {
         "version": "0.6.6",
@@ -2503,7 +2503,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/dummy-tokens/USDC.sol": {
-      "lastModificationDate": 1621384799035,
+      "lastModificationDate": 1621908941156,
       "contentHash": "f2c3d12108d97d820fb8d73059aae145",
       "sourceName": "contracts/dummy-tokens/USDC.sol",
       "solcConfig": {
@@ -2547,7 +2547,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/dummy-tokens/DSLA.sol": {
-      "lastModificationDate": 1621384781641,
+      "lastModificationDate": 1621908941156,
       "contentHash": "ab6df40cf55de4ffc0e9feaa5f40ffba",
       "sourceName": "contracts/dummy-tokens/DSLA.sol",
       "solcConfig": {
@@ -2591,7 +2591,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/dummy-tokens/DAI.sol": {
-      "lastModificationDate": 1621384793071,
+      "lastModificationDate": 1621908941154,
       "contentHash": "fb9cceb5454b9c500e9787cc8aec2049",
       "sourceName": "contracts/dummy-tokens/DAI.sol",
       "solcConfig": {
