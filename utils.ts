@@ -1,4 +1,4 @@
-import { CONTRACT_NAMES, PERIOD_TYPE } from './constants';
+import { PERIOD_TYPE } from './constants';
 import {
   ChainlinkNodeConfiguration,
   PreCoordinatorConfiguration,
@@ -9,11 +9,7 @@ import { toWei, padRight } from 'web3-utils';
 const moment = require('moment');
 const createClient = require('ipfs-http-client');
 
-const ipfsClient = createClient({
-  host: 'ipfs.dsla.network',
-  port: 443,
-  protocol: 'https',
-});
+const ipfsClient = createClient({ url: process.env.IPFS_URI });
 
 export async function getIPFSHash(ipfsData) {
   const dataString = JSON.stringify(ipfsData);

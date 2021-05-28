@@ -17,7 +17,6 @@ import { extendEnvironment } from 'hardhat/config';
 import 'hardhat-deploy';
 import 'hardhat-deploy-ethers';
 import '@nomiclabs/hardhat-ethers';
-import '@nomiclabs/hardhat-etherscan';
 import '@nomiclabs/hardhat-web3';
 import 'babel-polyfill';
 import 'babel-register';
@@ -35,7 +34,6 @@ const developStacktical: StackticalConfiguration = {
     isProduction: false,
     nodeFunds: '10',
     gasLimit: undefined,
-    externalAdapterUrL: null,
     ethWsUrl: 'ws://host.docker.internal:8545',
     ethHttpUrl: 'http://host.docker.internal:8545',
     nodesConfiguration: [
@@ -105,6 +103,7 @@ const developStacktical: StackticalConfiguration = {
       ],
       stake: {
         allowedTokens: [CONTRACT_NAMES.DAI, CONTRACT_NAMES.USDC],
+        stakingParameters: {},
       },
       messengers: [
         {
@@ -177,7 +176,6 @@ const config: HardhatUserConfig = {
           isProduction: false,
           nodeFunds: '0.001',
           gasLimit: undefined,
-          externalAdapterUrL: null,
           ethWsUrl: process.env.HARMONYTESTNET_WS_URI,
           nodesConfiguration: developStacktical.chainlink.nodesConfiguration,
         },
@@ -281,9 +279,6 @@ const config: HardhatUserConfig = {
     deploy: 'deploy',
     deployments: 'deployments',
     imports: './build/contracts',
-  },
-  etherscan: {
-    apiKey: process.env.ETHERSCAN_API_KEY,
   },
   namedAccounts: {
     deployer: {

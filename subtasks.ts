@@ -29,12 +29,7 @@ import {
   SLARegistry__factory,
   StakeRegistry__factory,
 } from './typechain';
-import {
-  CONTRACT_NAMES,
-  PERIOD_STATUS,
-  PERIOD_TYPE,
-  SENetworkNamesBytes32,
-} from './constants';
+import { CONTRACT_NAMES, PERIOD_STATUS, PERIOD_TYPE } from './constants';
 import {
   bootstrapStrings,
   generateBootstrapPeriods,
@@ -223,7 +218,8 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
       try {
         const postedJob = await getChainlinkJob(node);
         if (postedJob) {
-          await deleteJob(node, postedJob.id);
+          // await deleteJob(node, postedJob.id);
+          return postedJob;
         }
         const httpRequestJobRes = await postChainlinkJob(node);
         return httpRequestJobRes.data;
@@ -295,14 +291,11 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
       const { nodeFunds, gasLimit } = stacktical.chainlink;
       const [defaultAccount] = await web3.eth.getAccounts();
       let balance = await web3.eth.getBalance(chainlinkNodeAddress);
-      if (web3.utils.fromWei(balance) < nodeFunds) {
+      if (web3.utils.fromWei(balance) < Number(nodeFunds)) {
         await web3.eth.sendTransaction({
           from: defaultAccount,
           to: chainlinkNodeAddress,
-          value: web3.utils.toWei(
-            String(Number(nodeFunds) - web3.utils.fromWei(balance)),
-            'ether'
-          ),
+          value: web3.utils.toWei(String(nodeFunds), 'ether'),
           gas: gasLimit,
         });
       }
@@ -784,8 +777,7 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
         }
         console.log('Updating staking parameters');
         const tx = await stakeRegistry.setStakingParameters(
-          stakingParameters.DSLAburnRate ||
-            currentStakingParameters.DSLAburnRate,
+          currentStakingParameters.DSLAburnRate,
           toWei(stakingParameters.dslaDepositByPeriod) ||
             currentStakingParameters.dslaDepositByPeriod,
           toWei(stakingParameters.dslaPlatformReward) ||
