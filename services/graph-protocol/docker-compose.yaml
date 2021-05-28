@@ -23,7 +23,7 @@ services:
       - '8030:8030'
       - '8040:8040'
     depends_on:
-      - postgres
+      - postgres-graph-service
     environment:
       postgres_host: postgres
       postgres_user: postgres
