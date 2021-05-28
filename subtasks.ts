@@ -419,38 +419,10 @@ subtask(
   const { stacktical }: { stacktical: StackticalConfiguration } =
     network.config;
   const { getArtifact }: DeploymentsExtension = deployments;
-  if (stacktical.addresses.oracle) {
-    const artifact = await getArtifact(CONTRACT_NAMES.Oracle);
-    deployments.save(CONTRACT_NAMES.Oracle, {
-      address: stacktical.addresses.oracle,
-      abi: artifact.abi,
-    });
-  }
-  if (stacktical.addresses.tokens.LINK) {
-    const artifact = await getArtifact(CONTRACT_NAMES.LinkToken);
-    await deployments.save(CONTRACT_NAMES.LinkToken, {
-      address: stacktical.addresses.tokens.LINK,
-      abi: artifact.abi,
-    });
-  }
-  if (stacktical.addresses.tokens.DSLA) {
-    const artifact = await getArtifact(CONTRACT_NAMES.ERC20);
-    await deployments.save(CONTRACT_NAMES.DSLA, {
-      address: stacktical.addresses.tokens.DSLA,
-      abi: artifact.abi,
-    });
-  }
-  if (stacktical.addresses.tokens.DAI) {
-    const artifact = await getArtifact(CONTRACT_NAMES.ERC20);
-    await deployments.save(CONTRACT_NAMES.DAI, {
-      address: stacktical.addresses.tokens.DAI,
-      abi: artifact.abi,
-    });
-  }
-  if (stacktical.addresses.tokens.USDC) {
-    const artifact = await getArtifact(CONTRACT_NAMES.ERC20);
-    await deployments.save(CONTRACT_NAMES.USDC, {
-      address: stacktical.addresses.tokens.USDC,
+  for (let contractName of Object.keys(stacktical.addresses)) {
+    const artifact = await getArtifact(contractName);
+    deployments.save(contractName, {
+      address: stacktical.addresses[contractName],
       abi: artifact.abi,
     });
   }

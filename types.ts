@@ -19,13 +19,7 @@ export type ScriptsConfiguration = {
 };
 
 export type DeployedContractAddresses = {
-  tokens: {
-    LINK: string | null;
-    DSLA: string | null;
-    DAI: string | null;
-    USDC: string | null;
-  };
-  oracle: string | null;
+  [key: string]: string;
 };
 
 export type ChainlinkConfiguration = {
