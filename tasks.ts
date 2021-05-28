@@ -1,6 +1,7 @@
 import { task } from 'hardhat/config';
 import { SUB_TASK_NAMES } from './subtasks';
 import { printSeparator } from './utils';
+import app from './services/external-adapter';
 
 enum TASK_NAMES {
   EXPORT_DATA = 'stacktical:export-data',
@@ -13,6 +14,7 @@ enum TASK_NAMES {
   SET_PRECOORDINATOR = 'stacktical:set-precoordinator',
   CHAINLINK_DOCKER_COMPOSE = 'stacktical:chainlink-docker-compose',
   PREPARE_CHAINLINK_NODES = 'stacktical:prepare-chainlink-nodes',
+  EXTERNAL_ADAPTER = 'stacktical:external-adapter',
 }
 
 task(
@@ -113,6 +115,16 @@ task(
   await run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
   await run(SUB_TASK_NAMES.DEPLOY_CHAINLINK_CONTRACTS);
   await run(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE);
+});
+
+task(
+  TASK_NAMES.EXTERNAL_ADAPTER,
+  'Deploys Oracle and LinkToken contracts and creates the proper docker-compose files'
+).setAction(async (_, { run }) => {
+  app.listen(6060, () => {
+    console.log(`External adapter initialized at  http://localhost:${6060}`);
+  });
+  return new Promise(() => {});
 });
 
 module.exports = {};

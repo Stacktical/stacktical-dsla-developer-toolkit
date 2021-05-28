@@ -20,7 +20,7 @@ async function getValidatorAPR(params) {
   const analyticsData = await getAnalyticsFromNetworkAnalyticsContract(
     params,
     hexToUtf8(slaData.networkName),
-    slaData.periodType,
+    slaData.periodType
   );
   console.log('Analytics data:');
   console.log(analyticsData);
@@ -97,7 +97,4 @@ app.post('/', async (req, res) => {
     },
   });
 });
-
-app.listen(port, () => {
-  console.log(`External adapter initialized at  http://localhost:${port}`);
-});
+export default app;
