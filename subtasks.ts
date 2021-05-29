@@ -29,7 +29,12 @@ import {
   SLARegistry__factory,
   StakeRegistry__factory,
 } from './typechain';
-import { CONTRACT_NAMES, PERIOD_STATUS, PERIOD_TYPE } from './constants';
+import {
+  CONTRACT_NAMES,
+  PERIOD_STATUS,
+  PERIOD_TYPE,
+  SENetworks,
+} from './constants';
 import {
   bootstrapStrings,
   generateBootstrapPeriods,
@@ -38,6 +43,7 @@ import {
   printSeparator,
 } from './utils';
 import { formatBytes32String } from 'ethers/lib/utils';
+import axios from 'axios';
 
 const prettier = require('prettier');
 const { DataFile } = require('edit-config');
@@ -75,6 +81,8 @@ export enum SUB_TASK_NAMES {
   DEPLOY_LOCAL_CHAINLINK_NODES = 'DEPLOY_LOCAL_CHAINLINK_NODES',
   DEPLOY_CHAINLINK_CONTRACTS = 'DEPLOY_CHAINLINK_CONTRACTS',
   UPDATE_PRECOORDINATOR = 'UPDATE_PRECOORDINATOR',
+  FULFILL_ANALYTICS = 'FULFILL_ANALYTICS',
+  FULFILL_SLI = 'FULFILL_SLI',
 }
 
 subtask(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES, undefined).setAction(
@@ -1191,7 +1199,7 @@ subtask(SUB_TASK_NAMES.GET_PRECOORDINATOR, undefined).setAction(
 
 subtask(SUB_TASK_NAMES.SET_PRECOORDINATOR, undefined).setAction(
   async (taskArgs, hre: any) => {
-    const { deployments, ethers, getNamedAccounts, network, web3, run } = hre;
+    const { deployments, ethers, getNamedAccounts, network } = hre;
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
     const { get } = deployments;
@@ -1284,5 +1292,258 @@ subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
       'Service agreeement id updated in SEMessenger and NetworkAnalytics contracts: '
     );
     console.log(saId);
+  }
+);
+
+subtask(SUB_TASK_NAMES.FULFILL_ANALYTICS, undefined).setAction(
+  async (taskArgs, hre: any) => {
+    const { deployments, ethers, getNamedAccounts, run, network } = hre;
+    const { stacktical }: { stacktical: StackticalConfiguration } =
+      network.config;
+    await run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
+    const { get } = deployments;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    const networkTicker = taskArgs.networkTicker.toUpperCase();
+    if (!Object.keys(SENetworks).includes(networkTicker)) {
+      throw new Error('Network not recognized: ' + networkTicker);
+    }
+    const na = await NetworkAnalytics__factory.connect(
+      (
+        await get(CONTRACT_NAMES.NetworkAnalytics)
+      ).address,
+      signer
+    );
+    const { periodId, periodType } = taskArgs;
+    const networkBytes32 = formatBytes32String(networkTicker);
+    const isRequested = await na.periodAnalyticsRequested(
+      networkBytes32,
+      periodType,
+      periodId
+    );
+    if (!isRequested) throw new Error('Analytics not requested yet');
+    const storedAnalytics = await na.periodAnalytics(
+      networkBytes32,
+      periodType,
+      periodId
+    );
+    if (Number(storedAnalytics) !== 0)
+      throw new Error('Analytics already fulfilled');
+
+    let filter = na.filters.ChainlinkRequested();
+    let events = await na.queryFilter(filter);
+    let requestedAnalyticsEvent;
+    for (let event of events) {
+      const { id } = event.args;
+      const analyticsRequest = await na.requestIdToAnalyticsRequest(id);
+      if (
+        analyticsRequest.networkName === networkBytes32 &&
+        Number(analyticsRequest.periodId) === periodId &&
+        analyticsRequest.periodType === periodType
+      ) {
+        requestedAnalyticsEvent = event;
+      }
+    }
+    if (requestedAnalyticsEvent === undefined)
+      throw new Error('Request id not found');
+    const chainlinkNodeConfig: ChainlinkNodeConfiguration =
+      stacktical.chainlink.nodesConfiguration.find(
+        (node) => node.name === taskArgs.nodeName
+      );
+    if (!chainlinkNodeConfig)
+      throw new Error('Chainlink node config not found');
+    const externalAdapterUrl = stacktical.chainlink.isProduction
+      ? chainlinkNodeConfig.externalAdapterUrl
+      : 'http://localhost:' +
+        chainlinkNodeConfig.externalAdapterUrl.split(':').slice(-1)[0];
+    const periodRegistry = await PeriodRegistry__factory.connect(
+      (
+        await get(CONTRACT_NAMES.PeriodRegistry)
+      ).address,
+      signer
+    );
+    const { start, end } = await periodRegistry.getPeriodStartAndEnd(
+      periodType,
+      periodId
+    );
+    const { data } = await axios({
+      method: 'post',
+      url: `${externalAdapterUrl}`,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      // eslint-disable-next-line global-require,import/no-dynamic-require
+      data: {
+        data: {
+          job_type: 'staking_efficiency_analytics',
+          network_name: networkTicker,
+          period_id: periodId,
+          period_type: periodType,
+          sla_monitoring_start: start.toString(),
+          sla_monitoring_end: end.toString(),
+        },
+      },
+    });
+    const { result } = data.data;
+    const preCoordinator = await PreCoordinator__factory.connect(
+      (
+        await get(CONTRACT_NAMES.PreCoordinator)
+      ).address,
+      signer
+    );
+    const saRequestedFilter = preCoordinator.filters.ChainlinkRequested();
+    const saRequestedEvents = await preCoordinator.queryFilter(
+      saRequestedFilter
+    );
+    const oracleRequestId = saRequestedEvents.find(
+      (event) => event.blockNumber === requestedAnalyticsEvent.blockNumber
+    ).args.id;
+    const job = await getChainlinkJob(chainlinkNodeConfig);
+    const oracle = await Oracle__factory.connect(
+      job.attributes.initiators[0].params.address,
+      signer
+    );
+    const oracleRqFilter = oracle.filters.OracleRequest();
+    const oracleRqEvents = await oracle.queryFilter(oracleRqFilter);
+    const oracleRqEvent = oracleRqEvents.find(
+      (event) => event.args.requestId === oracleRequestId
+    );
+    const preCoordinatorCallbackId = '0x6a9705b4';
+
+    await oracle.fulfillOracleRequest(
+      oracleRequestId,
+      String(0.1 * 10 ** 18),
+      preCoordinator.address,
+      preCoordinatorCallbackId,
+      oracleRqEvent.args.cancelExpiration,
+      '0x' + result
+    );
+  }
+);
+
+subtask(SUB_TASK_NAMES.FULFILL_SLI, undefined).setAction(
+  async (taskArgs, hre: any) => {
+    throw new Error('Not implemented yet');
+    const { deployments, ethers, getNamedAccounts, run, network } = hre;
+    const { stacktical }: { stacktical: StackticalConfiguration } =
+      network.config;
+    await run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
+    const { get } = deployments;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    const networkTicker = taskArgs.networkTicker.toUpperCase();
+    if (!Object.keys(SENetworks).includes(networkTicker)) {
+      throw new Error('Network not recognized: ' + networkTicker);
+    }
+    const na = await NetworkAnalytics__factory.connect(
+      (
+        await get(CONTRACT_NAMES.NetworkAnalytics)
+      ).address,
+      signer
+    );
+    const { periodId, periodType } = taskArgs;
+    const networkBytes32 = formatBytes32String(networkTicker);
+    const isRequested = await na.periodAnalyticsRequested(
+      networkBytes32,
+      periodType,
+      periodId
+    );
+    if (!isRequested) throw new Error('Analytics not requested yet');
+    const storedAnalytics = await na.periodAnalytics(
+      networkBytes32,
+      periodType,
+      periodId
+    );
+    if (Number(storedAnalytics) !== 0)
+      throw new Error('Analytics already fulfilled');
+
+    let filter = na.filters.ChainlinkRequested();
+    let events = await na.queryFilter(filter);
+    let requestedAnalyticsEvent;
+    for (let event of events) {
+      const { id } = event.args;
+      const analyticsRequest = await na.requestIdToAnalyticsRequest(id);
+      if (
+        analyticsRequest.networkName === networkBytes32 &&
+        Number(analyticsRequest.periodId) === periodId &&
+        analyticsRequest.periodType === periodType
+      ) {
+        requestedAnalyticsEvent = event;
+      }
+    }
+    if (requestedAnalyticsEvent === undefined)
+      throw new Error('Request id not found');
+    const chainlinkNodeConfig: ChainlinkNodeConfiguration =
+      stacktical.chainlink.nodesConfiguration.find(
+        (node) => node.name === taskArgs.nodeName
+      );
+    if (!chainlinkNodeConfig)
+      throw new Error('Chainlink node config not found');
+    const externalAdapterUrl = stacktical.chainlink.isProduction
+      ? chainlinkNodeConfig.externalAdapterUrl
+      : 'http://localhost:' +
+        chainlinkNodeConfig.externalAdapterUrl.split(':').slice(-1)[0];
+    const periodRegistry = await PeriodRegistry__factory.connect(
+      (
+        await get(CONTRACT_NAMES.PeriodRegistry)
+      ).address,
+      signer
+    );
+    const { start, end } = await periodRegistry.getPeriodStartAndEnd(
+      periodType,
+      periodId
+    );
+    const { data } = await axios({
+      method: 'post',
+      url: `${externalAdapterUrl}`,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      // eslint-disable-next-line global-require,import/no-dynamic-require
+      data: {
+        data: {
+          job_type: 'staking_efficiency_analytics',
+          network_name: networkTicker,
+          period_id: periodId,
+          period_type: periodType,
+          sla_monitoring_start: start.toString(),
+          sla_monitoring_end: end.toString(),
+        },
+      },
+    });
+    const { result } = data.data;
+    const preCoordinator = await PreCoordinator__factory.connect(
+      (
+        await get(CONTRACT_NAMES.PreCoordinator)
+      ).address,
+      signer
+    );
+    const saRequestedFilter = preCoordinator.filters.ChainlinkRequested();
+    const saRequestedEvents = await preCoordinator.queryFilter(
+      saRequestedFilter
+    );
+    const oracleRequestId = saRequestedEvents.find(
+      (event) => event.blockNumber === requestedAnalyticsEvent.blockNumber
+    ).args.id;
+    const job = await getChainlinkJob(chainlinkNodeConfig);
+    const oracle = await Oracle__factory.connect(
+      job.attributes.initiators[0].params.address,
+      signer
+    );
+    const oracleRqFilter = oracle.filters.OracleRequest();
+    const oracleRqEvents = await oracle.queryFilter(oracleRqFilter);
+    const oracleRqEvent = oracleRqEvents.find(
+      (event) => event.args.requestId === oracleRequestId
+    );
+    const preCoordinatorCallbackId = '0x6a9705b4';
+
+    await oracle.fulfillOracleRequest(
+      oracleRequestId,
+      String(0.1 * 10 ** 18),
+      preCoordinator.address,
+      preCoordinatorCallbackId,
+      oracleRqEvent.args.cancelExpiration,
+      '0x' + result
+    );
   }
 );

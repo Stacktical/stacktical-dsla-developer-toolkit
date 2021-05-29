@@ -525,8 +525,8 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@chainlink/contracts/src/v0.6/Oracle.sol": {
-      "lastModificationDate": 1622236260154,
-      "contentHash": "1e915a011c46d916d478e403faa2b5d4",
+      "lastModificationDate": 1622314622645,
+      "contentHash": "cc8cf6450acd5119847972b4eaf32f05",
       "sourceName": "@chainlink/contracts/src/v0.6/Oracle.sol",
       "solcConfig": {
         "version": "0.6.6",
@@ -2674,6 +2674,48 @@
       ],
       "artifacts": [
         "Migrations"
+      ]
+    },
+    "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/hardhat/console.sol": {
+      "lastModificationDate": 1620321652989,
+      "contentHash": "cc4777addd464ea56fa35b1c45df0591",
+      "sourceName": "hardhat/console.sol",
+      "solcConfig": {
+        "version": "0.6.6",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.4.22 <0.9.0"
+      ],
+      "artifacts": [
+        "console"
       ]
     }
   }

@@ -1,3 +1,16 @@
+oracle
+oracleEvents
+let oracleEvents = await oracle.queryFilter(oracleFilters)
+let oracleFilters = oracle.filters.OracleRequest()
+oracle = await OracleFactory.Oracle__factory.connect(oracleArtifact.address,signer)
+oracle = await OracleFactory.connect(oracleArtifact.address,signer)
+let oracle = await OracleFactory
+const OracleFactory = require('./typechain/factories/Oracle__factory')
+let signer = await ethers.getSigner((await hre.getNamedAccounts()).deployer)
+let signer = await ethers.getSigner((await hre.getNamedAccounts()).address)
+let signer = await ethers.getSigner((await hre.getNamedAccounts().address)
+let signer = await ethers.getSigner((await hre.getNamedAccounts()).address)
+const oracleArtifact = await hre.deployments.get('Oracle')
 await ethers.provider.send('evm_mine')
 await ethers.provider.send
 await ethers.provider.send('evm_mine')

@@ -2,10 +2,6 @@ import { task, types } from 'hardhat/config';
 import { SUB_TASK_NAMES } from './subtasks';
 import { printSeparator } from './utils';
 import externalAdapter from './services/external-adapter';
-import { CONTRACT_NAMES, SENetworks } from './constants';
-import { NetworkAnalytics__factory, Oracle__factory } from './typechain';
-import { formatBytes32String } from 'ethers/lib/utils';
-import { ChainlinkNodeConfiguration, StackticalConfiguration } from './types';
 
 enum TASK_NAMES {
   EXPORT_DATA = 'stacktical:export-data',
@@ -20,6 +16,7 @@ enum TASK_NAMES {
   PREPARE_CHAINLINK_NODES = 'stacktical:prepare-chainlink-nodes',
   EXTERNAL_ADAPTER = 'stacktical:external-adapter',
   FULFILL_ANALYTICS = 'stacktical:fulfill-analytics',
+  FULFILL_SLI = 'stacktical:fulfill-sli',
 }
 
 task(
@@ -154,84 +151,31 @@ task(TASK_NAMES.FULFILL_ANALYTICS, 'Fulfill pendant network analytics')
     types.int
   )
   .addParam('networkTicker', 'Network ticker of the period to fulfill')
-  .addParam('nodeName', 'Name of the Chainlink node', undefined, types.string)
+  .addParam(
+    'nodeName',
+    'Name of the Chainlink node to use to fulfill',
+    undefined,
+    types.string
+  )
   .setAction(async (taskArgs, hre: any) => {
-    const { deployments, ethers, getNamedAccounts, run, network } = hre;
-    const { stacktical }: { stacktical: StackticalConfiguration } =
-      network.config;
-    await run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
-    const { get } = deployments;
-    const { deployer } = await getNamedAccounts();
-    const signer = await ethers.getSigner(deployer);
-    const networkTicker = taskArgs.networkTicker.toUpperCase();
-    if (!Object.keys(SENetworks).includes(networkTicker)) {
-      throw new Error('Network not recognized: ' + networkTicker);
-    }
-    const na = await NetworkAnalytics__factory.connect(
-      (
-        await get(CONTRACT_NAMES.NetworkAnalytics)
-      ).address,
-      signer
-    );
-    const { periodId, periodType } = taskArgs;
-    const networkBytes32 = formatBytes32String(networkTicker);
-    const isRequested = await na.periodAnalyticsRequested(
-      networkBytes32,
-      periodType,
-      periodId
-    );
-    if (!isRequested) throw new Error('Analytics not requested yet');
-    const storedAnalytics = await na.periodAnalytics(
-      networkBytes32,
-      periodType,
-      periodId
-    );
-    if (Number(storedAnalytics) !== 0)
-      throw new Error('Analytics already fulfilled');
-    const oracle = await Oracle__factory.connect(
-      (
-        await get(CONTRACT_NAMES.Oracle)
-      ).address,
-      signer
-    );
-    let filter = na.filters.ChainlinkRequested();
-    let events = await na.queryFilter(filter);
-    let targetId;
-    for (let event of events) {
-      const { id } = event.args;
-      const analyticsRequest = await na.requestIdToAnalyticsRequest(id);
-      if (
-        analyticsRequest.networkName === networkBytes32 &&
-        Number(analyticsRequest.periodId) === periodId &&
-        analyticsRequest.periodType === periodType
-      ) {
-        targetId = id;
-      }
-    }
-    if (targetId === undefined) throw new Error('Request id not found');
-    const chainlinkNodeConfig: ChainlinkNodeConfiguration =
-      stacktical.chainlink.nodesConfiguration.find(
-        (node) => node.name === taskArgs.nodeName
-      );
-    if (!chainlinkNodeConfig)
-      throw new Error('Chainlink node config not found');
-    console.log(chainlinkNodeConfig);
-    // const eventFilter = oracle.filters.EmitFulfilled();
-    // const events = await oracle.queryFilter(eventFilter);
-    // const {
-    //   _payment,
-    //   _requestId,
-    //   _callbackAddress,
-    //   _callbackFunctionId,
-    //   _data,
-    //   _expiration,
-    // } = events[0].args;
-    // console.log(fromWei(_payment.toString()));
-    // console.log(_requestId);
-    // console.log(_callbackAddress);
-    // console.log(_callbackFunctionId);
-    // console.log(_data);
-    // console.log(_expiration);
+    await hre.run(SUB_TASK_NAMES.FULFILL_ANALYTICS, taskArgs);
+  });
+
+task(TASK_NAMES.FULFILL_SLI, 'Fulfill pendant contract sli')
+  .addParam(
+    'contract',
+    'Address of the SLA contract to fulfill',
+    undefined,
+    types.string
+  )
+  .addParam(
+    'nodeName',
+    'Name of the Chainlink node to use to fulfill',
+    undefined,
+    types.string
+  )
+  .setAction(async (taskArgs, hre: any) => {
+    await hre.run(SUB_TASK_NAMES.FULFILL_SLI, taskArgs);
   });
 
 module.exports = {};
