@@ -183,6 +183,94 @@ const config: HardhatUserConfig = {
             '0xC33492F8D76918A9527165A9fD71089980656357',
           [CONTRACT_NAMES.Details]:
             '0x38b0cd8BB4C4608E32EE75b25A8846459cEAd513',
+          [CONTRACT_NAMES.PreCoordinator]:
+            '0x7db551Ce6677211309db39A67F73cA923e9d4944',
+        },
+        checkPastPeriods: true,
+        bootstrap: {
+          messengers: {
+            networkAnalytics: {
+              allowedNetworks: SENetworkNames,
+            },
+          },
+          allowance: [
+            {
+              contract: CONTRACT_NAMES.NetworkAnalytics,
+              token: CONTRACT_NAMES.LinkToken,
+              allowance: '10',
+            },
+            {
+              contract: CONTRACT_NAMES.SEMessenger,
+              token: CONTRACT_NAMES.LinkToken,
+              allowance: '10',
+            },
+          ],
+          registry: {
+            periods: [
+              {
+                periodType: PERIOD_TYPE.WEEKLY,
+                amountOfPeriods: 52,
+                expiredPeriods: 0,
+              },
+            ],
+            stake: {
+              allowedTokens: [CONTRACT_NAMES.DAI, CONTRACT_NAMES.USDC],
+              stakingParameters: {},
+            },
+            messengers: [
+              {
+                contract: CONTRACT_NAMES.SEMessenger,
+                specificationPath: `${appRoot.path}/messenger-specs/${CONTRACT_NAMES.SEMessenger}`,
+              },
+            ],
+          },
+        },
+        scripts: {
+          deploy_sla: developStacktical.scripts.deploy_sla,
+        },
+      },
+    },
+    [NETWORKS.POLYGON]: {
+      chainId: 137,
+      accounts: {
+        mnemonic: process.env.MAINNET_MNEMONIC,
+      },
+      url: process.env.POLYGON_URI,
+      stacktical: {
+        chainlink: {
+          isProduction: true,
+          nodeFunds: '1',
+          gasLimit: undefined,
+          ethWsUrl: process.env.POLYGON_WS_URI,
+          nodesConfiguration: developStacktical.chainlink.nodesConfiguration,
+        },
+        addresses: {
+          [CONTRACT_NAMES.DSLA]: '0xa0E390e9ceA0D0e8cd40048ced9fA9EA10D71639',
+          [CONTRACT_NAMES.DAI]: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
+          [CONTRACT_NAMES.USDC]: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
+          [CONTRACT_NAMES.SLORegistry]:
+            '0x0b1cfF33ad49690dB0Eb0bc17429613969C7dDcF',
+          [CONTRACT_NAMES.SLARegistry]:
+            '0xf41EaA49BBae8650f051100d4385d5d7F9af4a54',
+          [CONTRACT_NAMES.MessengerRegistry]:
+            '0x8993F44B7Ee14446B12B6D879c325E3Cd624653B',
+          [CONTRACT_NAMES.PeriodRegistry]:
+            '0xEF12BDcF5E5D5ae4c950a9FaEb2A274d1646b48D',
+          [CONTRACT_NAMES.StakeRegistry]:
+            '0xc5C890444975f2211F84d3b543355f8DC74a6069',
+          [CONTRACT_NAMES.SEMessenger]:
+            '0x3eBe46d0d873B635D1e003BEe76de67cE2F3a584',
+          [CONTRACT_NAMES.NetworkAnalytics]:
+            '0x2f5F25F158cb7Ae0BF1f7eBfDF4ed9A58E3BcB58',
+          [CONTRACT_NAMES.Details]:
+            '0x857533E7d9DE216E8BdBd1620018099B88cDD792',
+          [CONTRACT_NAMES.PreCoordinator]:
+            '0x6e782e2c3f42003eE56d30BdD269555738A39e4A',
+          [CONTRACT_NAMES.StringUtils]:
+            '0x143c0e6cB35AC53C7f06d4914199E4cAc3977AC7',
+          [CONTRACT_NAMES.LinkToken]:
+            '0xb0897686c545045afc77cf20ec7a532e3120e0f1',
+          [CONTRACT_NAMES.Oracle]: '0x99F4e62a317cc666589c9e370c73c15B158f3c61',
         },
         checkPastPeriods: true,
         bootstrap: {

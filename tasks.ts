@@ -159,6 +159,7 @@ task(TASK_NAMES.FULFILL_ANALYTICS, 'Fulfill pendant network analytics')
     types.string
   )
   .setAction(async (taskArgs, hre: any) => {
+    await hre.run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
     await hre.run(SUB_TASK_NAMES.FULFILL_ANALYTICS, taskArgs);
   });
 
@@ -176,6 +177,7 @@ task(TASK_NAMES.FULFILL_SLI, 'Fulfill pendant contract sli')
     types.string
   )
   .setAction(async (taskArgs, hre: any) => {
+    await hre.run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
     await hre.run(SUB_TASK_NAMES.FULFILL_SLI, taskArgs);
   });
 

@@ -1297,10 +1297,9 @@ subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
 
 subtask(SUB_TASK_NAMES.FULFILL_ANALYTICS, undefined).setAction(
   async (taskArgs, hre: any) => {
-    const { deployments, ethers, getNamedAccounts, run, network } = hre;
+    const { deployments, ethers, getNamedAccounts, network } = hre;
     const { stacktical }: { stacktical: StackticalConfiguration } =
       network.config;
-    await run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
     const { get } = deployments;
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
@@ -1410,14 +1409,14 @@ subtask(SUB_TASK_NAMES.FULFILL_ANALYTICS, undefined).setAction(
     );
     const preCoordinatorCallbackId = '0x6a9705b4';
 
-    await oracle.fulfillOracleRequest(
-      oracleRequestId,
-      String(0.1 * 10 ** 18),
-      preCoordinator.address,
-      preCoordinatorCallbackId,
-      oracleRqEvent.args.cancelExpiration,
-      '0x' + result
-    );
+    // await oracle.fulfillOracleRequest(
+    //   oracleRequestId,
+    //   String(0.1 * 10 ** 18),
+    //   preCoordinator.address,
+    //   preCoordinatorCallbackId,
+    //   oracleRqEvent.args.cancelExpiration,
+    //   '0x' + result
+    // );
   }
 );
 

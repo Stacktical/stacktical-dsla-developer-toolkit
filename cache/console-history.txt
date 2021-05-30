@@ -1,3 +1,14 @@
+await networkAnalytics.getNetworkNames()
+networkAnalytics.getNetworkNames()
+networkAnalytics.getNetworkNames
+let networkAnalytics = await naFactory.connect(networkAnalyticsArtifact.address,signer)
+let networkAnalytics = await naFactory(networkAnalyticsArtifact.address,signer)
+networkAnalyticsArtifact.address
+let networkAnalytics = await naFactory(networkAnalyticsArtifact.address,signer)
+let networkAnalyticsArtifact = await hre.deployments.get('NetworkAnalytics')
+let naFactory = fact.NetworkAnalytics__factory
+let fact =require('./typechain/factories/NetworkAnalytics__factory')
+let signer = await ethers.getSigner((await hre.getNamedAccounts()).deployer)
 oracle
 oracleEvents
 let oracleEvents = await oracle.queryFilter(oracleFilters)
