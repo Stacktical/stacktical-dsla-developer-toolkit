@@ -17,6 +17,7 @@ enum TASK_NAMES {
   EXTERNAL_ADAPTER = 'stacktical:external-adapter',
   FULFILL_ANALYTICS = 'stacktical:fulfill-analytics',
   FULFILL_SLI = 'stacktical:fulfill-sli',
+  INITIALIZE_DEFAULT_ADDRESSES = 'stacktical:initialize-addresses',
 }
 
 task(
@@ -177,5 +178,12 @@ task(TASK_NAMES.FULFILL_SLI, 'Fulfill pendant contract sli')
   .setAction(async (taskArgs, hre: any) => {
     await hre.run(SUB_TASK_NAMES.FULFILL_SLI, taskArgs);
   });
+
+task(
+  TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES,
+  'Initialize default addresses'
+).setAction(async (_, hre: any) => {
+  await hre.run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
+});
 
 module.exports = {};

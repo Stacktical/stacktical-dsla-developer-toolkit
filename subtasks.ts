@@ -429,7 +429,7 @@ subtask(
   const { getArtifact }: DeploymentsExtension = deployments;
   for (let contractName of Object.keys(stacktical.addresses)) {
     const artifact = await getArtifact(contractName);
-    deployments.save(contractName, {
+    await deployments.save(contractName, {
       address: stacktical.addresses[contractName],
       abi: artifact.abi,
     });
