@@ -269,6 +269,11 @@ subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
 
 subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
   async (_, hre: any) => {
+    const { deployments, network, ethers, getNamedAccounts, web3 } = hre;
+    const { deployer } = await getNamedAccounts();
+    const { get } = deployments;
+    const { stacktical }: { stacktical: StackticalConfiguration } =
+      network.config;
     function wait(timeout) {
       return new Promise((resolve) => {
         setTimeout(resolve, timeout);
@@ -290,8 +295,18 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
       try {
         const postedJob = await getChainlinkJob(node);
         if (postedJob) {
-          // await deleteJob(node, postedJob.id);
-          return postedJob;
+          if (!stacktical.chainlink.deleteOldJobs) {
+            console.log('Keeping existing job:');
+            console.log(
+              util.inspect(postedJob, { showHidden: false, depth: null })
+            );
+            return postedJob;
+          }
+          console.log('Deleting existing job:');
+          console.log(
+            util.inspect(postedJob, { showHidden: false, depth: null })
+          );
+          await deleteJob(node, postedJob.id);
         }
         const httpRequestJobRes = await postChainlinkJob(node);
         return httpRequestJobRes.data;
@@ -312,11 +327,7 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
         return false;
       }
     };
-    const { deployments, network, ethers, getNamedAccounts, web3 } = hre;
-    const { deployer } = await getNamedAccounts();
-    const { get } = deployments;
-    const { stacktical }: { stacktical: StackticalConfiguration } =
-      network.config;
+
     // Create bridge
     console.log('Starting automated configuration for Chainlink nodes...');
     for (let node of stacktical.chainlink.nodesConfiguration) {
@@ -1409,14 +1420,14 @@ subtask(SUB_TASK_NAMES.FULFILL_ANALYTICS, undefined).setAction(
     );
     const preCoordinatorCallbackId = '0x6a9705b4';
 
-    // await oracle.fulfillOracleRequest(
-    //   oracleRequestId,
-    //   String(0.1 * 10 ** 18),
-    //   preCoordinator.address,
-    //   preCoordinatorCallbackId,
-    //   oracleRqEvent.args.cancelExpiration,
-    //   '0x' + result
-    // );
+    await oracle.fulfillOracleRequest(
+      oracleRequestId,
+      String(0.1 * 10 ** 18),
+      preCoordinator.address,
+      preCoordinatorCallbackId,
+      oracleRqEvent.args.cancelExpiration,
+      '0x' + result
+    );
   }
 );
 

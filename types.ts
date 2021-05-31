@@ -24,6 +24,7 @@ export type DeployedContractAddresses = {
 
 export type ChainlinkConfiguration = {
   isProduction: boolean;
+  deleteOldJobs: boolean;
   nodeFunds: string;
   gasLimit?: string;
   ethWsUrl: string;

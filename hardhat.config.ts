@@ -32,6 +32,7 @@ import {
 const developStacktical: StackticalConfiguration = {
   chainlink: {
     isProduction: false,
+    deleteOldJobs: true,
     nodeFunds: '10',
     gasLimit: undefined,
     ethWsUrl: 'ws://host.docker.internal:8545',
@@ -155,6 +156,7 @@ const config: HardhatUserConfig = {
       stacktical: {
         chainlink: {
           isProduction: true,
+          deleteOldJobs: false,
           nodeFunds: '1',
           gasLimit: undefined,
           ethWsUrl: process.env.ETHEREUM_WS_URI,
@@ -239,6 +241,7 @@ const config: HardhatUserConfig = {
       stacktical: {
         chainlink: {
           isProduction: true,
+          deleteOldJobs: true,
           nodeFunds: '1',
           gasLimit: undefined,
           ethWsUrl: process.env.POLYGON_WS_URI,
@@ -328,6 +331,7 @@ const config: HardhatUserConfig = {
       stacktical: {
         chainlink: {
           isProduction: false,
+          deleteOldJobs: false,
           nodeFunds: '0.001',
           gasLimit: undefined,
           ethWsUrl: process.env.HARMONYTESTNET_WS_URI,
