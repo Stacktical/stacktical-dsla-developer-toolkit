@@ -165,14 +165,15 @@ task(TASK_NAMES.FULFILL_ANALYTICS, 'Fulfill pendant network analytics')
 
 task(TASK_NAMES.FULFILL_SLI, 'Fulfill pendant contract sli')
   .addParam(
-    'contract',
-    'Address of the SLA contract to fulfill',
+    'address',
+    'Address of the SLA contract to fulfill sli',
     undefined,
     types.string
   )
+  .addParam('periodId', 'Period to use to fulfill sli', undefined, types.string)
   .addParam(
     'nodeName',
-    'Name of the Chainlink node to use to fulfill',
+    'Name of the Chainlink node to use to fulfill sli',
     undefined,
     types.string
   )

@@ -53,6 +53,7 @@ const path = require('path');
 const yaml = require('js-yaml');
 const compose = require('docker-compose');
 const moment = require('moment');
+const util = require('util');
 
 export enum SUB_TASK_NAMES {
   PREPARE_CHAINLINK_NODES = 'PREPARE_CHAINLINK_NODES',
@@ -1080,7 +1081,6 @@ subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
     const { get } = deployments;
-    console.log('Starting SLI request process');
     const slaRegistry = await SLARegistry__factory.connect(
       (
         await get(CONTRACT_NAMES.SLARegistry)
@@ -1092,14 +1092,14 @@ subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
     if (taskArgs.address) ethers.utils.getAddress(taskArgs.address);
     const slaAddress = taskArgs.address || slaAddresses.slice(-1)[0];
     const sla = await SLA__factory.connect(slaAddress, signer);
-    console.log(`SLA address: ${slaAddresses}`);
 
     const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
-    const ownerApproval = true;
     console.log(
-      'Starting automated job 1: Request SLI for period ' +
+      'Starting SLI request process for period ' +
         nextVerifiablePeriod.toString()
     );
+    console.log(`SLA address: ${slaAddresses}`);
+    const ownerApproval = true;
     let tx = await slaRegistry.requestSLI(
       Number(nextVerifiablePeriod),
       sla.address,
@@ -1126,7 +1126,6 @@ subtask(SUB_TASK_NAMES.REQUEST_ANALYTICS, undefined).setAction(
     const signer = await ethers.getSigner(deployer);
     const { get } = deployments;
 
-    console.log('SLI request process finished');
     console.log('Starting Analytics request process');
 
     const networkAnalytics = await NetworkAnalytics__factory.connect(
@@ -1366,35 +1365,7 @@ subtask(SUB_TASK_NAMES.FULFILL_ANALYTICS, undefined).setAction(
       ? chainlinkNodeConfig.externalAdapterUrl
       : 'http://localhost:' +
         chainlinkNodeConfig.externalAdapterUrl.split(':').slice(-1)[0];
-    const periodRegistry = await PeriodRegistry__factory.connect(
-      (
-        await get(CONTRACT_NAMES.PeriodRegistry)
-      ).address,
-      signer
-    );
-    const { start, end } = await periodRegistry.getPeriodStartAndEnd(
-      periodType,
-      periodId
-    );
-    const { data } = await axios({
-      method: 'post',
-      url: `${externalAdapterUrl}`,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      // eslint-disable-next-line global-require,import/no-dynamic-require
-      data: {
-        data: {
-          job_type: 'staking_efficiency_analytics',
-          network_name: networkTicker,
-          period_id: periodId,
-          period_type: periodType,
-          sla_monitoring_start: start.toString(),
-          sla_monitoring_end: end.toString(),
-        },
-      },
-    });
-    const { result } = data.data;
+
     const preCoordinator = await PreCoordinator__factory.connect(
       (
         await get(CONTRACT_NAMES.PreCoordinator)
@@ -1418,8 +1389,37 @@ subtask(SUB_TASK_NAMES.FULFILL_ANALYTICS, undefined).setAction(
     const oracleRqEvent = oracleRqEvents.find(
       (event) => event.args.requestId === oracleRequestId
     );
+    console.log('Request id successfully identified: ');
+    console.log(oracleRqEvent.args);
     const preCoordinatorCallbackId = '0x6a9705b4';
-
+    const periodRegistry = await PeriodRegistry__factory.connect(
+      (
+        await get(CONTRACT_NAMES.PeriodRegistry)
+      ).address,
+      signer
+    );
+    const { start, end } = await periodRegistry.getPeriodStartAndEnd(
+      periodType,
+      periodId
+    );
+    const { data } = await axios({
+      method: 'post',
+      url: externalAdapterUrl,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: {
+        data: {
+          job_type: 'staking_efficiency_analytics',
+          network_name: networkTicker,
+          period_id: periodId,
+          period_type: periodType,
+          sla_monitoring_start: start.toString(),
+          sla_monitoring_end: end.toString(),
+        },
+      },
+    });
+    const { result } = data.data;
     await oracle.fulfillOracleRequest(
       oracleRequestId,
       String(0.1 * 10 ** 18),
@@ -1434,126 +1434,101 @@ subtask(SUB_TASK_NAMES.FULFILL_ANALYTICS, undefined).setAction(
 subtask(SUB_TASK_NAMES.FULFILL_SLI, undefined).setAction(
   async (taskArgs, hre: any) => {
     throw new Error('Not implemented yet');
-    const { deployments, ethers, getNamedAccounts, run, network } = hre;
-    const { stacktical }: { stacktical: StackticalConfiguration } =
-      network.config;
-    await run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
-    const { get } = deployments;
-    const { deployer } = await getNamedAccounts();
-    const signer = await ethers.getSigner(deployer);
-    const networkTicker = taskArgs.networkTicker.toUpperCase();
-    if (!Object.keys(SENetworks).includes(networkTicker)) {
-      throw new Error('Network not recognized: ' + networkTicker);
-    }
-    const na = await NetworkAnalytics__factory.connect(
-      (
-        await get(CONTRACT_NAMES.NetworkAnalytics)
-      ).address,
-      signer
-    );
-    const { periodId, periodType } = taskArgs;
-    const networkBytes32 = formatBytes32String(networkTicker);
-    const isRequested = await na.periodAnalyticsRequested(
-      networkBytes32,
-      periodType,
-      periodId
-    );
-    if (!isRequested) throw new Error('Analytics not requested yet');
-    const storedAnalytics = await na.periodAnalytics(
-      networkBytes32,
-      periodType,
-      periodId
-    );
-    if (Number(storedAnalytics) !== 0)
-      throw new Error('Analytics already fulfilled');
-
-    let filter = na.filters.ChainlinkRequested();
-    let events = await na.queryFilter(filter);
-    let requestedAnalyticsEvent;
-    for (let event of events) {
-      const { id } = event.args;
-      const analyticsRequest = await na.requestIdToAnalyticsRequest(id);
-      if (
-        analyticsRequest.networkName === networkBytes32 &&
-        Number(analyticsRequest.periodId) === periodId &&
-        analyticsRequest.periodType === periodType
-      ) {
-        requestedAnalyticsEvent = event;
-      }
-    }
-    if (requestedAnalyticsEvent === undefined)
-      throw new Error('Request id not found');
-    const chainlinkNodeConfig: ChainlinkNodeConfiguration =
-      stacktical.chainlink.nodesConfiguration.find(
-        (node) => node.name === taskArgs.nodeName
-      );
-    if (!chainlinkNodeConfig)
-      throw new Error('Chainlink node config not found');
-    const externalAdapterUrl = stacktical.chainlink.isProduction
-      ? chainlinkNodeConfig.externalAdapterUrl
-      : 'http://localhost:' +
-        chainlinkNodeConfig.externalAdapterUrl.split(':').slice(-1)[0];
-    const periodRegistry = await PeriodRegistry__factory.connect(
-      (
-        await get(CONTRACT_NAMES.PeriodRegistry)
-      ).address,
-      signer
-    );
-    const { start, end } = await periodRegistry.getPeriodStartAndEnd(
-      periodType,
-      periodId
-    );
-    const { data } = await axios({
-      method: 'post',
-      url: `${externalAdapterUrl}`,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      // eslint-disable-next-line global-require,import/no-dynamic-require
-      data: {
-        data: {
-          job_type: 'staking_efficiency_analytics',
-          network_name: networkTicker,
-          period_id: periodId,
-          period_type: periodType,
-          sla_monitoring_start: start.toString(),
-          sla_monitoring_end: end.toString(),
-        },
-      },
-    });
-    const { result } = data.data;
-    const preCoordinator = await PreCoordinator__factory.connect(
-      (
-        await get(CONTRACT_NAMES.PreCoordinator)
-      ).address,
-      signer
-    );
-    const saRequestedFilter = preCoordinator.filters.ChainlinkRequested();
-    const saRequestedEvents = await preCoordinator.queryFilter(
-      saRequestedFilter
-    );
-    const oracleRequestId = saRequestedEvents.find(
-      (event) => event.blockNumber === requestedAnalyticsEvent.blockNumber
-    ).args.id;
-    const job = await getChainlinkJob(chainlinkNodeConfig);
-    const oracle = await Oracle__factory.connect(
-      job.attributes.initiators[0].params.address,
-      signer
-    );
-    const oracleRqFilter = oracle.filters.OracleRequest();
-    const oracleRqEvents = await oracle.queryFilter(oracleRqFilter);
-    const oracleRqEvent = oracleRqEvents.find(
-      (event) => event.args.requestId === oracleRequestId
-    );
-    const preCoordinatorCallbackId = '0x6a9705b4';
-
-    await oracle.fulfillOracleRequest(
-      oracleRequestId,
-      String(0.1 * 10 ** 18),
-      preCoordinator.address,
-      preCoordinatorCallbackId,
-      oracleRqEvent.args.cancelExpiration,
-      '0x' + result
-    );
+    // const { deployments, ethers, getNamedAccounts, run, network } = hre;
+    // const { stacktical }: { stacktical: StackticalConfiguration } =
+    //   network.config;
+    // await run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
+    // const { get } = deployments;
+    // const { deployer } = await getNamedAccounts();
+    // const signer = await ethers.getSigner(deployer);
+    // const seMessenger = await SEMessenger__factory.connect(
+    //   (
+    //     await get(CONTRACT_NAMES.SEMessenger)
+    //   ).address,
+    //   signer
+    // );
+    // const { periodId, periodType } = taskArgs;
+    //
+    // let seFilter = seMessenger.filters.ChainlinkRequested();
+    // let seEvents = await seMessenger.queryFilter(seFilter);
+    // let sliRequestedEvent;
+    // for (let event of seEvents) {
+    //   const { id } = event.args;
+    //   const sliRequestEvent = await seMessenger.requestIdToSLIRequest(id);
+    //   if (
+    //     sliRequestEvent.periodId == taskArgs.periodId &&
+    //     sliRequestEvent.slaAddress === taskArgs.address
+    //   ) {
+    //     sliRequestedEvent = event;
+    //   }
+    // }
+    // if (sliRequestedEvent === undefined)
+    //   throw new Error('Request id not found');
+    // const chainlinkNodeConfig: ChainlinkNodeConfiguration =
+    //   stacktical.chainlink.nodesConfiguration.find(
+    //     (node) => node.name === taskArgs.nodeName
+    //   );
+    // if (!chainlinkNodeConfig)
+    //   throw new Error('Chainlink node config not found');
+    // const externalAdapterUrl = stacktical.chainlink.isProduction
+    //   ? chainlinkNodeConfig.externalAdapterUrl
+    //   : 'http://localhost:' +
+    //     chainlinkNodeConfig.externalAdapterUrl.split(':').slice(-1)[0];
+    // const networkAnalytics = await NetworkAnalytics__factory.connect(
+    //   (
+    //     await get(CONTRACT_NAMES.NetworkAnalytics)
+    //   ).address,
+    //   signer
+    // );
+    // const { data } = await axios({
+    //   method: 'post',
+    //   url: `${externalAdapterUrl}`,
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   // eslint-disable-next-line global-require,import/no-dynamic-require
+    //   data: {
+    //     data: {
+    //       job_type: 'staking_efficiency',
+    //       network_analytics_address: networkAnalytics.address,
+    //       period_id: taskArgs.periodId,
+    //       sla_address: toChecksumAddress(taskArgs.address),
+    //     },
+    //   },
+    // });
+    // const { result } = data.data;
+    // const preCoordinator = await PreCoordinator__factory.connect(
+    //   (
+    //     await get(CONTRACT_NAMES.PreCoordinator)
+    //   ).address,
+    //   signer
+    // );
+    // const saRequestedFilter = preCoordinator.filters.ChainlinkRequested();
+    // const saRequestedEvents = await preCoordinator.queryFilter(
+    //   saRequestedFilter
+    // );
+    // const oracleRequestId = saRequestedEvents.find(
+    //   (event) => event.blockNumber === sliRequestedEvent.blockNumber
+    // ).args.id;
+    // const job = await getChainlinkJob(chainlinkNodeConfig);
+    // const oracle = await Oracle__factory.connect(
+    //   job.attributes.initiators[0].params.address,
+    //   signer
+    // );
+    // const oracleRqFilter = oracle.filters.OracleRequest();
+    // const oracleRqEvents = await oracle.queryFilter(oracleRqFilter);
+    // const oracleRqEvent = oracleRqEvents.find(
+    //   (event) => event.args.requestId === oracleRequestId
+    // );
+    // const preCoordinatorCallbackId = '0x6a9705b4';
+    //
+    // await oracle.fulfillOracleRequest(
+    //   oracleRequestId,
+    //   String(0.1 * 10 ** 18),
+    //   preCoordinator.address,
+    //   preCoordinatorCallbackId,
+    //   oracleRqEvent.args.cancelExpiration,
+    //   '0x' + result
+    // );
   }
 );
