@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
 require('dotenv').config({ path: './.env' });
-import * as StackticalConfigs from './stacktical-config';
+import * as StackticalConfigs from './stacktical.config';
 
 import './tasks';
 import { NETWORKS } from './constants';
