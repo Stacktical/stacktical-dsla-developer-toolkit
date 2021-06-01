@@ -1096,7 +1096,6 @@ subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
     const slaAddress = taskArgs.address
       ? ethers.utils.getAddress(taskArgs.address)
       : (await slaRegistry.userSLAs(deployer)).slice(-1)[0];
-    console.log(slaAddress);
     const sla = await SLA__factory.connect(slaAddress, signer);
 
     const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
@@ -1466,16 +1465,12 @@ subtask(SUB_TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE, undefined).setAction(
     const { get } = deployments;
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
-    console.log('Setting allowance to contracts');
     for (let tokenAllowance of allowance) {
       console.log(
         'Getting allowance of ' +
-          tokenAllowance.allowance +
-          ' ' +
           tokenAllowance.token +
           ' for ' +
-          tokenAllowance.contract +
-          '  '
+          tokenAllowance.contract
       );
       const token = await ERC20__factory.connect(
         (
@@ -1493,7 +1488,6 @@ subtask(SUB_TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE, undefined).setAction(
       const ownerBalance = await token.balanceOf(owner);
       console.log('Allower balance: ' + fromWei(ownerBalance.toString()));
     }
-    console.log('Alowance setted to contracts');
   }
 );
 
