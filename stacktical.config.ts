@@ -198,7 +198,7 @@ const ethereum: StackticalConfiguration = {
       messengers: [
         {
           contract: CONTRACT_NAMES.SEMessenger,
-          specificationPath: `${appRoot.path}/messenger-specs/${CONTRACT_NAMES.SEMessenger}`,
+          specificationPath: `${appRoot.path}/messenger-specs/${CONTRACT_NAMES.SEMessenger}.json`,
         },
       ],
     },
@@ -247,12 +247,15 @@ const harmonytestnet: StackticalConfiguration = {
       ],
       stake: {
         allowedTokens: [CONTRACT_NAMES.DAI, CONTRACT_NAMES.USDC],
-        stakingParameters: { dslaBurnedByVerification: '0' },
+        stakingParameters: {
+          dslaBurnedByVerification: '0',
+          dslaPlatformReward: '500',
+        },
       },
       messengers: [
         {
           contract: CONTRACT_NAMES.SEMessenger,
-          specificationPath: `${appRoot.path}/messenger-specs/${CONTRACT_NAMES.SEMessenger}`,
+          specificationPath: `${appRoot.path}/messenger-specs/${CONTRACT_NAMES.SEMessenger}.json`,
         },
       ],
     },
@@ -354,7 +357,7 @@ const polygon: StackticalConfiguration = {
       messengers: [
         {
           contract: CONTRACT_NAMES.SEMessenger,
-          specificationPath: `${appRoot.path}/messenger-specs/${CONTRACT_NAMES.SEMessenger}`,
+          specificationPath: `${appRoot.path}/messenger-specs/${CONTRACT_NAMES.SEMessenger}.json`,
         },
       ],
     },

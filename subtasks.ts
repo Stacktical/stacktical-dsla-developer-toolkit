@@ -620,7 +620,7 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
         stake: { allowedTokens, stakingParameters },
       },
     } = bootstrap;
-    const { deployments, ethers, getNamedAccounts } = hre;
+    const { deployments, ethers, getNamedAccounts, network } = hre;
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
     const { get } = deployments;
@@ -689,19 +689,29 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
         console.log('Updating staking parameters');
         const tx = await stakeRegistry.setStakingParameters(
           currentStakingParameters.DSLAburnRate,
-          toWei(stakingParameters.dslaDepositByPeriod) ||
+          (stakingParameters.dslaDepositByPeriod &&
+            toWei(stakingParameters.dslaDepositByPeriod)) ||
             currentStakingParameters.dslaDepositByPeriod,
-          toWei(stakingParameters.dslaPlatformReward) ||
+          (stakingParameters.dslaPlatformReward &&
+            toWei(stakingParameters.dslaPlatformReward)) ||
             currentStakingParameters.dslaPlatformReward,
-          toWei(stakingParameters.dslaMessengerReward) ||
+          (stakingParameters.dslaMessengerReward &&
+            toWei(stakingParameters.dslaMessengerReward)) ||
             currentStakingParameters.dslaMessengerReward,
-          toWei(stakingParameters.dslaUserReward) ||
+          (stakingParameters.dslaUserReward &&
+            toWei(stakingParameters.dslaUserReward)) ||
             currentStakingParameters.dslaUserReward,
-          toWei(stakingParameters.dslaBurnedByVerification) ||
+          (stakingParameters.dslaBurnedByVerification &&
+            toWei(stakingParameters.dslaBurnedByVerification)) ||
             currentStakingParameters.dslaBurnedByVerification,
           stakingParameters.maxTokenLength ||
             currentStakingParameters.maxTokenLength,
-          stakingParameters.maxLeverage || currentStakingParameters.maxLeverage
+          stakingParameters.maxLeverage || currentStakingParameters.maxLeverage,
+          {
+            ...(network.config.gas !== 'auto' && {
+              gasLimit: network.config.gas,
+            }),
+          }
         );
         await tx.wait();
         const newParameters = await stakeRegistry.getStakingParameters();
@@ -1343,7 +1353,11 @@ subtask(SUB_TASK_NAMES.FULFILL_ANALYTICS, undefined).setAction(
       throw new Error('Analytics already fulfilled');
 
     let filter = na.filters.ChainlinkRequested();
-    let events = await na.queryFilter(filter);
+    let events = await na.queryFilter(
+      filter,
+      (await get(CONTRACT_NAMES.NetworkAnalytics))?.receipt?.blockNumber ||
+        undefined
+    );
     let requestedAnalyticsEvent;
     for (let event of events) {
       const { id } = event.args;
@@ -1377,7 +1391,9 @@ subtask(SUB_TASK_NAMES.FULFILL_ANALYTICS, undefined).setAction(
     );
     const saRequestedFilter = preCoordinator.filters.ChainlinkRequested();
     const saRequestedEvents = await preCoordinator.queryFilter(
-      saRequestedFilter
+      saRequestedFilter,
+      (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
+        undefined
     );
     const oracleRequestId = saRequestedEvents.find(
       (event) => event.blockNumber === requestedAnalyticsEvent.blockNumber
@@ -1388,7 +1404,10 @@ subtask(SUB_TASK_NAMES.FULFILL_ANALYTICS, undefined).setAction(
       signer
     );
     const oracleRqFilter = oracle.filters.OracleRequest();
-    const oracleRqEvents = await oracle.queryFilter(oracleRqFilter);
+    const oracleRqEvents = await oracle.queryFilter(
+      oracleRqFilter,
+      (await get(CONTRACT_NAMES.Oracle))?.receipt?.blockNumber || undefined
+    );
     const oracleRqEvent = oracleRqEvents.find(
       (event) => event.args.requestId === oracleRequestId
     );
