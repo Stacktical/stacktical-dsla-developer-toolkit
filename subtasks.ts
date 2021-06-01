@@ -22,6 +22,7 @@ import {
   MessengerRegistry__factory,
   NetworkAnalytics__factory,
   Oracle__factory,
+  Ownable__factory,
   PeriodRegistry__factory,
   PreCoordinator__factory,
   SEMessenger__factory,
@@ -83,6 +84,7 @@ export enum SUB_TASK_NAMES {
   UPDATE_PRECOORDINATOR = 'UPDATE_PRECOORDINATOR',
   FULFILL_ANALYTICS = 'FULFILL_ANALYTICS',
   FULFILL_SLI = 'FULFILL_SLI',
+  CHECK_CONTRACTS_ALLOWANCE = 'CHECK_CONTRACTS_ALLOWANCE',
 }
 
 subtask(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES, undefined).setAction(
@@ -1451,6 +1453,47 @@ subtask(SUB_TASK_NAMES.FULFILL_ANALYTICS, undefined).setAction(
       oracleRqEvent.args.cancelExpiration,
       '0x' + result
     );
+  }
+);
+subtask(SUB_TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE, undefined).setAction(
+  async (_, hre: any) => {
+    const { deployments, ethers, getNamedAccounts, network } = hre;
+    const { stacktical }: { stacktical: StackticalConfiguration } =
+      network.config;
+    const {
+      bootstrap: { allowance },
+    } = stacktical;
+    const { get } = deployments;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    console.log('Setting allowance to contracts');
+    for (let tokenAllowance of allowance) {
+      console.log(
+        'Getting allowance of ' +
+          tokenAllowance.allowance +
+          ' ' +
+          tokenAllowance.token +
+          ' for ' +
+          tokenAllowance.contract +
+          '  '
+      );
+      const token = await ERC20__factory.connect(
+        (
+          await get(tokenAllowance.token)
+        ).address,
+        signer
+      );
+      const contract = Ownable__factory.connect(
+        (await get(tokenAllowance.contract)).address,
+        signer
+      );
+      const owner = await contract.owner();
+      let allowance = await token.allowance(owner, contract.address);
+      console.log('Allowance: ' + fromWei(allowance.toString()));
+      const ownerBalance = await token.balanceOf(owner);
+      console.log('Allower balance: ' + fromWei(ownerBalance.toString()));
+    }
+    console.log('Alowance setted to contracts');
   }
 );
 
