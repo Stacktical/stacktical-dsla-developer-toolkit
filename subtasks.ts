@@ -1091,9 +1091,10 @@ subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
       signer
     );
 
-    const slaAddresses = await slaRegistry.userSLAs(deployer);
-    if (taskArgs.address) ethers.utils.getAddress(taskArgs.address);
-    const slaAddress = taskArgs.address || slaAddresses.slice(-1)[0];
+    const slaAddress = taskArgs.address
+      ? ethers.utils.getAddress(taskArgs.address)
+      : (await slaRegistry.userSLAs(deployer)).slice(-1)[0];
+    console.log(slaAddress);
     const sla = await SLA__factory.connect(slaAddress, signer);
 
     const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
@@ -1101,7 +1102,7 @@ subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
       'Starting SLI request process for period ' +
         nextVerifiablePeriod.toString()
     );
-    console.log(`SLA address: ${slaAddresses}`);
+    console.log(`SLA address: ${slaAddress}`);
     const ownerApproval = true;
     let tx = await slaRegistry.requestSLI(
       Number(nextVerifiablePeriod),
