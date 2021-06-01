@@ -1111,13 +1111,15 @@ subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
       ownerApproval,
       { ...(network.config.gas !== 'auto' && { gasLimit: network.config.gas }) }
     );
+    console.log('Transaction receipt: ');
+    console.log(tx);
     await tx.wait();
     await new Promise((resolve) => sla.on('SLICreated', () => resolve(null)));
     const createdSLI = await sla.periodSLIs(nextVerifiablePeriod);
     const { timestamp, sli, status } = createdSLI;
-    console.log('Created SLI timestamp:', timestamp.toString());
-    console.log('Created SLI sli:', sli.toString());
-    console.log('Created SLI status:', PERIOD_STATUS[status]);
+    console.log('Created SLI timestamp: ', timestamp.toString());
+    console.log('Created SLI sli: ', sli.toString());
+    console.log('Created SLI status: ', PERIOD_STATUS[status]);
     console.log('SLI request process finished');
   }
 );
@@ -1444,14 +1446,15 @@ subtask(SUB_TASK_NAMES.FULFILL_ANALYTICS, undefined).setAction(
       },
     });
     const { result } = data.data;
-    await oracle.fulfillOracleRequest(
-      oracleRequestId,
-      String(0.1 * 10 ** 18),
-      preCoordinator.address,
-      preCoordinatorCallbackId,
-      oracleRqEvent.args.cancelExpiration,
-      '0x' + result
-    );
+    if (!taskArgs.rundry)
+      await oracle.fulfillOracleRequest(
+        oracleRequestId,
+        String(0.1 * 10 ** 18),
+        preCoordinator.address,
+        preCoordinatorCallbackId,
+        oracleRqEvent.args.cancelExpiration,
+        '0x' + result
+      );
   }
 );
 subtask(SUB_TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE, undefined).setAction(
