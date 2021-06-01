@@ -1,4 +1,4 @@
-import { task } from 'hardhat/config';
+import { task, types } from 'hardhat/config';
 import { SUB_TASK_NAMES } from './subtasks';
 import { printSeparator } from './utils';
 import externalAdapter from './services/external-adapter';
@@ -15,6 +15,10 @@ enum TASK_NAMES {
   CHAINLINK_DOCKER_COMPOSE = 'stacktical:chainlink-docker-compose',
   PREPARE_CHAINLINK_NODES = 'stacktical:prepare-chainlink-nodes',
   EXTERNAL_ADAPTER = 'stacktical:external-adapter',
+  FULFILL_ANALYTICS = 'stacktical:fulfill-analytics',
+  FULFILL_SLI = 'stacktical:fulfill-sli',
+  INITIALIZE_DEFAULT_ADDRESSES = 'stacktical:initialize-addresses',
+  RESTART_CHAINLINK_NODES = 'stacktical:restart-chainlink-nodes',
 }
 
 task(
@@ -133,6 +137,69 @@ task(
     console.log(`External adapter initialized at http://localhost:${6060}`);
   });
   return new Promise((resolve, reject) => {});
+});
+
+task(TASK_NAMES.FULFILL_ANALYTICS, 'Fulfill pendant network analytics')
+  .addParam(
+    'periodId',
+    'Period id of the period to fulfill',
+    undefined,
+    types.int
+  )
+  .addParam(
+    'periodType',
+    'Period type of the period to fulfill',
+    undefined,
+    types.int
+  )
+  .addParam('networkTicker', 'Network ticker of the period to fulfill')
+  .addParam(
+    'nodeName',
+    'Name of the Chainlink node to use to fulfill',
+    undefined,
+    types.string
+  )
+  .setAction(async (taskArgs, hre: any) => {
+    await hre.run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
+    await hre.run(SUB_TASK_NAMES.FULFILL_ANALYTICS, taskArgs);
+  });
+
+task(TASK_NAMES.FULFILL_SLI, 'Fulfill pendant contract sli')
+  .addParam(
+    'address',
+    'Address of the SLA contract to fulfill sli',
+    undefined,
+    types.string
+  )
+  .addParam('periodId', 'Period to use to fulfill sli', undefined, types.string)
+  .addParam(
+    'nodeName',
+    'Name of the Chainlink node to use to fulfill sli',
+    undefined,
+    types.string
+  )
+  .setAction(async (taskArgs, hre: any) => {
+    await hre.run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
+    await hre.run(SUB_TASK_NAMES.FULFILL_SLI, taskArgs);
+  });
+
+task(
+  TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES,
+  'Initialize default addresses'
+).setAction(async (_, hre: any) => {
+  await hre.run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
+});
+
+task(
+  TASK_NAMES.RESTART_CHAINLINK_NODES,
+  'Deploy or reset the local chainlink nodes'
+).setAction(async (_, hre: any) => {
+  console.log(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES);
+  await hre.run(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES);
+  console.log(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE);
+  await hre.run(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE);
+  console.log(SUB_TASK_NAMES.START_LOCAL_CHAINLINK_NODES);
+  await hre.run(SUB_TASK_NAMES.START_LOCAL_CHAINLINK_NODES);
 });
 
 module.exports = {};

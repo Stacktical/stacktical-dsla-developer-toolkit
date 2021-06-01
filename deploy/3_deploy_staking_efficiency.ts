@@ -37,7 +37,11 @@ module.exports = async ({
     await ethers.getSigner(deployer)
   );
   const eventFilter = preCoordinator.filters.NewServiceAgreement();
-  const events = await preCoordinator.queryFilter(eventFilter);
+  const precoordinatorArtifact = await get(CONTRACT_NAMES.PreCoordinator);
+  const events = await preCoordinator.queryFilter(
+    eventFilter,
+    precoordinatorArtifact?.receipt?.blockNumber || undefined
+  );
   const { saId } = events[0].args;
   const feeMultiplier = stacktical.chainlink.nodesConfiguration.length;
   await deploy(CONTRACT_NAMES.NetworkAnalytics, {

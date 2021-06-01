@@ -145,11 +145,13 @@ interface OracleInterface extends ethers.utils.Interface {
 
   events: {
     "CancelOracleRequest(bytes32)": EventFragment;
+    "EmitFulfilled(bytes32,uint256,address,bytes4,uint256,bytes32)": EventFragment;
     "OracleRequest(bytes32,address,bytes32,uint256,address,bytes4,uint256,uint256,bytes)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "CancelOracleRequest"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "EmitFulfilled"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OracleRequest"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
 }
@@ -412,6 +414,25 @@ export class Oracle extends BaseContract {
     CancelOracleRequest(
       requestId?: BytesLike | null
     ): TypedEventFilter<[string], { requestId: string }>;
+
+    EmitFulfilled(
+      _requestId?: null,
+      _payment?: null,
+      _callbackAddress?: null,
+      _callbackFunctionId?: null,
+      _expiration?: null,
+      _data?: null
+    ): TypedEventFilter<
+      [string, BigNumber, string, string, BigNumber, string],
+      {
+        _requestId: string;
+        _payment: BigNumber;
+        _callbackAddress: string;
+        _callbackFunctionId: string;
+        _expiration: BigNumber;
+        _data: string;
+      }
+    >;
 
     OracleRequest(
       specId?: BytesLike | null,

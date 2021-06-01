@@ -29,7 +29,12 @@ import {
   SLARegistry__factory,
   StakeRegistry__factory,
 } from './typechain';
-import { CONTRACT_NAMES, PERIOD_STATUS, PERIOD_TYPE } from './constants';
+import {
+  CONTRACT_NAMES,
+  PERIOD_STATUS,
+  PERIOD_TYPE,
+  SENetworks,
+} from './constants';
 import {
   bootstrapStrings,
   generateBootstrapPeriods,
@@ -38,6 +43,7 @@ import {
   printSeparator,
 } from './utils';
 import { formatBytes32String } from 'ethers/lib/utils';
+import axios from 'axios';
 
 const prettier = require('prettier');
 const { DataFile } = require('edit-config');
@@ -72,9 +78,11 @@ export enum SUB_TASK_NAMES {
   REQUEST_ANALYTICS = 'REQUEST_ANALYTICS',
   GET_PRECOORDINATOR = 'GET_PRECOORDINATOR',
   SET_PRECOORDINATOR = 'SET_PRECOORDINATOR',
-  DEPLOY_LOCAL_SERVICES = 'DEPLOY_LOCAL_SERVICES',
+  DEPLOY_LOCAL_CHAINLINK_NODES = 'DEPLOY_LOCAL_CHAINLINK_NODES',
   DEPLOY_CHAINLINK_CONTRACTS = 'DEPLOY_CHAINLINK_CONTRACTS',
   UPDATE_PRECOORDINATOR = 'UPDATE_PRECOORDINATOR',
+  FULFILL_ANALYTICS = 'FULFILL_ANALYTICS',
+  FULFILL_SLI = 'FULFILL_SLI',
 }
 
 subtask(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES, undefined).setAction(
@@ -261,6 +269,11 @@ subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
 
 subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
   async (_, hre: any) => {
+    const { deployments, network, ethers, getNamedAccounts, web3 } = hre;
+    const { deployer } = await getNamedAccounts();
+    const { get } = deployments;
+    const { stacktical }: { stacktical: StackticalConfiguration } =
+      network.config;
     function wait(timeout) {
       return new Promise((resolve) => {
         setTimeout(resolve, timeout);
@@ -282,8 +295,12 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
       try {
         const postedJob = await getChainlinkJob(node);
         if (postedJob) {
-          // await deleteJob(node, postedJob.id);
-          return postedJob;
+          if (!stacktical.chainlink.deleteOldJobs) {
+            console.log('Keeping existing jobId: ' + postedJob.id);
+            return postedJob;
+          }
+          console.log('Deleting existing jobId: ' + postedJob.id);
+          await deleteJob(node, postedJob.id);
         }
         const httpRequestJobRes = await postChainlinkJob(node);
         return httpRequestJobRes.data;
@@ -304,11 +321,7 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
         return false;
       }
     };
-    const { deployments, network, ethers, getNamedAccounts, web3 } = hre;
-    const { deployer } = await getNamedAccounts();
-    const { get } = deployments;
-    const { stacktical }: { stacktical: StackticalConfiguration } =
-      network.config;
+
     // Create bridge
     console.log('Starting automated configuration for Chainlink nodes...');
     for (let node of stacktical.chainlink.nodesConfiguration) {
@@ -388,14 +401,14 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
         chainlinkNodeAddress
       );
       console.log(`Chainlink Node Fullfillment permissions: ${permissions}`);
-      console.log('Automated configuration finished for node:' + node.name);
+      console.log('Automated configuration finished for node: ' + node.name);
       printSeparator();
     }
     console.log('Automated configuration finished for all nodes');
   }
 );
 
-subtask(SUB_TASK_NAMES.DEPLOY_LOCAL_SERVICES, undefined).setAction(
+subtask(SUB_TASK_NAMES.DEPLOY_LOCAL_CHAINLINK_NODES, undefined).setAction(
   async (_, hre: any) => {
     const localServicesSubtasks = [
       SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE,
@@ -419,38 +432,10 @@ subtask(
   const { stacktical }: { stacktical: StackticalConfiguration } =
     network.config;
   const { getArtifact }: DeploymentsExtension = deployments;
-  if (stacktical.addresses.oracle) {
-    const artifact = await getArtifact(CONTRACT_NAMES.Oracle);
-    deployments.save(CONTRACT_NAMES.Oracle, {
-      address: stacktical.addresses.oracle,
-      abi: artifact.abi,
-    });
-  }
-  if (stacktical.addresses.tokens.LINK) {
-    const artifact = await getArtifact(CONTRACT_NAMES.LinkToken);
-    await deployments.save(CONTRACT_NAMES.LinkToken, {
-      address: stacktical.addresses.tokens.LINK,
-      abi: artifact.abi,
-    });
-  }
-  if (stacktical.addresses.tokens.DSLA) {
-    const artifact = await getArtifact(CONTRACT_NAMES.ERC20);
-    await deployments.save(CONTRACT_NAMES.DSLA, {
-      address: stacktical.addresses.tokens.DSLA,
-      abi: artifact.abi,
-    });
-  }
-  if (stacktical.addresses.tokens.DAI) {
-    const artifact = await getArtifact(CONTRACT_NAMES.ERC20);
-    await deployments.save(CONTRACT_NAMES.DAI, {
-      address: stacktical.addresses.tokens.DAI,
-      abi: artifact.abi,
-    });
-  }
-  if (stacktical.addresses.tokens.USDC) {
-    const artifact = await getArtifact(CONTRACT_NAMES.ERC20);
-    await deployments.save(CONTRACT_NAMES.USDC, {
-      address: stacktical.addresses.tokens.USDC,
+  for (let contractName of Object.keys(stacktical.addresses)) {
+    const artifact = await getArtifact(contractName);
+    await deployments.save(contractName, {
+      address: stacktical.addresses[contractName],
       abi: artifact.abi,
     });
   }
@@ -624,144 +609,6 @@ subtask(SUB_TASK_NAMES.EXPORT_ABIS, undefined).setAction(
     }
   }
 );
-
-// subtask(SUB_TASK_NAMES.BOOTSTRAP_DSLA_PROTOCOL, undefined).setAction(
-//   async (_, hre: any) => {
-//     const {
-//       stacktical: { bootstrap },
-//     }: { stacktical: StackticalConfiguration } = hre.network.config;
-//     const {
-//       registry: {
-//         periods,
-//         messengers: { linkTokenAllowance },
-//       },
-//     } = bootstrap;
-//
-//     console.log('Starting automated jobs to bootstrap protocol correctly');
-//
-//     const { deployments, ethers, getNamedAccounts } = hre;
-//     const { deployer } = await getNamedAccounts();
-//     const signer = await ethers.getSigner(deployer);
-//     const { get } = deployments;
-//
-//     const daiArtifact = await get(CONTRACT_NAMES.DAI);
-//     const usdcArtifact = await get(CONTRACT_NAMES.USDC);
-//     const stakeRegistryArtifact = await get(CONTRACT_NAMES.StakeRegistry);
-//     const periodRegistryArtifact = await get(CONTRACT_NAMES.PeriodRegistry);
-//     const networkAnalyticsArtifact = await get(CONTRACT_NAMES.NetworkAnalytics);
-//     const networkAnalytics = await NetworkAnalytics__factory.connect(
-//       networkAnalyticsArtifact.address,
-//       signer
-//     );
-//     const daiToken = await DAI__factory.connect(daiArtifact.address, signer);
-//     const usdcToken = await USDC__factory.connect(usdcArtifact.address, signer);
-//     const stakeRegistry = await StakeRegistry__factory.connect(
-//       stakeRegistryArtifact.address,
-//       signer
-//     );
-//     const periodRegistry = await PeriodRegistry__factory.connect(
-//       periodRegistryArtifact.address,
-//       signer
-//     );
-//     const seMessenger = await SEMessenger__factory.connect(
-//       (
-//         await get(CONTRACT_NAMES.SEMessenger)
-//       ).address,
-//       signer
-//     );
-//     const slaRegistry = await SLARegistry__factory.connect(
-//       (
-//         await get(CONTRACT_NAMES.SLARegistry)
-//       ).address,
-//       signer
-//     );
-//
-//     let tx;
-//     console.log(
-//       'Starting automated job 1: allowing DAI and USDC on StakeRegistry'
-//     );
-//     tx = await stakeRegistry.addAllowedTokens(daiToken.address);
-//     await tx.wait();
-//     tx = await stakeRegistry.addAllowedTokens(usdcToken.address);
-//     await tx.wait();
-//
-//     console.log('Starting automated job 2: periods initialization');
-//     for (let period of periods) {
-//       const { periodType, amountOfPeriods, expiredPeriods } = period;
-//       const [periodStarts, periodEnds] = generateBootstrapPeriods(
-//         periodType,
-//         amountOfPeriods,
-//         expiredPeriods
-//       );
-//       const periodStartsDate = periodStarts.map((date) =>
-//         moment(date * 1000)
-//           .utc(0)
-//           .format('DD/MM/YYYY HH:mm:ss')
-//       );
-//       const periodEndsDate = periodEnds.map((date) =>
-//         moment(date * 1000)
-//           .utc(0)
-//           .format('DD/MM/YYYY HH:mm:ss')
-//       );
-//       console.log(
-//         'Periods generated for ' + PERIOD_TYPE[periodType] + ' period type:'
-//       );
-//       console.log(periodStartsDate, periodEndsDate);
-//       console.log(periodStarts, periodEnds);
-//       tx = await periodRegistry.initializePeriod(
-//         periodType,
-//         periodStarts,
-//         periodEnds
-//       );
-//       await tx.wait();
-//     }
-//
-//     console.log(
-//       'Starting automated job 3: Adding the network names to the NetworkAnalytics contract'
-//     );
-//     tx = await networkAnalytics.addMultipleNetworks(SENetworkNamesBytes32);
-//     await tx.wait();
-//
-//     console.log(
-//       'Starting automated job 4: Increasing allowance for NetworkAnalytics and SEMessenger with 10 link tokens'
-//     );
-//     const linkTokenAddress = (await get(CONTRACT_NAMES.LinkToken)).address;
-//     const linkToken = await LinkToken__factory.connect(
-//       linkTokenAddress,
-//       signer
-//     );
-//     tx = await linkToken.approve(
-//       networkAnalytics.address,
-//       ethers.utils.parseEther(linkTokenAllowance)
-//     );
-//     await tx.wait();
-//     tx = await linkToken.approve(
-//       seMessenger.address,
-//       ethers.utils.parseEther(linkTokenAllowance)
-//     );
-//     await tx.wait();
-//
-//     console.log(
-//       'Starting automated job 5: Registering messenger on the SLARegistry'
-//     );
-//     const seMessengerSpec = JSON.parse(
-//       fs.readFileSync(`${appRoot.path}/messenger-specs/SEMessenger.json`)
-//     );
-//
-//     const updatedSpec = {
-//       ...seMessengerSpec,
-//       timestamp: new Date().toISOString(),
-//     };
-//     const seMessengerSpecIPFS = await getIPFSHash(updatedSpec);
-//
-//     tx = await slaRegistry.registerMessenger(
-//       seMessenger.address,
-//       `https://ipfs.dsla.network/ipfs/${seMessengerSpecIPFS}`
-//     );
-//     await tx.wait();
-//     console.log('Bootstrap process completed');
-//   }
-// );
 
 subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
   async (_, hre: any) => {
@@ -1227,7 +1074,6 @@ subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
     const { get } = deployments;
-    console.log('Starting SLI request process');
     const slaRegistry = await SLARegistry__factory.connect(
       (
         await get(CONTRACT_NAMES.SLARegistry)
@@ -1239,14 +1085,14 @@ subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
     if (taskArgs.address) ethers.utils.getAddress(taskArgs.address);
     const slaAddress = taskArgs.address || slaAddresses.slice(-1)[0];
     const sla = await SLA__factory.connect(slaAddress, signer);
-    console.log(`SLA address: ${slaAddresses}`);
 
     const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
-    const ownerApproval = true;
     console.log(
-      'Starting automated job 1: Request SLI for period ' +
+      'Starting SLI request process for period ' +
         nextVerifiablePeriod.toString()
     );
+    console.log(`SLA address: ${slaAddresses}`);
+    const ownerApproval = true;
     let tx = await slaRegistry.requestSLI(
       Number(nextVerifiablePeriod),
       sla.address,
@@ -1273,7 +1119,6 @@ subtask(SUB_TASK_NAMES.REQUEST_ANALYTICS, undefined).setAction(
     const signer = await ethers.getSigner(deployer);
     const { get } = deployments;
 
-    console.log('SLI request process finished');
     console.log('Starting Analytics request process');
 
     const networkAnalytics = await NetworkAnalytics__factory.connect(
@@ -1327,7 +1172,11 @@ subtask(SUB_TASK_NAMES.GET_PRECOORDINATOR, undefined).setAction(
       signer
     );
     const eventsFilter = precoordinator.filters.NewServiceAgreement();
-    const events = await precoordinator.queryFilter(eventsFilter);
+    const events = await precoordinator.queryFilter(
+      eventsFilter,
+      (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
+        undefined
+    );
     for (let event of events) {
       printSeparator();
       const { saId, payment, minresponses } = event.args;
@@ -1357,7 +1206,7 @@ subtask(SUB_TASK_NAMES.GET_PRECOORDINATOR, undefined).setAction(
 
 subtask(SUB_TASK_NAMES.SET_PRECOORDINATOR, undefined).setAction(
   async (taskArgs, hre: any) => {
-    const { deployments, ethers, getNamedAccounts, network, web3, run } = hre;
+    const { deployments, ethers, getNamedAccounts, network } = hre;
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
     const { get } = deployments;
@@ -1384,7 +1233,9 @@ subtask(SUB_TASK_NAMES.SET_PRECOORDINATOR, undefined).setAction(
       preCoordinatorConfiguration.jobIds,
       preCoordinatorConfiguration.payments
     );
-    await tx.wait();
+    const receipt = await tx.wait();
+    console.log('Service agreement created: ');
+    console.log(receipt.events[0].args);
   }
 );
 
@@ -1419,7 +1270,11 @@ subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
       signer
     );
     let eventFilter = precoordinator.filters.NewServiceAgreement();
-    let events = await precoordinator.queryFilter(eventFilter);
+    let events = await precoordinator.queryFilter(
+      eventFilter,
+      (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
+        undefined
+    );
     const lastEvent = events.slice(-1)[0];
     const { saId } = lastEvent.args;
     const serviceAgreement = await precoordinator.getServiceAgreement(saId);
@@ -1450,5 +1305,233 @@ subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
       'Service agreeement id updated in SEMessenger and NetworkAnalytics contracts: '
     );
     console.log(saId);
+  }
+);
+
+subtask(SUB_TASK_NAMES.FULFILL_ANALYTICS, undefined).setAction(
+  async (taskArgs, hre: any) => {
+    const { deployments, ethers, getNamedAccounts, network } = hre;
+    const { stacktical }: { stacktical: StackticalConfiguration } =
+      network.config;
+    const { get } = deployments;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    const networkTicker = taskArgs.networkTicker.toUpperCase();
+    if (!Object.keys(SENetworks).includes(networkTicker)) {
+      throw new Error('Network not recognized: ' + networkTicker);
+    }
+    const na = await NetworkAnalytics__factory.connect(
+      (
+        await get(CONTRACT_NAMES.NetworkAnalytics)
+      ).address,
+      signer
+    );
+    const { periodId, periodType } = taskArgs;
+    const networkBytes32 = formatBytes32String(networkTicker);
+    const isRequested = await na.periodAnalyticsRequested(
+      networkBytes32,
+      periodType,
+      periodId
+    );
+    if (!isRequested) throw new Error('Analytics not requested yet');
+    const storedAnalytics = await na.periodAnalytics(
+      networkBytes32,
+      periodType,
+      periodId
+    );
+    if (Number(storedAnalytics) !== 0)
+      throw new Error('Analytics already fulfilled');
+
+    let filter = na.filters.ChainlinkRequested();
+    let events = await na.queryFilter(filter);
+    let requestedAnalyticsEvent;
+    for (let event of events) {
+      const { id } = event.args;
+      const analyticsRequest = await na.requestIdToAnalyticsRequest(id);
+      if (
+        analyticsRequest.networkName === networkBytes32 &&
+        Number(analyticsRequest.periodId) === periodId &&
+        analyticsRequest.periodType === periodType
+      ) {
+        requestedAnalyticsEvent = event;
+      }
+    }
+    if (requestedAnalyticsEvent === undefined)
+      throw new Error('Request id not found');
+    const chainlinkNodeConfig: ChainlinkNodeConfiguration =
+      stacktical.chainlink.nodesConfiguration.find(
+        (node) => node.name === taskArgs.nodeName
+      );
+    if (!chainlinkNodeConfig)
+      throw new Error('Chainlink node config not found');
+    const externalAdapterUrl = stacktical.chainlink.isProduction
+      ? chainlinkNodeConfig.externalAdapterUrl
+      : 'http://localhost:' +
+        chainlinkNodeConfig.externalAdapterUrl.split(':').slice(-1)[0];
+
+    const preCoordinator = await PreCoordinator__factory.connect(
+      (
+        await get(CONTRACT_NAMES.PreCoordinator)
+      ).address,
+      signer
+    );
+    const saRequestedFilter = preCoordinator.filters.ChainlinkRequested();
+    const saRequestedEvents = await preCoordinator.queryFilter(
+      saRequestedFilter
+    );
+    const oracleRequestId = saRequestedEvents.find(
+      (event) => event.blockNumber === requestedAnalyticsEvent.blockNumber
+    ).args.id;
+    const job = await getChainlinkJob(chainlinkNodeConfig);
+    const oracle = await Oracle__factory.connect(
+      job.attributes.initiators[0].params.address,
+      signer
+    );
+    const oracleRqFilter = oracle.filters.OracleRequest();
+    const oracleRqEvents = await oracle.queryFilter(oracleRqFilter);
+    const oracleRqEvent = oracleRqEvents.find(
+      (event) => event.args.requestId === oracleRequestId
+    );
+    console.log('Request id successfully identified: ');
+    console.log(oracleRqEvent.args);
+    const preCoordinatorCallbackId = '0x6a9705b4';
+    const periodRegistry = await PeriodRegistry__factory.connect(
+      (
+        await get(CONTRACT_NAMES.PeriodRegistry)
+      ).address,
+      signer
+    );
+    const { start, end } = await periodRegistry.getPeriodStartAndEnd(
+      periodType,
+      periodId
+    );
+    const { data } = await axios({
+      method: 'post',
+      url: externalAdapterUrl,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: {
+        data: {
+          job_type: 'staking_efficiency_analytics',
+          network_name: networkTicker,
+          period_id: periodId,
+          period_type: periodType,
+          sla_monitoring_start: start.toString(),
+          sla_monitoring_end: end.toString(),
+        },
+      },
+    });
+    const { result } = data.data;
+    await oracle.fulfillOracleRequest(
+      oracleRequestId,
+      String(0.1 * 10 ** 18),
+      preCoordinator.address,
+      preCoordinatorCallbackId,
+      oracleRqEvent.args.cancelExpiration,
+      '0x' + result
+    );
+  }
+);
+
+subtask(SUB_TASK_NAMES.FULFILL_SLI, undefined).setAction(
+  async (taskArgs, hre: any) => {
+    throw new Error('Not implemented yet');
+    // const { deployments, ethers, getNamedAccounts, run, network } = hre;
+    // const { stacktical }: { stacktical: StackticalConfiguration } =
+    //   network.config;
+    // await run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
+    // const { get } = deployments;
+    // const { deployer } = await getNamedAccounts();
+    // const signer = await ethers.getSigner(deployer);
+    // const seMessenger = await SEMessenger__factory.connect(
+    //   (
+    //     await get(CONTRACT_NAMES.SEMessenger)
+    //   ).address,
+    //   signer
+    // );
+    // const { periodId, periodType } = taskArgs;
+    //
+    // let seFilter = seMessenger.filters.ChainlinkRequested();
+    // let seEvents = await seMessenger.queryFilter(seFilter);
+    // let sliRequestedEvent;
+    // for (let event of seEvents) {
+    //   const { id } = event.args;
+    //   const sliRequestEvent = await seMessenger.requestIdToSLIRequest(id);
+    //   if (
+    //     sliRequestEvent.periodId == taskArgs.periodId &&
+    //     sliRequestEvent.slaAddress === taskArgs.address
+    //   ) {
+    //     sliRequestedEvent = event;
+    //   }
+    // }
+    // if (sliRequestedEvent === undefined)
+    //   throw new Error('Request id not found');
+    // const chainlinkNodeConfig: ChainlinkNodeConfiguration =
+    //   stacktical.chainlink.nodesConfiguration.find(
+    //     (node) => node.name === taskArgs.nodeName
+    //   );
+    // if (!chainlinkNodeConfig)
+    //   throw new Error('Chainlink node config not found');
+    // const externalAdapterUrl = stacktical.chainlink.isProduction
+    //   ? chainlinkNodeConfig.externalAdapterUrl
+    //   : 'http://localhost:' +
+    //     chainlinkNodeConfig.externalAdapterUrl.split(':').slice(-1)[0];
+    // const networkAnalytics = await NetworkAnalytics__factory.connect(
+    //   (
+    //     await get(CONTRACT_NAMES.NetworkAnalytics)
+    //   ).address,
+    //   signer
+    // );
+    // const { data } = await axios({
+    //   method: 'post',
+    //   url: `${externalAdapterUrl}`,
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   // eslint-disable-next-line global-require,import/no-dynamic-require
+    //   data: {
+    //     data: {
+    //       job_type: 'staking_efficiency',
+    //       network_analytics_address: networkAnalytics.address,
+    //       period_id: taskArgs.periodId,
+    //       sla_address: toChecksumAddress(taskArgs.address),
+    //     },
+    //   },
+    // });
+    // const { result } = data.data;
+    // const preCoordinator = await PreCoordinator__factory.connect(
+    //   (
+    //     await get(CONTRACT_NAMES.PreCoordinator)
+    //   ).address,
+    //   signer
+    // );
+    // const saRequestedFilter = preCoordinator.filters.ChainlinkRequested();
+    // const saRequestedEvents = await preCoordinator.queryFilter(
+    //   saRequestedFilter
+    // );
+    // const oracleRequestId = saRequestedEvents.find(
+    //   (event) => event.blockNumber === sliRequestedEvent.blockNumber
+    // ).args.id;
+    // const job = await getChainlinkJob(chainlinkNodeConfig);
+    // const oracle = await Oracle__factory.connect(
+    //   job.attributes.initiators[0].params.address,
+    //   signer
+    // );
+    // const oracleRqFilter = oracle.filters.OracleRequest();
+    // const oracleRqEvents = await oracle.queryFilter(oracleRqFilter);
+    // const oracleRqEvent = oracleRqEvents.find(
+    //   (event) => event.args.requestId === oracleRequestId
+    // );
+    // const preCoordinatorCallbackId = '0x6a9705b4';
+    //
+    // await oracle.fulfillOracleRequest(
+    //   oracleRequestId,
+    //   String(0.1 * 10 ** 18),
+    //   preCoordinator.address,
+    //   preCoordinatorCallbackId,
+    //   oracleRqEvent.args.cancelExpiration,
+    //   '0x' + result
+    // );
   }
 );

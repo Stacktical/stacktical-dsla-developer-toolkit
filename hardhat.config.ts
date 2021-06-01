@@ -1,18 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
-require('dotenv').config({ path: './.env' });
-const appRoot = require('app-root-path');
 
-import { StackticalConfiguration } from './types';
+require('dotenv').config({ path: './.env' });
+import * as StackticalConfigs from './stacktical.config';
+
 import './tasks';
-import {
-  CONTRACT_NAMES,
-  NETWORKS,
-  PERIOD_TYPE,
-  SENetworkNames,
-  SENetworkNamesBytes32,
-  SENetworks,
-  SLO_TYPE,
-} from './constants';
+import { NETWORKS } from './constants';
 import { extendEnvironment } from 'hardhat/config';
 import 'hardhat-deploy';
 import 'hardhat-deploy-ethers';
@@ -29,117 +21,6 @@ import {
   Network,
 } from 'hardhat/types';
 
-const developStacktical: StackticalConfiguration = {
-  chainlink: {
-    isProduction: false,
-    nodeFunds: '10',
-    gasLimit: undefined,
-    ethWsUrl: 'ws://host.docker.internal:8545',
-    ethHttpUrl: 'http://host.docker.internal:8545',
-    nodesConfiguration: [
-      {
-        name: 'develop-1',
-        restApiUrl: 'http://localhost',
-        restApiPort: '6688',
-        email: 'test@stacktical.com',
-        password: 'PaSSword123456',
-        externalAdapterUrl: 'http://host.docker.internal:6060',
-      },
-      {
-        name: 'develop-2',
-        restApiUrl: 'http://localhost',
-        restApiPort: '6689',
-        email: 'test@stacktical.com',
-        password: 'PaSSword123456',
-        externalAdapterUrl: 'http://host.docker.internal:6060',
-      },
-    ],
-  },
-  addresses: {
-    tokens: {
-      LINK: null,
-      DSLA: null,
-      DAI: null,
-      USDC: null,
-    },
-    oracle: null,
-  },
-  checkPastPeriods: false,
-  bootstrap: {
-    allowance: [
-      {
-        contract: CONTRACT_NAMES.NetworkAnalytics,
-        token: CONTRACT_NAMES.LinkToken,
-        allowance: '10',
-      },
-      {
-        contract: CONTRACT_NAMES.SEMessenger,
-        token: CONTRACT_NAMES.LinkToken,
-        allowance: '10',
-      },
-    ],
-    messengers: {
-      networkAnalytics: {
-        allowedNetworks: SENetworkNames,
-      },
-    },
-    registry: {
-      periods: [
-        {
-          periodType: PERIOD_TYPE.HOURLY,
-          amountOfPeriods: 5,
-          expiredPeriods: 2,
-        },
-        {
-          periodType: PERIOD_TYPE.DAILY,
-          amountOfPeriods: 5,
-          expiredPeriods: 2,
-        },
-        {
-          periodType: PERIOD_TYPE.WEEKLY,
-          amountOfPeriods: 52,
-          expiredPeriods: 10,
-        },
-      ],
-      stake: {
-        allowedTokens: [CONTRACT_NAMES.DAI, CONTRACT_NAMES.USDC],
-        stakingParameters: {},
-      },
-      messengers: [
-        {
-          contract: CONTRACT_NAMES.SEMessenger,
-          specificationPath: `${appRoot.path}/messenger-specs/${CONTRACT_NAMES.SEMessenger}.json`,
-        },
-      ],
-    },
-  },
-  scripts: {
-    deploy_sla: {
-      sloValue: 50 * 10 ** 3,
-      sloType: SLO_TYPE.GreaterThan,
-      whitelisted: false,
-      periodType: PERIOD_TYPE.WEEKLY,
-      initialPeriodId: 0,
-      finalPeriodId: 10,
-      extraData: [SENetworkNamesBytes32[SENetworks.DOT]],
-      initialTokenSupply: '10000000',
-      initialTokenSupplyDivisor: 100,
-      leverage: 50,
-      deployerStakeTimes: 100,
-      notDeployerStakeTimes: 2,
-      serviceMetadata: {
-        serviceName: 'P-OPS',
-        serviceDescription: 'Official bDSLA Beta Partner.',
-        serviceImage:
-          'https://storage.googleapis.com/bdsla-incentivized-beta/validators/chainode.svg',
-        serviceURL: 'https://bdslaToken.network',
-        serviceAddress: 'validator-address',
-        serviceTicker: SENetworkNames[SENetworks.DOT],
-      },
-    },
-  },
-};
-
 const config: HardhatUserConfig = {
   // defaultNetwork: NETWORKS.DEVELOP,
   networks: {
@@ -152,7 +33,7 @@ const config: HardhatUserConfig = {
       mining: {
         auto: true,
       },
-      stacktical: developStacktical,
+      stacktical: StackticalConfigs[NETWORKS.DEVELOP],
     },
     [NETWORKS.DEVELOP]: {
       chainId: 1337,
@@ -160,7 +41,23 @@ const config: HardhatUserConfig = {
         mnemonic: process.env.DEVELOP_MNEMONIC,
       },
       url: 'http://localhost:8545',
-      stacktical: developStacktical,
+      stacktical: StackticalConfigs[NETWORKS.DEVELOP],
+    },
+    [NETWORKS.ETHEREUM]: {
+      chainId: 1,
+      accounts: {
+        mnemonic: process.env.MAINNET_MNEMONIC,
+      },
+      url: process.env.ETHEREUM_URI,
+      stacktical: StackticalConfigs[NETWORKS.ETHEREUM],
+    },
+    [NETWORKS.POLYGON]: {
+      chainId: 137,
+      accounts: {
+        mnemonic: process.env.MAINNET_MNEMONIC,
+      },
+      url: process.env.POLYGON_URI,
+      stacktical: StackticalConfigs[NETWORKS.POLYGON],
     },
     [NETWORKS.HARMONYTESTNET]: {
       chainId: 1666700000,
@@ -171,76 +68,7 @@ const config: HardhatUserConfig = {
       },
       url: process.env.HARMONYTESTNET_URI,
       saveDeployments: true,
-      stacktical: {
-        chainlink: {
-          isProduction: false,
-          nodeFunds: '0.001',
-          gasLimit: undefined,
-          ethWsUrl: process.env.HARMONYTESTNET_WS_URI,
-          nodesConfiguration: developStacktical.chainlink.nodesConfiguration,
-        },
-        addresses: {
-          tokens: {
-            LINK: null,
-            DSLA: null,
-            DAI: null,
-            USDC: null,
-          },
-          oracle: null,
-        },
-        checkPastPeriods: false,
-        bootstrap: {
-          messengers: {
-            networkAnalytics: {
-              allowedNetworks: SENetworkNames,
-            },
-          },
-          allowance: [
-            {
-              contract: CONTRACT_NAMES.NetworkAnalytics,
-              token: CONTRACT_NAMES.LinkToken,
-              allowance: '10',
-            },
-            {
-              contract: CONTRACT_NAMES.SEMessenger,
-              token: CONTRACT_NAMES.LinkToken,
-              allowance: '10',
-            },
-          ],
-          registry: {
-            periods: [
-              {
-                periodType: PERIOD_TYPE.HOURLY,
-                amountOfPeriods: 5,
-                expiredPeriods: 2,
-              },
-              {
-                periodType: PERIOD_TYPE.DAILY,
-                amountOfPeriods: 5,
-                expiredPeriods: 2,
-              },
-              {
-                periodType: PERIOD_TYPE.WEEKLY,
-                amountOfPeriods: 52,
-                expiredPeriods: 10,
-              },
-            ],
-            stake: {
-              allowedTokens: [CONTRACT_NAMES.DAI, CONTRACT_NAMES.USDC],
-              stakingParameters: {},
-            },
-            messengers: [
-              {
-                contract: CONTRACT_NAMES.SEMessenger,
-                specificationPath: `${appRoot.path}/messenger-specs/${CONTRACT_NAMES.SEMessenger}`,
-              },
-            ],
-          },
-        },
-        scripts: {
-          deploy_sla: developStacktical.scripts.deploy_sla,
-        },
-      },
+      stacktical: StackticalConfigs[NETWORKS.HARMONYTESTNET],
     },
   },
   solidity: {
