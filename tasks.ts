@@ -20,6 +20,8 @@ enum TASK_NAMES {
   INITIALIZE_DEFAULT_ADDRESSES = 'stacktical:initialize-addresses',
   RESTART_CHAINLINK_NODES = 'stacktical:restart-chainlink-nodes',
   CHECK_CONTRACTS_ALLOWANCE = 'stacktical:check-contracts-allowance',
+  PREC_FULFILL_ANALYTICS = 'stacktical:prec-fulfill-analytics',
+  REGISTRIES_CONFIGURATION = 'stacktical:registries-config',
 }
 
 task(
@@ -205,6 +207,32 @@ task(
 ).setAction(async (_, hre: any) => {
   await hre.run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
 });
+
+task(TASK_NAMES.PREC_FULFILL_ANALYTICS, 'Prec fulfill analytics')
+  .addParam(
+    'periodId',
+    'Period id of the period to fulfill',
+    undefined,
+    types.int
+  )
+  .addParam(
+    'periodType',
+    'Period type of the period to fulfill',
+    undefined,
+    types.int
+  )
+  .addParam('networkTicker', 'Network ticker of the period to fulfill')
+  .addParam(
+    'nodeName',
+    'Name of the Chainlink node to use to fulfill',
+    undefined,
+    types.string
+  )
+  .addFlag('runDry', 'run the script without actually fulfilling the analytics')
+
+  .setAction(async (taskArgs, hre: any) => {
+    await hre.run(SUB_TASK_NAMES.PREC_FULFILL_ANALYTICS, taskArgs);
+  });
 
 task(
   TASK_NAMES.RESTART_CHAINLINK_NODES,

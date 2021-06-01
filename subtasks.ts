@@ -86,6 +86,7 @@ export enum SUB_TASK_NAMES {
   FULFILL_SLI = 'FULFILL_SLI',
   CHECK_CONTRACTS_ALLOWANCE = 'CHECK_CONTRACTS_ALLOWANCE',
   REGISTRIES_CONFIGURATION = 'REGISTRIES_CONFIGURATION',
+  PREC_FULFILL_ANALYTICS = 'PREC_FULFILL_ANALYTICS',
 }
 
 subtask(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES, undefined).setAction(
@@ -1462,6 +1463,129 @@ subtask(SUB_TASK_NAMES.FULFILL_ANALYTICS, undefined).setAction(
   }
 );
 
+subtask(SUB_TASK_NAMES.PREC_FULFILL_ANALYTICS, undefined).setAction(
+  async (taskArgs, hre: any) => {
+    const { deployments, ethers, getNamedAccounts, network } = hre;
+    const { stacktical }: { stacktical: StackticalConfiguration } =
+      network.config;
+    const { get } = deployments;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    const networkTicker = taskArgs.networkTicker.toUpperCase();
+    if (!Object.keys(SENetworks).includes(networkTicker)) {
+      throw new Error('Network not recognized: ' + networkTicker);
+    }
+    const na = await NetworkAnalytics__factory.connect(
+      (
+        await get(CONTRACT_NAMES.NetworkAnalytics)
+      ).address,
+      signer
+    );
+    const { periodId, periodType } = taskArgs;
+    const networkBytes32 = formatBytes32String(networkTicker);
+    const isRequested = await na.periodAnalyticsRequested(
+      networkBytes32,
+      periodType,
+      periodId
+    );
+    if (!isRequested) throw new Error('Analytics not requested yet');
+    const storedAnalytics = await na.periodAnalytics(
+      networkBytes32,
+      periodType,
+      periodId
+    );
+    if (Number(storedAnalytics) !== 0)
+      throw new Error('Analytics already fulfilled');
+
+    let filter = na.filters.ChainlinkRequested();
+    let events = await na.queryFilter(
+      filter,
+      (await get(CONTRACT_NAMES.NetworkAnalytics))?.receipt?.blockNumber ||
+        undefined
+    );
+    let requestedAnalyticsEvent;
+    for (let event of events) {
+      const { id } = event.args;
+      const analyticsRequest = await na.requestIdToAnalyticsRequest(id);
+      if (
+        analyticsRequest.networkName === networkBytes32 &&
+        Number(analyticsRequest.periodId) === periodId &&
+        analyticsRequest.periodType === periodType
+      ) {
+        requestedAnalyticsEvent = event;
+      }
+    }
+    if (requestedAnalyticsEvent === undefined)
+      throw new Error('Request id not found');
+    const chainlinkNodeConfig: ChainlinkNodeConfiguration =
+      stacktical.chainlink.nodesConfiguration.find(
+        (node) => node.name === taskArgs.nodeName
+      );
+    if (!chainlinkNodeConfig)
+      throw new Error('Chainlink node config not found');
+    const externalAdapterUrl = stacktical.chainlink.isProduction
+      ? chainlinkNodeConfig.externalAdapterUrl
+      : 'http://localhost:' +
+        chainlinkNodeConfig.externalAdapterUrl.split(':').slice(-1)[0];
+
+    const preCoordinator = await PreCoordinator__factory.connect(
+      (
+        await get(CONTRACT_NAMES.PreCoordinator)
+      ).address,
+      signer
+    );
+    const saRequestedFilter = preCoordinator.filters.ChainlinkRequested();
+    const saRequestedEvents = await preCoordinator.queryFilter(
+      saRequestedFilter,
+      (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
+        undefined
+    );
+    const oracleRequestId = saRequestedEvents.find(
+      (event) => event.blockNumber === requestedAnalyticsEvent.blockNumber
+    ).args.id;
+    const preCoordinatorStorage = await ethers.provider.getStorageAt(
+      preCoordinator.address,
+      1
+    );
+    console.log(preCoordinatorStorage);
+    console.log('Request id successfully identified: ');
+    console.log(oracleRequestId);
+    const periodRegistry = await PeriodRegistry__factory.connect(
+      (
+        await get(CONTRACT_NAMES.PeriodRegistry)
+      ).address,
+      signer
+    );
+    const { start, end } = await periodRegistry.getPeriodStartAndEnd(
+      periodType,
+      periodId
+    );
+    const { data } = await axios({
+      method: 'post',
+      url: externalAdapterUrl,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: {
+        data: {
+          job_type: 'staking_efficiency_analytics',
+          network_name: networkTicker,
+          period_id: periodId,
+          period_type: periodType,
+          sla_monitoring_start: start.toString(),
+          sla_monitoring_end: end.toString(),
+        },
+      },
+    });
+    const { result } = data.data;
+    console.log('External adapter result: ');
+    console.log(result);
+    if (!taskArgs.runDry) {
+      await preCoordinator.chainlinkCallback(oracleRequestId, '0x' + result);
+    }
+  }
+);
+
 subtask(SUB_TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE, undefined).setAction(
   async (_, hre: any) => {
     const { deployments, ethers, getNamedAccounts, network } = hre;
@@ -1636,7 +1760,7 @@ subtask(SUB_TASK_NAMES.REGISTRIES_CONFIGURATION, undefined).setAction(
       signer
     );
     const periodDefinitions = await periodRegistry.getPeriodDefinitions();
-    console.log('Period definitions: ');
+    console.log('Period definitions (UTC=0): ');
     console.log(
       periodDefinitions.reduce(
         (r, definition, index) => ({
