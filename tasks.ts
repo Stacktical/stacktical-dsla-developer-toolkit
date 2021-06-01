@@ -18,6 +18,7 @@ enum TASK_NAMES {
   FULFILL_ANALYTICS = 'stacktical:fulfill-analytics',
   FULFILL_SLI = 'stacktical:fulfill-sli',
   INITIALIZE_DEFAULT_ADDRESSES = 'stacktical:initialize-addresses',
+  RESTART_CHAINLINK_NODES = 'stacktical:restart-chainlink-nodes',
 }
 
 task(
@@ -187,6 +188,18 @@ task(
   'Initialize default addresses'
 ).setAction(async (_, hre: any) => {
   await hre.run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
+});
+
+task(
+  TASK_NAMES.RESTART_CHAINLINK_NODES,
+  'Deploy or reset the local chainlink nodes'
+).setAction(async (_, hre: any) => {
+  console.log(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES);
+  await hre.run(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES);
+  console.log(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE);
+  await hre.run(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE);
+  console.log(SUB_TASK_NAMES.START_LOCAL_CHAINLINK_NODES);
+  await hre.run(SUB_TASK_NAMES.START_LOCAL_CHAINLINK_NODES);
 });
 
 module.exports = {};

@@ -53,7 +53,6 @@ const path = require('path');
 const yaml = require('js-yaml');
 const compose = require('docker-compose');
 const moment = require('moment');
-const util = require('util');
 
 export enum SUB_TASK_NAMES {
   PREPARE_CHAINLINK_NODES = 'PREPARE_CHAINLINK_NODES',
@@ -297,16 +296,10 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
         const postedJob = await getChainlinkJob(node);
         if (postedJob) {
           if (!stacktical.chainlink.deleteOldJobs) {
-            console.log('Keeping existing job:');
-            console.log(
-              util.inspect(postedJob, { showHidden: false, depth: null })
-            );
+            console.log('Keeping existing jobId: ' + postedJob.id);
             return postedJob;
           }
-          console.log('Deleting existing job:');
-          console.log(
-            util.inspect(postedJob, { showHidden: false, depth: null })
-          );
+          console.log('Deleting existing jobId: ' + postedJob.id);
           await deleteJob(node, postedJob.id);
         }
         const httpRequestJobRes = await postChainlinkJob(node);
@@ -408,7 +401,7 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
         chainlinkNodeAddress
       );
       console.log(`Chainlink Node Fullfillment permissions: ${permissions}`);
-      console.log('Automated configuration finished for node:' + node.name);
+      console.log('Automated configuration finished for node: ' + node.name);
       printSeparator();
     }
     console.log('Automated configuration finished for all nodes');
@@ -1179,7 +1172,11 @@ subtask(SUB_TASK_NAMES.GET_PRECOORDINATOR, undefined).setAction(
       signer
     );
     const eventsFilter = precoordinator.filters.NewServiceAgreement();
-    const events = await precoordinator.queryFilter(eventsFilter);
+    const events = await precoordinator.queryFilter(
+      eventsFilter,
+      (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
+        undefined
+    );
     for (let event of events) {
       printSeparator();
       const { saId, payment, minresponses } = event.args;
@@ -1236,7 +1233,9 @@ subtask(SUB_TASK_NAMES.SET_PRECOORDINATOR, undefined).setAction(
       preCoordinatorConfiguration.jobIds,
       preCoordinatorConfiguration.payments
     );
-    await tx.wait();
+    const receipt = await tx.wait();
+    console.log('Service agreement created: ');
+    console.log(receipt.events[0].args);
   }
 );
 
@@ -1271,7 +1270,11 @@ subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
       signer
     );
     let eventFilter = precoordinator.filters.NewServiceAgreement();
-    let events = await precoordinator.queryFilter(eventFilter);
+    let events = await precoordinator.queryFilter(
+      eventFilter,
+      (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
+        undefined
+    );
     const lastEvent = events.slice(-1)[0];
     const { saId } = lastEvent.args;
     const serviceAgreement = await precoordinator.getServiceAgreement(saId);
