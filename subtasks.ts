@@ -1109,7 +1109,9 @@ subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
       Number(nextVerifiablePeriod),
       sla.address,
       ownerApproval,
-      { ...(network.config.gas !== 'auto' && { gasLimit: network.config.gas }) }
+      {
+        ...(network.config.gas !== 'auto' && { gasLimit: network.config.gas }),
+      }
     );
     console.log('Transaction receipt: ');
     console.log(tx);
