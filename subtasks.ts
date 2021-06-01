@@ -22,6 +22,7 @@ import {
   MessengerRegistry__factory,
   NetworkAnalytics__factory,
   Oracle__factory,
+  Ownable__factory,
   PeriodRegistry__factory,
   PreCoordinator__factory,
   SEMessenger__factory,
@@ -83,6 +84,7 @@ export enum SUB_TASK_NAMES {
   UPDATE_PRECOORDINATOR = 'UPDATE_PRECOORDINATOR',
   FULFILL_ANALYTICS = 'FULFILL_ANALYTICS',
   FULFILL_SLI = 'FULFILL_SLI',
+  CHECK_CONTRACTS_ALLOWANCE = 'CHECK_CONTRACTS_ALLOWANCE',
 }
 
 subtask(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES, undefined).setAction(
@@ -620,7 +622,7 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
         stake: { allowedTokens, stakingParameters },
       },
     } = bootstrap;
-    const { deployments, ethers, getNamedAccounts } = hre;
+    const { deployments, ethers, getNamedAccounts, network } = hre;
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
     const { get } = deployments;
@@ -689,19 +691,29 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
         console.log('Updating staking parameters');
         const tx = await stakeRegistry.setStakingParameters(
           currentStakingParameters.DSLAburnRate,
-          toWei(stakingParameters.dslaDepositByPeriod) ||
+          (stakingParameters.dslaDepositByPeriod &&
+            toWei(stakingParameters.dslaDepositByPeriod)) ||
             currentStakingParameters.dslaDepositByPeriod,
-          toWei(stakingParameters.dslaPlatformReward) ||
+          (stakingParameters.dslaPlatformReward &&
+            toWei(stakingParameters.dslaPlatformReward)) ||
             currentStakingParameters.dslaPlatformReward,
-          toWei(stakingParameters.dslaMessengerReward) ||
+          (stakingParameters.dslaMessengerReward &&
+            toWei(stakingParameters.dslaMessengerReward)) ||
             currentStakingParameters.dslaMessengerReward,
-          toWei(stakingParameters.dslaUserReward) ||
+          (stakingParameters.dslaUserReward &&
+            toWei(stakingParameters.dslaUserReward)) ||
             currentStakingParameters.dslaUserReward,
-          toWei(stakingParameters.dslaBurnedByVerification) ||
+          (stakingParameters.dslaBurnedByVerification &&
+            toWei(stakingParameters.dslaBurnedByVerification)) ||
             currentStakingParameters.dslaBurnedByVerification,
           stakingParameters.maxTokenLength ||
             currentStakingParameters.maxTokenLength,
-          stakingParameters.maxLeverage || currentStakingParameters.maxLeverage
+          stakingParameters.maxLeverage || currentStakingParameters.maxLeverage,
+          {
+            ...(network.config.gas !== 'auto' && {
+              gasLimit: network.config.gas,
+            }),
+          }
         );
         await tx.wait();
         const newParameters = await stakeRegistry.getStakingParameters();
@@ -1081,9 +1093,9 @@ subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
       signer
     );
 
-    const slaAddresses = await slaRegistry.userSLAs(deployer);
-    if (taskArgs.address) ethers.utils.getAddress(taskArgs.address);
-    const slaAddress = taskArgs.address || slaAddresses.slice(-1)[0];
+    const slaAddress = taskArgs.address
+      ? ethers.utils.getAddress(taskArgs.address)
+      : (await slaRegistry.userSLAs(deployer)).slice(-1)[0];
     const sla = await SLA__factory.connect(slaAddress, signer);
 
     const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
@@ -1091,7 +1103,7 @@ subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
       'Starting SLI request process for period ' +
         nextVerifiablePeriod.toString()
     );
-    console.log(`SLA address: ${slaAddresses}`);
+    console.log(`SLA address: ${slaAddress}`);
     const ownerApproval = true;
     let tx = await slaRegistry.requestSLI(
       Number(nextVerifiablePeriod),
@@ -1343,7 +1355,11 @@ subtask(SUB_TASK_NAMES.FULFILL_ANALYTICS, undefined).setAction(
       throw new Error('Analytics already fulfilled');
 
     let filter = na.filters.ChainlinkRequested();
-    let events = await na.queryFilter(filter);
+    let events = await na.queryFilter(
+      filter,
+      (await get(CONTRACT_NAMES.NetworkAnalytics))?.receipt?.blockNumber ||
+        undefined
+    );
     let requestedAnalyticsEvent;
     for (let event of events) {
       const { id } = event.args;
@@ -1377,7 +1393,9 @@ subtask(SUB_TASK_NAMES.FULFILL_ANALYTICS, undefined).setAction(
     );
     const saRequestedFilter = preCoordinator.filters.ChainlinkRequested();
     const saRequestedEvents = await preCoordinator.queryFilter(
-      saRequestedFilter
+      saRequestedFilter,
+      (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
+        undefined
     );
     const oracleRequestId = saRequestedEvents.find(
       (event) => event.blockNumber === requestedAnalyticsEvent.blockNumber
@@ -1388,7 +1406,10 @@ subtask(SUB_TASK_NAMES.FULFILL_ANALYTICS, undefined).setAction(
       signer
     );
     const oracleRqFilter = oracle.filters.OracleRequest();
-    const oracleRqEvents = await oracle.queryFilter(oracleRqFilter);
+    const oracleRqEvents = await oracle.queryFilter(
+      oracleRqFilter,
+      (await get(CONTRACT_NAMES.Oracle))?.receipt?.blockNumber || undefined
+    );
     const oracleRqEvent = oracleRqEvents.find(
       (event) => event.args.requestId === oracleRequestId
     );
@@ -1431,6 +1452,42 @@ subtask(SUB_TASK_NAMES.FULFILL_ANALYTICS, undefined).setAction(
       oracleRqEvent.args.cancelExpiration,
       '0x' + result
     );
+  }
+);
+subtask(SUB_TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE, undefined).setAction(
+  async (_, hre: any) => {
+    const { deployments, ethers, getNamedAccounts, network } = hre;
+    const { stacktical }: { stacktical: StackticalConfiguration } =
+      network.config;
+    const {
+      bootstrap: { allowance },
+    } = stacktical;
+    const { get } = deployments;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    for (let tokenAllowance of allowance) {
+      console.log(
+        'Getting allowance of ' +
+          tokenAllowance.token +
+          ' for ' +
+          tokenAllowance.contract
+      );
+      const token = await ERC20__factory.connect(
+        (
+          await get(tokenAllowance.token)
+        ).address,
+        signer
+      );
+      const contract = Ownable__factory.connect(
+        (await get(tokenAllowance.contract)).address,
+        signer
+      );
+      const owner = await contract.owner();
+      let allowance = await token.allowance(owner, contract.address);
+      console.log('Allowance: ' + fromWei(allowance.toString()));
+      const ownerBalance = await token.balanceOf(owner);
+      console.log('Allower balance: ' + fromWei(ownerBalance.toString()));
+    }
   }
 );
 

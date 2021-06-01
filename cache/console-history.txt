@@ -1,3 +1,4 @@
+hre.ethers
 await networkAnalytics.getNetworkNames()
 networkAnalytics.getNetworkNames()
 networkAnalytics.getNetworkNames

@@ -33,6 +33,9 @@ const config: HardhatUserConfig = {
       mining: {
         auto: true,
       },
+      forking: {
+        url: process.env.POLYGON_URI,
+      },
       stacktical: StackticalConfigs[NETWORKS.DEVELOP],
     },
     [NETWORKS.DEVELOP]: {
@@ -53,6 +56,7 @@ const config: HardhatUserConfig = {
     },
     [NETWORKS.POLYGON]: {
       chainId: 137,
+      gas: 20000000,
       accounts: {
         mnemonic: process.env.MAINNET_MNEMONIC,
       },

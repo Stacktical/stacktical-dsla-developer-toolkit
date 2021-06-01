@@ -19,6 +19,7 @@ enum TASK_NAMES {
   FULFILL_SLI = 'stacktical:fulfill-sli',
   INITIALIZE_DEFAULT_ADDRESSES = 'stacktical:initialize-addresses',
   RESTART_CHAINLINK_NODES = 'stacktical:restart-chainlink-nodes',
+  CHECK_CONTRACTS_ALLOWANCE = 'stacktical:check-contracts-allowance',
 }
 
 task(
@@ -70,6 +71,13 @@ task(TASK_NAMES.REQUEST_ANALYTICS, 'Request network analytics')
   .setAction(async (taskArgs, { run }) => {
     await run(SUB_TASK_NAMES.REQUEST_ANALYTICS, taskArgs);
   });
+
+task(
+  TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE,
+  'Request network analytics'
+).setAction(async (_, { run }) => {
+  await run(SUB_TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE);
+});
 
 task(
   TASK_NAMES.PREPARE_CHAINLINK_NODES,
