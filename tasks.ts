@@ -173,6 +173,13 @@ task(TASK_NAMES.FULFILL_ANALYTICS, 'Fulfill pendant network analytics')
     await hre.run(SUB_TASK_NAMES.FULFILL_ANALYTICS, taskArgs);
   });
 
+task(
+  TASK_NAMES.REGISTRIES_CONFIGURATION,
+  'Get registries contracts configuration'
+).setAction(async (_, hre: any) => {
+  await hre.run(SUB_TASK_NAMES.REGISTRIES_CONFIGURATION);
+});
+
 task(TASK_NAMES.FULFILL_SLI, 'Fulfill pendant contract sli')
   .addParam(
     'address',

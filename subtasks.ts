@@ -43,7 +43,7 @@ import {
   getPreCoordinatorConfiguration,
   printSeparator,
 } from './utils';
-import { formatBytes32String } from 'ethers/lib/utils';
+import { formatBytes32String, parseBytes32String } from 'ethers/lib/utils';
 import axios from 'axios';
 
 const prettier = require('prettier');
@@ -85,6 +85,7 @@ export enum SUB_TASK_NAMES {
   FULFILL_ANALYTICS = 'FULFILL_ANALYTICS',
   FULFILL_SLI = 'FULFILL_SLI',
   CHECK_CONTRACTS_ALLOWANCE = 'CHECK_CONTRACTS_ALLOWANCE',
+  REGISTRIES_CONFIGURATION = 'REGISTRIES_CONFIGURATION',
 }
 
 subtask(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES, undefined).setAction(
@@ -1448,7 +1449,7 @@ subtask(SUB_TASK_NAMES.FULFILL_ANALYTICS, undefined).setAction(
       },
     });
     const { result } = data.data;
-    if (!taskArgs.rundry)
+    if (!taskArgs.rundry) {
       await oracle.fulfillOracleRequest(
         oracleRequestId,
         String(0.1 * 10 ** 18),
@@ -1457,8 +1458,10 @@ subtask(SUB_TASK_NAMES.FULFILL_ANALYTICS, undefined).setAction(
         oracleRqEvent.args.cancelExpiration,
         '0x' + result
       );
+    }
   }
 );
+
 subtask(SUB_TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE, undefined).setAction(
   async (_, hre: any) => {
     const { deployments, ethers, getNamedAccounts, network } = hre;
@@ -1595,5 +1598,65 @@ subtask(SUB_TASK_NAMES.FULFILL_SLI, undefined).setAction(
     //   oracleRqEvent.args.cancelExpiration,
     //   '0x' + result
     // );
+  }
+);
+
+subtask(SUB_TASK_NAMES.REGISTRIES_CONFIGURATION, undefined).setAction(
+  async (taskArgs, hre: any) => {
+    const { deployments, ethers, getNamedAccounts } = hre;
+    const { get } = deployments;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    const na = await NetworkAnalytics__factory.connect(
+      (
+        await get(CONTRACT_NAMES.NetworkAnalytics)
+      ).address,
+      signer
+    );
+    const networksAdded = await na.getNetworkNames();
+    console.log('NetworkAnalytics added networks: ');
+    console.log(networksAdded.map(parseBytes32String));
+    const stakeRegistry = await StakeRegistry__factory.connect(
+      (
+        await get(CONTRACT_NAMES.StakeRegistry)
+      ).address,
+      signer
+    );
+    const stakingParameters = await stakeRegistry.getStakingParameters();
+    console.log('Staking parameters: ');
+    const entries = Object.entries(stakingParameters);
+    const formattedStakingParameters = entries
+      .splice(entries.length / 2, entries.length)
+      .map(([i, j]) => [i, j.toString()]);
+    console.log(formattedStakingParameters);
+    const periodRegistry = await PeriodRegistry__factory.connect(
+      (
+        await get(CONTRACT_NAMES.PeriodRegistry)
+      ).address,
+      signer
+    );
+    const periodDefinitions = await periodRegistry.getPeriodDefinitions();
+    console.log('Period definitions: ');
+    console.log(
+      periodDefinitions.reduce(
+        (r, definition, index) => ({
+          ...r,
+          [PERIOD_TYPE[index]]: {
+            initialized: definition.initialized,
+            starts: definition.starts.map((start) =>
+              moment(Number(start.toString()) * 1000)
+                .utc(0)
+                .format('DD/MM/YYYY HH:mm:ss')
+            ),
+            ends: definition.ends.map((end) =>
+              moment(Number(end.toString()) * 1000)
+                .utc(0)
+                .format('DD/MM/YYYY HH:mm:ss')
+            ),
+          },
+        }),
+        {}
+      )
+    );
   }
 );
