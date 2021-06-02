@@ -57,6 +57,7 @@ const config: HardhatUserConfig = {
     [NETWORKS.POLYGON]: {
       chainId: 137,
       gas: 20000000,
+      gasPrice: 1000000000,
       accounts: {
         mnemonic: process.env.MAINNET_MNEMONIC,
       },
