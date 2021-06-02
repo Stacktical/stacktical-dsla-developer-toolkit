@@ -2,6 +2,38 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v1.3.0...v1.4.0) (2021-06-02)
+
+
+### Features
+
+* check contracts allowance ([0a0ad35](https://github.com/Stacktical/stacktical-developer-toolkit/commit/0a0ad359a5aa731e151328d2bc339f2ea04086e1))
+* delete old chainlink jobs as optional ([e501462](https://github.com/Stacktical/stacktical-developer-toolkit/commit/e5014622817bee9bb51cf21c530365d3c38675ce))
+* deployed addresses to contract names ([b3aa9e5](https://github.com/Stacktical/stacktical-developer-toolkit/commit/b3aa9e55496a84975e011fd22403bd821d036021))
+* deploying to harmonytestnet ([d685573](https://github.com/Stacktical/stacktical-developer-toolkit/commit/d685573f74047b64f2479c35823e70bedcc021a1))
+* ethereum deployments ([b2d64ed](https://github.com/Stacktical/stacktical-developer-toolkit/commit/b2d64ed4e90951a1534984cb65b0f16b70e131f7))
+* ethereum stacktical configuration ([5091788](https://github.com/Stacktical/stacktical-developer-toolkit/commit/50917880f2d72a7d2475224eaf0560154ae9e8b1))
+* folder to single file ([63b28cd](https://github.com/Stacktical/stacktical-developer-toolkit/commit/63b28cd1b0b0f8a47ee30c6413ce96459126ac28))
+* forking polygon with hh node ([cfd3638](https://github.com/Stacktical/stacktical-developer-toolkit/commit/cfd3638cc3726dc02253ca86263b5b03ea4c2bce))
+* fulfill analytics run dry ([b0a124d](https://github.com/Stacktical/stacktical-developer-toolkit/commit/b0a124dcc0315340d821a6b78c75c2b052ca5050))
+* fulfill analytics task created ([ac5faa0](https://github.com/Stacktical/stacktical-developer-toolkit/commit/ac5faa083bd9c661b74643d07fc75c96b5f4f806))
+* fulfilling analytics correctly ([1b2c25e](https://github.com/Stacktical/stacktical-developer-toolkit/commit/1b2c25e8f6963e81c818b7c8e488a249dac06592))
+* fulfilling analytics manually ([23551d8](https://github.com/Stacktical/stacktical-developer-toolkit/commit/23551d8abe3a0452df3c818adcd5faed8b8fbf7e))
+* gas limit on request sli ([37f4bf7](https://github.com/Stacktical/stacktical-developer-toolkit/commit/37f4bf7568b4e40c8af8980dc6a79f7091c90ee6))
+* getting request id for precoordinator fulfillment ([5a8f7a0](https://github.com/Stacktical/stacktical-developer-toolkit/commit/5a8f7a02d5cd29df7078ef5b864b6a8b681a88d6))
+* initialize default addresses as task ([056d403](https://github.com/Stacktical/stacktical-developer-toolkit/commit/056d40307a62829cb703f2f05c2ba5b84b169f6b))
+* polygon network configuration ([f436118](https://github.com/Stacktical/stacktical-developer-toolkit/commit/f436118a66da1182f18f066c84fd1b482a1abc87))
+* printing request sli transaction receipt ([023fbe5](https://github.com/Stacktical/stacktical-developer-toolkit/commit/023fbe5c3b3bda9edb80aec80aac1885a0fdbc66))
+* registries configuration ([3ac632d](https://github.com/Stacktical/stacktical-developer-toolkit/commit/3ac632db537a4e4f212d3a4b45e3bcedd3218210))
+* **harmonytestnet:** staking parameters ([e6cec5d](https://github.com/Stacktical/stacktical-developer-toolkit/commit/e6cec5d8ad29bf7d057a25e8e9f8d8abbc05f708))
+* stacktical config in different folder ([efba5b3](https://github.com/Stacktical/stacktical-developer-toolkit/commit/efba5b3365896dda3afc262fa6dc331b2862c1b2))
+
+
+### Bug Fixes
+
+* request sli sla address definition ([e2f050b](https://github.com/Stacktical/stacktical-developer-toolkit/commit/e2f050bff85a0844db803a8ba2cefa1f6b0bcc9b))
+* truffle build folder deleted ([6f13fb0](https://github.com/Stacktical/stacktical-developer-toolkit/commit/6f13fb0d6e967d91dce0b3d1cb7f735b24ae6c3b))
+
 ## [1.3.0](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v1.2.0...v1.3.0) (2021-05-28)
 
 

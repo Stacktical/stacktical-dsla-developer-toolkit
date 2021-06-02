@@ -10,7 +10,8 @@ module.exports = async ({ run, network }) => {
     console.log(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES);
     await run(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES);
   } else {
-    await run(SUB_TASK_NAMES.DEPLOY_LOCAL_SERVICES);
+    console.log(SUB_TASK_NAMES.DEPLOY_LOCAL_CHAINLINK_NODES);
+    await run(SUB_TASK_NAMES.DEPLOY_LOCAL_CHAINLINK_NODES);
   }
 };
 module.exports.tags = [DEPLOYMENT_TAGS.Services];
