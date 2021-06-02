@@ -119,6 +119,8 @@ task(
   'Set the PreCoordinator service configuration from stacktical configuration'
 ).setAction(async (_, { run }) => {
   printSeparator();
+  await run(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE);
+  printSeparator();
   await run(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES);
   printSeparator();
   await run(SUB_TASK_NAMES.SET_PRECOORDINATOR);

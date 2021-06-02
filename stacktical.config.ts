@@ -274,7 +274,7 @@ const polygon: StackticalConfiguration = {
     ethWsUrl: process.env.ETHEREUM_WS_URI,
     nodesConfiguration: [
       {
-        name: 'polygon`-1',
+        name: 'polygon-1',
         restApiUrl: process.env.ETHEREUM_CHAINLINK_NODE_1_URL,
         restApiPort: process.env.ETHEREUM_CHAINLINK_NODE_1_PORT,
         email: process.env.ETHEREUM_CHAINLINK_NODE_1_USER,
@@ -283,7 +283,7 @@ const polygon: StackticalConfiguration = {
           'https://europe-west1-stacktical-0.cloudfunctions.net/dsla-indexer',
       },
       {
-        name: 'polygon`-2',
+        name: 'polygon-2',
         restApiUrl: process.env.ETHEREUM_CHAINLINK_NODE_2_URL,
         restApiPort: process.env.ETHEREUM_CHAINLINK_NODE_2_PORT,
         email: process.env.ETHEREUM_CHAINLINK_NODE_2_USER,
@@ -292,7 +292,7 @@ const polygon: StackticalConfiguration = {
           'https://europe-west1-stacktical-0.cloudfunctions.net/dsla-indexer',
       },
       {
-        name: 'polygon`-3',
+        name: 'polygon-3',
         restApiUrl: process.env.ETHEREUM_CHAINLINK_NODE_3_URL,
         restApiPort: process.env.ETHEREUM_CHAINLINK_NODE_3_PORT,
         email: process.env.ETHEREUM_CHAINLINK_NODE_3_USER,
@@ -322,7 +322,7 @@ const polygon: StackticalConfiguration = {
       '0x6e782e2c3f42003eE56d30BdD269555738A39e4A',
     [CONTRACT_NAMES.StringUtils]: '0x143c0e6cB35AC53C7f06d4914199E4cAc3977AC7',
     [CONTRACT_NAMES.Oracle]: '0x99F4e62a317cc666589c9e370c73c15B158f3c61',
-    [CONTRACT_NAMES.LinkToken]: '0xb0897686c545045afc77cf20ec7a532e3120e0f1',
+    [CONTRACT_NAMES.LinkToken]: '0xb0897686c545045afc77cf20ec7a532e3120e0f1 ',
   },
   checkPastPeriods: true,
   bootstrap: {
