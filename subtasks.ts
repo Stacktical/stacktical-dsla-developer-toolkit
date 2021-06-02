@@ -45,6 +45,7 @@ import {
 } from './utils';
 import { formatBytes32String, parseBytes32String } from 'ethers/lib/utils';
 import axios from 'axios';
+import { BigNumber } from 'ethers';
 
 const prettier = require('prettier');
 const { DataFile } = require('edit-config');
@@ -54,6 +55,7 @@ const path = require('path');
 const yaml = require('js-yaml');
 const compose = require('docker-compose');
 const moment = require('moment');
+const bs58 = require('bs58');
 
 export enum SUB_TASK_NAMES {
   PREPARE_CHAINLINK_NODES = 'PREPARE_CHAINLINK_NODES',
@@ -1357,8 +1359,19 @@ subtask(SUB_TASK_NAMES.FULFILL_ANALYTICS, undefined).setAction(
       periodType,
       periodId
     );
-    if (Number(storedAnalytics) !== 0)
+    if (Number(storedAnalytics) !== 0) {
+      console.log('Stored analytics:');
+      console.log(storedAnalytics);
+      console.log('IPFS data:');
+      console.log(
+        process.env.IPFS_URI +
+          /ipfs/ +
+          bs58.encode(
+            Buffer.from(`1220${storedAnalytics.replace('0x', '')}`, 'hex')
+          )
+      );
       throw new Error('Analytics already fulfilled');
+    }
 
     let filter = na.filters.ChainlinkRequested();
     let events = await na.queryFilter(
@@ -1494,8 +1507,19 @@ subtask(SUB_TASK_NAMES.PREC_FULFILL_ANALYTICS, undefined).setAction(
       periodType,
       periodId
     );
-    if (Number(storedAnalytics) !== 0)
+    if (Number(storedAnalytics) !== 0) {
+      console.log('Stored analytics:');
+      console.log(storedAnalytics);
+      console.log('IPFS data:');
+      console.log(
+        process.env.IPFS_URI +
+          /ipfs/ +
+          bs58.encode(
+            Buffer.from(`1220${storedAnalytics.replace('0x', '')}`, 'hex')
+          )
+      );
       throw new Error('Analytics already fulfilled');
+    }
 
     let filter = na.filters.ChainlinkRequested();
     let events = await na.queryFilter(
@@ -1543,11 +1567,6 @@ subtask(SUB_TASK_NAMES.PREC_FULFILL_ANALYTICS, undefined).setAction(
     const oracleRequestId = saRequestedEvents.find(
       (event) => event.blockNumber === requestedAnalyticsEvent.blockNumber
     ).args.id;
-    const preCoordinatorStorage = await ethers.provider.getStorageAt(
-      preCoordinator.address,
-      1
-    );
-    console.log(preCoordinatorStorage);
     console.log('Request id successfully identified: ');
     console.log(oracleRequestId);
     const periodRegistry = await PeriodRegistry__factory.connect(
@@ -1581,7 +1600,10 @@ subtask(SUB_TASK_NAMES.PREC_FULFILL_ANALYTICS, undefined).setAction(
     console.log('External adapter result: ');
     console.log(result);
     if (!taskArgs.runDry) {
-      await preCoordinator.chainlinkCallback(oracleRequestId, '0x' + result);
+      await preCoordinator.chainlinkCallback(
+        oracleRequestId,
+        BigNumber.from('0x' + result)
+      );
     }
   }
 );
