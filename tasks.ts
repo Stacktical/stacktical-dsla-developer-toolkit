@@ -171,7 +171,7 @@ task(TASK_NAMES.FULFILL_ANALYTICS, 'Fulfill pendant network analytics')
     undefined,
     types.string
   )
-  .addFlag('runDry', 'run the script without actually fulfilling the analytics')
+  .addFlag('dryRun', 'run the script without actually fulfilling the analytics')
   .setAction(async (taskArgs, hre: any) => {
     await hre.run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
     await hre.run(SUB_TASK_NAMES.FULFILL_ANALYTICS, taskArgs);
@@ -230,7 +230,7 @@ task(TASK_NAMES.PREC_FULFILL_ANALYTICS, 'Prec fulfill analytics')
     undefined,
     types.string
   )
-  .addFlag('runDry', 'run the script without actually fulfilling the analytics')
+  .addFlag('dryRun', 'run the script without actually fulfilling the analytics')
 
   .setAction(async (taskArgs, hre: any) => {
     await hre.run(SUB_TASK_NAMES.PREC_FULFILL_ANALYTICS, taskArgs);

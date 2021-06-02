@@ -1,6 +1,13 @@
 /* eslint-disable no-await-in-loop, import/no-extraneous-dependencies */
 import { DeploymentsExtension } from 'hardhat-deploy/dist/types';
-import { fromWei, toChecksumAddress, toWei } from 'web3-utils';
+import {
+  fromWei,
+  padLeft,
+  toChecksumAddress,
+  toWei,
+  soliditySha3,
+  numberToHex,
+} from 'web3-utils';
 
 import {
   deleteJob,
@@ -46,6 +53,7 @@ import {
 import { formatBytes32String, parseBytes32String } from 'ethers/lib/utils';
 import axios from 'axios';
 import { BigNumber } from 'ethers';
+import { rpcQuantity } from 'hardhat/internal/core/jsonrpc/types/base-types';
 
 const prettier = require('prettier');
 const { DataFile } = require('edit-config');
@@ -1540,7 +1548,7 @@ subtask(SUB_TASK_NAMES.PREC_FULFILL_ANALYTICS, undefined).setAction(
       }
     }
     if (requestedAnalyticsEvent === undefined)
-      throw new Error('Request id not found');
+      throw new Error('Request analytics event not found');
     const chainlinkNodeConfig: ChainlinkNodeConfiguration =
       stacktical.chainlink.nodesConfiguration.find(
         (node) => node.name === taskArgs.nodeName
@@ -1558,15 +1566,56 @@ subtask(SUB_TASK_NAMES.PREC_FULFILL_ANALYTICS, undefined).setAction(
       ).address,
       signer
     );
-    const saRequestedFilter = preCoordinator.filters.ChainlinkRequested();
-    const saRequestedEvents = await preCoordinator.queryFilter(
-      saRequestedFilter,
+    const pcRequestedFilter = preCoordinator.filters.ChainlinkRequested();
+    const pcRequestedEvents = await preCoordinator.queryFilter(
+      pcRequestedFilter,
       (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
         undefined
     );
-    const oracleRequestId = saRequestedEvents.find(
-      (event) => event.blockNumber === requestedAnalyticsEvent.blockNumber
-    ).args.id;
+    const preCoordinatorArtifact = await get(CONTRACT_NAMES.PreCoordinator);
+    const requestsSlot = preCoordinatorArtifact.storageLayout.storage.find(
+      (layout) => layout.label === 'requests'
+    ).slot;
+    if (!requestsSlot) {
+      throw new Error('requests mapping slot not found');
+    }
+    console.log('Requested Analytics event:');
+    console.log(requestedAnalyticsEvent);
+    let oracleRequestId;
+    console.log(
+      'Reading PreCoordinator "requests" internal mapping from storage'
+    );
+    for (let event of pcRequestedEvents) {
+      // read the "requests" mapping of the PreCoordinator by reading storage
+      // https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html#mappings-and-dynamic-arrays
+      const storageIndex = soliditySha3(
+        event.args.id,
+        padLeft(numberToHex(requestsSlot), 64)
+      );
+      const { data } = await axios({
+        method: 'post',
+        url: network.config.url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: {
+          jsonrpc: '2.0',
+          method: 'eth_getStorageAt',
+          params: [preCoordinator.address, storageIndex, 'latest'],
+          id: 1,
+        },
+      });
+      // if incomingRequest is equal to the PreCoordinator's ChainlinkRequest id, then catch the outgoingRequestId
+      printSeparator();
+      if (data.result === requestedAnalyticsEvent.args.id) {
+        console.log('Match found');
+        oracleRequestId = event.args.id;
+      }
+      console.log('PreCoordinator outgoing request: ' + event.args.id);
+      console.log('PreCoordinator incoming request: ' + data.result);
+    }
+    printSeparator();
+
     console.log('Request id successfully identified: ');
     console.log(oracleRequestId);
     const periodRegistry = await PeriodRegistry__factory.connect(
@@ -1599,7 +1648,13 @@ subtask(SUB_TASK_NAMES.PREC_FULFILL_ANALYTICS, undefined).setAction(
     const { result } = data.data;
     console.log('External adapter result: ');
     console.log(result);
-    if (!taskArgs.runDry) {
+    console.log('IPFS data:');
+    console.log(
+      process.env.IPFS_URI +
+        /ipfs/ +
+        bs58.encode(Buffer.from(`1220${result}`, 'hex'))
+    );
+    if (!taskArgs.dryRun) {
       await preCoordinator.chainlinkCallback(
         oracleRequestId,
         BigNumber.from('0x' + result)
