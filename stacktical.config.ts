@@ -265,6 +265,80 @@ const harmonytestnet: StackticalConfiguration = {
   },
 };
 
+const harmony: StackticalConfiguration = {
+  chainlink: {
+    isProduction: true,
+    deleteOldJobs: true,
+    nodeFunds: '1',
+    gasLimit: undefined,
+    ethWsUrl: process.env.HARMONY_WS_URI,
+    ethHttpUrl: process.env.HARMONY_URI,
+    nodesConfiguration: [
+      {
+        name: 'harmony`-1',
+        restApiUrl: process.env.HARMONY_CHAINLINK_NODE_1_URL,
+        restApiPort: process.env.HARMONY_CHAINLINK_NODE_1_PORT,
+        email: process.env.HARMONY_CHAINLINK_NODE_1_USER,
+        password: process.env.HARMONY_CHAINLINK_NODE_1_PASS,
+        externalAdapterUrl:
+          'https://europe-west1-stacktical-0.cloudfunctions.net/dsla-indexer',
+      },
+    ],
+  },
+  addresses: {
+    [CONTRACT_NAMES.DSLA]: '0x34704c70e9eC9fB9A921da6DAAD7D3e19f43c734',
+    [CONTRACT_NAMES.DAI]: '0xEf977d2f931C1978Db5F6747666fa1eACB0d0339',
+    [CONTRACT_NAMES.USDC]: '0x985458E523dB3d53125813eD68c274899e9DfAb4',
+    //[CONTRACT_NAMES.USDT]: '0x3C2B8Be99c50593081EAA2A724F0B8285F5aba8f',
+    [CONTRACT_NAMES.LinkToken]: '0x218532a12a389a4a92fC0C5Fb22901D1c19198aA',
+  },
+  checkPastPeriods: true,
+  bootstrap: {
+    messengers: {
+      networkAnalytics: {
+        allowedNetworks: SENetworkNames,
+      },
+    },
+    allowance: [
+      {
+        contract: CONTRACT_NAMES.NetworkAnalytics,
+        token: CONTRACT_NAMES.LinkToken,
+        allowance: '100',
+      },
+      {
+        contract: CONTRACT_NAMES.SEMessenger,
+        token: CONTRACT_NAMES.LinkToken,
+        allowance: '100',
+      },
+    ],
+    registry: {
+      periods: [
+        {
+          periodType: PERIOD_TYPE.WEEKLY,
+          amountOfPeriods: 52,
+          expiredPeriods: 0,
+        },
+      ],
+      stake: {
+        allowedTokens: [CONTRACT_NAMES.DSLA, CONTRACT_NAMES.DAI, CONTRACT_NAMES.USDC],
+        stakingParameters: {
+          dslaBurnedByVerification: '0',
+          dslaPlatformReward: '500',
+        },
+      },
+      messengers: [
+        {
+          contract: CONTRACT_NAMES.SEMessenger,
+          specificationPath: `${appRoot.path}/messenger-specs/${CONTRACT_NAMES.SEMessenger}.json`,
+        },
+      ],
+    },
+  },
+  scripts: {
+    deploy_sla: develop.scripts.deploy_sla,
+  },
+};
+
 const polygon: StackticalConfiguration = {
   chainlink: {
     isProduction: true,
@@ -353,7 +427,13 @@ const polygon: StackticalConfiguration = {
       ],
       stake: {
         allowedTokens: [CONTRACT_NAMES.DAI, CONTRACT_NAMES.USDC],
-        stakingParameters: {},
+        stakingParameters: {
+          dslaBurnedByVerification: '0',
+          dslaPlatformReward: '500',
+          dslaDepositByPeriod: '1000',
+          dslaMessengerReward: '250',
+          dslaUserReward: '250'
+        },
       },
       messengers: [
         {
@@ -368,4 +448,4 @@ const polygon: StackticalConfiguration = {
   },
 };
 
-export { develop, ethereum, harmonytestnet, polygon };
+export { develop, ethereum, harmonytestnet, harmony, polygon };
