@@ -1,6 +1,6 @@
 {
   "name": "stacktical-developer-toolkit",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Toolkit to deploy develop Chainlink Node, Graph Node, IPFS node, dev blockhain and DSLA contracts to multiple networks seamlessly",
   "scripts": {
     "hardhat-node": "hardhat node",
