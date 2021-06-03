@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v1.4.0...v1.5.0) (2021-06-03)
+
+
+### Features
+
+* error if not setting gas price ([393b802](https://github.com/Stacktical/stacktical-developer-toolkit/commit/393b8028adef37fd89308047bdacc28ec0cf80e3))
+* getting transaction error message ([ce924c8](https://github.com/Stacktical/stacktical-developer-toolkit/commit/ce924c86f0669e5df53ad62830d780841955b9fb))
+* getting valid slas script ([e1d90df](https://github.com/Stacktical/stacktical-developer-toolkit/commit/e1d90df7014ad7fa442077a11285afcb94c9af13))
+* mumbai deployment ([59b6b11](https://github.com/Stacktical/stacktical-developer-toolkit/commit/59b6b11eb05db7b8cb3d4e5e8ac5e3961f6bfca9))
+* printing IPFS url if storage data exists ([293370a](https://github.com/Stacktical/stacktical-developer-toolkit/commit/293370a23211ef08f7c6a76e15083f0e1639efb2))
+* reading requests mapping from precoordinator ([c70f88e](https://github.com/Stacktical/stacktical-developer-toolkit/commit/c70f88e762b61173aa9d60935b70b488fbddeae5))
+* setup docker compose before set precoordinator ([97ed863](https://github.com/Stacktical/stacktical-developer-toolkit/commit/97ed86373a62f44882c7356e2634b83ed6e35878))
+
+
+### Bug Fixes
+
+* dry run to sign transaction flag ([543061b](https://github.com/Stacktical/stacktical-developer-toolkit/commit/543061b5f2e50e1a85e87d19d264cdf947f73098))
+
 ## [1.4.0](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v1.3.0...v1.4.0) (2021-06-02)
 
 
