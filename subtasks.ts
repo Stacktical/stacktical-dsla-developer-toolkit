@@ -1655,9 +1655,14 @@ subtask(SUB_TASK_NAMES.PREC_FULFILL_ANALYTICS, undefined).setAction(
         bs58.encode(Buffer.from(`1220${result}`, 'hex'))
     );
     if (taskArgs.signTransaction) {
+      throw new Error('should set gas price and limit');
       await preCoordinator.chainlinkCallback(
         oracleRequestId,
-        BigNumber.from('0x' + result)
+        BigNumber.from('0x' + result),
+        {
+          gasLimit: 'set the gas limit',
+          gasPrice: 'set the gas price',
+        }
       );
     }
   }
