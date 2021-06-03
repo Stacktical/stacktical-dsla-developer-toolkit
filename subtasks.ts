@@ -1,6 +1,13 @@
 /* eslint-disable no-await-in-loop, import/no-extraneous-dependencies */
 import { DeploymentsExtension } from 'hardhat-deploy/dist/types';
-import { fromWei, toChecksumAddress, toWei } from 'web3-utils';
+import {
+  fromWei,
+  padLeft,
+  toChecksumAddress,
+  toWei,
+  soliditySha3,
+  numberToHex,
+} from 'web3-utils';
 
 import {
   deleteJob,
@@ -45,6 +52,9 @@ import {
 } from './utils';
 import { formatBytes32String, parseBytes32String } from 'ethers/lib/utils';
 import axios from 'axios';
+import { BigNumber } from 'ethers';
+import { rpcQuantity } from 'hardhat/internal/core/jsonrpc/types/base-types';
+import { TransactionRequest } from '@ethersproject/providers';
 
 const prettier = require('prettier');
 const { DataFile } = require('edit-config');
@@ -54,6 +64,7 @@ const path = require('path');
 const yaml = require('js-yaml');
 const compose = require('docker-compose');
 const moment = require('moment');
+const bs58 = require('bs58');
 
 export enum SUB_TASK_NAMES {
   PREPARE_CHAINLINK_NODES = 'PREPARE_CHAINLINK_NODES',
@@ -87,6 +98,8 @@ export enum SUB_TASK_NAMES {
   CHECK_CONTRACTS_ALLOWANCE = 'CHECK_CONTRACTS_ALLOWANCE',
   REGISTRIES_CONFIGURATION = 'REGISTRIES_CONFIGURATION',
   PREC_FULFILL_ANALYTICS = 'PREC_FULFILL_ANALYTICS',
+  GET_VALID_SLAS = 'GET_VALID_SLAS',
+  GET_REVERT_MESSAGE = 'GET_REVERT_MESSAGE',
 }
 
 subtask(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES, undefined).setAction(
@@ -215,6 +228,21 @@ subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
               }`;
             case /CHAINLINK_PORT/.test(envVariable):
               return `CHAINLINK_PORT=${node.restApiPort}`;
+            // case /ETH_GAS_PRICE_DEFAULT/.test(envVariable):
+            //   if (network.config.gasPrice) {
+            //     return `ETH_GAS_PRICE_DEFAULT=${network.config.gasPrice}`;
+            //   }
+            //   return envVariable;
+            // case /ETH_MAX_GAS_PRICE_WEI/.test(envVariable):
+            //   if (network.config.gasPrice) {
+            //     return `ETH_MAX_GAS_PRICE_WEI=${network.config.gasPrice}`;
+            //   }
+            //   return envVariable;
+            // case /ETH_MIN_GAS_PRICE_WEI/.test(envVariable):
+            //   if (network.config.gasPrice) {
+            //     return `ETH_MIN_GAS_PRICE_WEI=${network.config.gasPrice}`;
+            //   }
+            //   return envVariable;
             default:
               return envVariable;
           }
@@ -1357,8 +1385,19 @@ subtask(SUB_TASK_NAMES.FULFILL_ANALYTICS, undefined).setAction(
       periodType,
       periodId
     );
-    if (Number(storedAnalytics) !== 0)
+    if (Number(storedAnalytics) !== 0) {
+      console.log('Stored analytics:');
+      console.log(storedAnalytics);
+      console.log('IPFS data:');
+      console.log(
+        process.env.IPFS_URI +
+          /ipfs/ +
+          bs58.encode(
+            Buffer.from(`1220${storedAnalytics.replace('0x', '')}`, 'hex')
+          )
+      );
       throw new Error('Analytics already fulfilled');
+    }
 
     let filter = na.filters.ChainlinkRequested();
     let events = await na.queryFilter(
@@ -1450,7 +1489,7 @@ subtask(SUB_TASK_NAMES.FULFILL_ANALYTICS, undefined).setAction(
       },
     });
     const { result } = data.data;
-    if (!taskArgs.rundry) {
+    if (taskArgs.signTransaction) {
       await oracle.fulfillOracleRequest(
         oracleRequestId,
         String(0.1 * 10 ** 18),
@@ -1494,8 +1533,19 @@ subtask(SUB_TASK_NAMES.PREC_FULFILL_ANALYTICS, undefined).setAction(
       periodType,
       periodId
     );
-    if (Number(storedAnalytics) !== 0)
+    if (Number(storedAnalytics) !== 0) {
+      console.log('Stored analytics:');
+      console.log(storedAnalytics);
+      console.log('IPFS data:');
+      console.log(
+        process.env.IPFS_URI +
+          /ipfs/ +
+          bs58.encode(
+            Buffer.from(`1220${storedAnalytics.replace('0x', '')}`, 'hex')
+          )
+      );
       throw new Error('Analytics already fulfilled');
+    }
 
     let filter = na.filters.ChainlinkRequested();
     let events = await na.queryFilter(
@@ -1516,7 +1566,7 @@ subtask(SUB_TASK_NAMES.PREC_FULFILL_ANALYTICS, undefined).setAction(
       }
     }
     if (requestedAnalyticsEvent === undefined)
-      throw new Error('Request id not found');
+      throw new Error('Request analytics event not found');
     const chainlinkNodeConfig: ChainlinkNodeConfiguration =
       stacktical.chainlink.nodesConfiguration.find(
         (node) => node.name === taskArgs.nodeName
@@ -1534,20 +1584,56 @@ subtask(SUB_TASK_NAMES.PREC_FULFILL_ANALYTICS, undefined).setAction(
       ).address,
       signer
     );
-    const saRequestedFilter = preCoordinator.filters.ChainlinkRequested();
-    const saRequestedEvents = await preCoordinator.queryFilter(
-      saRequestedFilter,
+    const pcRequestedFilter = preCoordinator.filters.ChainlinkRequested();
+    const pcRequestedEvents = await preCoordinator.queryFilter(
+      pcRequestedFilter,
       (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
         undefined
     );
-    const oracleRequestId = saRequestedEvents.find(
-      (event) => event.blockNumber === requestedAnalyticsEvent.blockNumber
-    ).args.id;
-    const preCoordinatorStorage = await ethers.provider.getStorageAt(
-      preCoordinator.address,
-      1
+    const preCoordinatorArtifact = await get(CONTRACT_NAMES.PreCoordinator);
+    const requestsSlot = preCoordinatorArtifact.storageLayout.storage.find(
+      (layout) => layout.label === 'requests'
+    ).slot;
+    if (!requestsSlot) {
+      throw new Error('requests mapping slot not found');
+    }
+    console.log('Requested Analytics event:');
+    console.log(requestedAnalyticsEvent);
+    let oracleRequestId;
+    console.log(
+      'Reading PreCoordinator "requests" internal mapping from storage'
     );
-    console.log(preCoordinatorStorage);
+    for (let event of pcRequestedEvents) {
+      // read the "requests" mapping of the PreCoordinator by reading storage
+      // https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html#mappings-and-dynamic-arrays
+      const storageIndex = soliditySha3(
+        event.args.id,
+        padLeft(numberToHex(requestsSlot), 64)
+      );
+      const { data } = await axios({
+        method: 'post',
+        url: network.config.url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: {
+          jsonrpc: '2.0',
+          method: 'eth_getStorageAt',
+          params: [preCoordinator.address, storageIndex, 'latest'],
+          id: 1,
+        },
+      });
+      // if incomingRequest is equal to the PreCoordinator's ChainlinkRequest id, then catch the outgoingRequestId
+      printSeparator();
+      if (data.result === requestedAnalyticsEvent.args.id) {
+        console.log('Match found');
+        oracleRequestId = event.args.id;
+      }
+      console.log('PreCoordinator outgoing request: ' + event.args.id);
+      console.log('PreCoordinator incoming request: ' + data.result);
+    }
+    printSeparator();
+
     console.log('Request id successfully identified: ');
     console.log(oracleRequestId);
     const periodRegistry = await PeriodRegistry__factory.connect(
@@ -1580,8 +1666,22 @@ subtask(SUB_TASK_NAMES.PREC_FULFILL_ANALYTICS, undefined).setAction(
     const { result } = data.data;
     console.log('External adapter result: ');
     console.log(result);
-    if (!taskArgs.runDry) {
-      await preCoordinator.chainlinkCallback(oracleRequestId, '0x' + result);
+    console.log('IPFS data:');
+    console.log(
+      process.env.IPFS_URI +
+        /ipfs/ +
+        bs58.encode(Buffer.from(`1220${result}`, 'hex'))
+    );
+    if (taskArgs.signTransaction) {
+      throw new Error('should set gas price and limit');
+      await preCoordinator.chainlinkCallback(
+        oracleRequestId,
+        BigNumber.from('0x' + result),
+        {
+          gasLimit: 'set the gas limit',
+          gasPrice: 'set the gas price',
+        }
+      );
     }
   }
 );
@@ -1782,5 +1882,59 @@ subtask(SUB_TASK_NAMES.REGISTRIES_CONFIGURATION, undefined).setAction(
         {}
       )
     );
+  }
+);
+
+subtask(SUB_TASK_NAMES.GET_VALID_SLAS, undefined).setAction(
+  async (taskArgs, hre: any) => {
+    const { deployments, ethers, getNamedAccounts } = hre;
+    const { get } = deployments;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    const slaRegistry = await SLARegistry__factory.connect(
+      (
+        await get(CONTRACT_NAMES.SLARegistry)
+      ).address,
+      signer
+    );
+    const allSLAs = await slaRegistry.allSLAs();
+    console.log('SLA registry address:');
+    console.log(slaRegistry.address);
+    console.log('All valid SLAs:');
+    console.log(allSLAs);
+  }
+);
+
+subtask(SUB_TASK_NAMES.GET_REVERT_MESSAGE, undefined).setAction(
+  async (taskArgs, hre: any) => {
+    const { ethers, network } = hre;
+    const transaction = await ethers.provider.getTransaction(
+      taskArgs.transactionHash
+    );
+    console.log('Transaction:');
+    console.log(transaction);
+    const { data } = await axios({
+      method: 'post',
+      url: network.config.url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: {
+        jsonrpc: '2.0',
+        method: 'eth_call',
+        params: [
+          {
+            from: transaction.from,
+            to: transaction.to,
+            value: numberToHex(transaction.value.toString()),
+            data: transaction.data,
+          },
+          numberToHex(transaction.blockNumber),
+        ],
+        id: 1,
+      },
+    });
+    console.log('Error data:');
+    console.log(data);
   }
 );

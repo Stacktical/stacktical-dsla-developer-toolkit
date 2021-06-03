@@ -56,13 +56,34 @@ const config: HardhatUserConfig = {
     },
     [NETWORKS.POLYGON]: {
       chainId: 137,
-      gas: 20000000,
+      gas: 19000000,
       gasPrice: 1000000000,
       accounts: {
         mnemonic: process.env.MAINNET_MNEMONIC,
       },
       url: process.env.POLYGON_URI,
       stacktical: StackticalConfigs[NETWORKS.POLYGON],
+    },
+    [NETWORKS.MUMBAI]: {
+      chainId: 80001,
+      gas: 19000000,
+      gasPrice: 1000000000,
+      accounts: {
+        mnemonic: process.env.TESTNET_MNEMONIC,
+      },
+      url: process.env.MUMBAI_URI,
+      stacktical: StackticalConfigs[NETWORKS.MUMBAI],
+    },
+    [NETWORKS.HARMONY]: {
+      chainId: 1666600000,
+      gas: 12000000,
+      gasPrice: 1000000000,
+      accounts: {
+        mnemonic: process.env.MAINNET_MNEMONIC,
+      },
+      url: process.env.HARMONY_URI,
+      saveDeployments: true,
+      stacktical: StackticalConfigs[NETWORKS.HARMONY],
     },
     [NETWORKS.HARMONYTESTNET]: {
       chainId: 1666700000,

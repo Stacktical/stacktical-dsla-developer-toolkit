@@ -21,6 +21,8 @@ export enum CONTRACT_NAMES {
   DSLA = 'DSLA',
   DAI = 'DAI',
   USDC = 'USDC',
+  USDT = 'USDT',
+  ONE = "ONE",
   ERC20 = 'ERC20',
   Details = 'Details',
   IMessenger = 'IMessenger',
@@ -58,6 +60,7 @@ export enum NETWORKS {
   HARMONYTESTNET = 'harmonytestnet',
   ETHEREUM = 'ethereum',
   POLYGON = 'polygon',
+  HARMONY = "harmony",
 }
 
 export enum PERIOD_TYPE {

@@ -22,6 +22,8 @@ enum TASK_NAMES {
   CHECK_CONTRACTS_ALLOWANCE = 'stacktical:check-contracts-allowance',
   PREC_FULFILL_ANALYTICS = 'stacktical:prec-fulfill-analytics',
   REGISTRIES_CONFIGURATION = 'stacktical:registries-config',
+  GET_VALID_SLAS = 'stacktical:get-valid-slas',
+  GET_REVERT_MESSAGE = 'stacktical:get-revert-message',
 }
 
 task(
@@ -119,6 +121,8 @@ task(
   'Set the PreCoordinator service configuration from stacktical configuration'
 ).setAction(async (_, { run }) => {
   printSeparator();
+  await run(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE);
+  printSeparator();
   await run(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES);
   printSeparator();
   await run(SUB_TASK_NAMES.SET_PRECOORDINATOR);
@@ -169,7 +173,7 @@ task(TASK_NAMES.FULFILL_ANALYTICS, 'Fulfill pendant network analytics')
     undefined,
     types.string
   )
-  .addFlag('runDry', 'run the script without actually fulfilling the analytics')
+  .addFlag('signTransaction', 'signs the transaction to fulfill the analytics')
   .setAction(async (taskArgs, hre: any) => {
     await hre.run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
     await hre.run(SUB_TASK_NAMES.FULFILL_ANALYTICS, taskArgs);
@@ -228,7 +232,7 @@ task(TASK_NAMES.PREC_FULFILL_ANALYTICS, 'Prec fulfill analytics')
     undefined,
     types.string
   )
-  .addFlag('runDry', 'run the script without actually fulfilling the analytics')
+  .addFlag('signTransaction', 'signs the transaction to fulfill the analytics')
 
   .setAction(async (taskArgs, hre: any) => {
     await hre.run(SUB_TASK_NAMES.PREC_FULFILL_ANALYTICS, taskArgs);
@@ -245,5 +249,17 @@ task(
   console.log(SUB_TASK_NAMES.START_LOCAL_CHAINLINK_NODES);
   await hre.run(SUB_TASK_NAMES.START_LOCAL_CHAINLINK_NODES);
 });
+
+task(TASK_NAMES.GET_VALID_SLAS, 'Get all valid SLAs by network').setAction(
+  async (_, hre: any) => {
+    await hre.run(SUB_TASK_NAMES.GET_VALID_SLAS);
+  }
+);
+
+task(TASK_NAMES.GET_REVERT_MESSAGE, 'Get revert message for transaction hash')
+  .addParam('transactionHash', 'Transaction hash to get message')
+  .setAction(async (taskArgs, hre: any) => {
+    await hre.run(SUB_TASK_NAMES.GET_REVERT_MESSAGE, taskArgs);
+  });
 
 module.exports = {};

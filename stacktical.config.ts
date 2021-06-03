@@ -265,6 +265,84 @@ const harmonytestnet: StackticalConfiguration = {
   },
 };
 
+const harmony: StackticalConfiguration = {
+  chainlink: {
+    isProduction: true,
+    deleteOldJobs: true,
+    nodeFunds: '1',
+    gasLimit: undefined,
+    ethWsUrl: process.env.HARMONY_WS_URI,
+    ethHttpUrl: process.env.HARMONY_URI,
+    nodesConfiguration: [
+      {
+        name: 'harmony`-1',
+        restApiUrl: process.env.HARMONY_CHAINLINK_NODE_1_URL,
+        restApiPort: process.env.HARMONY_CHAINLINK_NODE_1_PORT,
+        email: process.env.HARMONY_CHAINLINK_NODE_1_USER,
+        password: process.env.HARMONY_CHAINLINK_NODE_1_PASS,
+        externalAdapterUrl:
+          'https://europe-west1-stacktical-0.cloudfunctions.net/dsla-indexer',
+      },
+    ],
+  },
+  addresses: {
+    [CONTRACT_NAMES.DSLA]: '0x34704c70e9eC9fB9A921da6DAAD7D3e19f43c734',
+    [CONTRACT_NAMES.DAI]: '0xEf977d2f931C1978Db5F6747666fa1eACB0d0339',
+    [CONTRACT_NAMES.USDC]: '0x985458E523dB3d53125813eD68c274899e9DfAb4',
+    //[CONTRACT_NAMES.USDT]: '0x3C2B8Be99c50593081EAA2A724F0B8285F5aba8f',
+    [CONTRACT_NAMES.LinkToken]: '0x218532a12a389a4a92fC0C5Fb22901D1c19198aA',
+  },
+  checkPastPeriods: true,
+  bootstrap: {
+    messengers: {
+      networkAnalytics: {
+        allowedNetworks: SENetworkNames,
+      },
+    },
+    allowance: [
+      {
+        contract: CONTRACT_NAMES.NetworkAnalytics,
+        token: CONTRACT_NAMES.LinkToken,
+        allowance: '100',
+      },
+      {
+        contract: CONTRACT_NAMES.SEMessenger,
+        token: CONTRACT_NAMES.LinkToken,
+        allowance: '100',
+      },
+    ],
+    registry: {
+      periods: [
+        {
+          periodType: PERIOD_TYPE.WEEKLY,
+          amountOfPeriods: 52,
+          expiredPeriods: 0,
+        },
+      ],
+      stake: {
+        allowedTokens: [
+          CONTRACT_NAMES.DSLA,
+          CONTRACT_NAMES.DAI,
+          CONTRACT_NAMES.USDC,
+        ],
+        stakingParameters: {
+          dslaBurnedByVerification: '0',
+          dslaPlatformReward: '500',
+        },
+      },
+      messengers: [
+        {
+          contract: CONTRACT_NAMES.SEMessenger,
+          specificationPath: `${appRoot.path}/messenger-specs/${CONTRACT_NAMES.SEMessenger}.json`,
+        },
+      ],
+    },
+  },
+  scripts: {
+    deploy_sla: develop.scripts.deploy_sla,
+  },
+};
+
 const polygon: StackticalConfiguration = {
   chainlink: {
     isProduction: true,
@@ -274,7 +352,7 @@ const polygon: StackticalConfiguration = {
     ethWsUrl: process.env.ETHEREUM_WS_URI,
     nodesConfiguration: [
       {
-        name: 'polygon`-1',
+        name: 'polygon-1',
         restApiUrl: process.env.ETHEREUM_CHAINLINK_NODE_1_URL,
         restApiPort: process.env.ETHEREUM_CHAINLINK_NODE_1_PORT,
         email: process.env.ETHEREUM_CHAINLINK_NODE_1_USER,
@@ -283,7 +361,7 @@ const polygon: StackticalConfiguration = {
           'https://europe-west1-stacktical-0.cloudfunctions.net/dsla-indexer',
       },
       {
-        name: 'polygon`-2',
+        name: 'polygon-2',
         restApiUrl: process.env.ETHEREUM_CHAINLINK_NODE_2_URL,
         restApiPort: process.env.ETHEREUM_CHAINLINK_NODE_2_PORT,
         email: process.env.ETHEREUM_CHAINLINK_NODE_2_USER,
@@ -292,7 +370,7 @@ const polygon: StackticalConfiguration = {
           'https://europe-west1-stacktical-0.cloudfunctions.net/dsla-indexer',
       },
       {
-        name: 'polygon`-3',
+        name: 'polygon-3',
         restApiUrl: process.env.ETHEREUM_CHAINLINK_NODE_3_URL,
         restApiPort: process.env.ETHEREUM_CHAINLINK_NODE_3_PORT,
         email: process.env.ETHEREUM_CHAINLINK_NODE_3_USER,
@@ -322,7 +400,7 @@ const polygon: StackticalConfiguration = {
       '0x6e782e2c3f42003eE56d30BdD269555738A39e4A',
     [CONTRACT_NAMES.StringUtils]: '0x143c0e6cB35AC53C7f06d4914199E4cAc3977AC7',
     [CONTRACT_NAMES.Oracle]: '0x99F4e62a317cc666589c9e370c73c15B158f3c61',
-    [CONTRACT_NAMES.LinkToken]: '0xb0897686c545045afc77cf20ec7a532e3120e0f1',
+    [CONTRACT_NAMES.LinkToken]: '0xb0897686c545045afc77cf20ec7a532e3120e0f1 ',
   },
   checkPastPeriods: true,
   bootstrap: {
@@ -353,7 +431,13 @@ const polygon: StackticalConfiguration = {
       ],
       stake: {
         allowedTokens: [CONTRACT_NAMES.DAI, CONTRACT_NAMES.USDC],
-        stakingParameters: {},
+        stakingParameters: {
+          dslaBurnedByVerification: '0',
+          dslaPlatformReward: '500',
+          dslaDepositByPeriod: '1000',
+          dslaMessengerReward: '250',
+          dslaUserReward: '250',
+        },
       },
       messengers: [
         {
@@ -368,4 +452,64 @@ const polygon: StackticalConfiguration = {
   },
 };
 
-export { develop, ethereum, harmonytestnet, polygon };
+const mumbai: StackticalConfiguration = {
+  chainlink: {
+    isProduction: false,
+    deleteOldJobs: true,
+    nodeFunds: '0.001',
+    gasLimit: undefined,
+    ethWsUrl: process.env.MUMBAI_WS_URI,
+    nodesConfiguration: develop.chainlink.nodesConfiguration,
+  },
+  addresses: {},
+  checkPastPeriods: false,
+  bootstrap: {
+    messengers: {
+      networkAnalytics: {
+        allowedNetworks: SENetworkNames,
+      },
+    },
+    allowance: [
+      {
+        contract: CONTRACT_NAMES.NetworkAnalytics,
+        token: CONTRACT_NAMES.LinkToken,
+        allowance: '10',
+      },
+      {
+        contract: CONTRACT_NAMES.SEMessenger,
+        token: CONTRACT_NAMES.LinkToken,
+        allowance: '10',
+      },
+    ],
+    registry: {
+      periods: [
+        {
+          periodType: PERIOD_TYPE.WEEKLY,
+          amountOfPeriods: 52,
+          expiredPeriods: 20,
+        },
+      ],
+      stake: {
+        allowedTokens: [CONTRACT_NAMES.DAI, CONTRACT_NAMES.USDC],
+        stakingParameters: {
+          dslaBurnedByVerification: '0',
+          dslaPlatformReward: '500',
+          dslaDepositByPeriod: '1000',
+          dslaMessengerReward: '250',
+          dslaUserReward: '250',
+        },
+      },
+      messengers: [
+        {
+          contract: CONTRACT_NAMES.SEMessenger,
+          specificationPath: `${appRoot.path}/messenger-specs/${CONTRACT_NAMES.SEMessenger}.json`,
+        },
+      ],
+    },
+  },
+  scripts: {
+    deploy_sla: develop.scripts.deploy_sla,
+  },
+};
+
+export { develop, ethereum, harmonytestnet, harmony, polygon, mumbai };
