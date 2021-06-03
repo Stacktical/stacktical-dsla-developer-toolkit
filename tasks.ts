@@ -23,6 +23,7 @@ enum TASK_NAMES {
   PREC_FULFILL_ANALYTICS = 'stacktical:prec-fulfill-analytics',
   REGISTRIES_CONFIGURATION = 'stacktical:registries-config',
   GET_VALID_SLAS = 'stacktical:get-valid-slas',
+  GET_REVERT_MESSAGE = 'stacktical:get-revert-message',
 }
 
 task(
@@ -254,5 +255,11 @@ task(TASK_NAMES.GET_VALID_SLAS, 'Get all valid SLAs by network').setAction(
     await hre.run(SUB_TASK_NAMES.GET_VALID_SLAS);
   }
 );
+
+task(TASK_NAMES.GET_REVERT_MESSAGE, 'Get revert message for transaction hash')
+  .addParam('transactionHash', 'Transaction hash to get message')
+  .setAction(async (taskArgs, hre: any) => {
+    await hre.run(SUB_TASK_NAMES.GET_REVERT_MESSAGE, taskArgs);
+  });
 
 module.exports = {};

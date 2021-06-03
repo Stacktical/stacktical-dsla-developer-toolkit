@@ -54,6 +54,7 @@ import { formatBytes32String, parseBytes32String } from 'ethers/lib/utils';
 import axios from 'axios';
 import { BigNumber } from 'ethers';
 import { rpcQuantity } from 'hardhat/internal/core/jsonrpc/types/base-types';
+import { TransactionRequest } from '@ethersproject/providers';
 
 const prettier = require('prettier');
 const { DataFile } = require('edit-config');
@@ -98,6 +99,7 @@ export enum SUB_TASK_NAMES {
   REGISTRIES_CONFIGURATION = 'REGISTRIES_CONFIGURATION',
   PREC_FULFILL_ANALYTICS = 'PREC_FULFILL_ANALYTICS',
   GET_VALID_SLAS = 'GET_VALID_SLAS',
+  GET_REVERT_MESSAGE = 'GET_REVERT_MESSAGE',
 }
 
 subtask(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES, undefined).setAction(
@@ -1900,5 +1902,39 @@ subtask(SUB_TASK_NAMES.GET_VALID_SLAS, undefined).setAction(
     console.log(slaRegistry.address);
     console.log('All valid SLAs:');
     console.log(allSLAs);
+  }
+);
+
+subtask(SUB_TASK_NAMES.GET_REVERT_MESSAGE, undefined).setAction(
+  async (taskArgs, hre: any) => {
+    const { ethers, network } = hre;
+    const transaction = await ethers.provider.getTransaction(
+      taskArgs.transactionHash
+    );
+    console.log('Transaction:');
+    console.log(transaction);
+    const { data } = await axios({
+      method: 'post',
+      url: network.config.url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: {
+        jsonrpc: '2.0',
+        method: 'eth_call',
+        params: [
+          {
+            from: transaction.from,
+            to: transaction.to,
+            value: numberToHex(transaction.value.toString()),
+            data: transaction.data,
+          },
+          numberToHex(transaction.blockNumber),
+        ],
+        id: 1,
+      },
+    });
+    console.log('Error data:');
+    console.log(data);
   }
 );
