@@ -64,16 +64,15 @@ const config: HardhatUserConfig = {
       url: process.env.POLYGON_URI,
       stacktical: StackticalConfigs[NETWORKS.POLYGON],
     },
-    [NETWORKS.HARMONYTESTNET]: {
-      chainId: 1666700000,
-      gas: 12000000,
+    [NETWORKS.MUMBAI]: {
+      chainId: 80001,
+      gas: 19000000,
       gasPrice: 1000000000,
       accounts: {
         mnemonic: process.env.TESTNET_MNEMONIC,
       },
-      url: process.env.HARMONYTESTNET_URI,
-      saveDeployments: true,
-      stacktical: StackticalConfigs[NETWORKS.HARMONYTESTNET],
+      url: process.env.MUMBAI_URI,
+      stacktical: StackticalConfigs[NETWORKS.MUMBAI],
     },
     [NETWORKS.HARMONY]: {
       chainId: 1666600000,
@@ -85,6 +84,17 @@ const config: HardhatUserConfig = {
       url: process.env.HARMONY_URI,
       saveDeployments: true,
       stacktical: StackticalConfigs[NETWORKS.HARMONY],
+    },
+    [NETWORKS.HARMONYTESTNET]: {
+      chainId: 1666700000,
+      gas: 12000000,
+      gasPrice: 1000000000,
+      accounts: {
+        mnemonic: process.env.TESTNET_MNEMONIC,
+      },
+      url: process.env.HARMONYTESTNET_URI,
+      saveDeployments: true,
+      stacktical: StackticalConfigs[NETWORKS.HARMONYTESTNET],
     },
   },
   solidity: {

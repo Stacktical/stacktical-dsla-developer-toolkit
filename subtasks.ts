@@ -225,6 +225,21 @@ subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
               }`;
             case /CHAINLINK_PORT/.test(envVariable):
               return `CHAINLINK_PORT=${node.restApiPort}`;
+            // case /ETH_GAS_PRICE_DEFAULT/.test(envVariable):
+            //   if (network.config.gasPrice) {
+            //     return `ETH_GAS_PRICE_DEFAULT=${network.config.gasPrice}`;
+            //   }
+            //   return envVariable;
+            // case /ETH_MAX_GAS_PRICE_WEI/.test(envVariable):
+            //   if (network.config.gasPrice) {
+            //     return `ETH_MAX_GAS_PRICE_WEI=${network.config.gasPrice}`;
+            //   }
+            //   return envVariable;
+            // case /ETH_MIN_GAS_PRICE_WEI/.test(envVariable):
+            //   if (network.config.gasPrice) {
+            //     return `ETH_MIN_GAS_PRICE_WEI=${network.config.gasPrice}`;
+            //   }
+            //   return envVariable;
             default:
               return envVariable;
           }

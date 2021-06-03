@@ -320,7 +320,11 @@ const harmony: StackticalConfiguration = {
         },
       ],
       stake: {
-        allowedTokens: [CONTRACT_NAMES.DSLA, CONTRACT_NAMES.DAI, CONTRACT_NAMES.USDC],
+        allowedTokens: [
+          CONTRACT_NAMES.DSLA,
+          CONTRACT_NAMES.DAI,
+          CONTRACT_NAMES.USDC,
+        ],
         stakingParameters: {
           dslaBurnedByVerification: '0',
           dslaPlatformReward: '500',
@@ -432,7 +436,7 @@ const polygon: StackticalConfiguration = {
           dslaPlatformReward: '500',
           dslaDepositByPeriod: '1000',
           dslaMessengerReward: '250',
-          dslaUserReward: '250'
+          dslaUserReward: '250',
         },
       },
       messengers: [
@@ -448,4 +452,64 @@ const polygon: StackticalConfiguration = {
   },
 };
 
-export { develop, ethereum, harmonytestnet, harmony, polygon };
+const mumbai: StackticalConfiguration = {
+  chainlink: {
+    isProduction: false,
+    deleteOldJobs: true,
+    nodeFunds: '0.001',
+    gasLimit: undefined,
+    ethWsUrl: process.env.MUMBAI_WS_URI,
+    nodesConfiguration: develop.chainlink.nodesConfiguration,
+  },
+  addresses: {},
+  checkPastPeriods: false,
+  bootstrap: {
+    messengers: {
+      networkAnalytics: {
+        allowedNetworks: SENetworkNames,
+      },
+    },
+    allowance: [
+      {
+        contract: CONTRACT_NAMES.NetworkAnalytics,
+        token: CONTRACT_NAMES.LinkToken,
+        allowance: '10',
+      },
+      {
+        contract: CONTRACT_NAMES.SEMessenger,
+        token: CONTRACT_NAMES.LinkToken,
+        allowance: '10',
+      },
+    ],
+    registry: {
+      periods: [
+        {
+          periodType: PERIOD_TYPE.WEEKLY,
+          amountOfPeriods: 52,
+          expiredPeriods: 20,
+        },
+      ],
+      stake: {
+        allowedTokens: [CONTRACT_NAMES.DAI, CONTRACT_NAMES.USDC],
+        stakingParameters: {
+          dslaBurnedByVerification: '0',
+          dslaPlatformReward: '500',
+          dslaDepositByPeriod: '1000',
+          dslaMessengerReward: '250',
+          dslaUserReward: '250',
+        },
+      },
+      messengers: [
+        {
+          contract: CONTRACT_NAMES.SEMessenger,
+          specificationPath: `${appRoot.path}/messenger-specs/${CONTRACT_NAMES.SEMessenger}.json`,
+        },
+      ],
+    },
+  },
+  scripts: {
+    deploy_sla: develop.scripts.deploy_sla,
+  },
+};
+
+export { develop, ethereum, harmonytestnet, harmony, polygon, mumbai };
