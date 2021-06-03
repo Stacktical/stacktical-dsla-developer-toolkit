@@ -97,6 +97,7 @@ export enum SUB_TASK_NAMES {
   CHECK_CONTRACTS_ALLOWANCE = 'CHECK_CONTRACTS_ALLOWANCE',
   REGISTRIES_CONFIGURATION = 'REGISTRIES_CONFIGURATION',
   PREC_FULFILL_ANALYTICS = 'PREC_FULFILL_ANALYTICS',
+  GET_VALID_SLAS = 'GET_VALID_SLAS',
 }
 
 subtask(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES, undefined).setAction(
@@ -1879,5 +1880,25 @@ subtask(SUB_TASK_NAMES.REGISTRIES_CONFIGURATION, undefined).setAction(
         {}
       )
     );
+  }
+);
+
+subtask(SUB_TASK_NAMES.GET_VALID_SLAS, undefined).setAction(
+  async (taskArgs, hre: any) => {
+    const { deployments, ethers, getNamedAccounts } = hre;
+    const { get } = deployments;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    const slaRegistry = await SLARegistry__factory.connect(
+      (
+        await get(CONTRACT_NAMES.SLARegistry)
+      ).address,
+      signer
+    );
+    const allSLAs = await slaRegistry.allSLAs();
+    console.log('SLA registry address:');
+    console.log(slaRegistry.address);
+    console.log('All valid SLAs:');
+    console.log(allSLAs);
   }
 );

@@ -22,6 +22,7 @@ enum TASK_NAMES {
   CHECK_CONTRACTS_ALLOWANCE = 'stacktical:check-contracts-allowance',
   PREC_FULFILL_ANALYTICS = 'stacktical:prec-fulfill-analytics',
   REGISTRIES_CONFIGURATION = 'stacktical:registries-config',
+  GET_VALID_SLAS = 'stacktical:get-valid-slas',
 }
 
 task(
@@ -247,5 +248,11 @@ task(
   console.log(SUB_TASK_NAMES.START_LOCAL_CHAINLINK_NODES);
   await hre.run(SUB_TASK_NAMES.START_LOCAL_CHAINLINK_NODES);
 });
+
+task(TASK_NAMES.GET_VALID_SLAS, 'Get all valid SLAs by network').setAction(
+  async (_, hre: any) => {
+    await hre.run(SUB_TASK_NAMES.GET_VALID_SLAS);
+  }
+);
 
 module.exports = {};
