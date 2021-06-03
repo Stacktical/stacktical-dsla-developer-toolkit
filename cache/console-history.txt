@@ -1,3 +1,4 @@
+await ethers.provider.send('evm_mine')
 let fact =require('./typechain/factories/NetworkAnalytics__factory')
 let networkAnalyticsArtifact = await hre.deployments.get('NetworkAnalytics')
 let naFactory = fact.NetworkAnalytics__factory

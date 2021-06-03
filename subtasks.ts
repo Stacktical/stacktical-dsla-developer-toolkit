@@ -1471,7 +1471,7 @@ subtask(SUB_TASK_NAMES.FULFILL_ANALYTICS, undefined).setAction(
       },
     });
     const { result } = data.data;
-    if (!taskArgs.rundry) {
+    if (taskArgs.signTransaction) {
       await oracle.fulfillOracleRequest(
         oracleRequestId,
         String(0.1 * 10 ** 18),
@@ -1654,7 +1654,7 @@ subtask(SUB_TASK_NAMES.PREC_FULFILL_ANALYTICS, undefined).setAction(
         /ipfs/ +
         bs58.encode(Buffer.from(`1220${result}`, 'hex'))
     );
-    if (!taskArgs.dryRun) {
+    if (taskArgs.signTransaction) {
       await preCoordinator.chainlinkCallback(
         oracleRequestId,
         BigNumber.from('0x' + result)
