@@ -169,14 +169,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.StringUtils__factory>;
     getContractFactory(
-      name: "NetworkAnalytics",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.NetworkAnalytics__factory>;
-    getContractFactory(
-      name: "SEMessenger",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.SEMessenger__factory>;
-    getContractFactory(
       name: "DAI",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DAI__factory>;
@@ -192,6 +184,14 @@ declare module "hardhat/types/runtime" {
       name: "Migrations",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Migrations__factory>;
+    getContractFactory(
+      name: "NetworkAnalytics",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.NetworkAnalytics__factory>;
+    getContractFactory(
+      name: "SEMessenger",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.SEMessenger__factory>;
 
     // default types
     getContractFactory(
