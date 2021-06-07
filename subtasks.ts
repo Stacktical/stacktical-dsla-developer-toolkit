@@ -130,44 +130,36 @@ subtask(SUB_TASK_NAMES.START_LOCAL_CHAINLINK_NODES, undefined).setAction(
   }
 );
 
-subtask(SUB_TASK_NAMES.START_LOCAL_GANACHE, undefined).setAction(
-  async (_, hre: any) => {
-    await compose.upAll({
-      cwd: path.join(`${appRoot.path}/services/ganache/`),
-      log: true,
-    });
-  }
-);
+subtask(SUB_TASK_NAMES.START_LOCAL_GANACHE, undefined).setAction(async () => {
+  await compose.upAll({
+    cwd: path.join(`${appRoot.path}/services/ganache/`),
+    log: true,
+  });
+});
 
-subtask(SUB_TASK_NAMES.STOP_LOCAL_GANACHE, undefined).setAction(
-  async (_, hre: any) => {
-    await compose.down({
-      cwd: path.join(`${appRoot.path}/services/ganache/`),
-      log: true,
-    });
-  }
-);
+subtask(SUB_TASK_NAMES.STOP_LOCAL_GANACHE, undefined).setAction(async () => {
+  await compose.down({
+    cwd: path.join(`${appRoot.path}/services/ganache/`),
+    log: true,
+  });
+});
 
-subtask(SUB_TASK_NAMES.START_LOCAL_IPFS, undefined).setAction(
-  async (_, hre: any) => {
-    await compose.upAll({
-      cwd: path.join(`${appRoot.path}/services/ipfs/`),
-      log: true,
-    });
-  }
-);
+subtask(SUB_TASK_NAMES.START_LOCAL_IPFS, undefined).setAction(async () => {
+  await compose.upAll({
+    cwd: path.join(`${appRoot.path}/services/ipfs/`),
+    log: true,
+  });
+});
 
-subtask(SUB_TASK_NAMES.STOP_LOCAL_IPFS, undefined).setAction(
-  async (_, hre: any) => {
-    await compose.down({
-      cwd: path.join(`${appRoot.path}/services/ipfs/`),
-      log: true,
-    });
-  }
-);
+subtask(SUB_TASK_NAMES.STOP_LOCAL_IPFS, undefined).setAction(async () => {
+  await compose.down({
+    cwd: path.join(`${appRoot.path}/services/ipfs/`),
+    log: true,
+  });
+});
 
 subtask(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE, undefined).setAction(
-  async (_, hre: any) => {
+  async () => {
     await compose.upAll({
       cwd: path.join(`${appRoot.path}/services/graph-protocol/`),
       log: true,
@@ -175,14 +167,12 @@ subtask(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE, undefined).setAction(
   }
 );
 
-subtask(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE, undefined).setAction(
-  async (_, hre: any) => {
-    await compose.down({
-      cwd: path.join(`${appRoot.path}/services/graph-protocol/`),
-      log: true,
-    });
-  }
-);
+subtask(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE, undefined).setAction(async () => {
+  await compose.down({
+    cwd: path.join(`${appRoot.path}/services/graph-protocol/`),
+    log: true,
+  });
+});
 
 subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
   async (_, hre: any) => {

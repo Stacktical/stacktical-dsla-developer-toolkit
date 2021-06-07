@@ -41,7 +41,6 @@ export type { StringUtils } from "./StringUtils";
 export type { DAI } from "./DAI";
 export type { DSLA } from "./DSLA";
 export type { USDC } from "./USDC";
-export type { Migrations } from "./Migrations";
 export type { NetworkAnalytics } from "./NetworkAnalytics";
 export type { SEMessenger } from "./SEMessenger";
 
@@ -85,6 +84,5 @@ export { StringUtils__factory } from "./factories/StringUtils__factory";
 export { DAI__factory } from "./factories/DAI__factory";
 export { DSLA__factory } from "./factories/DSLA__factory";
 export { USDC__factory } from "./factories/USDC__factory";
-export { Migrations__factory } from "./factories/Migrations__factory";
 export { NetworkAnalytics__factory } from "./factories/NetworkAnalytics__factory";
 export { SEMessenger__factory } from "./factories/SEMessenger__factory";

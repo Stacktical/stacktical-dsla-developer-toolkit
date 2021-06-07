@@ -1351,7 +1351,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/use-cases/staking-efficiency/SEMessenger.sol": {
-      "lastModificationDate": 1623102929210,
+      "lastModificationDate": 1623103011327,
       "contentHash": "7cedc95be21d8ed5af27b90d7b6f5551",
       "sourceName": "contracts/use-cases/staking-efficiency/SEMessenger.sol",
       "solcConfig": {
@@ -2489,6 +2489,108 @@
       ],
       "artifacts": [
         "Pausable"
+      ]
+    },
+    "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/use-cases/staking-efficiency-v1/NetworkAnalyticsV1.sol": {
+      "lastModificationDate": 1623105141087,
+      "contentHash": "761bfc22787eb571067453ebf983496c",
+      "sourceName": "contracts/use-cases/staking-efficiency-v1/NetworkAnalyticsV1.sol",
+      "solcConfig": {
+        "version": "0.6.6",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@chainlink/contracts/src/v0.6/ChainlinkClient.sol",
+        "@openzeppelin/contracts/access/Ownable.sol",
+        "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+        "@openzeppelin/contracts/token/ERC20/SafeERC20.sol",
+        "@openzeppelin/contracts/utils/ReentrancyGuard.sol",
+        "@stacktical/dsla-protocol/contracts/StringUtils.sol",
+        "@stacktical/dsla-protocol/contracts/PeriodRegistry.sol",
+        "@stacktical/dsla-protocol/contracts/StakeRegistry.sol"
+      ],
+      "versionPragmas": [
+        "0.6.6"
+      ],
+      "artifacts": [
+        "NetworkAnalytics"
+      ]
+    },
+    "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/use-cases/staking-efficiency-v1/SEMessengerV1.sol": {
+      "lastModificationDate": 1623105167107,
+      "contentHash": "e9d0a83728d6ca77bc7c0e05bd80866c",
+      "sourceName": "contracts/use-cases/staking-efficiency-v1/SEMessengerV1.sol",
+      "solcConfig": {
+        "version": "0.6.6",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@chainlink/contracts/src/v0.6/ChainlinkClient.sol",
+        "@stacktical/dsla-protocol/contracts/messenger/IMessenger.sol",
+        "@stacktical/dsla-protocol/contracts/SLA.sol",
+        "@stacktical/dsla-protocol/contracts/PeriodRegistry.sol",
+        "@stacktical/dsla-protocol/contracts/StringUtils.sol",
+        "./NetworkAnalyticsV1.sol",
+        "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+        "@openzeppelin/contracts/token/ERC20/SafeERC20.sol"
+      ],
+      "versionPragmas": [
+        "0.6.6"
+      ],
+      "artifacts": [
+        "SEMessenger"
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@stacktical/dsla-protocol/contracts/Details.sol": {
