@@ -20,7 +20,7 @@ const develop: StackticalConfiguration = {
     ethHttpUrl: 'http://host.docker.internal:8545',
     nodesConfiguration: [
       {
-        name: 'develop-1',
+        name: 'chainlink-node-1',
         restApiUrl: 'http://localhost',
         restApiPort: '6688',
         email: 'test@stacktical.com',

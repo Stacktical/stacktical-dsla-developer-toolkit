@@ -241,6 +241,11 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
         return (hits, misses);
     }
 
+//    function retryRequest(){
+//
+//    }
+
+
     /**
      * @dev sets a new jobId, which is a agreement Id of a PreCoordinator contract
      * @param _newJobId the id of the PreCoordinator agreement

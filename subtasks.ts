@@ -53,8 +53,6 @@ import {
 import { formatBytes32String, parseBytes32String } from 'ethers/lib/utils';
 import axios from 'axios';
 import { BigNumber } from 'ethers';
-import { rpcQuantity } from 'hardhat/internal/core/jsonrpc/types/base-types';
-import { TransactionRequest } from '@ethersproject/providers';
 
 const prettier = require('prettier');
 const { DataFile } = require('edit-config');
@@ -109,7 +107,7 @@ subtask(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES, undefined).setAction(
     for (let node of stacktical.chainlink.nodesConfiguration) {
       await compose.down({
         cwd: path.join(
-          `${appRoot.path}/services/chainlink-nodes/${node.name}/`
+          `${appRoot.path}/services/chainlink-nodes/${hre.network.name}-${node.name}/`
         ),
         log: true,
       });
@@ -124,7 +122,7 @@ subtask(SUB_TASK_NAMES.START_LOCAL_CHAINLINK_NODES, undefined).setAction(
     for (let node of stacktical.chainlink.nodesConfiguration) {
       await compose.upAll({
         cwd: path.join(
-          `${appRoot.path}/services/chainlink-nodes/${node.name}/`
+          `${appRoot.path}/services/chainlink-nodes/${hre.network.name}-${node.name}/`
         ),
         log: true,
       });
@@ -204,10 +202,10 @@ subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
         params: { address: oracle.address },
       },
     ]);
-
     await jobSpec.save();
 
     for (let node of stacktical.chainlink.nodesConfiguration) {
+      const nodeName = network.name + '-' + node.name;
       const fileContents = fs.readFileSync(
         `${appRoot.path}/services/docker-compose.yaml`,
         'utf8'
@@ -247,34 +245,34 @@ subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
               return envVariable;
           }
         });
-      data.services.postgres.container_name = `postgres-${node.name}`;
-      data.services.postgres.networks = [`${node.name}-network`];
+      data.services.postgres.container_name = `postgres-${nodeName}`;
+      data.services.postgres.networks = [`${nodeName}-network`];
 
-      data.services.chainlink.container_name = `chainlink-${node.name}`;
-      data.services.chainlink.networks = [`${node.name}-network`];
+      data.services.chainlink.container_name = `chainlink-${nodeName}`;
+      data.services.chainlink.networks = [`${nodeName}-network`];
 
       data.services.chainlink.ports = [
         `${node.restApiPort}:${node.restApiPort}`,
       ];
 
       data.networks = {
-        [`${node.name}-network`]: {
-          name: `${node.name}-developer-toolkit-network`,
+        [`${nodeName}-network`]: {
+          name: `${nodeName}-developer-toolkit-network`,
         },
       };
 
       const yamlStr = yaml.dump(data);
-      fs.mkdirSync(`${appRoot.path}/services/chainlink-nodes/${node.name}/`, {
+      fs.mkdirSync(`${appRoot.path}/services/chainlink-nodes/${nodeName}/`, {
         recursive: true,
       });
       fs.mkdirSync(
-        `${appRoot.path}/services/chainlink-nodes/${node.name}/chainlink`,
+        `${appRoot.path}/services/chainlink-nodes/${nodeName}/chainlink`,
         {
           recursive: true,
         }
       );
       fs.mkdirSync(
-        `${appRoot.path}/services/chainlink-nodes/${node.name}/postgres`,
+        `${appRoot.path}/services/chainlink-nodes/${nodeName}/postgres`,
         {
           recursive: true,
         }
@@ -282,16 +280,16 @@ subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
 
       fs.copyFileSync(
         `${appRoot.path}/services/.api`,
-        `${appRoot.path}/services/chainlink-nodes/${node.name}/chainlink/.api`
+        `${appRoot.path}/services/chainlink-nodes/${nodeName}/chainlink/.api`
       );
 
       fs.copyFileSync(
         `${appRoot.path}/services/.password`,
-        `${appRoot.path}/services/chainlink-nodes/${node.name}/chainlink/.password`
+        `${appRoot.path}/services/chainlink-nodes/${nodeName}/chainlink/.password`
       );
 
       fs.writeFileSync(
-        `${appRoot.path}/services/chainlink-nodes/${node.name}/docker-compose.yaml`,
+        `${appRoot.path}/services/chainlink-nodes/${nodeName}/docker-compose.yaml`,
         yamlStr,
         'utf8'
       );
