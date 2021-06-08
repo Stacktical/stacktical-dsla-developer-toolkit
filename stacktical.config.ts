@@ -6,6 +6,7 @@ import {
   SENetworkNamesBytes32,
   SENetworks,
   SLO_TYPE,
+  USE_CASES,
 } from './constants';
 
 const appRoot = require('app-root-path');
@@ -20,12 +21,18 @@ const develop: StackticalConfiguration = {
     ethHttpUrl: 'http://host.docker.internal:8545',
     nodesConfiguration: [
       {
-        name: 'chainlink-node-1',
+        name: 'node-1',
         restApiUrl: 'http://localhost',
         restApiPort: '6688',
         email: 'test@stacktical.com',
         password: 'PaSSword123456',
-        externalAdapterUrl: 'http://host.docker.internal:6060',
+      },
+      {
+        name: 'node-2',
+        restApiUrl: 'http://localhost',
+        restApiPort: '6689',
+        email: 'test@stacktical.com',
+        password: 'PaSSword123456',
       },
     ],
   },
@@ -39,11 +46,6 @@ const develop: StackticalConfiguration = {
         allowance: '10',
       },
     ],
-    messengers: {
-      networkAnalytics: {
-        allowedNetworks: SENetworkNames,
-      },
-    },
     registry: {
       periods: [
         {
@@ -60,6 +62,8 @@ const develop: StackticalConfiguration = {
         {
           contract: CONTRACT_NAMES.SEMessenger,
           specificationPath: `${appRoot.path}/messenger-specs/${CONTRACT_NAMES.SEMessenger}.json`,
+          useCaseName: USE_CASES.STAKING_EFFICIENCY,
+          externalAdapterUrl: 'http://host.docker.internal:6060',
         },
       ],
     },
@@ -105,8 +109,6 @@ const ethereum: StackticalConfiguration = {
         restApiPort: process.env.ETHEREUM_CHAINLINK_NODE_BERLIN_PORT,
         email: process.env.ETHEREUM_CHAINLINK_NODE_BERLIN_USER,
         password: process.env.ETHEREUM_CHAINLINK_NODE_BERLIN_PASS,
-        externalAdapterUrl:
-          'https://europe-west1-stacktical-0.cloudfunctions.net/dsla-indexer',
       },
       {
         name: 'newyork',
@@ -114,8 +116,6 @@ const ethereum: StackticalConfiguration = {
         restApiPort: process.env.ETHEREUM_CHAINLINK_NODE_NEWYORK_PORT,
         email: process.env.ETHEREUM_CHAINLINK_NODE_NEWYORK_USER,
         password: process.env.ETHEREUM_CHAINLINK_NODE_NEWYORK_PASS,
-        externalAdapterUrl:
-          'https://europe-west1-stacktical-0.cloudfunctions.net/dsla-indexer',
       },
       {
         name: 'paris',
@@ -123,8 +123,6 @@ const ethereum: StackticalConfiguration = {
         restApiPort: process.env.ETHEREUM_CHAINLINK_NODE_PARIS_PORT,
         email: process.env.ETHEREUM_CHAINLINK_NODE_PARIS_USER,
         password: process.env.ETHEREUM_CHAINLINK_NODE_PARIS_PASS,
-        externalAdapterUrl:
-          'https://europe-west1-stacktical-0.cloudfunctions.net/dsla-indexer',
       },
     ],
   },
@@ -149,11 +147,6 @@ const ethereum: StackticalConfiguration = {
   },
   checkPastPeriods: true,
   bootstrap: {
-    messengers: {
-      networkAnalytics: {
-        allowedNetworks: SENetworkNames,
-      },
-    },
     allowance: [
       {
         contract: CONTRACT_NAMES.SEMessenger,
@@ -177,6 +170,9 @@ const ethereum: StackticalConfiguration = {
         {
           contract: CONTRACT_NAMES.SEMessenger,
           specificationPath: `${appRoot.path}/messenger-specs/${CONTRACT_NAMES.SEMessenger}.json`,
+          useCaseName: 'staking-efficiency',
+          externalAdapterUrl:
+            'https://europe-west1-stacktical-0.cloudfunctions.net/dsla-indexer',
         },
       ],
     },
@@ -198,11 +194,6 @@ const harmonytestnet: StackticalConfiguration = {
   addresses: {},
   checkPastPeriods: false,
   bootstrap: {
-    messengers: {
-      networkAnalytics: {
-        allowedNetworks: SENetworkNames,
-      },
-    },
     allowance: [
       {
         contract: CONTRACT_NAMES.SEMessenger,
@@ -225,12 +216,7 @@ const harmonytestnet: StackticalConfiguration = {
           dslaPlatformReward: '500',
         },
       },
-      messengers: [
-        {
-          contract: CONTRACT_NAMES.SEMessenger,
-          specificationPath: `${appRoot.path}/messenger-specs/${CONTRACT_NAMES.SEMessenger}.json`,
-        },
-      ],
+      messengers: develop.bootstrap.registry.messengers,
     },
   },
   scripts: {
@@ -248,13 +234,11 @@ const harmony: StackticalConfiguration = {
     ethHttpUrl: process.env.HARMONY_URI,
     nodesConfiguration: [
       {
-        name: 'harmony`-1',
+        name: 'chainlink-node-1',
         restApiUrl: process.env.HARMONY_CHAINLINK_NODE_1_URL,
         restApiPort: process.env.HARMONY_CHAINLINK_NODE_1_PORT,
         email: process.env.HARMONY_CHAINLINK_NODE_1_USER,
         password: process.env.HARMONY_CHAINLINK_NODE_1_PASS,
-        externalAdapterUrl:
-          'https://europe-west1-stacktical-0.cloudfunctions.net/dsla-indexer',
       },
     ],
   },
@@ -267,11 +251,6 @@ const harmony: StackticalConfiguration = {
   },
   checkPastPeriods: true,
   bootstrap: {
-    messengers: {
-      networkAnalytics: {
-        allowedNetworks: SENetworkNames,
-      },
-    },
     allowance: [
       {
         contract: CONTRACT_NAMES.SEMessenger,
@@ -302,6 +281,9 @@ const harmony: StackticalConfiguration = {
         {
           contract: CONTRACT_NAMES.SEMessenger,
           specificationPath: `${appRoot.path}/messenger-specs/${CONTRACT_NAMES.SEMessenger}.json`,
+          useCaseName: 'staking-efficiency',
+          externalAdapterUrl:
+            'https://europe-west1-stacktical-0.cloudfunctions.net/dsla-indexer',
         },
       ],
     },
@@ -320,31 +302,25 @@ const polygon: StackticalConfiguration = {
     ethWsUrl: process.env.ETHEREUM_WS_URI,
     nodesConfiguration: [
       {
-        name: 'polygon-1',
+        name: 'node-1',
         restApiUrl: process.env.ETHEREUM_CHAINLINK_NODE_1_URL,
         restApiPort: process.env.ETHEREUM_CHAINLINK_NODE_1_PORT,
         email: process.env.ETHEREUM_CHAINLINK_NODE_1_USER,
         password: process.env.ETHEREUM_CHAINLINK_NODE_1_PASS,
-        externalAdapterUrl:
-          'https://europe-west1-stacktical-0.cloudfunctions.net/dsla-indexer',
       },
       {
-        name: 'polygon-2',
+        name: 'node-2',
         restApiUrl: process.env.ETHEREUM_CHAINLINK_NODE_2_URL,
         restApiPort: process.env.ETHEREUM_CHAINLINK_NODE_2_PORT,
         email: process.env.ETHEREUM_CHAINLINK_NODE_2_USER,
         password: process.env.ETHEREUM_CHAINLINK_NODE_2_PASS,
-        externalAdapterUrl:
-          'https://europe-west1-stacktical-0.cloudfunctions.net/dsla-indexer',
       },
       {
-        name: 'polygon-3',
+        name: 'node-3',
         restApiUrl: process.env.ETHEREUM_CHAINLINK_NODE_3_URL,
         restApiPort: process.env.ETHEREUM_CHAINLINK_NODE_3_PORT,
         email: process.env.ETHEREUM_CHAINLINK_NODE_3_USER,
         password: process.env.ETHEREUM_CHAINLINK_NODE_3_PASS,
-        externalAdapterUrl:
-          'https://europe-west1-stacktical-0.cloudfunctions.net/dsla-indexer',
       },
     ],
   },
@@ -370,11 +346,6 @@ const polygon: StackticalConfiguration = {
   },
   checkPastPeriods: true,
   bootstrap: {
-    messengers: {
-      networkAnalytics: {
-        allowedNetworks: SENetworkNames,
-      },
-    },
     allowance: [
       {
         contract: CONTRACT_NAMES.SEMessenger,
@@ -404,6 +375,9 @@ const polygon: StackticalConfiguration = {
         {
           contract: CONTRACT_NAMES.SEMessenger,
           specificationPath: `${appRoot.path}/messenger-specs/${CONTRACT_NAMES.SEMessenger}.json`,
+          useCaseName: 'staking-efficiency',
+          externalAdapterUrl:
+            'https://europe-west1-stacktical-0.cloudfunctions.net/dsla-indexer',
         },
       ],
     },
@@ -425,11 +399,6 @@ const mumbai: StackticalConfiguration = {
   addresses: {},
   checkPastPeriods: false,
   bootstrap: {
-    messengers: {
-      networkAnalytics: {
-        allowedNetworks: SENetworkNames,
-      },
-    },
     allowance: [
       {
         contract: CONTRACT_NAMES.SEMessenger,
@@ -455,12 +424,7 @@ const mumbai: StackticalConfiguration = {
           dslaUserReward: '250',
         },
       },
-      messengers: [
-        {
-          contract: CONTRACT_NAMES.SEMessenger,
-          specificationPath: `${appRoot.path}/messenger-specs/${CONTRACT_NAMES.SEMessenger}.json`,
-        },
-      ],
+      messengers: develop.bootstrap.registry.messengers,
     },
   },
   scripts: {

@@ -1,11 +1,6 @@
 import axios from 'axios';
 import { ChainlinkNodeConfiguration } from './types';
 
-const fs = require('fs');
-
-const appRoot = require('app-root-path');
-const dslaProtocolJsonPath = `${appRoot.path}/services/dsla-protocol.json`;
-
 let cookies = {};
 
 const getChainlinkSessionCookie = async (node: ChainlinkNodeConfiguration) => {
@@ -45,9 +40,11 @@ const getChainlinkAccounts = async (node: ChainlinkNodeConfiguration) => {
   return data;
 };
 
-const getChainlinkBridge = async (node: ChainlinkNodeConfiguration) => {
+const getChainlinkBridges = async (node: ChainlinkNodeConfiguration) => {
   const sessionCookie = await getChainlinkSessionCookie(node);
-  const { data } = await axios({
+  const {
+    data: { data },
+  } = await axios({
     method: 'get',
     url: `${node.restApiUrl}${
       node.restApiPort ? ':' + node.restApiPort : undefined
@@ -58,15 +55,14 @@ const getChainlinkBridge = async (node: ChainlinkNodeConfiguration) => {
     },
     withCredentials: true,
   });
-  const jobJson = JSON.parse(fs.readFileSync(dslaProtocolJsonPath));
-  return data.data.find(
-    (bridge) => bridge.attributes.name === jobJson.tasks[0].type
-  );
+  return data;
 };
 
-const getChainlinkJob = async (node: ChainlinkNodeConfiguration) => {
+const getChainlinkJobs = async (node: ChainlinkNodeConfiguration) => {
   const sessionCookie = await getChainlinkSessionCookie(node);
-  const { data } = await axios({
+  const {
+    data: { data },
+  } = await axios({
     method: 'get',
     url: `${node.restApiUrl}${
       node.restApiPort ? ':' + node.restApiPort : undefined
@@ -77,10 +73,7 @@ const getChainlinkJob = async (node: ChainlinkNodeConfiguration) => {
     },
     withCredentials: true,
   });
-  const jobJson = JSON.parse(fs.readFileSync(dslaProtocolJsonPath));
-  return data.data.find((job) =>
-    job.attributes.tasks.some((task) => task.type === jobJson.tasks[0].type)
-  );
+  return data;
 };
 
 const getChainlinkJobId = async (node: ChainlinkNodeConfiguration) => {
@@ -99,7 +92,11 @@ const getChainlinkJobId = async (node: ChainlinkNodeConfiguration) => {
   return `0x${data.data[0].id}`;
 };
 
-const postChainlinkJob = async (node: ChainlinkNodeConfiguration) => {
+const postChainlinkJob = async (
+  node: ChainlinkNodeConfiguration,
+  jobName,
+  oracleContractAddress
+) => {
   const sessionCookie = await getChainlinkSessionCookie(node);
   const { data } = await axios({
     method: 'post',
@@ -111,15 +108,41 @@ const postChainlinkJob = async (node: ChainlinkNodeConfiguration) => {
       'Content-Type': 'application/json',
     },
     // eslint-disable-next-line global-require,import/no-dynamic-require
-    data: require(dslaProtocolJsonPath),
+    data: {
+      initiators: [
+        {
+          type: 'RunLog',
+          params: {
+            address: oracleContractAddress,
+          },
+        },
+      ],
+      tasks: [
+        {
+          type: jobName,
+        },
+        {
+          type: 'copy',
+          params: {
+            copyPath: ['result'],
+          },
+        },
+        {
+          type: 'ethtx',
+        },
+      ],
+      minPayment: '10000000000',
+    },
     withCredentials: true,
   });
   return data;
 };
 
-const postChainlinkBridge = async (node: ChainlinkNodeConfiguration) => {
-  const jobJson = JSON.parse(fs.readFileSync(dslaProtocolJsonPath));
-
+const postChainlinkBridge = async (
+  node: ChainlinkNodeConfiguration,
+  useCaseName,
+  externalAdapterUrl
+) => {
   const sessionCookie = await getChainlinkSessionCookie(node);
   const { data } = await axios({
     method: 'post',
@@ -131,8 +154,8 @@ const postChainlinkBridge = async (node: ChainlinkNodeConfiguration) => {
       'Content-Type': 'application/json',
     },
     data: {
-      name: jobJson.tasks[0].type,
-      url: node.externalAdapterUrl,
+      name: useCaseName,
+      url: externalAdapterUrl,
     },
     withCredentials: true,
   });
@@ -159,9 +182,9 @@ export {
   deleteJob,
   postChainlinkJob,
   postChainlinkBridge,
-  getChainlinkJob,
+  getChainlinkJobs,
   getChainlinkJobId,
-  getChainlinkBridge,
+  getChainlinkBridges,
   getChainlinkAccounts,
   getChainlinkSessionCookie,
 };

@@ -1,19 +1,15 @@
 /* eslint-disable no-await-in-loop, import/no-extraneous-dependencies */
-import { DeploymentsExtension } from 'hardhat-deploy/dist/types';
 import {
-  fromWei,
-  padLeft,
-  toChecksumAddress,
-  toWei,
-  soliditySha3,
-  numberToHex,
-} from 'web3-utils';
+  DeploymentsExtension,
+  DeployOptionsBase,
+} from 'hardhat-deploy/dist/types';
+import { fromWei, toChecksumAddress, toWei, numberToHex } from 'web3-utils';
 
 import {
   deleteJob,
   getChainlinkAccounts,
-  getChainlinkBridge,
-  getChainlinkJob,
+  getChainlinkBridges,
+  getChainlinkJobs,
   postChainlinkBridge,
   postChainlinkJob,
 } from './chainlinkUtils';
@@ -36,12 +32,7 @@ import {
   SLARegistry__factory,
   StakeRegistry__factory,
 } from './typechain';
-import {
-  CONTRACT_NAMES,
-  PERIOD_STATUS,
-  PERIOD_TYPE,
-  SENetworks,
-} from './constants';
+import { CONTRACT_NAMES, PERIOD_STATUS, PERIOD_TYPE } from './constants';
 import {
   bootstrapStrings,
   generateBootstrapPeriods,
@@ -49,9 +40,7 @@ import {
   getPreCoordinatorConfiguration,
   printSeparator,
 } from './utils';
-import { formatBytes32String, parseBytes32String } from 'ethers/lib/utils';
 import axios from 'axios';
-import { BigNumber } from 'ethers';
 
 const prettier = require('prettier');
 const { DataFile } = require('edit-config');
@@ -175,19 +164,7 @@ subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
     const { get } = deployments;
     const { stacktical }: { stacktical: StackticalConfiguration } =
       network.config;
-    const oracle = await get(CONTRACT_NAMES.Oracle);
     const linkToken = await get(CONTRACT_NAMES.LinkToken);
-
-    const jobSpec = await DataFile.load(
-      `${appRoot.path}/services/dsla-protocol.json`
-    );
-    jobSpec.set('initiators', [
-      {
-        type: 'RunLog',
-        params: { address: oracle.address },
-      },
-    ]);
-    await jobSpec.save();
 
     for (let node of stacktical.chainlink.nodesConfiguration) {
       const nodeName = network.name + '-' + node.name;
@@ -289,26 +266,46 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
     const { get } = deployments;
     const { stacktical }: { stacktical: StackticalConfiguration } =
       network.config;
+    const oracle = await get(CONTRACT_NAMES.Oracle);
     function wait(timeout) {
       return new Promise((resolve) => {
         setTimeout(resolve, timeout);
       });
     }
 
-    const updatedBridge = async (node: ChainlinkNodeConfiguration) => {
+    const updatedBridge = async (
+      node: ChainlinkNodeConfiguration,
+      useCaseName,
+      externalAdapterUrl
+    ) => {
       try {
-        const postedBridge = await getChainlinkBridge(node);
-        if (postedBridge) return postedBridge;
-        const httpRequestJobRes = await postChainlinkBridge(node);
+        const bridges = await getChainlinkBridges(node);
+        const storedBridge = bridges.find(
+          (bridge) => bridge.attributes.name === useCaseName
+        );
+        if (storedBridge) return storedBridge;
+        const httpRequestJobRes = await postChainlinkBridge(
+          node,
+          useCaseName,
+          externalAdapterUrl
+        );
         return httpRequestJobRes.data;
       } catch (error) {
         return false;
       }
     };
 
-    const updatedJob = async (node: ChainlinkNodeConfiguration) => {
+    const updatedJob = async (node: ChainlinkNodeConfiguration, jobName) => {
       try {
-        const postedJob = await getChainlinkJob(node);
+        const postedJobs = await getChainlinkJobs(node);
+        const postedJob = postedJobs.find(
+          (job) =>
+            job.attributes.tasks.some((task) => task.type === jobName) &&
+            job.attributes.initiators.some(
+              (initiator) =>
+                toChecksumAddress(initiator.params.address) === oracle.address
+            )
+        );
         if (postedJob) {
           if (!stacktical.chainlink.deleteOldJobs) {
             console.log('Keeping existing jobId: ' + postedJob.id);
@@ -317,7 +314,11 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
           console.log('Deleting existing jobId: ' + postedJob.id);
           await deleteJob(node, postedJob.id);
         }
-        const httpRequestJobRes = await postChainlinkJob(node);
+        const httpRequestJobRes = await postChainlinkJob(
+          node,
+          jobName,
+          oracle.address
+        );
         return httpRequestJobRes.data;
       } catch (error) {
         return false;
@@ -342,33 +343,42 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
     for (let node of stacktical.chainlink.nodesConfiguration) {
       printSeparator();
       console.log('Preparing node: ' + node.name);
-      console.log('Creating dsla-protocol bridge in Chainlink nodes...');
-      let bridge = await updatedBridge(node);
-      while (!bridge) {
-        // eslint-disable-next-line no-await-in-loop
-        await wait(5000);
-        console.log(
-          'Bridge creation in Chainlink node failed, reattempting in 5 seconds'
+      for (let messenger of stacktical.bootstrap.registry.messengers) {
+        console.log('Creating use case configuration: ' + messenger.contract);
+        let bridge = await updatedBridge(
+          node,
+          messenger.useCaseName,
+          messenger.externalAdapterUrl
         );
-        // eslint-disable-next-line no-await-in-loop
-        bridge = await updatedBridge(node);
-      }
-      console.log(`Bridge created! Bridge ID: ${bridge.id}.`);
+        while (!bridge) {
+          // eslint-disable-next-line no-await-in-loop
+          await wait(5000);
+          console.log(
+            'Bridge creation in Chainlink node failed, reattempting in 5 seconds'
+          );
+          // eslint-disable-next-line no-await-in-loop
+          bridge = await updatedBridge(
+            node,
+            messenger.useCaseName,
+            messenger.externalAdapterUrl
+          );
+        }
+        console.log(`Bridge created! Bridge ID: ${bridge.id}.`);
 
-      // Create job
-      console.log('Creating staking efficiency job on Chainlink node...');
-      // eslint-disable-next-line global-require
-      let job = await updatedJob(node);
-      while (!job) {
-        // eslint-disable-next-line no-await-in-loop
-        await wait(5000);
-        console.log(
-          'Job creation in Chainlink node failed, reattempting in 5 seconds'
-        );
-        // eslint-disable-next-line no-await-in-loop
-        job = await updatedJob(node);
+        // Create job
+        // eslint-disable-next-line global-require
+        let job = await updatedJob(node, messenger.useCaseName);
+        while (!job) {
+          // eslint-disable-next-line no-await-in-loop
+          await wait(5000);
+          console.log(
+            'Job creation in Chainlink node failed, reattempting in 5 seconds'
+          );
+          // eslint-disable-next-line no-await-in-loop
+          job = await updatedJob(node, messenger.useCaseName);
+        }
+        console.log(`Job created! Job ID: ${job.id}.`);
       }
-      console.log(`Job created! Job ID: ${job.id}.`);
 
       // Fund node
       let chainlinkNodeAddress = await updatedAddress(node);
@@ -397,7 +407,6 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
       );
 
       // Authorize node
-      const oracle = await get(CONTRACT_NAMES.Oracle);
       const oracleContract = Oracle__factory.connect(
         oracle.address,
         await ethers.getSigner(deployer)
@@ -1190,8 +1199,11 @@ subtask(SUB_TASK_NAMES.SET_PRECOORDINATOR, undefined).setAction(
     console.log('Setting Chainlink config on PreCoordinator contract');
     console.log('Nodes configuration from stacktical config:');
     console.log(stacktical.chainlink.nodesConfiguration);
+    const oracle = await get(CONTRACT_NAMES.Oracle);
     const preCoordinatorConfiguration = await getPreCoordinatorConfiguration(
-      stacktical.chainlink.nodesConfiguration
+      stacktical.chainlink.nodesConfiguration,
+      taskArgs.useCaseName,
+      oracle.address
     );
     console.log('PreCoordinator configuration from nodes information:');
     console.log(preCoordinatorConfiguration);
@@ -1211,6 +1223,7 @@ subtask(SUB_TASK_NAMES.SET_PRECOORDINATOR, undefined).setAction(
     const receipt = await tx.wait();
     console.log('Service agreement created: ');
     console.log(receipt.events[0].args);
+    return receipt.events[0].args.saId;
   }
 );
 
@@ -1218,17 +1231,25 @@ subtask(SUB_TASK_NAMES.DEPLOY_CHAINLINK_CONTRACTS, undefined).setAction(
   async (taskArgs, hre: any) => {
     const { deploy, get } = hre.deployments;
     const { deployer } = await hre.getNamedAccounts();
+
     await deploy(CONTRACT_NAMES.LinkToken, {
       from: deployer,
       log: true,
       skipIfAlreadyDeployed: true,
     });
+
     const linkToken = await get(CONTRACT_NAMES.LinkToken);
     await deploy(CONTRACT_NAMES.Oracle, {
       from: deployer,
       args: [linkToken.address],
       log: true,
       skipIfAlreadyDeployed: true,
+    });
+
+    await deploy(CONTRACT_NAMES.PreCoordinator, {
+      from: deployer,
+      log: true,
+      args: [linkToken.address],
     });
   }
 );
@@ -1776,16 +1797,29 @@ subtask(SUB_TASK_NAMES.REGISTRIES_CONFIGURATION, undefined).setAction(
           ...r,
           [PERIOD_TYPE[index]]: {
             initialized: definition.initialized,
+          },
+        }),
+        {}
+      )
+    );
+    console.log(
+      periodDefinitions.reduce(
+        (r, definition, index) => ({
+          ...r,
+          [PERIOD_TYPE[index]]: {
+            initialized: definition.initialized,
             starts: definition.starts.map((start) =>
               moment(Number(start.toString()) * 1000)
                 .utc(0)
                 .format('DD/MM/YYYY HH:mm:ss')
             ),
+            startsUnix: definition.starts.map((start) => start.toString()),
             ends: definition.ends.map((end) =>
               moment(Number(end.toString()) * 1000)
                 .utc(0)
                 .format('DD/MM/YYYY HH:mm:ss')
             ),
+            endsUnix: definition.ends.map((end) => end.toString()),
           },
         }),
         {}

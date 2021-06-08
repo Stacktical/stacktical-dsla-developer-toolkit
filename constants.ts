@@ -51,6 +51,11 @@ export enum DEPLOYMENT_TAGS {
   Chainlink = 'chainlink',
   Services = 'services',
   Details = 'details',
+  Messengers = 'messengers',
+}
+
+export enum USE_CASES {
+  STAKING_EFFICIENCY = 'staking-efficiency',
 }
 
 export enum NETWORKS {
