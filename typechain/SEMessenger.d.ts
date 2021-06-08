@@ -26,7 +26,6 @@ interface SEMessengerInterface extends ethers.utils.Interface {
     "fulfillsCounter()": FunctionFragment;
     "jobId()": FunctionFragment;
     "messengerPrecision()": FunctionFragment;
-    "networkAnalyticsAddress()": FunctionFragment;
     "oracle()": FunctionFragment;
     "owner()": FunctionFragment;
     "parseSLIData(bytes32)": FunctionFragment;
@@ -53,10 +52,6 @@ interface SEMessengerInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "jobId", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "messengerPrecision",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "networkAnalyticsAddress",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "oracle", values?: undefined): string;
@@ -111,10 +106,6 @@ interface SEMessengerInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "jobId", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "messengerPrecision",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "networkAnalyticsAddress",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "oracle", data: BytesLike): Result;
@@ -231,8 +222,6 @@ export class SEMessenger extends BaseContract {
 
     messengerPrecision(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    networkAnalyticsAddress(overrides?: CallOverrides): Promise<[string]>;
-
     oracle(overrides?: CallOverrides): Promise<[string]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
@@ -297,8 +286,6 @@ export class SEMessenger extends BaseContract {
 
   messengerPrecision(overrides?: CallOverrides): Promise<BigNumber>;
 
-  networkAnalyticsAddress(overrides?: CallOverrides): Promise<string>;
-
   oracle(overrides?: CallOverrides): Promise<string>;
 
   owner(overrides?: CallOverrides): Promise<string>;
@@ -360,8 +347,6 @@ export class SEMessenger extends BaseContract {
     jobId(overrides?: CallOverrides): Promise<string>;
 
     messengerPrecision(overrides?: CallOverrides): Promise<BigNumber>;
-
-    networkAnalyticsAddress(overrides?: CallOverrides): Promise<string>;
 
     oracle(overrides?: CallOverrides): Promise<string>;
 
@@ -479,8 +464,6 @@ export class SEMessenger extends BaseContract {
 
     messengerPrecision(overrides?: CallOverrides): Promise<BigNumber>;
 
-    networkAnalyticsAddress(overrides?: CallOverrides): Promise<BigNumber>;
-
     oracle(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
@@ -543,10 +526,6 @@ export class SEMessenger extends BaseContract {
     jobId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     messengerPrecision(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    networkAnalyticsAddress(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

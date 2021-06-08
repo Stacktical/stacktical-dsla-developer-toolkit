@@ -18,7 +18,6 @@ module.exports = async ({
   const stringUtils = await get(CONTRACT_NAMES.StringUtils);
 
   const periodRegistry = await get(CONTRACT_NAMES.PeriodRegistry);
-  const stakeRegistry = await get(CONTRACT_NAMES.StakeRegistry);
 
   const baseOptions: DeployOptionsBase = {
     from: deployer,
@@ -44,29 +43,14 @@ module.exports = async ({
   );
   const { saId } = events[0].args;
   const feeMultiplier = stacktical.chainlink.nodesConfiguration.length;
-  await deploy(CONTRACT_NAMES.NetworkAnalytics, {
-    ...baseOptions,
-    args: [
-      preCoordinator.address,
-      linkToken.address,
-      saId,
-      periodRegistry.address,
-      stakeRegistry.address,
-      feeMultiplier,
-    ],
-    libraries: {
-      StringUtils: stringUtils.address,
-    },
-  });
-  const networkAnalytics = await get(CONTRACT_NAMES.NetworkAnalytics);
   await deploy(CONTRACT_NAMES.SEMessenger, {
     ...baseOptions,
     args: [
       preCoordinator.address,
       linkToken.address,
       saId,
-      networkAnalytics.address,
       feeMultiplier,
+      periodRegistry.address,
     ],
     libraries: {
       StringUtils: stringUtils.address,

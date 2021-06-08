@@ -46,7 +46,6 @@ task(TASK_NAMES.BOOTSTRAP_DSLA_PROTOCOL, 'Bootstrap DSLA protocol').setAction(
       SUB_TASK_NAMES.BOOTSTRAP_MESSENGER_REGISTRY,
       SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY,
       SUB_TASK_NAMES.BOOTSTRAP_PERIOD_REGISTRY,
-      SUB_TASK_NAMES.BOOTSTRAP_NETWORK_ANALYTICS,
       SUB_TASK_NAMES.SET_CONTRACTS_ALLOWANCE,
     ];
     for (let subtask of bootstrapSubtasks) {
@@ -70,11 +69,11 @@ task(
     await run(SUB_TASK_NAMES.REQUEST_SLI, taskArgs);
   });
 
-task(TASK_NAMES.REQUEST_ANALYTICS, 'Request network analytics')
-  .addParam('periodId', 'Period id to request network analytics')
-  .setAction(async (taskArgs, { run }) => {
-    await run(SUB_TASK_NAMES.REQUEST_ANALYTICS, taskArgs);
-  });
+// task(TASK_NAMES.REQUEST_ANALYTICS, 'Request network analytics')
+//   .addParam('periodId', 'Period id to request network analytics')
+//   .setAction(async (taskArgs, { run }) => {
+//     await run(SUB_TASK_NAMES.REQUEST_ANALYTICS, taskArgs);
+//   });
 
 task(
   TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE,
@@ -153,31 +152,31 @@ task(
   return new Promise((resolve, reject) => {});
 });
 
-task(TASK_NAMES.FULFILL_ANALYTICS, 'Fulfill pendant network analytics')
-  .addParam(
-    'periodId',
-    'Period id of the period to fulfill',
-    undefined,
-    types.int
-  )
-  .addParam(
-    'periodType',
-    'Period type of the period to fulfill',
-    undefined,
-    types.int
-  )
-  .addParam('networkTicker', 'Network ticker of the period to fulfill')
-  .addParam(
-    'nodeName',
-    'Name of the Chainlink node to use to fulfill',
-    undefined,
-    types.string
-  )
-  .addFlag('signTransaction', 'signs the transaction to fulfill the analytics')
-  .setAction(async (taskArgs, hre: any) => {
-    await hre.run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
-    await hre.run(SUB_TASK_NAMES.FULFILL_ANALYTICS, taskArgs);
-  });
+// task(TASK_NAMES.FULFILL_ANALYTICS, 'Fulfill pendant network analytics')
+//   .addParam(
+//     'periodId',
+//     'Period id of the period to fulfill',
+//     undefined,
+//     types.int
+//   )
+//   .addParam(
+//     'periodType',
+//     'Period type of the period to fulfill',
+//     undefined,
+//     types.int
+//   )
+//   .addParam('networkTicker', 'Network ticker of the period to fulfill')
+//   .addParam(
+//     'nodeName',
+//     'Name of the Chainlink node to use to fulfill',
+//     undefined,
+//     types.string
+//   )
+//   .addFlag('signTransaction', 'signs the transaction to fulfill the analytics')
+//   .setAction(async (taskArgs, hre: any) => {
+//     await hre.run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
+//     await hre.run(SUB_TASK_NAMES.FULFILL_ANALYTICS, taskArgs);
+//   });
 
 task(
   TASK_NAMES.REGISTRIES_CONFIGURATION,
@@ -212,31 +211,31 @@ task(
   await hre.run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
 });
 
-task(TASK_NAMES.PREC_FULFILL_ANALYTICS, 'Prec fulfill analytics')
-  .addParam(
-    'periodId',
-    'Period id of the period to fulfill',
-    undefined,
-    types.int
-  )
-  .addParam(
-    'periodType',
-    'Period type of the period to fulfill',
-    undefined,
-    types.int
-  )
-  .addParam('networkTicker', 'Network ticker of the period to fulfill')
-  .addParam(
-    'nodeName',
-    'Name of the Chainlink node to use to fulfill',
-    undefined,
-    types.string
-  )
-  .addFlag('signTransaction', 'signs the transaction to fulfill the analytics')
-
-  .setAction(async (taskArgs, hre: any) => {
-    await hre.run(SUB_TASK_NAMES.PREC_FULFILL_ANALYTICS, taskArgs);
-  });
+// task(TASK_NAMES.PREC_FULFILL_ANALYTICS, 'Prec fulfill analytics')
+//   .addParam(
+//     'periodId',
+//     'Period id of the period to fulfill',
+//     undefined,
+//     types.int
+//   )
+//   .addParam(
+//     'periodType',
+//     'Period type of the period to fulfill',
+//     undefined,
+//     types.int
+//   )
+//   .addParam('networkTicker', 'Network ticker of the period to fulfill')
+//   .addParam(
+//     'nodeName',
+//     'Name of the Chainlink node to use to fulfill',
+//     undefined,
+//     types.string
+//   )
+//   .addFlag('signTransaction', 'signs the transaction to fulfill the analytics')
+//
+//   .setAction(async (taskArgs, hre: any) => {
+//     await hre.run(SUB_TASK_NAMES.PREC_FULFILL_ANALYTICS, taskArgs);
+//   });
 
 task(
   TASK_NAMES.RESTART_CHAINLINK_NODES,

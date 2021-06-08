@@ -34,11 +34,6 @@ const develop: StackticalConfiguration = {
   bootstrap: {
     allowance: [
       {
-        contract: CONTRACT_NAMES.NetworkAnalytics,
-        token: CONTRACT_NAMES.LinkToken,
-        allowance: '10',
-      },
-      {
         contract: CONTRACT_NAMES.SEMessenger,
         token: CONTRACT_NAMES.LinkToken,
         allowance: '10',
@@ -52,19 +47,9 @@ const develop: StackticalConfiguration = {
     registry: {
       periods: [
         {
-          periodType: PERIOD_TYPE.HOURLY,
-          amountOfPeriods: 5,
-          expiredPeriods: 2,
-        },
-        {
-          periodType: PERIOD_TYPE.DAILY,
-          amountOfPeriods: 5,
-          expiredPeriods: 2,
-        },
-        {
           periodType: PERIOD_TYPE.WEEKLY,
           amountOfPeriods: 52,
-          expiredPeriods: 10,
+          expiredPeriods: 4,
         },
       ],
       stake: {
@@ -87,7 +72,7 @@ const develop: StackticalConfiguration = {
       periodType: PERIOD_TYPE.WEEKLY,
       initialPeriodId: 0,
       finalPeriodId: 10,
-      extraData: [SENetworkNamesBytes32[SENetworks.DOT]],
+      extraData: [SENetworkNamesBytes32[SENetworks.ONE]],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
       leverage: 50,
@@ -99,8 +84,8 @@ const develop: StackticalConfiguration = {
         serviceImage:
           'https://storage.googleapis.com/bdsla-incentivized-beta/validators/chainode.svg',
         serviceURL: 'https://bdslaToken.network',
-        serviceAddress: 'validator-address',
-        serviceTicker: SENetworkNames[SENetworks.DOT],
+        serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
+        serviceTicker: SENetworkNames[SENetworks.ONE],
       },
     },
   },
@@ -158,8 +143,6 @@ const ethereum: StackticalConfiguration = {
     [CONTRACT_NAMES.StakeRegistry]:
       '0x4b48AdDd838A11061cE285106f4a30cc5636735C',
     [CONTRACT_NAMES.SEMessenger]: '0xFB29aFC3F4B78755f07faD5B86448595D2EEC86C',
-    [CONTRACT_NAMES.NetworkAnalytics]:
-      '0xC33492F8D76918A9527165A9fD71089980656357',
     [CONTRACT_NAMES.Details]: '0x38b0cd8BB4C4608E32EE75b25A8846459cEAd513',
     [CONTRACT_NAMES.PreCoordinator]:
       '0x7db551Ce6677211309db39A67F73cA923e9d4944',
@@ -172,11 +155,6 @@ const ethereum: StackticalConfiguration = {
       },
     },
     allowance: [
-      {
-        contract: CONTRACT_NAMES.NetworkAnalytics,
-        token: CONTRACT_NAMES.LinkToken,
-        allowance: '10',
-      },
       {
         contract: CONTRACT_NAMES.SEMessenger,
         token: CONTRACT_NAMES.LinkToken,
@@ -226,11 +204,6 @@ const harmonytestnet: StackticalConfiguration = {
       },
     },
     allowance: [
-      {
-        contract: CONTRACT_NAMES.NetworkAnalytics,
-        token: CONTRACT_NAMES.LinkToken,
-        allowance: '10',
-      },
       {
         contract: CONTRACT_NAMES.SEMessenger,
         token: CONTRACT_NAMES.LinkToken,
@@ -300,11 +273,6 @@ const harmony: StackticalConfiguration = {
       },
     },
     allowance: [
-      {
-        contract: CONTRACT_NAMES.NetworkAnalytics,
-        token: CONTRACT_NAMES.LinkToken,
-        allowance: '100',
-      },
       {
         contract: CONTRACT_NAMES.SEMessenger,
         token: CONTRACT_NAMES.LinkToken,
@@ -393,8 +361,6 @@ const polygon: StackticalConfiguration = {
     [CONTRACT_NAMES.StakeRegistry]:
       '0xc5C890444975f2211F84d3b543355f8DC74a6069',
     [CONTRACT_NAMES.SEMessenger]: '0x3eBe46d0d873B635D1e003BEe76de67cE2F3a584',
-    [CONTRACT_NAMES.NetworkAnalytics]:
-      '0x2f5F25F158cb7Ae0BF1f7eBfDF4ed9A58E3BcB58',
     [CONTRACT_NAMES.Details]: '0x857533E7d9DE216E8BdBd1620018099B88cDD792',
     [CONTRACT_NAMES.PreCoordinator]:
       '0x6e782e2c3f42003eE56d30BdD269555738A39e4A',
@@ -410,11 +376,6 @@ const polygon: StackticalConfiguration = {
       },
     },
     allowance: [
-      {
-        contract: CONTRACT_NAMES.NetworkAnalytics,
-        token: CONTRACT_NAMES.LinkToken,
-        allowance: '10',
-      },
       {
         contract: CONTRACT_NAMES.SEMessenger,
         token: CONTRACT_NAMES.LinkToken,
@@ -470,11 +431,6 @@ const mumbai: StackticalConfiguration = {
       },
     },
     allowance: [
-      {
-        contract: CONTRACT_NAMES.NetworkAnalytics,
-        token: CONTRACT_NAMES.LinkToken,
-        allowance: '10',
-      },
       {
         contract: CONTRACT_NAMES.SEMessenger,
         token: CONTRACT_NAMES.LinkToken,

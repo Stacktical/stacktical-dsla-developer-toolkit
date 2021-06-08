@@ -27,7 +27,6 @@ import {
   DSLA__factory,
   ERC20__factory,
   MessengerRegistry__factory,
-  NetworkAnalytics__factory,
   Oracle__factory,
   Ownable__factory,
   PeriodRegistry__factory,
@@ -82,20 +81,16 @@ export enum SUB_TASK_NAMES {
   BOOTSTRAP_MESSENGER_REGISTRY = 'BOOTSTRAP_MESSENGER_REGISTRY',
   BOOTSTRAP_PERIOD_REGISTRY = 'BOOTSTRAP_PERIOD_REGISTRY',
   BOOTSTRAP_STAKE_REGISTRY = 'BOOTSTRAP_STAKE_REGISTRY',
-  BOOTSTRAP_NETWORK_ANALYTICS = 'BOOTSTRAP_NETWORK_ANALYTICS',
   SET_CONTRACTS_ALLOWANCE = 'SET_CONTRACTS_ALLOWANCE',
   REQUEST_SLI = 'REQUEST_SLI',
-  REQUEST_ANALYTICS = 'REQUEST_ANALYTICS',
   GET_PRECOORDINATOR = 'GET_PRECOORDINATOR',
   SET_PRECOORDINATOR = 'SET_PRECOORDINATOR',
   DEPLOY_LOCAL_CHAINLINK_NODES = 'DEPLOY_LOCAL_CHAINLINK_NODES',
   DEPLOY_CHAINLINK_CONTRACTS = 'DEPLOY_CHAINLINK_CONTRACTS',
   UPDATE_PRECOORDINATOR = 'UPDATE_PRECOORDINATOR',
-  FULFILL_ANALYTICS = 'FULFILL_ANALYTICS',
   FULFILL_SLI = 'FULFILL_SLI',
   CHECK_CONTRACTS_ALLOWANCE = 'CHECK_CONTRACTS_ALLOWANCE',
   REGISTRIES_CONFIGURATION = 'REGISTRIES_CONFIGURATION',
-  PREC_FULFILL_ANALYTICS = 'PREC_FULFILL_ANALYTICS',
   GET_VALID_SLAS = 'GET_VALID_SLAS',
   GET_REVERT_MESSAGE = 'GET_REVERT_MESSAGE',
 }
@@ -470,7 +465,6 @@ subtask(SUB_TASK_NAMES.SAVE_CONTRACTS_ADDRESSES, undefined).setAction(
       `\n\nexport default ${networkName}`,
     ];
     const [startingLine, finalLine] = getLines(network.name);
-    const NetworkAnalytics = await get(CONTRACT_NAMES.NetworkAnalytics);
     const DSLAToken = await get(CONTRACT_NAMES.DSLA);
     const DAIToken = await get(CONTRACT_NAMES.DAI);
     const USDCToken = await get(CONTRACT_NAMES.USDC);
@@ -494,7 +488,6 @@ subtask(SUB_TASK_NAMES.SAVE_CONTRACTS_ADDRESSES, undefined).setAction(
       PeriodRegistry: PeriodRegistry.address,
       StakeRegistry: StakeRegistry.address,
       SEMessenger: SEMessenger.address,
-      NetworkAnalytics: NetworkAnalytics.address,
       Details: Details.address,
       PreCoordinator: PreCoordinator.address,
       StringUtils: StringUtils.address,
@@ -558,7 +551,6 @@ subtask(SUB_TASK_NAMES.EXPORT_ABIS, undefined).setAction(
       CONTRACT_NAMES.MessengerRegistry
     );
     const Details = await getArtifact(CONTRACT_NAMES.Details);
-    const NetworkAnalytics = await getArtifact(CONTRACT_NAMES.NetworkAnalytics);
     const ERC20 = await getArtifact(CONTRACT_NAMES.ERC20);
 
     const files = {
@@ -596,11 +588,6 @@ subtask(SUB_TASK_NAMES.EXPORT_ABIS, undefined).setAction(
         constName: 'export const DetailsABI: AbiItem[] =',
         tsFileName: 'DetailsABI.ts',
         abi: Details.abi,
-      },
-      NetworkAnalytics: {
-        constName: 'export const NetworkAnalyticsABI: AbiItem[] =',
-        tsFileName: 'NetworkAnalyticsABI.ts',
-        abi: NetworkAnalytics.abi,
       },
       bDSLA: {
         constName: 'export const erc20ABI: AbiItem[] =',
@@ -803,7 +790,6 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_MESSENGER_REGISTRY, undefined).setAction(
       const messengerSpec = JSON.parse(
         fs.readFileSync(messenger.specificationPath)
       );
-
       const updatedSpec = {
         ...messengerSpec,
         timestamp: new Date().toISOString(),
@@ -839,6 +825,7 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_PERIOD_REGISTRY, undefined).setAction(
     const { deployments, ethers, getNamedAccounts } = hre;
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
+
     const { get } = deployments;
 
     const [startBootstrap, finishBootstrap] = bootstrapStrings(
@@ -898,47 +885,47 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_PERIOD_REGISTRY, undefined).setAction(
   }
 );
 
-subtask(SUB_TASK_NAMES.BOOTSTRAP_NETWORK_ANALYTICS, undefined).setAction(
-  async (_, hre: any) => {
-    const {
-      stacktical: { bootstrap },
-    }: { stacktical: StackticalConfiguration } = hre.network.config;
-    const {
-      messengers: {
-        networkAnalytics: { allowedNetworks },
-      },
-    } = bootstrap;
-    const { deployments, ethers, getNamedAccounts } = hre;
-    const { deployer } = await getNamedAccounts();
-    const signer = await ethers.getSigner(deployer);
-    const { get } = deployments;
-
-    const [startBootstrap, finishBootstrap] = bootstrapStrings(
-      CONTRACT_NAMES.NetworkAnalytics
-    );
-    console.log(startBootstrap);
-
-    const networkAnalyticsArtifact = await get(CONTRACT_NAMES.NetworkAnalytics);
-    const networkAnalytics = await NetworkAnalytics__factory.connect(
-      networkAnalyticsArtifact.address,
-      signer
-    );
-
-    console.log('Adding the network names to the NetworkAnalytics contract');
-    let tx = await networkAnalytics.addMultipleNetworks(
-      allowedNetworks.map(formatBytes32String)
-    );
-    await tx.wait();
-    const naNetworks = await networkAnalytics.getNetworkNames();
-    console.log('Networks to add: ');
-    console.log(allowedNetworks);
-    console.log('Networks to add in bytes32: ');
-    console.log(allowedNetworks.map(formatBytes32String));
-    console.log('Networks allowed on the NetworkAnalytics contract: ');
-    console.log(naNetworks);
-    console.log(finishBootstrap);
-  }
-);
+// subtask(SUB_TASK_NAMES.BOOTSTRAP_NETWORK_ANALYTICS, undefined).setAction(
+//   async (_, hre: any) => {
+//     const {
+//       stacktical: { bootstrap },
+//     }: { stacktical: StackticalConfiguration } = hre.network.config;
+//     const {
+//       messengers: {
+//         networkAnalytics: { allowedNetworks },
+//       },
+//     } = bootstrap;
+//     const { deployments, ethers, getNamedAccounts } = hre;
+//     const { deployer } = await getNamedAccounts();
+//     const signer = await ethers.getSigner(deployer);
+//     const { get } = deployments;
+//
+//     const [startBootstrap, finishBootstrap] = bootstrapStrings(
+//       CONTRACT_NAMES.NetworkAnalytics
+//     );
+//     console.log(startBootstrap);
+//
+//     const networkAnalyticsArtifact = await get(CONTRACT_NAMES.NetworkAnalytics);
+//     const networkAnalytics = await NetworkAnalytics__factory.connect(
+//       networkAnalyticsArtifact.address,
+//       signer
+//     );
+//
+//     console.log('Adding the network names to the NetworkAnalytics contract');
+//     let tx = await networkAnalytics.addMultipleNetworks(
+//       allowedNetworks.map(formatBytes32String)
+//     );
+//     await tx.wait();
+//     const naNetworks = await networkAnalytics.getNetworkNames();
+//     console.log('Networks to add: ');
+//     console.log(allowedNetworks);
+//     console.log('Networks to add in bytes32: ');
+//     console.log(allowedNetworks.map(formatBytes32String));
+//     console.log('Networks allowed on the NetworkAnalytics contract: ');
+//     console.log(naNetworks);
+//     console.log(finishBootstrap);
+//   }
+// );
 
 subtask(SUB_TASK_NAMES.SET_CONTRACTS_ALLOWANCE, undefined).setAction(
   async (_, hre: any) => {
@@ -1144,52 +1131,6 @@ subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
   }
 );
 
-subtask(SUB_TASK_NAMES.REQUEST_ANALYTICS, undefined).setAction(
-  async (taskArgs, hre: any) => {
-    const { deployments, ethers, getNamedAccounts, network } = hre;
-    const { stacktical }: { stacktical: StackticalConfiguration } =
-      network.config;
-    const { deployer } = await getNamedAccounts();
-    const signer = await ethers.getSigner(deployer);
-    const { get } = deployments;
-
-    console.log('Starting Analytics request process');
-
-    const networkAnalytics = await NetworkAnalytics__factory.connect(
-      (
-        await get(CONTRACT_NAMES.NetworkAnalytics)
-      ).address,
-      signer
-    );
-    const ownerApproval = true;
-    const {
-      scripts: { deploy_sla },
-    } = stacktical;
-    console.log(
-      'Starting automated job 1: Request Analytics for period ' +
-        taskArgs.periodId
-    );
-    let tx = await networkAnalytics.requestAnalytics(
-      taskArgs.periodId,
-      deploy_sla.periodType,
-      deploy_sla.extraData[0],
-      ownerApproval,
-      { ...(network.config.gas !== 'auto' && { gasLimit: network.config.gas }) }
-    );
-    await tx.wait();
-    await new Promise((resolve) =>
-      networkAnalytics.on('AnalyticsReceived', () => resolve(null))
-    );
-    const analyticsResult = await networkAnalytics.periodAnalytics(
-      deploy_sla.extraData[0],
-      deploy_sla.periodType,
-      taskArgs.periodId
-    );
-    console.log('Analytics result: ', analyticsResult);
-    console.log('Analytics request process finished');
-  }
-);
-
 subtask(SUB_TASK_NAMES.GET_PRECOORDINATOR, undefined).setAction(
   async (taskArgs, hre: any) => {
     const { deployments, ethers, getNamedAccounts } = hre;
@@ -1312,25 +1253,14 @@ subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
     const lastEvent = events.slice(-1)[0];
     const { saId } = lastEvent.args;
     const serviceAgreement = await precoordinator.getServiceAgreement(saId);
-    const networkAnalytics = await NetworkAnalytics__factory.connect(
-      (
-        await get(CONTRACT_NAMES.NetworkAnalytics)
-      ).address,
-      signer
-    );
     const seMessenger = await SEMessenger__factory.connect(
       (
         await get(CONTRACT_NAMES.SEMessenger)
       ).address,
       signer
     );
-    let tx = await networkAnalytics.setChainlinkJobID(
-      saId,
-      serviceAgreement.payments.length
-    );
-    await tx.wait();
 
-    tx = await seMessenger.setChainlinkJobID(
+    let tx = await seMessenger.setChainlinkJobID(
       saId,
       serviceAgreement.payments.length
     );
@@ -1342,337 +1272,337 @@ subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
   }
 );
 
-subtask(SUB_TASK_NAMES.FULFILL_ANALYTICS, undefined).setAction(
-  async (taskArgs, hre: any) => {
-    const { deployments, ethers, getNamedAccounts, network } = hre;
-    const { stacktical }: { stacktical: StackticalConfiguration } =
-      network.config;
-    const { get } = deployments;
-    const { deployer } = await getNamedAccounts();
-    const signer = await ethers.getSigner(deployer);
-    const networkTicker = taskArgs.networkTicker.toUpperCase();
-    if (!Object.keys(SENetworks).includes(networkTicker)) {
-      throw new Error('Network not recognized: ' + networkTicker);
-    }
-    const na = await NetworkAnalytics__factory.connect(
-      (
-        await get(CONTRACT_NAMES.NetworkAnalytics)
-      ).address,
-      signer
-    );
-    const { periodId, periodType } = taskArgs;
-    const networkBytes32 = formatBytes32String(networkTicker);
-    const isRequested = await na.periodAnalyticsRequested(
-      networkBytes32,
-      periodType,
-      periodId
-    );
-    if (!isRequested) throw new Error('Analytics not requested yet');
-    const storedAnalytics = await na.periodAnalytics(
-      networkBytes32,
-      periodType,
-      periodId
-    );
-    if (Number(storedAnalytics) !== 0) {
-      console.log('Stored analytics:');
-      console.log(storedAnalytics);
-      console.log('IPFS data:');
-      console.log(
-        process.env.IPFS_URI +
-          /ipfs/ +
-          bs58.encode(
-            Buffer.from(`1220${storedAnalytics.replace('0x', '')}`, 'hex')
-          )
-      );
-      throw new Error('Analytics already fulfilled');
-    }
-
-    let filter = na.filters.ChainlinkRequested();
-    let events = await na.queryFilter(
-      filter,
-      (await get(CONTRACT_NAMES.NetworkAnalytics))?.receipt?.blockNumber ||
-        undefined
-    );
-    let requestedAnalyticsEvent;
-    for (let event of events) {
-      const { id } = event.args;
-      const analyticsRequest = await na.requestIdToAnalyticsRequest(id);
-      if (
-        analyticsRequest.networkName === networkBytes32 &&
-        Number(analyticsRequest.periodId) === periodId &&
-        analyticsRequest.periodType === periodType
-      ) {
-        requestedAnalyticsEvent = event;
-      }
-    }
-    if (requestedAnalyticsEvent === undefined)
-      throw new Error('Request id not found');
-    const chainlinkNodeConfig: ChainlinkNodeConfiguration =
-      stacktical.chainlink.nodesConfiguration.find(
-        (node) => node.name === taskArgs.nodeName
-      );
-    if (!chainlinkNodeConfig)
-      throw new Error('Chainlink node config not found');
-    const externalAdapterUrl = stacktical.chainlink.isProduction
-      ? chainlinkNodeConfig.externalAdapterUrl
-      : 'http://localhost:' +
-        chainlinkNodeConfig.externalAdapterUrl.split(':').slice(-1)[0];
-
-    const preCoordinator = await PreCoordinator__factory.connect(
-      (
-        await get(CONTRACT_NAMES.PreCoordinator)
-      ).address,
-      signer
-    );
-    const saRequestedFilter = preCoordinator.filters.ChainlinkRequested();
-    const saRequestedEvents = await preCoordinator.queryFilter(
-      saRequestedFilter,
-      (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
-        undefined
-    );
-    const oracleRequestId = saRequestedEvents.find(
-      (event) => event.blockNumber === requestedAnalyticsEvent.blockNumber
-    ).args.id;
-    const job = await getChainlinkJob(chainlinkNodeConfig);
-    const oracle = await Oracle__factory.connect(
-      job.attributes.initiators[0].params.address,
-      signer
-    );
-    const oracleRqFilter = oracle.filters.OracleRequest();
-    const oracleRqEvents = await oracle.queryFilter(
-      oracleRqFilter,
-      (await get(CONTRACT_NAMES.Oracle))?.receipt?.blockNumber || undefined
-    );
-    const oracleRqEvent = oracleRqEvents.find(
-      (event) => event.args.requestId === oracleRequestId
-    );
-    console.log('Request id successfully identified: ');
-    console.log(oracleRqEvent.args);
-    const preCoordinatorCallbackId = '0x6a9705b4';
-    const periodRegistry = await PeriodRegistry__factory.connect(
-      (
-        await get(CONTRACT_NAMES.PeriodRegistry)
-      ).address,
-      signer
-    );
-    const { start, end } = await periodRegistry.getPeriodStartAndEnd(
-      periodType,
-      periodId
-    );
-    const { data } = await axios({
-      method: 'post',
-      url: externalAdapterUrl,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: {
-        data: {
-          job_type: 'staking_efficiency_analytics',
-          network_name: networkTicker,
-          period_id: periodId,
-          period_type: periodType,
-          sla_monitoring_start: start.toString(),
-          sla_monitoring_end: end.toString(),
-        },
-      },
-    });
-    const { result } = data.data;
-    if (taskArgs.signTransaction) {
-      await oracle.fulfillOracleRequest(
-        oracleRequestId,
-        String(0.1 * 10 ** 18),
-        preCoordinator.address,
-        preCoordinatorCallbackId,
-        oracleRqEvent.args.cancelExpiration,
-        '0x' + result
-      );
-    }
-  }
-);
-
-subtask(SUB_TASK_NAMES.PREC_FULFILL_ANALYTICS, undefined).setAction(
-  async (taskArgs, hre: any) => {
-    const { deployments, ethers, getNamedAccounts, network } = hre;
-    const { stacktical }: { stacktical: StackticalConfiguration } =
-      network.config;
-    const { get } = deployments;
-    const { deployer } = await getNamedAccounts();
-    const signer = await ethers.getSigner(deployer);
-    const networkTicker = taskArgs.networkTicker.toUpperCase();
-    if (!Object.keys(SENetworks).includes(networkTicker)) {
-      throw new Error('Network not recognized: ' + networkTicker);
-    }
-    const na = await NetworkAnalytics__factory.connect(
-      (
-        await get(CONTRACT_NAMES.NetworkAnalytics)
-      ).address,
-      signer
-    );
-    const { periodId, periodType } = taskArgs;
-    const networkBytes32 = formatBytes32String(networkTicker);
-    const isRequested = await na.periodAnalyticsRequested(
-      networkBytes32,
-      periodType,
-      periodId
-    );
-    if (!isRequested) throw new Error('Analytics not requested yet');
-    const storedAnalytics = await na.periodAnalytics(
-      networkBytes32,
-      periodType,
-      periodId
-    );
-    if (Number(storedAnalytics) !== 0) {
-      console.log('Stored analytics:');
-      console.log(storedAnalytics);
-      console.log('IPFS data:');
-      console.log(
-        process.env.IPFS_URI +
-          /ipfs/ +
-          bs58.encode(
-            Buffer.from(`1220${storedAnalytics.replace('0x', '')}`, 'hex')
-          )
-      );
-      throw new Error('Analytics already fulfilled');
-    }
-
-    let filter = na.filters.ChainlinkRequested();
-    let events = await na.queryFilter(
-      filter,
-      (await get(CONTRACT_NAMES.NetworkAnalytics))?.receipt?.blockNumber ||
-        undefined
-    );
-    let requestedAnalyticsEvent;
-    for (let event of events) {
-      const { id } = event.args;
-      const analyticsRequest = await na.requestIdToAnalyticsRequest(id);
-      if (
-        analyticsRequest.networkName === networkBytes32 &&
-        Number(analyticsRequest.periodId) === periodId &&
-        analyticsRequest.periodType === periodType
-      ) {
-        requestedAnalyticsEvent = event;
-      }
-    }
-    if (requestedAnalyticsEvent === undefined)
-      throw new Error('Request analytics event not found');
-    const chainlinkNodeConfig: ChainlinkNodeConfiguration =
-      stacktical.chainlink.nodesConfiguration.find(
-        (node) => node.name === taskArgs.nodeName
-      );
-    if (!chainlinkNodeConfig)
-      throw new Error('Chainlink node config not found');
-    const externalAdapterUrl = stacktical.chainlink.isProduction
-      ? chainlinkNodeConfig.externalAdapterUrl
-      : 'http://localhost:' +
-        chainlinkNodeConfig.externalAdapterUrl.split(':').slice(-1)[0];
-
-    const preCoordinator = await PreCoordinator__factory.connect(
-      (
-        await get(CONTRACT_NAMES.PreCoordinator)
-      ).address,
-      signer
-    );
-    const pcRequestedFilter = preCoordinator.filters.ChainlinkRequested();
-    const pcRequestedEvents = await preCoordinator.queryFilter(
-      pcRequestedFilter,
-      (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
-        undefined
-    );
-    const preCoordinatorArtifact = await get(CONTRACT_NAMES.PreCoordinator);
-    const requestsSlot = preCoordinatorArtifact.storageLayout.storage.find(
-      (layout) => layout.label === 'requests'
-    ).slot;
-    if (!requestsSlot) {
-      throw new Error('requests mapping slot not found');
-    }
-    console.log('Requested Analytics event:');
-    console.log(requestedAnalyticsEvent);
-    let oracleRequestId;
-    console.log(
-      'Reading PreCoordinator "requests" internal mapping from storage'
-    );
-    for (let event of pcRequestedEvents) {
-      // read the "requests" mapping of the PreCoordinator by reading storage
-      // https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html#mappings-and-dynamic-arrays
-      const storageIndex = soliditySha3(
-        event.args.id,
-        padLeft(numberToHex(requestsSlot), 64)
-      );
-      const { data } = await axios({
-        method: 'post',
-        url: network.config.url,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: {
-          jsonrpc: '2.0',
-          method: 'eth_getStorageAt',
-          params: [preCoordinator.address, storageIndex, 'latest'],
-          id: 1,
-        },
-      });
-      // if incomingRequest is equal to the PreCoordinator's ChainlinkRequest id, then catch the outgoingRequestId
-      printSeparator();
-      if (data.result === requestedAnalyticsEvent.args.id) {
-        console.log('Match found');
-        oracleRequestId = event.args.id;
-      }
-      console.log('PreCoordinator outgoing request: ' + event.args.id);
-      console.log('PreCoordinator incoming request: ' + data.result);
-    }
-    printSeparator();
-
-    console.log('Request id successfully identified: ');
-    console.log(oracleRequestId);
-    const periodRegistry = await PeriodRegistry__factory.connect(
-      (
-        await get(CONTRACT_NAMES.PeriodRegistry)
-      ).address,
-      signer
-    );
-    const { start, end } = await periodRegistry.getPeriodStartAndEnd(
-      periodType,
-      periodId
-    );
-    const { data } = await axios({
-      method: 'post',
-      url: externalAdapterUrl,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: {
-        data: {
-          job_type: 'staking_efficiency_analytics',
-          network_name: networkTicker,
-          period_id: periodId,
-          period_type: periodType,
-          sla_monitoring_start: start.toString(),
-          sla_monitoring_end: end.toString(),
-        },
-      },
-    });
-    const { result } = data.data;
-    console.log('External adapter result: ');
-    console.log(result);
-    console.log('IPFS data:');
-    console.log(
-      process.env.IPFS_URI +
-        /ipfs/ +
-        bs58.encode(Buffer.from(`1220${result}`, 'hex'))
-    );
-    if (taskArgs.signTransaction) {
-      throw new Error('should set gas price and limit');
-      await preCoordinator.chainlinkCallback(
-        oracleRequestId,
-        BigNumber.from('0x' + result),
-        {
-          gasLimit: 'set the gas limit',
-          gasPrice: 'set the gas price',
-        }
-      );
-    }
-  }
-);
+// subtask(SUB_TASK_NAMES.FULFILL_ANALYTICS, undefined).setAction(
+//   async (taskArgs, hre: any) => {
+//     const { deployments, ethers, getNamedAccounts, network } = hre;
+//     const { stacktical }: { stacktical: StackticalConfiguration } =
+//       network.config;
+//     const { get } = deployments;
+//     const { deployer } = await getNamedAccounts();
+//     const signer = await ethers.getSigner(deployer);
+//     const networkTicker = taskArgs.networkTicker.toUpperCase();
+//     if (!Object.keys(SENetworks).includes(networkTicker)) {
+//       throw new Error('Network not recognized: ' + networkTicker);
+//     }
+//     const na = await NetworkAnalytics__factory.connect(
+//       (
+//         await get(CONTRACT_NAMES.NetworkAnalytics)
+//       ).address,
+//       signer
+//     );
+//     const { periodId, periodType } = taskArgs;
+//     const networkBytes32 = formatBytes32String(networkTicker);
+//     const isRequested = await na.periodAnalyticsRequested(
+//       networkBytes32,
+//       periodType,
+//       periodId
+//     );
+//     if (!isRequested) throw new Error('Analytics not requested yet');
+//     const storedAnalytics = await na.periodAnalytics(
+//       networkBytes32,
+//       periodType,
+//       periodId
+//     );
+//     if (Number(storedAnalytics) !== 0) {
+//       console.log('Stored analytics:');
+//       console.log(storedAnalytics);
+//       console.log('IPFS data:');
+//       console.log(
+//         process.env.IPFS_URI +
+//           /ipfs/ +
+//           bs58.encode(
+//             Buffer.from(`1220${storedAnalytics.replace('0x', '')}`, 'hex')
+//           )
+//       );
+//       throw new Error('Analytics already fulfilled');
+//     }
+//
+//     let filter = na.filters.ChainlinkRequested();
+//     let events = await na.queryFilter(
+//       filter,
+//       (await get(CONTRACT_NAMES.NetworkAnalytics))?.receipt?.blockNumber ||
+//         undefined
+//     );
+//     let requestedAnalyticsEvent;
+//     for (let event of events) {
+//       const { id } = event.args;
+//       const analyticsRequest = await na.requestIdToAnalyticsRequest(id);
+//       if (
+//         analyticsRequest.networkName === networkBytes32 &&
+//         Number(analyticsRequest.periodId) === periodId &&
+//         analyticsRequest.periodType === periodType
+//       ) {
+//         requestedAnalyticsEvent = event;
+//       }
+//     }
+//     if (requestedAnalyticsEvent === undefined)
+//       throw new Error('Request id not found');
+//     const chainlinkNodeConfig: ChainlinkNodeConfiguration =
+//       stacktical.chainlink.nodesConfiguration.find(
+//         (node) => node.name === taskArgs.nodeName
+//       );
+//     if (!chainlinkNodeConfig)
+//       throw new Error('Chainlink node config not found');
+//     const externalAdapterUrl = stacktical.chainlink.isProduction
+//       ? chainlinkNodeConfig.externalAdapterUrl
+//       : 'http://localhost:' +
+//         chainlinkNodeConfig.externalAdapterUrl.split(':').slice(-1)[0];
+//
+//     const preCoordinator = await PreCoordinator__factory.connect(
+//       (
+//         await get(CONTRACT_NAMES.PreCoordinator)
+//       ).address,
+//       signer
+//     );
+//     const saRequestedFilter = preCoordinator.filters.ChainlinkRequested();
+//     const saRequestedEvents = await preCoordinator.queryFilter(
+//       saRequestedFilter,
+//       (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
+//         undefined
+//     );
+//     const oracleRequestId = saRequestedEvents.find(
+//       (event) => event.blockNumber === requestedAnalyticsEvent.blockNumber
+//     ).args.id;
+//     const job = await getChainlinkJob(chainlinkNodeConfig);
+//     const oracle = await Oracle__factory.connect(
+//       job.attributes.initiators[0].params.address,
+//       signer
+//     );
+//     const oracleRqFilter = oracle.filters.OracleRequest();
+//     const oracleRqEvents = await oracle.queryFilter(
+//       oracleRqFilter,
+//       (await get(CONTRACT_NAMES.Oracle))?.receipt?.blockNumber || undefined
+//     );
+//     const oracleRqEvent = oracleRqEvents.find(
+//       (event) => event.args.requestId === oracleRequestId
+//     );
+//     console.log('Request id successfully identified: ');
+//     console.log(oracleRqEvent.args);
+//     const preCoordinatorCallbackId = '0x6a9705b4';
+//     const periodRegistry = await PeriodRegistry__factory.connect(
+//       (
+//         await get(CONTRACT_NAMES.PeriodRegistry)
+//       ).address,
+//       signer
+//     );
+//     const { start, end } = await periodRegistry.getPeriodStartAndEnd(
+//       periodType,
+//       periodId
+//     );
+//     const { data } = await axios({
+//       method: 'post',
+//       url: externalAdapterUrl,
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       data: {
+//         data: {
+//           job_type: 'staking_efficiency_analytics',
+//           network_name: networkTicker,
+//           period_id: periodId,
+//           period_type: periodType,
+//           sla_monitoring_start: start.toString(),
+//           sla_monitoring_end: end.toString(),
+//         },
+//       },
+//     });
+//     const { result } = data.data;
+//     if (taskArgs.signTransaction) {
+//       await oracle.fulfillOracleRequest(
+//         oracleRequestId,
+//         String(0.1 * 10 ** 18),
+//         preCoordinator.address,
+//         preCoordinatorCallbackId,
+//         oracleRqEvent.args.cancelExpiration,
+//         '0x' + result
+//       );
+//     }
+//   }
+// );
+//
+// subtask(SUB_TASK_NAMES.PREC_FULFILL_ANALYTICS, undefined).setAction(
+//   async (taskArgs, hre: any) => {
+//     const { deployments, ethers, getNamedAccounts, network } = hre;
+//     const { stacktical }: { stacktical: StackticalConfiguration } =
+//       network.config;
+//     const { get } = deployments;
+//     const { deployer } = await getNamedAccounts();
+//     const signer = await ethers.getSigner(deployer);
+//     const networkTicker = taskArgs.networkTicker.toUpperCase();
+//     if (!Object.keys(SENetworks).includes(networkTicker)) {
+//       throw new Error('Network not recognized: ' + networkTicker);
+//     }
+//     const na = await NetworkAnalytics__factory.connect(
+//       (
+//         await get(CONTRACT_NAMES.NetworkAnalytics)
+//       ).address,
+//       signer
+//     );
+//     const { periodId, periodType } = taskArgs;
+//     const networkBytes32 = formatBytes32String(networkTicker);
+//     const isRequested = await na.periodAnalyticsRequested(
+//       networkBytes32,
+//       periodType,
+//       periodId
+//     );
+//     if (!isRequested) throw new Error('Analytics not requested yet');
+//     const storedAnalytics = await na.periodAnalytics(
+//       networkBytes32,
+//       periodType,
+//       periodId
+//     );
+//     if (Number(storedAnalytics) !== 0) {
+//       console.log('Stored analytics:');
+//       console.log(storedAnalytics);
+//       console.log('IPFS data:');
+//       console.log(
+//         process.env.IPFS_URI +
+//           /ipfs/ +
+//           bs58.encode(
+//             Buffer.from(`1220${storedAnalytics.replace('0x', '')}`, 'hex')
+//           )
+//       );
+//       throw new Error('Analytics already fulfilled');
+//     }
+//
+//     let filter = na.filters.ChainlinkRequested();
+//     let events = await na.queryFilter(
+//       filter,
+//       (await get(CONTRACT_NAMES.NetworkAnalytics))?.receipt?.blockNumber ||
+//         undefined
+//     );
+//     let requestedAnalyticsEvent;
+//     for (let event of events) {
+//       const { id } = event.args;
+//       const analyticsRequest = await na.requestIdToAnalyticsRequest(id);
+//       if (
+//         analyticsRequest.networkName === networkBytes32 &&
+//         Number(analyticsRequest.periodId) === periodId &&
+//         analyticsRequest.periodType === periodType
+//       ) {
+//         requestedAnalyticsEvent = event;
+//       }
+//     }
+//     if (requestedAnalyticsEvent === undefined)
+//       throw new Error('Request analytics event not found');
+//     const chainlinkNodeConfig: ChainlinkNodeConfiguration =
+//       stacktical.chainlink.nodesConfiguration.find(
+//         (node) => node.name === taskArgs.nodeName
+//       );
+//     if (!chainlinkNodeConfig)
+//       throw new Error('Chainlink node config not found');
+//     const externalAdapterUrl = stacktical.chainlink.isProduction
+//       ? chainlinkNodeConfig.externalAdapterUrl
+//       : 'http://localhost:' +
+//         chainlinkNodeConfig.externalAdapterUrl.split(':').slice(-1)[0];
+//
+//     const preCoordinator = await PreCoordinator__factory.connect(
+//       (
+//         await get(CONTRACT_NAMES.PreCoordinator)
+//       ).address,
+//       signer
+//     );
+//     const pcRequestedFilter = preCoordinator.filters.ChainlinkRequested();
+//     const pcRequestedEvents = await preCoordinator.queryFilter(
+//       pcRequestedFilter,
+//       (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
+//         undefined
+//     );
+//     const preCoordinatorArtifact = await get(CONTRACT_NAMES.PreCoordinator);
+//     const requestsSlot = preCoordinatorArtifact.storageLayout.storage.find(
+//       (layout) => layout.label === 'requests'
+//     ).slot;
+//     if (!requestsSlot) {
+//       throw new Error('requests mapping slot not found');
+//     }
+//     console.log('Requested Analytics event:');
+//     console.log(requestedAnalyticsEvent);
+//     let oracleRequestId;
+//     console.log(
+//       'Reading PreCoordinator "requests" internal mapping from storage'
+//     );
+//     for (let event of pcRequestedEvents) {
+//       // read the "requests" mapping of the PreCoordinator by reading storage
+//       // https://docs.soliditylang.org/en/latest/internals/layout_in_storage.html#mappings-and-dynamic-arrays
+//       const storageIndex = soliditySha3(
+//         event.args.id,
+//         padLeft(numberToHex(requestsSlot), 64)
+//       );
+//       const { data } = await axios({
+//         method: 'post',
+//         url: network.config.url,
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//         data: {
+//           jsonrpc: '2.0',
+//           method: 'eth_getStorageAt',
+//           params: [preCoordinator.address, storageIndex, 'latest'],
+//           id: 1,
+//         },
+//       });
+//       // if incomingRequest is equal to the PreCoordinator's ChainlinkRequest id, then catch the outgoingRequestId
+//       printSeparator();
+//       if (data.result === requestedAnalyticsEvent.args.id) {
+//         console.log('Match found');
+//         oracleRequestId = event.args.id;
+//       }
+//       console.log('PreCoordinator outgoing request: ' + event.args.id);
+//       console.log('PreCoordinator incoming request: ' + data.result);
+//     }
+//     printSeparator();
+//
+//     console.log('Request id successfully identified: ');
+//     console.log(oracleRequestId);
+//     const periodRegistry = await PeriodRegistry__factory.connect(
+//       (
+//         await get(CONTRACT_NAMES.PeriodRegistry)
+//       ).address,
+//       signer
+//     );
+//     const { start, end } = await periodRegistry.getPeriodStartAndEnd(
+//       periodType,
+//       periodId
+//     );
+//     const { data } = await axios({
+//       method: 'post',
+//       url: externalAdapterUrl,
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       data: {
+//         data: {
+//           job_type: 'staking_efficiency_analytics',
+//           network_name: networkTicker,
+//           period_id: periodId,
+//           period_type: periodType,
+//           sla_monitoring_start: start.toString(),
+//           sla_monitoring_end: end.toString(),
+//         },
+//       },
+//     });
+//     const { result } = data.data;
+//     console.log('External adapter result: ');
+//     console.log(result);
+//     console.log('IPFS data:');
+//     console.log(
+//       process.env.IPFS_URI +
+//         /ipfs/ +
+//         bs58.encode(Buffer.from(`1220${result}`, 'hex'))
+//     );
+//     if (taskArgs.signTransaction) {
+//       throw new Error('should set gas price and limit');
+//       await preCoordinator.chainlinkCallback(
+//         oracleRequestId,
+//         BigNumber.from('0x' + result),
+//         {
+//           gasLimit: 'set the gas limit',
+//           gasPrice: 'set the gas price',
+//         }
+//       );
+//     }
+//   }
+// );
 
 subtask(SUB_TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE, undefined).setAction(
   async (_, hre: any) => {
@@ -1819,15 +1749,6 @@ subtask(SUB_TASK_NAMES.REGISTRIES_CONFIGURATION, undefined).setAction(
     const { get } = deployments;
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
-    const na = await NetworkAnalytics__factory.connect(
-      (
-        await get(CONTRACT_NAMES.NetworkAnalytics)
-      ).address,
-      signer
-    );
-    const networksAdded = await na.getNetworkNames();
-    console.log('NetworkAnalytics added networks: ');
-    console.log(networksAdded.map(parseBytes32String));
     const stakeRegistry = await StakeRegistry__factory.connect(
       (
         await get(CONTRACT_NAMES.StakeRegistry)
