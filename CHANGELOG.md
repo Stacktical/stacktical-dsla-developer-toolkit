@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v1.5.0...v2.0.0) (2021-06-08)
+
+
+### Features
+
+* chainlink node names with network name ([2b3bdb6](https://github.com/Stacktical/stacktical-developer-toolkit/commit/2b3bdb6041ff55cbb40fc8583dfddc58a18bf6f7))
+* deploying multiple messengers ([5c00e9e](https://github.com/Stacktical/stacktical-developer-toolkit/commit/5c00e9e998596185751f707dde4049353b35f04e))
+* deploying se without na ([51e7cf1](https://github.com/Stacktical/stacktical-developer-toolkit/commit/51e7cf1cf61b91ccb433451b54dffa72d981022f))
+* dev external adapter without network analytics ([7f3a8c9](https://github.com/Stacktical/stacktical-developer-toolkit/commit/7f3a8c9d11a9e4c2a4fd643f3636377fdb0c7e64))
+* dsla protocol 2.0.1 ([4e9e95a](https://github.com/Stacktical/stacktical-developer-toolkit/commit/4e9e95adbcda21380afffa76c065b729baa98815))
+* messenger contracts code ([17c8f81](https://github.com/Stacktical/stacktical-developer-toolkit/commit/17c8f816ad1f7ac685468af1c897886bb50bc265))
+* set precoordinator by use case name ([3e0d142](https://github.com/Stacktical/stacktical-developer-toolkit/commit/3e0d1424ff2dbe4dc7f2f9ad1885f565c82a8110))
+* staking efficiency v2 ([f8286ad](https://github.com/Stacktical/stacktical-developer-toolkit/commit/f8286adf70b165a341466a9de1cb5d7a5443e009))
+
 ## [1.5.0](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v1.4.0...v1.5.0) (2021-06-03)
 
 
