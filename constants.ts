@@ -22,13 +22,12 @@ export enum CONTRACT_NAMES {
   DAI = 'DAI',
   USDC = 'USDC',
   USDT = 'USDT',
-  ONE = "ONE",
+  ONE = 'ONE',
   ERC20 = 'ERC20',
   Details = 'Details',
   IMessenger = 'IMessenger',
   LinkToken = 'LinkToken',
   MessengerRegistry = 'MessengerRegistry',
-  NetworkAnalytics = 'NetworkAnalytics',
   Oracle = 'Oracle',
   PeriodRegistry = 'PeriodRegistry',
   SEMessenger = 'SEMessenger',
@@ -52,6 +51,11 @@ export enum DEPLOYMENT_TAGS {
   Chainlink = 'chainlink',
   Services = 'services',
   Details = 'details',
+  Messengers = 'messengers',
+}
+
+export enum USE_CASES {
+  STAKING_EFFICIENCY = 'staking-efficiency',
 }
 
 export enum NETWORKS {
@@ -60,7 +64,7 @@ export enum NETWORKS {
   HARMONYTESTNET = 'harmonytestnet',
   ETHEREUM = 'ethereum',
   POLYGON = 'polygon',
-  HARMONY = "harmony",
+  HARMONY = 'harmony',
 }
 
 export enum PERIOD_TYPE {

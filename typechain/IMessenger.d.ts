@@ -31,6 +31,7 @@ interface IMessengerInterface extends ethers.utils.Interface {
     "renounceOwnership()": FunctionFragment;
     "requestSLI(uint256,address,bool,address)": FunctionFragment;
     "requestsCounter()": FunctionFragment;
+    "setChainlinkJobID(bytes32,uint256)": FunctionFragment;
     "setSLARegistry()": FunctionFragment;
     "slaRegistryAddress()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
@@ -65,6 +66,10 @@ interface IMessengerInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "setChainlinkJobID",
+    values: [BytesLike, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "setSLARegistry",
     values?: undefined
   ): string;
@@ -97,6 +102,10 @@ interface IMessengerInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "requestSLI", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "requestsCounter",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setChainlinkJobID",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -197,6 +206,12 @@ export class IMessenger extends BaseContract {
 
     requestsCounter(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    setChainlinkJobID(
+      _newJobId: BytesLike,
+      _feeMultiplier: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     setSLARegistry(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -241,6 +256,12 @@ export class IMessenger extends BaseContract {
 
   requestsCounter(overrides?: CallOverrides): Promise<BigNumber>;
 
+  setChainlinkJobID(
+    _newJobId: BytesLike,
+    _feeMultiplier: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   setSLARegistry(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -282,6 +303,12 @@ export class IMessenger extends BaseContract {
     ): Promise<void>;
 
     requestsCounter(overrides?: CallOverrides): Promise<BigNumber>;
+
+    setChainlinkJobID(
+      _newJobId: BytesLike,
+      _feeMultiplier: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     setSLARegistry(overrides?: CallOverrides): Promise<void>;
 
@@ -351,6 +378,12 @@ export class IMessenger extends BaseContract {
 
     requestsCounter(overrides?: CallOverrides): Promise<BigNumber>;
 
+    setChainlinkJobID(
+      _newJobId: BytesLike,
+      _feeMultiplier: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     setSLARegistry(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -397,6 +430,12 @@ export class IMessenger extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     requestsCounter(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    setChainlinkJobID(
+      _newJobId: BytesLike,
+      _feeMultiplier: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     setSLARegistry(
       overrides?: Overrides & { from?: string | Promise<string> }

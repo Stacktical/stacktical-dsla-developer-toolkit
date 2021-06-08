@@ -202,6 +202,24 @@ const _abi = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "_newJobId",
+        type: "bytes32",
+      },
+      {
+        internalType: "uint256",
+        name: "_feeMultiplier",
+        type: "uint256",
+      },
+    ],
+    name: "setChainlinkJobID",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "setSLARegistry",
     outputs: [],

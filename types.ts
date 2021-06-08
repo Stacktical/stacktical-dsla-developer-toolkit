@@ -38,7 +38,6 @@ export type ChainlinkNodeConfiguration = {
   restApiPort?: string;
   email: string;
   password: string;
-  externalAdapterUrl: string;
 };
 
 export type PreCoordinatorConfiguration = {
@@ -51,13 +50,8 @@ export type BootstrapConfiguration = {
   allowance: Array<TokenAllowance>;
   registry: {
     periods: Array<PeriodBootstrapDefinition>;
-    messengers: Array<MessengerDefinition>;
+    messengers: Array<MessengerConfiguration>;
     stake: StakeBootstrapDefinition;
-  };
-  messengers: {
-    networkAnalytics: {
-      allowedNetworks: Array<string>;
-    };
   };
 };
 
@@ -80,9 +74,11 @@ export type TokenAllowance = {
   allowance: string;
 };
 
-export type MessengerDefinition = {
+export type MessengerConfiguration = {
   contract: CONTRACT_NAMES;
   specificationPath: string;
+  externalAdapterUrl: string;
+  useCaseName: string;
 };
 
 export type DeploySLAConfiguration = {

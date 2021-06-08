@@ -3,8 +3,8 @@ import {
   ChainlinkNodeConfiguration,
   PreCoordinatorConfiguration,
 } from './types';
-import { getChainlinkJob } from './chainlinkUtils';
-import { toWei, padRight } from 'web3-utils';
+import { getChainlinkJobs } from './chainlinkUtils';
+import { toWei, padRight, toChecksumAddress } from 'web3-utils';
 
 const moment = require('moment');
 const createClient = require('ipfs-http-client');
@@ -59,7 +59,9 @@ export function generateBootstrapPeriods(
 }
 
 export const getPreCoordinatorConfiguration = async (
-  nodes: Array<ChainlinkNodeConfiguration>
+  nodes: Array<ChainlinkNodeConfiguration>,
+  useCaseName,
+  oracleContractAddress
 ) => {
   const preCoordinatorConfiguration: PreCoordinatorConfiguration = {
     oracles: [],
@@ -67,7 +69,16 @@ export const getPreCoordinatorConfiguration = async (
     payments: [],
   };
   for (let node of nodes) {
-    const job = await getChainlinkJob(node);
+    const jobs = await getChainlinkJobs(node);
+    const job = jobs.find(
+      (postedJob) =>
+        postedJob.attributes.tasks.some((task) => task.type === useCaseName) &&
+        postedJob.attributes.initiators.some(
+          (initiator) =>
+            toChecksumAddress(initiator.params.address) ===
+            oracleContractAddress
+        )
+    );
     preCoordinatorConfiguration.payments.push(toWei('0.1'));
     preCoordinatorConfiguration.jobIds.push(padRight('0x' + job.id, 64));
     preCoordinatorConfiguration.oracles.push(
