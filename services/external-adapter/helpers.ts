@@ -1,14 +1,10 @@
 require('dotenv').config();
 
-const createClient = require('ipfs-http-client');
-const bs58 = require('bs58');
 const axios = require('axios');
 import * as crypto from 'crypto';
 const Web3 = require('web3');
-const { toChecksumAddress, fromAscii } = require('web3-utils');
-const { NetworkAnalyticsABI } = require('./abis');
+const { toChecksumAddress } = require('web3-utils');
 
-const ipfsClient = createClient({ url: process.env.IPFS_URI });
 const { SLAABI } = require('./abis');
 
 function createRandomAddress() {
@@ -37,54 +33,15 @@ function createValidatorData() {
   };
 }
 
-function createWeekAnalyticsData() {
+function createAnalyticsData(validatorAddress) {
   return {
-    'validator-address': { ...createValidatorData() },
+    [validatorAddress]: { ...createValidatorData() },
   };
-}
-
-async function storeDataOnIFPS(ipfsData) {
-  const dataString = JSON.stringify(ipfsData);
-  const buffer = Buffer.from(dataString, 'utf-8');
-  const { path: ipfsHash } = await ipfsClient.add(buffer);
-  return ipfsHash;
-}
-
-function periodTypeNumberToString(periodType) {
-  return ['Hourly', 'Daily', 'Weekly', 'BiWeekly', 'Monthly', 'Yearly'][
-    periodType
-  ];
-}
-
-function ipfsHashToBytes32(ipfsHash) {
-  return bs58.decode(ipfsHash).slice(2).toString('hex');
-}
-
-function bytes32ToIPFSCID(bytes32) {
-  return bs58.encode(Buffer.from(`1220${bytes32.replace('0x', '')}`, 'hex'));
 }
 
 async function getIPFSDataFromCID(cid) {
   const { data } = await axios.get(`${process.env.IPFS_URI}/ipfs/${cid}`);
   return data;
-}
-
-async function getAnalyticsFromNetworkAnalyticsContract(
-  params,
-  networkName,
-  periodType
-) {
-  const web3 = new Web3(process.env.WEB3_URI);
-  const networkAnalyticsContract = new web3.eth.Contract(
-    NetworkAnalyticsABI,
-    params.network_analytics_address
-  );
-  const ipfsBytes32 = await networkAnalyticsContract.methods
-    .periodAnalytics(fromAscii(networkName), periodType, params.period_id)
-    .call();
-  const ipfsCID = bytes32ToIPFSCID(ipfsBytes32);
-  console.log(`Analytics IPFS url: ${process.env.IPFS_URI}/ipfs/${ipfsCID}`);
-  return getIPFSDataFromCID(ipfsCID);
 }
 
 async function getSLAData(address) {
@@ -100,9 +57,5 @@ async function getSLAData(address) {
 
 module.exports = {
   getSLAData,
-  getAnalyticsFromNetworkAnalyticsContract,
-  periodTypeNumberToString,
-  storeDataOnIFPS,
-  ipfsHashToBytes32,
-  createWeekAnalyticsData,
+  createAnalyticsData,
 };
