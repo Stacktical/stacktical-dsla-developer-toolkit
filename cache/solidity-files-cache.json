@@ -1266,8 +1266,8 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/dsla-use-cases/staking-efficiency/SEMessenger.sol": {
-      "lastModificationDate": 1623172074599,
-      "contentHash": "bed3aff9d304a25b6e23990166c7a150",
+      "lastModificationDate": 1623192470238,
+      "contentHash": "ef9345f6a857f6614589f75099bc16e5",
       "sourceName": "contracts/dsla-use-cases/staking-efficiency/SEMessenger.sol",
       "solcConfig": {
         "version": "0.6.6",
@@ -1316,8 +1316,8 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@stacktical/dsla-protocol/contracts/messenger/IMessenger.sol": {
-      "lastModificationDate": 1623102214750,
-      "contentHash": "7731395981ce5f87489a66f7df8470bb",
+      "lastModificationDate": 1623192418201,
+      "contentHash": "09bc753de4e7de71e4c80ac2ad486e8c",
       "sourceName": "@stacktical/dsla-protocol/contracts/messenger/IMessenger.sol",
       "solcConfig": {
         "version": "0.6.6",

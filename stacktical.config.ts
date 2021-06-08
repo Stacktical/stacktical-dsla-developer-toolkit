@@ -27,13 +27,6 @@ const develop: StackticalConfiguration = {
         email: 'test@stacktical.com',
         password: 'PaSSword123456',
       },
-      {
-        name: 'node-2',
-        restApiUrl: 'http://localhost',
-        restApiPort: '6689',
-        email: 'test@stacktical.com',
-        password: 'PaSSword123456',
-      },
     ],
   },
   addresses: {},

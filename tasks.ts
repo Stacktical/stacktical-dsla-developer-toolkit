@@ -8,19 +8,16 @@ enum TASK_NAMES {
   DEPLOY_SLA = 'stacktical:deploy-sla',
   BOOTSTRAP_DSLA_PROTOCOL = 'stacktical:bootstrap',
   REQUEST_SLI = 'stacktical:request-sli',
-  REQUEST_ANALYTICS = 'stacktical:request-analytics',
   RESTART_SERVICES = 'stacktical:restart-services',
   GET_PRECOORDINATOR = 'stacktical:get-precoordinator',
   SET_PRECOORDINATOR = 'stacktical:set-precoordinator',
   CHAINLINK_DOCKER_COMPOSE = 'stacktical:chainlink-docker-compose',
   PREPARE_CHAINLINK_NODES = 'stacktical:prepare-chainlink-nodes',
   EXTERNAL_ADAPTER = 'stacktical:external-adapter',
-  FULFILL_ANALYTICS = 'stacktical:fulfill-analytics',
   FULFILL_SLI = 'stacktical:fulfill-sli',
   INITIALIZE_DEFAULT_ADDRESSES = 'stacktical:initialize-addresses',
   RESTART_CHAINLINK_NODES = 'stacktical:restart-chainlink-nodes',
   CHECK_CONTRACTS_ALLOWANCE = 'stacktical:check-contracts-allowance',
-  PREC_FULFILL_ANALYTICS = 'stacktical:prec-fulfill-analytics',
   REGISTRIES_CONFIGURATION = 'stacktical:registries-config',
   GET_VALID_SLAS = 'stacktical:get-valid-slas',
   GET_REVERT_MESSAGE = 'stacktical:get-revert-message',
@@ -118,19 +115,21 @@ task(
 task(
   TASK_NAMES.SET_PRECOORDINATOR,
   'Set the PreCoordinator service configuration from stacktical configuration'
-).setAction(async (_, { run }) => {
-  printSeparator();
-  await run(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE);
-  printSeparator();
-  await run(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES);
-  printSeparator();
-  await run(SUB_TASK_NAMES.SET_PRECOORDINATOR);
-  printSeparator();
-  await run(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR);
-  printSeparator();
-  await run(SUB_TASK_NAMES.GET_PRECOORDINATOR);
-  printSeparator();
-});
+)
+  .addParam('useCaseName', 'Use case to set the precoordinator')
+  .setAction(async (taskArgs, { run }) => {
+    printSeparator();
+    await run(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE);
+    printSeparator();
+    await run(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES);
+    printSeparator();
+    await run(SUB_TASK_NAMES.SET_PRECOORDINATOR, taskArgs);
+    printSeparator();
+    await run(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, taskArgs);
+    printSeparator();
+    await run(SUB_TASK_NAMES.GET_PRECOORDINATOR);
+    printSeparator();
+  });
 
 task(
   TASK_NAMES.CHAINLINK_DOCKER_COMPOSE,

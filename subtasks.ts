@@ -22,6 +22,7 @@ import {
 import {
   DSLA__factory,
   ERC20__factory,
+  IMessenger__factory,
   MessengerRegistry__factory,
   Oracle__factory,
   Ownable__factory,
@@ -1259,6 +1260,8 @@ subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
     const { get } = hre.deployments;
     const { deployer } = await hre.getNamedAccounts();
     const signer = await hre.ethers.getSigner(deployer);
+    const { stacktical }: { stacktical: StackticalConfiguration } =
+      hre.network.config;
     const precoordinator = await PreCoordinator__factory.connect(
       (
         await get(CONTRACT_NAMES.PreCoordinator)
@@ -1274,21 +1277,22 @@ subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
     const lastEvent = events.slice(-1)[0];
     const { saId } = lastEvent.args;
     const serviceAgreement = await precoordinator.getServiceAgreement(saId);
-    const seMessenger = await SEMessenger__factory.connect(
+    const messengerName = stacktical.bootstrap.registry.messengers.find(
+      (messenger) => messenger.useCaseName === taskArgs.useCaseName
+    ).contract;
+    const messenger = await IMessenger__factory.connect(
       (
-        await get(CONTRACT_NAMES.SEMessenger)
+        await get(messengerName)
       ).address,
       signer
     );
 
-    let tx = await seMessenger.setChainlinkJobID(
+    let tx = await messenger.setChainlinkJobID(
       saId,
       serviceAgreement.payments.length
     );
     await tx.wait();
-    console.log(
-      'Service agreeement id updated in SEMessenger and NetworkAnalytics contracts: '
-    );
+    console.log('Service agreeement id updated in: ' + messengerName);
     console.log(saId);
   }
 );

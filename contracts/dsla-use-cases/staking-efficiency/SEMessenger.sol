@@ -241,6 +241,7 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
      */
     function setChainlinkJobID(bytes32 _newJobId, uint256 _feeMultiplier)
         external
+        override
         onlyOwner
     {
         _jobId = _newJobId;
