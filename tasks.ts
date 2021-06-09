@@ -8,6 +8,7 @@ enum TASK_NAMES {
   DEPLOY_SLA = 'stacktical:deploy-sla',
   BOOTSTRAP_DSLA_PROTOCOL = 'stacktical:bootstrap',
   REQUEST_SLI = 'stacktical:request-sli',
+  RETRY_REQUEST_SLI = 'stacktical:retry-request-sli',
   RESTART_SERVICES = 'stacktical:restart-services',
   GET_PRECOORDINATOR = 'stacktical:get-precoordinator',
   SET_PRECOORDINATOR = 'stacktical:set-precoordinator',
@@ -258,6 +259,17 @@ task(TASK_NAMES.GET_REVERT_MESSAGE, 'Get revert message for transaction hash')
   .addParam('transactionHash', 'Transaction hash to get message')
   .setAction(async (taskArgs, hre: any) => {
     await hre.run(SUB_TASK_NAMES.GET_REVERT_MESSAGE, taskArgs);
+  });
+
+task(
+  TASK_NAMES.RETRY_REQUEST_SLI,
+  'Retry a request SLI from Messenger contract'
+)
+  .addOptionalParam('slaAddress', 'SLA address')
+  .addParam('useCaseName', 'Name of the use case e.g. staking-efficiency')
+  .addParam('periodId', 'Period id')
+  .setAction(async (taskArgs, hre: any) => {
+    await hre.run(SUB_TASK_NAMES.RETRY_REQUEST_SLI, taskArgs);
   });
 
 module.exports = {};

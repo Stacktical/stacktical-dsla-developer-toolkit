@@ -9,6 +9,7 @@ module.exports = async ({ getNamedAccounts, deployments, network, run }) => {
   const { deploy, get } = deployments;
   const stringUtils = await get(CONTRACT_NAMES.StringUtils);
   const periodRegistry = await get(CONTRACT_NAMES.PeriodRegistry);
+  const stakeRegistry = await get(CONTRACT_NAMES.StakeRegistry);
   const linkToken = await get(CONTRACT_NAMES.LinkToken);
 
   for (let messenger of stacktical.bootstrap.registry.messengers) {
@@ -26,6 +27,7 @@ module.exports = async ({ getNamedAccounts, deployments, network, run }) => {
         saId,
         feeMultiplier,
         periodRegistry.address,
+        stakeRegistry.address,
       ],
       libraries: {
         StringUtils: stringUtils.address,

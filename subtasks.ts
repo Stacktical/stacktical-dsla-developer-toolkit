@@ -29,6 +29,7 @@ import {
   PeriodRegistry__factory,
   PreCoordinator__factory,
   SEMessenger__factory,
+  SLA,
   SLA__factory,
   SLARegistry__factory,
   StakeRegistry__factory,
@@ -73,6 +74,7 @@ export enum SUB_TASK_NAMES {
   BOOTSTRAP_STAKE_REGISTRY = 'BOOTSTRAP_STAKE_REGISTRY',
   SET_CONTRACTS_ALLOWANCE = 'SET_CONTRACTS_ALLOWANCE',
   REQUEST_SLI = 'REQUEST_SLI',
+  RETRY_REQUEST_SLI = 'RETRY_REQUEST_SLI',
   GET_PRECOORDINATOR = 'GET_PRECOORDINATOR',
   SET_PRECOORDINATOR = 'SET_PRECOORDINATOR',
   DEPLOY_LOCAL_CHAINLINK_NODES = 'DEPLOY_LOCAL_CHAINLINK_NODES',
@@ -1883,5 +1885,51 @@ subtask(SUB_TASK_NAMES.GET_REVERT_MESSAGE, undefined).setAction(
     });
     console.log('Error data:');
     console.log(data);
+  }
+);
+
+subtask(SUB_TASK_NAMES.RETRY_REQUEST_SLI, undefined).setAction(
+  async (taskArgs, hre: any) => {
+    const { deployments, ethers, getNamedAccounts, network } = hre;
+    const { stacktical }: { stacktical: StackticalConfiguration } =
+      network.config;
+    const { get } = deployments;
+    const { deployer } = await getNamedAccounts();
+    const slaRegistry = await SLARegistry__factory.connect(
+      (
+        await get(CONTRACT_NAMES.SLARegistry)
+      ).address,
+      await ethers.getSigner(deployer)
+    );
+    const slaAddress = taskArgs.slaAddress
+      ? ethers.utils.getAddress(taskArgs.slaAddress)
+      : (await slaRegistry.userSLAs(deployer)).slice(-1)[0];
+
+    console.log('Retrying request:');
+    const messengerContractName = stacktical.bootstrap.registry.messengers.find(
+      (messenger) => messenger.useCaseName === taskArgs.useCaseName
+    ).contract;
+    const messenger = IMessenger__factory.connect(
+      (await get(messengerContractName)).address,
+      await ethers.getSigner(deployer)
+    );
+
+    await messenger.retryRequest(slaAddress, taskArgs.periodId);
+
+    const sla = SLA__factory.connect(
+      slaAddress,
+      await ethers.getSigner(deployer)
+    );
+    await new Promise((resolve) => {
+      sla.on('SLICreated', () => {
+        resolve(null);
+      });
+    });
+    const createdSLI = await sla.periodSLIs(taskArgs.periodId);
+    const { timestamp, sli, status } = createdSLI;
+    console.log('Created SLI timestamp: ', timestamp.toString());
+    console.log('Created SLI sli: ', sli.toString());
+    console.log('Created SLI status: ', PERIOD_STATUS[status]);
+    console.log('SLI request process finished');
   }
 );

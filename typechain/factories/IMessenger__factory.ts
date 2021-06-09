@@ -204,6 +204,24 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "_slaAddress",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_periodId",
+        type: "uint256",
+      },
+    ],
+    name: "retryRequest",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "bytes32",
         name: "_newJobId",
         type: "bytes32",

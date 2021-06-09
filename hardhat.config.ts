@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
 require('dotenv').config({ path: './.env' });
-import * as StackticalConfigs from './stacktical.config';
+import * as DTKConfigs from './dtk.config';
 
 import './tasks';
 import { NETWORKS } from './constants';
@@ -36,7 +36,7 @@ const config: HardhatUserConfig = {
       forking: {
         url: process.env.POLYGON_URI,
       },
-      stacktical: StackticalConfigs[NETWORKS.DEVELOP],
+      stacktical: DTKConfigs[NETWORKS.DEVELOP],
     },
     [NETWORKS.DEVELOP]: {
       chainId: 1337,
@@ -44,7 +44,7 @@ const config: HardhatUserConfig = {
         mnemonic: process.env.DEVELOP_MNEMONIC,
       },
       url: 'http://localhost:8545',
-      stacktical: StackticalConfigs[NETWORKS.DEVELOP],
+      stacktical: DTKConfigs[NETWORKS.DEVELOP],
     },
     [NETWORKS.ETHEREUM]: {
       chainId: 1,
@@ -52,7 +52,7 @@ const config: HardhatUserConfig = {
         mnemonic: process.env.MAINNET_MNEMONIC,
       },
       url: process.env.ETHEREUM_URI,
-      stacktical: StackticalConfigs[NETWORKS.ETHEREUM],
+      stacktical: DTKConfigs[NETWORKS.ETHEREUM],
     },
     [NETWORKS.POLYGON]: {
       chainId: 137,
@@ -62,7 +62,7 @@ const config: HardhatUserConfig = {
         mnemonic: process.env.MAINNET_MNEMONIC,
       },
       url: process.env.POLYGON_URI,
-      stacktical: StackticalConfigs[NETWORKS.POLYGON],
+      stacktical: DTKConfigs[NETWORKS.POLYGON],
     },
     [NETWORKS.MUMBAI]: {
       chainId: 80001,
@@ -72,7 +72,7 @@ const config: HardhatUserConfig = {
         mnemonic: process.env.TESTNET_MNEMONIC,
       },
       url: process.env.MUMBAI_URI,
-      stacktical: StackticalConfigs[NETWORKS.MUMBAI],
+      stacktical: DTKConfigs[NETWORKS.MUMBAI],
     },
     [NETWORKS.HARMONY]: {
       chainId: 1666600000,
@@ -83,7 +83,7 @@ const config: HardhatUserConfig = {
       },
       url: process.env.HARMONY_URI,
       saveDeployments: true,
-      stacktical: StackticalConfigs[NETWORKS.HARMONY],
+      stacktical: DTKConfigs[NETWORKS.HARMONY],
     },
     [NETWORKS.HARMONYTESTNET]: {
       chainId: 1666700000,
@@ -94,7 +94,7 @@ const config: HardhatUserConfig = {
       },
       url: process.env.HARMONYTESTNET_URI,
       saveDeployments: true,
-      stacktical: StackticalConfigs[NETWORKS.HARMONYTESTNET],
+      stacktical: DTKConfigs[NETWORKS.HARMONYTESTNET],
     },
   },
   solidity: {

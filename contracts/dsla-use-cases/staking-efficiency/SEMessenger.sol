@@ -8,6 +8,7 @@ import '@stacktical/dsla-protocol/contracts/messenger/IMessenger.sol';
 import '@stacktical/dsla-protocol/contracts/SLA.sol';
 import '@stacktical/dsla-protocol/contracts/PeriodRegistry.sol';
 import '@stacktical/dsla-protocol/contracts/StringUtils.sol';
+import '@stacktical/dsla-protocol/contracts/StakeRegistry.sol';
 
 import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
 import '@openzeppelin/contracts/token/ERC20/SafeERC20.sol';
@@ -40,6 +41,8 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
     uint256 private _requestsCounter;
     uint256 private _fulfillsCounter;
     PeriodRegistry private periodRegistry;
+    StakeRegistry private stakeRegistry;
+    bool private retry = false;
 
     /**
      * @dev parameterize the variables according to network
@@ -54,13 +57,15 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
         address _messengerChainlinkToken,
         bytes32 _messengerJobId,
         uint256 _feeMultiplier,
-        PeriodRegistry _periodRegistry
+        PeriodRegistry _periodRegistry,
+        StakeRegistry _stakeRegistry
     ) public {
         _jobId = _messengerJobId;
         setChainlinkToken(_messengerChainlinkToken);
         _oracle = _messengerChainlinkOracle;
         _fee = _feeMultiplier * _baseFee;
         periodRegistry = _periodRegistry;
+        stakeRegistry = _stakeRegistry;
     }
 
     /**
@@ -85,11 +90,19 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
 
     /// @dev Throws if called by any address other than the SLARegistry contract or Chainlink Oracle.
     modifier onlySLARegistry() {
-        require(
-            msg.sender == _slaRegistryAddress,
-            'Can only be called by SLARegistry'
-        );
+        if (!retry) {
+            require(
+                msg.sender == _slaRegistryAddress,
+                'Can only be called by SLARegistry'
+            );
+        }
         _;
+    }
+
+    modifier retryLock() {
+        retry = true;
+        _;
+        retry = false;
     }
 
     /**
@@ -230,9 +243,20 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
         return (hits, misses);
     }
 
-    //    function retryRequest(){
-    //
-    //    }
+    function retryRequest(address _slaAddress, uint256 _periodId)
+        external
+        override
+        retryLock
+    {
+        require(
+            stakeRegistry.periodIsVerified(_slaAddress, _periodId),
+            'StakeRegistry: not verified'
+        );
+        SLA sla = SLA(_slaAddress);
+        (, , SLA.Status status) = sla.periodSLIs(_periodId);
+        require(status == SLA.Status.NotVerified, 'SLA: verified');
+        requestSLI(_periodId, _slaAddress, false, msg.sender);
+    }
 
     /**
      * @dev sets a new jobId, which is a agreement Id of a PreCoordinator contract
