@@ -31,6 +31,7 @@ const develop: StackticalConfiguration = {
   },
   addresses: {},
   checkPastPeriods: false,
+  burnDSLA: true,
   bootstrap: {
     allowance: [
       {
@@ -139,6 +140,7 @@ const ethereum: StackticalConfiguration = {
       '0x7db551Ce6677211309db39A67F73cA923e9d4944',
   },
   checkPastPeriods: true,
+  burnDSLA: true,
   bootstrap: {
     allowance: [
       {
@@ -186,6 +188,7 @@ const harmonytestnet: StackticalConfiguration = {
   },
   addresses: {},
   checkPastPeriods: false,
+  burnDSLA: false,
   bootstrap: {
     allowance: [
       {
@@ -243,6 +246,7 @@ const harmony: StackticalConfiguration = {
     [CONTRACT_NAMES.LinkToken]: '0x218532a12a389a4a92fC0C5Fb22901D1c19198aA',
   },
   checkPastPeriods: true,
+  burnDSLA: false,
   bootstrap: {
     allowance: [
       {
@@ -338,6 +342,7 @@ const polygon: StackticalConfiguration = {
     [CONTRACT_NAMES.LinkToken]: '0xb0897686c545045afc77cf20ec7a532e3120e0f1 ',
   },
   checkPastPeriods: true,
+  burnDSLA: false,
   bootstrap: {
     allowance: [
       {
@@ -391,6 +396,7 @@ const mumbai: StackticalConfiguration = {
   },
   addresses: {},
   checkPastPeriods: false,
+  burnDSLA: false,
   bootstrap: {
     allowance: [
       {

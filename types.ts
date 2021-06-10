@@ -3,6 +3,7 @@ import { CONTRACT_NAMES, PERIOD_TYPE, SLO_TYPE } from './constants';
 export type StackticalConfiguration = {
   chainlink: ChainlinkConfiguration;
   checkPastPeriods: boolean;
+  burnDSLA: boolean;
   addresses: DeployedContractAddresses;
   bootstrap: BootstrapConfiguration;
   scripts?: ScriptsConfiguration;
