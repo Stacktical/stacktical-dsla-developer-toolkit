@@ -51,6 +51,11 @@ const develop: StackticalConfiguration = {
       factory: EthereumERC20__factory,
       name: TOKEN_NAMES.USDC,
     },
+    {
+      factory: EthereumERC20__factory,
+      name: TOKEN_NAMES.USDT,
+      address: '0x34704c70e9eC9fB9A921da6DAAD7D3e19f43c734',
+    },
   ],
   bootstrap: {
     allowance: [
@@ -69,13 +74,12 @@ const develop: StackticalConfiguration = {
         },
       ],
       stake: {
-        allowedTokens: [CONTRACT_NAMES.DAI, CONTRACT_NAMES.USDC],
         stakingParameters: {},
       },
       messengers: [
         {
           contract: CONTRACT_NAMES.SEMessenger,
-          specificationPath: `${appRoot.path}/messenger-specs/${CONTRACT_NAMES.SEMessenger}.json`,
+          specificationPath: `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_EFFICIENCY}/${CONTRACT_NAMES.SEMessenger}.json`,
           useCaseName: USE_CASES.STAKING_EFFICIENCY,
           externalAdapterUrl: 'http://host.docker.internal:6060',
         },
@@ -192,7 +196,6 @@ const ethereum: StackticalConfiguration = {
         },
       ],
       stake: {
-        allowedTokens: [CONTRACT_NAMES.DAI, CONTRACT_NAMES.USDC],
         stakingParameters: {},
       },
       messengers: [
@@ -254,7 +257,6 @@ const harmonytestnet: StackticalConfiguration = {
         },
       ],
       stake: {
-        allowedTokens: [CONTRACT_NAMES.DAI, CONTRACT_NAMES.USDC],
         stakingParameters: {
           dslaBurnedByVerification: '0',
           dslaPlatformReward: '500',
@@ -330,11 +332,6 @@ const harmony: StackticalConfiguration = {
         },
       ],
       stake: {
-        allowedTokens: [
-          CONTRACT_NAMES.DSLA,
-          CONTRACT_NAMES.DAI,
-          CONTRACT_NAMES.USDC,
-        ],
         stakingParameters: {
           dslaBurnedByVerification: '0',
           dslaPlatformReward: '500',
@@ -440,7 +437,6 @@ const polygon: StackticalConfiguration = {
         },
       ],
       stake: {
-        allowedTokens: [CONTRACT_NAMES.DAI, CONTRACT_NAMES.USDC],
         stakingParameters: {
           dslaBurnedByVerification: '0',
           dslaPlatformReward: '500',
@@ -512,7 +508,6 @@ const mumbai: StackticalConfiguration = {
         },
       ],
       stake: {
-        allowedTokens: [CONTRACT_NAMES.DAI, CONTRACT_NAMES.USDC],
         stakingParameters: {
           dslaBurnedByVerification: '0',
           dslaPlatformReward: '500',

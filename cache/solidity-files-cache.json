@@ -1265,57 +1265,6 @@
         "BufferChainlink"
       ]
     },
-    "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/use-cases/staking-efficiency/SEMessenger.sol": {
-      "lastModificationDate": 1623356219477,
-      "contentHash": "c3823f2450e119f9dfb46e1e37531eb6",
-      "sourceName": "contracts/use-cases/staking-efficiency/SEMessenger.sol",
-      "solcConfig": {
-        "version": "0.6.6",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "devdoc",
-                "userdoc",
-                "storageLayout",
-                "evm.gasEstimates"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          },
-          "metadata": {
-            "useLiteralContent": true
-          }
-        }
-      },
-      "imports": [
-        "@chainlink/contracts/src/v0.6/ChainlinkClient.sol",
-        "@stacktical/dsla-protocol/contracts/messenger/IMessenger.sol",
-        "@stacktical/dsla-protocol/contracts/SLA.sol",
-        "@stacktical/dsla-protocol/contracts/PeriodRegistry.sol",
-        "@stacktical/dsla-protocol/contracts/StringUtils.sol",
-        "@stacktical/dsla-protocol/contracts/StakeRegistry.sol",
-        "@openzeppelin/contracts/token/ERC20/ERC20.sol",
-        "@openzeppelin/contracts/token/ERC20/SafeERC20.sol"
-      ],
-      "versionPragmas": [
-        "0.6.6"
-      ],
-      "artifacts": [
-        "SEMessenger"
-      ]
-    },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@stacktical/dsla-protocol/contracts/messenger/IMessenger.sol": {
       "lastModificationDate": 1623356010383,
       "contentHash": "d793a1d597ee544d7437a75af5054786",
@@ -2452,8 +2401,8 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/tokens/HarmonyERC20.sol": {
-      "lastModificationDate": 1623430823249,
-      "contentHash": "a8680fe8b73462b6cda315ea4516898d",
+      "lastModificationDate": 1623449048511,
+      "contentHash": "32f7ae843bc733365d63f5b8ef3ca80c",
       "sourceName": "contracts/tokens/HarmonyERC20.sol",
       "solcConfig": {
         "version": "0.6.6",
@@ -2485,15 +2434,9 @@
           }
         }
       },
-      "imports": [
-        "@openzeppelin/contracts/presets/ERC20PresetMinterPauser.sol"
-      ],
-      "versionPragmas": [
-        "0.6.6"
-      ],
-      "artifacts": [
-        "HarmonyERC20"
-      ]
+      "imports": [],
+      "versionPragmas": [],
+      "artifacts": []
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/tokens/EthereumERC20.sol": {
       "lastModificationDate": 1623430805003,
@@ -2623,6 +2566,57 @@
         ">=0.4.24 <0.7.0"
       ],
       "artifacts": []
+    },
+    "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/messengers/staking-efficiency/SEMessenger.sol": {
+      "lastModificationDate": 1623356219477,
+      "contentHash": "c3823f2450e119f9dfb46e1e37531eb6",
+      "sourceName": "contracts/messengers/staking-efficiency/SEMessenger.sol",
+      "solcConfig": {
+        "version": "0.6.6",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@chainlink/contracts/src/v0.6/ChainlinkClient.sol",
+        "@stacktical/dsla-protocol/contracts/messenger/IMessenger.sol",
+        "@stacktical/dsla-protocol/contracts/SLA.sol",
+        "@stacktical/dsla-protocol/contracts/PeriodRegistry.sol",
+        "@stacktical/dsla-protocol/contracts/StringUtils.sol",
+        "@stacktical/dsla-protocol/contracts/StakeRegistry.sol",
+        "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+        "@openzeppelin/contracts/token/ERC20/SafeERC20.sol"
+      ],
+      "versionPragmas": [
+        "0.6.6"
+      ],
+      "artifacts": [
+        "SEMessenger"
+      ]
     }
   }
 }

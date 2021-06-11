@@ -57,6 +57,7 @@ export enum DEPLOYMENT_TAGS {
   Services = 'services',
   Details = 'details',
   Messengers = 'messengers',
+  DummyTokens = 'dummy-tokens',
 }
 
 export enum USE_CASES {

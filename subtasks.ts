@@ -639,11 +639,11 @@ subtask(SUB_TASK_NAMES.EXPORT_ABIS, undefined).setAction(
 subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
   async (_, hre: any) => {
     const {
-      stacktical: { bootstrap },
+      stacktical: { bootstrap, tokens },
     }: { stacktical: StackticalConfiguration } = hre.network.config;
     const {
       registry: {
-        stake: { allowedTokens, stakingParameters },
+        stake: { stakingParameters },
       },
     } = bootstrap;
     const { deployments, ethers, getNamedAccounts, network } = hre;
@@ -663,18 +663,18 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
     );
 
     console.log('Allowing tokens on StakeRegistry');
-    for (let tokenName of allowedTokens) {
-      console.log('Allowing ' + tokenName + ' token');
-      const tokenArtifact = await get(tokenName);
+    for (let token of tokens) {
+      console.log('Allowing ' + token.name + ' token');
+      const tokenArtifact = await get(token.name);
       const allowedToken = await stakeRegistry.isAllowedToken(
         tokenArtifact.address
       );
       if (allowedToken) {
-        console.log(tokenName + ' token already allowed');
+        console.log(token.name + ' token already allowed');
       } else {
         const tx = await stakeRegistry.addAllowedTokens(tokenArtifact.address);
         await tx.wait();
-        console.log(tokenName + ' token successfully allowed');
+        console.log(token.name + ' token successfully allowed');
       }
     }
 

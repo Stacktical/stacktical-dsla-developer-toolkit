@@ -69,7 +69,6 @@ export type BootstrapConfiguration = {
 };
 
 export type StakeBootstrapDefinition = {
-  allowedTokens: Array<CONTRACT_NAMES>;
   stakingParameters: {
     dslaDepositByPeriod?: string;
     dslaPlatformReward?: string;
@@ -83,7 +82,7 @@ export type StakeBootstrapDefinition = {
 
 export type TokenAllowance = {
   contract: CONTRACT_NAMES;
-  token: CONTRACT_NAMES;
+  token: CONTRACT_NAMES | TOKEN_NAMES;
   allowance: string;
 };
 
