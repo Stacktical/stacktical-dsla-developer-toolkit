@@ -9,11 +9,7 @@ import {
   TOKEN_NAMES,
   USE_CASES,
 } from './constants';
-import {
-  EthereumERC20__factory,
-  HarmonyERC20__factory,
-  PolygonERC20__factory,
-} from './typechain';
+import { EthereumERC20__factory, PolygonERC20__factory } from './typechain';
 
 const appRoot = require('app-root-path');
 
@@ -219,15 +215,15 @@ const harmonytestnet: StackticalConfiguration = {
   burnDSLA: false,
   tokens: [
     {
-      factory: HarmonyERC20__factory,
+      factory: EthereumERC20__factory,
       name: TOKEN_NAMES.DSLA,
     },
     {
-      factory: HarmonyERC20__factory,
+      factory: EthereumERC20__factory,
       name: TOKEN_NAMES.DAI,
     },
     {
-      factory: HarmonyERC20__factory,
+      factory: EthereumERC20__factory,
       name: TOKEN_NAMES.USDC,
     },
   ],
@@ -275,22 +271,22 @@ const harmony: StackticalConfiguration = {
   burnDSLA: false,
   tokens: [
     {
-      factory: HarmonyERC20__factory,
+      factory: EthereumERC20__factory,
       name: TOKEN_NAMES.DSLA,
       address: '0x34704c70e9eC9fB9A921da6DAAD7D3e19f43c734',
     },
     {
-      factory: HarmonyERC20__factory,
+      factory: EthereumERC20__factory,
       name: TOKEN_NAMES.DAI,
       address: '0xEf977d2f931C1978Db5F6747666fa1eACB0d0339',
     },
     {
-      factory: HarmonyERC20__factory,
+      factory: EthereumERC20__factory,
       name: TOKEN_NAMES.USDC,
       address: '0x985458E523dB3d53125813eD68c274899e9DfAb4',
     },
     {
-      factory: HarmonyERC20__factory,
+      factory: EthereumERC20__factory,
       name: TOKEN_NAMES.USDT,
       address: '0x3C2B8Be99c50593081EAA2A724F0B8285F5aba8f',
     },
@@ -466,19 +462,19 @@ const mumbai: StackticalConfiguration = {
   burnDSLA: false,
   tokens: [
     {
-      factory: HarmonyERC20__factory,
+      factory: EthereumERC20__factory,
       name: TOKEN_NAMES.DSLA,
     },
     {
-      factory: HarmonyERC20__factory,
+      factory: EthereumERC20__factory,
       name: TOKEN_NAMES.DAI,
     },
     {
-      factory: HarmonyERC20__factory,
+      factory: EthereumERC20__factory,
       name: TOKEN_NAMES.USDC,
     },
     {
-      factory: HarmonyERC20__factory,
+      factory: EthereumERC20__factory,
       name: TOKEN_NAMES.USDT,
     },
   ],

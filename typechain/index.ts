@@ -40,7 +40,6 @@ export type { Staking } from "./Staking";
 export type { StringUtils } from "./StringUtils";
 export type { SEMessenger } from "./SEMessenger";
 export type { EthereumERC20 } from "./EthereumERC20";
-export type { HarmonyERC20 } from "./HarmonyERC20";
 export type { PolygonERC20 } from "./PolygonERC20";
 
 export { ERC677Token__factory } from "./factories/ERC677Token__factory";
@@ -82,5 +81,4 @@ export { Staking__factory } from "./factories/Staking__factory";
 export { StringUtils__factory } from "./factories/StringUtils__factory";
 export { SEMessenger__factory } from "./factories/SEMessenger__factory";
 export { EthereumERC20__factory } from "./factories/EthereumERC20__factory";
-export { HarmonyERC20__factory } from "./factories/HarmonyERC20__factory";
 export { PolygonERC20__factory } from "./factories/PolygonERC20__factory";
