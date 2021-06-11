@@ -1,12 +1,24 @@
-import { CONTRACT_NAMES, PERIOD_TYPE, SLO_TYPE } from './constants';
+import {
+  CONTRACT_NAMES,
+  PERIOD_TYPE,
+  SLO_TYPE,
+  TOKEN_NAMES,
+} from './constants';
 
 export type StackticalConfiguration = {
-  chainlink: ChainlinkConfiguration;
-  checkPastPeriods: boolean;
   burnDSLA: boolean;
+  checkPastPeriods: boolean;
+  tokens: Array<TokenConfiguration>;
+  chainlink: ChainlinkConfiguration;
   addresses: DeployedContractAddresses;
   bootstrap: BootstrapConfiguration;
   scripts?: ScriptsConfiguration;
+};
+
+export type TokenConfiguration = {
+  factory: any;
+  name: TOKEN_NAMES;
+  address?: string;
 };
 
 export type PeriodBootstrapDefinition = {

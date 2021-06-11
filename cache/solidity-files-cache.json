@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/chainlink/LinkToken.sol": {
-      "lastModificationDate": 1621908941153,
-      "contentHash": "98973383610cd9be0e66935ffcd8b1f8",
+      "lastModificationDate": 1623429882463,
+      "contentHash": "b25604bcd54feebde79b62fd075ce7b4",
       "sourceName": "contracts/chainlink/LinkToken.sol",
       "solcConfig": {
         "version": "0.4.24",
@@ -44,7 +44,7 @@
       "artifacts": []
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@chainlink/contracts/src/v0.4/LinkToken.sol": {
-      "lastModificationDate": 1620345004083,
+      "lastModificationDate": 1623355167879,
       "contentHash": "e9f0ef74e0010d065eca3b3031c440dd",
       "sourceName": "@chainlink/contracts/src/v0.4/LinkToken.sol",
       "solcConfig": {
@@ -89,7 +89,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@chainlink/contracts/src/v0.4/ERC677Token.sol": {
-      "lastModificationDate": 1620345004083,
+      "lastModificationDate": 1623355167876,
       "contentHash": "45b8db7fb2ef3b6c7dd95365ea22d0ff",
       "sourceName": "@chainlink/contracts/src/v0.4/ERC677Token.sol",
       "solcConfig": {
@@ -134,7 +134,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@chainlink/contracts/src/v0.4/vendor/StandardToken.sol": {
-      "lastModificationDate": 1620345004128,
+      "lastModificationDate": 1623355168969,
       "contentHash": "5300b9763e6778c2336eee86399a98e0",
       "sourceName": "@chainlink/contracts/src/v0.4/vendor/StandardToken.sol",
       "solcConfig": {
@@ -179,7 +179,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@chainlink/contracts/src/v0.4/interfaces/ERC677.sol": {
-      "lastModificationDate": 1620345004125,
+      "lastModificationDate": 1623355168958,
       "contentHash": "05de760f44a7c34c788f89571bbb77ee",
       "sourceName": "@chainlink/contracts/src/v0.4/interfaces/ERC677.sol",
       "solcConfig": {
@@ -223,7 +223,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@chainlink/contracts/src/v0.4/interfaces/ERC677Receiver.sol": {
-      "lastModificationDate": 1620345004126,
+      "lastModificationDate": 1623355168959,
       "contentHash": "59f6b5d24479f462b1376ba5a96edf2a",
       "sourceName": "@chainlink/contracts/src/v0.4/interfaces/ERC677Receiver.sol",
       "solcConfig": {
@@ -265,7 +265,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@chainlink/contracts/src/v0.4/interfaces/ERC20.sol": {
-      "lastModificationDate": 1620345004125,
+      "lastModificationDate": 1623355168957,
       "contentHash": "d26b294b4ca855f62158427dbf044b4b",
       "sourceName": "@chainlink/contracts/src/v0.4/interfaces/ERC20.sol",
       "solcConfig": {
@@ -309,7 +309,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@chainlink/contracts/src/v0.4/interfaces/ERC20Basic.sol": {
-      "lastModificationDate": 1620345004125,
+      "lastModificationDate": 1623355168958,
       "contentHash": "c669adeb22611a05d90e6444dcb431e6",
       "sourceName": "@chainlink/contracts/src/v0.4/interfaces/ERC20Basic.sol",
       "solcConfig": {
@@ -351,7 +351,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@chainlink/contracts/src/v0.4/vendor/BasicToken.sol": {
-      "lastModificationDate": 1620345004127,
+      "lastModificationDate": 1623355168963,
       "contentHash": "52edfd6bccbc7ebcfbb59b0ccfb19b56",
       "sourceName": "@chainlink/contracts/src/v0.4/vendor/BasicToken.sol",
       "solcConfig": {
@@ -396,7 +396,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@chainlink/contracts/src/v0.4/vendor/SafeMathChainlink.sol": {
-      "lastModificationDate": 1620345004127,
+      "lastModificationDate": 1623355168967,
       "contentHash": "25526c623f7624993554d443f0f25549",
       "sourceName": "@chainlink/contracts/src/v0.4/vendor/SafeMathChainlink.sol",
       "solcConfig": {
@@ -438,8 +438,8 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/chainlink/Oracle.sol": {
-      "lastModificationDate": 1623194917327,
-      "contentHash": "5b8f00859944afaa016aee10655d1c4f",
+      "lastModificationDate": 1623429882465,
+      "contentHash": "e3b4463949f2a2efb8e84c9dfe62d566",
       "sourceName": "contracts/chainlink/Oracle.sol",
       "solcConfig": {
         "version": "0.6.6",
@@ -1265,10 +1265,10 @@
         "BufferChainlink"
       ]
     },
-    "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/dsla-use-cases/staking-efficiency/SEMessenger.sol": {
-      "lastModificationDate": 1623255005903,
+    "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/use-cases/staking-efficiency/SEMessenger.sol": {
+      "lastModificationDate": 1623356219477,
       "contentHash": "c3823f2450e119f9dfb46e1e37531eb6",
-      "sourceName": "contracts/dsla-use-cases/staking-efficiency/SEMessenger.sol",
+      "sourceName": "contracts/use-cases/staking-efficiency/SEMessenger.sol",
       "solcConfig": {
         "version": "0.6.6",
         "settings": {
@@ -1498,8 +1498,61 @@
         "StringUtils"
       ]
     },
+    "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@stacktical/dsla-protocol/contracts/StakeRegistry.sol": {
+      "lastModificationDate": 1623356010384,
+      "contentHash": "f2c0ec33e0ce8c05f868b392f27beeb7",
+      "sourceName": "@stacktical/dsla-protocol/contracts/StakeRegistry.sol",
+      "solcConfig": {
+        "version": "0.6.6",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/access/Ownable.sol",
+        "@openzeppelin/contracts/math/SafeMath.sol",
+        "@openzeppelin/contracts/presets/ERC20PresetMinterPauser.sol",
+        "@openzeppelin/contracts/token/ERC20/SafeERC20.sol",
+        "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+        "@openzeppelin/contracts/utils/ReentrancyGuard.sol",
+        "./SLA.sol",
+        "./messenger/IMessenger.sol",
+        "./SLARegistry.sol",
+        "./StringUtils.sol"
+      ],
+      "versionPragmas": [
+        "0.6.6"
+      ],
+      "artifacts": [
+        "StakeRegistry"
+      ]
+    },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol": {
-      "lastModificationDate": 1623355168807,
+      "lastModificationDate": 1623438482093,
       "contentHash": "8065b340476f61365c076897199425f1",
       "sourceName": "@openzeppelin/contracts/token/ERC20/ERC20.sol",
       "solcConfig": {
@@ -1850,59 +1903,6 @@
       ],
       "artifacts": [
         "SLORegistry"
-      ]
-    },
-    "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@stacktical/dsla-protocol/contracts/StakeRegistry.sol": {
-      "lastModificationDate": 1623356010384,
-      "contentHash": "f2c0ec33e0ce8c05f868b392f27beeb7",
-      "sourceName": "@stacktical/dsla-protocol/contracts/StakeRegistry.sol",
-      "solcConfig": {
-        "version": "0.6.6",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "devdoc",
-                "userdoc",
-                "storageLayout",
-                "evm.gasEstimates"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          },
-          "metadata": {
-            "useLiteralContent": true
-          }
-        }
-      },
-      "imports": [
-        "@openzeppelin/contracts/access/Ownable.sol",
-        "@openzeppelin/contracts/math/SafeMath.sol",
-        "@openzeppelin/contracts/presets/ERC20PresetMinterPauser.sol",
-        "@openzeppelin/contracts/token/ERC20/SafeERC20.sol",
-        "@openzeppelin/contracts/token/ERC20/ERC20.sol",
-        "@openzeppelin/contracts/utils/ReentrancyGuard.sol",
-        "./SLA.sol",
-        "./messenger/IMessenger.sol",
-        "./SLARegistry.sol",
-        "./StringUtils.sol"
-      ],
-      "versionPragmas": [
-        "0.6.6"
-      ],
-      "artifacts": [
-        "StakeRegistry"
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@stacktical/dsla-protocol/contracts/Staking.sol": {
@@ -2406,10 +2406,10 @@
         "Details"
       ]
     },
-    "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/dummy-tokens/USDC.sol": {
-      "lastModificationDate": 1621908941156,
-      "contentHash": "f2c3d12108d97d820fb8d73059aae145",
-      "sourceName": "contracts/dummy-tokens/USDC.sol",
+    "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/tokens/PolygonERC20.sol": {
+      "lastModificationDate": 1623441233752,
+      "contentHash": "cd81e6760cdadd30ef998734088bf402",
+      "sourceName": "contracts/tokens/PolygonERC20.sol",
       "solcConfig": {
         "version": "0.6.6",
         "settings": {
@@ -2441,19 +2441,20 @@
         }
       },
       "imports": [
-        "@openzeppelin/contracts/presets/ERC20PresetMinterPauser.sol"
+        "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+        "@openzeppelin/contracts/math/SafeMath.sol"
       ],
       "versionPragmas": [
         "0.6.6"
       ],
       "artifacts": [
-        "USDC"
+        "PolygonERC20"
       ]
     },
-    "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/dummy-tokens/DSLA.sol": {
-      "lastModificationDate": 1621908941156,
-      "contentHash": "ab6df40cf55de4ffc0e9feaa5f40ffba",
-      "sourceName": "contracts/dummy-tokens/DSLA.sol",
+    "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/tokens/HarmonyERC20.sol": {
+      "lastModificationDate": 1623430823249,
+      "contentHash": "a8680fe8b73462b6cda315ea4516898d",
+      "sourceName": "contracts/tokens/HarmonyERC20.sol",
       "solcConfig": {
         "version": "0.6.6",
         "settings": {
@@ -2491,13 +2492,13 @@
         "0.6.6"
       ],
       "artifacts": [
-        "DSLA"
+        "HarmonyERC20"
       ]
     },
-    "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/dummy-tokens/DAI.sol": {
-      "lastModificationDate": 1621908941154,
-      "contentHash": "fb9cceb5454b9c500e9787cc8aec2049",
-      "sourceName": "contracts/dummy-tokens/DAI.sol",
+    "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/tokens/EthereumERC20.sol": {
+      "lastModificationDate": 1623430805003,
+      "contentHash": "3fde85e74a258ecac977cbdc6852b7a8",
+      "sourceName": "contracts/tokens/EthereumERC20.sol",
       "solcConfig": {
         "version": "0.6.6",
         "settings": {
@@ -2535,12 +2536,12 @@
         "0.6.6"
       ],
       "artifacts": [
-        "DAI"
+        "EthereumERC20"
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/DSLA.sol": {
-      "lastModificationDate": 1623194917327,
-      "contentHash": "661390b395aec632f805d98d22e8710a",
+      "lastModificationDate": 1623429882470,
+      "contentHash": "6cce32f4d92e6cb013b5b83cc0daf375",
       "sourceName": "contracts/DSLA.sol",
       "solcConfig": {
         "version": "0.6.6",
@@ -2582,8 +2583,8 @@
       "artifacts": []
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/chainlink/PreCoordinator.sol": {
-      "lastModificationDate": 1623194917327,
-      "contentHash": "4f3edca34250b524b1cb5f2ce15475ed",
+      "lastModificationDate": 1623429882469,
+      "contentHash": "3c66f66b1b6f7b2de4283fccf0e59807",
       "sourceName": "contracts/chainlink/PreCoordinator.sol",
       "solcConfig": {
         "version": "0.6.6",

@@ -38,12 +38,17 @@ export enum CONTRACT_NAMES {
   Staking = 'Staking',
   StringUtils = 'StringUtils',
   PreCoordinator = 'PreCoordinator',
+  EthereumERC20 = 'EthereumERC20',
+  HarmonyERC20 = 'HarmonyERC20',
+  PolygonERC20 = 'PolygonERC20',
+  AvalancheERC20 = 'AvalancheERC20',
 }
 
 export enum TOKEN_NAMES {
   DSLA = 'DSLA',
   DAI = 'DAI',
   USDC = 'USDC',
+  USDT = 'USDT',
 }
 
 export enum DEPLOYMENT_TAGS {

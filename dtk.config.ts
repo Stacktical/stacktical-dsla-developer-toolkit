@@ -6,8 +6,14 @@ import {
   SENetworkNamesBytes32,
   SENetworks,
   SLO_TYPE,
+  TOKEN_NAMES,
   USE_CASES,
 } from './constants';
+import {
+  EthereumERC20__factory,
+  HarmonyERC20__factory,
+  PolygonERC20__factory,
+} from './typechain';
 
 const appRoot = require('app-root-path');
 
@@ -32,6 +38,20 @@ const develop: StackticalConfiguration = {
   addresses: {},
   checkPastPeriods: false,
   burnDSLA: true,
+  tokens: [
+    {
+      factory: EthereumERC20__factory,
+      name: TOKEN_NAMES.DSLA,
+    },
+    {
+      factory: EthereumERC20__factory,
+      name: TOKEN_NAMES.DAI,
+    },
+    {
+      factory: EthereumERC20__factory,
+      name: TOKEN_NAMES.USDC,
+    },
+  ],
   bootstrap: {
     allowance: [
       {
@@ -90,6 +110,25 @@ const develop: StackticalConfiguration = {
 };
 
 const ethereum: StackticalConfiguration = {
+  checkPastPeriods: true,
+  burnDSLA: true,
+  tokens: [
+    {
+      factory: EthereumERC20__factory,
+      name: TOKEN_NAMES.DSLA,
+      address: '0x3aFfCCa64c2A6f4e3B6Bd9c64CD2C969EFd1ECBe',
+    },
+    {
+      factory: EthereumERC20__factory,
+      name: TOKEN_NAMES.DAI,
+      address: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+    },
+    {
+      factory: EthereumERC20__factory,
+      name: TOKEN_NAMES.USDC,
+      address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+    },
+  ],
   chainlink: {
     isProduction: true,
     deleteOldJobs: false,
@@ -121,9 +160,6 @@ const ethereum: StackticalConfiguration = {
     ],
   },
   addresses: {
-    [CONTRACT_NAMES.DSLA]: '0x3aFfCCa64c2A6f4e3B6Bd9c64CD2C969EFd1ECBe',
-    [CONTRACT_NAMES.DAI]: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
-    [CONTRACT_NAMES.USDC]: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
     [CONTRACT_NAMES.Oracle]: '0x99F4e62a317cc666589c9e370c73c15B158f3c61',
     [CONTRACT_NAMES.LinkToken]: '0x514910771af9ca656af840dff83e8264ecf986ca',
     [CONTRACT_NAMES.SLORegistry]: '0x1bE60A36Ba9De2eCeFe8be8d2720B67f932EC487',
@@ -139,8 +175,6 @@ const ethereum: StackticalConfiguration = {
     [CONTRACT_NAMES.PreCoordinator]:
       '0x7db551Ce6677211309db39A67F73cA923e9d4944',
   },
-  checkPastPeriods: true,
-  burnDSLA: true,
   bootstrap: {
     allowance: [
       {
@@ -178,6 +212,22 @@ const ethereum: StackticalConfiguration = {
 };
 
 const harmonytestnet: StackticalConfiguration = {
+  checkPastPeriods: false,
+  burnDSLA: false,
+  tokens: [
+    {
+      factory: HarmonyERC20__factory,
+      name: TOKEN_NAMES.DSLA,
+    },
+    {
+      factory: HarmonyERC20__factory,
+      name: TOKEN_NAMES.DAI,
+    },
+    {
+      factory: HarmonyERC20__factory,
+      name: TOKEN_NAMES.USDC,
+    },
+  ],
   chainlink: {
     isProduction: false,
     deleteOldJobs: true,
@@ -187,8 +237,6 @@ const harmonytestnet: StackticalConfiguration = {
     nodesConfiguration: develop.chainlink.nodesConfiguration,
   },
   addresses: {},
-  checkPastPeriods: false,
-  burnDSLA: false,
   bootstrap: {
     allowance: [
       {
@@ -221,6 +269,30 @@ const harmonytestnet: StackticalConfiguration = {
 };
 
 const harmony: StackticalConfiguration = {
+  checkPastPeriods: true,
+  burnDSLA: false,
+  tokens: [
+    {
+      factory: HarmonyERC20__factory,
+      name: TOKEN_NAMES.DSLA,
+      address: '0x34704c70e9eC9fB9A921da6DAAD7D3e19f43c734',
+    },
+    {
+      factory: HarmonyERC20__factory,
+      name: TOKEN_NAMES.DAI,
+      address: '0xEf977d2f931C1978Db5F6747666fa1eACB0d0339',
+    },
+    {
+      factory: HarmonyERC20__factory,
+      name: TOKEN_NAMES.USDC,
+      address: '0x985458E523dB3d53125813eD68c274899e9DfAb4',
+    },
+    {
+      factory: HarmonyERC20__factory,
+      name: TOKEN_NAMES.USDT,
+      address: '0x3C2B8Be99c50593081EAA2A724F0B8285F5aba8f',
+    },
+  ],
   chainlink: {
     isProduction: true,
     deleteOldJobs: true,
@@ -239,14 +311,8 @@ const harmony: StackticalConfiguration = {
     ],
   },
   addresses: {
-    [CONTRACT_NAMES.DSLA]: '0x34704c70e9eC9fB9A921da6DAAD7D3e19f43c734',
-    [CONTRACT_NAMES.DAI]: '0xEf977d2f931C1978Db5F6747666fa1eACB0d0339',
-    [CONTRACT_NAMES.USDC]: '0x985458E523dB3d53125813eD68c274899e9DfAb4',
-    //[CONTRACT_NAMES.USDT]: '0x3C2B8Be99c50593081EAA2A724F0B8285F5aba8f',
     [CONTRACT_NAMES.LinkToken]: '0x218532a12a389a4a92fC0C5Fb22901D1c19198aA',
   },
-  checkPastPeriods: true,
-  burnDSLA: false,
   bootstrap: {
     allowance: [
       {
@@ -291,6 +357,25 @@ const harmony: StackticalConfiguration = {
 };
 
 const polygon: StackticalConfiguration = {
+  checkPastPeriods: true,
+  burnDSLA: false,
+  tokens: [
+    {
+      factory: PolygonERC20__factory,
+      name: TOKEN_NAMES.DSLA,
+      address: '0xa0E390e9ceA0D0e8cd40048ced9fA9EA10D71639',
+    },
+    {
+      factory: PolygonERC20__factory,
+      name: TOKEN_NAMES.DAI,
+      address: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
+    },
+    {
+      factory: PolygonERC20__factory,
+      name: TOKEN_NAMES.USDC,
+      address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
+    },
+  ],
   chainlink: {
     isProduction: true,
     deleteOldJobs: true,
@@ -322,9 +407,6 @@ const polygon: StackticalConfiguration = {
     ],
   },
   addresses: {
-    [CONTRACT_NAMES.DSLA]: '0xa0E390e9ceA0D0e8cd40048ced9fA9EA10D71639',
-    [CONTRACT_NAMES.DAI]: '0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063',
-    [CONTRACT_NAMES.USDC]: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
     [CONTRACT_NAMES.SLORegistry]: '0x0b1cfF33ad49690dB0Eb0bc17429613969C7dDcF',
     [CONTRACT_NAMES.SLARegistry]: '0xf41EaA49BBae8650f051100d4385d5d7F9af4a54',
     [CONTRACT_NAMES.MessengerRegistry]:
@@ -341,8 +423,6 @@ const polygon: StackticalConfiguration = {
     [CONTRACT_NAMES.Oracle]: '0x99F4e62a317cc666589c9e370c73c15B158f3c61',
     [CONTRACT_NAMES.LinkToken]: '0xb0897686c545045afc77cf20ec7a532e3120e0f1 ',
   },
-  checkPastPeriods: true,
-  burnDSLA: false,
   bootstrap: {
     allowance: [
       {
@@ -386,6 +466,26 @@ const polygon: StackticalConfiguration = {
 };
 
 const mumbai: StackticalConfiguration = {
+  checkPastPeriods: false,
+  burnDSLA: false,
+  tokens: [
+    {
+      factory: HarmonyERC20__factory,
+      name: TOKEN_NAMES.DSLA,
+    },
+    {
+      factory: HarmonyERC20__factory,
+      name: TOKEN_NAMES.DAI,
+    },
+    {
+      factory: HarmonyERC20__factory,
+      name: TOKEN_NAMES.USDC,
+    },
+    {
+      factory: HarmonyERC20__factory,
+      name: TOKEN_NAMES.USDT,
+    },
+  ],
   chainlink: {
     isProduction: false,
     deleteOldJobs: true,
@@ -395,8 +495,6 @@ const mumbai: StackticalConfiguration = {
     nodesConfiguration: develop.chainlink.nodesConfiguration,
   },
   addresses: {},
-  checkPastPeriods: false,
-  burnDSLA: false,
   bootstrap: {
     allowance: [
       {
