@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v2.0.0...v2.1.0) (2021-06-12)
+
+
+### Features
+
+* burn DSLA config flag ([c2a34db](https://github.com/Stacktical/stacktical-developer-toolkit/commit/c2a34db2e647feea875a79cb9bb37fdece71657f))
+* burnDSLA as staking parameter ([a700965](https://github.com/Stacktical/stacktical-developer-toolkit/commit/a700965aaff244c06ad22d2258c8485fb363cd8f))
+* harmony contract commennted ([901dcca](https://github.com/Stacktical/stacktical-developer-toolkit/commit/901dccae543dbbf461101c66981294678a39c84d))
+* hrc20 contract code ([9861cfd](https://github.com/Stacktical/stacktical-developer-toolkit/commit/9861cfdc6f614647677e2548950eed814d0083ac))
+* initializing token contracts from tokens config ([a383920](https://github.com/Stacktical/stacktical-developer-toolkit/commit/a3839203a74c68efdc95199b4d126d3045ef18c9))
+* retry function on SEMEssenger ([7dd4d22](https://github.com/Stacktical/stacktical-developer-toolkit/commit/7dd4d229f54e02841290ac29c455b592e7690f7a))
+* solhint ([09e9019](https://github.com/Stacktical/stacktical-developer-toolkit/commit/09e90194214b46dce814880253f9b0c6a4936728))
+
 ## [2.0.0](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v1.5.0...v2.0.0) (2021-06-08)
 
 

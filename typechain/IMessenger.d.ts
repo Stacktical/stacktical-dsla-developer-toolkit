@@ -31,6 +31,7 @@ interface IMessengerInterface extends ethers.utils.Interface {
     "renounceOwnership()": FunctionFragment;
     "requestSLI(uint256,address,bool,address)": FunctionFragment;
     "requestsCounter()": FunctionFragment;
+    "retryRequest(address,uint256)": FunctionFragment;
     "setChainlinkJobID(bytes32,uint256)": FunctionFragment;
     "setSLARegistry()": FunctionFragment;
     "slaRegistryAddress()": FunctionFragment;
@@ -64,6 +65,10 @@ interface IMessengerInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "requestsCounter",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "retryRequest",
+    values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "setChainlinkJobID",
@@ -102,6 +107,10 @@ interface IMessengerInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "requestSLI", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "requestsCounter",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "retryRequest",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -206,6 +215,12 @@ export class IMessenger extends BaseContract {
 
     requestsCounter(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    retryRequest(
+      _slaAddress: string,
+      _periodId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     setChainlinkJobID(
       _newJobId: BytesLike,
       _feeMultiplier: BigNumberish,
@@ -256,6 +271,12 @@ export class IMessenger extends BaseContract {
 
   requestsCounter(overrides?: CallOverrides): Promise<BigNumber>;
 
+  retryRequest(
+    _slaAddress: string,
+    _periodId: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   setChainlinkJobID(
     _newJobId: BytesLike,
     _feeMultiplier: BigNumberish,
@@ -303,6 +324,12 @@ export class IMessenger extends BaseContract {
     ): Promise<void>;
 
     requestsCounter(overrides?: CallOverrides): Promise<BigNumber>;
+
+    retryRequest(
+      _slaAddress: string,
+      _periodId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     setChainlinkJobID(
       _newJobId: BytesLike,
@@ -378,6 +405,12 @@ export class IMessenger extends BaseContract {
 
     requestsCounter(overrides?: CallOverrides): Promise<BigNumber>;
 
+    retryRequest(
+      _slaAddress: string,
+      _periodId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     setChainlinkJobID(
       _newJobId: BytesLike,
       _feeMultiplier: BigNumberish,
@@ -430,6 +463,12 @@ export class IMessenger extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     requestsCounter(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    retryRequest(
+      _slaAddress: string,
+      _periodId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     setChainlinkJobID(
       _newJobId: BytesLike,
