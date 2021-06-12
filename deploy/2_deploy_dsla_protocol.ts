@@ -20,7 +20,7 @@ module.exports = async ({ getNamedAccounts, deployments, network }) => {
   const { address: dslaTokenAddress } = await get(CONTRACT_NAMES.DSLA);
   await deploy(CONTRACT_NAMES.StakeRegistry, {
     ...baseOptions,
-    args: [dslaTokenAddress, stacktical.burnDSLA],
+    args: [dslaTokenAddress],
   });
 
   const periodRegistry = await get(CONTRACT_NAMES.PeriodRegistry);

@@ -1440,7 +1440,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@stacktical/dsla-protocol/contracts/messenger/IMessenger.sol": {
-      "lastModificationDate": 1623356010383,
+      "lastModificationDate": 1623456991570,
       "contentHash": "d793a1d597ee544d7437a75af5054786",
       "sourceName": "@stacktical/dsla-protocol/contracts/messenger/IMessenger.sol",
       "solcConfig": {
@@ -1484,7 +1484,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@stacktical/dsla-protocol/contracts/SLA.sol": {
-      "lastModificationDate": 1623356010384,
+      "lastModificationDate": 1623456991572,
       "contentHash": "e4e963a54a3b15dac6c706e6d426260f",
       "sourceName": "@stacktical/dsla-protocol/contracts/SLA.sol",
       "solcConfig": {
@@ -1535,7 +1535,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@stacktical/dsla-protocol/contracts/PeriodRegistry.sol": {
-      "lastModificationDate": 1623356010384,
+      "lastModificationDate": 1623456991571,
       "contentHash": "2dda87211f47828c990850fdb7338d0f",
       "sourceName": "@stacktical/dsla-protocol/contracts/PeriodRegistry.sol",
       "solcConfig": {
@@ -1580,7 +1580,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@stacktical/dsla-protocol/contracts/StringUtils.sol": {
-      "lastModificationDate": 1623356010385,
+      "lastModificationDate": 1623456991573,
       "contentHash": "01bbcb20be42b74cb71d928e2fecce46",
       "sourceName": "@stacktical/dsla-protocol/contracts/StringUtils.sol",
       "solcConfig": {
@@ -1622,8 +1622,8 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@stacktical/dsla-protocol/contracts/StakeRegistry.sol": {
-      "lastModificationDate": 1623356010384,
-      "contentHash": "f2c0ec33e0ce8c05f868b392f27beeb7",
+      "lastModificationDate": 1623456991572,
+      "contentHash": "2540c9941f80d8970de465ee931e70c8",
       "sourceName": "@stacktical/dsla-protocol/contracts/StakeRegistry.sol",
       "solcConfig": {
         "version": "0.6.6",
@@ -1937,7 +1937,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@stacktical/dsla-protocol/contracts/SLARegistry.sol": {
-      "lastModificationDate": 1623356010384,
+      "lastModificationDate": 1623456991572,
       "contentHash": "6df6f3749c27510d9e986f41cd587dae",
       "sourceName": "@stacktical/dsla-protocol/contracts/SLARegistry.sol",
       "solcConfig": {
@@ -1987,7 +1987,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@stacktical/dsla-protocol/contracts/SLORegistry.sol": {
-      "lastModificationDate": 1623356010384,
+      "lastModificationDate": 1623456991572,
       "contentHash": "41864f41630b4ff3843698e03cc30de4",
       "sourceName": "@stacktical/dsla-protocol/contracts/SLORegistry.sol",
       "solcConfig": {
@@ -2029,8 +2029,8 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@stacktical/dsla-protocol/contracts/Staking.sol": {
-      "lastModificationDate": 1623356010385,
-      "contentHash": "b3d3078136f4269b3db890cb8d28693f",
+      "lastModificationDate": 1623456991572,
+      "contentHash": "87b71decea1ba7b8c2e0f2e73bde762f",
       "sourceName": "@stacktical/dsla-protocol/contracts/Staking.sol",
       "solcConfig": {
         "version": "0.6.6",
@@ -2081,7 +2081,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@stacktical/dsla-protocol/contracts/MessengerRegistry.sol": {
-      "lastModificationDate": 1623356010383,
+      "lastModificationDate": 1623456991571,
       "contentHash": "955a420e9dec73794548b1c25a44bcf7",
       "sourceName": "@stacktical/dsla-protocol/contracts/MessengerRegistry.sol",
       "solcConfig": {
@@ -2479,7 +2479,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/node_modules/@stacktical/dsla-protocol/contracts/Details.sol": {
-      "lastModificationDate": 1623356010383,
+      "lastModificationDate": 1623456991570,
       "contentHash": "93452a4fb76f17db6891812b20cf07c1",
       "sourceName": "@stacktical/dsla-protocol/contracts/Details.sol",
       "solcConfig": {

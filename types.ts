@@ -6,7 +6,6 @@ import {
 } from './constants';
 
 export type StackticalConfiguration = {
-  burnDSLA: boolean;
   checkPastPeriods: boolean;
   tokens: Array<TokenConfiguration>;
   chainlink: ChainlinkConfiguration;
@@ -77,6 +76,7 @@ export type StakeBootstrapDefinition = {
     dslaBurnedByVerification?: string;
     maxTokenLength?: string;
     maxLeverage?: string;
+    burnDSLA?: boolean;
   };
 };
 

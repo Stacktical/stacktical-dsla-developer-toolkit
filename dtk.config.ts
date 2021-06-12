@@ -33,7 +33,6 @@ const develop: StackticalConfiguration = {
   },
   addresses: {},
   checkPastPeriods: false,
-  burnDSLA: true,
   tokens: [
     {
       factory: EthereumERC20__factory,
@@ -111,7 +110,6 @@ const develop: StackticalConfiguration = {
 
 const ethereum: StackticalConfiguration = {
   checkPastPeriods: true,
-  burnDSLA: true,
   tokens: [
     {
       factory: EthereumERC20__factory,
@@ -212,7 +210,6 @@ const ethereum: StackticalConfiguration = {
 
 const harmonytestnet: StackticalConfiguration = {
   checkPastPeriods: false,
-  burnDSLA: false,
   tokens: [
     {
       factory: EthereumERC20__factory,
@@ -256,6 +253,7 @@ const harmonytestnet: StackticalConfiguration = {
         stakingParameters: {
           dslaBurnedByVerification: '0',
           dslaPlatformReward: '500',
+          burnDSLA: false,
         },
       },
       messengers: develop.bootstrap.registry.messengers,
@@ -268,7 +266,6 @@ const harmonytestnet: StackticalConfiguration = {
 
 const harmony: StackticalConfiguration = {
   checkPastPeriods: true,
-  burnDSLA: false,
   tokens: [
     {
       factory: EthereumERC20__factory,
@@ -331,6 +328,7 @@ const harmony: StackticalConfiguration = {
         stakingParameters: {
           dslaBurnedByVerification: '0',
           dslaPlatformReward: '500',
+          burnDSLA: false,
         },
       },
       messengers: [
@@ -351,7 +349,6 @@ const harmony: StackticalConfiguration = {
 
 const polygon: StackticalConfiguration = {
   checkPastPeriods: true,
-  burnDSLA: false,
   tokens: [
     {
       factory: PolygonERC20__factory,
@@ -439,6 +436,7 @@ const polygon: StackticalConfiguration = {
           dslaDepositByPeriod: '1000',
           dslaMessengerReward: '250',
           dslaUserReward: '250',
+          burnDSLA: false,
         },
       },
       messengers: [
@@ -459,7 +457,6 @@ const polygon: StackticalConfiguration = {
 
 const mumbai: StackticalConfiguration = {
   checkPastPeriods: false,
-  burnDSLA: false,
   tokens: [
     {
       factory: EthereumERC20__factory,
@@ -510,6 +507,7 @@ const mumbai: StackticalConfiguration = {
           dslaDepositByPeriod: '1000',
           dslaMessengerReward: '250',
           dslaUserReward: '250',
+          burnDSLA: false,
         },
       },
       messengers: develop.bootstrap.registry.messengers,

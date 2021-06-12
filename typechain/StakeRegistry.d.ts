@@ -36,7 +36,7 @@ interface StakeRegistryInterface extends ethers.utils.Interface {
     "renounceOwnership()": FunctionFragment;
     "returnLockedValue(address)": FunctionFragment;
     "setSLARegistry()": FunctionFragment;
-    "setStakingParameters(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint64)": FunctionFragment;
+    "setStakingParameters(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint64,bool)": FunctionFragment;
     "slaLockedValue(address)": FunctionFragment;
     "slaRegistry()": FunctionFragment;
     "slaWasStakedByUser(address,address)": FunctionFragment;
@@ -111,7 +111,8 @@ interface StakeRegistryInterface extends ethers.utils.Interface {
       BigNumberish,
       BigNumberish,
       BigNumberish,
-      BigNumberish
+      BigNumberish,
+      boolean
     ]
   ): string;
   encodeFunctionData(
@@ -221,7 +222,7 @@ interface StakeRegistryInterface extends ethers.utils.Interface {
     "DTokenCreated(address,address,string,string)": EventFragment;
     "LockedValueReturned(address,address,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
-    "StakingParametersModified(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint64)": EventFragment;
+    "StakingParametersModified(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint64,bool)": EventFragment;
     "ValueLocked(address,address,uint256)": EventFragment;
     "VerificationRewardDistributed(address,address,uint256,uint256,uint256,uint256)": EventFragment;
   };
@@ -330,7 +331,8 @@ export class StakeRegistry extends BaseContract {
         BigNumber,
         BigNumber,
         BigNumber,
-        BigNumber
+        BigNumber,
+        boolean
       ] & {
         DSLAburnRate: BigNumber;
         dslaDepositByPeriod: BigNumber;
@@ -340,6 +342,7 @@ export class StakeRegistry extends BaseContract {
         dslaBurnedByVerification: BigNumber;
         maxTokenLength: BigNumber;
         maxLeverage: BigNumber;
+        burnDSLA: boolean;
       }
     >;
 
@@ -390,6 +393,7 @@ export class StakeRegistry extends BaseContract {
       dslaBurnedByVerification: BigNumberish,
       maxTokenLength: BigNumberish,
       maxLeverage: BigNumberish,
+      burnDSLA: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -481,7 +485,8 @@ export class StakeRegistry extends BaseContract {
       BigNumber,
       BigNumber,
       BigNumber,
-      BigNumber
+      BigNumber,
+      boolean
     ] & {
       DSLAburnRate: BigNumber;
       dslaDepositByPeriod: BigNumber;
@@ -491,6 +496,7 @@ export class StakeRegistry extends BaseContract {
       dslaBurnedByVerification: BigNumber;
       maxTokenLength: BigNumber;
       maxLeverage: BigNumber;
+      burnDSLA: boolean;
     }
   >;
 
@@ -541,6 +547,7 @@ export class StakeRegistry extends BaseContract {
     dslaBurnedByVerification: BigNumberish,
     maxTokenLength: BigNumberish,
     maxLeverage: BigNumberish,
+    burnDSLA: boolean,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -635,7 +642,8 @@ export class StakeRegistry extends BaseContract {
         BigNumber,
         BigNumber,
         BigNumber,
-        BigNumber
+        BigNumber,
+        boolean
       ] & {
         DSLAburnRate: BigNumber;
         dslaDepositByPeriod: BigNumber;
@@ -645,6 +653,7 @@ export class StakeRegistry extends BaseContract {
         dslaBurnedByVerification: BigNumber;
         maxTokenLength: BigNumber;
         maxLeverage: BigNumber;
+        burnDSLA: boolean;
       }
     >;
 
@@ -688,6 +697,7 @@ export class StakeRegistry extends BaseContract {
       dslaBurnedByVerification: BigNumberish,
       maxTokenLength: BigNumberish,
       maxLeverage: BigNumberish,
+      burnDSLA: boolean,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -770,7 +780,8 @@ export class StakeRegistry extends BaseContract {
       dslaUserReward?: null,
       dslaBurnedByVerification?: null,
       maxTokenLength?: null,
-      maxLeverage?: null
+      maxLeverage?: null,
+      burnDSLA?: null
     ): TypedEventFilter<
       [
         BigNumber,
@@ -780,7 +791,8 @@ export class StakeRegistry extends BaseContract {
         BigNumber,
         BigNumber,
         BigNumber,
-        BigNumber
+        BigNumber,
+        boolean
       ],
       {
         DSLAburnRate: BigNumber;
@@ -791,6 +803,7 @@ export class StakeRegistry extends BaseContract {
         dslaBurnedByVerification: BigNumber;
         maxTokenLength: BigNumber;
         maxLeverage: BigNumber;
+        burnDSLA: boolean;
       }
     >;
 
@@ -903,6 +916,7 @@ export class StakeRegistry extends BaseContract {
       dslaBurnedByVerification: BigNumberish,
       maxTokenLength: BigNumberish,
       maxLeverage: BigNumberish,
+      burnDSLA: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1010,6 +1024,7 @@ export class StakeRegistry extends BaseContract {
       dslaBurnedByVerification: BigNumberish,
       maxTokenLength: BigNumberish,
       maxLeverage: BigNumberish,
+      burnDSLA: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

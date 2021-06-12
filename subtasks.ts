@@ -733,6 +733,9 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
           stakingParameters.maxTokenLength ||
             currentStakingParameters.maxTokenLength,
           stakingParameters.maxLeverage || currentStakingParameters.maxLeverage,
+          stakingParameters.burnDSLA !== undefined
+            ? stakingParameters.burnDSLA
+            : currentStakingParameters.burnDSLA,
           {
             ...(network.config.gas !== 'auto' && {
               gasLimit: network.config.gas,
@@ -765,6 +768,7 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
           'maxTokenLength: ' + newParameters.maxTokenLength.toString()
         );
         console.log('maxLeverage: ' + newParameters.maxLeverage.toString());
+        console.log('burnDSLA: ' + newParameters.burnDSLA);
       }
     }
     console.log(finishBootstrap);
