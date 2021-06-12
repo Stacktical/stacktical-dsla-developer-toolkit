@@ -1,9 +1,6 @@
 /* eslint-disable no-await-in-loop, import/no-extraneous-dependencies */
-import {
-  DeploymentsExtension,
-  DeployOptionsBase,
-} from 'hardhat-deploy/dist/types';
-import { fromWei, toChecksumAddress, toWei, numberToHex } from 'web3-utils';
+import { DeploymentsExtension } from 'hardhat-deploy/dist/types';
+import { fromWei, numberToHex, toChecksumAddress, toWei } from 'web3-utils';
 
 import {
   deleteJob,
@@ -20,7 +17,6 @@ import {
   StackticalConfiguration,
 } from './types';
 import {
-  DSLA__factory,
   ERC20__factory,
   IMessenger__factory,
   MessengerRegistry__factory,
@@ -29,12 +25,17 @@ import {
   PeriodRegistry__factory,
   PreCoordinator__factory,
   SEMessenger__factory,
-  SLA,
   SLA__factory,
   SLARegistry__factory,
   StakeRegistry__factory,
 } from './typechain';
-import { CONTRACT_NAMES, PERIOD_STATUS, PERIOD_TYPE } from './constants';
+
+import {
+  CONTRACT_NAMES,
+  PERIOD_STATUS,
+  PERIOD_TYPE,
+  TOKEN_NAMES,
+} from './constants';
 import {
   bootstrapStrings,
   generateBootstrapPeriods,
@@ -45,14 +46,12 @@ import {
 import axios from 'axios';
 
 const prettier = require('prettier');
-const { DataFile } = require('edit-config');
 const appRoot = require('app-root-path');
 const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
 const compose = require('docker-compose');
 const moment = require('moment');
-const bs58 = require('bs58');
 
 export enum SUB_TASK_NAMES {
   PREPARE_CHAINLINK_NODES = 'PREPARE_CHAINLINK_NODES',
@@ -466,6 +465,14 @@ subtask(
       abi: artifact.abi,
     });
   }
+  for (let token of stacktical.tokens) {
+    if (token.address) {
+      await deployments.save(token.name, {
+        address: token.address,
+        abi: token.factory.abi,
+      });
+    }
+  }
 });
 
 subtask(SUB_TASK_NAMES.SAVE_CONTRACTS_ADDRESSES, undefined).setAction(
@@ -632,11 +639,11 @@ subtask(SUB_TASK_NAMES.EXPORT_ABIS, undefined).setAction(
 subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
   async (_, hre: any) => {
     const {
-      stacktical: { bootstrap },
+      stacktical: { bootstrap, tokens },
     }: { stacktical: StackticalConfiguration } = hre.network.config;
     const {
       registry: {
-        stake: { allowedTokens, stakingParameters },
+        stake: { stakingParameters },
       },
     } = bootstrap;
     const { deployments, ethers, getNamedAccounts, network } = hre;
@@ -656,18 +663,18 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
     );
 
     console.log('Allowing tokens on StakeRegistry');
-    for (let tokenName of allowedTokens) {
-      console.log('Allowing ' + tokenName + ' token');
-      const tokenArtifact = await get(tokenName);
+    for (let token of tokens) {
+      console.log('Allowing ' + token.name + ' token');
+      const tokenArtifact = await get(token.name);
       const allowedToken = await stakeRegistry.isAllowedToken(
         tokenArtifact.address
       );
       if (allowedToken) {
-        console.log(tokenName + ' token already allowed');
+        console.log(token.name + ' token already allowed');
       } else {
         const tx = await stakeRegistry.addAllowedTokens(tokenArtifact.address);
         await tx.wait();
-        console.log(tokenName + ' token successfully allowed');
+        console.log(token.name + ' token successfully allowed');
       }
     }
 
@@ -726,6 +733,9 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
           stakingParameters.maxTokenLength ||
             currentStakingParameters.maxTokenLength,
           stakingParameters.maxLeverage || currentStakingParameters.maxLeverage,
+          stakingParameters.burnDSLA !== undefined
+            ? stakingParameters.burnDSLA
+            : currentStakingParameters.burnDSLA,
           {
             ...(network.config.gas !== 'auto' && {
               gasLimit: network.config.gas,
@@ -758,6 +768,7 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
           'maxTokenLength: ' + newParameters.maxTokenLength.toString()
         );
         console.log('maxLeverage: ' + newParameters.maxLeverage.toString());
+        console.log('burnDSLA: ' + newParameters.burnDSLA);
       }
     }
     console.log(finishBootstrap);
@@ -992,6 +1003,8 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(async (_, hre: any) => {
   const { deployer, notDeployer } = await getNamedAccounts();
   const signer = await ethers.getSigner(deployer);
   const { get } = deployments;
+  const { stacktical }: { stacktical: StackticalConfiguration } =
+    hre.network.config;
   console.log('Starting SLA deployment process');
   const { deploy_sla }: { deploy_sla: DeploySLAConfiguration } = scripts;
   const {
@@ -1020,7 +1033,10 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(async (_, hre: any) => {
   const stakeRegistryArtifact = await get(CONTRACT_NAMES.StakeRegistry);
   const dslaTokenArtifact = await get(CONTRACT_NAMES.DSLA);
   const slaRegistryArtifact = await get(CONTRACT_NAMES.SLARegistry);
-  const dslaToken = await DSLA__factory.connect(
+  const dslaTokenConfig = stacktical.tokens.find(
+    (token) => token.name === TOKEN_NAMES.DSLA
+  );
+  const dslaToken = await dslaTokenConfig.factory.connect(
     dslaTokenArtifact.address,
     signer
   );

@@ -1,11 +1,23 @@
-import { CONTRACT_NAMES, PERIOD_TYPE, SLO_TYPE } from './constants';
+import {
+  CONTRACT_NAMES,
+  PERIOD_TYPE,
+  SLO_TYPE,
+  TOKEN_NAMES,
+} from './constants';
 
 export type StackticalConfiguration = {
-  chainlink: ChainlinkConfiguration;
   checkPastPeriods: boolean;
+  tokens: Array<TokenConfiguration>;
+  chainlink: ChainlinkConfiguration;
   addresses: DeployedContractAddresses;
   bootstrap: BootstrapConfiguration;
   scripts?: ScriptsConfiguration;
+};
+
+export type TokenConfiguration = {
+  factory: any;
+  name: TOKEN_NAMES;
+  address?: string;
 };
 
 export type PeriodBootstrapDefinition = {
@@ -56,7 +68,6 @@ export type BootstrapConfiguration = {
 };
 
 export type StakeBootstrapDefinition = {
-  allowedTokens: Array<CONTRACT_NAMES>;
   stakingParameters: {
     dslaDepositByPeriod?: string;
     dslaPlatformReward?: string;
@@ -65,12 +76,13 @@ export type StakeBootstrapDefinition = {
     dslaBurnedByVerification?: string;
     maxTokenLength?: string;
     maxLeverage?: string;
+    burnDSLA?: boolean;
   };
 };
 
 export type TokenAllowance = {
   contract: CONTRACT_NAMES;
-  token: CONTRACT_NAMES;
+  token: CONTRACT_NAMES | TOKEN_NAMES;
   allowance: string;
 };
 
