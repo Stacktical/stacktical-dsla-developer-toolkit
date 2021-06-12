@@ -195,7 +195,7 @@ const ethereum: StackticalConfiguration = {
       messengers: [
         {
           contract: CONTRACT_NAMES.SEMessenger,
-          specificationPath: `${appRoot.path}/messenger-specs/${CONTRACT_NAMES.SEMessenger}.json`,
+          specificationPath: `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_EFFICIENCY}/${CONTRACT_NAMES.SEMessenger}.json`,
           useCaseName: 'staking-efficiency',
           externalAdapterUrl:
             'https://europe-west1-stacktical-0.cloudfunctions.net/dsla-indexer',
@@ -334,7 +334,7 @@ const harmony: StackticalConfiguration = {
       messengers: [
         {
           contract: CONTRACT_NAMES.SEMessenger,
-          specificationPath: `${appRoot.path}/messenger-specs/${CONTRACT_NAMES.SEMessenger}.json`,
+          specificationPath: `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_EFFICIENCY}/${CONTRACT_NAMES.SEMessenger}.json`,
           useCaseName: 'staking-efficiency',
           externalAdapterUrl:
             'https://europe-west1-stacktical-0.cloudfunctions.net/dsla-indexer',
@@ -442,7 +442,7 @@ const polygon: StackticalConfiguration = {
       messengers: [
         {
           contract: CONTRACT_NAMES.SEMessenger,
-          specificationPath: `${appRoot.path}/messenger-specs/${CONTRACT_NAMES.SEMessenger}.json`,
+          specificationPath: `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_EFFICIENCY}/${CONTRACT_NAMES.SEMessenger}.json`,
           useCaseName: 'staking-efficiency',
           externalAdapterUrl:
             'https://europe-west1-stacktical-0.cloudfunctions.net/dsla-indexer',
