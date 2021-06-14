@@ -8,6 +8,7 @@ import { NETWORKS } from './constants';
 import { extendEnvironment } from 'hardhat/config';
 import 'hardhat-deploy';
 import 'hardhat-deploy-ethers';
+import '@nomiclabs/hardhat-waffle';
 import '@nomiclabs/hardhat-ethers';
 import '@nomiclabs/hardhat-web3';
 import 'babel-polyfill';

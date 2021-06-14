@@ -1,5 +1,6 @@
 import { StackticalConfiguration } from './types';
 import {
+  appRoot,
   CONTRACT_NAMES,
   PERIOD_TYPE,
   SENetworkNames,
@@ -10,8 +11,6 @@ import {
   USE_CASES,
 } from './constants';
 import { EthereumERC20__factory, PolygonERC20__factory } from './typechain';
-
-const appRoot = require('app-root-path');
 
 const develop: StackticalConfiguration = {
   chainlink: {
