@@ -27,7 +27,7 @@ export type PeriodBootstrapDefinition = {
 };
 
 export type ScriptsConfiguration = {
-  deploy_sla?: DeploySLAConfiguration;
+  deploy_sla?: Array<DeploySLAConfiguration>;
 };
 
 export type DeployedContractAddresses = {

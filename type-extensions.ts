@@ -4,31 +4,31 @@ import { StackticalConfiguration } from './types';
 
 declare module 'hardhat/types/config' {
   interface HardhatNetworkUserConfig {
-    stacktical?: StackticalConfiguration | undefined;
+    stacktical?: StackticalConfiguration;
   }
 
   interface HttpNetworkUserConfig {
-    stacktical?: StackticalConfiguration | undefined;
+    stacktical?: StackticalConfiguration;
   }
 
   interface HardhatNetworkConfig {
-    stacktical?: StackticalConfiguration | undefined;
+    stacktical?: StackticalConfiguration;
   }
 
   interface HttpNetworkConfig {
-    stacktical?: StackticalConfiguration | undefined;
+    stacktical?: StackticalConfiguration;
   }
 
   interface HardhatNetworkUserConfig {
-    stacktical?: StackticalConfiguration | undefined;
+    stacktical?: StackticalConfiguration;
   }
 }
 
 declare module 'hardhat/types/runtime' {
   interface HardhatNetworkUserConfig {
-    stacktical?: StackticalConfiguration | undefined;
+    stacktical?: StackticalConfiguration;
   }
   interface Network {
-    stacktical?: StackticalConfiguration | undefined;
+    stacktical?: StackticalConfiguration;
   }
 }

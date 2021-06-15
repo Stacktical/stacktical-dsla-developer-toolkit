@@ -22,6 +22,8 @@ import {
   Network,
 } from 'hardhat/types';
 
+// import 'tsconfig-paths/register';
+
 const config: HardhatUserConfig = {
   // defaultNetwork: NETWORKS.DEVELOP,
   networks: {

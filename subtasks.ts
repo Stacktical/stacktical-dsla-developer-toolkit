@@ -44,6 +44,7 @@ import {
   printSeparator,
 } from './utils';
 import axios from 'axios';
+import { HardhatRuntimeEnvironment } from 'hardhat/types';
 
 const prettier = require('prettier');
 const appRoot = require('app-root-path');
@@ -87,9 +88,8 @@ export enum SUB_TASK_NAMES {
 }
 
 subtask(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES, undefined).setAction(
-  async (_, hre: any) => {
-    const { stacktical }: { stacktical: StackticalConfiguration } =
-      hre.network.config;
+  async (_, hre: HardhatRuntimeEnvironment) => {
+    const { stacktical } = hre.network.config;
     for (let node of stacktical.chainlink.nodesConfiguration) {
       await compose.down({
         cwd: path.join(
@@ -102,9 +102,8 @@ subtask(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES, undefined).setAction(
 );
 
 subtask(SUB_TASK_NAMES.START_LOCAL_CHAINLINK_NODES, undefined).setAction(
-  async (_, hre: any) => {
-    const { stacktical }: { stacktical: StackticalConfiguration } =
-      hre.network.config;
+  async (_, hre: HardhatRuntimeEnvironment) => {
+    const { stacktical } = hre.network.config;
     for (let node of stacktical.chainlink.nodesConfiguration) {
       await compose.upAll({
         cwd: path.join(
@@ -161,11 +160,10 @@ subtask(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE, undefined).setAction(async () => {
 });
 
 subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
-  async (_, hre: any) => {
+  async (_, hre: HardhatRuntimeEnvironment) => {
     const { deployments, network } = hre;
     const { get } = deployments;
-    const { stacktical }: { stacktical: StackticalConfiguration } =
-      network.config;
+    const { stacktical } = network.config;
     const linkToken = await get(CONTRACT_NAMES.LinkToken);
 
     for (let node of stacktical.chainlink.nodesConfiguration) {
@@ -186,7 +184,7 @@ subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
               return `ETH_URL=${stacktical.chainlink.ethWsUrl}`;
             case /ETH_HTTP_URL/.test(envVariable):
               return `ETH_HTTP_URL=${
-                stacktical.chainlink.ethHttpUrl || network.config.url
+                stacktical.chainlink.ethHttpUrl || (network.config as any).url
               }`;
             case /CHAINLINK_PORT/.test(envVariable):
               return `CHAINLINK_PORT=${node.restApiPort}`;
@@ -262,12 +260,11 @@ subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
 );
 
 subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
-  async (_, hre: any) => {
+  async (_, hre: HardhatRuntimeEnvironment) => {
     const { deployments, network, ethers, getNamedAccounts, web3 } = hre;
     const { deployer } = await getNamedAccounts();
     const { get } = deployments;
-    const { stacktical }: { stacktical: StackticalConfiguration } =
-      network.config;
+    const { stacktical } = network.config;
     const oracle = await get(CONTRACT_NAMES.Oracle);
     function wait(timeout) {
       return new Promise((resolve) => {
@@ -395,7 +392,7 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
       const { nodeFunds, gasLimit } = stacktical.chainlink;
       const [defaultAccount] = await web3.eth.getAccounts();
       let balance = await web3.eth.getBalance(chainlinkNodeAddress);
-      if (web3.utils.fromWei(balance) < Number(nodeFunds)) {
+      if (Number(web3.utils.fromWei(balance)) < Number(nodeFunds)) {
         await web3.eth.sendTransaction({
           from: defaultAccount,
           to: chainlinkNodeAddress,
@@ -435,7 +432,7 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
 );
 
 subtask(SUB_TASK_NAMES.DEPLOY_LOCAL_CHAINLINK_NODES, undefined).setAction(
-  async (_, hre: any) => {
+  async (_, hre: HardhatRuntimeEnvironment) => {
     const localServicesSubtasks = [
       SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE,
       SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES,
@@ -453,10 +450,9 @@ subtask(SUB_TASK_NAMES.DEPLOY_LOCAL_CHAINLINK_NODES, undefined).setAction(
 subtask(
   SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES,
   'Saves addresses from stacktical config'
-).setAction(async (_, hre: any) => {
+).setAction(async (_, hre: HardhatRuntimeEnvironment) => {
   const { deployments, network } = hre;
-  const { stacktical }: { stacktical: StackticalConfiguration } =
-    network.config;
+  const { stacktical } = network.config;
   const { getArtifact }: DeploymentsExtension = deployments;
   for (let contractName of Object.keys(stacktical.addresses)) {
     const artifact = await getArtifact(contractName);
@@ -476,7 +472,7 @@ subtask(
 });
 
 subtask(SUB_TASK_NAMES.SAVE_CONTRACTS_ADDRESSES, undefined).setAction(
-  async (_, hre: any) => {
+  async (_, hre: HardhatRuntimeEnvironment) => {
     const { network, deployments } = hre;
     const { get } = deployments;
     const getLines = (networkName) => [
@@ -558,7 +554,7 @@ subtask(SUB_TASK_NAMES.SAVE_CONTRACTS_ADDRESSES, undefined).setAction(
 );
 
 subtask(SUB_TASK_NAMES.EXPORT_ABIS, undefined).setAction(
-  async (_, hre: any) => {
+  async (_, hre: HardhatRuntimeEnvironment) => {
     const { deployments } = hre;
     const { getArtifact } = deployments;
     const SLA = await getArtifact(CONTRACT_NAMES.SLA);
@@ -637,10 +633,10 @@ subtask(SUB_TASK_NAMES.EXPORT_ABIS, undefined).setAction(
 );
 
 subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
-  async (_, hre: any) => {
+  async (_, hre: HardhatRuntimeEnvironment) => {
     const {
       stacktical: { bootstrap, tokens },
-    }: { stacktical: StackticalConfiguration } = hre.network.config;
+    } = hre.network.config;
     const {
       registry: {
         stake: { stakingParameters },
@@ -776,14 +772,14 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
 );
 
 subtask(SUB_TASK_NAMES.BOOTSTRAP_MESSENGER_REGISTRY, undefined).setAction(
-  async (_, hre: any) => {
+  async (_, hre: HardhatRuntimeEnvironment) => {
     const { deployments, ethers, getNamedAccounts } = hre;
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
     const { get } = deployments;
     const {
       stacktical: { bootstrap },
-    }: { stacktical: StackticalConfiguration } = hre.network.config;
+    } = hre.network.config;
     const {
       registry: { messengers },
     } = bootstrap;
@@ -838,10 +834,10 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_MESSENGER_REGISTRY, undefined).setAction(
 );
 
 subtask(SUB_TASK_NAMES.BOOTSTRAP_PERIOD_REGISTRY, undefined).setAction(
-  async (_, hre: any) => {
+  async (_, hre: HardhatRuntimeEnvironment) => {
     const {
       stacktical: { bootstrap },
-    }: { stacktical: StackticalConfiguration } = hre.network.config;
+    } = hre.network.config;
     const {
       registry: { periods },
     } = bootstrap;
@@ -909,7 +905,7 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_PERIOD_REGISTRY, undefined).setAction(
 );
 
 // subtask(SUB_TASK_NAMES.BOOTSTRAP_NETWORK_ANALYTICS, undefined).setAction(
-//   async (_, hre: any) => {
+//   async (_, hre: HardhatRuntimeEnvironment) => {
 //     const {
 //       stacktical: { bootstrap },
 //     }: { stacktical: StackticalConfiguration } = hre.network.config;
@@ -951,10 +947,10 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_PERIOD_REGISTRY, undefined).setAction(
 // );
 
 subtask(SUB_TASK_NAMES.SET_CONTRACTS_ALLOWANCE, undefined).setAction(
-  async (_, hre: any) => {
+  async (_, hre: HardhatRuntimeEnvironment) => {
     const {
       stacktical: { bootstrap },
-    }: { stacktical: StackticalConfiguration } = hre.network.config;
+    } = hre.network.config;
     const { allowance } = bootstrap;
     const { deployments, ethers, getNamedAccounts } = hre;
     const { deployer } = await getNamedAccounts();
@@ -989,132 +985,140 @@ subtask(SUB_TASK_NAMES.SET_CONTRACTS_ALLOWANCE, undefined).setAction(
   }
 );
 
-subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(async (_, hre: any) => {
-  const {
-    deployments,
-    ethers,
-    getNamedAccounts,
-    network: {
-      config: {
-        stacktical: { scripts },
+subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
+  async (_, hre: HardhatRuntimeEnvironment) => {
+    const {
+      deployments,
+      ethers,
+      getNamedAccounts,
+      network: {
+        config: {
+          stacktical: { scripts },
+        },
       },
-    },
-  } = hre;
-  const { deployer, notDeployer } = await getNamedAccounts();
-  const signer = await ethers.getSigner(deployer);
-  const { get } = deployments;
-  const { stacktical }: { stacktical: StackticalConfiguration } =
-    hre.network.config;
-  console.log('Starting SLA deployment process');
-  const { deploy_sla }: { deploy_sla: DeploySLAConfiguration } = scripts;
-  const {
-    serviceMetadata,
-    sloValue,
-    sloType,
-    whitelisted,
-    periodType,
-    initialPeriodId,
-    finalPeriodId,
-    extraData,
-    leverage,
-    initialTokenSupply,
-    initialTokenSupplyDivisor,
-    deployerStakeTimes,
-    notDeployerStakeTimes,
-  } = deploy_sla;
-  const stakeAmount = Number(initialTokenSupply) / initialTokenSupplyDivisor;
-  const stakeAmountTimesWei = (times) => toWei(String(stakeAmount * times));
-  const semessengerArtifact = await get(CONTRACT_NAMES.SEMessenger);
-  const seMessenger = await SEMessenger__factory.connect(
-    semessengerArtifact.address,
-    signer
-  );
-  const ipfsHash = await getIPFSHash(serviceMetadata);
-  const stakeRegistryArtifact = await get(CONTRACT_NAMES.StakeRegistry);
-  const dslaTokenArtifact = await get(CONTRACT_NAMES.DSLA);
-  const slaRegistryArtifact = await get(CONTRACT_NAMES.SLARegistry);
-  const dslaTokenConfig = stacktical.tokens.find(
-    (token) => token.name === TOKEN_NAMES.DSLA
-  );
-  const dslaToken = await dslaTokenConfig.factory.connect(
-    dslaTokenArtifact.address,
-    signer
-  );
-  const stakeRegistry = await StakeRegistry__factory.connect(
-    stakeRegistryArtifact.address,
-    signer
-  );
-  const slaRegistry = await SLARegistry__factory.connect(
-    slaRegistryArtifact.address,
-    signer
-  );
-  console.log('Starting process 1: Allowance on Stake registry to deploy SLA');
-  const { dslaDepositByPeriod } =
-    await stakeRegistry.callStatic.getStakingParameters();
-  const dslaDeposit = toWei(
-    String(
-      Number(fromWei(dslaDepositByPeriod.toString())) *
-        (finalPeriodId - initialPeriodId + 1)
-    )
-  );
-  let tx = await dslaToken.approve(stakeRegistry.address, dslaDeposit);
-  await tx.wait();
+    } = hre;
+    const { deployer, notDeployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    const { get } = deployments;
+    const { stacktical } = hre.network.config;
+    console.log('Starting SLA deployment process');
+    const { deploy_sla } = scripts;
+    for (let config of deploy_sla) {
+      const {
+        serviceMetadata,
+        sloValue,
+        sloType,
+        whitelisted,
+        periodType,
+        initialPeriodId,
+        finalPeriodId,
+        extraData,
+        leverage,
+        initialTokenSupply,
+        initialTokenSupplyDivisor,
+        deployerStakeTimes,
+        notDeployerStakeTimes,
+      } = config;
+      const stakeAmount =
+        Number(initialTokenSupply) / initialTokenSupplyDivisor;
+      const stakeAmountTimesWei = (times) => toWei(String(stakeAmount * times));
+      const semessengerArtifact = await get(CONTRACT_NAMES.SEMessenger);
+      const seMessenger = await SEMessenger__factory.connect(
+        semessengerArtifact.address,
+        signer
+      );
+      const ipfsHash = await getIPFSHash(serviceMetadata);
+      const stakeRegistryArtifact = await get(CONTRACT_NAMES.StakeRegistry);
+      const dslaTokenArtifact = await get(CONTRACT_NAMES.DSLA);
+      const slaRegistryArtifact = await get(CONTRACT_NAMES.SLARegistry);
+      const dslaTokenConfig = stacktical.tokens.find(
+        (token) => token.name === TOKEN_NAMES.DSLA
+      );
+      const dslaToken = await dslaTokenConfig.factory.connect(
+        dslaTokenArtifact.address,
+        signer
+      );
+      const stakeRegistry = await StakeRegistry__factory.connect(
+        stakeRegistryArtifact.address,
+        signer
+      );
+      const slaRegistry = await SLARegistry__factory.connect(
+        slaRegistryArtifact.address,
+        signer
+      );
+      console.log(
+        'Starting process 1: Allowance on Stake registry to deploy SLA'
+      );
+      const { dslaDepositByPeriod } =
+        await stakeRegistry.callStatic.getStakingParameters();
+      const dslaDeposit = toWei(
+        String(
+          Number(fromWei(dslaDepositByPeriod.toString())) *
+            (finalPeriodId - initialPeriodId + 1)
+        )
+      );
+      let tx = await dslaToken.approve(stakeRegistry.address, dslaDeposit);
+      await tx.wait();
 
-  console.log('Starting process 2: Deploy SLA');
-  tx = await slaRegistry.createSLA(
-    sloValue,
-    sloType,
-    whitelisted,
-    seMessenger.address,
-    periodType,
-    initialPeriodId,
-    finalPeriodId,
-    ipfsHash,
-    extraData,
-    leverage
-  );
-  await tx.wait();
+      console.log('Starting process 2: Deploy SLA');
+      tx = await slaRegistry.createSLA(
+        sloValue,
+        sloType,
+        whitelisted,
+        seMessenger.address,
+        periodType,
+        initialPeriodId,
+        finalPeriodId,
+        ipfsHash,
+        extraData,
+        leverage
+      );
+      await tx.wait();
 
-  const slaAddresses = await slaRegistry.userSLAs(deployer);
-  const sla = await SLA__factory.connect(
-    slaAddresses[slaAddresses.length - 1],
-    signer
-  );
+      const slaAddresses = await slaRegistry.userSLAs(deployer);
+      const sla = await SLA__factory.connect(
+        slaAddresses[slaAddresses.length - 1],
+        signer
+      );
 
-  console.log(`SLA address: ${slaAddresses[slaAddresses.length - 1]}`);
+      console.log(`SLA address: ${slaAddresses[slaAddresses.length - 1]}`);
 
-  tx = await sla.addAllowedTokens(dslaToken.address);
-  await tx.wait();
+      tx = await sla.addAllowedTokens(dslaToken.address);
+      await tx.wait();
 
-  console.log('Starting process 3: Stake on deployer and notOwner pools');
+      console.log('Starting process 3: Stake on deployer and notOwner pools');
 
-  const deployerStake = stakeAmountTimesWei(deployerStakeTimes);
-  console.log(
-    `Starting process 3.1: deployer: ${fromWei(deployerStake)} bDSLA`
-  );
-  tx = await dslaToken.approve(sla.address, deployerStake);
-  await tx.wait();
-  tx = await sla.stakeTokens(deployerStake, dslaToken.address);
-  await tx.wait();
-  const notDeployerBalance = await dslaToken.callStatic.balanceOf(notDeployer);
-  const notDeployerStake = stakeAmountTimesWei(notDeployerStakeTimes);
-  if (fromWei(notDeployerStake) > fromWei(notDeployerBalance.toString())) {
-    tx = await dslaToken.transfer(notDeployer, notDeployerStake);
-    await tx.wait();
+      const deployerStake = stakeAmountTimesWei(deployerStakeTimes);
+      console.log(
+        `Starting process 3.1: deployer: ${fromWei(deployerStake)} bDSLA`
+      );
+      tx = await dslaToken.approve(sla.address, deployerStake);
+      await tx.wait();
+      tx = await sla.stakeTokens(deployerStake, dslaToken.address);
+      await tx.wait();
+      const notDeployerBalance = await dslaToken.callStatic.balanceOf(
+        notDeployer
+      );
+      const notDeployerStake = stakeAmountTimesWei(notDeployerStakeTimes);
+      if (fromWei(notDeployerStake) > fromWei(notDeployerBalance.toString())) {
+        tx = await dslaToken.transfer(notDeployer, notDeployerStake);
+        await tx.wait();
+      }
+      console.log(
+        `Starting process 3.2: notDeployer: ${fromWei(notDeployerStake)} bDSLA`
+      );
+      await dslaToken.connect(await ethers.getSigner(notDeployer));
+      tx = await dslaToken.approve(sla.address, notDeployerStake);
+      await tx.wait();
+      tx = await sla.stakeTokens(notDeployerStake, dslaToken.address);
+      await tx.wait();
+    }
+    console.log('SLA deployment process finished');
   }
-  console.log(
-    `Starting process 3.2: notDeployer: ${fromWei(notDeployerStake)} bDSLA`
-  );
-  await dslaToken.connect(await ethers.getSigner(notDeployer));
-  tx = await dslaToken.approve(sla.address, notDeployerStake);
-  await tx.wait();
-  tx = await sla.stakeTokens(notDeployerStake, dslaToken.address);
-  await tx.wait();
-  console.log('SLA deployment process finished');
-});
+);
 
 subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
-  async (taskArgs, hre: any) => {
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
     const { deployments, ethers, getNamedAccounts, network } = hre;
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
@@ -1160,7 +1164,7 @@ subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
 );
 
 subtask(SUB_TASK_NAMES.GET_PRECOORDINATOR, undefined).setAction(
-  async (taskArgs, hre: any) => {
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
     const { deployments, ethers, getNamedAccounts } = hre;
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
@@ -1208,13 +1212,12 @@ subtask(SUB_TASK_NAMES.GET_PRECOORDINATOR, undefined).setAction(
 );
 
 subtask(SUB_TASK_NAMES.SET_PRECOORDINATOR, undefined).setAction(
-  async (taskArgs, hre: any) => {
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
     const { deployments, ethers, getNamedAccounts, network } = hre;
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
     const { get } = deployments;
-    const { stacktical }: { stacktical: StackticalConfiguration } =
-      network.config;
+    const { stacktical } = network.config;
     console.log('Setting Chainlink config on PreCoordinator contract');
     console.log('Nodes configuration from stacktical config:');
     console.log(stacktical.chainlink.nodesConfiguration);
@@ -1247,7 +1250,7 @@ subtask(SUB_TASK_NAMES.SET_PRECOORDINATOR, undefined).setAction(
 );
 
 subtask(SUB_TASK_NAMES.DEPLOY_CHAINLINK_CONTRACTS, undefined).setAction(
-  async (taskArgs, hre: any) => {
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
     const { deploy, get } = hre.deployments;
     const { deployer } = await hre.getNamedAccounts();
 
@@ -1274,12 +1277,11 @@ subtask(SUB_TASK_NAMES.DEPLOY_CHAINLINK_CONTRACTS, undefined).setAction(
 );
 
 subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
-  async (taskArgs, hre: any) => {
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
     const { get } = hre.deployments;
     const { deployer } = await hre.getNamedAccounts();
     const signer = await hre.ethers.getSigner(deployer);
-    const { stacktical }: { stacktical: StackticalConfiguration } =
-      hre.network.config;
+    const { stacktical } = hre.network.config;
     const precoordinator = await PreCoordinator__factory.connect(
       (
         await get(CONTRACT_NAMES.PreCoordinator)
@@ -1316,7 +1318,7 @@ subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
 );
 
 // subtask(SUB_TASK_NAMES.FULFILL_ANALYTICS, undefined).setAction(
-//   async (taskArgs, hre: any) => {
+//   async (taskArgs, hre: HardhatRuntimeEnvironment) => {
 //     const { deployments, ethers, getNamedAccounts, network } = hre;
 //     const { stacktical }: { stacktical: StackticalConfiguration } =
 //       network.config;
@@ -1464,7 +1466,7 @@ subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
 // );
 //
 // subtask(SUB_TASK_NAMES.PREC_FULFILL_ANALYTICS, undefined).setAction(
-//   async (taskArgs, hre: any) => {
+//   async (taskArgs, hre: HardhatRuntimeEnvironment) => {
 //     const { deployments, ethers, getNamedAccounts, network } = hre;
 //     const { stacktical }: { stacktical: StackticalConfiguration } =
 //       network.config;
@@ -1573,7 +1575,7 @@ subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
 //       );
 //       const { data } = await axios({
 //         method: 'post',
-//         url: network.config.url,
+//         url: (network.config as any).url,
 //         headers: {
 //           'Content-Type': 'application/json',
 //         },
@@ -1648,10 +1650,9 @@ subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
 // );
 
 subtask(SUB_TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE, undefined).setAction(
-  async (_, hre: any) => {
+  async (_, hre: HardhatRuntimeEnvironment) => {
     const { deployments, ethers, getNamedAccounts, network } = hre;
-    const { stacktical }: { stacktical: StackticalConfiguration } =
-      network.config;
+    const { stacktical } = network.config;
     const {
       bootstrap: { allowance },
     } = stacktical;
@@ -1685,7 +1686,7 @@ subtask(SUB_TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE, undefined).setAction(
 );
 
 subtask(SUB_TASK_NAMES.FULFILL_SLI, undefined).setAction(
-  async (taskArgs, hre: any) => {
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
     throw new Error('Not implemented yet');
     // const { deployments, ethers, getNamedAccounts, run, network } = hre;
     // const { stacktical }: { stacktical: StackticalConfiguration } =
@@ -1787,7 +1788,7 @@ subtask(SUB_TASK_NAMES.FULFILL_SLI, undefined).setAction(
 );
 
 subtask(SUB_TASK_NAMES.REGISTRIES_CONFIGURATION, undefined).setAction(
-  async (taskArgs, hre: any) => {
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
     const { deployments, ethers, getNamedAccounts } = hre;
     const { get } = deployments;
     const { deployer } = await getNamedAccounts();
@@ -1851,7 +1852,7 @@ subtask(SUB_TASK_NAMES.REGISTRIES_CONFIGURATION, undefined).setAction(
 );
 
 subtask(SUB_TASK_NAMES.GET_VALID_SLAS, undefined).setAction(
-  async (taskArgs, hre: any) => {
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
     const { deployments, ethers, getNamedAccounts } = hre;
     const { get } = deployments;
     const { deployer } = await getNamedAccounts();
@@ -1871,7 +1872,7 @@ subtask(SUB_TASK_NAMES.GET_VALID_SLAS, undefined).setAction(
 );
 
 subtask(SUB_TASK_NAMES.GET_REVERT_MESSAGE, undefined).setAction(
-  async (taskArgs, hre: any) => {
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
     const { ethers, network } = hre;
     const transaction = await ethers.provider.getTransaction(
       taskArgs.transactionHash
@@ -1880,7 +1881,7 @@ subtask(SUB_TASK_NAMES.GET_REVERT_MESSAGE, undefined).setAction(
     console.log(transaction);
     const { data } = await axios({
       method: 'post',
-      url: network.config.url,
+      url: (network.config as any).url,
       headers: {
         'Content-Type': 'application/json',
       },
@@ -1905,10 +1906,9 @@ subtask(SUB_TASK_NAMES.GET_REVERT_MESSAGE, undefined).setAction(
 );
 
 subtask(SUB_TASK_NAMES.RETRY_REQUEST_SLI, undefined).setAction(
-  async (taskArgs, hre: any) => {
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
     const { deployments, ethers, getNamedAccounts, network } = hre;
-    const { stacktical }: { stacktical: StackticalConfiguration } =
-      network.config;
+    const { stacktical } = network.config;
     const { get } = deployments;
     const { deployer } = await getNamedAccounts();
     const slaRegistry = await SLARegistry__factory.connect(
