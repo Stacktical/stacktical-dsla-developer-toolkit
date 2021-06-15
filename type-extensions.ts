@@ -23,12 +23,3 @@ declare module 'hardhat/types/config' {
     stacktical?: StackticalConfiguration;
   }
 }
-
-declare module 'hardhat/types/runtime' {
-  interface HardhatNetworkUserConfig {
-    stacktical?: StackticalConfiguration;
-  }
-  interface Network {
-    stacktical?: StackticalConfiguration;
-  }
-}

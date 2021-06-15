@@ -68,7 +68,7 @@ export enum SUB_TASK_NAMES {
   INITIALIZE_DEFAULT_ADDRESSES = 'INITIALIZE_DEFAULT_ADDRESSES',
   SAVE_CONTRACTS_ADDRESSES = 'SAVE_CONTRACTS_ADDRESSES',
   EXPORT_ABIS = 'EXPORT_ABIS',
-  DEPLOY_SLA = 'DEPLOY_SLA',
+  DEPLOY_SLAS = 'DEPLOY_SLAS',
   BOOTSTRAP_MESSENGER_REGISTRY = 'BOOTSTRAP_MESSENGER_REGISTRY',
   BOOTSTRAP_PERIOD_REGISTRY = 'BOOTSTRAP_PERIOD_REGISTRY',
   BOOTSTRAP_STAKE_REGISTRY = 'BOOTSTRAP_STAKE_REGISTRY',
@@ -904,48 +904,6 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_PERIOD_REGISTRY, undefined).setAction(
   }
 );
 
-// subtask(SUB_TASK_NAMES.BOOTSTRAP_NETWORK_ANALYTICS, undefined).setAction(
-//   async (_, hre: HardhatRuntimeEnvironment) => {
-//     const {
-//       stacktical: { bootstrap },
-//     }: { stacktical: StackticalConfiguration } = hre.network.config;
-//     const {
-//       messengers: {
-//         networkAnalytics: { allowedNetworks },
-//       },
-//     } = bootstrap;
-//     const { deployments, ethers, getNamedAccounts } = hre;
-//     const { deployer } = await getNamedAccounts();
-//     const signer = await ethers.getSigner(deployer);
-//     const { get } = deployments;
-//
-//     const [startBootstrap, finishBootstrap] = bootstrapStrings(
-//       CONTRACT_NAMES.NetworkAnalytics
-//     );
-//     console.log(startBootstrap);
-//
-//     const networkAnalyticsArtifact = await get(CONTRACT_NAMES.NetworkAnalytics);
-//     const networkAnalytics = await NetworkAnalytics__factory.connect(
-//       networkAnalyticsArtifact.address,
-//       signer
-//     );
-//
-//     console.log('Adding the network names to the NetworkAnalytics contract');
-//     let tx = await networkAnalytics.addMultipleNetworks(
-//       allowedNetworks.map(formatBytes32String)
-//     );
-//     await tx.wait();
-//     const naNetworks = await networkAnalytics.getNetworkNames();
-//     console.log('Networks to add: ');
-//     console.log(allowedNetworks);
-//     console.log('Networks to add in bytes32: ');
-//     console.log(allowedNetworks.map(formatBytes32String));
-//     console.log('Networks allowed on the NetworkAnalytics contract: ');
-//     console.log(naNetworks);
-//     console.log(finishBootstrap);
-//   }
-// );
-
 subtask(SUB_TASK_NAMES.SET_CONTRACTS_ALLOWANCE, undefined).setAction(
   async (_, hre: HardhatRuntimeEnvironment) => {
     const {
@@ -985,7 +943,7 @@ subtask(SUB_TASK_NAMES.SET_CONTRACTS_ALLOWANCE, undefined).setAction(
   }
 );
 
-subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
+subtask(SUB_TASK_NAMES.DEPLOY_SLAS, undefined).setAction(
   async (_, hre: HardhatRuntimeEnvironment) => {
     const {
       deployments,
@@ -1004,6 +962,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
     console.log('Starting SLA deployment process');
     const { deploy_sla } = scripts;
     for (let config of deploy_sla) {
+      printSeparator();
       const {
         serviceMetadata,
         sloValue,
@@ -1112,6 +1071,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       await tx.wait();
       tx = await sla.stakeTokens(notDeployerStake, dslaToken.address);
       await tx.wait();
+      printSeparator();
     }
     console.log('SLA deployment process finished');
   }
@@ -1314,6 +1274,307 @@ subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
     await tx.wait();
     console.log('Service agreeement id updated in: ' + messengerName);
     console.log(saId);
+  }
+);
+
+subtask(SUB_TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE, undefined).setAction(
+  async (_, hre: HardhatRuntimeEnvironment) => {
+    const { deployments, ethers, getNamedAccounts, network } = hre;
+    const { stacktical } = network.config;
+    const {
+      bootstrap: { allowance },
+    } = stacktical;
+    const { get } = deployments;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    for (let tokenAllowance of allowance) {
+      console.log(
+        'Getting allowance of ' +
+          tokenAllowance.token +
+          ' for ' +
+          tokenAllowance.contract
+      );
+      const token = await ERC20__factory.connect(
+        (
+          await get(tokenAllowance.token)
+        ).address,
+        signer
+      );
+      const contract = Ownable__factory.connect(
+        (await get(tokenAllowance.contract)).address,
+        signer
+      );
+      const owner = await contract.owner();
+      let allowance = await token.allowance(owner, contract.address);
+      console.log('Allowance: ' + fromWei(allowance.toString()));
+      const ownerBalance = await token.balanceOf(owner);
+      console.log('Allower balance: ' + fromWei(ownerBalance.toString()));
+    }
+  }
+);
+
+subtask(SUB_TASK_NAMES.FULFILL_SLI, undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    throw new Error('Not implemented yet');
+    // const { deployments, ethers, getNamedAccounts, run, network } = hre;
+    // const { stacktical }: { stacktical: StackticalConfiguration } =
+    //   network.config;
+    // await run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
+    // const { get } = deployments;
+    // const { deployer } = await getNamedAccounts();
+    // const signer = await ethers.getSigner(deployer);
+    // const seMessenger = await SEMessenger__factory.connect(
+    //   (
+    //     await get(CONTRACT_NAMES.SEMessenger)
+    //   ).address,
+    //   signer
+    // );
+    // const { periodId, periodType } = taskArgs;
+    //
+    // let seFilter = seMessenger.filters.ChainlinkRequested();
+    // let seEvents = await seMessenger.queryFilter(seFilter);
+    // let sliRequestedEvent;
+    // for (let event of seEvents) {
+    //   const { id } = event.args;
+    //   const sliRequestEvent = await seMessenger.requestIdToSLIRequest(id);
+    //   if (
+    //     sliRequestEvent.periodId == taskArgs.periodId &&
+    //     sliRequestEvent.slaAddress === taskArgs.address
+    //   ) {
+    //     sliRequestedEvent = event;
+    //   }
+    // }
+    // if (sliRequestedEvent === undefined)
+    //   throw new Error('Request id not found');
+    // const chainlinkNodeConfig: ChainlinkNodeConfiguration =
+    //   stacktical.chainlink.nodesConfiguration.find(
+    //     (node) => node.name === taskArgs.nodeName
+    //   );
+    // if (!chainlinkNodeConfig)
+    //   throw new Error('Chainlink node config not found');
+    // const externalAdapterUrl = stacktical.chainlink.isProduction
+    //   ? chainlinkNodeConfig.externalAdapterUrl
+    //   : 'http://localhost:' +
+    //     chainlinkNodeConfig.externalAdapterUrl.split(':').slice(-1)[0];
+    // const networkAnalytics = await NetworkAnalytics__factory.connect(
+    //   (
+    //     await get(CONTRACT_NAMES.NetworkAnalytics)
+    //   ).address,
+    //   signer
+    // );
+    // const { data } = await axios({
+    //   method: 'post',
+    //   url: `${externalAdapterUrl}`,
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   // eslint-disable-next-line global-require,import/no-dynamic-require
+    //   data: {
+    //     data: {
+    //       job_type: 'staking_efficiency',
+    //       network_analytics_address: networkAnalytics.address,
+    //       period_id: taskArgs.periodId,
+    //       sla_address: toChecksumAddress(taskArgs.address),
+    //     },
+    //   },
+    // });
+    // const { result } = data.data;
+    // const preCoordinator = await PreCoordinator__factory.connect(
+    //   (
+    //     await get(CONTRACT_NAMES.PreCoordinator)
+    //   ).address,
+    //   signer
+    // );
+    // const saRequestedFilter = preCoordinator.filters.ChainlinkRequested();
+    // const saRequestedEvents = await preCoordinator.queryFilter(
+    //   saRequestedFilter
+    // );
+    // const oracleRequestId = saRequestedEvents.find(
+    //   (event) => event.blockNumber === sliRequestedEvent.blockNumber
+    // ).args.id;
+    // const job = await getChainlinkJob(chainlinkNodeConfig);
+    // const oracle = await Oracle__factory.connect(
+    //   job.attributes.initiators[0].params.address,
+    //   signer
+    // );
+    // const oracleRqFilter = oracle.filters.OracleRequest();
+    // const oracleRqEvents = await oracle.queryFilter(oracleRqFilter);
+    // const oracleRqEvent = oracleRqEvents.find(
+    //   (event) => event.args.requestId === oracleRequestId
+    // );
+    // const preCoordinatorCallbackId = '0x6a9705b4';
+    //
+    // await oracle.fulfillOracleRequest(
+    //   oracleRequestId,
+    //   String(0.1 * 10 ** 18),
+    //   preCoordinator.address,
+    //   preCoordinatorCallbackId,
+    //   oracleRqEvent.args.cancelExpiration,
+    //   '0x' + result
+    // );
+  }
+);
+
+subtask(SUB_TASK_NAMES.REGISTRIES_CONFIGURATION, undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    const { deployments, ethers, getNamedAccounts } = hre;
+    const { get } = deployments;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    const stakeRegistry = await StakeRegistry__factory.connect(
+      (
+        await get(CONTRACT_NAMES.StakeRegistry)
+      ).address,
+      signer
+    );
+    const stakingParameters = await stakeRegistry.getStakingParameters();
+    console.log('Staking parameters: ');
+    const entries = Object.entries(stakingParameters);
+    const formattedStakingParameters = entries
+      .splice(entries.length / 2, entries.length)
+      .map(([i, j]) => [i, j.toString()]);
+    console.log(formattedStakingParameters);
+    const periodRegistry = await PeriodRegistry__factory.connect(
+      (
+        await get(CONTRACT_NAMES.PeriodRegistry)
+      ).address,
+      signer
+    );
+    const periodDefinitions = await periodRegistry.getPeriodDefinitions();
+    console.log('Period definitions (UTC=0): ');
+    console.log(
+      periodDefinitions.reduce(
+        (r, definition, index) => ({
+          ...r,
+          [PERIOD_TYPE[index]]: {
+            initialized: definition.initialized,
+          },
+        }),
+        {}
+      )
+    );
+    console.log(
+      periodDefinitions.reduce(
+        (r, definition, index) => ({
+          ...r,
+          [PERIOD_TYPE[index]]: {
+            initialized: definition.initialized,
+            starts: definition.starts.map((start) =>
+              moment(Number(start.toString()) * 1000)
+                .utc(0)
+                .format('DD/MM/YYYY HH:mm:ss')
+            ),
+            startsUnix: definition.starts.map((start) => start.toString()),
+            ends: definition.ends.map((end) =>
+              moment(Number(end.toString()) * 1000)
+                .utc(0)
+                .format('DD/MM/YYYY HH:mm:ss')
+            ),
+            endsUnix: definition.ends.map((end) => end.toString()),
+          },
+        }),
+        {}
+      )
+    );
+  }
+);
+
+subtask(SUB_TASK_NAMES.GET_VALID_SLAS, undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    const { deployments, ethers, getNamedAccounts } = hre;
+    const { get } = deployments;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    const slaRegistry = await SLARegistry__factory.connect(
+      (
+        await get(CONTRACT_NAMES.SLARegistry)
+      ).address,
+      signer
+    );
+    const allSLAs = await slaRegistry.allSLAs();
+    console.log('SLA registry address:');
+    console.log(slaRegistry.address);
+    console.log('All valid SLAs:');
+    console.log(allSLAs);
+  }
+);
+
+subtask(SUB_TASK_NAMES.GET_REVERT_MESSAGE, undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    const { ethers, network } = hre;
+    const transaction = await ethers.provider.getTransaction(
+      taskArgs.transactionHash
+    );
+    console.log('Transaction:');
+    console.log(transaction);
+    const { data } = await axios({
+      method: 'post',
+      url: (network.config as any).url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: {
+        jsonrpc: '2.0',
+        method: 'eth_call',
+        params: [
+          {
+            from: transaction.from,
+            to: transaction.to,
+            value: numberToHex(transaction.value.toString()),
+            data: transaction.data,
+          },
+          numberToHex(transaction.blockNumber),
+        ],
+        id: 1,
+      },
+    });
+    console.log('Error data:');
+    console.log(data);
+  }
+);
+
+subtask(SUB_TASK_NAMES.RETRY_REQUEST_SLI, undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    const { deployments, ethers, getNamedAccounts, network } = hre;
+    const { stacktical } = network.config;
+    const { get } = deployments;
+    const { deployer } = await getNamedAccounts();
+    const slaRegistry = await SLARegistry__factory.connect(
+      (
+        await get(CONTRACT_NAMES.SLARegistry)
+      ).address,
+      await ethers.getSigner(deployer)
+    );
+    const slaAddress = taskArgs.slaAddress
+      ? ethers.utils.getAddress(taskArgs.slaAddress)
+      : (await slaRegistry.userSLAs(deployer)).slice(-1)[0];
+
+    console.log('Retrying request:');
+    const messengerContractName = stacktical.bootstrap.registry.messengers.find(
+      (messenger) => messenger.useCaseName === taskArgs.useCaseName
+    ).contract;
+    const messenger = IMessenger__factory.connect(
+      (await get(messengerContractName)).address,
+      await ethers.getSigner(deployer)
+    );
+
+    await messenger.retryRequest(slaAddress, taskArgs.periodId);
+
+    const sla = SLA__factory.connect(
+      slaAddress,
+      await ethers.getSigner(deployer)
+    );
+    await new Promise((resolve) => {
+      sla.on('SLICreated', () => {
+        resolve(null);
+      });
+    });
+    const createdSLI = await sla.periodSLIs(taskArgs.periodId);
+    const { timestamp, sli, status } = createdSLI;
+    console.log('Created SLI timestamp: ', timestamp.toString());
+    console.log('Created SLI sli: ', sli.toString());
+    console.log('Created SLI status: ', PERIOD_STATUS[status]);
+    console.log('SLI request process finished');
   }
 );
 
@@ -1648,304 +1909,3 @@ subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
 //     }
 //   }
 // );
-
-subtask(SUB_TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE, undefined).setAction(
-  async (_, hre: HardhatRuntimeEnvironment) => {
-    const { deployments, ethers, getNamedAccounts, network } = hre;
-    const { stacktical } = network.config;
-    const {
-      bootstrap: { allowance },
-    } = stacktical;
-    const { get } = deployments;
-    const { deployer } = await getNamedAccounts();
-    const signer = await ethers.getSigner(deployer);
-    for (let tokenAllowance of allowance) {
-      console.log(
-        'Getting allowance of ' +
-          tokenAllowance.token +
-          ' for ' +
-          tokenAllowance.contract
-      );
-      const token = await ERC20__factory.connect(
-        (
-          await get(tokenAllowance.token)
-        ).address,
-        signer
-      );
-      const contract = Ownable__factory.connect(
-        (await get(tokenAllowance.contract)).address,
-        signer
-      );
-      const owner = await contract.owner();
-      let allowance = await token.allowance(owner, contract.address);
-      console.log('Allowance: ' + fromWei(allowance.toString()));
-      const ownerBalance = await token.balanceOf(owner);
-      console.log('Allower balance: ' + fromWei(ownerBalance.toString()));
-    }
-  }
-);
-
-subtask(SUB_TASK_NAMES.FULFILL_SLI, undefined).setAction(
-  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
-    throw new Error('Not implemented yet');
-    // const { deployments, ethers, getNamedAccounts, run, network } = hre;
-    // const { stacktical }: { stacktical: StackticalConfiguration } =
-    //   network.config;
-    // await run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
-    // const { get } = deployments;
-    // const { deployer } = await getNamedAccounts();
-    // const signer = await ethers.getSigner(deployer);
-    // const seMessenger = await SEMessenger__factory.connect(
-    //   (
-    //     await get(CONTRACT_NAMES.SEMessenger)
-    //   ).address,
-    //   signer
-    // );
-    // const { periodId, periodType } = taskArgs;
-    //
-    // let seFilter = seMessenger.filters.ChainlinkRequested();
-    // let seEvents = await seMessenger.queryFilter(seFilter);
-    // let sliRequestedEvent;
-    // for (let event of seEvents) {
-    //   const { id } = event.args;
-    //   const sliRequestEvent = await seMessenger.requestIdToSLIRequest(id);
-    //   if (
-    //     sliRequestEvent.periodId == taskArgs.periodId &&
-    //     sliRequestEvent.slaAddress === taskArgs.address
-    //   ) {
-    //     sliRequestedEvent = event;
-    //   }
-    // }
-    // if (sliRequestedEvent === undefined)
-    //   throw new Error('Request id not found');
-    // const chainlinkNodeConfig: ChainlinkNodeConfiguration =
-    //   stacktical.chainlink.nodesConfiguration.find(
-    //     (node) => node.name === taskArgs.nodeName
-    //   );
-    // if (!chainlinkNodeConfig)
-    //   throw new Error('Chainlink node config not found');
-    // const externalAdapterUrl = stacktical.chainlink.isProduction
-    //   ? chainlinkNodeConfig.externalAdapterUrl
-    //   : 'http://localhost:' +
-    //     chainlinkNodeConfig.externalAdapterUrl.split(':').slice(-1)[0];
-    // const networkAnalytics = await NetworkAnalytics__factory.connect(
-    //   (
-    //     await get(CONTRACT_NAMES.NetworkAnalytics)
-    //   ).address,
-    //   signer
-    // );
-    // const { data } = await axios({
-    //   method: 'post',
-    //   url: `${externalAdapterUrl}`,
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   // eslint-disable-next-line global-require,import/no-dynamic-require
-    //   data: {
-    //     data: {
-    //       job_type: 'staking_efficiency',
-    //       network_analytics_address: networkAnalytics.address,
-    //       period_id: taskArgs.periodId,
-    //       sla_address: toChecksumAddress(taskArgs.address),
-    //     },
-    //   },
-    // });
-    // const { result } = data.data;
-    // const preCoordinator = await PreCoordinator__factory.connect(
-    //   (
-    //     await get(CONTRACT_NAMES.PreCoordinator)
-    //   ).address,
-    //   signer
-    // );
-    // const saRequestedFilter = preCoordinator.filters.ChainlinkRequested();
-    // const saRequestedEvents = await preCoordinator.queryFilter(
-    //   saRequestedFilter
-    // );
-    // const oracleRequestId = saRequestedEvents.find(
-    //   (event) => event.blockNumber === sliRequestedEvent.blockNumber
-    // ).args.id;
-    // const job = await getChainlinkJob(chainlinkNodeConfig);
-    // const oracle = await Oracle__factory.connect(
-    //   job.attributes.initiators[0].params.address,
-    //   signer
-    // );
-    // const oracleRqFilter = oracle.filters.OracleRequest();
-    // const oracleRqEvents = await oracle.queryFilter(oracleRqFilter);
-    // const oracleRqEvent = oracleRqEvents.find(
-    //   (event) => event.args.requestId === oracleRequestId
-    // );
-    // const preCoordinatorCallbackId = '0x6a9705b4';
-    //
-    // await oracle.fulfillOracleRequest(
-    //   oracleRequestId,
-    //   String(0.1 * 10 ** 18),
-    //   preCoordinator.address,
-    //   preCoordinatorCallbackId,
-    //   oracleRqEvent.args.cancelExpiration,
-    //   '0x' + result
-    // );
-  }
-);
-
-subtask(SUB_TASK_NAMES.REGISTRIES_CONFIGURATION, undefined).setAction(
-  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
-    const { deployments, ethers, getNamedAccounts } = hre;
-    const { get } = deployments;
-    const { deployer } = await getNamedAccounts();
-    const signer = await ethers.getSigner(deployer);
-    const stakeRegistry = await StakeRegistry__factory.connect(
-      (
-        await get(CONTRACT_NAMES.StakeRegistry)
-      ).address,
-      signer
-    );
-    const stakingParameters = await stakeRegistry.getStakingParameters();
-    console.log('Staking parameters: ');
-    const entries = Object.entries(stakingParameters);
-    const formattedStakingParameters = entries
-      .splice(entries.length / 2, entries.length)
-      .map(([i, j]) => [i, j.toString()]);
-    console.log(formattedStakingParameters);
-    const periodRegistry = await PeriodRegistry__factory.connect(
-      (
-        await get(CONTRACT_NAMES.PeriodRegistry)
-      ).address,
-      signer
-    );
-    const periodDefinitions = await periodRegistry.getPeriodDefinitions();
-    console.log('Period definitions (UTC=0): ');
-    console.log(
-      periodDefinitions.reduce(
-        (r, definition, index) => ({
-          ...r,
-          [PERIOD_TYPE[index]]: {
-            initialized: definition.initialized,
-          },
-        }),
-        {}
-      )
-    );
-    console.log(
-      periodDefinitions.reduce(
-        (r, definition, index) => ({
-          ...r,
-          [PERIOD_TYPE[index]]: {
-            initialized: definition.initialized,
-            starts: definition.starts.map((start) =>
-              moment(Number(start.toString()) * 1000)
-                .utc(0)
-                .format('DD/MM/YYYY HH:mm:ss')
-            ),
-            startsUnix: definition.starts.map((start) => start.toString()),
-            ends: definition.ends.map((end) =>
-              moment(Number(end.toString()) * 1000)
-                .utc(0)
-                .format('DD/MM/YYYY HH:mm:ss')
-            ),
-            endsUnix: definition.ends.map((end) => end.toString()),
-          },
-        }),
-        {}
-      )
-    );
-  }
-);
-
-subtask(SUB_TASK_NAMES.GET_VALID_SLAS, undefined).setAction(
-  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
-    const { deployments, ethers, getNamedAccounts } = hre;
-    const { get } = deployments;
-    const { deployer } = await getNamedAccounts();
-    const signer = await ethers.getSigner(deployer);
-    const slaRegistry = await SLARegistry__factory.connect(
-      (
-        await get(CONTRACT_NAMES.SLARegistry)
-      ).address,
-      signer
-    );
-    const allSLAs = await slaRegistry.allSLAs();
-    console.log('SLA registry address:');
-    console.log(slaRegistry.address);
-    console.log('All valid SLAs:');
-    console.log(allSLAs);
-  }
-);
-
-subtask(SUB_TASK_NAMES.GET_REVERT_MESSAGE, undefined).setAction(
-  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
-    const { ethers, network } = hre;
-    const transaction = await ethers.provider.getTransaction(
-      taskArgs.transactionHash
-    );
-    console.log('Transaction:');
-    console.log(transaction);
-    const { data } = await axios({
-      method: 'post',
-      url: (network.config as any).url,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: {
-        jsonrpc: '2.0',
-        method: 'eth_call',
-        params: [
-          {
-            from: transaction.from,
-            to: transaction.to,
-            value: numberToHex(transaction.value.toString()),
-            data: transaction.data,
-          },
-          numberToHex(transaction.blockNumber),
-        ],
-        id: 1,
-      },
-    });
-    console.log('Error data:');
-    console.log(data);
-  }
-);
-
-subtask(SUB_TASK_NAMES.RETRY_REQUEST_SLI, undefined).setAction(
-  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
-    const { deployments, ethers, getNamedAccounts, network } = hre;
-    const { stacktical } = network.config;
-    const { get } = deployments;
-    const { deployer } = await getNamedAccounts();
-    const slaRegistry = await SLARegistry__factory.connect(
-      (
-        await get(CONTRACT_NAMES.SLARegistry)
-      ).address,
-      await ethers.getSigner(deployer)
-    );
-    const slaAddress = taskArgs.slaAddress
-      ? ethers.utils.getAddress(taskArgs.slaAddress)
-      : (await slaRegistry.userSLAs(deployer)).slice(-1)[0];
-
-    console.log('Retrying request:');
-    const messengerContractName = stacktical.bootstrap.registry.messengers.find(
-      (messenger) => messenger.useCaseName === taskArgs.useCaseName
-    ).contract;
-    const messenger = IMessenger__factory.connect(
-      (await get(messengerContractName)).address,
-      await ethers.getSigner(deployer)
-    );
-
-    await messenger.retryRequest(slaAddress, taskArgs.periodId);
-
-    const sla = SLA__factory.connect(
-      slaAddress,
-      await ethers.getSigner(deployer)
-    );
-    await new Promise((resolve) => {
-      sla.on('SLICreated', () => {
-        resolve(null);
-      });
-    });
-    const createdSLI = await sla.periodSLIs(taskArgs.periodId);
-    const { timestamp, sli, status } = createdSLI;
-    console.log('Created SLI timestamp: ', timestamp.toString());
-    console.log('Created SLI sli: ', sli.toString());
-    console.log('Created SLI status: ', PERIOD_STATUS[status]);
-    console.log('SLI request process finished');
-  }
-);

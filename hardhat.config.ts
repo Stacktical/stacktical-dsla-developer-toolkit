@@ -156,12 +156,12 @@ const config: HardhatUserConfig = {
   },
 };
 
-extendEnvironment((env) => {
-  networkFromConfig(env, env.network);
-});
-
-function networkFromConfig(env: HardhatRuntimeEnvironment, network: Network) {
-  network.stacktical = env.network.stacktical;
-}
+// extendEnvironment((env) => {
+//   networkFromConfig(env, env.network);
+// });
+//
+// function networkFromConfig(env: HardhatRuntimeEnvironment, network: Network) {
+//   network.stacktical = env.network.stacktical;
+// }
 
 module.exports = config;
