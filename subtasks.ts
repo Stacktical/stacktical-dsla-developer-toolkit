@@ -71,7 +71,6 @@ export enum SUB_TASK_NAMES {
   BOOTSTRAP_STAKE_REGISTRY = 'BOOTSTRAP_STAKE_REGISTRY',
   SET_CONTRACTS_ALLOWANCE = 'SET_CONTRACTS_ALLOWANCE',
   REQUEST_SLI = 'REQUEST_SLI',
-  RETRY_REQUEST_SLI = 'RETRY_REQUEST_SLI',
   GET_PRECOORDINATOR = 'GET_PRECOORDINATOR',
   SET_PRECOORDINATOR = 'SET_PRECOORDINATOR',
   DEPLOY_LOCAL_CHAINLINK_NODES = 'DEPLOY_LOCAL_CHAINLINK_NODES',
@@ -961,6 +960,8 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
     const slaConfigs = taskArgs.id ? [deploy_sla[taskArgs.id]] : deploy_sla;
     for (let config of slaConfigs) {
       printSeparator();
+      console.log('Deploying SLA:');
+      console.log(config);
       const {
         serviceMetadata,
         sloValue,

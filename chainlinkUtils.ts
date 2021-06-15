@@ -122,10 +122,7 @@ const postChainlinkJob = async (
           type: jobName,
         },
         {
-          type: 'copy',
-          params: {
-            copyPath: ['result'],
-          },
+          type: 'EthUint256',
         },
         {
           type: 'ethtx',
