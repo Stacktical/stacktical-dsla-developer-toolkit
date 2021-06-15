@@ -5,10 +5,9 @@ import externalAdapter from './services/external-adapter';
 
 enum TASK_NAMES {
   EXPORT_DATA = 'stacktical:export-data',
-  DEPLOY_SLAS = 'stacktical:deploy-slas',
+  DEPLOY_SLA = 'stacktical:deploy-sla',
   BOOTSTRAP_DSLA_PROTOCOL = 'stacktical:bootstrap',
   REQUEST_SLI = 'stacktical:request-sli',
-  RETRY_REQUEST_SLI = 'stacktical:retry-request-sli',
   RESTART_SERVICES = 'stacktical:restart-services',
   GET_PRECOORDINATOR = 'stacktical:get-precoordinator',
   SET_PRECOORDINATOR = 'stacktical:set-precoordinator',
@@ -24,12 +23,14 @@ enum TASK_NAMES {
   GET_REVERT_MESSAGE = 'stacktical:get-revert-message',
 }
 
-task(
-  TASK_NAMES.DEPLOY_SLAS,
-  'Deploy customized SLA from stacktical config'
-).setAction(async (_, { run }) => {
-  await run(SUB_TASK_NAMES.DEPLOY_SLAS);
-});
+task(TASK_NAMES.DEPLOY_SLA, 'Deploy customized SLA from stacktical config')
+  .addOptionalParam(
+    'id',
+    'id of the arrays of SLAs of the deploy_sla stacktical config'
+  )
+  .setAction(async (taskArgs, { run }) => {
+    await run(SUB_TASK_NAMES.DEPLOY_SLA, taskArgs);
+  });
 
 task(TASK_NAMES.EXPORT_DATA, 'Export data to exported-data folder').setAction(
   async (_, { run }) => {
@@ -60,18 +61,13 @@ task(
   'Request a SLI verification for next verifiable period'
 )
   .addOptionalParam(
-    'address',
+    'slaAddress',
     '(optional) The SLA address. Defaults to last deployed SLA by deployer address'
   )
+  .addFlag('retry', ' pass the flag retry to trigger the retry mechanism')
   .setAction(async (taskArgs, { run }) => {
     await run(SUB_TASK_NAMES.REQUEST_SLI, taskArgs);
   });
-
-// task(TASK_NAMES.REQUEST_ANALYTICS, 'Request network analytics')
-//   .addParam('periodId', 'Period id to request network analytics')
-//   .setAction(async (taskArgs, { run }) => {
-//     await run(SUB_TASK_NAMES.REQUEST_ANALYTICS, taskArgs);
-//   });
 
 task(
   TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE,
@@ -152,32 +148,6 @@ task(
   return new Promise((resolve, reject) => {});
 });
 
-// task(TASK_NAMES.FULFILL_ANALYTICS, 'Fulfill pendant network analytics')
-//   .addParam(
-//     'periodId',
-//     'Period id of the period to fulfill',
-//     undefined,
-//     types.int
-//   )
-//   .addParam(
-//     'periodType',
-//     'Period type of the period to fulfill',
-//     undefined,
-//     types.int
-//   )
-//   .addParam('networkTicker', 'Network ticker of the period to fulfill')
-//   .addParam(
-//     'nodeName',
-//     'Name of the Chainlink node to use to fulfill',
-//     undefined,
-//     types.string
-//   )
-//   .addFlag('signTransaction', 'signs the transaction to fulfill the analytics')
-//   .setAction(async (taskArgs, hre: any) => {
-//     await hre.run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
-//     await hre.run(SUB_TASK_NAMES.FULFILL_ANALYTICS, taskArgs);
-//   });
-
 task(
   TASK_NAMES.REGISTRIES_CONFIGURATION,
   'Get registries contracts configuration'
@@ -211,6 +181,56 @@ task(
   await hre.run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
 });
 
+task(
+  TASK_NAMES.RESTART_CHAINLINK_NODES,
+  'Deploy or reset the local chainlink nodes'
+).setAction(async (_, hre: any) => {
+  console.log(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES);
+  await hre.run(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES);
+  console.log(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE);
+  await hre.run(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE);
+  console.log(SUB_TASK_NAMES.START_LOCAL_CHAINLINK_NODES);
+  await hre.run(SUB_TASK_NAMES.START_LOCAL_CHAINLINK_NODES);
+});
+
+task(TASK_NAMES.GET_VALID_SLAS, 'Get all valid SLAs by network').setAction(
+  async (_, hre: any) => {
+    await hre.run(SUB_TASK_NAMES.GET_VALID_SLAS);
+  }
+);
+
+task(TASK_NAMES.GET_REVERT_MESSAGE, 'Get revert message for transaction hash')
+  .addParam('transactionHash', 'Transaction hash to get message')
+  .setAction(async (taskArgs, hre: any) => {
+    await hre.run(SUB_TASK_NAMES.GET_REVERT_MESSAGE, taskArgs);
+  });
+
+// task(TASK_NAMES.FULFILL_ANALYTICS, 'Fulfill pendant network analytics')
+//   .addParam(
+//     'periodId',
+//     'Period id of the period to fulfill',
+//     undefined,
+//     types.int
+//   )
+//   .addParam(
+//     'periodType',
+//     'Period type of the period to fulfill',
+//     undefined,
+//     types.int
+//   )
+//   .addParam('networkTicker', 'Network ticker of the period to fulfill')
+//   .addParam(
+//     'nodeName',
+//     'Name of the Chainlink node to use to fulfill',
+//     undefined,
+//     types.string
+//   )
+//   .addFlag('signTransaction', 'signs the transaction to fulfill the analytics')
+//   .setAction(async (taskArgs, hre: any) => {
+//     await hre.run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
+//     await hre.run(SUB_TASK_NAMES.FULFILL_ANALYTICS, taskArgs);
+//   });
+
 // task(TASK_NAMES.PREC_FULFILL_ANALYTICS, 'Prec fulfill analytics')
 //   .addParam(
 //     'periodId',
@@ -236,40 +256,5 @@ task(
 //   .setAction(async (taskArgs, hre: any) => {
 //     await hre.run(SUB_TASK_NAMES.PREC_FULFILL_ANALYTICS, taskArgs);
 //   });
-
-task(
-  TASK_NAMES.RESTART_CHAINLINK_NODES,
-  'Deploy or reset the local chainlink nodes'
-).setAction(async (_, hre: any) => {
-  console.log(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES);
-  await hre.run(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES);
-  console.log(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE);
-  await hre.run(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE);
-  console.log(SUB_TASK_NAMES.START_LOCAL_CHAINLINK_NODES);
-  await hre.run(SUB_TASK_NAMES.START_LOCAL_CHAINLINK_NODES);
-});
-
-task(TASK_NAMES.GET_VALID_SLAS, 'Get all valid SLAs by network').setAction(
-  async (_, hre: any) => {
-    await hre.run(SUB_TASK_NAMES.GET_VALID_SLAS);
-  }
-);
-
-task(TASK_NAMES.GET_REVERT_MESSAGE, 'Get revert message for transaction hash')
-  .addParam('transactionHash', 'Transaction hash to get message')
-  .setAction(async (taskArgs, hre: any) => {
-    await hre.run(SUB_TASK_NAMES.GET_REVERT_MESSAGE, taskArgs);
-  });
-
-task(
-  TASK_NAMES.RETRY_REQUEST_SLI,
-  'Retry a request SLI from Messenger contract'
-)
-  .addOptionalParam('slaAddress', 'SLA address')
-  .addParam('useCaseName', 'Name of the use case e.g. staking-efficiency')
-  .addParam('periodId', 'Period id')
-  .setAction(async (taskArgs, hre: any) => {
-    await hre.run(SUB_TASK_NAMES.RETRY_REQUEST_SLI, taskArgs);
-  });
 
 module.exports = {};

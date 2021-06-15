@@ -11,11 +11,7 @@ import {
   postChainlinkJob,
 } from './chainlinkUtils';
 import { subtask } from 'hardhat/config';
-import {
-  ChainlinkNodeConfiguration,
-  DeploySLAConfiguration,
-  StackticalConfiguration,
-} from './types';
+import { ChainlinkNodeConfiguration } from './types';
 import {
   ERC20__factory,
   IMessenger__factory,
@@ -25,6 +21,7 @@ import {
   PeriodRegistry__factory,
   PreCoordinator__factory,
   SEMessenger__factory,
+  SLA,
   SLA__factory,
   SLARegistry__factory,
   StakeRegistry__factory,
@@ -68,7 +65,7 @@ export enum SUB_TASK_NAMES {
   INITIALIZE_DEFAULT_ADDRESSES = 'INITIALIZE_DEFAULT_ADDRESSES',
   SAVE_CONTRACTS_ADDRESSES = 'SAVE_CONTRACTS_ADDRESSES',
   EXPORT_ABIS = 'EXPORT_ABIS',
-  DEPLOY_SLAS = 'DEPLOY_SLAS',
+  DEPLOY_SLA = 'DEPLOY_SLA',
   BOOTSTRAP_MESSENGER_REGISTRY = 'BOOTSTRAP_MESSENGER_REGISTRY',
   BOOTSTRAP_PERIOD_REGISTRY = 'BOOTSTRAP_PERIOD_REGISTRY',
   BOOTSTRAP_STAKE_REGISTRY = 'BOOTSTRAP_STAKE_REGISTRY',
@@ -943,8 +940,8 @@ subtask(SUB_TASK_NAMES.SET_CONTRACTS_ALLOWANCE, undefined).setAction(
   }
 );
 
-subtask(SUB_TASK_NAMES.DEPLOY_SLAS, undefined).setAction(
-  async (_, hre: HardhatRuntimeEnvironment) => {
+subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
     const {
       deployments,
       ethers,
@@ -961,7 +958,8 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLAS, undefined).setAction(
     const { stacktical } = hre.network.config;
     console.log('Starting SLA deployment process');
     const { deploy_sla } = scripts;
-    for (let config of deploy_sla) {
+    const slaConfigs = taskArgs.id ? [deploy_sla[taskArgs.id]] : deploy_sla;
+    for (let config of slaConfigs) {
       printSeparator();
       const {
         serviceMetadata,
@@ -1102,14 +1100,27 @@ subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
     );
     console.log(`SLA address: ${slaAddress}`);
     const ownerApproval = true;
-    let tx = await slaRegistry.requestSLI(
-      Number(nextVerifiablePeriod),
-      sla.address,
-      ownerApproval,
-      {
-        ...(network.config.gas !== 'auto' && { gasLimit: network.config.gas }),
-      }
-    );
+    let tx;
+    if (taskArgs.retry) {
+      console.log('Retrying request...');
+      const messenger = IMessenger__factory.connect(
+        await sla.messengerAddress(),
+        await ethers.getSigner(deployer)
+      );
+      tx = await messenger.retryRequest(slaAddress, nextVerifiablePeriod);
+    } else {
+      console.log('Requesting SLI...');
+      tx = await slaRegistry.requestSLI(
+        Number(nextVerifiablePeriod),
+        sla.address,
+        ownerApproval,
+        {
+          ...(network.config.gas !== 'auto' && {
+            gasLimit: network.config.gas,
+          }),
+        }
+      );
+    }
     console.log('Transaction receipt: ');
     console.log(tx);
     await tx.wait();
@@ -1495,7 +1506,30 @@ subtask(SUB_TASK_NAMES.GET_VALID_SLAS, undefined).setAction(
     console.log('SLA registry address:');
     console.log(slaRegistry.address);
     console.log('All valid SLAs:');
-    console.log(allSLAs);
+    for (let slaAddress of allSLAs) {
+      printSeparator();
+      const sla = <SLA>(
+        await ethers.getContractAt(CONTRACT_NAMES.SLA, slaAddress)
+      );
+      const breachedContract = await sla.breachedContract();
+      const contractFinished = await sla.contractFinished();
+      const creationBlockNumber = await sla.creationBlockNumber();
+      const messengerAddress = await sla.messengerAddress();
+      const initialPeriodId = await sla.initialPeriodId();
+      const finalPeriodId = await sla.finalPeriodId();
+      const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
+      const periodType = await sla.periodType();
+      console.log('slaAddress', slaAddress);
+      console.log('breachedContract', breachedContract);
+      console.log('contractFinished', contractFinished);
+      console.log('messengerAddress', messengerAddress);
+      console.log('periodType', PERIOD_TYPE[periodType]);
+      console.log('creationBlockNumber', creationBlockNumber.toString());
+      console.log('initialPeriodId', initialPeriodId.toString());
+      console.log('finalPeriodId', finalPeriodId.toString());
+      console.log('nextVerifiablePeriod', nextVerifiablePeriod.toString());
+      printSeparator();
+    }
   }
 );
 
@@ -1530,51 +1564,6 @@ subtask(SUB_TASK_NAMES.GET_REVERT_MESSAGE, undefined).setAction(
     });
     console.log('Error data:');
     console.log(data);
-  }
-);
-
-subtask(SUB_TASK_NAMES.RETRY_REQUEST_SLI, undefined).setAction(
-  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
-    const { deployments, ethers, getNamedAccounts, network } = hre;
-    const { stacktical } = network.config;
-    const { get } = deployments;
-    const { deployer } = await getNamedAccounts();
-    const slaRegistry = await SLARegistry__factory.connect(
-      (
-        await get(CONTRACT_NAMES.SLARegistry)
-      ).address,
-      await ethers.getSigner(deployer)
-    );
-    const slaAddress = taskArgs.slaAddress
-      ? ethers.utils.getAddress(taskArgs.slaAddress)
-      : (await slaRegistry.userSLAs(deployer)).slice(-1)[0];
-
-    console.log('Retrying request:');
-    const messengerContractName = stacktical.bootstrap.registry.messengers.find(
-      (messenger) => messenger.useCaseName === taskArgs.useCaseName
-    ).contract;
-    const messenger = IMessenger__factory.connect(
-      (await get(messengerContractName)).address,
-      await ethers.getSigner(deployer)
-    );
-
-    await messenger.retryRequest(slaAddress, taskArgs.periodId);
-
-    const sla = SLA__factory.connect(
-      slaAddress,
-      await ethers.getSigner(deployer)
-    );
-    await new Promise((resolve) => {
-      sla.on('SLICreated', () => {
-        resolve(null);
-      });
-    });
-    const createdSLI = await sla.periodSLIs(taskArgs.periodId);
-    const { timestamp, sli, status } = createdSLI;
-    console.log('Created SLI timestamp: ', timestamp.toString());
-    console.log('Created SLI sli: ', sli.toString());
-    console.log('Created SLI status: ', PERIOD_STATUS[status]);
-    console.log('SLI request process finished');
   }
 );
 
