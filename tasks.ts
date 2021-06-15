@@ -5,7 +5,7 @@ import externalAdapter from './services/external-adapter';
 
 enum TASK_NAMES {
   EXPORT_DATA = 'stacktical:export-data',
-  DEPLOY_SLA = 'stacktical:deploy-sla',
+  DEPLOY_SLAS = 'stacktical:deploy-slas',
   BOOTSTRAP_DSLA_PROTOCOL = 'stacktical:bootstrap',
   REQUEST_SLI = 'stacktical:request-sli',
   RETRY_REQUEST_SLI = 'stacktical:retry-request-sli',
@@ -25,10 +25,10 @@ enum TASK_NAMES {
 }
 
 task(
-  TASK_NAMES.DEPLOY_SLA,
+  TASK_NAMES.DEPLOY_SLAS,
   'Deploy customized SLA from stacktical config'
 ).setAction(async (_, { run }) => {
-  await run(SUB_TASK_NAMES.DEPLOY_SLA);
+  await run(SUB_TASK_NAMES.DEPLOY_SLAS);
 });
 
 task(TASK_NAMES.EXPORT_DATA, 'Export data to exported-data folder').setAction(
