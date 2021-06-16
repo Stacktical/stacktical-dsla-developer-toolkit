@@ -43,6 +43,8 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
     PeriodRegistry private periodRegistry;
     StakeRegistry private stakeRegistry;
     bool private retry = false;
+    /// @dev network name e.g. ethereum, harmony etc, to tell external adapter where to point
+    bytes32 public networkName;
 
     /**
      * @dev parameterize the variables according to network
@@ -58,7 +60,8 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
         bytes32 _messengerJobId,
         uint256 _feeMultiplier,
         PeriodRegistry _periodRegistry,
-        StakeRegistry _stakeRegistry
+        StakeRegistry _stakeRegistry,
+        bytes32 _networkName
     ) public {
         _jobId = _messengerJobId;
         setChainlinkToken(_messengerChainlinkToken);
@@ -66,6 +69,7 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
         _fee = _feeMultiplier * _baseFee;
         periodRegistry = _periodRegistry;
         stakeRegistry = _stakeRegistry;
+        networkName = _networkName;
     }
 
     /**
@@ -164,6 +168,7 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
             StringUtils.uintToStr(sla_monitoring_end)
         );
         request.add('sla_address', StringUtils.addressToString(_slaAddress));
+        request.add('network_name', StringUtils.bytes32ToStr(networkName));
 
         // Sends the request with 0.1 LINK to the oracle contract
         bytes32 requestId = sendChainlinkRequestTo(_oracle, request, _fee);

@@ -1,10 +1,16 @@
 import { StackticalConfiguration } from '../types';
 import { CONTRACT_NAMES, DEPLOYMENT_TAGS } from '../constants';
 import { SUB_TASK_NAMES } from '../subtasks';
+import { HardhatRuntimeEnvironment } from 'hardhat/types';
+import { formatBytes32String } from 'ethers/lib/utils';
 
-module.exports = async ({ getNamedAccounts, deployments, network, run }) => {
-  const { stacktical }: { stacktical: StackticalConfiguration } =
-    network.config;
+module.exports = async ({
+  getNamedAccounts,
+  deployments,
+  network,
+  run,
+}: HardhatRuntimeEnvironment) => {
+  const { stacktical } = network.config;
   const { deployer } = await getNamedAccounts();
   const { deploy, get } = deployments;
   const stringUtils = await get(CONTRACT_NAMES.StringUtils);
@@ -28,6 +34,7 @@ module.exports = async ({ getNamedAccounts, deployments, network, run }) => {
         feeMultiplier,
         periodRegistry.address,
         stakeRegistry.address,
+        formatBytes32String(network.name),
       ],
       libraries: {
         StringUtils: stringUtils.address,
