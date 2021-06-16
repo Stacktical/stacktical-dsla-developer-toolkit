@@ -5,7 +5,7 @@
   "scripts": {
     "hardhat-node": "hardhat node",
     "custom-ganache": "ganache-cli --accounts 10 --defaultBalanceEther 100000 -d -i 1337 -l 12000000 -h 0.0.0.0",
-    "external-adapter": "pm2 start services/external-adapter/index.ts --name external-adapter --watch ./external-adapter --no-daemon",
+    "external-adapter": "pm2 delete external-adapter 2> /dev/null || true && pm2 start services/external-adapter/index.ts --name external-adapter --watch ./services/external-adapter --no-daemon",
     "truffle:debug:develop": "truffle debug --network develop",
     "release:patch": "standard-version --release-as patch",
     "release:minor": "standard-version --release-as minor",
@@ -49,6 +49,7 @@
     "dotenv": "^9.0.0",
     "express": "^4.17.1",
     "ipfs-http-client": "^49.0.4",
+    "joi": "^17.4.0",
     "js-yaml": "^4.1.0",
     "moment": "^2.29.1",
     "openzeppelin-solidity": "^2.5.1",

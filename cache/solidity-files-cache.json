@@ -1389,8 +1389,8 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/messengers/staking-efficiency/SEMessenger.sol": {
-      "lastModificationDate": 1623791419485,
-      "contentHash": "ba23ae1dcbc8aa8a8fa6867fa35a5965",
+      "lastModificationDate": 1623856436170,
+      "contentHash": "329433eb787a58cf43c507f64b79bf87",
       "sourceName": "contracts/messengers/staking-efficiency/SEMessenger.sol",
       "solcConfig": {
         "version": "0.6.6",

@@ -1,9 +1,9 @@
-require('dotenv').config();
+require('./env-validation');
 const express = require('express');
 const axios = require('axios');
 const Web3 = require('web3');
-
 const { SLAABI, MessengerABI } = require('./abis');
+let web3Uri;
 
 type SLAData = {
   serviceName: string;
@@ -19,7 +19,7 @@ type SLAData = {
 };
 
 async function getSLAData(address): Promise<SLAData> {
-  const web3 = new Web3(process.env.WEB3_URI);
+  const web3 = new Web3(web3Uri);
   const slaContract = new web3.eth.Contract(SLAABI, address);
   const ipfsCID = await slaContract.methods.ipfsHash().call();
   console.log(`SLA IPFS url: ${process.env.IPFS_URI}/ipfs/${ipfsCID}`);
@@ -31,7 +31,7 @@ async function getSLAData(address): Promise<SLAData> {
 }
 
 async function getSLI(slaData: SLAData) {
-  const web3 = new Web3(process.env.WEB3_URI);
+  const web3 = new Web3(web3Uri);
   const messenger = new web3.eth.Contract(
     MessengerABI,
     slaData.messengerAddress
@@ -52,9 +52,11 @@ app.post('/', async (req, res) => {
   console.log(req.body);
   const requestData = {
     sla_address: data.sla_address,
+    network_name: data.network_name,
     sla_monitoring_start: data.sla_monitoring_start,
     sla_monitoring_end: data.sla_monitoring_end,
   };
+  web3Uri = process.env[`${requestData.network_name.toUpperCase()}_URI`];
   const slaData = await getSLAData(requestData.sla_address);
   console.log('SLA Data:');
   console.log(slaData);
@@ -68,4 +70,6 @@ app.post('/', async (req, res) => {
   });
 });
 
-export default app;
+app.listen(6060, () => {
+  console.log(`External adapter initialized at http://localhost:${6060}`);
+});
