@@ -107,7 +107,7 @@ const develop: StackticalConfiguration = {
       },
       {
         sloValue: 10 * 10 ** 3,
-        sloType: SLO_TYPE.SmallerThan,
+        sloType: SLO_TYPE.GreaterThan,
         whitelisted: false,
         periodType: PERIOD_TYPE.WEEKLY,
         initialPeriodId: 10,

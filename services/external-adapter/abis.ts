@@ -1,4 +1,4 @@
-const SLAABI = [
+export const SLAABI = [
   {
     inputs: [
       { internalType: 'address', name: '_owner', type: 'address' },
@@ -606,7 +606,7 @@ const SLAABI = [
   },
 ];
 
-const MessengerABI = [
+export const MessengerABI = [
   {
     inputs: [
       {
@@ -1063,8 +1063,3 @@ const MessengerABI = [
     type: 'function',
   },
 ];
-
-module.exports = {
-  SLAABI,
-  MessengerABI,
-};

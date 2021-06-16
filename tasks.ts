@@ -1,7 +1,6 @@
 import { task, types } from 'hardhat/config';
 import { SUB_TASK_NAMES } from './subtasks';
 import { printSeparator } from './utils';
-import externalAdapter from './services/external-adapter';
 
 enum TASK_NAMES {
   EXPORT_DATA = 'stacktical:export-data',
@@ -13,7 +12,6 @@ enum TASK_NAMES {
   SET_PRECOORDINATOR = 'stacktical:set-precoordinator',
   CHAINLINK_DOCKER_COMPOSE = 'stacktical:chainlink-docker-compose',
   PREPARE_CHAINLINK_NODES = 'stacktical:prepare-chainlink-nodes',
-  EXTERNAL_ADAPTER = 'stacktical:external-adapter',
   FULFILL_SLI = 'stacktical:fulfill-sli',
   INITIALIZE_DEFAULT_ADDRESSES = 'stacktical:initialize-addresses',
   RESTART_CHAINLINK_NODES = 'stacktical:restart-chainlink-nodes',
@@ -135,17 +133,6 @@ task(
   await run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
   await run(SUB_TASK_NAMES.DEPLOY_CHAINLINK_CONTRACTS);
   await run(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE);
-});
-
-task(
-  TASK_NAMES.EXTERNAL_ADAPTER,
-  'Runs an external adapter from path chainlink-nodes/external-adapter'
-).setAction(async (_, hre: any) => {
-  process.env.WEB3_URI = hre.network.config.url;
-  externalAdapter.listen(6060, () => {
-    console.log(`External adapter initialized at http://localhost:${6060}`);
-  });
-  return new Promise((resolve, reject) => {});
 });
 
 task(

@@ -1,12 +1,9 @@
-import { NETWORKS } from '../../constants';
-
-require('dotenv').config();
+require('./env-validation');
 const express = require('express');
 const axios = require('axios');
 const Web3 = require('web3');
-let web3Uri;
-
 const { SLAABI, MessengerABI } = require('./abis');
+let web3Uri;
 
 type SLAData = {
   serviceName: string;
@@ -73,4 +70,6 @@ app.post('/', async (req, res) => {
   });
 });
 
-export default app;
+app.listen(6060, () => {
+  console.log(`External adapter initialized at http://localhost:${6060}`);
+});
