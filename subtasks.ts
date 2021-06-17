@@ -1,7 +1,6 @@
 /* eslint-disable no-await-in-loop, import/no-extraneous-dependencies */
 import { DeploymentsExtension } from 'hardhat-deploy/dist/types';
 import { fromWei, numberToHex, toChecksumAddress, toWei } from 'web3-utils';
-
 import {
   deleteJob,
   getChainlinkAccounts,
@@ -338,7 +337,6 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
     console.log('Starting automated configuration for Chainlink nodes...');
     for (let node of stacktical.chainlink.nodesConfiguration) {
       printSeparator();
-      const schema = Joi.object({}).unknown();
       console.log('Preparing node: ' + node.name);
       for (let messenger of stacktical.bootstrap.registry.messengers) {
         console.log('Creating use case configuration: ' + messenger.contract);
