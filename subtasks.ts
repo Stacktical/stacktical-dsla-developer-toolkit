@@ -1048,7 +1048,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
 
       const deployerStake = stakeAmountTimesWei(deployerStakeTimes);
       console.log(
-        `Starting process 3.1: deployer: ${fromWei(deployerStake)} bDSLA`
+        `Starting process 3.1: deployer: ${fromWei(deployerStake)} DSLA`
       );
       tx = await dslaToken.approve(sla.address, deployerStake);
       await tx.wait();
@@ -1063,7 +1063,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
         await tx.wait();
       }
       console.log(
-        `Starting process 3.2: notDeployer: ${fromWei(notDeployerStake)} bDSLA`
+        `Starting process 3.2: notDeployer: ${fromWei(notDeployerStake)} DSLA`
       );
       await dslaToken.connect(await ethers.getSigner(notDeployer));
       tx = await dslaToken.approve(sla.address, notDeployerStake);

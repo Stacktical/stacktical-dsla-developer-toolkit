@@ -1,0 +1,481 @@
+{
+  "address": "0x0FB3138BFCBFAf57439A3aF1944f41b4363abf82",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "ownerAddress",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "messengerAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "specificationUrl",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "precision",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        }
+      ],
+      "name": "MessengerModified",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "ownerAddress",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "messengerAddress",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "specificationUrl",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "precision",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        }
+      ],
+      "name": "MessengerRegistered",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "getMessengers",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "ownerAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "messengerAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "string",
+              "name": "specificationUrl",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "precision",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "requestsCounter",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "fulfillsCounter",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "id",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct MessengerRegistry.Messenger[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMessengersLength",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "messengers",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "ownerAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "messengerAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "string",
+          "name": "specificationUrl",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "precision",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "requestsCounter",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "fulfillsCounter",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_specificationUrl",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_messengerId",
+          "type": "uint256"
+        }
+      ],
+      "name": "modifyMessenger",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "ownerMessengers",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_callerAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_messengerAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "string",
+          "name": "_specificationUrl",
+          "type": "string"
+        }
+      ],
+      "name": "registerMessenger",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "registeredMessengers",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "setSLARegistry",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "slaRegistry",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x50aa61e4f114ae42771be337268b16af85109248e8e54351970fc1cf579ce6e5",
+  "receipt": {
+    "to": null,
+    "from": "0x25c0E8Fe8bc7a01a66A5C2008E85fA9A01C73113",
+    "contractAddress": "0x0FB3138BFCBFAf57439A3aF1944f41b4363abf82",
+    "transactionIndex": 0,
+    "gasUsed": "1066687",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0xb38e1f371902a2864eaf7ffa9b4f89dbe51a34d66d1b0ba92bcf17852d024e09",
+    "transactionHash": "0x50aa61e4f114ae42771be337268b16af85109248e8e54351970fc1cf579ce6e5",
+    "logs": [],
+    "blockNumber": 25540472,
+    "cumulativeGasUsed": "1066687",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [],
+  "solcInputHash": "d3eb24d8bcf17f927c2f6ff6b88c723a",
+  "metadata": "{\"compiler\":{\"version\":\"0.6.6+commit.6c089d02\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"ownerAddress\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"messengerAddress\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"specificationUrl\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"precision\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"}],\"name\":\"MessengerModified\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"ownerAddress\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"messengerAddress\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"specificationUrl\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"precision\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"}],\"name\":\"MessengerRegistered\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"getMessengers\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"ownerAddress\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"messengerAddress\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"specificationUrl\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"precision\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"requestsCounter\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"fulfillsCounter\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"}],\"internalType\":\"struct MessengerRegistry.Messenger[]\",\"name\":\"\",\"type\":\"tuple[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMessengersLength\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"messengers\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"ownerAddress\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"messengerAddress\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"specificationUrl\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"precision\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"requestsCounter\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"fulfillsCounter\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_specificationUrl\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"_messengerId\",\"type\":\"uint256\"}],\"name\":\"modifyMessenger\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"ownerMessengers\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_callerAddress\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_messengerAddress\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"_specificationUrl\",\"type\":\"string\"}],\"name\":\"registerMessenger\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"registeredMessengers\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"setSLARegistry\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"slaRegistry\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"details\":\"MessengerRegistry is a contract to register openly distributed Messengers\",\"methods\":{\"modifyMessenger(string,uint256)\":{\"details\":\"function to modifyMessenger a Messenger\"},\"registerMessenger(address,address,string)\":{\"details\":\"function to register a new Messenger\"},\"setSLARegistry()\":{\"details\":\"sets the SLARegistry contract address and can only be called once\"}},\"title\":\"MessengerRegistry\"},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"@stacktical/dsla-protocol/contracts/MessengerRegistry.sol\":\"MessengerRegistry\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts/access/Ownable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n\\npragma solidity >=0.6.0 <0.8.0;\\n\\nimport \\\"../utils/Context.sol\\\";\\n/**\\n * @dev Contract module which provides a basic access control mechanism, where\\n * there is an account (an owner) that can be granted exclusive access to\\n * specific functions.\\n *\\n * By default, the owner account will be the one that deploys the contract. This\\n * can later be changed with {transferOwnership}.\\n *\\n * This module is used through inheritance. It will make available the modifier\\n * `onlyOwner`, which can be applied to your functions to restrict their use to\\n * the owner.\\n */\\nabstract contract Ownable is Context {\\n    address private _owner;\\n\\n    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);\\n\\n    /**\\n     * @dev Initializes the contract setting the deployer as the initial owner.\\n     */\\n    constructor () internal {\\n        address msgSender = _msgSender();\\n        _owner = msgSender;\\n        emit OwnershipTransferred(address(0), msgSender);\\n    }\\n\\n    /**\\n     * @dev Returns the address of the current owner.\\n     */\\n    function owner() public view virtual returns (address) {\\n        return _owner;\\n    }\\n\\n    /**\\n     * @dev Throws if called by any account other than the owner.\\n     */\\n    modifier onlyOwner() {\\n        require(owner() == _msgSender(), \\\"Ownable: caller is not the owner\\\");\\n        _;\\n    }\\n\\n    /**\\n     * @dev Leaves the contract without owner. It will not be possible to call\\n     * `onlyOwner` functions anymore. Can only be called by the current owner.\\n     *\\n     * NOTE: Renouncing ownership will leave the contract without an owner,\\n     * thereby removing any functionality that is only available to the owner.\\n     */\\n    function renounceOwnership() public virtual onlyOwner {\\n        emit OwnershipTransferred(_owner, address(0));\\n        _owner = address(0);\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Can only be called by the current owner.\\n     */\\n    function transferOwnership(address newOwner) public virtual onlyOwner {\\n        require(newOwner != address(0), \\\"Ownable: new owner is the zero address\\\");\\n        emit OwnershipTransferred(_owner, newOwner);\\n        _owner = newOwner;\\n    }\\n}\\n\",\"keccak256\":\"0x15e2d5bd4c28a88548074c54d220e8086f638a71ed07e6b3ba5a70066fcf458d\"},\"@openzeppelin/contracts/utils/Context.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n\\npragma solidity >=0.6.0 <0.8.0;\\n\\n/*\\n * @dev Provides information about the current execution context, including the\\n * sender of the transaction and its data. While these are generally available\\n * via msg.sender and msg.data, they should not be accessed in such a direct\\n * manner, since when dealing with GSN meta-transactions the account sending and\\n * paying for execution may not be the actual sender (as far as an application\\n * is concerned).\\n *\\n * This contract is only required for intermediate, library-like contracts.\\n */\\nabstract contract Context {\\n    function _msgSender() internal view virtual returns (address payable) {\\n        return msg.sender;\\n    }\\n\\n    function _msgData() internal view virtual returns (bytes memory) {\\n        this; // silence state mutability warning without generating bytecode - see https://github.com/ethereum/solidity/issues/2691\\n        return msg.data;\\n    }\\n}\\n\",\"keccak256\":\"0x8d3cb350f04ff49cfb10aef08d87f19dcbaecc8027b0bed12f3275cd12f38cf0\"},\"@stacktical/dsla-protocol/contracts/MessengerRegistry.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity 0.6.6;\\npragma experimental ABIEncoderV2;\\n\\nimport './messenger/IMessenger.sol';\\n\\n/**\\n * @title MessengerRegistry\\n * @dev MessengerRegistry is a contract to register openly distributed Messengers\\n */\\ncontract MessengerRegistry {\\n    struct Messenger {\\n        address ownerAddress;\\n        address messengerAddress;\\n        string specificationUrl;\\n        uint256 precision;\\n        uint256 requestsCounter;\\n        uint256 fulfillsCounter;\\n        uint256 id;\\n    }\\n\\n    /// @dev array to store the messengers\\n    Messenger[] public messengers;\\n    /// @dev (messengerAddress=>bool) to check if the Messenger was\\n    mapping(address => bool) public registeredMessengers;\\n    /// @dev (userAddress=>messengerAddress[]) to register the messengers of an owner\\n    mapping(address => uint256[]) public ownerMessengers;\\n    /// @dev (userAddress=>messengerAddress[]) to register the owner of a Messenger\\n    address public slaRegistry;\\n\\n    event MessengerRegistered(\\n        address indexed ownerAddress,\\n        address indexed messengerAddress,\\n        string specificationUrl,\\n        uint256 precision,\\n        uint256 id\\n    );\\n\\n    event MessengerModified(\\n        address indexed ownerAddress,\\n        address indexed messengerAddress,\\n        string specificationUrl,\\n        uint256 precision,\\n        uint256 id\\n    );\\n\\n    /**\\n     * @dev sets the SLARegistry contract address and can only be called\\n     * once\\n     */\\n    function setSLARegistry() external {\\n        // Only able to trigger this function once\\n        require(\\n            address(slaRegistry) == address(0),\\n            'SLARegistry address has already been set'\\n        );\\n\\n        slaRegistry = msg.sender;\\n    }\\n\\n    /**\\n     * @dev function to register a new Messenger\\n     */\\n    function registerMessenger(\\n        address _callerAddress,\\n        address _messengerAddress,\\n        string calldata _specificationUrl\\n    ) external {\\n        require(\\n            msg.sender == slaRegistry,\\n            'Should only be called using the SLARegistry contract'\\n        );\\n        require(\\n            !registeredMessengers[_messengerAddress],\\n            'messenger already registered'\\n        );\\n\\n        IMessenger messenger = IMessenger(_messengerAddress);\\n        address messengerOwner = messenger.owner();\\n        require(\\n            messengerOwner == _callerAddress,\\n            'Should only be called by the messenger owner'\\n        );\\n        uint256 precision = messenger.messengerPrecision();\\n        uint256 requestsCounter = messenger.requestsCounter();\\n        uint256 fulfillsCounter = messenger.fulfillsCounter();\\n        registeredMessengers[_messengerAddress] = true;\\n        uint256 id = messengers.length;\\n        ownerMessengers[messengerOwner].push(id);\\n\\n        messengers.push(\\n            Messenger({\\n                ownerAddress: messengerOwner,\\n                messengerAddress: _messengerAddress,\\n                specificationUrl: _specificationUrl,\\n                precision: precision,\\n                requestsCounter: requestsCounter,\\n                fulfillsCounter: fulfillsCounter,\\n                id: id\\n            })\\n        );\\n\\n        emit MessengerRegistered(\\n            messengerOwner,\\n            _messengerAddress,\\n            _specificationUrl,\\n            precision,\\n            id\\n        );\\n    }\\n\\n    /**\\n     * @dev function to modifyMessenger a Messenger\\n     */\\n    function modifyMessenger(\\n        string calldata _specificationUrl,\\n        uint256 _messengerId\\n    ) external {\\n        Messenger storage storedMessenger = messengers[_messengerId];\\n        IMessenger messenger = IMessenger(storedMessenger.messengerAddress);\\n        require(\\n            msg.sender == messenger.owner(),\\n            'Can only be modified by the owner'\\n        );\\n        storedMessenger.specificationUrl = _specificationUrl;\\n        storedMessenger.ownerAddress = msg.sender;\\n        emit MessengerModified(\\n            storedMessenger.ownerAddress,\\n            storedMessenger.messengerAddress,\\n            storedMessenger.specificationUrl,\\n            storedMessenger.precision,\\n            storedMessenger.id\\n        );\\n    }\\n\\n    function getMessengers() external view returns (Messenger[] memory) {\\n        Messenger[] memory returnMessengers = new Messenger[](\\n            messengers.length\\n        );\\n        for (uint256 index = 0; index < messengers.length; index++) {\\n            IMessenger messenger = IMessenger(\\n                messengers[index].messengerAddress\\n            );\\n            uint256 requestsCounter = messenger.requestsCounter();\\n            uint256 fulfillsCounter = messenger.fulfillsCounter();\\n            returnMessengers[index] = Messenger({\\n                ownerAddress: messengers[index].ownerAddress,\\n                messengerAddress: messengers[index].messengerAddress,\\n                specificationUrl: messengers[index].specificationUrl,\\n                precision: messengers[index].precision,\\n                requestsCounter: requestsCounter,\\n                fulfillsCounter: fulfillsCounter,\\n                id: messengers[index].id\\n            });\\n        }\\n        return returnMessengers;\\n    }\\n\\n    function getMessengersLength() external view returns (uint256) {\\n        return messengers.length;\\n    }\\n}\\n\",\"keccak256\":\"0x859e06cc384032fb8673bd5fa55170dd9402e343b6769a7509c3c902280a0ad2\"},\"@stacktical/dsla-protocol/contracts/messenger/IMessenger.sol\":{\"content\":\"pragma solidity 0.6.6;\\n\\nimport '@openzeppelin/contracts/access/Ownable.sol';\\n\\n/**\\n * @title IMessenger\\n * @dev Interface to create new Messenger contract to add lo Messenger lists\\n */\\n\\nabstract contract IMessenger is Ownable {\\n    struct SLIRequest {\\n        address slaAddress;\\n        uint256 periodId;\\n    }\\n\\n    /**\\n     * @dev event emitted when having a response from Chainlink with the SLI\\n     * @param slaAddress 1. SLA address to store the SLI\\n     * @param periodId 2. id of the Chainlink request\\n     * @param requestId 3. id of the Chainlink request\\n     * @param chainlinkResponse 4. response from Chainlink\\n     */\\n    event SLIReceived(\\n        address indexed slaAddress,\\n        uint256 periodId,\\n        bytes32 indexed requestId,\\n        bytes32 chainlinkResponse\\n    );\\n\\n    /**\\n     * @dev sets the SLARegistry contract address and can only be called once\\n     */\\n    function setSLARegistry() external virtual;\\n\\n    /**\\n     * @dev creates a ChainLink request to get a new SLI value for the\\n     * given params. Can only be called by the SLARegistry contract or Chainlink Oracle.\\n     * @param _periodId 1. id of the period to be queried\\n     * @param _slaAddress 2. address of the receiver SLA\\n     * @param _slaAddress 2. if approval by owner or msg.sender\\n     */\\n\\n    function requestSLI(\\n        uint256 _periodId,\\n        address _slaAddress,\\n        bool _ownerApproval,\\n        address _callerAddress\\n    ) external virtual;\\n\\n    /**\\n     * @dev callback function for the Chainlink SLI request which stores\\n     * the SLI in the SLA contract\\n     * @param _requestId the ID of the ChainLink request\\n     * @param _chainlinkResponseUint256 response object from Chainlink Oracles\\n     */\\n    function fulfillSLI(bytes32 _requestId, uint256 _chainlinkResponseUint256)\\n        external\\n        virtual;\\n\\n    /**\\n     * @dev gets the messenger precision\\n     */\\n    function messengerPrecision() external view virtual returns (uint256);\\n\\n    /**\\n     * @dev gets the slaRegistryAddress\\n     */\\n    function slaRegistryAddress() external view virtual returns (address);\\n\\n    /**\\n     * @dev gets the chainlink oracle contract address\\n     */\\n    function oracle() external view virtual returns (address);\\n\\n    /**\\n     * @dev gets the chainlink job id\\n     */\\n    function jobId() external view virtual returns (bytes32);\\n\\n    /**\\n     * @dev gets the fee amount of LINK token\\n     */\\n    function fee() external view virtual returns (uint256);\\n\\n    /**\\n     * @dev returns the requestsCounter\\n     */\\n    function requestsCounter() external view virtual returns (uint256);\\n\\n    /**\\n     * @dev returns the fulfillsCounter\\n     */\\n    function fulfillsCounter() external view virtual returns (uint256);\\n\\n    function setChainlinkJobID(bytes32 _newJobId, uint256 _feeMultiplier)\\n        external\\n        virtual;\\n\\n    function retryRequest(address _slaAddress, uint256 _periodId)\\n        external\\n        virtual;\\n}\\n\",\"keccak256\":\"0xf83da5044c8dbf6e108d183c76db071d0b20e2b8d025b16e145fcfa6230a7416\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b50611256806100206000396000f3fe608060405234801561001057600080fd5b50600436106100935760003560e01c80639f69d7f8116100665780639f69d7f814610111578063db69a46214610119578063eabb8a731461012e578063ef4003db14610141578063f38815891461016157610093565b806304fec8d21461009857806324ec66b3146100c157806369b5354b146100e7578063822d332e146100fc575b600080fd5b6100ab6100a6366004610da9565b610169565b6040516100b891906111f3565b60405180910390f35b6100d46100cf366004610e1e565b610197565b6040516100b89796959493929190610eaf565b6100ef61027a565b6040516100b89190610f01565b61010f61010a366004610dd4565b610594565b005b6100ab6106f9565b6101216106ff565b6040516100b89190610e9b565b61010f61013c366004610d46565b61070e565b61015461014f366004610d07565b610b19565b6040516100b89190610fb5565b61010f610b2e565b6002602052816000526040600020818154811061018257fe5b90600052602060002001600091509150505481565b600081815481106101a457fe5b600091825260209182902060079091020180546001808301546002808501805460408051601f600019978416156101000297909701909216939093049485018890048802810188019092528382526001600160a01b03948516975091909316949091908301828280156102585780601f1061022d57610100808354040283529160200191610258565b820191906000526020600020905b81548152906001019060200180831161023b57829003601f168201915b5050505050908060030154908060040154908060050154908060060154905087565b600054606090819067ffffffffffffffff8111801561029857600080fd5b506040519080825280602002602001820160405280156102d257816020015b6102bf610b6b565b8152602001906001900390816102b75790505b50905060005b60005481101561058d5760008082815481106102f057fe5b906000526020600020906007020160010160009054906101000a90046001600160a01b031690506000816001600160a01b031663663c22696040518163ffffffff1660e01b815260040160206040518083038186803b15801561035257600080fd5b505afa158015610366573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061038a9190610e36565b90506000826001600160a01b031663a50c54256040518163ffffffff1660e01b815260040160206040518083038186803b1580156103c757600080fd5b505afa1580156103db573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906103ff9190610e36565b90506040518060e001604052806000868154811061041957fe5b600091825260208083206007909202909101546001600160a01b0316835281549201918790811061044657fe5b60009182526020808320600160079093020191909101546001600160a01b0316835281549201918790811061047757fe5b600091825260209182902060026007909202018101805460408051601f60001961010060018616150201909316949094049182018590048502840185019052808352919290919083018282801561050f5780601f106104e45761010080835404028352916020019161050f565b820191906000526020600020905b8154815290600101906020018083116104f257829003601f168201915b505050505081526020016000868154811061052657fe5b90600052602060002090600702016003015481526020018381526020018281526020016000868154811061055657fe5b90600052602060002090600702016006015481525085858151811061057757fe5b60209081029190910101525050506001016102d8565b5090505b90565b60008082815481106105a257fe5b9060005260206000209060070201905060008160010160009054906101000a90046001600160a01b03169050806001600160a01b0316638da5cb5b6040518163ffffffff1660e01b815260040160206040518083038186803b15801561060757600080fd5b505afa15801561061b573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061063f9190610d2a565b6001600160a01b0316336001600160a01b0316146106785760405162461bcd60e51b815260040161066f90611093565b60405180910390fd5b610686600283018686610bba565b5081546001600160a01b03191633178083556001830154600384015460068501546040516001600160a01b0393841694909316927f535c96772bc04bd66e3fc2bab24c455ef0b5bac77cc845b644482e89dce86112926106ea926002890192610fff565b60405180910390a35050505050565b60005490565b6003546001600160a01b031681565b6003546001600160a01b031633146107385760405162461bcd60e51b815260040161066f906110d4565b6001600160a01b03831660009081526001602052604090205460ff16156107715760405162461bcd60e51b815260040161066f90611128565b60008390506000816001600160a01b0316638da5cb5b6040518163ffffffff1660e01b815260040160206040518083038186803b1580156107b157600080fd5b505afa1580156107c5573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906107e99190610d2a565b9050856001600160a01b0316816001600160a01b03161461081c5760405162461bcd60e51b815260040161066f906111a7565b6000826001600160a01b031663c9b0cb226040518163ffffffff1660e01b815260040160206040518083038186803b15801561085757600080fd5b505afa15801561086b573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061088f9190610e36565b90506000836001600160a01b031663663c22696040518163ffffffff1660e01b815260040160206040518083038186803b1580156108cc57600080fd5b505afa1580156108e0573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906109049190610e36565b90506000846001600160a01b031663a50c54256040518163ffffffff1660e01b815260040160206040518083038186803b15801561094157600080fd5b505afa158015610955573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906109799190610e36565b6001600160a01b03808a166000818152600160208181526040808420805460ff1916841790558354958b1680855260028352818520805494850181558552828520909301869055805160e081018252928352828201949094528351601f8d0182900482028101820185528c8152959650939491939092830191908c908c908190840183828082843760009201829052509385525050506020808301899052604080840189905260608401889052608090930186905284546001818101875595835291819020845160079093020180546001600160a01b039384166001600160a01b031991821617825585830151968201805497909416961695909517909155908201518051929392610a919260028501920190610c38565b50606082015181600301556080820151816004015560a0820151816005015560c082015181600601555050886001600160a01b0316856001600160a01b03167f65ec88813f8015e2d5de403d956ea4d6c79b88ad66a42ada93a9b4619e10fd888a8a8886604051610b059493929190610fc0565b60405180910390a350505050505050505050565b60016020526000908152604090205460ff1681565b6003546001600160a01b031615610b575760405162461bcd60e51b815260040161066f9061115f565b600380546001600160a01b03191633179055565b6040518060e0016040528060006001600160a01b0316815260200160006001600160a01b0316815260200160608152602001600081526020016000815260200160008152602001600081525090565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f10610bfb5782800160ff19823516178555610c28565b82800160010185558215610c28579182015b82811115610c28578235825591602001919060010190610c0d565b50610c34929150610ca6565b5090565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f10610c7957805160ff1916838001178555610c28565b82800160010185558215610c28579182015b82811115610c28578251825591602001919060010190610c8b565b61059191905b80821115610c345760008155600101610cac565b60008083601f840112610cd1578182fd5b50813567ffffffffffffffff811115610ce8578182fd5b602083019150836020828501011115610d0057600080fd5b9250929050565b600060208284031215610d18578081fd5b8135610d2381611208565b9392505050565b600060208284031215610d3b578081fd5b8151610d2381611208565b60008060008060608587031215610d5b578283fd5b8435610d6681611208565b93506020850135610d7681611208565b9250604085013567ffffffffffffffff811115610d91578283fd5b610d9d87828801610cc0565b95989497509550505050565b60008060408385031215610dbb578182fd5b8235610dc681611208565b946020939093013593505050565b600080600060408486031215610de8578283fd5b833567ffffffffffffffff811115610dfe578384fd5b610e0a86828701610cc0565b909790965060209590950135949350505050565b600060208284031215610e2f578081fd5b5035919050565b600060208284031215610e47578081fd5b5051919050565b600081518084526020825b82811015610e74578481018201518682018301528101610e59565b82811115610e8457838284880101525b5080601f19601f8401168601019250505092915050565b6001600160a01b0391909116815260200190565b6001600160a01b0388811682528716602082015260e060408201819052600090610edb90830188610e4e565b90508560608301528460808301528360a08301528260c083015298975050505050505050565b60208082528251828201819052600091906040908185019080840286018301878501865b83811015610fa757888303603f19018552815180516001600160a01b0390811685528882015116888501528681015160e088860181905290610f6982870182610e4e565b606084810151908801526080808501519088015260a0808501519088015260c093840151939096019290925250509386019390860190600101610f25565b509098975050505050505050565b901515815260200190565b6000606082528460608301528486608084013780608086840101526080601f19601f870116830101905083602083015282604083015295945050505050565b6000606082016060835281865460018082166000811461102657600181146110445761107d565b60028304607f16855260ff198316608088015260a08701935061107d565b600283048086526110548b6111fc565b875b828110156110735781548a82016080015290840190602001611056565b8901608001955050505b5050506020840195909552505060400152919050565b60208082526021908201527f43616e206f6e6c79206265206d6f64696669656420627920746865206f776e656040820152603960f91b606082015260800190565b60208082526034908201527f53686f756c64206f6e6c792062652063616c6c6564207573696e67207468652060408201527314d310549959da5cdd1c9e4818dbdb9d1c9858dd60621b606082015260800190565b6020808252601c908201527f6d657373656e67657220616c7265616479207265676973746572656400000000604082015260600190565b60208082526028908201527f534c41526567697374727920616464726573732068617320616c7265616479206040820152671899595b881cd95d60c21b606082015260800190565b6020808252602c908201527f53686f756c64206f6e6c792062652063616c6c656420627920746865206d657360408201526b39b2b733b2b91037bbb732b960a11b606082015260800190565b90815260200190565b60009081526020902090565b6001600160a01b038116811461121d57600080fd5b5056fea264697066735822122023312866cb0ac4dd1596d494a539738d151f822791f5e9ec118395fcadd7c40464736f6c63430006060033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100935760003560e01c80639f69d7f8116100665780639f69d7f814610111578063db69a46214610119578063eabb8a731461012e578063ef4003db14610141578063f38815891461016157610093565b806304fec8d21461009857806324ec66b3146100c157806369b5354b146100e7578063822d332e146100fc575b600080fd5b6100ab6100a6366004610da9565b610169565b6040516100b891906111f3565b60405180910390f35b6100d46100cf366004610e1e565b610197565b6040516100b89796959493929190610eaf565b6100ef61027a565b6040516100b89190610f01565b61010f61010a366004610dd4565b610594565b005b6100ab6106f9565b6101216106ff565b6040516100b89190610e9b565b61010f61013c366004610d46565b61070e565b61015461014f366004610d07565b610b19565b6040516100b89190610fb5565b61010f610b2e565b6002602052816000526040600020818154811061018257fe5b90600052602060002001600091509150505481565b600081815481106101a457fe5b600091825260209182902060079091020180546001808301546002808501805460408051601f600019978416156101000297909701909216939093049485018890048802810188019092528382526001600160a01b03948516975091909316949091908301828280156102585780601f1061022d57610100808354040283529160200191610258565b820191906000526020600020905b81548152906001019060200180831161023b57829003601f168201915b5050505050908060030154908060040154908060050154908060060154905087565b600054606090819067ffffffffffffffff8111801561029857600080fd5b506040519080825280602002602001820160405280156102d257816020015b6102bf610b6b565b8152602001906001900390816102b75790505b50905060005b60005481101561058d5760008082815481106102f057fe5b906000526020600020906007020160010160009054906101000a90046001600160a01b031690506000816001600160a01b031663663c22696040518163ffffffff1660e01b815260040160206040518083038186803b15801561035257600080fd5b505afa158015610366573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061038a9190610e36565b90506000826001600160a01b031663a50c54256040518163ffffffff1660e01b815260040160206040518083038186803b1580156103c757600080fd5b505afa1580156103db573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906103ff9190610e36565b90506040518060e001604052806000868154811061041957fe5b600091825260208083206007909202909101546001600160a01b0316835281549201918790811061044657fe5b60009182526020808320600160079093020191909101546001600160a01b0316835281549201918790811061047757fe5b600091825260209182902060026007909202018101805460408051601f60001961010060018616150201909316949094049182018590048502840185019052808352919290919083018282801561050f5780601f106104e45761010080835404028352916020019161050f565b820191906000526020600020905b8154815290600101906020018083116104f257829003601f168201915b505050505081526020016000868154811061052657fe5b90600052602060002090600702016003015481526020018381526020018281526020016000868154811061055657fe5b90600052602060002090600702016006015481525085858151811061057757fe5b60209081029190910101525050506001016102d8565b5090505b90565b60008082815481106105a257fe5b9060005260206000209060070201905060008160010160009054906101000a90046001600160a01b03169050806001600160a01b0316638da5cb5b6040518163ffffffff1660e01b815260040160206040518083038186803b15801561060757600080fd5b505afa15801561061b573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061063f9190610d2a565b6001600160a01b0316336001600160a01b0316146106785760405162461bcd60e51b815260040161066f90611093565b60405180910390fd5b610686600283018686610bba565b5081546001600160a01b03191633178083556001830154600384015460068501546040516001600160a01b0393841694909316927f535c96772bc04bd66e3fc2bab24c455ef0b5bac77cc845b644482e89dce86112926106ea926002890192610fff565b60405180910390a35050505050565b60005490565b6003546001600160a01b031681565b6003546001600160a01b031633146107385760405162461bcd60e51b815260040161066f906110d4565b6001600160a01b03831660009081526001602052604090205460ff16156107715760405162461bcd60e51b815260040161066f90611128565b60008390506000816001600160a01b0316638da5cb5b6040518163ffffffff1660e01b815260040160206040518083038186803b1580156107b157600080fd5b505afa1580156107c5573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906107e99190610d2a565b9050856001600160a01b0316816001600160a01b03161461081c5760405162461bcd60e51b815260040161066f906111a7565b6000826001600160a01b031663c9b0cb226040518163ffffffff1660e01b815260040160206040518083038186803b15801561085757600080fd5b505afa15801561086b573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061088f9190610e36565b90506000836001600160a01b031663663c22696040518163ffffffff1660e01b815260040160206040518083038186803b1580156108cc57600080fd5b505afa1580156108e0573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906109049190610e36565b90506000846001600160a01b031663a50c54256040518163ffffffff1660e01b815260040160206040518083038186803b15801561094157600080fd5b505afa158015610955573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906109799190610e36565b6001600160a01b03808a166000818152600160208181526040808420805460ff1916841790558354958b1680855260028352818520805494850181558552828520909301869055805160e081018252928352828201949094528351601f8d0182900482028101820185528c8152959650939491939092830191908c908c908190840183828082843760009201829052509385525050506020808301899052604080840189905260608401889052608090930186905284546001818101875595835291819020845160079093020180546001600160a01b039384166001600160a01b031991821617825585830151968201805497909416961695909517909155908201518051929392610a919260028501920190610c38565b50606082015181600301556080820151816004015560a0820151816005015560c082015181600601555050886001600160a01b0316856001600160a01b03167f65ec88813f8015e2d5de403d956ea4d6c79b88ad66a42ada93a9b4619e10fd888a8a8886604051610b059493929190610fc0565b60405180910390a350505050505050505050565b60016020526000908152604090205460ff1681565b6003546001600160a01b031615610b575760405162461bcd60e51b815260040161066f9061115f565b600380546001600160a01b03191633179055565b6040518060e0016040528060006001600160a01b0316815260200160006001600160a01b0316815260200160608152602001600081526020016000815260200160008152602001600081525090565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f10610bfb5782800160ff19823516178555610c28565b82800160010185558215610c28579182015b82811115610c28578235825591602001919060010190610c0d565b50610c34929150610ca6565b5090565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f10610c7957805160ff1916838001178555610c28565b82800160010185558215610c28579182015b82811115610c28578251825591602001919060010190610c8b565b61059191905b80821115610c345760008155600101610cac565b60008083601f840112610cd1578182fd5b50813567ffffffffffffffff811115610ce8578182fd5b602083019150836020828501011115610d0057600080fd5b9250929050565b600060208284031215610d18578081fd5b8135610d2381611208565b9392505050565b600060208284031215610d3b578081fd5b8151610d2381611208565b60008060008060608587031215610d5b578283fd5b8435610d6681611208565b93506020850135610d7681611208565b9250604085013567ffffffffffffffff811115610d91578283fd5b610d9d87828801610cc0565b95989497509550505050565b60008060408385031215610dbb578182fd5b8235610dc681611208565b946020939093013593505050565b600080600060408486031215610de8578283fd5b833567ffffffffffffffff811115610dfe578384fd5b610e0a86828701610cc0565b909790965060209590950135949350505050565b600060208284031215610e2f578081fd5b5035919050565b600060208284031215610e47578081fd5b5051919050565b600081518084526020825b82811015610e74578481018201518682018301528101610e59565b82811115610e8457838284880101525b5080601f19601f8401168601019250505092915050565b6001600160a01b0391909116815260200190565b6001600160a01b0388811682528716602082015260e060408201819052600090610edb90830188610e4e565b90508560608301528460808301528360a08301528260c083015298975050505050505050565b60208082528251828201819052600091906040908185019080840286018301878501865b83811015610fa757888303603f19018552815180516001600160a01b0390811685528882015116888501528681015160e088860181905290610f6982870182610e4e565b606084810151908801526080808501519088015260a0808501519088015260c093840151939096019290925250509386019390860190600101610f25565b509098975050505050505050565b901515815260200190565b6000606082528460608301528486608084013780608086840101526080601f19601f870116830101905083602083015282604083015295945050505050565b6000606082016060835281865460018082166000811461102657600181146110445761107d565b60028304607f16855260ff198316608088015260a08701935061107d565b600283048086526110548b6111fc565b875b828110156110735781548a82016080015290840190602001611056565b8901608001955050505b5050506020840195909552505060400152919050565b60208082526021908201527f43616e206f6e6c79206265206d6f64696669656420627920746865206f776e656040820152603960f91b606082015260800190565b60208082526034908201527f53686f756c64206f6e6c792062652063616c6c6564207573696e67207468652060408201527314d310549959da5cdd1c9e4818dbdb9d1c9858dd60621b606082015260800190565b6020808252601c908201527f6d657373656e67657220616c7265616479207265676973746572656400000000604082015260600190565b60208082526028908201527f534c41526567697374727920616464726573732068617320616c7265616479206040820152671899595b881cd95d60c21b606082015260800190565b6020808252602c908201527f53686f756c64206f6e6c792062652063616c6c656420627920746865206d657360408201526b39b2b733b2b91037bbb732b960a11b606082015260800190565b90815260200190565b60009081526020902090565b6001600160a01b038116811461121d57600080fd5b5056fea264697066735822122023312866cb0ac4dd1596d494a539738d151f822791f5e9ec118395fcadd7c40464736f6c63430006060033",
+  "devdoc": {
+    "details": "MessengerRegistry is a contract to register openly distributed Messengers",
+    "methods": {
+      "modifyMessenger(string,uint256)": {
+        "details": "function to modifyMessenger a Messenger"
+      },
+      "registerMessenger(address,address,string)": {
+        "details": "function to register a new Messenger"
+      },
+      "setSLARegistry()": {
+        "details": "sets the SLARegistry contract address and can only be called once"
+      }
+    },
+    "title": "MessengerRegistry"
+  },
+  "userdoc": {
+    "methods": {}
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 7897,
+        "contract": "@stacktical/dsla-protocol/contracts/MessengerRegistry.sol:MessengerRegistry",
+        "label": "messengers",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_array(t_struct(Messenger)7894_storage)dyn_storage"
+      },
+      {
+        "astId": 7901,
+        "contract": "@stacktical/dsla-protocol/contracts/MessengerRegistry.sol:MessengerRegistry",
+        "label": "registeredMessengers",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_mapping(t_address,t_bool)"
+      },
+      {
+        "astId": 7906,
+        "contract": "@stacktical/dsla-protocol/contracts/MessengerRegistry.sol:MessengerRegistry",
+        "label": "ownerMessengers",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_mapping(t_address,t_array(t_uint256)dyn_storage)"
+      },
+      {
+        "astId": 7908,
+        "contract": "@stacktical/dsla-protocol/contracts/MessengerRegistry.sol:MessengerRegistry",
+        "label": "slaRegistry",
+        "offset": 0,
+        "slot": "3",
+        "type": "t_address"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_array(t_struct(Messenger)7894_storage)dyn_storage": {
+        "base": "t_struct(Messenger)7894_storage",
+        "encoding": "dynamic_array",
+        "label": "struct MessengerRegistry.Messenger[]",
+        "numberOfBytes": "32"
+      },
+      "t_array(t_uint256)dyn_storage": {
+        "base": "t_uint256",
+        "encoding": "dynamic_array",
+        "label": "uint256[]",
+        "numberOfBytes": "32"
+      },
+      "t_bool": {
+        "encoding": "inplace",
+        "label": "bool",
+        "numberOfBytes": "1"
+      },
+      "t_mapping(t_address,t_array(t_uint256)dyn_storage)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => uint256[])",
+        "numberOfBytes": "32",
+        "value": "t_array(t_uint256)dyn_storage"
+      },
+      "t_mapping(t_address,t_bool)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => bool)",
+        "numberOfBytes": "32",
+        "value": "t_bool"
+      },
+      "t_string_storage": {
+        "encoding": "bytes",
+        "label": "string",
+        "numberOfBytes": "32"
+      },
+      "t_struct(Messenger)7894_storage": {
+        "encoding": "inplace",
+        "label": "struct MessengerRegistry.Messenger",
+        "members": [
+          {
+            "astId": 7881,
+            "contract": "@stacktical/dsla-protocol/contracts/MessengerRegistry.sol:MessengerRegistry",
+            "label": "ownerAddress",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address"
+          },
+          {
+            "astId": 7883,
+            "contract": "@stacktical/dsla-protocol/contracts/MessengerRegistry.sol:MessengerRegistry",
+            "label": "messengerAddress",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_address"
+          },
+          {
+            "astId": 7885,
+            "contract": "@stacktical/dsla-protocol/contracts/MessengerRegistry.sol:MessengerRegistry",
+            "label": "specificationUrl",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_string_storage"
+          },
+          {
+            "astId": 7887,
+            "contract": "@stacktical/dsla-protocol/contracts/MessengerRegistry.sol:MessengerRegistry",
+            "label": "precision",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 7889,
+            "contract": "@stacktical/dsla-protocol/contracts/MessengerRegistry.sol:MessengerRegistry",
+            "label": "requestsCounter",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 7891,
+            "contract": "@stacktical/dsla-protocol/contracts/MessengerRegistry.sol:MessengerRegistry",
+            "label": "fulfillsCounter",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 7893,
+            "contract": "@stacktical/dsla-protocol/contracts/MessengerRegistry.sol:MessengerRegistry",
+            "label": "id",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_uint256"
+          }
+        ],
+        "numberOfBytes": "224"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}

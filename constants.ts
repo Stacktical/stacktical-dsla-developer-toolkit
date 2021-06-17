@@ -71,6 +71,8 @@ export enum NETWORKS {
   ETHEREUM = 'ethereum',
   POLYGON = 'polygon',
   HARMONY = 'harmony',
+  KOVAN = 'kovan',
+  FUJI = 'fuji',
 }
 
 export enum PERIOD_TYPE {

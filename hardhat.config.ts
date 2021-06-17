@@ -16,11 +16,7 @@ import 'babel-register';
 import '@typechain/hardhat';
 import './stacktical-plugin';
 import './type-extensions';
-import {
-  HardhatRuntimeEnvironment,
-  HardhatUserConfig,
-  Network,
-} from 'hardhat/types';
+import { HardhatUserConfig } from 'hardhat/types';
 
 // import 'tsconfig-paths/register';
 
@@ -56,6 +52,14 @@ const config: HardhatUserConfig = {
       },
       url: process.env.ETHEREUM_URI,
       stacktical: DTKConfigs[NETWORKS.ETHEREUM],
+    },
+    [NETWORKS.KOVAN]: {
+      chainId: 42,
+      accounts: {
+        mnemonic: process.env.TESTNET_MNEMONIC,
+      },
+      url: process.env.KOVAN_URI,
+      stacktical: DTKConfigs[NETWORKS.KOVAN],
     },
     [NETWORKS.POLYGON]: {
       chainId: 137,

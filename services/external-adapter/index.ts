@@ -18,6 +18,13 @@ type SLAData = {
   messengerAddress: string;
 };
 
+type RequestData = {
+  sla_address: string;
+  network_name: string;
+  sla_monitoring_start: number;
+  sla_monitoring_end: number;
+};
+
 async function getSLAData(address): Promise<SLAData> {
   const web3 = new Web3(web3Uri);
   const slaContract = new web3.eth.Contract(SLAABI, address);
@@ -30,7 +37,10 @@ async function getSLAData(address): Promise<SLAData> {
   return { ...data, periodType, networkName, messengerAddress };
 }
 
-async function getSLI(slaData: SLAData) {
+async function getSLI(requestData: RequestData) {
+  const slaData = await getSLAData(requestData.sla_address);
+  console.log('SLA Data:');
+  console.log(slaData);
   const web3 = new Web3(web3Uri);
   const messenger = new web3.eth.Contract(
     MessengerABI,
@@ -57,10 +67,7 @@ app.post('/', async (req, res) => {
     sla_monitoring_end: data.sla_monitoring_end,
   };
   web3Uri = process.env[`${requestData.network_name.toUpperCase()}_URI`];
-  const slaData = await getSLAData(requestData.sla_address);
-  console.log('SLA Data:');
-  console.log(slaData);
-  const result = await getSLI(slaData);
+  const result = await getSLI(requestData);
   console.log('result:', result);
   res.send({
     jobRunID: id,

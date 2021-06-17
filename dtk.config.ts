@@ -12,7 +12,7 @@ import {
 } from './constants';
 import { EthereumERC20__factory, PolygonERC20__factory } from './typechain';
 
-const develop: StackticalConfiguration = {
+export const develop: StackticalConfiguration = {
   chainlink: {
     isProduction: false,
     deleteOldJobs: true,
@@ -106,7 +106,76 @@ const develop: StackticalConfiguration = {
         },
       },
       {
-        sloValue: 10 * 10 ** 3,
+        sloValue: 15 * 10 ** 3,
+        sloType: SLO_TYPE.GreaterThan,
+        whitelisted: false,
+        periodType: PERIOD_TYPE.WEEKLY,
+        initialPeriodId: 10,
+        finalPeriodId: 30,
+        extraData: [SENetworkNamesBytes32[SENetworks.ONE]],
+        initialTokenSupply: '10000000',
+        initialTokenSupplyDivisor: 100,
+        deployerStakeTimes: 100,
+        notDeployerStakeTimes: 2,
+        leverage: 50,
+        serviceMetadata: {
+          serviceName: 'P-OPS',
+          serviceDescription: 'Official bDSLA Beta Partner.',
+          serviceImage:
+            'https://storage.googleapis.com/bdsla-incentivized-beta/validators/chainode.svg',
+          serviceURL: 'https://bdslaToken.network',
+          serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
+          serviceTicker: SENetworkNames[SENetworks.ONE],
+        },
+      },
+      {
+        sloValue: 20 * 10 ** 3,
+        sloType: SLO_TYPE.GreaterThan,
+        whitelisted: false,
+        periodType: PERIOD_TYPE.WEEKLY,
+        initialPeriodId: 10,
+        finalPeriodId: 30,
+        extraData: [SENetworkNamesBytes32[SENetworks.ONE]],
+        initialTokenSupply: '10000000',
+        initialTokenSupplyDivisor: 100,
+        deployerStakeTimes: 100,
+        notDeployerStakeTimes: 2,
+        leverage: 50,
+        serviceMetadata: {
+          serviceName: 'P-OPS',
+          serviceDescription: 'Official bDSLA Beta Partner.',
+          serviceImage:
+            'https://storage.googleapis.com/bdsla-incentivized-beta/validators/chainode.svg',
+          serviceURL: 'https://bdslaToken.network',
+          serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
+          serviceTicker: SENetworkNames[SENetworks.ONE],
+        },
+      },
+      {
+        sloValue: 25 * 10 ** 3,
+        sloType: SLO_TYPE.GreaterThan,
+        whitelisted: false,
+        periodType: PERIOD_TYPE.WEEKLY,
+        initialPeriodId: 10,
+        finalPeriodId: 30,
+        extraData: [SENetworkNamesBytes32[SENetworks.ONE]],
+        initialTokenSupply: '10000000',
+        initialTokenSupplyDivisor: 100,
+        deployerStakeTimes: 100,
+        notDeployerStakeTimes: 2,
+        leverage: 50,
+        serviceMetadata: {
+          serviceName: 'P-OPS',
+          serviceDescription: 'Official bDSLA Beta Partner.',
+          serviceImage:
+            'https://storage.googleapis.com/bdsla-incentivized-beta/validators/chainode.svg',
+          serviceURL: 'https://bdslaToken.network',
+          serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
+          serviceTicker: SENetworkNames[SENetworks.ONE],
+        },
+      },
+      {
+        sloValue: 40 * 10 ** 3,
         sloType: SLO_TYPE.GreaterThan,
         whitelisted: false,
         periodType: PERIOD_TYPE.WEEKLY,
@@ -132,7 +201,92 @@ const develop: StackticalConfiguration = {
   },
 };
 
-const ethereum: StackticalConfiguration = {
+export const kovan: StackticalConfiguration = {
+  chainlink: {
+    isProduction: true,
+    deleteOldJobs: true,
+    nodeFunds: '0.1',
+    gasLimit: undefined,
+    ethWsUrl: process.env.KOVAN_WS_URI,
+    ethHttpUrl: process.env.KOVAN_URI,
+    nodesConfiguration: [
+      {
+        name: 'berlin',
+        restApiUrl: process.env.KOVAN_CHAINLINK_NODE_BERLIN_URL,
+        restApiPort: process.env.KOVAN_CHAINLINK_NODE_BERLIN_PORT,
+        email: process.env.KOVAN_CHAINLINK_NODE_BERLIN_USER,
+        password: process.env.KOVAN_CHAINLINK_NODE_BERLIN_PASS,
+      },
+      {
+        name: 'newyork',
+        restApiUrl: process.env.KOVAN_CHAINLINK_NODE_NEWYORK_URL,
+        restApiPort: process.env.KOVAN_CHAINLINK_NODE_NEWYORK_PORT,
+        email: process.env.KOVAN_CHAINLINK_NODE_NEWYORK_USER,
+        password: process.env.KOVAN_CHAINLINK_NODE_NEWYORK_PASS,
+      },
+      {
+        name: 'paris',
+        restApiUrl: process.env.KOVAN_CHAINLINK_NODE_PARIS_URL,
+        restApiPort: process.env.KOVAN_CHAINLINK_NODE_PARIS_PORT,
+        email: process.env.KOVAN_CHAINLINK_NODE_PARIS_USER,
+        password: process.env.KOVAN_CHAINLINK_NODE_PARIS_PASS,
+      },
+    ],
+  },
+  addresses: {},
+  checkPastPeriods: false,
+  tokens: [
+    {
+      factory: EthereumERC20__factory,
+      name: TOKEN_NAMES.DSLA,
+    },
+    {
+      factory: EthereumERC20__factory,
+      name: TOKEN_NAMES.DAI,
+    },
+    {
+      factory: EthereumERC20__factory,
+      name: TOKEN_NAMES.USDC,
+    },
+    {
+      factory: EthereumERC20__factory,
+      name: TOKEN_NAMES.USDT,
+    },
+  ],
+  bootstrap: {
+    allowance: [
+      {
+        contract: CONTRACT_NAMES.SEMessenger,
+        token: CONTRACT_NAMES.LinkToken,
+        allowance: '10',
+      },
+    ],
+    registry: {
+      periods: [
+        {
+          periodType: PERIOD_TYPE.WEEKLY,
+          amountOfPeriods: 52,
+          expiredPeriods: 14,
+        },
+      ],
+      stake: {
+        stakingParameters: {},
+      },
+      messengers: [
+        {
+          contract: CONTRACT_NAMES.SEMessenger,
+          specificationPath: `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_EFFICIENCY}/${CONTRACT_NAMES.SEMessenger}.json`,
+          useCaseName: USE_CASES.STAKING_EFFICIENCY,
+          externalAdapterUrl:
+            'https://europe-west3-stacktical-0.cloudfunctions.net/staking-efficiency-indexer',
+        },
+      ],
+    },
+  },
+  scripts: develop.scripts,
+};
+
+export const ethereum: StackticalConfiguration = {
   checkPastPeriods: true,
   tokens: [
     {
@@ -232,7 +386,7 @@ const ethereum: StackticalConfiguration = {
   },
 };
 
-const harmonytestnet: StackticalConfiguration = {
+export const harmonytestnet: StackticalConfiguration = {
   checkPastPeriods: false,
   tokens: [
     {
@@ -288,7 +442,7 @@ const harmonytestnet: StackticalConfiguration = {
   },
 };
 
-const harmony: StackticalConfiguration = {
+export const harmony: StackticalConfiguration = {
   checkPastPeriods: true,
   tokens: [
     {
@@ -371,7 +525,7 @@ const harmony: StackticalConfiguration = {
   },
 };
 
-const polygon: StackticalConfiguration = {
+export const polygon: StackticalConfiguration = {
   checkPastPeriods: true,
   tokens: [
     {
@@ -479,7 +633,7 @@ const polygon: StackticalConfiguration = {
   },
 };
 
-const mumbai: StackticalConfiguration = {
+export const mumbai: StackticalConfiguration = {
   checkPastPeriods: false,
   tokens: [
     {
@@ -541,5 +695,3 @@ const mumbai: StackticalConfiguration = {
     deploy_sla: develop.scripts.deploy_sla,
   },
 };
-
-export { develop, ethereum, harmonytestnet, harmony, polygon, mumbai };
