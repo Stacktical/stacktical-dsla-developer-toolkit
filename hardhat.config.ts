@@ -21,24 +21,24 @@ const networks = [
   { name: NETWORKS.DEVELOP, enabled: true },
   { name: NETWORKS.KOVAN, enabled: false },
   { name: NETWORKS.MUMBAI, enabled: false },
-  { name: NETWORKS.HARMONYTESTNET, enabled: false },
+  { name: NETWORKS.HARMONYTESTNET, enabled: true },
   { name: NETWORKS.ETHEREUM, enabled: false },
   { name: NETWORKS.HARMONY, enabled: false },
   { name: NETWORKS.POLYGON, enabled: false },
 ];
 
 const config: HardhatUserConfig = {
-  networks: networks.reduce(
-    (r, network) => ({
-      ...r,
-      ...(network.enabled && {
+  networks: networks
+    .filter((network) => network.enabled)
+    .reduce(
+      (r, network) => ({
+        ...r,
         [network.name]: require(`./configurations/${network.name}.config`)[
           network.name
         ],
       }),
-    }),
-    {}
-  ),
+      {}
+    ),
   solidity: {
     compilers: [
       {

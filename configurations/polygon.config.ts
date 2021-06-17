@@ -7,7 +7,7 @@ import {
 } from '../constants';
 import { PolygonERC20__factory } from '../typechain';
 import { NetworkUserConfig } from 'hardhat/types';
-import { scripts } from './scripts.config';
+import { scripts } from '../scripts.config';
 
 import Joi from 'joi';
 

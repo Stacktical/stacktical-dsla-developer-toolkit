@@ -4,8 +4,8 @@ import {
   SENetworkNamesBytes32,
   SENetworks,
   SLO_TYPE,
-} from '../constants';
-import { ScriptsConfiguration } from '../types';
+} from './constants';
+import { ScriptsConfiguration } from './types';
 
 export const scripts: ScriptsConfiguration = {
   deploy_sla: [

@@ -7,7 +7,7 @@ import {
 } from '../constants';
 import { EthereumERC20__factory } from '../typechain';
 import { NetworkUserConfig } from 'hardhat/types';
-import { scripts } from './scripts.config';
+import { scripts } from '../scripts.config';
 
 import Joi from 'joi';
 
@@ -53,14 +53,14 @@ export const harmonytestnet: NetworkUserConfig = {
     chainlink: {
       isProduction: false,
       deleteOldJobs: true,
-      nodeFunds: '1',
+      nodeFunds: '0.01',
       gasLimit: undefined,
       ethWsUrl: process.env.HARMONYTESTNET_WS_URI,
       nodesConfiguration: [
         {
           name: 'node-1',
           restApiUrl: 'http://localhost',
-          restApiPort: '6688',
+          restApiPort: '6690',
           email: 'test@stacktical.com',
           password: 'PaSSword123456',
         },
