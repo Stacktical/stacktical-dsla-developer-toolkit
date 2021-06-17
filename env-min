@@ -1,0 +1,4 @@
+IPFS_URI=http://localhost:5001
+DEVELOP_MNEMONIC="myth like bonus scare over problem client lizard pioneer submit female collect"
+DEVELOP_URI="http://localhost:8545"
+DEVELOP_WS_URI="ws://localhost:8545"

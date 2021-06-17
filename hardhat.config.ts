@@ -17,45 +17,28 @@ import './stacktical-plugin';
 import './type-extensions';
 import { HardhatUserConfig } from 'hardhat/types';
 
-import { develop } from './configurations/develop.config';
-import { ethereum } from './configurations/ethereum.config';
-import { kovan } from './configurations/kovan.config';
-import { polygon } from './configurations/polygon.config';
-import { mumbai } from './configurations/mumbai.config';
-import { harmony } from './configurations/harmony.config';
-import { harmonytestnet } from './configurations/harmonytestnet.config';
-
 const networks = [
-  { name: NETWORKS.DEVELOP, config: develop, enabled: true },
-  { name: NETWORKS.KOVAN, config: kovan, enabled: false },
-  { name: NETWORKS.MUMBAI, config: mumbai, enabled: false },
-  { name: NETWORKS.HARMONYTESTNET, config: harmonytestnet, enabled: false },
-  { name: NETWORKS.ETHEREUM, config: ethereum, enabled: false },
-  { name: NETWORKS.HARMONY, config: harmony, enabled: false },
-  { name: NETWORKS.POLYGON, config: polygon, enabled: false },
+  { name: NETWORKS.DEVELOP, enabled: true },
+  { name: NETWORKS.KOVAN, enabled: false },
+  { name: NETWORKS.MUMBAI, enabled: false },
+  { name: NETWORKS.HARMONYTESTNET, enabled: false },
+  { name: NETWORKS.ETHEREUM, enabled: false },
+  { name: NETWORKS.HARMONY, enabled: false },
+  { name: NETWORKS.POLYGON, enabled: false },
 ];
 
 const config: HardhatUserConfig = {
-  networks: {
-    hardhat: {
-      chainId: 1337,
-      accounts: {
-        mnemonic: process.env.DEVELOP_MNEMONIC,
-      },
-      saveDeployments: true,
-      mining: {
-        auto: true,
-      },
-      stacktical: develop.stacktical,
-    },
-    ...networks.reduce(
-      (r, network) => ({
-        ...r,
-        ...(network.enabled && { [network.name]: network.config }),
+  networks: networks.reduce(
+    (r, network) => ({
+      ...r,
+      ...(network.enabled && {
+        [network.name]: require(`./configurations/${network.name}.config`)[
+          network.name
+        ],
       }),
-      {}
-    ),
-  },
+    }),
+    {}
+  ),
   solidity: {
     compilers: [
       {

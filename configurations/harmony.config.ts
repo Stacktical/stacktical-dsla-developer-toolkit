@@ -10,21 +10,19 @@ import { NetworkUserConfig } from 'hardhat/types';
 import { scripts } from './scripts.config';
 import Joi from 'joi';
 
-// const schema = Joi.object({
-//   DEVELOP_MNEMONIC: Joi.string().required(),
-//   DEVELOP_URI: Joi.string().required(),
-//   DEVELOP_WS_URI: Joi.string().required(),
-// }).unknown();
-//
-// const { error, value } = schema.validate(process.env);
-//
-// if (error) {
-//   throw new Error(
-//     `.env file validation error for network develop: ${error.message}`
-//   );
-// } else {
-//   process.env = value;
-// }
+const schema = Joi.object({
+  MAINNET_MNEMONIC: Joi.string().required(),
+  HARMONY_URI: Joi.string().required(),
+  HARMONY_WS_URI: Joi.string().required(),
+}).unknown();
+
+const { error, value } = schema.validate(process.env);
+
+if (error) {
+  throw new Error(`.env file validation error: ${error.message}`);
+} else {
+  process.env = value;
+}
 
 export const harmony: NetworkUserConfig = {
   chainId: 1666600000,

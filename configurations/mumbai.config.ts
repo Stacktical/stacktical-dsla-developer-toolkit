@@ -9,6 +9,22 @@ import { EthereumERC20__factory } from '../typechain';
 import { NetworkUserConfig } from 'hardhat/types';
 import { scripts } from './scripts.config';
 
+import Joi from 'joi';
+
+const schema = Joi.object({
+  TESTNET_MNEMONIC: Joi.string().required(),
+  MUMBAI_URI: Joi.string().required(),
+  MUMBAI_WS_URI: Joi.string().required(),
+}).unknown();
+
+const { error, value } = schema.validate(process.env);
+
+if (error) {
+  throw new Error(`.env file validation error: ${error.message}`);
+} else {
+  process.env = value;
+}
+
 export const mumbai: NetworkUserConfig = {
   chainId: 80001,
   gas: 19000000,

@@ -816,7 +816,7 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_MESSENGER_REGISTRY, undefined).setAction(
       if (!registeredMessenger) {
         const tx = await slaRegistry.registerMessenger(
           messengerArtifact.address,
-          `https://ipfs.dsla.network/ipfs/${seMessengerSpecIPFS}`
+          `${process.env.IPFS_URI}/ipfs/${seMessengerSpecIPFS}`
         );
         await tx.wait();
       } else {
