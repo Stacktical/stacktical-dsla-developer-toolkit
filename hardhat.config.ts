@@ -1,7 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
 require('dotenv').config({ path: './.env' });
-import * as DTKConfigs from './dtk.config';
 
 import './tasks';
 import './dtk-env-validation';
@@ -18,8 +17,25 @@ import './stacktical-plugin';
 import './type-extensions';
 import { HardhatUserConfig } from 'hardhat/types';
 
+import { develop } from './configurations/develop.config';
+import { ethereum } from './configurations/ethereum.config';
+import { kovan } from './configurations/kovan.config';
+import { polygon } from './configurations/polygon.config';
+import { mumbai } from './configurations/mumbai.config';
+import { harmony } from './configurations/harmony.config';
+import { harmonytestnet } from './configurations/harmonytestnet.config';
+
+const networks = [
+  { name: NETWORKS.DEVELOP, config: develop, enabled: true },
+  { name: NETWORKS.KOVAN, config: kovan, enabled: false },
+  { name: NETWORKS.MUMBAI, config: mumbai, enabled: false },
+  { name: NETWORKS.HARMONYTESTNET, config: harmonytestnet, enabled: false },
+  { name: NETWORKS.ETHEREUM, config: ethereum, enabled: false },
+  { name: NETWORKS.HARMONY, config: harmony, enabled: false },
+  { name: NETWORKS.POLYGON, config: polygon, enabled: false },
+];
+
 const config: HardhatUserConfig = {
-  // defaultNetwork: NETWORKS.DEVELOP,
   networks: {
     hardhat: {
       chainId: 1337,
@@ -30,74 +46,15 @@ const config: HardhatUserConfig = {
       mining: {
         auto: true,
       },
-      stacktical: DTKConfigs[NETWORKS.DEVELOP],
+      stacktical: develop.stacktical,
     },
-    [NETWORKS.DEVELOP]: {
-      chainId: 1337,
-      accounts: {
-        mnemonic: process.env.DEVELOP_MNEMONIC,
-      },
-      url: 'http://localhost:8545',
-      stacktical: DTKConfigs[NETWORKS.DEVELOP],
-    },
-    [NETWORKS.ETHEREUM]: {
-      chainId: 1,
-      accounts: {
-        mnemonic: process.env.MAINNET_MNEMONIC,
-      },
-      url: process.env.ETHEREUM_URI,
-      stacktical: DTKConfigs[NETWORKS.ETHEREUM],
-    },
-    [NETWORKS.KOVAN]: {
-      chainId: 42,
-      accounts: {
-        mnemonic: process.env.TESTNET_MNEMONIC,
-      },
-      url: process.env.KOVAN_URI,
-      stacktical: DTKConfigs[NETWORKS.KOVAN],
-    },
-    [NETWORKS.POLYGON]: {
-      chainId: 137,
-      gas: 19000000,
-      gasPrice: 1000000000,
-      accounts: {
-        mnemonic: process.env.MAINNET_MNEMONIC,
-      },
-      url: process.env.POLYGON_URI,
-      stacktical: DTKConfigs[NETWORKS.POLYGON],
-    },
-    [NETWORKS.MUMBAI]: {
-      chainId: 80001,
-      gas: 19000000,
-      gasPrice: 1000000000,
-      accounts: {
-        mnemonic: process.env.TESTNET_MNEMONIC,
-      },
-      url: process.env.MUMBAI_URI,
-      stacktical: DTKConfigs[NETWORKS.MUMBAI],
-    },
-    [NETWORKS.HARMONY]: {
-      chainId: 1666600000,
-      gas: 12000000,
-      gasPrice: 1000000000,
-      accounts: {
-        mnemonic: process.env.MAINNET_MNEMONIC,
-      },
-      url: process.env.HARMONY_URI,
-      saveDeployments: true,
-      stacktical: DTKConfigs[NETWORKS.HARMONY],
-    },
-    [NETWORKS.HARMONYTESTNET]: {
-      chainId: 1666700000,
-      gas: 12000000,
-      gasPrice: 1000000000,
-      accounts: {
-        mnemonic: process.env.TESTNET_MNEMONIC,
-      },
-      url: process.env.HARMONYTESTNET_URI,
-      saveDeployments: true,
-      stacktical: DTKConfigs[NETWORKS.HARMONYTESTNET],
-    },
+    ...networks.reduce(
+      (r, network) => ({
+        ...r,
+        ...(network.enabled && { [network.name]: network.config }),
+      }),
+      {}
+    ),
   },
   solidity: {
     compilers: [
@@ -154,7 +111,6 @@ const config: HardhatUserConfig = {
     },
   },
 };
-
 // extendEnvironment((env) => {
 //   networkFromConfig(env, env.network);
 // });
