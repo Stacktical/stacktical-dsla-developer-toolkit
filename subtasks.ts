@@ -1,7 +1,6 @@
 /* eslint-disable no-await-in-loop, import/no-extraneous-dependencies */
 import { DeploymentsExtension } from 'hardhat-deploy/dist/types';
 import { fromWei, numberToHex, toChecksumAddress, toWei } from 'web3-utils';
-
 import {
   deleteJob,
   getChainlinkAccounts,
@@ -9,7 +8,7 @@ import {
   getChainlinkJobs,
   postChainlinkBridge,
   postChainlinkJob,
-} from './chainlinkUtils';
+} from './chainlink-utils';
 import { subtask } from 'hardhat/config';
 import { ChainlinkNodeConfiguration } from './types';
 import {
@@ -42,6 +41,7 @@ import {
 } from './utils';
 import axios from 'axios';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
+import Joi from 'joi';
 
 const prettier = require('prettier');
 const appRoot = require('app-root-path');
@@ -1048,7 +1048,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
 
       const deployerStake = stakeAmountTimesWei(deployerStakeTimes);
       console.log(
-        `Starting process 3.1: deployer: ${fromWei(deployerStake)} bDSLA`
+        `Starting process 3.1: deployer: ${fromWei(deployerStake)} DSLA`
       );
       tx = await dslaToken.approve(sla.address, deployerStake);
       await tx.wait();
@@ -1063,7 +1063,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
         await tx.wait();
       }
       console.log(
-        `Starting process 3.2: notDeployer: ${fromWei(notDeployerStake)} bDSLA`
+        `Starting process 3.2: notDeployer: ${fromWei(notDeployerStake)} DSLA`
       );
       await dslaToken.connect(await ethers.getSigner(notDeployer));
       tx = await dslaToken.approve(sla.address, notDeployerStake);

@@ -4,8 +4,8 @@ require('dotenv').config({ path: './.env' });
 import * as DTKConfigs from './dtk.config';
 
 import './tasks';
+import './dtk-env-validation';
 import { NETWORKS } from './constants';
-import { extendEnvironment } from 'hardhat/config';
 import 'hardhat-deploy';
 import 'hardhat-deploy-ethers';
 import '@nomiclabs/hardhat-waffle';
@@ -16,13 +16,7 @@ import 'babel-register';
 import '@typechain/hardhat';
 import './stacktical-plugin';
 import './type-extensions';
-import {
-  HardhatRuntimeEnvironment,
-  HardhatUserConfig,
-  Network,
-} from 'hardhat/types';
-
-// import 'tsconfig-paths/register';
+import { HardhatUserConfig } from 'hardhat/types';
 
 const config: HardhatUserConfig = {
   // defaultNetwork: NETWORKS.DEVELOP,
@@ -35,9 +29,6 @@ const config: HardhatUserConfig = {
       saveDeployments: true,
       mining: {
         auto: true,
-      },
-      forking: {
-        url: process.env.POLYGON_URI,
       },
       stacktical: DTKConfigs[NETWORKS.DEVELOP],
     },
@@ -56,6 +47,14 @@ const config: HardhatUserConfig = {
       },
       url: process.env.ETHEREUM_URI,
       stacktical: DTKConfigs[NETWORKS.ETHEREUM],
+    },
+    [NETWORKS.KOVAN]: {
+      chainId: 42,
+      accounts: {
+        mnemonic: process.env.TESTNET_MNEMONIC,
+      },
+      url: process.env.KOVAN_URI,
+      stacktical: DTKConfigs[NETWORKS.KOVAN],
     },
     [NETWORKS.POLYGON]: {
       chainId: 137,
