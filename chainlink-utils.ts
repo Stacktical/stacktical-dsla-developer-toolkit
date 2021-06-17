@@ -94,8 +94,8 @@ const getChainlinkJobId = async (node: ChainlinkNodeConfiguration) => {
 
 const postChainlinkJob = async (
   node: ChainlinkNodeConfiguration,
-  jobName,
-  oracleContractAddress
+  jobName: any,
+  oracleContractAddress: string
 ) => {
   const sessionCookie = await getChainlinkSessionCookie(node);
   const { data } = await axios({
@@ -137,8 +137,8 @@ const postChainlinkJob = async (
 
 const postChainlinkBridge = async (
   node: ChainlinkNodeConfiguration,
-  useCaseName,
-  externalAdapterUrl
+  useCaseName: string,
+  externalAdapterUrl: string
 ) => {
   const sessionCookie = await getChainlinkSessionCookie(node);
   const { data } = await axios({
@@ -159,7 +159,7 @@ const postChainlinkBridge = async (
   return data;
 };
 
-const deleteJob = async (node, jobId) => {
+const deleteJob = async (node: ChainlinkNodeConfiguration, jobId: string) => {
   const sessionCookie = await getChainlinkSessionCookie(node);
   const { data } = await axios({
     method: 'delete',

@@ -9,7 +9,7 @@ import {
   getChainlinkJobs,
   postChainlinkBridge,
   postChainlinkJob,
-} from './chainlinkUtils';
+} from './chainlink-utils';
 import { subtask } from 'hardhat/config';
 import { ChainlinkNodeConfiguration } from './types';
 import {
@@ -42,6 +42,7 @@ import {
 } from './utils';
 import axios from 'axios';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
+import Joi from 'joi';
 
 const prettier = require('prettier');
 const appRoot = require('app-root-path');
@@ -337,6 +338,7 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
     console.log('Starting automated configuration for Chainlink nodes...');
     for (let node of stacktical.chainlink.nodesConfiguration) {
       printSeparator();
+      const schema = Joi.object({}).unknown();
       console.log('Preparing node: ' + node.name);
       for (let messenger of stacktical.bootstrap.registry.messengers) {
         console.log('Creating use case configuration: ' + messenger.contract);

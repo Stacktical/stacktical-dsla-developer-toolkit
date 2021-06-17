@@ -3,7 +3,7 @@ import {
   ChainlinkNodeConfiguration,
   PreCoordinatorConfiguration,
 } from './types';
-import { getChainlinkJobs } from './chainlinkUtils';
+import { getChainlinkJobs } from './chainlink-utils';
 import { toWei, padRight, toChecksumAddress } from 'web3-utils';
 
 const moment = require('moment');

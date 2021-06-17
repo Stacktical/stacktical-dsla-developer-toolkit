@@ -4,8 +4,8 @@ require('dotenv').config({ path: './.env' });
 import * as DTKConfigs from './dtk.config';
 
 import './tasks';
+import './dtk-env-validation';
 import { NETWORKS } from './constants';
-import { extendEnvironment } from 'hardhat/config';
 import 'hardhat-deploy';
 import 'hardhat-deploy-ethers';
 import '@nomiclabs/hardhat-waffle';
@@ -18,8 +18,6 @@ import './stacktical-plugin';
 import './type-extensions';
 import { HardhatUserConfig } from 'hardhat/types';
 
-// import 'tsconfig-paths/register';
-
 const config: HardhatUserConfig = {
   // defaultNetwork: NETWORKS.DEVELOP,
   networks: {
@@ -31,9 +29,6 @@ const config: HardhatUserConfig = {
       saveDeployments: true,
       mining: {
         auto: true,
-      },
-      forking: {
-        url: process.env.POLYGON_URI,
       },
       stacktical: DTKConfigs[NETWORKS.DEVELOP],
     },
