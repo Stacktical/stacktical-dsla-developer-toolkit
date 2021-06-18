@@ -33,7 +33,7 @@ const config: HardhatUserConfig = {
     .reduce(
       (r, network) => ({
         ...r,
-        [network.name]: require(`./configurations/${network.name}.config`)[
+        [network.name]: require(`./networks/${network.name}.config`)[
           network.name
         ],
       }),

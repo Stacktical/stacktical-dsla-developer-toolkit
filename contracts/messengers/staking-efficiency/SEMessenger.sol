@@ -4,7 +4,7 @@ pragma experimental ABIEncoderV2;
 
 import '@chainlink/contracts/src/v0.6/ChainlinkClient.sol';
 
-import '@stacktical/dsla-protocol/contracts/messenger/IMessenger.sol';
+import '@stacktical/dsla-protocol/contracts/interfaces/IMessenger.sol';
 import '@stacktical/dsla-protocol/contracts/SLA.sol';
 import '@stacktical/dsla-protocol/contracts/PeriodRegistry.sol';
 import '@stacktical/dsla-protocol/contracts/StringUtils.sol';

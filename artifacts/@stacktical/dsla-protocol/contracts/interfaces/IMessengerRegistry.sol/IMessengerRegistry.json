@@ -1,0 +1,60 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IMessengerRegistry",
+  "sourceName": "@stacktical/dsla-protocol/contracts/interfaces/IMessengerRegistry.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "callerAddress_",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "messengerAddress_",
+          "type": "address"
+        },
+        {
+          "internalType": "string",
+          "name": "specificationUrl_",
+          "type": "string"
+        }
+      ],
+      "name": "registerMessenger",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "messengerAddress_",
+          "type": "address"
+        }
+      ],
+      "name": "registeredMessengers",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "setSLARegistry",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
