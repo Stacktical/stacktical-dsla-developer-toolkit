@@ -36,7 +36,7 @@ export type DeployedContractAddresses = {
 };
 
 export type ChainlinkConfiguration = {
-  isProduction: boolean;
+  deployLocal: boolean;
   deleteOldJobs: boolean;
   nodeFunds: string;
   gasLimit?: string;
