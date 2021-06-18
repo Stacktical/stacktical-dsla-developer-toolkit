@@ -1,13 +1,7 @@
-import {
-  appRoot,
-  CONTRACT_NAMES,
-  PERIOD_TYPE,
-  TOKEN_NAMES,
-  USE_CASES,
-} from '../constants';
-import { EthereumERC20__factory } from '../typechain';
-import { NetworkUserConfig } from 'hardhat/types';
-import { scripts } from '../scripts.config';
+import {appRoot, CONTRACT_NAMES, PERIOD_TYPE, TOKEN_NAMES, USE_CASES,} from '../constants';
+import {EthereumERC20__factory} from '../typechain';
+import {NetworkUserConfig} from 'hardhat/types';
+import {scripts} from '../scripts.config';
 
 import Joi from 'joi';
 
@@ -35,6 +29,7 @@ export const harmonytestnet: NetworkUserConfig = {
   url: process.env.HARMONYTESTNET_URI,
   saveDeployments: true,
   stacktical: {
+    deployTokens: false,
     checkPastPeriods: false,
     tokens: [
       {
@@ -51,7 +46,7 @@ export const harmonytestnet: NetworkUserConfig = {
       },
     ],
     chainlink: {
-      isProduction: false,
+      deployLocal: false,
       deleteOldJobs: true,
       nodeFunds: '0.01',
       gasLimit: undefined,

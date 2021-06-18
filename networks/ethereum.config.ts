@@ -1,13 +1,7 @@
-import {
-  appRoot,
-  CONTRACT_NAMES,
-  PERIOD_TYPE,
-  TOKEN_NAMES,
-  USE_CASES,
-} from '../constants';
-import { EthereumERC20__factory } from '../typechain';
-import { NetworkUserConfig } from 'hardhat/types';
-import { scripts } from '../scripts.config';
+import {appRoot, CONTRACT_NAMES, PERIOD_TYPE, TOKEN_NAMES, USE_CASES,} from '../constants';
+import {EthereumERC20__factory} from '../typechain';
+import {NetworkUserConfig} from 'hardhat/types';
+import {scripts} from '../scripts.config';
 import Joi from 'joi';
 
 const schema = Joi.object({
@@ -32,6 +26,7 @@ export const ethereum: NetworkUserConfig = {
   url: process.env.ETHEREUM_URI,
   stacktical: {
     checkPastPeriods: true,
+    deployTokens: false,
     tokens: [
       {
         factory: EthereumERC20__factory,
@@ -50,7 +45,7 @@ export const ethereum: NetworkUserConfig = {
       },
     ],
     chainlink: {
-      isProduction: true,
+      deployLocal: true,
       deleteOldJobs: false,
       nodeFunds: '1',
       gasLimit: undefined,

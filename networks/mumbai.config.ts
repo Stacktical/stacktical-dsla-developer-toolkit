@@ -1,13 +1,7 @@
-import {
-  appRoot,
-  CONTRACT_NAMES,
-  PERIOD_TYPE,
-  TOKEN_NAMES,
-  USE_CASES,
-} from '../constants';
-import { EthereumERC20__factory } from '../typechain';
-import { NetworkUserConfig } from 'hardhat/types';
-import { scripts } from '../scripts.config';
+import {appRoot, CONTRACT_NAMES, PERIOD_TYPE, TOKEN_NAMES, USE_CASES,} from '../constants';
+import {EthereumERC20__factory} from '../typechain';
+import {NetworkUserConfig} from 'hardhat/types';
+import {scripts} from '../scripts.config';
 
 import Joi from 'joi';
 
@@ -34,6 +28,7 @@ export const mumbai: NetworkUserConfig = {
   },
   url: process.env.MUMBAI_URI,
   stacktical: {
+    deployTokens: true,
     checkPastPeriods: false,
     tokens: [
       {
@@ -54,7 +49,7 @@ export const mumbai: NetworkUserConfig = {
       },
     ],
     chainlink: {
-      isProduction: false,
+      deployLocal: false,
       deleteOldJobs: true,
       nodeFunds: '0.001',
       gasLimit: undefined,

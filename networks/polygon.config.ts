@@ -1,13 +1,7 @@
-import {
-  appRoot,
-  CONTRACT_NAMES,
-  PERIOD_TYPE,
-  TOKEN_NAMES,
-  USE_CASES,
-} from '../constants';
-import { PolygonERC20__factory } from '../typechain';
-import { NetworkUserConfig } from 'hardhat/types';
-import { scripts } from '../scripts.config';
+import {appRoot, CONTRACT_NAMES, PERIOD_TYPE, TOKEN_NAMES, USE_CASES,} from '../constants';
+import {PolygonERC20__factory} from '../typechain';
+import {NetworkUserConfig} from 'hardhat/types';
+import {scripts} from '../scripts.config';
 
 import Joi from 'joi';
 
@@ -34,6 +28,7 @@ export const polygon: NetworkUserConfig = {
   },
   url: process.env.POLYGON_URI,
   stacktical: {
+    deployTokens: false,
     checkPastPeriods: true,
     tokens: [
       {
@@ -53,7 +48,7 @@ export const polygon: NetworkUserConfig = {
       },
     ],
     chainlink: {
-      isProduction: true,
+      deployLocal: true,
       deleteOldJobs: true,
       nodeFunds: '1',
       gasLimit: undefined,

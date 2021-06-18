@@ -1,13 +1,7 @@
-import {
-  appRoot,
-  CONTRACT_NAMES,
-  PERIOD_TYPE,
-  TOKEN_NAMES,
-  USE_CASES,
-} from '../constants';
-import { EthereumERC20__factory } from '../typechain';
-import { NetworkUserConfig } from 'hardhat/types';
-import { scripts } from '../scripts.config';
+import {appRoot, CONTRACT_NAMES, PERIOD_TYPE, TOKEN_NAMES, USE_CASES,} from '../constants';
+import {EthereumERC20__factory} from '../typechain';
+import {NetworkUserConfig} from 'hardhat/types';
+import {scripts} from '../scripts.config';
 
 import Joi from 'joi';
 
@@ -32,8 +26,10 @@ export const kovan: NetworkUserConfig = {
   },
   url: process.env.KOVAN_URI,
   stacktical: {
+    deployTokens: true,
+    checkPastPeriods: false,
     chainlink: {
-      isProduction: true,
+      deployLocal: true,
       deleteOldJobs: true,
       nodeFunds: '0.1',
       gasLimit: undefined,
@@ -64,7 +60,6 @@ export const kovan: NetworkUserConfig = {
       ],
     },
     addresses: {},
-    checkPastPeriods: false,
     tokens: [
       {
         factory: EthereumERC20__factory,

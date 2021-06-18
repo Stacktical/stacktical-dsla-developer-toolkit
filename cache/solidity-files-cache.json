@@ -3394,57 +3394,6 @@
       "artifacts": [
         "MessengerRegistry"
       ]
-    },
-    "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/messengers/staking-efficiency-v2/SEMessengerV2.sol": {
-      "lastModificationDate": 1624032553100,
-      "contentHash": "4a089efdc00777f265d44f88417ce103",
-      "sourceName": "contracts/messengers/staking-efficiency-v2/SEMessengerV2.sol",
-      "solcConfig": {
-        "version": "0.6.6",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers",
-                "metadata",
-                "devdoc",
-                "userdoc",
-                "storageLayout",
-                "evm.gasEstimates"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          },
-          "metadata": {
-            "useLiteralContent": true
-          }
-        }
-      },
-      "imports": [
-        "@chainlink/contracts/src/v0.6/ChainlinkClient.sol",
-        "@stacktical/dsla-contracts/contracts/interfaces/IMessenger.sol",
-        "@stacktical/dsla-contracts/contracts/SLA.sol",
-        "@stacktical/dsla-contracts/contracts/PeriodRegistry.sol",
-        "@stacktical/dsla-contracts/contracts/StringUtils.sol",
-        "@stacktical/dsla-contracts/contracts/StakeRegistry.sol",
-        "@openzeppelin/contracts/token/ERC20/ERC20.sol",
-        "@openzeppelin/contracts/token/ERC20/SafeERC20.sol"
-      ],
-      "versionPragmas": [
-        "0.6.6"
-      ],
-      "artifacts": [
-        "SEMessengerV2"
-      ]
     }
   }
 }

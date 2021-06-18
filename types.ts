@@ -1,12 +1,8 @@
-import {
-  CONTRACT_NAMES,
-  PERIOD_TYPE,
-  SLO_TYPE,
-  TOKEN_NAMES,
-} from './constants';
+import {CONTRACT_NAMES, PERIOD_TYPE, SLO_TYPE, TOKEN_NAMES,} from './constants';
 
 export type StackticalConfiguration = {
   checkPastPeriods: boolean;
+  deployTokens: boolean;
   tokens: Array<TokenConfiguration>;
   chainlink: ChainlinkConfiguration;
   addresses: DeployedContractAddresses;

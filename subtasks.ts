@@ -1,49 +1,42 @@
 /* eslint-disable no-await-in-loop, import/no-extraneous-dependencies */
-import { DeploymentsExtension } from 'hardhat-deploy/dist/types';
-import { fromWei, numberToHex, toChecksumAddress, toWei } from 'web3-utils';
+import {DeploymentsExtension} from 'hardhat-deploy/dist/types';
+import {fromWei, numberToHex, toChecksumAddress, toWei} from 'web3-utils';
 import {
-  deleteJob,
-  getChainlinkAccounts,
-  getChainlinkBridges,
-  getChainlinkJobs,
-  postChainlinkBridge,
-  postChainlinkJob,
+    deleteJob,
+    getChainlinkAccounts,
+    getChainlinkBridges,
+    getChainlinkJobs,
+    postChainlinkBridge,
+    postChainlinkJob,
 } from './chainlink-utils';
-import { subtask, task } from 'hardhat/config';
-import { ChainlinkNodeConfiguration } from './types';
+import {subtask} from 'hardhat/config';
+import {ChainlinkNodeConfiguration} from './types';
 import {
-  ERC20__factory,
-  IMessenger,
-  IMessenger__factory,
-  MessengerRegistry__factory,
-  Oracle__factory,
-  Ownable__factory,
-  PeriodRegistry__factory,
-  PreCoordinator__factory,
-  SEMessenger__factory,
-  SLA,
-  SLA__factory,
-  SLARegistry__factory,
-  StakeRegistry__factory,
+    ERC20__factory,
+    IMessenger__factory,
+    MessengerRegistry__factory,
+    Oracle__factory,
+    Ownable__factory,
+    PeriodRegistry__factory,
+    PreCoordinator__factory,
+    SEMessenger__factory,
+    SLA,
+    SLA__factory,
+    SLARegistry__factory,
+    StakeRegistry__factory,
 } from './typechain';
 
+import {CONTRACT_NAMES, PERIOD_STATUS, PERIOD_TYPE, TOKEN_NAMES,} from './constants';
 import {
-  CONTRACT_NAMES,
-  PERIOD_STATUS,
-  PERIOD_TYPE,
-  TOKEN_NAMES,
-} from './constants';
-import {
-  bootstrapStrings,
-  generateBootstrapPeriods,
-  getIPFSHash,
-  getPreCoordinatorConfiguration,
-  printSeparator,
+    bootstrapStrings,
+    generateBootstrapPeriods,
+    getIPFSHash,
+    getPreCoordinatorConfiguration,
+    printSeparator,
 } from './utils';
 import axios from 'axios';
-import { HardhatRuntimeEnvironment } from 'hardhat/types';
-import Joi from 'joi';
-import { formatBytes32String } from 'ethers/lib/utils';
+import {HardhatRuntimeEnvironment} from 'hardhat/types';
+import {formatBytes32String} from 'ethers/lib/utils';
 
 const prettier = require('prettier');
 const appRoot = require('app-root-path');
@@ -895,7 +888,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
     );
     if (!registeredMessenger) {
       consola.info(
-        'Registering ' + messenger.contract + ' on the MessengerRegistry'
+        'Registering ' + messenger.contract + ' in MessengerRegistry'
       );
       const messengerSpec = JSON.parse(
         fs.readFileSync(messenger.specificationPath)
@@ -1471,7 +1464,7 @@ subtask(SUB_TASK_NAMES.FULFILL_SLI, undefined).setAction(
     //   );
     // if (!chainlinkNodeConfig)
     //   throw new Error('Chainlink node config not found');
-    // const externalAdapterUrl = stacktical.chainlink.isProduction
+    // const externalAdapterUrl = stacktical.chainlink.deployLocal
     //   ? chainlinkNodeConfig.externalAdapterUrl
     //   : 'http://localhost:' +
     //     chainlinkNodeConfig.externalAdapterUrl.split(':').slice(-1)[0];
@@ -1746,7 +1739,7 @@ subtask(SUB_TASK_NAMES.GET_REVERT_MESSAGE, undefined).setAction(
 //       );
 //     if (!chainlinkNodeConfig)
 //       throw new Error('Chainlink node config not found');
-//     const externalAdapterUrl = stacktical.chainlink.isProduction
+//     const externalAdapterUrl = stacktical.chainlink.deployLocal
 //       ? chainlinkNodeConfig.externalAdapterUrl
 //       : 'http://localhost:' +
 //         chainlinkNodeConfig.externalAdapterUrl.split(':').slice(-1)[0];
@@ -1894,7 +1887,7 @@ subtask(SUB_TASK_NAMES.GET_REVERT_MESSAGE, undefined).setAction(
 //       );
 //     if (!chainlinkNodeConfig)
 //       throw new Error('Chainlink node config not found');
-//     const externalAdapterUrl = stacktical.chainlink.isProduction
+//     const externalAdapterUrl = stacktical.chainlink.deployLocal
 //       ? chainlinkNodeConfig.externalAdapterUrl
 //       : 'http://localhost:' +
 //         chainlinkNodeConfig.externalAdapterUrl.split(':').slice(-1)[0];

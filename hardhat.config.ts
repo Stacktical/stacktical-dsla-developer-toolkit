@@ -4,7 +4,7 @@ require('dotenv').config({ path: './.env' });
 
 import './tasks';
 import './dtk-env-validation';
-import { NETWORKS } from './constants';
+import {NETWORKS} from './constants';
 import 'hardhat-deploy';
 import 'hardhat-deploy-ethers';
 import '@nomiclabs/hardhat-waffle';
@@ -14,13 +14,13 @@ import '@nomiclabs/hardhat-etherscan';
 import 'babel-polyfill';
 import 'babel-register';
 import '@typechain/hardhat';
-import './stacktical-plugin';
+import './stacktical.validation';
 import './type-extensions';
-import { HardhatUserConfig } from 'hardhat/types';
+import {HardhatUserConfig} from 'hardhat/types';
 
 const networks = [
   { name: NETWORKS.DEVELOP, enabled: true },
-  { name: NETWORKS.KOVAN, enabled: false },
+  { name: NETWORKS.KOVAN, enabled: true },
   { name: NETWORKS.MUMBAI, enabled: false },
   { name: NETWORKS.HARMONYTESTNET, enabled: false },
   { name: NETWORKS.ETHEREUM, enabled: false },
