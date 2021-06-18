@@ -43,6 +43,17 @@ extendConfig(
             );
           }
         }
+        if (
+          new Set(
+            stackticalConfig.messengers.map(
+              (messenger) => messenger.useCaseName
+            )
+          ).size !== stackticalConfig.messengers.length
+        ) {
+          throw new Error(
+            'Messenger use case name repeated for network ' + network
+          );
+        }
         config.networks[network]['stacktical'] =
           userConfig.networks[network]['stacktical'];
       }
