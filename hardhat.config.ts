@@ -10,6 +10,7 @@ import 'hardhat-deploy-ethers';
 import '@nomiclabs/hardhat-waffle';
 import '@nomiclabs/hardhat-ethers';
 import '@nomiclabs/hardhat-web3';
+import '@nomiclabs/hardhat-etherscan';
 import 'babel-polyfill';
 import 'babel-register';
 import '@typechain/hardhat';
@@ -19,7 +20,7 @@ import { HardhatUserConfig } from 'hardhat/types';
 
 const networks = [
   { name: NETWORKS.DEVELOP, enabled: true },
-  { name: NETWORKS.KOVAN, enabled: false },
+  { name: NETWORKS.KOVAN, enabled: true },
   { name: NETWORKS.MUMBAI, enabled: false },
   { name: NETWORKS.HARMONYTESTNET, enabled: true },
   { name: NETWORKS.ETHEREUM, enabled: false },
@@ -27,8 +28,8 @@ const networks = [
   { name: NETWORKS.POLYGON, enabled: false },
 ];
 
-const config: HardhatUserConfig = {
-  networks: networks
+const getEnabledNetworks = () =>
+  networks
     .filter((network) => network.enabled)
     .reduce(
       (r, network) => ({
@@ -38,7 +39,10 @@ const config: HardhatUserConfig = {
         ],
       }),
       {}
-    ),
+    );
+
+const config: HardhatUserConfig = {
+  networks: getEnabledNetworks(),
   solidity: {
     compilers: [
       {
@@ -92,6 +96,9 @@ const config: HardhatUserConfig = {
     notDeployer: {
       default: 1,
     },
+  },
+  etherscan: {
+    apiKey: process.env.ETHERSCAN_API_KEY,
   },
 };
 // extendEnvironment((env) => {

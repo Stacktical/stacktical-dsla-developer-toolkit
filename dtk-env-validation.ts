@@ -3,6 +3,7 @@ require('dotenv').config();
 
 const schema = Joi.object({
   IPFS_URI: Joi.string().required(),
+  // ETHERSCAN_API_KEY: Joi.string().default(''),
 }).unknown();
 
 const { error, value } = schema.validate(process.env);

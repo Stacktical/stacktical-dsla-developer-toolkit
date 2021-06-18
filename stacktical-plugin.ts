@@ -8,7 +8,7 @@ extendConfig(
   (config: HardhatConfig, userConfig: Readonly<HardhatUserConfig>) => {
     Object.keys(userConfig.networks).forEach((network) => {
       const networkDefinition = userConfig.networks[network]['stacktical'];
-      // Check if sensitive data (private data) is parsed correctly before executing
+      // Check if potentially env parameters fields (private data such as credentials) is parsed correctly before executing
       if (networkDefinition) {
         const schema = Joi.object({
           chainlink: Joi.object({
