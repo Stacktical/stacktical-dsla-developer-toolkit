@@ -9,7 +9,7 @@
   },
   "include": [
     "hardhat.config.ts",
-    "./scripts",
+    "./networks",
     "./deploy",
     "./test",
     "typechain/**/*"
