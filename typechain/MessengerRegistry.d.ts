@@ -23,13 +23,10 @@ interface MessengerRegistryInterface extends ethers.utils.Interface {
   functions: {
     "getMessengers()": FunctionFragment;
     "getMessengersLength()": FunctionFragment;
-    "messengers(uint256)": FunctionFragment;
     "modifyMessenger(string,uint256)": FunctionFragment;
-    "ownerMessengers(address,uint256)": FunctionFragment;
     "registerMessenger(address,address,string)": FunctionFragment;
     "registeredMessengers(address)": FunctionFragment;
     "setSLARegistry()": FunctionFragment;
-    "slaRegistry()": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -41,15 +38,7 @@ interface MessengerRegistryInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "messengers",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "modifyMessenger",
-    values: [string, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "ownerMessengers",
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
@@ -64,10 +53,6 @@ interface MessengerRegistryInterface extends ethers.utils.Interface {
     functionFragment: "setSLARegistry",
     values?: undefined
   ): string;
-  encodeFunctionData(
-    functionFragment: "slaRegistry",
-    values?: undefined
-  ): string;
 
   decodeFunctionResult(
     functionFragment: "getMessengers",
@@ -77,13 +62,8 @@ interface MessengerRegistryInterface extends ethers.utils.Interface {
     functionFragment: "getMessengersLength",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "messengers", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "modifyMessenger",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "ownerMessengers",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -96,10 +76,6 @@ interface MessengerRegistryInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "setSLARegistry",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "slaRegistry",
     data: BytesLike
   ): Result;
 
@@ -182,50 +158,27 @@ export class MessengerRegistry extends BaseContract {
 
     getMessengersLength(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    messengers(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [string, string, string, BigNumber, BigNumber, BigNumber, BigNumber] & {
-        ownerAddress: string;
-        messengerAddress: string;
-        specificationUrl: string;
-        precision: BigNumber;
-        requestsCounter: BigNumber;
-        fulfillsCounter: BigNumber;
-        id: BigNumber;
-      }
-    >;
-
     modifyMessenger(
       _specificationUrl: string,
       _messengerId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    ownerMessengers(
-      arg0: string,
-      arg1: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
     registerMessenger(
-      _callerAddress: string,
-      _messengerAddress: string,
-      _specificationUrl: string,
+      callerAddress_: string,
+      messengerAddress_: string,
+      specificationUrl_: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     registeredMessengers(
-      arg0: string,
+      messengerAddress_: string,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
     setSLARegistry(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-
-    slaRegistry(overrides?: CallOverrides): Promise<[string]>;
   };
 
   getMessengers(
@@ -244,50 +197,27 @@ export class MessengerRegistry extends BaseContract {
 
   getMessengersLength(overrides?: CallOverrides): Promise<BigNumber>;
 
-  messengers(
-    arg0: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<
-    [string, string, string, BigNumber, BigNumber, BigNumber, BigNumber] & {
-      ownerAddress: string;
-      messengerAddress: string;
-      specificationUrl: string;
-      precision: BigNumber;
-      requestsCounter: BigNumber;
-      fulfillsCounter: BigNumber;
-      id: BigNumber;
-    }
-  >;
-
   modifyMessenger(
     _specificationUrl: string,
     _messengerId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  ownerMessengers(
-    arg0: string,
-    arg1: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
   registerMessenger(
-    _callerAddress: string,
-    _messengerAddress: string,
-    _specificationUrl: string,
+    callerAddress_: string,
+    messengerAddress_: string,
+    specificationUrl_: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   registeredMessengers(
-    arg0: string,
+    messengerAddress_: string,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
   setSLARegistry(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
-
-  slaRegistry(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
     getMessengers(
@@ -306,48 +236,25 @@ export class MessengerRegistry extends BaseContract {
 
     getMessengersLength(overrides?: CallOverrides): Promise<BigNumber>;
 
-    messengers(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [string, string, string, BigNumber, BigNumber, BigNumber, BigNumber] & {
-        ownerAddress: string;
-        messengerAddress: string;
-        specificationUrl: string;
-        precision: BigNumber;
-        requestsCounter: BigNumber;
-        fulfillsCounter: BigNumber;
-        id: BigNumber;
-      }
-    >;
-
     modifyMessenger(
       _specificationUrl: string,
       _messengerId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    ownerMessengers(
-      arg0: string,
-      arg1: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     registerMessenger(
-      _callerAddress: string,
-      _messengerAddress: string,
-      _specificationUrl: string,
+      callerAddress_: string,
+      messengerAddress_: string,
+      specificationUrl_: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
     registeredMessengers(
-      arg0: string,
+      messengerAddress_: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
     setSLARegistry(overrides?: CallOverrides): Promise<void>;
-
-    slaRegistry(overrides?: CallOverrides): Promise<string>;
   };
 
   filters: {
@@ -391,40 +298,27 @@ export class MessengerRegistry extends BaseContract {
 
     getMessengersLength(overrides?: CallOverrides): Promise<BigNumber>;
 
-    messengers(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     modifyMessenger(
       _specificationUrl: string,
       _messengerId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    ownerMessengers(
-      arg0: string,
-      arg1: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     registerMessenger(
-      _callerAddress: string,
-      _messengerAddress: string,
-      _specificationUrl: string,
+      callerAddress_: string,
+      messengerAddress_: string,
+      specificationUrl_: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     registeredMessengers(
-      arg0: string,
+      messengerAddress_: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     setSLARegistry(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
-
-    slaRegistry(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -434,39 +328,26 @@ export class MessengerRegistry extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    messengers(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     modifyMessenger(
       _specificationUrl: string,
       _messengerId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    ownerMessengers(
-      arg0: string,
-      arg1: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     registerMessenger(
-      _callerAddress: string,
-      _messengerAddress: string,
-      _specificationUrl: string,
+      callerAddress_: string,
+      messengerAddress_: string,
+      specificationUrl_: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     registeredMessengers(
-      arg0: string,
+      messengerAddress_: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     setSLARegistry(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
-
-    slaRegistry(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }

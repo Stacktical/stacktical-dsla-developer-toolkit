@@ -1092,6 +1092,10 @@ subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
     const slaAddress = taskArgs.address
       ? ethers.utils.getAddress(taskArgs.address)
       : (await slaRegistry.userSLAs(deployer)).slice(-1)[0];
+
+    if (!slaAddress) {
+      throw new Error('No SLAs deployed to the network yet!');
+    }
     const sla = await SLA__factory.connect(slaAddress, signer);
 
     const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
