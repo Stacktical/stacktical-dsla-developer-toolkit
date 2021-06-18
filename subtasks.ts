@@ -13,6 +13,8 @@ import { subtask } from 'hardhat/config';
 import { ChainlinkNodeConfiguration } from './types';
 import {
   ERC20__factory,
+  IERC20,
+  IERC20__factory,
   IMessenger__factory,
   MessengerRegistry__factory,
   Oracle__factory,
@@ -41,7 +43,7 @@ import {
 } from './utils';
 import axios from 'axios';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
-import Joi from 'joi';
+import { formatBytes32String } from 'ethers/lib/utils';
 
 const prettier = require('prettier');
 const appRoot = require('app-root-path');
@@ -50,6 +52,7 @@ const path = require('path');
 const yaml = require('js-yaml');
 const compose = require('docker-compose');
 const moment = require('moment');
+const consola = require('consola');
 
 export enum SUB_TASK_NAMES {
   PREPARE_CHAINLINK_NODES = 'PREPARE_CHAINLINK_NODES',
@@ -63,7 +66,7 @@ export enum SUB_TASK_NAMES {
   STOP_LOCAL_GRAPH_NODE = 'STOP_LOCAL_GRAPH_NODE',
   START_LOCAL_GRAPH_NODE = 'START_LOCAL_GRAPH_NODE',
   INITIALIZE_DEFAULT_ADDRESSES = 'INITIALIZE_DEFAULT_ADDRESSES',
-  SAVE_CONTRACTS_ADDRESSES = 'SAVE_CONTRACTS_ADDRESSES',
+  EXPORT_CONTRACTS_ADDRESSES = 'EXPORT_CONTRACTS_ADDRESSES',
   EXPORT_ABIS = 'EXPORT_ABIS',
   DEPLOY_SLA = 'DEPLOY_SLA',
   BOOTSTRAP_MESSENGER_REGISTRY = 'BOOTSTRAP_MESSENGER_REGISTRY',
@@ -81,6 +84,7 @@ export enum SUB_TASK_NAMES {
   REGISTRIES_CONFIGURATION = 'REGISTRIES_CONFIGURATION',
   GET_VALID_SLAS = 'GET_VALID_SLAS',
   GET_REVERT_MESSAGE = 'GET_REVERT_MESSAGE',
+  DEPLOY_MESSENGER = 'DEPLOY_MESSENGER',
 }
 
 subtask(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES, undefined).setAction(
@@ -338,7 +342,7 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
     for (let node of stacktical.chainlink.nodesConfiguration) {
       printSeparator();
       console.log('Preparing node: ' + node.name);
-      for (let messenger of stacktical.bootstrap.registry.messengers) {
+      for (let messenger of stacktical.messengers) {
         console.log('Creating use case configuration: ' + messenger.contract);
         let bridge = await updatedBridge(
           node,
@@ -467,43 +471,62 @@ subtask(
   }
 });
 
-subtask(SUB_TASK_NAMES.SAVE_CONTRACTS_ADDRESSES, undefined).setAction(
+subtask(SUB_TASK_NAMES.EXPORT_CONTRACTS_ADDRESSES, undefined).setAction(
   async (_, hre: HardhatRuntimeEnvironment) => {
     const { network, deployments } = hre;
     const { get } = deployments;
+    const { stacktical } = network.config;
+
+    consola.info('Starting export contracts addresses process');
+
     const getLines = (networkName) => [
       `const ${networkName} = `,
       `\n\nexport default ${networkName}`,
     ];
     const [startingLine, finalLine] = getLines(network.name);
-    const DSLAToken = await get(CONTRACT_NAMES.DSLA);
-    const DAIToken = await get(CONTRACT_NAMES.DAI);
-    const USDCToken = await get(CONTRACT_NAMES.USDC);
     const SLORegistry = await get(CONTRACT_NAMES.SLORegistry);
     const SLARegistry = await get(CONTRACT_NAMES.SLARegistry);
     const MessengerRegistry = await get(CONTRACT_NAMES.MessengerRegistry);
     const PeriodRegistry = await get(CONTRACT_NAMES.PeriodRegistry);
     const StakeRegistry = await get(CONTRACT_NAMES.StakeRegistry);
-    const SEMessenger = await get(CONTRACT_NAMES.SEMessenger);
     const Details = await get(CONTRACT_NAMES.Details);
     const PreCoordinator = await get(CONTRACT_NAMES.PreCoordinator);
     const StringUtils = await get(CONTRACT_NAMES.StringUtils);
 
     const addresses = {
-      DSLAToken: DSLAToken.address,
-      DAIToken: DAIToken.address,
-      USDCToken: USDCToken.address,
       SLORegistry: SLORegistry.address,
       SLARegistry: SLARegistry.address,
       MessengerRegistry: MessengerRegistry.address,
       PeriodRegistry: PeriodRegistry.address,
       StakeRegistry: StakeRegistry.address,
-      SEMessenger: SEMessenger.address,
       Details: Details.address,
       PreCoordinator: PreCoordinator.address,
       StringUtils: StringUtils.address,
+      ...stacktical.tokens.reduce(
+        (r, token) => ({
+          ...r,
+          [token.name + 'Token']: require(appRoot.path +
+            '/deployments/' +
+            network.name +
+            '/' +
+            token.name).address,
+        }),
+        {}
+      ),
+      ...stacktical.messengers.reduce(
+        (r, messenger) => ({
+          ...r,
+          [messenger.contract]: require(appRoot.path +
+            '/deployments/' +
+            network.name +
+            '/' +
+            messenger.contract).address,
+        }),
+        {}
+      ),
     };
-
+    consola.info('Resulting addresses');
+    console.log(addresses);
     const base_path = `${appRoot}/exported-data/networks`;
     const prettifiedAddresses = prettier.format(
       startingLine + JSON.stringify(addresses) + finalLine,
@@ -546,6 +569,7 @@ subtask(SUB_TASK_NAMES.SAVE_CONTRACTS_ADDRESSES, undefined).setAction(
       path.resolve(__dirname, `${base_path}/index.ts`),
       prettifiedIndex
     );
+    consola.success('Contract addresses exported correctly');
   }
 );
 
@@ -553,6 +577,8 @@ subtask(SUB_TASK_NAMES.EXPORT_ABIS, undefined).setAction(
   async (_, hre: HardhatRuntimeEnvironment) => {
     const { deployments } = hre;
     const { getArtifact } = deployments;
+    consola.info('Starting export ABIs process');
+
     const SLA = await getArtifact(CONTRACT_NAMES.SLA);
     const SLARegistry = await getArtifact(CONTRACT_NAMES.SLARegistry);
     const SLORegistry = await getArtifact(CONTRACT_NAMES.SLORegistry);
@@ -562,7 +588,6 @@ subtask(SUB_TASK_NAMES.EXPORT_ABIS, undefined).setAction(
       CONTRACT_NAMES.MessengerRegistry
     );
     const Details = await getArtifact(CONTRACT_NAMES.Details);
-    const ERC20 = await getArtifact(CONTRACT_NAMES.ERC20);
 
     const files = {
       SLA: {
@@ -600,10 +625,10 @@ subtask(SUB_TASK_NAMES.EXPORT_ABIS, undefined).setAction(
         tsFileName: 'DetailsABI.ts',
         abi: Details.abi,
       },
-      bDSLA: {
+      ERC20: {
         constName: 'export const erc20ABI: AbiItem[] =',
         tsFileName: 'erc20ABI.ts',
-        abi: ERC20.abi,
+        abi: IERC20__factory.abi,
       },
     };
 
@@ -625,6 +650,7 @@ subtask(SUB_TASK_NAMES.EXPORT_ABIS, undefined).setAction(
         content
       );
     }
+    consola.success('ABIs exported correctly');
   }
 );
 
@@ -774,11 +800,8 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_MESSENGER_REGISTRY, undefined).setAction(
     const signer = await ethers.getSigner(deployer);
     const { get } = deployments;
     const {
-      stacktical: { bootstrap },
+      stacktical: { messengers },
     } = hre.network.config;
-    const {
-      registry: { messengers },
-    } = bootstrap;
     const [startBootstrap, finishBootstrap] = bootstrapStrings(
       CONTRACT_NAMES.MessengerRegistry
     );
@@ -821,11 +844,114 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_MESSENGER_REGISTRY, undefined).setAction(
         await tx.wait();
       } else {
         console.log(
-          messenger.contract + ' already registered on the SLARegistry'
+          messenger.contract + ' already registered on MessengerRegistry'
         );
       }
     }
     console.log(finishBootstrap);
+  }
+);
+
+subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    const { deployments, ethers, getNamedAccounts, network } = hre;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    const { get, deploy } = deployments;
+    const { messengers } = network.config.stacktical;
+    printSeparator();
+    consola.start('Starting automated jobs to register messengers');
+    const slaRegistry = await SLARegistry__factory.connect(
+      (
+        await get(CONTRACT_NAMES.SLARegistry)
+      ).address,
+      signer
+    );
+
+    const messengerRegistry = await MessengerRegistry__factory.connect(
+      (
+        await get(CONTRACT_NAMES.MessengerRegistry)
+      ).address,
+      signer
+    );
+
+    const messenger = messengers[taskArgs.id];
+
+    consola.info('Deploying ' + messenger.contract + ' to ' + hre.network.name);
+    const preCoordinator = await get(CONTRACT_NAMES.PreCoordinator);
+    const stakeRegistry = await get(CONTRACT_NAMES.StakeRegistry);
+    const stringUtils = await get(CONTRACT_NAMES.StringUtils);
+    const periodRegistry = await get(CONTRACT_NAMES.PeriodRegistry);
+    const linkToken = await get(CONTRACT_NAMES.LinkToken);
+    const feeMultiplier =
+      network.config.stacktical.chainlink.nodesConfiguration.length;
+    const deployedMessenger = await deploy(messenger.contract, {
+      from: deployer,
+      log: true,
+      args: [
+        preCoordinator.address,
+        linkToken.address,
+        feeMultiplier,
+        periodRegistry.address,
+        stakeRegistry.address,
+        formatBytes32String(network.name),
+      ],
+      libraries: {
+        StringUtils: stringUtils.address,
+      },
+    });
+    if (deployedMessenger.newlyDeployed) {
+      consola.success(
+        messenger.contract +
+          ' successfully deployed at ' +
+          deployedMessenger.address
+      );
+    } else {
+      consola.warn(
+        messenger.contract + ' already deployed at ' + deployedMessenger.address
+      );
+    }
+
+    const registeredMessenger = await messengerRegistry.registeredMessengers(
+      deployedMessenger.address
+    );
+    if (!registeredMessenger) {
+      consola.info(
+        'Registering ' + messenger.contract + ' in MessengerRegistry'
+      );
+      const messengerSpec = JSON.parse(
+        fs.readFileSync(messenger.specificationPath)
+      );
+      const updatedSpec = {
+        ...messengerSpec,
+        timestamp: new Date().toISOString(),
+      };
+      const seMessengerSpecIPFS = await getIPFSHash(updatedSpec);
+      let tx = await slaRegistry.registerMessenger(
+        deployedMessenger.address,
+        `${process.env.IPFS_URI}/ipfs/${seMessengerSpecIPFS}`
+      );
+      await tx.wait();
+      consola.success(
+        messenger.contract +
+          ' messenger successfully registered on the MessengerRegistry'
+      );
+      await hre.run(SUB_TASK_NAMES.SET_PRECOORDINATOR, {
+        id: taskArgs.id,
+      });
+      consola.info('Creating saId in messenger ' + messenger.contract);
+      await hre.run(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, {
+        id: taskArgs.id,
+      });
+    } else {
+      consola.warn(
+        messenger.contract + ' already registered on MessengerRegistry'
+      );
+    }
+    consola.ready(
+      'Finishing automated jobs to register messenger: ' + messenger.contract
+    );
+    printSeparator();
   }
 );
 
@@ -1198,9 +1324,10 @@ subtask(SUB_TASK_NAMES.SET_PRECOORDINATOR, undefined).setAction(
     console.log('Nodes configuration from stacktical config:');
     console.log(stacktical.chainlink.nodesConfiguration);
     const oracle = await get(CONTRACT_NAMES.Oracle);
+    const messenger = stacktical.messengers[taskArgs.id];
     const preCoordinatorConfiguration = await getPreCoordinatorConfiguration(
       stacktical.chainlink.nodesConfiguration,
-      taskArgs.useCaseName,
+      messenger.useCaseName,
       oracle.address
     );
     console.log('PreCoordinator configuration from nodes information:');
@@ -1273,9 +1400,7 @@ subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
     const lastEvent = events.slice(-1)[0];
     const { saId } = lastEvent.args;
     const serviceAgreement = await precoordinator.getServiceAgreement(saId);
-    const messengerName = stacktical.bootstrap.registry.messengers.find(
-      (messenger) => messenger.useCaseName === taskArgs.useCaseName
-    ).contract;
+    const messengerName = stacktical.messengers[taskArgs.id].contract;
     const messenger = await IMessenger__factory.connect(
       (
         await get(messengerName)
@@ -1288,7 +1413,7 @@ subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
       serviceAgreement.payments.length
     );
     await tx.wait();
-    console.log('Service agreeement id updated in: ' + messengerName);
+    consola.success('Service agreeement id updated in ' + messengerName);
     console.log(saId);
   }
 );
@@ -1368,7 +1493,7 @@ subtask(SUB_TASK_NAMES.FULFILL_SLI, undefined).setAction(
     //   );
     // if (!chainlinkNodeConfig)
     //   throw new Error('Chainlink node config not found');
-    // const externalAdapterUrl = stacktical.chainlink.isProduction
+    // const externalAdapterUrl = stacktical.chainlink.deployLocal
     //   ? chainlinkNodeConfig.externalAdapterUrl
     //   : 'http://localhost:' +
     //     chainlinkNodeConfig.externalAdapterUrl.split(':').slice(-1)[0];
@@ -1643,7 +1768,7 @@ subtask(SUB_TASK_NAMES.GET_REVERT_MESSAGE, undefined).setAction(
 //       );
 //     if (!chainlinkNodeConfig)
 //       throw new Error('Chainlink node config not found');
-//     const externalAdapterUrl = stacktical.chainlink.isProduction
+//     const externalAdapterUrl = stacktical.chainlink.deployLocal
 //       ? chainlinkNodeConfig.externalAdapterUrl
 //       : 'http://localhost:' +
 //         chainlinkNodeConfig.externalAdapterUrl.split(':').slice(-1)[0];
@@ -1791,7 +1916,7 @@ subtask(SUB_TASK_NAMES.GET_REVERT_MESSAGE, undefined).setAction(
 //       );
 //     if (!chainlinkNodeConfig)
 //       throw new Error('Chainlink node config not found');
-//     const externalAdapterUrl = stacktical.chainlink.isProduction
+//     const externalAdapterUrl = stacktical.chainlink.deployLocal
 //       ? chainlinkNodeConfig.externalAdapterUrl
 //       : 'http://localhost:' +
 //         chainlinkNodeConfig.externalAdapterUrl.split(':').slice(-1)[0];

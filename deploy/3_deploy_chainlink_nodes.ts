@@ -6,12 +6,12 @@ module.exports = async ({ run, network }) => {
   const { stacktical }: { stacktical: StackticalConfiguration } =
     network.config;
 
-  if (stacktical.chainlink.isProduction) {
-    console.log(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES);
-    await run(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES);
-  } else {
+  if (stacktical.chainlink.deployLocal) {
     console.log(SUB_TASK_NAMES.DEPLOY_LOCAL_CHAINLINK_NODES);
     await run(SUB_TASK_NAMES.DEPLOY_LOCAL_CHAINLINK_NODES);
+  } else {
+    console.log(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES);
+    await run(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES);
   }
 };
 module.exports.tags = [DEPLOYMENT_TAGS.Services];

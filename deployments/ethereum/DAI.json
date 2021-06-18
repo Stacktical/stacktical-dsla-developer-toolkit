@@ -2,7 +2,18 @@
   "address": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
   "abi": [
     {
-      "inputs": [],
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "symbol",
+          "type": "string"
+        }
+      ],
       "stateMutability": "nonpayable",
       "type": "constructor"
     },

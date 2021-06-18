@@ -32,8 +32,10 @@ export const kovan: NetworkUserConfig = {
   },
   url: process.env.KOVAN_URI,
   stacktical: {
+    deployTokens: true,
+    checkPastPeriods: false,
     chainlink: {
-      isProduction: true,
+      deployLocal: true,
       deleteOldJobs: true,
       nodeFunds: '0.1',
       gasLimit: undefined,
@@ -64,7 +66,6 @@ export const kovan: NetworkUserConfig = {
       ],
     },
     addresses: {},
-    checkPastPeriods: false,
     tokens: [
       {
         factory: EthereumERC20__factory,
@@ -77,10 +78,6 @@ export const kovan: NetworkUserConfig = {
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.USDC,
-      },
-      {
-        factory: EthereumERC20__factory,
-        name: TOKEN_NAMES.USDT,
       },
     ],
     bootstrap: {
@@ -102,17 +99,17 @@ export const kovan: NetworkUserConfig = {
         stake: {
           stakingParameters: {},
         },
-        messengers: [
-          {
-            contract: CONTRACT_NAMES.SEMessenger,
-            specificationPath: `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_EFFICIENCY}/${CONTRACT_NAMES.SEMessenger}.json`,
-            useCaseName: USE_CASES.STAKING_EFFICIENCY,
-            externalAdapterUrl:
-              'https://europe-west3-stacktical-0.cloudfunctions.net/staking-efficiency-indexer',
-          },
-        ],
       },
     },
+    messengers: [
+      {
+        contract: CONTRACT_NAMES.SEMessenger,
+        specificationPath: `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_EFFICIENCY}/${CONTRACT_NAMES.SEMessenger}.json`,
+        useCaseName: USE_CASES.STAKING_EFFICIENCY,
+        externalAdapterUrl:
+          'https://europe-west3-stacktical-0.cloudfunctions.net/staking-efficiency-indexer',
+      },
+    ],
     scripts: scripts,
   },
 };

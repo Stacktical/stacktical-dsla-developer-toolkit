@@ -1,17 +1,14 @@
-import {
-  CONTRACT_NAMES,
-  PERIOD_TYPE,
-  SLO_TYPE,
-  TOKEN_NAMES,
-} from './constants';
+import {CONTRACT_NAMES, PERIOD_TYPE, SLO_TYPE, TOKEN_NAMES,} from './constants';
 
 export type StackticalConfiguration = {
   checkPastPeriods: boolean;
+  deployTokens: boolean;
   tokens: Array<TokenConfiguration>;
   chainlink: ChainlinkConfiguration;
   addresses: DeployedContractAddresses;
   bootstrap: BootstrapConfiguration;
-  scripts?: ScriptsConfiguration;
+  messengers: Array<MessengerConfiguration>;
+  scripts: ScriptsConfiguration;
 };
 
 export type TokenConfiguration = {
@@ -35,7 +32,7 @@ export type DeployedContractAddresses = {
 };
 
 export type ChainlinkConfiguration = {
-  isProduction: boolean;
+  deployLocal: boolean;
   deleteOldJobs: boolean;
   nodeFunds: string;
   gasLimit?: string;
@@ -62,7 +59,6 @@ export type BootstrapConfiguration = {
   allowance: Array<TokenAllowance>;
   registry: {
     periods: Array<PeriodBootstrapDefinition>;
-    messengers: Array<MessengerConfiguration>;
     stake: StakeBootstrapDefinition;
   };
 };

@@ -19,6 +19,7 @@ enum TASK_NAMES {
   REGISTRIES_CONFIGURATION = 'stacktical:registries-config',
   GET_VALID_SLAS = 'stacktical:get-valid-slas',
   GET_REVERT_MESSAGE = 'stacktical:get-revert-message',
+  DEPLOY_MESSENGER = 'stacktical:deploy-messenger',
 }
 
 task(TASK_NAMES.DEPLOY_SLA, 'Deploy customized SLA from stacktical config')
@@ -32,7 +33,8 @@ task(TASK_NAMES.DEPLOY_SLA, 'Deploy customized SLA from stacktical config')
 
 task(TASK_NAMES.EXPORT_DATA, 'Export data to exported-data folder').setAction(
   async (_, { run }) => {
-    await run(SUB_TASK_NAMES.SAVE_CONTRACTS_ADDRESSES);
+    await run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
+    await run(SUB_TASK_NAMES.EXPORT_CONTRACTS_ADDRESSES);
     await run(SUB_TASK_NAMES.EXPORT_ABIS);
   }
 );
@@ -111,7 +113,7 @@ task(
   TASK_NAMES.SET_PRECOORDINATOR,
   'Set the PreCoordinator service configuration from stacktical configuration'
 )
-  .addParam('useCaseName', 'Use case to set the precoordinator')
+  .addParam('id', 'Messenger id of stacktical.messengers')
   .setAction(async (taskArgs, { run }) => {
     printSeparator();
     await run(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE);
@@ -169,6 +171,13 @@ task(
 });
 
 task(
+  TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES,
+  'Initialize default addresses'
+).setAction(async (_, hre: any) => {
+  await hre.run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
+});
+
+task(
   TASK_NAMES.RESTART_CHAINLINK_NODES,
   'Deploy or reset the local chainlink nodes'
 ).setAction(async (_, hre: any) => {
@@ -190,6 +199,15 @@ task(TASK_NAMES.GET_REVERT_MESSAGE, 'Get revert message for transaction hash')
   .addParam('transactionHash', 'Transaction hash to get message')
   .setAction(async (taskArgs, hre: any) => {
     await hre.run(SUB_TASK_NAMES.GET_REVERT_MESSAGE, taskArgs);
+  });
+
+task(TASK_NAMES.DEPLOY_MESSENGER, 'deploy a messenger in the MessengerRegistry')
+  .addParam(
+    'id',
+    'Id of the messenger on the messengers list of the network config'
+  )
+  .setAction(async (taskArgs, hre: any) => {
+    await hre.run(SUB_TASK_NAMES.DEPLOY_MESSENGER, taskArgs);
   });
 
 // task(TASK_NAMES.FULFILL_ANALYTICS, 'Fulfill pendant network analytics')

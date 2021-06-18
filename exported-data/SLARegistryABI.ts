@@ -3,27 +3,11 @@ import { AbiItem } from 'web3-utils/types';
 export const SLARegistryABI: AbiItem[] = [
   {
     inputs: [
-      {
-        internalType: 'contract SLORegistry',
-        name: '_sloRegistry',
-        type: 'address',
-      },
-      {
-        internalType: 'contract PeriodRegistry',
-        name: '_periodRegistry',
-        type: 'address',
-      },
-      {
-        internalType: 'contract MessengerRegistry',
-        name: '_messengerRegistry',
-        type: 'address',
-      },
-      {
-        internalType: 'contract StakeRegistry',
-        name: '_stakeRegistry',
-        type: 'address',
-      },
-      { internalType: 'bool', name: '_checkPastPeriod', type: 'bool' },
+      { internalType: 'address', name: 'sloRegistry_', type: 'address' },
+      { internalType: 'address', name: 'periodRegistry_', type: 'address' },
+      { internalType: 'address', name: 'messengerRegistry_', type: 'address' },
+      { internalType: 'address', name: 'stakeRegistry_', type: 'address' },
+      { internalType: 'bool', name: 'checkPastPeriod_', type: 'bool' },
     ],
     stateMutability: 'nonpayable',
     type: 'constructor',
@@ -104,24 +88,24 @@ export const SLARegistryABI: AbiItem[] = [
   },
   {
     inputs: [
-      { internalType: 'uint256', name: '_sloValue', type: 'uint256' },
+      { internalType: 'uint256', name: 'sloValue_', type: 'uint256' },
       {
         internalType: 'enum SLORegistry.SLOType',
-        name: '_sloType',
+        name: 'sloType_',
         type: 'uint8',
       },
-      { internalType: 'bool', name: '_whitelisted', type: 'bool' },
-      { internalType: 'address', name: '_messengerAddress', type: 'address' },
+      { internalType: 'bool', name: 'whitelisted_', type: 'bool' },
+      { internalType: 'address', name: 'messengerAddress_', type: 'address' },
       {
-        internalType: 'enum PeriodRegistry.PeriodType',
-        name: '_periodType',
+        internalType: 'enum IPeriodRegistry.PeriodType',
+        name: 'periodType_',
         type: 'uint8',
       },
-      { internalType: 'uint128', name: '_initialPeriodId', type: 'uint128' },
-      { internalType: 'uint128', name: '_finalPeriodId', type: 'uint128' },
-      { internalType: 'string', name: '_ipfsHash', type: 'string' },
-      { internalType: 'bytes32[]', name: '_extraData', type: 'bytes32[]' },
-      { internalType: 'uint64', name: '_leverage', type: 'uint64' },
+      { internalType: 'uint128', name: 'initialPeriodId_', type: 'uint128' },
+      { internalType: 'uint128', name: 'finalPeriodId_', type: 'uint128' },
+      { internalType: 'string', name: 'ipfsHash_', type: 'string' },
+      { internalType: 'bytes32[]', name: 'extraData_', type: 'bytes32[]' },
+      { internalType: 'uint64', name: 'leverage_', type: 'uint64' },
     ],
     name: 'createSLA',
     outputs: [],
@@ -138,18 +122,14 @@ export const SLARegistryABI: AbiItem[] = [
   {
     inputs: [],
     name: 'messengerRegistry',
-    outputs: [
-      { internalType: 'contract MessengerRegistry', name: '', type: 'address' },
-    ],
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'periodRegistry',
-    outputs: [
-      { internalType: 'contract PeriodRegistry', name: '', type: 'address' },
-    ],
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function',
   },
@@ -184,18 +164,14 @@ export const SLARegistryABI: AbiItem[] = [
   {
     inputs: [],
     name: 'sloRegistry',
-    outputs: [
-      { internalType: 'contract SLORegistry', name: '', type: 'address' },
-    ],
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [],
     name: 'stakeRegistry',
-    outputs: [
-      { internalType: 'contract StakeRegistry', name: '', type: 'address' },
-    ],
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function',
   },

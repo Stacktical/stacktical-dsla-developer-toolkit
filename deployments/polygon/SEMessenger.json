@@ -14,19 +14,24 @@
           "type": "address"
         },
         {
-          "internalType": "bytes32",
-          "name": "_messengerJobId",
-          "type": "bytes32"
-        },
-        {
-          "internalType": "address",
-          "name": "_networkAnalyticsAddress",
-          "type": "address"
-        },
-        {
           "internalType": "uint256",
           "name": "_feeMultiplier",
           "type": "uint256"
+        },
+        {
+          "internalType": "contract PeriodRegistry",
+          "name": "_periodRegistry",
+          "type": "address"
+        },
+        {
+          "internalType": "contract StakeRegistry",
+          "name": "_stakeRegistry",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "_networkName",
+          "type": "bytes32"
         }
       ],
       "stateMutability": "nonpayable",
@@ -193,7 +198,7 @@
         },
         {
           "internalType": "uint256",
-          "name": "_chainlinkResponseUint256",
+          "name": "_chainlinkResponse",
           "type": "uint256"
         }
       ],
@@ -243,12 +248,12 @@
     },
     {
       "inputs": [],
-      "name": "networkAnalyticsAddress",
+      "name": "networkName",
       "outputs": [
         {
-          "internalType": "address",
+          "internalType": "bytes32",
           "name": "",
-          "type": "address"
+          "type": "bytes32"
         }
       ],
       "stateMutability": "view",
@@ -278,30 +283,6 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "bytes32",
-          "name": "sliData",
-          "type": "bytes32"
-        }
-      ],
-      "name": "parseSLIData",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "pure",
       "type": "function"
     },
     {
@@ -393,6 +374,24 @@
         }
       ],
       "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_slaAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_periodId",
+          "type": "uint256"
+        }
+      ],
+      "name": "retryRequest",
+      "outputs": [],
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {

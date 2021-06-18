@@ -25,7 +25,7 @@ export const PeriodRegistryABI: AbiItem[] = [
     inputs: [
       {
         indexed: false,
-        internalType: 'enum PeriodRegistry.PeriodType',
+        internalType: 'enum IPeriodRegistry.PeriodType',
         name: 'periodType',
         type: 'uint8',
       },
@@ -44,7 +44,7 @@ export const PeriodRegistryABI: AbiItem[] = [
     inputs: [
       {
         indexed: false,
-        internalType: 'enum PeriodRegistry.PeriodType',
+        internalType: 'enum IPeriodRegistry.PeriodType',
         name: 'periodType',
         type: 'uint8',
       },
@@ -61,7 +61,7 @@ export const PeriodRegistryABI: AbiItem[] = [
   {
     inputs: [
       {
-        internalType: 'enum PeriodRegistry.PeriodType',
+        internalType: 'enum IPeriodRegistry.PeriodType',
         name: '_periodType',
         type: 'uint8',
       },
@@ -94,7 +94,7 @@ export const PeriodRegistryABI: AbiItem[] = [
   {
     inputs: [
       {
-        internalType: 'enum PeriodRegistry.PeriodType',
+        internalType: 'enum IPeriodRegistry.PeriodType',
         name: '_periodType',
         type: 'uint8',
       },
@@ -111,7 +111,7 @@ export const PeriodRegistryABI: AbiItem[] = [
   {
     inputs: [
       {
-        internalType: 'enum PeriodRegistry.PeriodType',
+        internalType: 'enum IPeriodRegistry.PeriodType',
         name: '_periodType',
         type: 'uint8',
       },
@@ -126,7 +126,7 @@ export const PeriodRegistryABI: AbiItem[] = [
   {
     inputs: [
       {
-        internalType: 'enum PeriodRegistry.PeriodType',
+        internalType: 'enum IPeriodRegistry.PeriodType',
         name: '_periodType',
         type: 'uint8',
       },
@@ -139,7 +139,7 @@ export const PeriodRegistryABI: AbiItem[] = [
   {
     inputs: [
       {
-        internalType: 'enum PeriodRegistry.PeriodType',
+        internalType: 'enum IPeriodRegistry.PeriodType',
         name: '_periodType',
         type: 'uint8',
       },
@@ -160,7 +160,7 @@ export const PeriodRegistryABI: AbiItem[] = [
   {
     inputs: [
       {
-        internalType: 'enum PeriodRegistry.PeriodType',
+        internalType: 'enum IPeriodRegistry.PeriodType',
         name: '',
         type: 'uint8',
       },
@@ -173,7 +173,7 @@ export const PeriodRegistryABI: AbiItem[] = [
   {
     inputs: [
       {
-        internalType: 'enum PeriodRegistry.PeriodType',
+        internalType: 'enum IPeriodRegistry.PeriodType',
         name: '_periodType',
         type: 'uint8',
       },
@@ -187,7 +187,7 @@ export const PeriodRegistryABI: AbiItem[] = [
   {
     inputs: [
       {
-        internalType: 'enum PeriodRegistry.PeriodType',
+        internalType: 'enum IPeriodRegistry.PeriodType',
         name: '_periodType',
         type: 'uint8',
       },

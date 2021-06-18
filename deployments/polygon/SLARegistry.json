@@ -4,28 +4,28 @@
     {
       "inputs": [
         {
-          "internalType": "contract SLORegistry",
-          "name": "_sloRegistry",
+          "internalType": "address",
+          "name": "sloRegistry_",
           "type": "address"
         },
         {
-          "internalType": "contract PeriodRegistry",
-          "name": "_periodRegistry",
+          "internalType": "address",
+          "name": "periodRegistry_",
           "type": "address"
         },
         {
-          "internalType": "contract MessengerRegistry",
-          "name": "_messengerRegistry",
+          "internalType": "address",
+          "name": "messengerRegistry_",
           "type": "address"
         },
         {
-          "internalType": "contract StakeRegistry",
-          "name": "_stakeRegistry",
+          "internalType": "address",
+          "name": "stakeRegistry_",
           "type": "address"
         },
         {
           "internalType": "bool",
-          "name": "_checkPastPeriod",
+          "name": "checkPastPeriod_",
           "type": "bool"
         }
       ],
@@ -144,52 +144,52 @@
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "_sloValue",
+          "name": "sloValue_",
           "type": "uint256"
         },
         {
           "internalType": "enum SLORegistry.SLOType",
-          "name": "_sloType",
+          "name": "sloType_",
           "type": "uint8"
         },
         {
           "internalType": "bool",
-          "name": "_whitelisted",
+          "name": "whitelisted_",
           "type": "bool"
         },
         {
           "internalType": "address",
-          "name": "_messengerAddress",
+          "name": "messengerAddress_",
           "type": "address"
         },
         {
-          "internalType": "enum PeriodRegistry.PeriodType",
-          "name": "_periodType",
+          "internalType": "enum IPeriodRegistry.PeriodType",
+          "name": "periodType_",
           "type": "uint8"
         },
         {
           "internalType": "uint128",
-          "name": "_initialPeriodId",
+          "name": "initialPeriodId_",
           "type": "uint128"
         },
         {
           "internalType": "uint128",
-          "name": "_finalPeriodId",
+          "name": "finalPeriodId_",
           "type": "uint128"
         },
         {
           "internalType": "string",
-          "name": "_ipfsHash",
+          "name": "ipfsHash_",
           "type": "string"
         },
         {
           "internalType": "bytes32[]",
-          "name": "_extraData",
+          "name": "extraData_",
           "type": "bytes32[]"
         },
         {
           "internalType": "uint64",
-          "name": "_leverage",
+          "name": "leverage_",
           "type": "uint64"
         }
       ],
@@ -222,7 +222,7 @@
       "name": "messengerRegistry",
       "outputs": [
         {
-          "internalType": "contract MessengerRegistry",
+          "internalType": "address",
           "name": "",
           "type": "address"
         }
@@ -235,7 +235,7 @@
       "name": "periodRegistry",
       "outputs": [
         {
-          "internalType": "contract PeriodRegistry",
+          "internalType": "address",
           "name": "",
           "type": "address"
         }
@@ -302,7 +302,7 @@
       "name": "sloRegistry",
       "outputs": [
         {
-          "internalType": "contract SLORegistry",
+          "internalType": "address",
           "name": "",
           "type": "address"
         }
@@ -315,7 +315,7 @@
       "name": "stakeRegistry",
       "outputs": [
         {
-          "internalType": "contract StakeRegistry",
+          "internalType": "address",
           "name": "",
           "type": "address"
         }

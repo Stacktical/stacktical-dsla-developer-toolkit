@@ -1,13 +1,7 @@
-import {
-  appRoot,
-  CONTRACT_NAMES,
-  PERIOD_TYPE,
-  TOKEN_NAMES,
-  USE_CASES,
-} from '../constants';
-import { EthereumERC20__factory } from '../typechain';
-import { NetworkUserConfig } from 'hardhat/types';
-import { scripts } from '../scripts.config';
+import {appRoot, CONTRACT_NAMES, PERIOD_TYPE, TOKEN_NAMES, USE_CASES,} from '../constants';
+import {EthereumERC20__factory} from '../typechain';
+import {NetworkUserConfig} from 'hardhat/types';
+import {scripts} from '../scripts.config';
 
 import Joi from 'joi';
 
@@ -32,8 +26,10 @@ export const develop: NetworkUserConfig = {
   },
   url: 'http://localhost:8545',
   stacktical: {
+    checkPastPeriods: false,
+    deployTokens: true,
     chainlink: {
-      isProduction: false,
+      deployLocal: false,
       deleteOldJobs: true,
       nodeFunds: '10',
       gasLimit: undefined,
@@ -50,7 +46,6 @@ export const develop: NetworkUserConfig = {
       ],
     },
     addresses: {},
-    checkPastPeriods: false,
     tokens: [
       {
         factory: EthereumERC20__factory,
@@ -67,7 +62,6 @@ export const develop: NetworkUserConfig = {
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.USDT,
-        address: '0x34704c70e9eC9fB9A921da6DAAD7D3e19f43c734',
       },
     ],
     bootstrap: {
@@ -89,16 +83,16 @@ export const develop: NetworkUserConfig = {
         stake: {
           stakingParameters: {},
         },
-        messengers: [
-          {
-            contract: CONTRACT_NAMES.SEMessenger,
-            specificationPath: `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_EFFICIENCY}/${CONTRACT_NAMES.SEMessenger}.json`,
-            useCaseName: USE_CASES.STAKING_EFFICIENCY,
-            externalAdapterUrl: 'http://host.docker.internal:6060',
-          },
-        ],
       },
     },
+    messengers: [
+      {
+        contract: CONTRACT_NAMES.SEMessenger,
+        specificationPath: `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_EFFICIENCY}/${CONTRACT_NAMES.SEMessenger}.json`,
+        useCaseName: USE_CASES.STAKING_EFFICIENCY,
+        externalAdapterUrl: 'http://host.docker.internal:6060',
+      },
+    ],
     scripts: scripts,
   },
 };

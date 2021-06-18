@@ -5,7 +5,7 @@
     "esModuleInterop": true,
     "moduleResolution": "node",
     "forceConsistentCasingInFileNames": true,
-    "outDir": "dist",
+    "outDir": "dist"
   },
   "include": [
     "hardhat.config.ts",

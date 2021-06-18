@@ -137,6 +137,12 @@
           "internalType": "uint64",
           "name": "maxLeverage",
           "type": "uint64"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "burnDSLA",
+          "type": "bool"
         }
       ],
       "name": "StakingParametersModified",
@@ -386,6 +392,11 @@
           "internalType": "uint64",
           "name": "maxLeverage",
           "type": "uint64"
+        },
+        {
+          "internalType": "bool",
+          "name": "burnDSLA",
+          "type": "bool"
         }
       ],
       "stateMutability": "view",
@@ -557,6 +568,11 @@
           "internalType": "uint64",
           "name": "maxLeverage",
           "type": "uint64"
+        },
+        {
+          "internalType": "bool",
+          "name": "burnDSLA",
+          "type": "bool"
         }
       ],
       "name": "setStakingParameters",
@@ -618,7 +634,7 @@
       "name": "slaRegistry",
       "outputs": [
         {
-          "internalType": "contract SLARegistry",
+          "internalType": "contract ISLARegistry",
           "name": "",
           "type": "address"
         }
