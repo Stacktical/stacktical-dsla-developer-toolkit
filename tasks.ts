@@ -19,6 +19,7 @@ enum TASK_NAMES {
   REGISTRIES_CONFIGURATION = 'stacktical:registries-config',
   GET_VALID_SLAS = 'stacktical:get-valid-slas',
   GET_REVERT_MESSAGE = 'stacktical:get-revert-message',
+  DEPLOY_MESSENGER = 'stacktical:deploy-messenger',
 }
 
 task(TASK_NAMES.DEPLOY_SLA, 'Deploy customized SLA from stacktical config')
@@ -190,6 +191,15 @@ task(TASK_NAMES.GET_REVERT_MESSAGE, 'Get revert message for transaction hash')
   .addParam('transactionHash', 'Transaction hash to get message')
   .setAction(async (taskArgs, hre: any) => {
     await hre.run(SUB_TASK_NAMES.GET_REVERT_MESSAGE, taskArgs);
+  });
+
+task(TASK_NAMES.DEPLOY_MESSENGER, 'deploy a messenger in the MessengerRegistry')
+  .addParam(
+    'id',
+    'Id of the messenger on the messengers list of the network config'
+  )
+  .setAction(async (taskArgs, hre: any) => {
+    await hre.run(SUB_TASK_NAMES.DEPLOY_MESSENGER, taskArgs);
   });
 
 // task(TASK_NAMES.FULFILL_ANALYTICS, 'Fulfill pendant network analytics')

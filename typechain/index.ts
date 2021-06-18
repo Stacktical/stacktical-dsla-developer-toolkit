@@ -43,6 +43,7 @@ export type { StakeRegistry } from "./StakeRegistry";
 export type { Staking } from "./Staking";
 export type { StringUtils } from "./StringUtils";
 export type { SEMessenger } from "./SEMessenger";
+export type { SEMessengerV2 } from "./SEMessengerV2";
 export type { EthereumERC20 } from "./EthereumERC20";
 export type { PolygonERC20 } from "./PolygonERC20";
 
@@ -88,5 +89,6 @@ export { StakeRegistry__factory } from "./factories/StakeRegistry__factory";
 export { Staking__factory } from "./factories/Staking__factory";
 export { StringUtils__factory } from "./factories/StringUtils__factory";
 export { SEMessenger__factory } from "./factories/SEMessenger__factory";
+export { SEMessengerV2__factory } from "./factories/SEMessengerV2__factory";
 export { EthereumERC20__factory } from "./factories/EthereumERC20__factory";
 export { PolygonERC20__factory } from "./factories/PolygonERC20__factory";

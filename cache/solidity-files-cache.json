@@ -124,7 +124,7 @@
       "artifacts": []
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/DSLA.sol": {
-      "lastModificationDate": 1623984876412,
+      "lastModificationDate": 1623985809439,
       "contentHash": "8bafb9f89693efa415fe32f2fa914028",
       "sourceName": "contracts/DSLA.sol",
       "solcConfig": {
@@ -1395,7 +1395,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/messengers/staking-efficiency/SEMessenger.sol": {
-      "lastModificationDate": 1623984088948,
+      "lastModificationDate": 1623985809439,
       "contentHash": "e63447c1690224043f527006e97bce89",
       "sourceName": "contracts/messengers/staking-efficiency/SEMessenger.sol",
       "solcConfig": {
@@ -3393,6 +3393,57 @@
       ],
       "artifacts": [
         "MessengerRegistry"
+      ]
+    },
+    "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/messengers/staking-efficiency-v2/SEMessengerV2.sol": {
+      "lastModificationDate": 1624031078390,
+      "contentHash": "7bd8a7a1ee8b47db91c0249126396510",
+      "sourceName": "contracts/messengers/staking-efficiency-v2/SEMessengerV2.sol",
+      "solcConfig": {
+        "version": "0.6.6",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [
+        "@chainlink/contracts/src/v0.6/ChainlinkClient.sol",
+        "@stacktical/dsla-contracts/contracts/interfaces/IMessenger.sol",
+        "@stacktical/dsla-contracts/contracts/SLA.sol",
+        "@stacktical/dsla-contracts/contracts/PeriodRegistry.sol",
+        "@stacktical/dsla-contracts/contracts/StringUtils.sol",
+        "@stacktical/dsla-contracts/contracts/StakeRegistry.sol",
+        "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+        "@openzeppelin/contracts/token/ERC20/SafeERC20.sol"
+      ],
+      "versionPragmas": [
+        "0.6.6"
+      ],
+      "artifacts": [
+        "SEMessengerV2"
       ]
     }
   }

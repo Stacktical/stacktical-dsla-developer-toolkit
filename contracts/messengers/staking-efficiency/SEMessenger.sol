@@ -51,19 +51,16 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
      * @notice sets the Chainlink parameters (oracle address, token address, jobId) and sets the SLARegistry to 0x0 address
      * @param _messengerChainlinkOracle 1. the address of the oracle to create requests to
      * @param _messengerChainlinkToken 2. the address of LINK token contract
-     * @param _messengerJobId 3. the job id for Staking efficiency job
      * @param _feeMultiplier 6. states the amount of paid nodes running behind the precoordinator, to set the fee
      */
     constructor(
         address _messengerChainlinkOracle,
         address _messengerChainlinkToken,
-        bytes32 _messengerJobId,
         uint256 _feeMultiplier,
         PeriodRegistry _periodRegistry,
         StakeRegistry _stakeRegistry,
         bytes32 _networkName
     ) public {
-        _jobId = _messengerJobId;
         setChainlinkToken(_messengerChainlinkToken);
         _oracle = _messengerChainlinkOracle;
         _fee = _feeMultiplier * _baseFee;
@@ -136,6 +133,7 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
         bool _messengerOwnerApproval,
         address _callerAddress
     ) public override onlySLARegistry nonReentrant {
+        require(_jobId != 0, '_jobI empty');
         SLA sla = SLA(_slaAddress);
         if (_messengerOwnerApproval) {
             ERC20(chainlinkTokenAddress()).safeTransferFrom(

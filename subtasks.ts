@@ -9,7 +9,7 @@ import {
   postChainlinkBridge,
   postChainlinkJob,
 } from './chainlink-utils';
-import { subtask } from 'hardhat/config';
+import { subtask, task } from 'hardhat/config';
 import { ChainlinkNodeConfiguration } from './types';
 import {
   ERC20__factory,
@@ -42,6 +42,7 @@ import {
 import axios from 'axios';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import Joi from 'joi';
+import { formatBytes32String } from 'ethers/lib/utils';
 
 const prettier = require('prettier');
 const appRoot = require('app-root-path');
@@ -50,6 +51,7 @@ const path = require('path');
 const yaml = require('js-yaml');
 const compose = require('docker-compose');
 const moment = require('moment');
+const consola = require('consola');
 
 export enum SUB_TASK_NAMES {
   PREPARE_CHAINLINK_NODES = 'PREPARE_CHAINLINK_NODES',
@@ -81,6 +83,7 @@ export enum SUB_TASK_NAMES {
   REGISTRIES_CONFIGURATION = 'REGISTRIES_CONFIGURATION',
   GET_VALID_SLAS = 'GET_VALID_SLAS',
   GET_REVERT_MESSAGE = 'GET_REVERT_MESSAGE',
+  DEPLOY_MESSENGER = 'DEPLOY_MESSENGER',
 }
 
 subtask(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES, undefined).setAction(
@@ -821,11 +824,97 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_MESSENGER_REGISTRY, undefined).setAction(
         await tx.wait();
       } else {
         console.log(
-          messenger.contract + ' already registered on the SLARegistry'
+          messenger.contract + ' already registered on MessengerRegistry'
         );
       }
     }
     console.log(finishBootstrap);
+  }
+);
+
+subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    const { deployments, ethers, getNamedAccounts, network } = hre;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    const { get, deploy } = deployments;
+    const {
+      stacktical: { bootstrap },
+    } = hre.network.config;
+    const {
+      registry: { messengers },
+    } = bootstrap;
+
+    consola.start('Starting automated jobs to register messengers');
+    const slaRegistry = await SLARegistry__factory.connect(
+      (
+        await get(CONTRACT_NAMES.SLARegistry)
+      ).address,
+      signer
+    );
+
+    const messengerRegistry = await MessengerRegistry__factory.connect(
+      (
+        await get(CONTRACT_NAMES.MessengerRegistry)
+      ).address,
+      signer
+    );
+
+    const messenger = messengers[taskArgs.id];
+    consola.info('Deploying ' + messenger.contract + ' to ' + hre.network.name);
+    const preCoordinator = await get(CONTRACT_NAMES.PreCoordinator);
+    const stakeRegistry = await get(CONTRACT_NAMES.StakeRegistry);
+    const stringUtils = await get(CONTRACT_NAMES.StringUtils);
+    const periodRegistry = await get(CONTRACT_NAMES.PeriodRegistry);
+    const linkToken = await get(CONTRACT_NAMES.LinkToken);
+    const feeMultiplier =
+      network.config.stacktical.chainlink.nodesConfiguration.length;
+    await deploy(messenger.contract, {
+      from: deployer,
+      log: true,
+      args: [
+        preCoordinator.address,
+        linkToken.address,
+        feeMultiplier,
+        periodRegistry.address,
+        stakeRegistry.address,
+        formatBytes32String(network.name),
+      ],
+      libraries: {
+        StringUtils: stringUtils.address,
+      },
+    });
+
+    await hre.run(SUB_TASK_NAMES.SET_PRECOORDINATOR, {
+      useCaseName: messenger.useCaseName,
+    });
+
+    consola.info('Registering ' + messenger.contract + ' on the SLARegistry');
+    const messengerArtifact = await get(messenger.contract);
+
+    const registeredMessenger = await messengerRegistry.registeredMessengers(
+      messengerArtifact.address
+    );
+    if (!registeredMessenger) {
+      const messengerSpec = JSON.parse(
+        fs.readFileSync(messenger.specificationPath)
+      );
+      const updatedSpec = {
+        ...messengerSpec,
+        timestamp: new Date().toISOString(),
+      };
+      const seMessengerSpecIPFS = await getIPFSHash(updatedSpec);
+      const tx = await slaRegistry.registerMessenger(
+        messengerArtifact.address,
+        `${process.env.IPFS_URI}/ipfs/${seMessengerSpecIPFS}`
+      );
+      await tx.wait();
+    } else {
+      consola.warn(
+        messenger.contract + ' already registered on MessengerRegistry'
+      );
+    }
+    consola.ready('Finishing automated jobs to register messengers');
   }
 );
 

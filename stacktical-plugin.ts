@@ -30,6 +30,7 @@ extendConfig(
             `Config validation error for network ${network}: ${error.message}`
           );
         }
+
         config.networks[network]['stacktical'] =
           userConfig.networks[network]['stacktical'];
       }
