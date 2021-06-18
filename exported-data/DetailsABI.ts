@@ -105,7 +105,7 @@ export const DetailsABI: AbiItem[] = [
       { internalType: 'uint128', name: 'finalPeriodId', type: 'uint128' },
       { internalType: 'bool', name: 'whiteListed', type: 'bool' },
       {
-        internalType: 'enum PeriodRegistry.PeriodType',
+        internalType: 'enum IPeriodRegistry.PeriodType',
         name: 'periodType',
         type: 'uint8',
       },

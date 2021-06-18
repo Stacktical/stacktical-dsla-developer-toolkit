@@ -6,7 +6,7 @@ export const SLAABI: AbiItem[] = [
       { internalType: 'address', name: '_owner', type: 'address' },
       { internalType: 'bool', name: '_whitelisted', type: 'bool' },
       {
-        internalType: 'enum PeriodRegistry.PeriodType',
+        internalType: 'enum IPeriodRegistry.PeriodType',
         name: '_periodType',
         type: 'uint8',
       },
@@ -343,13 +343,6 @@ export const SLAABI: AbiItem[] = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'dslaTokenAddress',
-    outputs: [{ internalType: 'address', name: '', type: 'address' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [{ internalType: 'address', name: '', type: 'address' }],
     name: 'duTokenRegistry',
     outputs: [
@@ -477,7 +470,7 @@ export const SLAABI: AbiItem[] = [
     name: 'periodType',
     outputs: [
       {
-        internalType: 'enum PeriodRegistry.PeriodType',
+        internalType: 'enum IPeriodRegistry.PeriodType',
         name: '',
         type: 'uint8',
       },
@@ -533,15 +526,6 @@ export const SLAABI: AbiItem[] = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'slaRegistry',
-    outputs: [
-      { internalType: 'contract SLARegistry', name: '', type: 'address' },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [
       { internalType: 'uint256', name: '_amount', type: 'uint256' },
       { internalType: 'address', name: '_token', type: 'address' },
@@ -559,10 +543,24 @@ export const SLAABI: AbiItem[] = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'toggleUserWithdrawLocked',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     inputs: [{ internalType: 'address', name: 'newOwner', type: 'address' }],
     name: 'transferOwnership',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'userWithdrawLocked',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    stateMutability: 'view',
     type: 'function',
   },
   {

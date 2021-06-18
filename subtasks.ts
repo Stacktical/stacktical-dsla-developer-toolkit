@@ -1,42 +1,49 @@
 /* eslint-disable no-await-in-loop, import/no-extraneous-dependencies */
-import {DeploymentsExtension} from 'hardhat-deploy/dist/types';
-import {fromWei, numberToHex, toChecksumAddress, toWei} from 'web3-utils';
+import { DeploymentsExtension } from 'hardhat-deploy/dist/types';
+import { fromWei, numberToHex, toChecksumAddress, toWei } from 'web3-utils';
 import {
-    deleteJob,
-    getChainlinkAccounts,
-    getChainlinkBridges,
-    getChainlinkJobs,
-    postChainlinkBridge,
-    postChainlinkJob,
+  deleteJob,
+  getChainlinkAccounts,
+  getChainlinkBridges,
+  getChainlinkJobs,
+  postChainlinkBridge,
+  postChainlinkJob,
 } from './chainlink-utils';
-import {subtask} from 'hardhat/config';
-import {ChainlinkNodeConfiguration} from './types';
+import { subtask } from 'hardhat/config';
+import { ChainlinkNodeConfiguration } from './types';
 import {
-    ERC20__factory,
-    IMessenger__factory,
-    MessengerRegistry__factory,
-    Oracle__factory,
-    Ownable__factory,
-    PeriodRegistry__factory,
-    PreCoordinator__factory,
-    SEMessenger__factory,
-    SLA,
-    SLA__factory,
-    SLARegistry__factory,
-    StakeRegistry__factory,
+  ERC20__factory,
+  IERC20,
+  IERC20__factory,
+  IMessenger__factory,
+  MessengerRegistry__factory,
+  Oracle__factory,
+  Ownable__factory,
+  PeriodRegistry__factory,
+  PreCoordinator__factory,
+  SEMessenger__factory,
+  SLA,
+  SLA__factory,
+  SLARegistry__factory,
+  StakeRegistry__factory,
 } from './typechain';
 
-import {CONTRACT_NAMES, PERIOD_STATUS, PERIOD_TYPE, TOKEN_NAMES,} from './constants';
 import {
-    bootstrapStrings,
-    generateBootstrapPeriods,
-    getIPFSHash,
-    getPreCoordinatorConfiguration,
-    printSeparator,
+  CONTRACT_NAMES,
+  PERIOD_STATUS,
+  PERIOD_TYPE,
+  TOKEN_NAMES,
+} from './constants';
+import {
+  bootstrapStrings,
+  generateBootstrapPeriods,
+  getIPFSHash,
+  getPreCoordinatorConfiguration,
+  printSeparator,
 } from './utils';
 import axios from 'axios';
-import {HardhatRuntimeEnvironment} from 'hardhat/types';
-import {formatBytes32String} from 'ethers/lib/utils';
+import { HardhatRuntimeEnvironment } from 'hardhat/types';
+import { formatBytes32String } from 'ethers/lib/utils';
 
 const prettier = require('prettier');
 const appRoot = require('app-root-path');
@@ -59,7 +66,7 @@ export enum SUB_TASK_NAMES {
   STOP_LOCAL_GRAPH_NODE = 'STOP_LOCAL_GRAPH_NODE',
   START_LOCAL_GRAPH_NODE = 'START_LOCAL_GRAPH_NODE',
   INITIALIZE_DEFAULT_ADDRESSES = 'INITIALIZE_DEFAULT_ADDRESSES',
-  SAVE_CONTRACTS_ADDRESSES = 'SAVE_CONTRACTS_ADDRESSES',
+  EXPORT_CONTRACTS_ADDRESSES = 'EXPORT_CONTRACTS_ADDRESSES',
   EXPORT_ABIS = 'EXPORT_ABIS',
   DEPLOY_SLA = 'DEPLOY_SLA',
   BOOTSTRAP_MESSENGER_REGISTRY = 'BOOTSTRAP_MESSENGER_REGISTRY',
@@ -464,43 +471,62 @@ subtask(
   }
 });
 
-subtask(SUB_TASK_NAMES.SAVE_CONTRACTS_ADDRESSES, undefined).setAction(
+subtask(SUB_TASK_NAMES.EXPORT_CONTRACTS_ADDRESSES, undefined).setAction(
   async (_, hre: HardhatRuntimeEnvironment) => {
     const { network, deployments } = hre;
     const { get } = deployments;
+    const { stacktical } = network.config;
+
+    consola.info('Starting export contracts addresses process');
+
     const getLines = (networkName) => [
       `const ${networkName} = `,
       `\n\nexport default ${networkName}`,
     ];
     const [startingLine, finalLine] = getLines(network.name);
-    const DSLAToken = await get(CONTRACT_NAMES.DSLA);
-    const DAIToken = await get(CONTRACT_NAMES.DAI);
-    const USDCToken = await get(CONTRACT_NAMES.USDC);
     const SLORegistry = await get(CONTRACT_NAMES.SLORegistry);
     const SLARegistry = await get(CONTRACT_NAMES.SLARegistry);
     const MessengerRegistry = await get(CONTRACT_NAMES.MessengerRegistry);
     const PeriodRegistry = await get(CONTRACT_NAMES.PeriodRegistry);
     const StakeRegistry = await get(CONTRACT_NAMES.StakeRegistry);
-    const SEMessenger = await get(CONTRACT_NAMES.SEMessenger);
     const Details = await get(CONTRACT_NAMES.Details);
     const PreCoordinator = await get(CONTRACT_NAMES.PreCoordinator);
     const StringUtils = await get(CONTRACT_NAMES.StringUtils);
 
     const addresses = {
-      DSLAToken: DSLAToken.address,
-      DAIToken: DAIToken.address,
-      USDCToken: USDCToken.address,
       SLORegistry: SLORegistry.address,
       SLARegistry: SLARegistry.address,
       MessengerRegistry: MessengerRegistry.address,
       PeriodRegistry: PeriodRegistry.address,
       StakeRegistry: StakeRegistry.address,
-      SEMessenger: SEMessenger.address,
       Details: Details.address,
       PreCoordinator: PreCoordinator.address,
       StringUtils: StringUtils.address,
+      ...stacktical.tokens.reduce(
+        (r, token) => ({
+          ...r,
+          [token.name + 'Token']: require(appRoot.path +
+            '/deployments/' +
+            network.name +
+            '/' +
+            token.name).address,
+        }),
+        {}
+      ),
+      ...stacktical.messengers.reduce(
+        (r, messenger) => ({
+          ...r,
+          [messenger.contract]: require(appRoot.path +
+            '/deployments/' +
+            network.name +
+            '/' +
+            messenger.contract).address,
+        }),
+        {}
+      ),
     };
-
+    consola.info('Resulting addresses');
+    console.log(addresses);
     const base_path = `${appRoot}/exported-data/networks`;
     const prettifiedAddresses = prettier.format(
       startingLine + JSON.stringify(addresses) + finalLine,
@@ -543,6 +569,7 @@ subtask(SUB_TASK_NAMES.SAVE_CONTRACTS_ADDRESSES, undefined).setAction(
       path.resolve(__dirname, `${base_path}/index.ts`),
       prettifiedIndex
     );
+    consola.success('Contract addresses exported correctly');
   }
 );
 
@@ -550,6 +577,8 @@ subtask(SUB_TASK_NAMES.EXPORT_ABIS, undefined).setAction(
   async (_, hre: HardhatRuntimeEnvironment) => {
     const { deployments } = hre;
     const { getArtifact } = deployments;
+    consola.info('Starting export ABIs process');
+
     const SLA = await getArtifact(CONTRACT_NAMES.SLA);
     const SLARegistry = await getArtifact(CONTRACT_NAMES.SLARegistry);
     const SLORegistry = await getArtifact(CONTRACT_NAMES.SLORegistry);
@@ -559,7 +588,6 @@ subtask(SUB_TASK_NAMES.EXPORT_ABIS, undefined).setAction(
       CONTRACT_NAMES.MessengerRegistry
     );
     const Details = await getArtifact(CONTRACT_NAMES.Details);
-    const ERC20 = await getArtifact(CONTRACT_NAMES.ERC20);
 
     const files = {
       SLA: {
@@ -597,10 +625,10 @@ subtask(SUB_TASK_NAMES.EXPORT_ABIS, undefined).setAction(
         tsFileName: 'DetailsABI.ts',
         abi: Details.abi,
       },
-      bDSLA: {
+      ERC20: {
         constName: 'export const erc20ABI: AbiItem[] =',
         tsFileName: 'erc20ABI.ts',
-        abi: ERC20.abi,
+        abi: IERC20__factory.abi,
       },
     };
 
@@ -622,6 +650,7 @@ subtask(SUB_TASK_NAMES.EXPORT_ABIS, undefined).setAction(
         content
       );
     }
+    consola.success('ABIs exported correctly');
   }
 );
 

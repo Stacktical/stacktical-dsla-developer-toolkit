@@ -4,7 +4,7 @@ require('dotenv').config({ path: './.env' });
 
 import './tasks';
 import './dtk-env-validation';
-import {NETWORKS} from './constants';
+import { NETWORKS } from './constants';
 import 'hardhat-deploy';
 import 'hardhat-deploy-ethers';
 import '@nomiclabs/hardhat-waffle';
@@ -16,16 +16,16 @@ import 'babel-register';
 import '@typechain/hardhat';
 import './stacktical.validation';
 import './type-extensions';
-import {HardhatUserConfig} from 'hardhat/types';
+import { HardhatUserConfig } from 'hardhat/types';
 
 const networks = [
   { name: NETWORKS.DEVELOP, enabled: true },
   { name: NETWORKS.KOVAN, enabled: true },
-  { name: NETWORKS.MUMBAI, enabled: false },
-  { name: NETWORKS.HARMONYTESTNET, enabled: false },
-  { name: NETWORKS.ETHEREUM, enabled: false },
-  { name: NETWORKS.HARMONY, enabled: false },
-  { name: NETWORKS.POLYGON, enabled: false },
+  { name: NETWORKS.MUMBAI, enabled: true },
+  { name: NETWORKS.HARMONYTESTNET, enabled: true },
+  { name: NETWORKS.ETHEREUM, enabled: true },
+  { name: NETWORKS.HARMONY, enabled: true },
+  { name: NETWORKS.POLYGON, enabled: true },
 ];
 
 const getEnabledNetworks = () =>

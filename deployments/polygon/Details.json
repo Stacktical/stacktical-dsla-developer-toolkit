@@ -257,7 +257,7 @@
           "type": "bool"
         },
         {
-          "internalType": "enum PeriodRegistry.PeriodType",
+          "internalType": "enum IPeriodRegistry.PeriodType",
           "name": "periodType",
           "type": "uint8"
         },

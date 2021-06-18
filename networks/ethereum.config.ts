@@ -1,7 +1,13 @@
-import {appRoot, CONTRACT_NAMES, PERIOD_TYPE, TOKEN_NAMES, USE_CASES,} from '../constants';
-import {EthereumERC20__factory} from '../typechain';
-import {NetworkUserConfig} from 'hardhat/types';
-import {scripts} from '../scripts.config';
+import {
+  appRoot,
+  CONTRACT_NAMES,
+  PERIOD_TYPE,
+  TOKEN_NAMES,
+  USE_CASES,
+} from '../constants';
+import { EthereumERC20__factory } from '../typechain';
+import { NetworkUserConfig } from 'hardhat/types';
+import { scripts } from '../scripts.config';
 import Joi from 'joi';
 
 const schema = Joi.object({
@@ -90,6 +96,8 @@ export const ethereum: NetworkUserConfig = {
       [CONTRACT_NAMES.SEMessenger]:
         '0xFB29aFC3F4B78755f07faD5B86448595D2EEC86C',
       [CONTRACT_NAMES.Details]: '0x38b0cd8BB4C4608E32EE75b25A8846459cEAd513',
+      [CONTRACT_NAMES.StringUtils]:
+        '0xC7183212c2b0D4A62A542F7C4c3060Db55BE0bd2',
       [CONTRACT_NAMES.PreCoordinator]:
         '0x7db551Ce6677211309db39A67F73cA923e9d4944',
     },
