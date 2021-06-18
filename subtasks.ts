@@ -13,6 +13,7 @@ import { subtask, task } from 'hardhat/config';
 import { ChainlinkNodeConfiguration } from './types';
 import {
   ERC20__factory,
+  IMessenger,
   IMessenger__factory,
   MessengerRegistry__factory,
   Oracle__factory,
@@ -341,7 +342,7 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
     for (let node of stacktical.chainlink.nodesConfiguration) {
       printSeparator();
       console.log('Preparing node: ' + node.name);
-      for (let messenger of stacktical.bootstrap.registry.messengers) {
+      for (let messenger of stacktical.messengers) {
         console.log('Creating use case configuration: ' + messenger.contract);
         let bridge = await updatedBridge(
           node,
@@ -777,11 +778,8 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_MESSENGER_REGISTRY, undefined).setAction(
     const signer = await ethers.getSigner(deployer);
     const { get } = deployments;
     const {
-      stacktical: { bootstrap },
+      stacktical: { messengers },
     } = hre.network.config;
-    const {
-      registry: { messengers },
-    } = bootstrap;
     const [startBootstrap, finishBootstrap] = bootstrapStrings(
       CONTRACT_NAMES.MessengerRegistry
     );
@@ -838,13 +836,8 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
     const { get, deploy } = deployments;
-    const {
-      stacktical: { bootstrap },
-    } = hre.network.config;
-    const {
-      registry: { messengers },
-    } = bootstrap;
-
+    const { messengers } = network.config.stacktical;
+    printSeparator();
     consola.start('Starting automated jobs to register messengers');
     const slaRegistry = await SLARegistry__factory.connect(
       (
@@ -861,6 +854,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
     );
 
     const messenger = messengers[taskArgs.id];
+
     consola.info('Deploying ' + messenger.contract + ' to ' + hre.network.name);
     const preCoordinator = await get(CONTRACT_NAMES.PreCoordinator);
     const stakeRegistry = await get(CONTRACT_NAMES.StakeRegistry);
@@ -869,7 +863,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
     const linkToken = await get(CONTRACT_NAMES.LinkToken);
     const feeMultiplier =
       network.config.stacktical.chainlink.nodesConfiguration.length;
-    await deploy(messenger.contract, {
+    const deployedMessenger = await deploy(messenger.contract, {
       from: deployer,
       log: true,
       args: [
@@ -884,18 +878,25 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
         StringUtils: stringUtils.address,
       },
     });
-
-    await hre.run(SUB_TASK_NAMES.SET_PRECOORDINATOR, {
-      useCaseName: messenger.useCaseName,
-    });
-
-    consola.info('Registering ' + messenger.contract + ' on the SLARegistry');
-    const messengerArtifact = await get(messenger.contract);
+    if (deployedMessenger.newlyDeployed) {
+      consola.success(
+        messenger.contract +
+          ' successfully deployed at ' +
+          deployedMessenger.address
+      );
+    } else {
+      consola.warn(
+        messenger.contract + ' already deployed at ' + deployedMessenger.address
+      );
+    }
 
     const registeredMessenger = await messengerRegistry.registeredMessengers(
-      messengerArtifact.address
+      deployedMessenger.address
     );
     if (!registeredMessenger) {
+      consola.info(
+        'Registering ' + messenger.contract + ' on the MessengerRegistry'
+      );
       const messengerSpec = JSON.parse(
         fs.readFileSync(messenger.specificationPath)
       );
@@ -904,17 +905,31 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
         timestamp: new Date().toISOString(),
       };
       const seMessengerSpecIPFS = await getIPFSHash(updatedSpec);
-      const tx = await slaRegistry.registerMessenger(
-        messengerArtifact.address,
+      let tx = await slaRegistry.registerMessenger(
+        deployedMessenger.address,
         `${process.env.IPFS_URI}/ipfs/${seMessengerSpecIPFS}`
       );
       await tx.wait();
+      consola.success(
+        messenger.contract +
+          ' messenger successfully registered on the MessengerRegistry'
+      );
+      await hre.run(SUB_TASK_NAMES.SET_PRECOORDINATOR, {
+        id: taskArgs.id,
+      });
+      consola.info('Creating saId in messenger ' + messenger.contract);
+      await hre.run(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, {
+        id: taskArgs.id,
+      });
     } else {
       consola.warn(
         messenger.contract + ' already registered on MessengerRegistry'
       );
     }
-    consola.ready('Finishing automated jobs to register messengers');
+    consola.ready(
+      'Finishing automated jobs to register messenger: ' + messenger.contract
+    );
+    printSeparator();
   }
 );
 
@@ -1287,9 +1302,10 @@ subtask(SUB_TASK_NAMES.SET_PRECOORDINATOR, undefined).setAction(
     console.log('Nodes configuration from stacktical config:');
     console.log(stacktical.chainlink.nodesConfiguration);
     const oracle = await get(CONTRACT_NAMES.Oracle);
+    const messenger = stacktical.messengers[taskArgs.id];
     const preCoordinatorConfiguration = await getPreCoordinatorConfiguration(
       stacktical.chainlink.nodesConfiguration,
-      taskArgs.useCaseName,
+      messenger.useCaseName,
       oracle.address
     );
     console.log('PreCoordinator configuration from nodes information:');
@@ -1362,9 +1378,7 @@ subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
     const lastEvent = events.slice(-1)[0];
     const { saId } = lastEvent.args;
     const serviceAgreement = await precoordinator.getServiceAgreement(saId);
-    const messengerName = stacktical.bootstrap.registry.messengers.find(
-      (messenger) => messenger.useCaseName === taskArgs.useCaseName
-    ).contract;
+    const messengerName = stacktical.messengers[taskArgs.id].contract;
     const messenger = await IMessenger__factory.connect(
       (
         await get(messengerName)
@@ -1377,7 +1391,7 @@ subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
       serviceAgreement.payments.length
     );
     await tx.wait();
-    console.log('Service agreeement id updated in: ' + messengerName);
+    consola.success('Service agreeement id updated in ' + messengerName);
     console.log(saId);
   }
 );

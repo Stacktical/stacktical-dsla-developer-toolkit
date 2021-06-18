@@ -5,7 +5,7 @@ import { HardhatRuntimeEnvironment } from 'hardhat/types';
 module.exports = async ({ network, run }: HardhatRuntimeEnvironment) => {
   const { stacktical } = network.config;
 
-  for (let messenger in stacktical.bootstrap.registry.messengers) {
+  for (let messenger in stacktical.messengers) {
     await run(SUB_TASK_NAMES.DEPLOY_MESSENGER, {
       id: messenger,
     });

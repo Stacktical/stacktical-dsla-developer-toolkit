@@ -112,7 +112,7 @@ task(
   TASK_NAMES.SET_PRECOORDINATOR,
   'Set the PreCoordinator service configuration from stacktical configuration'
 )
-  .addParam('useCaseName', 'Use case to set the precoordinator')
+  .addParam('id', 'Messenger id of stacktical.messengers')
   .setAction(async (taskArgs, { run }) => {
     printSeparator();
     await run(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE);

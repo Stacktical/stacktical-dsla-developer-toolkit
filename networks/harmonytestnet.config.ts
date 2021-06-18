@@ -90,16 +90,16 @@ export const harmonytestnet: NetworkUserConfig = {
             burnDSLA: false,
           },
         },
-        messengers: [
-          {
-            contract: CONTRACT_NAMES.SEMessenger,
-            specificationPath: `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_EFFICIENCY}/${CONTRACT_NAMES.SEMessenger}.json`,
-            useCaseName: USE_CASES.STAKING_EFFICIENCY,
-            externalAdapterUrl: 'http://host.docker.internal:6060',
-          },
-        ],
       },
     },
+    messengers: [
+      {
+        contract: CONTRACT_NAMES.SEMessenger,
+        specificationPath: `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_EFFICIENCY}/${CONTRACT_NAMES.SEMessenger}.json`,
+        useCaseName: USE_CASES.STAKING_EFFICIENCY,
+        externalAdapterUrl: 'http://host.docker.internal:6060',
+      },
+    ],
     scripts: scripts,
   },
 };

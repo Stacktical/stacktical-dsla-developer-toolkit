@@ -11,7 +11,8 @@ export type StackticalConfiguration = {
   chainlink: ChainlinkConfiguration;
   addresses: DeployedContractAddresses;
   bootstrap: BootstrapConfiguration;
-  scripts?: ScriptsConfiguration;
+  messengers: Array<MessengerConfiguration>;
+  scripts: ScriptsConfiguration;
 };
 
 export type TokenConfiguration = {
@@ -62,7 +63,6 @@ export type BootstrapConfiguration = {
   allowance: Array<TokenAllowance>;
   registry: {
     periods: Array<PeriodBootstrapDefinition>;
-    messengers: Array<MessengerConfiguration>;
     stake: StakeBootstrapDefinition;
   };
 };

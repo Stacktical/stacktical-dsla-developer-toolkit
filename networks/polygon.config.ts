@@ -129,17 +129,17 @@ export const polygon: NetworkUserConfig = {
             burnDSLA: false,
           },
         },
-        messengers: [
-          {
-            contract: CONTRACT_NAMES.SEMessenger,
-            specificationPath: `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_EFFICIENCY}/${CONTRACT_NAMES.SEMessenger}.json`,
-            useCaseName: 'staking-efficiency',
-            externalAdapterUrl:
-              'https://europe-west1-stacktical-0.cloudfunctions.net/dsla-indexer',
-          },
-        ],
       },
     },
+    messengers: [
+      {
+        contract: CONTRACT_NAMES.SEMessenger,
+        specificationPath: `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_EFFICIENCY}/${CONTRACT_NAMES.SEMessenger}.json`,
+        useCaseName: 'staking-efficiency',
+        externalAdapterUrl:
+          'https://europe-west1-stacktical-0.cloudfunctions.net/dsla-indexer',
+      },
+    ],
     scripts: scripts,
   },
 };
