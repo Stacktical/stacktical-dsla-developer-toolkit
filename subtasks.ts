@@ -21,6 +21,7 @@ import {
   Oracle__factory,
   Ownable__factory,
   PeriodRegistry__factory,
+  PreCoordinator,
   PreCoordinator__factory,
   SEMessenger__factory,
   SLA,
@@ -1158,7 +1159,12 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
         finalPeriodId,
         ipfsHash,
         extraData,
-        leverage
+        leverage,
+        {
+          ...(hre.network.config.gas !== 'auto' && {
+            gasLimit: hre.network.config.gas,
+          }),
+        }
       );
       await tx.wait();
 
@@ -1277,11 +1283,8 @@ subtask(SUB_TASK_NAMES.GET_PRECOORDINATOR, undefined).setAction(
 
     console.log('Getting Chainlink config from PreCoordinator contract');
 
-    const precoordinator = await PreCoordinator__factory.connect(
-      (
-        await get(CONTRACT_NAMES.PreCoordinator)
-      ).address,
-      signer
+    const precoordinator = <PreCoordinator>(
+      await ethers.getContract(CONTRACT_NAMES.PreCoordinator)
     );
     const eventsFilter = precoordinator.filters.NewServiceAgreement();
     const events = await precoordinator.queryFilter(
