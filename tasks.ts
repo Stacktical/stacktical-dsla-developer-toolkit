@@ -1,6 +1,8 @@
 import { task, types } from 'hardhat/config';
 import { SUB_TASK_NAMES } from './subtasks';
 import { printSeparator } from './utils';
+import { HardhatRuntimeEnvironment } from 'hardhat/types';
+import { IMessenger } from './typechain';
 
 enum TASK_NAMES {
   EXPORT_DATA = 'stacktical:export-data',
@@ -20,6 +22,7 @@ enum TASK_NAMES {
   GET_VALID_SLAS = 'stacktical:get-valid-slas',
   GET_REVERT_MESSAGE = 'stacktical:get-revert-message',
   DEPLOY_MESSENGER = 'stacktical:deploy-messenger',
+  GET_MESSENGER = 'stacktical:get-messenger',
 }
 
 task(TASK_NAMES.DEPLOY_SLA, 'Deploy customized SLA from stacktical config')
@@ -208,6 +211,15 @@ task(TASK_NAMES.DEPLOY_MESSENGER, 'deploy a messenger in the MessengerRegistry')
   )
   .setAction(async (taskArgs, hre: any) => {
     await hre.run(SUB_TASK_NAMES.DEPLOY_MESSENGER, taskArgs);
+  });
+
+task(TASK_NAMES.GET_MESSENGER, 'get messenger data')
+  .addOptionalParam(
+    'id',
+    'Id of the messenger on the messengers list of the network config'
+  )
+  .setAction(async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    await hre.run(SUB_TASK_NAMES.GET_MESSENGER, taskArgs);
   });
 
 // task(TASK_NAMES.FULFILL_ANALYTICS, 'Fulfill pendant network analytics')

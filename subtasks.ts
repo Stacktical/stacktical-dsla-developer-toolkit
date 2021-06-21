@@ -15,6 +15,7 @@ import {
   ERC20__factory,
   IERC20,
   IERC20__factory,
+  IMessenger,
   IMessenger__factory,
   MessengerRegistry__factory,
   Oracle__factory,
@@ -86,6 +87,7 @@ export enum SUB_TASK_NAMES {
   GET_VALID_SLAS = 'GET_VALID_SLAS',
   GET_REVERT_MESSAGE = 'GET_REVERT_MESSAGE',
   DEPLOY_MESSENGER = 'DEPLOY_MESSENGER',
+  GET_MESSENGER = 'GET_MESSENGER',
 }
 
 subtask(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES, undefined).setAction(
@@ -1692,6 +1694,38 @@ subtask(SUB_TASK_NAMES.GET_REVERT_MESSAGE, undefined).setAction(
     });
     console.log('Error data:');
     console.log(data);
+  }
+);
+
+subtask(SUB_TASK_NAMES.GET_MESSENGER, undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    const { ethers, network } = hre;
+    const { stacktical } = network.config;
+    const messengers = taskArgs.id
+      ? [stacktical.messengers[taskArgs.id]]
+      : stacktical.messengers;
+    for (let messenger of messengers) {
+      const messengerArtifact = <IMessenger>(
+        await ethers.getContract(messenger.contract)
+      );
+      printSeparator();
+      consola.info('messenger: ', messenger.contract);
+      const fee = await messengerArtifact.fee();
+      consola.info('fee:', fromWei(fee.toString()));
+      const fulfillsCounter = await messengerArtifact.fulfillsCounter();
+      consola.info('fulfillsCounter:', fulfillsCounter.toString());
+      const requestsCounter = await messengerArtifact.requestsCounter();
+      consola.info('requestsCounter:', requestsCounter.toString());
+      const jobId = await messengerArtifact.jobId();
+      consola.info('jobId:', jobId);
+      const messengerPrecision = await messengerArtifact.messengerPrecision();
+      consola.info('messengerPrecision:', messengerPrecision.toString());
+      const oracle = await messengerArtifact.oracle();
+      consola.info('oracle:', oracle);
+      const owner = await messengerArtifact.owner();
+      consola.info('owner:', owner);
+      printSeparator();
+    }
   }
 );
 
