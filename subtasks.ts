@@ -25,6 +25,7 @@ import {
   SLA,
   SLA__factory,
   SLARegistry__factory,
+  StakeRegistry,
   StakeRegistry__factory,
 } from './typechain';
 
@@ -1562,11 +1563,8 @@ subtask(SUB_TASK_NAMES.REGISTRIES_CONFIGURATION, undefined).setAction(
     const { get } = deployments;
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
-    const stakeRegistry = await StakeRegistry__factory.connect(
-      (
-        await get(CONTRACT_NAMES.StakeRegistry)
-      ).address,
-      signer
+    const stakeRegistry = <StakeRegistry>(
+      await ethers.getContract(CONTRACT_NAMES.StakeRegistry)
     );
     const stakingParameters = await stakeRegistry.getStakingParameters();
     console.log('Staking parameters: ');
