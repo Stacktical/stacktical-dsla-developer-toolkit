@@ -51,7 +51,7 @@ export const ethereum: NetworkUserConfig = {
       },
     ],
     chainlink: {
-      deployLocal: true,
+      deployLocal: false,
       deleteOldJobs: false,
       nodeFunds: '1',
       gasLimit: undefined,
@@ -81,25 +81,7 @@ export const ethereum: NetworkUserConfig = {
       ],
     },
     addresses: {
-      [CONTRACT_NAMES.Oracle]: '0x99F4e62a317cc666589c9e370c73c15B158f3c61',
       [CONTRACT_NAMES.LinkToken]: '0x514910771af9ca656af840dff83e8264ecf986ca',
-      [CONTRACT_NAMES.SLORegistry]:
-        '0x1bE60A36Ba9De2eCeFe8be8d2720B67f932EC487',
-      [CONTRACT_NAMES.SLARegistry]:
-        '0xB63a13825e129fBa2f2205847158461bec5f265A',
-      [CONTRACT_NAMES.MessengerRegistry]:
-        '0x766C0b52fADC43Bc3EEAe8BC64536404981951bE',
-      [CONTRACT_NAMES.PeriodRegistry]:
-        '0x5Da279bE9D6CeB11e7D7117915075066909357bc',
-      [CONTRACT_NAMES.StakeRegistry]:
-        '0x4b48AdDd838A11061cE285106f4a30cc5636735C',
-      [CONTRACT_NAMES.SEMessenger]:
-        '0xFB29aFC3F4B78755f07faD5B86448595D2EEC86C',
-      [CONTRACT_NAMES.Details]: '0x38b0cd8BB4C4608E32EE75b25A8846459cEAd513',
-      [CONTRACT_NAMES.StringUtils]:
-        '0xC7183212c2b0D4A62A542F7C4c3060Db55BE0bd2',
-      [CONTRACT_NAMES.PreCoordinator]:
-        '0x7db551Ce6677211309db39A67F73cA923e9d4944',
     },
     bootstrap: {
       allowance: [
@@ -126,9 +108,9 @@ export const ethereum: NetworkUserConfig = {
       {
         contract: CONTRACT_NAMES.SEMessenger,
         specificationPath: `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_EFFICIENCY}/${CONTRACT_NAMES.SEMessenger}.json`,
-        useCaseName: 'staking-efficiency',
+        useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl:
-          'https://europe-west1-stacktical-0.cloudfunctions.net/dsla-indexer',
+          'https://europe-west3-stacktical-0.cloudfunctions.net/staking-efficiency-indexer',
       },
     ],
     scripts: scripts,

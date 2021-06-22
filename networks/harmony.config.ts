@@ -53,7 +53,7 @@ export const harmony: NetworkUserConfig = {
       },
     ],
     chainlink: {
-      deployLocal: true,
+      deployLocal: false,
       deleteOldJobs: true,
       nodeFunds: '1',
       gasLimit: undefined,
@@ -61,11 +61,18 @@ export const harmony: NetworkUserConfig = {
       ethHttpUrl: process.env.HARMONY_URI,
       nodesConfiguration: [
         {
-          name: 'chainlink-node-1',
+          name: 'newyork.chainlink.node.dsla.network',
           restApiUrl: process.env.HARMONY_CHAINLINK_NODE_1_URL,
           restApiPort: process.env.HARMONY_CHAINLINK_NODE_1_PORT,
           email: process.env.HARMONY_CHAINLINK_NODE_1_USER,
           password: process.env.HARMONY_CHAINLINK_NODE_1_PASS,
+        },
+        {
+          name: 'losangeles.chainlink.node.dsla.network',
+          restApiUrl: process.env.HARMONY_CHAINLINK_NODE_2_URL,
+          restApiPort: process.env.HARMONY_CHAINLINK_NODE_2_PORT,
+          email: process.env.HARMONY_CHAINLINK_NODE_2_USER,
+          password: process.env.HARMONY_CHAINLINK_NODE_2_PASS,
         },
       ],
     },
@@ -101,9 +108,9 @@ export const harmony: NetworkUserConfig = {
       {
         contract: CONTRACT_NAMES.SEMessenger,
         specificationPath: `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_EFFICIENCY}/${CONTRACT_NAMES.SEMessenger}.json`,
-        useCaseName: 'staking-efficiency',
+        useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl:
-          'https://europe-west1-stacktical-0.cloudfunctions.net/dsla-indexer',
+          'https://europe-west3-stacktical-0.cloudfunctions.net/staking-efficiency-indexer',
       },
     ],
     scripts: scripts,

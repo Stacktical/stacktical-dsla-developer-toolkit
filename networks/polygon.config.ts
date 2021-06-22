@@ -48,55 +48,37 @@ export const polygon: NetworkUserConfig = {
       },
     ],
     chainlink: {
-      deployLocal: true,
+      deployLocal: false,
       deleteOldJobs: true,
       nodeFunds: '1',
       gasLimit: undefined,
-      ethWsUrl: process.env.ETHEREUM_WS_URI,
+      ethWsUrl: process.env.POLYGON_WS_URI,
       nodesConfiguration: [
         {
-          name: 'node-1',
-          restApiUrl: process.env.ETHEREUM_CHAINLINK_NODE_1_URL,
-          restApiPort: process.env.ETHEREUM_CHAINLINK_NODE_1_PORT,
-          email: process.env.ETHEREUM_CHAINLINK_NODE_1_USER,
-          password: process.env.ETHEREUM_CHAINLINK_NODE_1_PASS,
+          name: 'Berlin',
+          restApiUrl: process.env.POLYGON_CHAINLINK_NODE_1_URL,
+          restApiPort: process.env.POLYGON_CHAINLINK_NODE_1_PORT,
+          email: process.env.POLYGON_CHAINLINK_NODE_1_USER,
+          password: process.env.POLYGON_CHAINLINK_NODE_1_PASS,
         },
         {
-          name: 'node-2',
-          restApiUrl: process.env.ETHEREUM_CHAINLINK_NODE_2_URL,
-          restApiPort: process.env.ETHEREUM_CHAINLINK_NODE_2_PORT,
-          email: process.env.ETHEREUM_CHAINLINK_NODE_2_USER,
-          password: process.env.ETHEREUM_CHAINLINK_NODE_2_PASS,
+          name: 'NewYork',
+          restApiUrl: process.env.POLYGON_CHAINLINK_NODE_2_URL,
+          restApiPort: process.env.POLYGON_CHAINLINK_NODE_2_PORT,
+          email: process.env.POLYGON_CHAINLINK_NODE_2_USER,
+          password: process.env.POLYGON_CHAINLINK_NODE_2_PASS,
         },
         {
-          name: 'node-3',
-          restApiUrl: process.env.ETHEREUM_CHAINLINK_NODE_3_URL,
-          restApiPort: process.env.ETHEREUM_CHAINLINK_NODE_3_PORT,
-          email: process.env.ETHEREUM_CHAINLINK_NODE_3_USER,
-          password: process.env.ETHEREUM_CHAINLINK_NODE_3_PASS,
+          name: 'Paris',
+          restApiUrl: process.env.POLYGON_CHAINLINK_NODE_3_URL,
+          restApiPort: process.env.POLYGON_CHAINLINK_NODE_3_PORT,
+          email: process.env.POLYGON_CHAINLINK_NODE_3_USER,
+          password: process.env.POLYGON_CHAINLINK_NODE_3_PASS,
         },
       ],
     },
     addresses: {
-      [CONTRACT_NAMES.SLORegistry]:
-        '0x0b1cfF33ad49690dB0Eb0bc17429613969C7dDcF',
-      [CONTRACT_NAMES.SLARegistry]:
-        '0xf41EaA49BBae8650f051100d4385d5d7F9af4a54',
-      [CONTRACT_NAMES.MessengerRegistry]:
-        '0x8993F44B7Ee14446B12B6D879c325E3Cd624653B',
-      [CONTRACT_NAMES.PeriodRegistry]:
-        '0xEF12BDcF5E5D5ae4c950a9FaEb2A274d1646b48D',
-      [CONTRACT_NAMES.StakeRegistry]:
-        '0xc5C890444975f2211F84d3b543355f8DC74a6069',
-      [CONTRACT_NAMES.SEMessenger]:
-        '0x3eBe46d0d873B635D1e003BEe76de67cE2F3a584',
-      [CONTRACT_NAMES.Details]: '0x857533E7d9DE216E8BdBd1620018099B88cDD792',
-      [CONTRACT_NAMES.PreCoordinator]:
-        '0x6e782e2c3f42003eE56d30BdD269555738A39e4A',
-      [CONTRACT_NAMES.StringUtils]:
-        '0x143c0e6cB35AC53C7f06d4914199E4cAc3977AC7',
-      [CONTRACT_NAMES.Oracle]: '0x99F4e62a317cc666589c9e370c73c15B158f3c61',
-      [CONTRACT_NAMES.LinkToken]: '0xb0897686c545045afc77cf20ec7a532e3120e0f1 ',
+      [CONTRACT_NAMES.LinkToken]: '0xb0897686c545045afc77cf20ec7a532e3120e0f1',
     },
     bootstrap: {
       allowance: [
@@ -130,9 +112,9 @@ export const polygon: NetworkUserConfig = {
       {
         contract: CONTRACT_NAMES.SEMessenger,
         specificationPath: `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_EFFICIENCY}/${CONTRACT_NAMES.SEMessenger}.json`,
-        useCaseName: 'staking-efficiency',
+        useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl:
-          'https://europe-west1-stacktical-0.cloudfunctions.net/dsla-indexer',
+          'https://europe-west3-stacktical-0.cloudfunctions.net/staking-efficiency-indexer',
       },
     ],
     scripts: scripts,
