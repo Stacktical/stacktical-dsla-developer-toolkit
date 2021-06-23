@@ -23,6 +23,7 @@ enum TASK_NAMES {
   GET_REVERT_MESSAGE = 'stacktical:get-revert-message',
   DEPLOY_MESSENGER = 'stacktical:deploy-messenger',
   GET_MESSENGER = 'stacktical:get-messenger',
+  TRANSFER_OWNERSHIP = 'stacktical:transfer-ownership',
 }
 
 task(TASK_NAMES.DEPLOY_SLA, 'Deploy customized SLA from stacktical config')
@@ -220,6 +221,15 @@ task(TASK_NAMES.GET_MESSENGER, 'get messenger data')
   )
   .setAction(async (taskArgs, hre: HardhatRuntimeEnvironment) => {
     await hre.run(SUB_TASK_NAMES.GET_MESSENGER, taskArgs);
+  });
+
+task(
+  TASK_NAMES.TRANSFER_OWNERSHIP,
+  'transfer ownership of core contracts to a owner address'
+)
+  .addOptionalParam('newOwner', 'address of the new owner')
+  .setAction(async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    await hre.run(SUB_TASK_NAMES.TRANSFER_OWNERSHIP, taskArgs);
   });
 
 // task(TASK_NAMES.FULFILL_ANALYTICS, 'Fulfill pendant network analytics')

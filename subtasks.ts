@@ -17,15 +17,18 @@ import {
   IERC20__factory,
   IMessenger,
   IMessenger__factory,
+  MessengerRegistry,
   MessengerRegistry__factory,
   Oracle__factory,
   Ownable__factory,
+  PeriodRegistry,
   PeriodRegistry__factory,
   PreCoordinator,
   PreCoordinator__factory,
   SEMessenger__factory,
   SLA,
   SLA__factory,
+  SLARegistry,
   SLARegistry__factory,
   StakeRegistry,
   StakeRegistry__factory,
@@ -89,6 +92,7 @@ export enum SUB_TASK_NAMES {
   GET_REVERT_MESSAGE = 'GET_REVERT_MESSAGE',
   DEPLOY_MESSENGER = 'DEPLOY_MESSENGER',
   GET_MESSENGER = 'GET_MESSENGER',
+  TRANSFER_OWNERSHIP = 'TRANSFER_OWNERSHIP',
 }
 
 subtask(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES, undefined).setAction(
@@ -1729,6 +1733,47 @@ subtask(SUB_TASK_NAMES.GET_MESSENGER, undefined).setAction(
       consola.info('owner:', owner);
       printSeparator();
     }
+  }
+);
+
+subtask(SUB_TASK_NAMES.TRANSFER_OWNERSHIP, undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    const { ethers, network } = hre;
+    const { stacktical } = network.config;
+    const periodRegistry = <PeriodRegistry>(
+      await ethers.getContract(CONTRACT_NAMES.PeriodRegistry)
+    );
+    const stakeRegistry = <StakeRegistry>(
+      await ethers.getContract(CONTRACT_NAMES.StakeRegistry)
+    );
+    const newOwner = toChecksumAddress(taskArgs.newOwner);
+    const periodRegistryOwner = await periodRegistry.owner();
+    const stakeRegistryOwner = await stakeRegistry.owner();
+    consola.info('PeriodRegistry owner address:', periodRegistryOwner);
+    consola.info('StakeRegistry owner address:', stakeRegistryOwner);
+    consola.info('New owner address:', newOwner);
+    let tx;
+    if (newOwner !== periodRegistryOwner) {
+      printSeparator();
+      consola.info('Transferring PeriodRegistry ownership');
+      tx = await periodRegistry.transferOwnership(newOwner);
+      await tx.wait();
+      consola.success(
+        'PeriodRegistry ownership successfully transferred, new owner:',
+        await periodRegistry.owner()
+      );
+    }
+    if (newOwner !== stakeRegistryOwner) {
+      printSeparator();
+      consola.info('Transferring StakeRegistry ownership');
+      tx = await stakeRegistry.transferOwnership(newOwner);
+      await tx.wait();
+      consola.success(
+        'StakeRegistry ownership successfully transferred, new owner:',
+        await stakeRegistry.owner()
+      );
+    }
+    printSeparator();
   }
 );
 
