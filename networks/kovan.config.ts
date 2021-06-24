@@ -106,8 +106,7 @@ export const kovan: NetworkUserConfig = {
         contract: CONTRACT_NAMES.SEMessenger,
         specificationPath: `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_EFFICIENCY}/${CONTRACT_NAMES.SEMessenger}.json`,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
-        externalAdapterUrl:
-          'https://europe-west3-stacktical-0.cloudfunctions.net/staking-efficiency-indexer',
+        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
       },
     ],
     scripts: scripts,

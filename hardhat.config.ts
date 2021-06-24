@@ -25,7 +25,7 @@ const networks = [
   { name: NETWORKS.HARMONYTESTNET, enabled: false },
   { name: NETWORKS.ETHEREUM, enabled: false },
   { name: NETWORKS.HARMONY, enabled: false },
-  { name: NETWORKS.POLYGON, enabled: false },
+  { name: NETWORKS.POLYGON, enabled: true },
 ];
 
 const getEnabledNetworks = () =>
