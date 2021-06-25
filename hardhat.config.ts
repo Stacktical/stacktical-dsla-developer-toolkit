@@ -6,13 +6,13 @@ import './tasks';
 import './dtk-env-validation';
 import { NETWORKS } from './constants';
 import 'hardhat-deploy';
-import 'hardhat-deploy-ethers';
 import '@nomiclabs/hardhat-waffle';
 import '@nomiclabs/hardhat-ethers';
 import '@nomiclabs/hardhat-web3';
 import '@nomiclabs/hardhat-etherscan';
 import 'babel-polyfill';
 import 'babel-register';
+import 'hardhat-abi-exporter';
 import '@typechain/hardhat';
 import './stacktical.validation';
 import './type-extensions';
@@ -21,8 +21,8 @@ import { HardhatUserConfig } from 'hardhat/types';
 const networks = [
   { name: NETWORKS.DEVELOP, enabled: true },
   { name: NETWORKS.KOVAN, enabled: false },
-  { name: NETWORKS.MUMBAI, enabled: false },
-  { name: NETWORKS.HARMONYTESTNET, enabled: false },
+  { name: NETWORKS.MUMBAI, enabled: true },
+  { name: NETWORKS.HARMONYTESTNET, enabled: true },
   { name: NETWORKS.ETHEREUM, enabled: false },
   { name: NETWORKS.HARMONY, enabled: false },
   { name: NETWORKS.POLYGON, enabled: true },
@@ -99,6 +99,14 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY,
+  },
+  typechain: {
+    alwaysGenerateOverloads: false,
+  },
+  abiExporter: {
+    path: './exported-data/abi',
+    clear: true,
+    spacing: 2,
   },
 };
 // extendEnvironment((env) => {

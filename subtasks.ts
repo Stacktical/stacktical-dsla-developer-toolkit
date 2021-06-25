@@ -1228,8 +1228,8 @@ subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
       signer
     );
 
-    const slaAddress = taskArgs.address
-      ? ethers.utils.getAddress(taskArgs.address)
+    const slaAddress = taskArgs.slaAddress
+      ? ethers.utils.getAddress(taskArgs.slaAddress)
       : (await slaRegistry.userSLAs(deployer)).slice(-1)[0];
 
     if (!slaAddress) {

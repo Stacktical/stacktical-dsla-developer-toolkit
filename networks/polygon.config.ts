@@ -1,7 +1,13 @@
-import {appRoot, CONTRACT_NAMES, PERIOD_TYPE, TOKEN_NAMES, USE_CASES,} from '../constants';
-import {PolygonERC20__factory} from '../typechain';
-import {NetworkUserConfig} from 'hardhat/types';
-import {scripts} from '../scripts.config';
+import {
+  appRoot,
+  CONTRACT_NAMES,
+  PERIOD_TYPE,
+  TOKEN_NAMES,
+  USE_CASES,
+} from '../constants';
+import { PolygonERC20__factory } from '../typechain';
+import { NetworkUserConfig } from 'hardhat/types';
+import { scripts } from '../scripts.config';
 
 import Joi from 'joi';
 
@@ -22,7 +28,7 @@ if (error) {
 export const polygon: NetworkUserConfig = {
   chainId: 137,
   gas: 19000000,
-  gasPrice: 1000000000,
+  gasPrice: 2000000000,
   accounts: {
     mnemonic: process.env.MAINNET_MNEMONIC,
   },
