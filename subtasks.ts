@@ -13,11 +13,8 @@ import { subtask } from 'hardhat/config';
 import { ChainlinkNodeConfiguration } from './types';
 import {
   ERC20__factory,
-  IERC20,
-  IERC20__factory,
   IMessenger,
   IMessenger__factory,
-  MessengerRegistry,
   MessengerRegistry__factory,
   Oracle__factory,
   Ownable__factory,
@@ -28,7 +25,6 @@ import {
   SEMessenger__factory,
   SLA,
   SLA__factory,
-  SLARegistry,
   SLARegistry__factory,
   StakeRegistry,
   StakeRegistry__factory,
@@ -50,6 +46,7 @@ import {
 import axios from 'axios';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { formatBytes32String } from 'ethers/lib/utils';
+import { networks } from './hardhat.config';
 
 const prettier = require('prettier');
 const appRoot = require('app-root-path');
@@ -72,7 +69,7 @@ export enum SUB_TASK_NAMES {
   STOP_LOCAL_GRAPH_NODE = 'STOP_LOCAL_GRAPH_NODE',
   START_LOCAL_GRAPH_NODE = 'START_LOCAL_GRAPH_NODE',
   INITIALIZE_DEFAULT_ADDRESSES = 'INITIALIZE_DEFAULT_ADDRESSES',
-  EXPORT_CONTRACTS_ADDRESSES = 'EXPORT_CONTRACTS_ADDRESSES',
+  EXPORT_NETWORKS = 'EXPORT_NETWORKS',
   DEPLOY_SLA = 'DEPLOY_SLA',
   BOOTSTRAP_MESSENGER_REGISTRY = 'BOOTSTRAP_MESSENGER_REGISTRY',
   BOOTSTRAP_PERIOD_REGISTRY = 'BOOTSTRAP_PERIOD_REGISTRY',
@@ -478,19 +475,13 @@ subtask(
   }
 });
 
-subtask(SUB_TASK_NAMES.EXPORT_CONTRACTS_ADDRESSES, undefined).setAction(
+subtask(SUB_TASK_NAMES.EXPORT_NETWORKS, undefined).setAction(
   async (_, hre: HardhatRuntimeEnvironment) => {
     const { network, deployments } = hre;
     const { get } = deployments;
     const { stacktical } = network.config;
 
     consola.info('Starting export contracts addresses process');
-
-    const getLines = (networkName) => [
-      `const ${networkName} = `,
-      `\n\nexport default ${networkName}`,
-    ];
-    const [startingLine, finalLine] = getLines(network.name);
     const SLORegistry = await get(CONTRACT_NAMES.SLORegistry);
     const SLARegistry = await get(CONTRACT_NAMES.SLARegistry);
     const MessengerRegistry = await get(CONTRACT_NAMES.MessengerRegistry);
@@ -534,9 +525,9 @@ subtask(SUB_TASK_NAMES.EXPORT_CONTRACTS_ADDRESSES, undefined).setAction(
     };
     consola.info('Resulting addresses');
     console.log(addresses);
-    const base_path = `${appRoot}/exported-data/networks`;
+    const base_path = `${appRoot}/exported-data`;
     const prettifiedAddresses = prettier.format(
-      startingLine + JSON.stringify(addresses) + finalLine,
+      `export const ${network.name} = ` + JSON.stringify(addresses),
       {
         useTabs: false,
         tabWidth: 2,
@@ -549,29 +540,19 @@ subtask(SUB_TASK_NAMES.EXPORT_CONTRACTS_ADDRESSES, undefined).setAction(
       prettifiedAddresses
     );
 
-    const files = await new Promise((resolve, reject) => {
-      fs.readdir(`${appRoot}/deployments`, undefined, (err, files) => {
-        if (err) return reject(err);
-        resolve(files);
-      });
+    const exportLines = networks
+      .filter((network) => network.exportable)
+      .reduce(
+        (r, network) =>
+          (r += `export {${network.name}} from './${network.name}'\n`),
+        ''
+      );
+    const prettifiedIndex = prettier.format(`${exportLines}\n`, {
+      useTabs: false,
+      tabWidth: 2,
+      singleQuote: true,
+      parser: 'typescript',
     });
-    const importLines = Object.values(files).reduce(
-      (r, name) => (r += `import ${name} from './${name}'\n`),
-      ''
-    );
-    const exportLines = Object.values(files).reduce(
-      (r, name) => (r += `${name}, `),
-      ''
-    );
-    const prettifiedIndex = prettier.format(
-      `${importLines}\n \n export{ \n ${exportLines} }`,
-      {
-        useTabs: false,
-        tabWidth: 2,
-        singleQuote: true,
-        parser: 'typescript',
-      }
-    );
     fs.writeFileSync(
       path.resolve(__dirname, `${base_path}/index.ts`),
       prettifiedIndex

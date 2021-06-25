@@ -1,4 +1,4 @@
-const kovan = {
+export const kovan = {
   SLORegistry: '0x0cD250ABdC619e9c5Cc46a0B8B521ec8557a5B47',
   SLARegistry: '0x1c5CeeFf521b91dC4aF2c3a9B40913f9622F0F9e',
   MessengerRegistry: '0x25cc4FdAa24C23A3A10F09ca3FA1a7D03fb98bEE',
@@ -12,5 +12,3 @@ const kovan = {
   USDCToken: '0x9965Fef05a7A617Fd20f3A9B2fC25aFe22503Ed0',
   SEMessenger: '0xCf11e6FB83d825B7486B9807661378159F0a8ff1',
 };
-
-export default kovan;

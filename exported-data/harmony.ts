@@ -1,4 +1,4 @@
-const harmony = {
+export const harmony = {
   SLORegistry: '0xDf43eED59B0f9fc639Ec80Ac2BAF4ABf1c70c370',
   SLARegistry: '0xC084329D3115eE3b2172DA953D3f880aB742620D',
   MessengerRegistry: '0x551264EBEdd316A173680Ea956dB0a7cE2864682',
@@ -13,5 +13,3 @@ const harmony = {
   USDTToken: '0x3C2B8Be99c50593081EAA2A724F0B8285F5aba8f',
   SEMessenger: '0xFE676810B6072d9D3Fc4279340d60f72153508A6',
 };
-
-export default harmony;

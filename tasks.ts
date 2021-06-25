@@ -37,7 +37,7 @@ task(TASK_NAMES.DEPLOY_SLA, 'Deploy customized SLA from stacktical config')
 task(TASK_NAMES.EXPORT_DATA, 'Export data to exported-data folder').setAction(
   async (_, { run }) => {
     await run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
-    await run(SUB_TASK_NAMES.EXPORT_CONTRACTS_ADDRESSES);
+    await run(SUB_TASK_NAMES.EXPORT_NETWORKS);
   }
 );
 

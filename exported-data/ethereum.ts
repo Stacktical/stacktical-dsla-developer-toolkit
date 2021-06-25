@@ -1,4 +1,4 @@
-const ethereum = {
+export const ethereum = {
   SLORegistry: '0xd108F88cF1a834572a0f1677c356C5786E896012',
   SLARegistry: '0x69D491038b1ED64167814951CC39AAca04090561',
   MessengerRegistry: '0x2208A83ac05A9c284f147d3d415C5b9C4810a833',
@@ -12,5 +12,3 @@ const ethereum = {
   USDCToken: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
   SEMessenger: '0x3eAd69a34DEb212Af739500915241897fDa027AA',
 };
-
-export default ethereum;
