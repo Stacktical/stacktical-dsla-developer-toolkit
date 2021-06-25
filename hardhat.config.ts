@@ -23,8 +23,8 @@ const networks = [
   { name: NETWORKS.KOVAN, enabled: false },
   { name: NETWORKS.MUMBAI, enabled: true },
   { name: NETWORKS.HARMONYTESTNET, enabled: true },
-  { name: NETWORKS.ETHEREUM, enabled: false },
-  { name: NETWORKS.HARMONY, enabled: false },
+  { name: NETWORKS.ETHEREUM, enabled: true },
+  { name: NETWORKS.HARMONY, enabled: true },
   { name: NETWORKS.POLYGON, enabled: true },
 ];
 

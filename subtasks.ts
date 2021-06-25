@@ -73,7 +73,6 @@ export enum SUB_TASK_NAMES {
   START_LOCAL_GRAPH_NODE = 'START_LOCAL_GRAPH_NODE',
   INITIALIZE_DEFAULT_ADDRESSES = 'INITIALIZE_DEFAULT_ADDRESSES',
   EXPORT_CONTRACTS_ADDRESSES = 'EXPORT_CONTRACTS_ADDRESSES',
-  EXPORT_ABIS = 'EXPORT_ABIS',
   DEPLOY_SLA = 'DEPLOY_SLA',
   BOOTSTRAP_MESSENGER_REGISTRY = 'BOOTSTRAP_MESSENGER_REGISTRY',
   BOOTSTRAP_PERIOD_REGISTRY = 'BOOTSTRAP_PERIOD_REGISTRY',
@@ -578,87 +577,6 @@ subtask(SUB_TASK_NAMES.EXPORT_CONTRACTS_ADDRESSES, undefined).setAction(
       prettifiedIndex
     );
     consola.success('Contract addresses exported correctly');
-  }
-);
-
-subtask(SUB_TASK_NAMES.EXPORT_ABIS, undefined).setAction(
-  async (_, hre: HardhatRuntimeEnvironment) => {
-    const { deployments } = hre;
-    const { getArtifact } = deployments;
-    consola.info('Starting export ABIs process');
-
-    const SLA = await getArtifact(CONTRACT_NAMES.SLA);
-    const SLARegistry = await getArtifact(CONTRACT_NAMES.SLARegistry);
-    const SLORegistry = await getArtifact(CONTRACT_NAMES.SLORegistry);
-    const PeriodRegistry = await getArtifact(CONTRACT_NAMES.PeriodRegistry);
-    const StakeRegistry = await getArtifact(CONTRACT_NAMES.StakeRegistry);
-    const MessengerRegistry = await getArtifact(
-      CONTRACT_NAMES.MessengerRegistry
-    );
-    const Details = await getArtifact(CONTRACT_NAMES.Details);
-
-    const files = {
-      SLA: {
-        constName: 'export const SLAABI: AbiItem[] =',
-        tsFileName: 'SLAABI.ts',
-        abi: SLA.abi,
-      },
-      SLARegistry: {
-        constName: 'export const SLARegistryABI: AbiItem[] =',
-        tsFileName: 'SLARegistryABI.ts',
-        abi: SLARegistry.abi,
-      },
-      SLORegistry: {
-        constName: 'export const SLORegistryABI: AbiItem[] =',
-        tsFileName: 'SLORegistryABI.ts',
-        abi: SLORegistry.abi,
-      },
-      PeriodRegistry: {
-        constName: 'export const PeriodRegistryABI: AbiItem[] =',
-        tsFileName: 'PeriodRegistryABI.ts',
-        abi: PeriodRegistry.abi,
-      },
-      StakeRegistry: {
-        constName: 'export const StakeRegistryABI: AbiItem[] =',
-        tsFileName: 'StakeRegistryABI.ts',
-        abi: StakeRegistry.abi,
-      },
-      MessengerRegistry: {
-        constName: 'export const MessengerRegistryABI: AbiItem[] =',
-        tsFileName: 'MessengerRegistryABI.ts',
-        abi: MessengerRegistry.abi,
-      },
-      Details: {
-        constName: 'export const DetailsABI: AbiItem[] =',
-        tsFileName: 'DetailsABI.ts',
-        abi: Details.abi,
-      },
-      ERC20: {
-        constName: 'export const erc20ABI: AbiItem[] =',
-        tsFileName: 'erc20ABI.ts',
-        abi: IERC20__factory.abi,
-      },
-    };
-
-    const base_path = `${appRoot}/exported-data`;
-    const importAbiItem = "import { AbiItem } from 'web3-utils/types';\n\n";
-    for (const file of Object.values(files)) {
-      const { constName, tsFileName, abi } = file;
-      const content = prettier.format(
-        importAbiItem + constName + JSON.stringify(abi),
-        {
-          useTabs: false,
-          tabWidth: 2,
-          singleQuote: true,
-          parser: 'typescript',
-        }
-      );
-      fs.writeFileSync(
-        path.resolve(__dirname, `${base_path}/${tsFileName}`),
-        content
-      );
-    }
-    consola.success('ABIs exported correctly');
   }
 );
 

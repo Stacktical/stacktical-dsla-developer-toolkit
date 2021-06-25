@@ -2,7 +2,6 @@ import { task, types } from 'hardhat/config';
 import { SUB_TASK_NAMES } from './subtasks';
 import { printSeparator } from './utils';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
-import { IMessenger } from './typechain';
 
 enum TASK_NAMES {
   EXPORT_DATA = 'stacktical:export-data',
@@ -39,7 +38,6 @@ task(TASK_NAMES.EXPORT_DATA, 'Export data to exported-data folder').setAction(
   async (_, { run }) => {
     await run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
     await run(SUB_TASK_NAMES.EXPORT_CONTRACTS_ADDRESSES);
-    await run(SUB_TASK_NAMES.EXPORT_ABIS);
   }
 );
 
