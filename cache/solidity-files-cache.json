@@ -438,7 +438,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/chainlink/Oracle.sol": {
-      "lastModificationDate": 1623458144406,
+      "lastModificationDate": 1624462037053,
       "contentHash": "e3b4463949f2a2efb8e84c9dfe62d566",
       "sourceName": "contracts/chainlink/Oracle.sol",
       "solcConfig": {
@@ -1266,7 +1266,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/messengers/staking-efficiency/SEMessenger.sol": {
-      "lastModificationDate": 1624393818187,
+      "lastModificationDate": 1624462037054,
       "contentHash": "ef41471fed47488cc6d1c43be3e37a46",
       "sourceName": "contracts/messengers/staking-efficiency/SEMessenger.sol",
       "solcConfig": {
@@ -2482,7 +2482,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/tokens/PolygonERC20.sol": {
-      "lastModificationDate": 1623458144408,
+      "lastModificationDate": 1624462037054,
       "contentHash": "cd81e6760cdadd30ef998734088bf402",
       "sourceName": "contracts/tokens/PolygonERC20.sol",
       "solcConfig": {
@@ -2623,8 +2623,8 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/DSLA.sol": {
-      "lastModificationDate": 1624042029346,
-      "contentHash": "73abfcc17b24448bb07cae3793a48517",
+      "lastModificationDate": 1624462037052,
+      "contentHash": "a14b5484e4a14ebb15e5a826c79e28ee",
       "sourceName": "contracts/DSLA.sol",
       "solcConfig": {
         "version": "0.6.6",
@@ -2657,7 +2657,6 @@
         }
       },
       "imports": [
-        "@stacktical/dsla-contracts/contracts/SLARegistry.sol",
         "@stacktical/dsla-contracts/contracts/PeriodRegistry.sol",
         "@stacktical/dsla-contracts/contracts/StakeRegistry.sol",
         "@stacktical/dsla-contracts/contracts/MessengerRegistry.sol",
@@ -2673,7 +2672,7 @@
       "artifacts": []
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/tokens/EthereumERC20.sol": {
-      "lastModificationDate": 1623458144407,
+      "lastModificationDate": 1624462037054,
       "contentHash": "3fde85e74a258ecac977cbdc6852b7a8",
       "sourceName": "contracts/tokens/EthereumERC20.sol",
       "solcConfig": {
@@ -2717,7 +2716,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-developer-toolkit/contracts/chainlink/PreCoordinator.sol": {
-      "lastModificationDate": 1623458144407,
+      "lastModificationDate": 1624462037053,
       "contentHash": "3c66f66b1b6f7b2de4283fccf0e59807",
       "sourceName": "contracts/chainlink/PreCoordinator.sol",
       "solcConfig": {

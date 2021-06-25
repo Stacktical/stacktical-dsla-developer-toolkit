@@ -35,7 +35,7 @@ export const develop: NetworkUserConfig = {
     checkPastPeriods: false,
     deployTokens: true,
     chainlink: {
-      deployLocal: false,
+      deployLocal: true,
       deleteOldJobs: true,
       nodeFunds: '10',
       gasLimit: undefined,
