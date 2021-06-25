@@ -1,13 +1,20 @@
-import {appRoot, CONTRACT_NAMES, PERIOD_TYPE, TOKEN_NAMES, USE_CASES,} from '../constants';
-import {EthereumERC20__factory} from '../typechain';
-import {NetworkUserConfig} from 'hardhat/types';
-import {scripts} from '../scripts.config';
+import {
+  appRoot,
+  CONTRACT_NAMES,
+  PERIOD_TYPE,
+  TOKEN_NAMES,
+  USE_CASES,
+} from '../constants';
+import { EthereumERC20__factory } from '../typechain';
+import { NetworkUserConfig } from 'hardhat/types';
+import { scripts } from '../scripts.config';
 import Joi from 'joi';
 
 const schema = Joi.object({
   MAINNET_MNEMONIC: Joi.string().required(),
   HARMONY_URI: Joi.string().required(),
   HARMONY_WS_URI: Joi.string().required(),
+  STAKING_EFFICIENCY_INDEXER_URI: Joi.string().required(),
 }).unknown();
 
 const { error, value } = schema.validate(process.env);

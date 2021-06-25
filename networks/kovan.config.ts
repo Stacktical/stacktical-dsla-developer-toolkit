@@ -15,6 +15,7 @@ const schema = Joi.object({
   TESTNET_MNEMONIC: Joi.string().required(),
   KOVAN_URI: Joi.string().required(),
   KOVAN_WS_URI: Joi.string().required(),
+  STAKING_EFFICIENCY_INDEXER_URI: Joi.string().required(),
 }).unknown();
 
 const { error, value } = schema.validate(process.env);

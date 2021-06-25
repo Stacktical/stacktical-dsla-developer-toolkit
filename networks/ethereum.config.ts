@@ -14,6 +14,7 @@ const schema = Joi.object({
   MAINNET_MNEMONIC: Joi.string().required(),
   ETHEREUM_URI: Joi.string().required(),
   ETHEREUM_WS_URI: Joi.string().required(),
+  STAKING_EFFICIENCY_INDEXER_URI: Joi.string().required(),
 }).unknown();
 
 const { error, value } = schema.validate(process.env);
