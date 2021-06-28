@@ -28,7 +28,7 @@ if (error) {
 export const mumbai: NetworkUserConfig = {
   chainId: 80001,
   gas: 19000000,
-  gasPrice: 1000000000,
+  gasPrice: 1 * 10 ** 9,
   accounts: {
     mnemonic: process.env.TESTNET_MNEMONIC,
   },

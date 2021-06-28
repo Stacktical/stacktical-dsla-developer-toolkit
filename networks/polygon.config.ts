@@ -29,7 +29,7 @@ if (error) {
 export const polygon: NetworkUserConfig = {
   chainId: 137,
   gas: 19000000,
-  gasPrice: 2000000000,
+  gasPrice: 20 * 10 ** 9,
   accounts: {
     mnemonic: process.env.MAINNET_MNEMONIC,
   },
