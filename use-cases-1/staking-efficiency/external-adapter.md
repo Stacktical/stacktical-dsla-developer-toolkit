@@ -1,0 +1,2 @@
+# External adapter \(SE\)
+
