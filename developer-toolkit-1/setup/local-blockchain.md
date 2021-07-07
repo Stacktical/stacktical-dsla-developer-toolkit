@@ -1,4 +1,0 @@
-# Local blockchain
-
-### npm script
-
