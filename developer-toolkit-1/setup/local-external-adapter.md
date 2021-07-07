@@ -1,0 +1,2 @@
+# Local external adapter
+
