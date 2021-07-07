@@ -1,2 +1,0 @@
-# Stacktical scripts
-
