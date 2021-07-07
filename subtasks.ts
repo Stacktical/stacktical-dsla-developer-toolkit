@@ -1103,10 +1103,13 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       console.log(
         `Starting process 3.2: notDeployer: ${fromWei(notDeployerStake)} DSLA`
       );
-      await dslaToken.connect(await ethers.getSigner(notDeployer));
-      tx = await dslaToken.approve(sla.address, notDeployerStake);
+      tx = await dslaToken
+        .connect(await ethers.getSigner(notDeployer))
+        .approve(sla.address, notDeployerStake);
       await tx.wait();
-      tx = await sla.stakeTokens(notDeployerStake, dslaToken.address);
+      tx = await sla
+        .connect(await ethers.getSigner(notDeployer))
+        .stakeTokens(notDeployerStake, dslaToken.address);
       await tx.wait();
       printSeparator();
     }
