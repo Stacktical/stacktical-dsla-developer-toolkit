@@ -1,102 +1,48 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
 require('dotenv').config({ path: './.env' });
-import * as DTKConfigs from './dtk.config';
 
 import './tasks';
+import './dtk-env-validation';
 import { NETWORKS } from './constants';
-import { extendEnvironment } from 'hardhat/config';
 import 'hardhat-deploy';
-import 'hardhat-deploy-ethers';
+import '@nomiclabs/hardhat-waffle';
 import '@nomiclabs/hardhat-ethers';
 import '@nomiclabs/hardhat-web3';
+import '@nomiclabs/hardhat-etherscan';
 import 'babel-polyfill';
 import 'babel-register';
+import 'hardhat-abi-exporter';
 import '@typechain/hardhat';
-import './stacktical-plugin';
+import './stacktical.validation';
 import './type-extensions';
-import {
-  HardhatRuntimeEnvironment,
-  HardhatUserConfig,
-  Network,
-} from 'hardhat/types';
+import { HardhatUserConfig } from 'hardhat/types';
+
+export const networks = [
+  { name: NETWORKS.DEVELOP, enabled: true, exportable: true },
+  { name: NETWORKS.KOVAN, enabled: true, exportable: true },
+  { name: NETWORKS.MUMBAI, enabled: true, exportable: false },
+  { name: NETWORKS.HARMONYTESTNET, enabled: true, exportable: false },
+  { name: NETWORKS.ETHEREUM, enabled: true, exportable: true },
+  { name: NETWORKS.HARMONY, enabled: true, exportable: true },
+  { name: NETWORKS.POLYGON, enabled: true, exportable: false },
+];
+
+const getEnabledNetworks = () =>
+  networks
+    .filter((network) => network.enabled)
+    .reduce(
+      (r, network) => ({
+        ...r,
+        [network.name]: require(`./networks/${network.name}.config`)[
+          network.name
+        ],
+      }),
+      {}
+    );
 
 const config: HardhatUserConfig = {
-  // defaultNetwork: NETWORKS.DEVELOP,
-  networks: {
-    hardhat: {
-      chainId: 1337,
-      accounts: {
-        mnemonic: process.env.DEVELOP_MNEMONIC,
-      },
-      saveDeployments: true,
-      mining: {
-        auto: true,
-      },
-      forking: {
-        url: process.env.POLYGON_URI,
-      },
-      stacktical: DTKConfigs[NETWORKS.DEVELOP],
-    },
-    [NETWORKS.DEVELOP]: {
-      chainId: 1337,
-      accounts: {
-        mnemonic: process.env.DEVELOP_MNEMONIC,
-      },
-      url: 'http://localhost:8545',
-      stacktical: DTKConfigs[NETWORKS.DEVELOP],
-    },
-    [NETWORKS.ETHEREUM]: {
-      chainId: 1,
-      accounts: {
-        mnemonic: process.env.MAINNET_MNEMONIC,
-      },
-      url: process.env.ETHEREUM_URI,
-      stacktical: DTKConfigs[NETWORKS.ETHEREUM],
-    },
-    [NETWORKS.POLYGON]: {
-      chainId: 137,
-      gas: 19000000,
-      gasPrice: 1000000000,
-      accounts: {
-        mnemonic: process.env.MAINNET_MNEMONIC,
-      },
-      url: process.env.POLYGON_URI,
-      stacktical: DTKConfigs[NETWORKS.POLYGON],
-    },
-    [NETWORKS.MUMBAI]: {
-      chainId: 80001,
-      gas: 19000000,
-      gasPrice: 1000000000,
-      accounts: {
-        mnemonic: process.env.TESTNET_MNEMONIC,
-      },
-      url: process.env.MUMBAI_URI,
-      stacktical: DTKConfigs[NETWORKS.MUMBAI],
-    },
-    [NETWORKS.HARMONY]: {
-      chainId: 1666600000,
-      gas: 12000000,
-      gasPrice: 1000000000,
-      accounts: {
-        mnemonic: process.env.MAINNET_MNEMONIC,
-      },
-      url: process.env.HARMONY_URI,
-      saveDeployments: true,
-      stacktical: DTKConfigs[NETWORKS.HARMONY],
-    },
-    [NETWORKS.HARMONYTESTNET]: {
-      chainId: 1666700000,
-      gas: 12000000,
-      gasPrice: 1000000000,
-      accounts: {
-        mnemonic: process.env.TESTNET_MNEMONIC,
-      },
-      url: process.env.HARMONYTESTNET_URI,
-      saveDeployments: true,
-      stacktical: DTKConfigs[NETWORKS.HARMONYTESTNET],
-    },
-  },
+  networks: getEnabledNetworks(),
   solidity: {
     compilers: [
       {
@@ -151,14 +97,24 @@ const config: HardhatUserConfig = {
       default: 1,
     },
   },
+  etherscan: {
+    apiKey: process.env.ETHERSCAN_API_KEY,
+  },
+  typechain: {
+    alwaysGenerateOverloads: false,
+  },
+  abiExporter: {
+    path: './exported-data/abi',
+    clear: true,
+    spacing: 2,
+  },
 };
-
-extendEnvironment((env) => {
-  networkFromConfig(env, env.network);
-});
-
-function networkFromConfig(env: HardhatRuntimeEnvironment, network: Network) {
-  network.stacktical = env.network.stacktical;
-}
+// extendEnvironment((env) => {
+//   networkFromConfig(env, env.network);
+// });
+//
+// function networkFromConfig(env: HardhatRuntimeEnvironment, network: Network) {
+//   network.stacktical = env.network.stacktical;
+// }
 
 module.exports = config;

@@ -4,11 +4,11 @@ pragma experimental ABIEncoderV2;
 
 import '@chainlink/contracts/src/v0.6/ChainlinkClient.sol';
 
-import '@stacktical/dsla-protocol/contracts/messenger/IMessenger.sol';
-import '@stacktical/dsla-protocol/contracts/SLA.sol';
-import '@stacktical/dsla-protocol/contracts/PeriodRegistry.sol';
-import '@stacktical/dsla-protocol/contracts/StringUtils.sol';
-import '@stacktical/dsla-protocol/contracts/StakeRegistry.sol';
+import '@stacktical/dsla-contracts/contracts/interfaces/IMessenger.sol';
+import '@stacktical/dsla-contracts/contracts/SLA.sol';
+import '@stacktical/dsla-contracts/contracts/PeriodRegistry.sol';
+import '@stacktical/dsla-contracts/contracts/StringUtils.sol';
+import '@stacktical/dsla-contracts/contracts/StakeRegistry.sol';
 
 import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
 import '@openzeppelin/contracts/token/ERC20/SafeERC20.sol';
@@ -43,29 +43,30 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
     PeriodRegistry private periodRegistry;
     StakeRegistry private stakeRegistry;
     bool private retry = false;
+    /// @dev network name e.g. ethereum, harmony etc, to tell external adapter where to point
+    bytes32 public networkName;
 
     /**
      * @dev parameterize the variables according to network
      * @notice sets the Chainlink parameters (oracle address, token address, jobId) and sets the SLARegistry to 0x0 address
      * @param _messengerChainlinkOracle 1. the address of the oracle to create requests to
      * @param _messengerChainlinkToken 2. the address of LINK token contract
-     * @param _messengerJobId 3. the job id for Staking efficiency job
      * @param _feeMultiplier 6. states the amount of paid nodes running behind the precoordinator, to set the fee
      */
     constructor(
         address _messengerChainlinkOracle,
         address _messengerChainlinkToken,
-        bytes32 _messengerJobId,
         uint256 _feeMultiplier,
         PeriodRegistry _periodRegistry,
-        StakeRegistry _stakeRegistry
+        StakeRegistry _stakeRegistry,
+        bytes32 _networkName
     ) public {
-        _jobId = _messengerJobId;
         setChainlinkToken(_messengerChainlinkToken);
         _oracle = _messengerChainlinkOracle;
         _fee = _feeMultiplier * _baseFee;
         periodRegistry = _periodRegistry;
         stakeRegistry = _stakeRegistry;
+        networkName = _networkName;
     }
 
     /**
@@ -132,6 +133,7 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
         bool _messengerOwnerApproval,
         address _callerAddress
     ) public override onlySLARegistry nonReentrant {
+        require(_jobId != 0, '_jobI empty');
         SLA sla = SLA(_slaAddress);
         if (_messengerOwnerApproval) {
             ERC20(chainlinkTokenAddress()).safeTransferFrom(
@@ -146,15 +148,15 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
                 _fee
             );
         }
-        Chainlink.Request memory request =
-            buildChainlinkRequest(
-                _jobId,
-                address(this),
-                this.fulfillSLI.selector
-            );
-        (uint256 sla_monitoring_start, uint256 sla_monitoring_end) =
-            periodRegistry.getPeriodStartAndEnd(sla.periodType(), _periodId);
-        request.add('job_type', 'staking_efficiency');
+        Chainlink.Request memory request = buildChainlinkRequest(
+            _jobId,
+            address(this),
+            this.fulfillSLI.selector
+        );
+        (
+            uint256 sla_monitoring_start,
+            uint256 sla_monitoring_end
+        ) = periodRegistry.getPeriodStartAndEnd(sla.periodType(), _periodId);
         request.add(
             'sla_monitoring_start',
             StringUtils.uintToStr(sla_monitoring_start)
@@ -164,6 +166,7 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
             StringUtils.uintToStr(sla_monitoring_end)
         );
         request.add('sla_address', StringUtils.addressToString(_slaAddress));
+        request.add('network_name', StringUtils.bytes32ToStr(networkName));
 
         // Sends the request with 0.1 LINK to the oracle contract
         bytes32 requestId = sendChainlinkRequestTo(_oracle, request, _fee);
@@ -183,64 +186,26 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
      * @dev callback function for the Chainlink SLI request which stores
      * the SLI in the SLA contract
      * @param _requestId the ID of the ChainLink request
-     * @param _chainlinkResponseUint256 response object from Chainlink Oracles
+     * @param _chainlinkResponse response object from Chainlink Oracles
      */
-    function fulfillSLI(bytes32 _requestId, uint256 _chainlinkResponseUint256)
+    function fulfillSLI(bytes32 _requestId, uint256 _chainlinkResponse)
         external
         override
         nonReentrant
         recordChainlinkFulfillment(_requestId)
     {
-        bytes32 _chainlinkResponse = bytes32(_chainlinkResponseUint256);
         SLIRequest memory request = requestIdToSLIRequest[_requestId];
         emit SLIReceived(
             request.slaAddress,
             request.periodId,
             _requestId,
-            _chainlinkResponse
+            bytes32(_chainlinkResponse)
         );
-        (uint256 hits, uint256 misses) = parseSLIData(_chainlinkResponse);
-        uint256 total = hits.add(misses);
-        uint256 stakingEfficiency =
-            hits.mul(100 * _messengerPrecision).div(total);
+        _fulfillsCounter += 1;
         SLA(request.slaAddress).registerSLI(
-            stakingEfficiency,
+            _chainlinkResponse,
             request.periodId
         );
-
-        _fulfillsCounter += 1;
-    }
-
-    /**
-     * @dev recieves a string of "hits,misses" data and returns hits and misses as uint256
-     * @param sliData the ID of the ChainLink request
-     */
-    function parseSLIData(bytes32 sliData)
-        public
-        pure
-        returns (uint256, uint256)
-    {
-        bytes memory bytesSLIData = bytes(StringUtils.bytes32ToStr(sliData));
-        uint256 sliDataLength = bytesSLIData.length;
-        bytes memory bytesHits = new bytes(sliDataLength);
-        bytes memory bytesMisses = new bytes(sliDataLength);
-        for (uint256 index; index < sliDataLength; index++) {
-            if (bytesSLIData[index] == bytes1(',')) {
-                for (uint256 index2 = 0; index2 < index; index2++) {
-                    bytesHits[index2] = bytesSLIData[index2];
-                }
-                for (
-                    uint256 index3 = 0;
-                    index3 < sliDataLength - index - 1;
-                    index3++
-                ) {
-                    bytesMisses[index3] = bytesSLIData[index + 1 + index3];
-                }
-            }
-        }
-        uint256 hits = StringUtils.bytesToUint(bytesHits);
-        uint256 misses = StringUtils.bytesToUint(bytesMisses);
-        return (hits, misses);
     }
 
     function retryRequest(address _slaAddress, uint256 _periodId)

@@ -26,9 +26,9 @@ interface SEMessengerInterface extends ethers.utils.Interface {
     "fulfillsCounter()": FunctionFragment;
     "jobId()": FunctionFragment;
     "messengerPrecision()": FunctionFragment;
+    "networkName()": FunctionFragment;
     "oracle()": FunctionFragment;
     "owner()": FunctionFragment;
-    "parseSLIData(bytes32)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "requestIdToSLIRequest(bytes32)": FunctionFragment;
     "requestSLI(uint256,address,bool,address)": FunctionFragment;
@@ -55,12 +55,12 @@ interface SEMessengerInterface extends ethers.utils.Interface {
     functionFragment: "messengerPrecision",
     values?: undefined
   ): string;
+  encodeFunctionData(
+    functionFragment: "networkName",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "oracle", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "parseSLIData",
-    values: [BytesLike]
-  ): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
@@ -113,12 +113,12 @@ interface SEMessengerInterface extends ethers.utils.Interface {
     functionFragment: "messengerPrecision",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "oracle", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "parseSLIData",
+    functionFragment: "networkName",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "oracle", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
@@ -221,7 +221,7 @@ export class SEMessenger extends BaseContract {
 
     fulfillSLI(
       _requestId: BytesLike,
-      _chainlinkResponseUint256: BigNumberish,
+      _chainlinkResponse: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -231,14 +231,11 @@ export class SEMessenger extends BaseContract {
 
     messengerPrecision(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    networkName(overrides?: CallOverrides): Promise<[string]>;
+
     oracle(overrides?: CallOverrides): Promise<[string]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
-
-    parseSLIData(
-      sliData: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber, BigNumber]>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -291,7 +288,7 @@ export class SEMessenger extends BaseContract {
 
   fulfillSLI(
     _requestId: BytesLike,
-    _chainlinkResponseUint256: BigNumberish,
+    _chainlinkResponse: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -301,14 +298,11 @@ export class SEMessenger extends BaseContract {
 
   messengerPrecision(overrides?: CallOverrides): Promise<BigNumber>;
 
+  networkName(overrides?: CallOverrides): Promise<string>;
+
   oracle(overrides?: CallOverrides): Promise<string>;
 
   owner(overrides?: CallOverrides): Promise<string>;
-
-  parseSLIData(
-    sliData: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<[BigNumber, BigNumber]>;
 
   renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -359,7 +353,7 @@ export class SEMessenger extends BaseContract {
 
     fulfillSLI(
       _requestId: BytesLike,
-      _chainlinkResponseUint256: BigNumberish,
+      _chainlinkResponse: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -369,14 +363,11 @@ export class SEMessenger extends BaseContract {
 
     messengerPrecision(overrides?: CallOverrides): Promise<BigNumber>;
 
+    networkName(overrides?: CallOverrides): Promise<string>;
+
     oracle(overrides?: CallOverrides): Promise<string>;
 
     owner(overrides?: CallOverrides): Promise<string>;
-
-    parseSLIData(
-      sliData: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber, BigNumber]>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
@@ -481,7 +472,7 @@ export class SEMessenger extends BaseContract {
 
     fulfillSLI(
       _requestId: BytesLike,
-      _chainlinkResponseUint256: BigNumberish,
+      _chainlinkResponse: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -491,14 +482,11 @@ export class SEMessenger extends BaseContract {
 
     messengerPrecision(overrides?: CallOverrides): Promise<BigNumber>;
 
+    networkName(overrides?: CallOverrides): Promise<BigNumber>;
+
     oracle(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
-
-    parseSLIData(
-      sliData: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -550,7 +538,7 @@ export class SEMessenger extends BaseContract {
 
     fulfillSLI(
       _requestId: BytesLike,
-      _chainlinkResponseUint256: BigNumberish,
+      _chainlinkResponse: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -562,14 +550,11 @@ export class SEMessenger extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    networkName(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     oracle(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    parseSLIData(
-      sliData: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }

@@ -71,6 +71,8 @@ export enum NETWORKS {
   ETHEREUM = 'ethereum',
   POLYGON = 'polygon',
   HARMONY = 'harmony',
+  KOVAN = 'kovan',
+  FUJI = 'fuji',
 }
 
 export enum PERIOD_TYPE {
@@ -96,3 +98,4 @@ export enum SLO_TYPE {
   GreaterThan,
   GreaterOrEqualTo,
 }
+export const appRoot = require('app-root-path');

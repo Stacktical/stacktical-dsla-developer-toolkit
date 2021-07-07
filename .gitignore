@@ -1,6 +1,7 @@
 node_modules/
 .idea
 .DS_Store
+*.swp
 .env
 services/chainlink/tempkeys
 services/chainlink/secret

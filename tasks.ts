@@ -1,20 +1,18 @@
 import { task, types } from 'hardhat/config';
 import { SUB_TASK_NAMES } from './subtasks';
 import { printSeparator } from './utils';
-import externalAdapter from './services/external-adapter';
+import { HardhatRuntimeEnvironment } from 'hardhat/types';
 
 enum TASK_NAMES {
   EXPORT_DATA = 'stacktical:export-data',
   DEPLOY_SLA = 'stacktical:deploy-sla',
   BOOTSTRAP_DSLA_PROTOCOL = 'stacktical:bootstrap',
   REQUEST_SLI = 'stacktical:request-sli',
-  RETRY_REQUEST_SLI = 'stacktical:retry-request-sli',
   RESTART_SERVICES = 'stacktical:restart-services',
   GET_PRECOORDINATOR = 'stacktical:get-precoordinator',
   SET_PRECOORDINATOR = 'stacktical:set-precoordinator',
   CHAINLINK_DOCKER_COMPOSE = 'stacktical:chainlink-docker-compose',
   PREPARE_CHAINLINK_NODES = 'stacktical:prepare-chainlink-nodes',
-  EXTERNAL_ADAPTER = 'stacktical:external-adapter',
   FULFILL_SLI = 'stacktical:fulfill-sli',
   INITIALIZE_DEFAULT_ADDRESSES = 'stacktical:initialize-addresses',
   RESTART_CHAINLINK_NODES = 'stacktical:restart-chainlink-nodes',
@@ -22,19 +20,24 @@ enum TASK_NAMES {
   REGISTRIES_CONFIGURATION = 'stacktical:registries-config',
   GET_VALID_SLAS = 'stacktical:get-valid-slas',
   GET_REVERT_MESSAGE = 'stacktical:get-revert-message',
+  DEPLOY_MESSENGER = 'stacktical:deploy-messenger',
+  GET_MESSENGER = 'stacktical:get-messenger',
+  TRANSFER_OWNERSHIP = 'stacktical:transfer-ownership',
 }
 
-task(
-  TASK_NAMES.DEPLOY_SLA,
-  'Deploy customized SLA from stacktical config'
-).setAction(async (_, { run }) => {
-  await run(SUB_TASK_NAMES.DEPLOY_SLA);
-});
+task(TASK_NAMES.DEPLOY_SLA, 'Deploy customized SLA from stacktical config')
+  .addOptionalParam(
+    'id',
+    'id of the arrays of SLAs of the deploy_sla stacktical config'
+  )
+  .setAction(async (taskArgs, { run }) => {
+    await run(SUB_TASK_NAMES.DEPLOY_SLA, taskArgs);
+  });
 
 task(TASK_NAMES.EXPORT_DATA, 'Export data to exported-data folder').setAction(
   async (_, { run }) => {
-    await run(SUB_TASK_NAMES.SAVE_CONTRACTS_ADDRESSES);
-    await run(SUB_TASK_NAMES.EXPORT_ABIS);
+    await run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
+    await run(SUB_TASK_NAMES.EXPORT_NETWORKS);
   }
 );
 
@@ -60,18 +63,13 @@ task(
   'Request a SLI verification for next verifiable period'
 )
   .addOptionalParam(
-    'address',
+    'slaAddress',
     '(optional) The SLA address. Defaults to last deployed SLA by deployer address'
   )
+  .addFlag('retry', ' pass the flag retry to trigger the retry mechanism')
   .setAction(async (taskArgs, { run }) => {
     await run(SUB_TASK_NAMES.REQUEST_SLI, taskArgs);
   });
-
-// task(TASK_NAMES.REQUEST_ANALYTICS, 'Request network analytics')
-//   .addParam('periodId', 'Period id to request network analytics')
-//   .setAction(async (taskArgs, { run }) => {
-//     await run(SUB_TASK_NAMES.REQUEST_ANALYTICS, taskArgs);
-//   });
 
 task(
   TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE,
@@ -95,15 +93,15 @@ task(
   await run(SUB_TASK_NAMES.STOP_LOCAL_GANACHE);
   console.log(SUB_TASK_NAMES.STOP_LOCAL_IPFS);
   await run(SUB_TASK_NAMES.STOP_LOCAL_IPFS);
-  console.log(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
-  await run(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
+  // console.log(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
+  // await run(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
 
   console.log(SUB_TASK_NAMES.START_LOCAL_GANACHE);
   await run(SUB_TASK_NAMES.START_LOCAL_GANACHE);
   console.log(SUB_TASK_NAMES.START_LOCAL_IPFS);
   await run(SUB_TASK_NAMES.START_LOCAL_IPFS);
-  console.log(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE);
-  await run(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE);
+  // console.log(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE);
+  // await run(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE);
 });
 
 task(
@@ -117,7 +115,7 @@ task(
   TASK_NAMES.SET_PRECOORDINATOR,
   'Set the PreCoordinator service configuration from stacktical configuration'
 )
-  .addParam('useCaseName', 'Use case to set the precoordinator')
+  .addParam('id', 'Messenger id of stacktical.messengers')
   .setAction(async (taskArgs, { run }) => {
     printSeparator();
     await run(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE);
@@ -140,43 +138,6 @@ task(
   await run(SUB_TASK_NAMES.DEPLOY_CHAINLINK_CONTRACTS);
   await run(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE);
 });
-
-task(
-  TASK_NAMES.EXTERNAL_ADAPTER,
-  'Runs an external adapter from path chainlink-nodes/external-adapter'
-).setAction(async (_, hre: any) => {
-  process.env.WEB3_URI = hre.network.config.url;
-  externalAdapter.listen(6060, () => {
-    console.log(`External adapter initialized at http://localhost:${6060}`);
-  });
-  return new Promise((resolve, reject) => {});
-});
-
-// task(TASK_NAMES.FULFILL_ANALYTICS, 'Fulfill pendant network analytics')
-//   .addParam(
-//     'periodId',
-//     'Period id of the period to fulfill',
-//     undefined,
-//     types.int
-//   )
-//   .addParam(
-//     'periodType',
-//     'Period type of the period to fulfill',
-//     undefined,
-//     types.int
-//   )
-//   .addParam('networkTicker', 'Network ticker of the period to fulfill')
-//   .addParam(
-//     'nodeName',
-//     'Name of the Chainlink node to use to fulfill',
-//     undefined,
-//     types.string
-//   )
-//   .addFlag('signTransaction', 'signs the transaction to fulfill the analytics')
-//   .setAction(async (taskArgs, hre: any) => {
-//     await hre.run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
-//     await hre.run(SUB_TASK_NAMES.FULFILL_ANALYTICS, taskArgs);
-//   });
 
 task(
   TASK_NAMES.REGISTRIES_CONFIGURATION,
@@ -211,31 +172,12 @@ task(
   await hre.run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
 });
 
-// task(TASK_NAMES.PREC_FULFILL_ANALYTICS, 'Prec fulfill analytics')
-//   .addParam(
-//     'periodId',
-//     'Period id of the period to fulfill',
-//     undefined,
-//     types.int
-//   )
-//   .addParam(
-//     'periodType',
-//     'Period type of the period to fulfill',
-//     undefined,
-//     types.int
-//   )
-//   .addParam('networkTicker', 'Network ticker of the period to fulfill')
-//   .addParam(
-//     'nodeName',
-//     'Name of the Chainlink node to use to fulfill',
-//     undefined,
-//     types.string
-//   )
-//   .addFlag('signTransaction', 'signs the transaction to fulfill the analytics')
-//
-//   .setAction(async (taskArgs, hre: any) => {
-//     await hre.run(SUB_TASK_NAMES.PREC_FULFILL_ANALYTICS, taskArgs);
-//   });
+task(
+  TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES,
+  'Initialize default addresses'
+).setAction(async (_, hre: any) => {
+  await hre.run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
+});
 
 task(
   TASK_NAMES.RESTART_CHAINLINK_NODES,
@@ -261,15 +203,83 @@ task(TASK_NAMES.GET_REVERT_MESSAGE, 'Get revert message for transaction hash')
     await hre.run(SUB_TASK_NAMES.GET_REVERT_MESSAGE, taskArgs);
   });
 
-task(
-  TASK_NAMES.RETRY_REQUEST_SLI,
-  'Retry a request SLI from Messenger contract'
-)
-  .addOptionalParam('slaAddress', 'SLA address')
-  .addParam('useCaseName', 'Name of the use case e.g. staking-efficiency')
-  .addParam('periodId', 'Period id')
+task(TASK_NAMES.DEPLOY_MESSENGER, 'deploy a messenger in the MessengerRegistry')
+  .addParam(
+    'id',
+    'Id of the messenger on the messengers list of the network config'
+  )
   .setAction(async (taskArgs, hre: any) => {
-    await hre.run(SUB_TASK_NAMES.RETRY_REQUEST_SLI, taskArgs);
+    await hre.run(SUB_TASK_NAMES.DEPLOY_MESSENGER, taskArgs);
   });
+
+task(TASK_NAMES.GET_MESSENGER, 'get messenger data')
+  .addOptionalParam(
+    'id',
+    'Id of the messenger on the messengers list of the network config'
+  )
+  .setAction(async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    await hre.run(SUB_TASK_NAMES.GET_MESSENGER, taskArgs);
+  });
+
+task(
+  TASK_NAMES.TRANSFER_OWNERSHIP,
+  'transfer ownership of core contracts to a owner address'
+)
+  .addOptionalParam('newOwner', 'address of the new owner')
+  .setAction(async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    await hre.run(SUB_TASK_NAMES.TRANSFER_OWNERSHIP, taskArgs);
+  });
+
+// task(TASK_NAMES.FULFILL_ANALYTICS, 'Fulfill pendant network analytics')
+//   .addParam(
+//     'periodId',
+//     'Period id of the period to fulfill',
+//     undefined,
+//     types.int
+//   )
+//   .addParam(
+//     'periodType',
+//     'Period type of the period to fulfill',
+//     undefined,
+//     types.int
+//   )
+//   .addParam('networkTicker', 'Network ticker of the period to fulfill')
+//   .addParam(
+//     'nodeName',
+//     'Name of the Chainlink node to use to fulfill',
+//     undefined,
+//     types.string
+//   )
+//   .addFlag('signTransaction', 'signs the transaction to fulfill the analytics')
+//   .setAction(async (taskArgs, hre: any) => {
+//     await hre.run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
+//     await hre.run(SUB_TASK_NAMES.FULFILL_ANALYTICS, taskArgs);
+//   });
+
+// task(TASK_NAMES.PREC_FULFILL_ANALYTICS, 'Prec fulfill analytics')
+//   .addParam(
+//     'periodId',
+//     'Period id of the period to fulfill',
+//     undefined,
+//     types.int
+//   )
+//   .addParam(
+//     'periodType',
+//     'Period type of the period to fulfill',
+//     undefined,
+//     types.int
+//   )
+//   .addParam('networkTicker', 'Network ticker of the period to fulfill')
+//   .addParam(
+//     'nodeName',
+//     'Name of the Chainlink node to use to fulfill',
+//     undefined,
+//     types.string
+//   )
+//   .addFlag('signTransaction', 'signs the transaction to fulfill the analytics')
+//
+//   .setAction(async (taskArgs, hre: any) => {
+//     await hre.run(SUB_TASK_NAMES.PREC_FULFILL_ANALYTICS, taskArgs);
+//   });
 
 module.exports = {};
