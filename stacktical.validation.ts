@@ -2,7 +2,21 @@ import { extendConfig } from 'hardhat/config';
 import { HardhatConfig, HardhatUserConfig } from 'hardhat/types';
 
 import './type-extensions';
-import Joi from 'joi';
+
+const Joi = require('joi');
+require('dotenv').config();
+
+const schema = Joi.object({
+  IPFS_URI: Joi.string().required(),
+}).unknown();
+
+const { error, value } = schema.validate(process.env);
+
+if (error) {
+  throw new Error(`global .env file validation error: ${error.message}`);
+} else {
+  process.env = value;
+}
 
 extendConfig(
   (config: HardhatConfig, userConfig: Readonly<HardhatUserConfig>) => {
