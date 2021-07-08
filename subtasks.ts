@@ -46,7 +46,7 @@ import {
 import axios from 'axios';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { formatBytes32String } from 'ethers/lib/utils';
-import { networks } from './hardhat.config';
+import { networks } from './networks';
 
 const prettier = require('prettier');
 const appRoot = require('app-root-path');
