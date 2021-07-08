@@ -1,2 +1,0 @@
-# Chainlink job \(SE\)
-

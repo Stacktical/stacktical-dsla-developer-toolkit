@@ -1,4 +1,9 @@
-import {CONTRACT_NAMES, PERIOD_TYPE, SLO_TYPE, TOKEN_NAMES,} from './constants';
+import {
+  CONTRACT_NAMES,
+  PERIOD_TYPE,
+  SLO_TYPE,
+  TOKEN_NAMES,
+} from './constants';
 
 export type StackticalConfiguration = {
   checkPastPeriods: boolean;
@@ -34,6 +39,7 @@ export type DeployedContractAddresses = {
 export type ChainlinkConfiguration = {
   deployLocal: boolean;
   deleteOldJobs: boolean;
+  cleanLocalFolder: boolean;
   nodeFunds: string;
   gasLimit?: string;
   ethWsUrl: string;

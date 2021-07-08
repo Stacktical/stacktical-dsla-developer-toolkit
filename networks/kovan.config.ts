@@ -38,6 +38,7 @@ export const kovan: NetworkUserConfig = {
     chainlink: {
       deployLocal: false,
       deleteOldJobs: true,
+      cleanLocalFolder: false,
       nodeFunds: '0.1',
       gasLimit: undefined,
       ethWsUrl: process.env.KOVAN_WS_URI,

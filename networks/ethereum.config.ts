@@ -54,6 +54,7 @@ export const ethereum: NetworkUserConfig = {
     chainlink: {
       deployLocal: false,
       deleteOldJobs: false,
+      cleanLocalFolder: false,
       nodeFunds: '1',
       gasLimit: undefined,
       ethWsUrl: process.env.ETHEREUM_WS_URI,
