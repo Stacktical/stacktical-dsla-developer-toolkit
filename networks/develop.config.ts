@@ -37,6 +37,7 @@ export const develop: NetworkUserConfig = {
     chainlink: {
       deployLocal: true,
       deleteOldJobs: true,
+      cleanLocalFolder: true,
       nodeFunds: '10',
       gasLimit: undefined,
       ethWsUrl: 'ws://host.docker.internal:8545',

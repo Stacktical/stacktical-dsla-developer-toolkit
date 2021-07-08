@@ -62,6 +62,7 @@ export const harmony: NetworkUserConfig = {
     chainlink: {
       deployLocal: false,
       deleteOldJobs: true,
+      cleanLocalFolder: false,
       nodeFunds: '1',
       gasLimit: undefined,
       ethWsUrl: process.env.HARMONY_WS_URI,
