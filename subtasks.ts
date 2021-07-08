@@ -172,6 +172,13 @@ subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
 
     for (let node of stacktical.chainlink.nodesConfiguration) {
       const nodeName = network.name + '-' + node.name;
+
+      if (stacktical.chainlink.cleanLocalFolder) {
+        fs.rmdirSync(`${appRoot.path}/services/chainlink-nodes/${nodeName}/`, {
+          recursive: true,
+        });
+      }
+
       const fileContents = fs.readFileSync(
         `${appRoot.path}/services/docker-compose.yaml`,
         'utf8'
@@ -192,21 +199,6 @@ subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
               }`;
             case /CHAINLINK_PORT/.test(envVariable):
               return `CHAINLINK_PORT=${node.restApiPort}`;
-            // case /ETH_GAS_PRICE_DEFAULT/.test(envVariable):
-            //   if (network.config.gasPrice) {
-            //     return `ETH_GAS_PRICE_DEFAULT=${network.config.gasPrice}`;
-            //   }
-            //   return envVariable;
-            // case /ETH_MAX_GAS_PRICE_WEI/.test(envVariable):
-            //   if (network.config.gasPrice) {
-            //     return `ETH_MAX_GAS_PRICE_WEI=${network.config.gasPrice}`;
-            //   }
-            //   return envVariable;
-            // case /ETH_MIN_GAS_PRICE_WEI/.test(envVariable):
-            //   if (network.config.gasPrice) {
-            //     return `ETH_MIN_GAS_PRICE_WEI=${network.config.gasPrice}`;
-            //   }
-            //   return envVariable;
             default:
               return envVariable;
           }

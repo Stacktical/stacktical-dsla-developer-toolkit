@@ -57,6 +57,7 @@ export const polygon: NetworkUserConfig = {
     chainlink: {
       deployLocal: false,
       deleteOldJobs: true,
+      cleanLocalFolder: false,
       nodeFunds: '1',
       gasLimit: undefined,
       ethWsUrl: process.env.POLYGON_WS_URI,

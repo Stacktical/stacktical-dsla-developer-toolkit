@@ -53,6 +53,7 @@ export const mumbai: NetworkUserConfig = {
     chainlink: {
       deployLocal: false,
       deleteOldJobs: true,
+      cleanLocalFolder: false,
       nodeFunds: '0.001',
       gasLimit: undefined,
       ethWsUrl: process.env.MUMBAI_WS_URI,
