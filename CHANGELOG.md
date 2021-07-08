@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.2.1](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v2.2.0...v2.2.1) (2021-07-08)
+
+
+### Features
+
+* clean chainlink local folders ([ca95e9e](https://github.com/Stacktical/stacktical-developer-toolkit/commit/ca95e9e9ca45a89eed544d3c14e71ce3dbf493b3))
+* networks config in index file ([442c338](https://github.com/Stacktical/stacktical-developer-toolkit/commit/442c33884d8706ddc9ad2aebb1cd9a9900ad61c9))
+* networks disabled ([1f9ba42](https://github.com/Stacktical/stacktical-developer-toolkit/commit/1f9ba4267e18b0041936c61a213116f764441ea8))
+* public ipfs gateway in external adapter ([8584599](https://github.com/Stacktical/stacktical-developer-toolkit/commit/85845999cd26b1593ccccd72c6623fc2d8550459))
+* reasonable SLAs deployed ([a014ef2](https://github.com/Stacktical/stacktical-developer-toolkit/commit/a014ef2e9861fcdafd515f4d90cec53a52e8d701))
+
+
+### Bug Fixes
+
+* deploy sla script notDeployer stake ([cf61c39](https://github.com/Stacktical/stacktical-developer-toolkit/commit/cf61c39e1f592309767c880a0bf7f65f92615774))
+
 ## [2.2.0](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v2.1.0...v2.2.0) (2021-07-07)
 
 
