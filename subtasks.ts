@@ -35,6 +35,7 @@ import {
   PERIOD_STATUS,
   PERIOD_TYPE,
   TOKEN_NAMES,
+  USE_CASES,
 } from './constants';
 import {
   bootstrapStrings,
@@ -723,10 +724,8 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_MESSENGER_REGISTRY, undefined).setAction(
     for (let messenger of messengers) {
       console.log('Registering ' + messenger.contract + ' on the SLARegistry');
       const messengerArtifact = await get(messenger.contract);
-
-      const messengerSpec = JSON.parse(
-        fs.readFileSync(messenger.specificationPath)
-      );
+      const specificationPath = `${appRoot.path}/contracts/messengers/${messenger.useCaseName}/${messenger.contract}.json`;
+      const messengerSpec = JSON.parse(fs.readFileSync(specificationPath));
       const updatedSpec = {
         ...messengerSpec,
         timestamp: new Date().toISOString(),
@@ -818,9 +817,8 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
       consola.info(
         'Registering ' + messenger.contract + ' in MessengerRegistry'
       );
-      const messengerSpec = JSON.parse(
-        fs.readFileSync(messenger.specificationPath)
-      );
+      const specificationPath = `${appRoot.path}/contracts/messengers/${messenger.useCaseName}/${messenger.contract}.json`;
+      const messengerSpec = JSON.parse(fs.readFileSync(specificationPath));
       const updatedSpec = {
         ...messengerSpec,
         timestamp: new Date().toISOString(),

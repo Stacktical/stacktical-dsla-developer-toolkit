@@ -3,6 +3,7 @@ import {
   PERIOD_TYPE,
   SLO_TYPE,
   TOKEN_NAMES,
+  USE_CASES,
 } from './constants';
 
 export type StackticalConfiguration = {
@@ -90,9 +91,8 @@ export type TokenAllowance = {
 
 export type MessengerConfiguration = {
   contract: CONTRACT_NAMES;
-  specificationPath: string;
+  useCaseName: USE_CASES;
   externalAdapterUrl: string;
-  useCaseName: string;
 };
 
 export type DeploySLAConfiguration = {

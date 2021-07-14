@@ -1,0 +1,13 @@
+{
+  "useCaseName": "awesome-indexer",
+  "ownerUrl": "https://www.awesome.com",
+  "useCaseDocs": "https://readme.awesome.com/",
+  "externalAdapterRepo": "https://www.github.com/awesome-company/awesome-indexer",
+  "keywords": ["awesome"],
+  "timestamp": "2021-07-07T00:00:00+00:00",
+  "version": {
+    "major": 1,
+    "minor": 0,
+    "patch": 0
+  }
+}

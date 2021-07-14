@@ -1,29 +1,13 @@
 {
-  "name": "Staking Efficiency SLA by Stacktical",
-  "category": "staking-efficiency",
+  "useCaseName": "staking-efficiency",
   "ownerUrl": "https://www.stacktical.com",
-  "ownershipUrl": "https://readme.stacktical.com/",
-  "indexerUrl": "https://readme.stacktical.com/",
+  "useCaseDocs": "https://readme.stacktical.com/developer-guide/use-cases-1/staking-efficiency/introduction",
+  "externalAdapterRepo": "https://github.com/Stacktical/staking-efficiency-indexer",
   "keywords": ["dpos", "staking", "validator", "delegator"],
-  "timestamp": "2021-03-31T00:00:00+00:00",
-  "unit": "%",
+  "timestamp": "2021-07-07T00:00:00+00:00",
   "version": {
     "major": 1,
     "minor": 0,
     "patch": 0
-  },
-  "job": {
-    "tasks": [
-      {
-        "type": "staking-efficiency"
-      },
-      {
-        "type": "EthUint256"
-      },
-      {
-        "type": "ethtx"
-      }
-    ],
-    "minPayment": "10000000000"
   }
 }
