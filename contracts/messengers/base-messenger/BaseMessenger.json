@@ -1,5 +1,6 @@
 {
   "useCaseName": "awesome-indexer",
+  "symbol": "AI",
   "ownerUrl": "https://www.awesome.com",
   "useCaseDocs": "https://readme.awesome.com/",
   "externalAdapterRepo": "https://www.github.com/awesome-company/awesome-indexer",

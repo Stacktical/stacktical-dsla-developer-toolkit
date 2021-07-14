@@ -1,5 +1,6 @@
 {
   "useCaseName": "staking-efficiency",
+  "symbol": "SE",
   "ownerUrl": "https://www.stacktical.com",
   "useCaseDocs": "https://readme.stacktical.com/developer-guide/use-cases-1/staking-efficiency/introduction",
   "externalAdapterRepo": "https://github.com/Stacktical/staking-efficiency-indexer",
