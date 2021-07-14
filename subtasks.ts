@@ -1370,7 +1370,7 @@ subtask(SUB_TASK_NAMES.FULFILL_SLI, undefined).setAction(
     // const signer = await ethers.getSigner(deployer);
     // const seMessenger = await SEMessenger__factory.connect(
     //   (
-    //     await get(CONTRACT_NAMES.SEMessenger)
+    //     await get(CONTRACT_NAMES.BaseMessenger)
     //   ).address,
     //   signer
     // );

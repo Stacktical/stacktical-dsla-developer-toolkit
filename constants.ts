@@ -42,6 +42,7 @@ export enum CONTRACT_NAMES {
   HarmonyERC20 = 'HarmonyERC20',
   PolygonERC20 = 'PolygonERC20',
   AvalancheERC20 = 'AvalancheERC20',
+  BaseMessenger = 'BaseMessenger',
 }
 
 export enum TOKEN_NAMES {

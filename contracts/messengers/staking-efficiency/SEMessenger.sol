@@ -13,29 +13,16 @@ import '@stacktical/dsla-contracts/contracts/StakeRegistry.sol';
 import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
 import '@openzeppelin/contracts/token/ERC20/SafeERC20.sol';
 
-/**
- * @title SEMessenger
- * @dev Staking efficiency Messenger
- */
-
 contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
     using SafeERC20 for ERC20;
 
-    /// @dev Mapping that stores chainlink sli request information
     mapping(bytes32 => SLIRequest) public requestIdToSLIRequest;
-    /// @dev Array with all request IDs
     bytes32[] public requests;
-    /// @dev The address of the SLARegistry contract
     address private _slaRegistryAddress;
-    /// @dev Chainlink oracle address
     address private immutable _oracle;
-    /// @dev chainlink jobId
     bytes32 private _jobId;
-    // @dev fee for Chainlink querys. Currently 0.1 LINK
     uint256 private constant _baseFee = 0.1 ether;
-    /// @dev fee for Chainlink querys. Currently 0.1 LINK
     uint256 private _fee;
-    /// @dev to multiply the SLI value and get better precision. Useful to deploy SLO correctly
     uint256 private constant _messengerPrecision = 10**3;
 
     uint256 private _requestsCounter;
@@ -43,16 +30,8 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
     PeriodRegistry private periodRegistry;
     StakeRegistry private stakeRegistry;
     bool private retry = false;
-    /// @dev network name e.g. ethereum, harmony etc, to tell external adapter where to point
     bytes32 public networkName;
 
-    /**
-     * @dev parameterize the variables according to network
-     * @notice sets the Chainlink parameters (oracle address, token address, jobId) and sets the SLARegistry to 0x0 address
-     * @param _messengerChainlinkOracle 1. the address of the oracle to create requests to
-     * @param _messengerChainlinkToken 2. the address of LINK token contract
-     * @param _feeMultiplier 6. states the amount of paid nodes running behind the precoordinator, to set the fee
-     */
     constructor(
         address _messengerChainlinkOracle,
         address _messengerChainlinkToken,
@@ -69,27 +48,14 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
         networkName = _networkName;
     }
 
-    /**
-     * @dev event emitted when modifying the jobId
-     * @param owner 1. -
-     * @param jobId 2. -
-     * @param fee 3. -
-     */
     event JobIdModified(address indexed owner, bytes32 jobId, uint256 fee);
 
-    /**
-     * @dev event emitted when modifying the jobId
-     * @param caller 1. -
-     * @param requestsCounter 2. -
-     * @param requestId 3. -
-     */
     event SLIRequested(
         address indexed caller,
         uint256 requestsCounter,
         bytes32 requestId
     );
 
-    /// @dev Throws if called by any address other than the SLARegistry contract or Chainlink Oracle.
     modifier onlySLARegistry() {
         if (!retry) {
             require(
@@ -106,12 +72,7 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
         retry = false;
     }
 
-    /**
-     * @dev sets the SLARegistry contract address and can only be called
-     * once
-     */
     function setSLARegistry() public override {
-        // Only able to trigger this function once
         require(
             _slaRegistryAddress == address(0),
             'SLARegistry address has already been set'
@@ -120,13 +81,6 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
         _slaRegistryAddress = msg.sender;
     }
 
-    /**
-     * @dev creates a ChainLink request to get a new SLI value for the
-     * given params. Can only be called by the SLARegistry contract or Chainlink Oracle.
-     * @param _periodId 1. value of the period id
-     * @param _slaAddress 2. SLA Address
-     * @param _messengerOwnerApproval 3. if approval by owner or msg sender
-     */
     function requestSLI(
         uint256 _periodId,
         address _slaAddress,
@@ -182,12 +136,6 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
         emit SLIRequested(_callerAddress, _requestsCounter, requestId);
     }
 
-    /**
-     * @dev callback function for the Chainlink SLI request which stores
-     * the SLI in the SLA contract
-     * @param _requestId the ID of the ChainLink request
-     * @param _chainlinkResponse response object from Chainlink Oracles
-     */
     function fulfillSLI(bytes32 _requestId, uint256 _chainlinkResponse)
         external
         override
@@ -223,11 +171,6 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
         requestSLI(_periodId, _slaAddress, false, msg.sender);
     }
 
-    /**
-     * @dev sets a new jobId, which is a agreement Id of a PreCoordinator contract
-     * @param _newJobId the id of the PreCoordinator agreement
-     * @param _feeMultiplier how many Chainlink nodes would be paid on the agreement id, to set the fee value
-     */
     function setChainlinkJobID(bytes32 _newJobId, uint256 _feeMultiplier)
         external
         override
@@ -238,51 +181,30 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
         emit JobIdModified(msg.sender, _newJobId, _fee);
     }
 
-    /**
-     * @dev returns the value of the sla registry address
-     */
     function slaRegistryAddress() external view override returns (address) {
         return _slaRegistryAddress;
     }
 
-    /**
-     * @dev returns the value of the messenger precision
-     */
     function messengerPrecision() external view override returns (uint256) {
         return _messengerPrecision;
     }
 
-    /**
-     * @dev returns the chainlink oracle contract address
-     */
     function oracle() external view override returns (address) {
         return _oracle;
     }
 
-    /**
-     * @dev returns the chainlink job id
-     */
     function jobId() external view override returns (bytes32) {
         return _jobId;
     }
 
-    /**
-     * @dev returns the chainlink fee value on LINK tokens
-     */
     function fee() external view override returns (uint256) {
         return _fee;
     }
 
-    /**
-     * @dev returns the requestsCounter
-     */
     function requestsCounter() external view override returns (uint256) {
         return _requestsCounter;
     }
 
-    /**
-     * @dev returns the fulfillsCounter
-     */
     function fulfillsCounter() external view override returns (uint256) {
         return _fulfillsCounter;
     }
