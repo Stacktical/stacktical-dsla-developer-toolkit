@@ -724,7 +724,7 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_MESSENGER_REGISTRY, undefined).setAction(
     for (let messenger of messengers) {
       console.log('Registering ' + messenger.contract + ' on the SLARegistry');
       const messengerArtifact = await get(messenger.contract);
-      const specificationPath = `${appRoot.path}/contracts/messengers/${messenger.useCaseName}/${messenger.contract}.json`;
+      const specificationPath = `${appRoot.path}/contracts/messengers/${messenger.useCaseName}/use-case-spec.json`;
       const messengerSpec = JSON.parse(fs.readFileSync(specificationPath));
       const updatedSpec = {
         ...messengerSpec,
@@ -817,7 +817,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
       consola.info(
         'Registering ' + messenger.contract + ' in MessengerRegistry'
       );
-      const specificationPath = `${appRoot.path}/contracts/messengers/${messenger.useCaseName}/${messenger.contract}.json`;
+      const specificationPath = `${appRoot.path}/contracts/messengers/${messenger.useCaseName}/use-case-spec.json`;
       const messengerSpec = JSON.parse(fs.readFileSync(specificationPath));
       const updatedSpec = {
         ...messengerSpec,
