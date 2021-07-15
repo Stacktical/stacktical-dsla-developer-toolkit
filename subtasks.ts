@@ -171,14 +171,18 @@ subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
     const { stacktical } = network.config;
     const linkToken = await get(CONTRACT_NAMES.LinkToken);
 
-    for (let node of stacktical.chainlink.nodesConfiguration) {
-      const nodeName = network.name + '-' + node.name;
-
-      if (stacktical.chainlink.cleanLocalFolder) {
-        fs.rmdirSync(`${appRoot.path}/services/chainlink-nodes/${nodeName}/`, {
+    if (stacktical.chainlink.cleanLocalFolder) {
+      const folders = fs
+        .readdirSync(`${appRoot.path}/services/chainlink-nodes/`)
+        .filter((folder) => new RegExp(`${network.name}`).test(folder));
+      for (let folder of folders) {
+        fs.rmdirSync(`${appRoot.path}/services/chainlink-nodes/${folder}`, {
           recursive: true,
         });
       }
+    }
+    for (let node of stacktical.chainlink.nodesConfiguration) {
+      const nodeName = network.name + '-' + node.name;
 
       const fileContents = fs.readFileSync(
         `${appRoot.path}/services/docker-compose.yaml`,
