@@ -11,7 +11,7 @@ import { ScriptsConfiguration } from './types';
 export const scripts: ScriptsConfiguration = {
   deploy_sla: [
     {
-      sloValue: 7 * 10 ** 3,
+      sloValue: 7,
       sloType: SLO_TYPE.GreaterThan,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
@@ -35,7 +35,7 @@ export const scripts: ScriptsConfiguration = {
       },
     },
     {
-      sloValue: 8 * 10 ** 3,
+      sloValue: 8,
       sloType: SLO_TYPE.GreaterThan,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
@@ -59,7 +59,7 @@ export const scripts: ScriptsConfiguration = {
       },
     },
     {
-      sloValue: 9 * 10 ** 3,
+      sloValue: 9,
       sloType: SLO_TYPE.GreaterThan,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
@@ -83,7 +83,7 @@ export const scripts: ScriptsConfiguration = {
       },
     },
     {
-      sloValue: 10 * 10 ** 3,
+      sloValue: 10,
       sloType: SLO_TYPE.GreaterThan,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
@@ -107,7 +107,7 @@ export const scripts: ScriptsConfiguration = {
       },
     },
     {
-      sloValue: 11 * 10 ** 3,
+      sloValue: 11,
       sloType: SLO_TYPE.GreaterThan,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,

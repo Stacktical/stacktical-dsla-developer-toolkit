@@ -1007,7 +1007,9 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       const stakeAmount =
         Number(initialTokenSupply) / initialTokenSupplyDivisor;
       const stakeAmountTimesWei = (times) => toWei(String(stakeAmount * times));
-      const messenger = await ethers.getContract(config.messengerContract);
+      const messenger: IMessenger = await ethers.getContract(
+        config.messengerContract
+      );
       const ipfsHash = await getIPFSHash(serviceMetadata);
       const stakeRegistryArtifact = await get(CONTRACT_NAMES.StakeRegistry);
       const dslaTokenArtifact = await get(CONTRACT_NAMES.DSLA);
@@ -1043,7 +1045,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
 
       console.log('Starting process 2: Deploy SLA');
       tx = await slaRegistry.createSLA(
-        sloValue,
+        sloValue * Number(await messenger.messengerPrecision()),
         sloType,
         whitelisted,
         messenger.address,
