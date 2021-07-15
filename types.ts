@@ -5,6 +5,7 @@ import {
   TOKEN_NAMES,
   USE_CASES,
 } from './constants';
+import { ContractFactory } from 'ethers';
 
 export type StackticalConfiguration = {
   checkPastPeriods: boolean;
@@ -106,12 +107,13 @@ export type DeploySLAConfiguration = {
   };
   sloValue: number;
   sloType: SLO_TYPE;
-  whitelisted: boolean;
   periodType: PERIOD_TYPE;
   initialPeriodId: number;
   finalPeriodId: number;
-  extraData: Array<string>;
   leverage: number;
+  messengerContract: CONTRACT_NAMES;
+  whitelisted: boolean;
+  extraData: Array<string>;
   initialTokenSupply: string;
   initialTokenSupplyDivisor: number;
   deployerStakeTimes: number;

@@ -1007,11 +1007,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       const stakeAmount =
         Number(initialTokenSupply) / initialTokenSupplyDivisor;
       const stakeAmountTimesWei = (times) => toWei(String(stakeAmount * times));
-      const semessengerArtifact = await get(CONTRACT_NAMES.SEMessenger);
-      const seMessenger = await SEMessenger__factory.connect(
-        semessengerArtifact.address,
-        signer
-      );
+      const messenger = await ethers.getContract(config.messengerContract);
       const ipfsHash = await getIPFSHash(serviceMetadata);
       const stakeRegistryArtifact = await get(CONTRACT_NAMES.StakeRegistry);
       const dslaTokenArtifact = await get(CONTRACT_NAMES.DSLA);
@@ -1050,7 +1046,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
         sloValue,
         sloType,
         whitelisted,
-        seMessenger.address,
+        messenger.address,
         periodType,
         initialPeriodId,
         finalPeriodId,
