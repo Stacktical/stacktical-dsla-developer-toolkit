@@ -6,6 +6,33 @@
   "externalAdapterRepo": "https://github.com/Stacktical/staking-efficiency-indexer",
   "keywords": ["dpos", "staking", "validator", "delegator"],
   "timestamp": "2021-07-07T00:00:00+00:00",
+  "ipfsData": {
+    "serviceName": {
+      "type": "string",
+      "description": "The Validator service name"
+    },
+    "serviceDescription": {
+      "type": "string",
+      "description": "The Validator service description"
+    },
+    "serviceImage": {
+      "type": "url",
+      "description": "The Validator service image to display"
+    },
+    "serviceURL": {
+      "type": "url",
+      "description": "The Validator service URL"
+    },
+    "serviceAddress": {
+      "type": "address",
+      "description": "The Validator service blockchain address"
+    },
+    "serviceTicker": {
+      "type": "string",
+      "description": "The Validator service ticker",
+      "values": ["ONE", "DOT", "ATOM", "BAND", "eGLD", "XTZ", "AVAX", "ROSE"]
+    }
+  },
   "version": {
     "major": 1,
     "minor": 0,
