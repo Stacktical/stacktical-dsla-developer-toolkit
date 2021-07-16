@@ -1,0 +1,31 @@
+{
+  "useCaseName": "awesome-indexer",
+  "symbol": "AI",
+  "ownerUrl": "https://www.awesome.com",
+  "useCaseDocs": "https://readme.awesome.com/",
+  "externalAdapterRepo": "https://www.github.com/awesome-company/awesome-indexer",
+  "keywords": ["awesome"],
+  "timestamp": "2021-07-07T00:00:00+00:00",
+  "ipfsData": {
+    "parameter1": {
+      "type": "parameter 1 type",
+      "values": ["value1", "value2", "value3"],
+      "description": "parameter 1 description"
+    },
+    "parameter2": {
+      "type": "parameter 2 type",
+      "values": ["value1", "value2", "value3"],
+      "description": "parameter 2 description"
+    },
+    "parameter3": {
+      "type": "parameter 3 type",
+      "values": ["value1", "value2", "value3"],
+      "description": "parameter 3 description"
+    }
+  },
+  "version": {
+    "major": 1,
+    "minor": 0,
+    "patch": 0
+  }
+}

@@ -119,7 +119,6 @@ export const polygon: NetworkUserConfig = {
     messengers: [
       {
         contract: CONTRACT_NAMES.SEMessenger,
-        specificationPath: `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_EFFICIENCY}/${CONTRACT_NAMES.SEMessenger}.json`,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
       },
