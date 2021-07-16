@@ -35,6 +35,7 @@ import {
   PERIOD_STATUS,
   PERIOD_TYPE,
   TOKEN_NAMES,
+  USE_CASES,
 } from './constants';
 import {
   bootstrapStrings,
@@ -170,14 +171,18 @@ subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
     const { stacktical } = network.config;
     const linkToken = await get(CONTRACT_NAMES.LinkToken);
 
-    for (let node of stacktical.chainlink.nodesConfiguration) {
-      const nodeName = network.name + '-' + node.name;
-
-      if (stacktical.chainlink.cleanLocalFolder) {
-        fs.rmdirSync(`${appRoot.path}/services/chainlink-nodes/${nodeName}/`, {
+    if (stacktical.chainlink.cleanLocalFolder) {
+      const folders = fs
+        .readdirSync(`${appRoot.path}/services/chainlink-nodes/`)
+        .filter((folder) => new RegExp(`${network.name}`).test(folder));
+      for (let folder of folders) {
+        fs.rmdirSync(`${appRoot.path}/services/chainlink-nodes/${folder}`, {
           recursive: true,
         });
       }
+    }
+    for (let node of stacktical.chainlink.nodesConfiguration) {
+      const nodeName = network.name + '-' + node.name;
 
       const fileContents = fs.readFileSync(
         `${appRoot.path}/services/docker-compose.yaml`,
@@ -723,10 +728,8 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_MESSENGER_REGISTRY, undefined).setAction(
     for (let messenger of messengers) {
       console.log('Registering ' + messenger.contract + ' on the SLARegistry');
       const messengerArtifact = await get(messenger.contract);
-
-      const messengerSpec = JSON.parse(
-        fs.readFileSync(messenger.specificationPath)
-      );
+      const specificationPath = `${appRoot.path}/contracts/messengers/${messenger.useCaseName}/use-case-spec.json`;
+      const messengerSpec = JSON.parse(fs.readFileSync(specificationPath));
       const updatedSpec = {
         ...messengerSpec,
         timestamp: new Date().toISOString(),
@@ -818,9 +821,8 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
       consola.info(
         'Registering ' + messenger.contract + ' in MessengerRegistry'
       );
-      const messengerSpec = JSON.parse(
-        fs.readFileSync(messenger.specificationPath)
-      );
+      const specificationPath = `${appRoot.path}/contracts/messengers/${messenger.useCaseName}/use-case-spec.json`;
+      const messengerSpec = JSON.parse(fs.readFileSync(specificationPath));
       const updatedSpec = {
         ...messengerSpec,
         timestamp: new Date().toISOString(),
@@ -1005,10 +1007,8 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       const stakeAmount =
         Number(initialTokenSupply) / initialTokenSupplyDivisor;
       const stakeAmountTimesWei = (times) => toWei(String(stakeAmount * times));
-      const semessengerArtifact = await get(CONTRACT_NAMES.SEMessenger);
-      const seMessenger = await SEMessenger__factory.connect(
-        semessengerArtifact.address,
-        signer
+      const messenger: IMessenger = await ethers.getContract(
+        config.messengerContract
       );
       const ipfsHash = await getIPFSHash(serviceMetadata);
       const stakeRegistryArtifact = await get(CONTRACT_NAMES.StakeRegistry);
@@ -1045,10 +1045,10 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
 
       console.log('Starting process 2: Deploy SLA');
       tx = await slaRegistry.createSLA(
-        sloValue,
+        sloValue * Number(await messenger.messengerPrecision()),
         sloType,
         whitelisted,
-        seMessenger.address,
+        messenger.address,
         periodType,
         initialPeriodId,
         finalPeriodId,
@@ -1370,7 +1370,7 @@ subtask(SUB_TASK_NAMES.FULFILL_SLI, undefined).setAction(
     // const signer = await ethers.getSigner(deployer);
     // const seMessenger = await SEMessenger__factory.connect(
     //   (
-    //     await get(CONTRACT_NAMES.SEMessenger)
+    //     await get(CONTRACT_NAMES.BaseMessenger)
     //   ).address,
     //   signer
     // );
