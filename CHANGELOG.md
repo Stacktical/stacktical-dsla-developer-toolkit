@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.3.0](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v2.2.1...v2.3.0) (2021-07-16)
+
+
+### Features
+
+* base messenger specification ([04dbf36](https://github.com/Stacktical/stacktical-developer-toolkit/commit/04dbf360bcb644a1d063079c717ddff5b779bee7))
+* cleaning local folder by network ([88aeddd](https://github.com/Stacktical/stacktical-developer-toolkit/commit/88aeddd57c02e7277889d988baa0cd89f1ee4a0f))
+* deploy sla messenger from config ([ceccb1e](https://github.com/Stacktical/stacktical-developer-toolkit/commit/ceccb1e560bc2430b1e3ed3279cf91a2d01d047d))
+* deploy sla messenger precision ([e713024](https://github.com/Stacktical/stacktical-developer-toolkit/commit/e71302488f29260fcdeae291a63259999ba67f88))
+* ipfs data from the use case spec ([eaa39a9](https://github.com/Stacktical/stacktical-developer-toolkit/commit/eaa39a9787aab962b03cf8f4565ec2e190103e8e))
+* symbol on use case spec ([a2156fb](https://github.com/Stacktical/stacktical-developer-toolkit/commit/a2156fb4665ea6fda60bd76a04590b363274941f))
+
+
+### Bug Fixes
+
+* no extra data required in external adapter ([b0b6a56](https://github.com/Stacktical/stacktical-developer-toolkit/commit/b0b6a56b7d7f42ce0503e871a28d65e6118a3b90))
+* separate SEMessenger ([fdfebc4](https://github.com/Stacktical/stacktical-developer-toolkit/commit/fdfebc434f979d1ccf65a07f5fece660fa142c2d))
+
 ### [2.2.1](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v2.2.0...v2.2.1) (2021-07-08)
 
 
