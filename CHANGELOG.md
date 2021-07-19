@@ -2,6 +2,81 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.3.0](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v2.2.1...v2.3.0) (2021-07-16)
+
+
+### Features
+
+* base messenger specification ([04dbf36](https://github.com/Stacktical/stacktical-developer-toolkit/commit/04dbf360bcb644a1d063079c717ddff5b779bee7))
+* cleaning local folder by network ([88aeddd](https://github.com/Stacktical/stacktical-developer-toolkit/commit/88aeddd57c02e7277889d988baa0cd89f1ee4a0f))
+* deploy sla messenger from config ([ceccb1e](https://github.com/Stacktical/stacktical-developer-toolkit/commit/ceccb1e560bc2430b1e3ed3279cf91a2d01d047d))
+* deploy sla messenger precision ([e713024](https://github.com/Stacktical/stacktical-developer-toolkit/commit/e71302488f29260fcdeae291a63259999ba67f88))
+* ipfs data from the use case spec ([eaa39a9](https://github.com/Stacktical/stacktical-developer-toolkit/commit/eaa39a9787aab962b03cf8f4565ec2e190103e8e))
+* symbol on use case spec ([a2156fb](https://github.com/Stacktical/stacktical-developer-toolkit/commit/a2156fb4665ea6fda60bd76a04590b363274941f))
+
+
+### Bug Fixes
+
+* no extra data required in external adapter ([b0b6a56](https://github.com/Stacktical/stacktical-developer-toolkit/commit/b0b6a56b7d7f42ce0503e871a28d65e6118a3b90))
+* separate SEMessenger ([fdfebc4](https://github.com/Stacktical/stacktical-developer-toolkit/commit/fdfebc434f979d1ccf65a07f5fece660fa142c2d))
+
+### [2.2.1](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v2.2.0...v2.2.1) (2021-07-08)
+
+
+### Features
+
+* clean chainlink local folders ([ca95e9e](https://github.com/Stacktical/stacktical-developer-toolkit/commit/ca95e9e9ca45a89eed544d3c14e71ce3dbf493b3))
+* networks config in index file ([442c338](https://github.com/Stacktical/stacktical-developer-toolkit/commit/442c33884d8706ddc9ad2aebb1cd9a9900ad61c9))
+* networks disabled ([1f9ba42](https://github.com/Stacktical/stacktical-developer-toolkit/commit/1f9ba4267e18b0041936c61a213116f764441ea8))
+* public ipfs gateway in external adapter ([8584599](https://github.com/Stacktical/stacktical-developer-toolkit/commit/85845999cd26b1593ccccd72c6623fc2d8550459))
+* reasonable SLAs deployed ([a014ef2](https://github.com/Stacktical/stacktical-developer-toolkit/commit/a014ef2e9861fcdafd515f4d90cec53a52e8d701))
+
+
+### Bug Fixes
+
+* deploy sla script notDeployer stake ([cf61c39](https://github.com/Stacktical/stacktical-developer-toolkit/commit/cf61c39e1f592309767c880a0bf7f65f92615774))
+
+## [2.2.0](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v2.1.0...v2.2.0) (2021-07-07)
+
+
+### Features
+
+* checking env conditionally ([57cff26](https://github.com/Stacktical/stacktical-developer-toolkit/commit/57cff26093a7f5ac1fc6e98941840cfded41e622))
+* checking repeated useCaseName for enabled networks ([804a2cd](https://github.com/Stacktical/stacktical-developer-toolkit/commit/804a2cd72e18e224589859aed9e6aff61e897095))
+* default values for uris ([570ef7f](https://github.com/Stacktical/stacktical-developer-toolkit/commit/570ef7fe27ef55d5bb3275e361d53ce83d44a5e5))
+* deploy local chainlink flag ([992c738](https://github.com/Stacktical/stacktical-developer-toolkit/commit/992c738a4e65889c6657a42b2d5c2f68b815fca6))
+* deploy tokens flag ([27acc2d](https://github.com/Stacktical/stacktical-developer-toolkit/commit/27acc2ddfb3a721eeaf9b94a3b07dd70122dcefe))
+* deployed to Kovan ([a735bee](https://github.com/Stacktical/stacktical-developer-toolkit/commit/a735beea35a0fc5b0fd7ed8e15c5e9cb347a6878))
+* deploying messenger from task ([1e11e51](https://github.com/Stacktical/stacktical-developer-toolkit/commit/1e11e51ce51368c8db32d2efc0c413c58bf02fa0))
+* deploying messengers from deploy messenger task ([d6fc037](https://github.com/Stacktical/stacktical-developer-toolkit/commit/d6fc03725ac0f2c254d268f316d20c0a4351a789))
+* deploying multiple slas from deploy sla script ([eecf738](https://github.com/Stacktical/stacktical-developer-toolkit/commit/eecf738adb6c653fc6c42e5d5237e935b1f60b68))
+* deploying v1.3 to develop ([a44caf9](https://github.com/Stacktical/stacktical-developer-toolkit/commit/a44caf92c72278729373ab1336a92c49c5e84f3c))
+* deploying v1.3 to frontend ([b66d5fa](https://github.com/Stacktical/stacktical-developer-toolkit/commit/b66d5fa61d1d3bad49be79f2173cc9fbbb5da84c))
+* dsla contracts 2.2.4 ([77a79d9](https://github.com/Stacktical/stacktical-developer-toolkit/commit/77a79d938ff8504cd298dca1216909f463ba9232))
+* dsla protocol v1.3 deployed to kovan ([a8b6f68](https://github.com/Stacktical/stacktical-developer-toolkit/commit/a8b6f689b2f064ea86b7cba81aa7791e5f3e2241))
+* enabling networks conditionally ([6227714](https://github.com/Stacktical/stacktical-developer-toolkit/commit/62277143f0ed51d529703a54cfe148f6acb8bda7))
+* export abis subtask deleted ([e087ad4](https://github.com/Stacktical/stacktical-developer-toolkit/commit/e087ad41c856584d7b6000c1659e530de395285a))
+* export data script updated ([58f6ffc](https://github.com/Stacktical/stacktical-developer-toolkit/commit/58f6ffcc116927af71bd99c89c4e491b9d10d8de))
+* exported data reformatted ([cfe00c5](https://github.com/Stacktical/stacktical-developer-toolkit/commit/cfe00c5209255067b9b34f4bc1fb1b7b79589373))
+* external adapter as pm2 process ([08070fb](https://github.com/Stacktical/stacktical-developer-toolkit/commit/08070fb586d31d0091c16258064627e9c55398d6))
+* get messengers task ([a526239](https://github.com/Stacktical/stacktical-developer-toolkit/commit/a526239aff2ca4d7578f25c411115b55baad4d80))
+* hre to correct type on tasks ([6890f37](https://github.com/Stacktical/stacktical-developer-toolkit/commit/6890f377dfa71be9d0db009854dfd855aad6cde7))
+* requiring env for external adapter ([74b5ee8](https://github.com/Stacktical/stacktical-developer-toolkit/commit/74b5ee858c86938fc71d4c72a038e5f9067d0e3e))
+* retry from request sli ([f5efd49](https://github.com/Stacktical/stacktical-developer-toolkit/commit/f5efd49adb649068c070f75cb92aafcd49ded453))
+* semessenger without hits and misses ([8e5bbee](https://github.com/Stacktical/stacktical-developer-toolkit/commit/8e5bbee8dc06003794c627ffa47cbf8cec776525))
+* sending network name as parameter of SEMessenger ([eaea77e](https://github.com/Stacktical/stacktical-developer-toolkit/commit/eaea77e0595592d5a89fb76b89b67c4669cad358))
+* transfer ownership task ([688f6fa](https://github.com/Stacktical/stacktical-developer-toolkit/commit/688f6fa971ed311640652c71ffa8d3943cc8af6d))
+* validating chainlink nodes data with joi ([eeaf9c5](https://github.com/Stacktical/stacktical-developer-toolkit/commit/eeaf9c5aa81d337fcedb06771e02f994b2508cce))
+* validating schemas before execution ([c835b1a](https://github.com/Stacktical/stacktical-developer-toolkit/commit/c835b1ac679fcfb050feb4ac07db12b47ca77a2c))
+
+
+### Bug Fixes
+
+* correct usage of env parameters ([de9539f](https://github.com/Stacktical/stacktical-developer-toolkit/commit/de9539fcec8800ae2144e86e6d8d98670f0649c2))
+* deploy sla auto gas ([f88bf64](https://github.com/Stacktical/stacktical-developer-toolkit/commit/f88bf64b8fdcaf33f5d8f60c5fb72d446a9c682d))
+* semessenger spec path ([bc6dc63](https://github.com/Stacktical/stacktical-developer-toolkit/commit/bc6dc63b05600bc085789a45843ab26ca0b9877a))
+* staking parameters from registries ([1871717](https://github.com/Stacktical/stacktical-developer-toolkit/commit/18717179f7b6679fe37ab8662affa255ad80d1b6))
+
 ## [2.1.0](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v2.0.0...v2.1.0) (2021-06-12)
 
 ### Features

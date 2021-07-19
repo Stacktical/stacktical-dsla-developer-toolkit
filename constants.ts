@@ -1,22 +1,3 @@
-import { formatBytes32String } from 'ethers/lib/utils';
-
-// SEMessenger configuration
-export enum SENetworks {
-  ONE,
-  DOT,
-  ATOM,
-  BAND,
-  eGLD,
-  XTZ,
-  AVAX,
-  ROSE,
-}
-
-export const SENetworkNames = Object.keys(SENetworks).filter((key: any) =>
-  isNaN(key)
-);
-export const SENetworkNamesBytes32 = SENetworkNames.map(formatBytes32String);
-
 export enum CONTRACT_NAMES {
   DSLA = 'DSLA',
   DAI = 'DAI',
@@ -42,6 +23,7 @@ export enum CONTRACT_NAMES {
   HarmonyERC20 = 'HarmonyERC20',
   PolygonERC20 = 'PolygonERC20',
   AvalancheERC20 = 'AvalancheERC20',
+  BaseMessenger = 'BaseMessenger',
 }
 
 export enum TOKEN_NAMES {

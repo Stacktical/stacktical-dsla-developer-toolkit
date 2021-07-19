@@ -38,6 +38,7 @@ export const kovan: NetworkUserConfig = {
     chainlink: {
       deployLocal: false,
       deleteOldJobs: true,
+      cleanLocalFolder: false,
       nodeFunds: '0.1',
       gasLimit: undefined,
       ethWsUrl: process.env.KOVAN_WS_URI,
@@ -105,7 +106,6 @@ export const kovan: NetworkUserConfig = {
     messengers: [
       {
         contract: CONTRACT_NAMES.SEMessenger,
-        specificationPath: `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_EFFICIENCY}/${CONTRACT_NAMES.SEMessenger}.json`,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
       },

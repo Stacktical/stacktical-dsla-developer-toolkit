@@ -1,10 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
-
 require('dotenv').config({ path: './.env' });
-
-import './tasks';
-import './dtk-env-validation';
-import { NETWORKS } from './constants';
+import { networks } from './networks';
+import { HardhatUserConfig } from 'hardhat/types';
 import 'hardhat-deploy';
 import '@nomiclabs/hardhat-waffle';
 import '@nomiclabs/hardhat-ethers';
@@ -16,17 +13,7 @@ import 'hardhat-abi-exporter';
 import '@typechain/hardhat';
 import './stacktical.validation';
 import './type-extensions';
-import { HardhatUserConfig } from 'hardhat/types';
-
-export const networks = [
-  { name: NETWORKS.DEVELOP, enabled: true, exportable: true },
-  { name: NETWORKS.KOVAN, enabled: true, exportable: true },
-  { name: NETWORKS.MUMBAI, enabled: true, exportable: false },
-  { name: NETWORKS.HARMONYTESTNET, enabled: true, exportable: false },
-  { name: NETWORKS.ETHEREUM, enabled: true, exportable: true },
-  { name: NETWORKS.HARMONY, enabled: true, exportable: true },
-  { name: NETWORKS.POLYGON, enabled: true, exportable: false },
-];
+import './tasks';
 
 const getEnabledNetworks = () =>
   networks

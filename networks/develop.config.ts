@@ -37,6 +37,7 @@ export const develop: NetworkUserConfig = {
     chainlink: {
       deployLocal: true,
       deleteOldJobs: true,
+      cleanLocalFolder: true,
       nodeFunds: '10',
       gasLimit: undefined,
       ethWsUrl: 'ws://host.docker.internal:8545',
@@ -94,7 +95,6 @@ export const develop: NetworkUserConfig = {
     messengers: [
       {
         contract: CONTRACT_NAMES.SEMessenger,
-        specificationPath: `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_EFFICIENCY}/${CONTRACT_NAMES.SEMessenger}.json`,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl: 'http://host.docker.internal:6060',
       },

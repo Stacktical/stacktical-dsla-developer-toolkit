@@ -53,6 +53,7 @@ export const mumbai: NetworkUserConfig = {
     chainlink: {
       deployLocal: false,
       deleteOldJobs: true,
+      cleanLocalFolder: false,
       nodeFunds: '0.001',
       gasLimit: undefined,
       ethWsUrl: process.env.MUMBAI_WS_URI,
@@ -98,7 +99,6 @@ export const mumbai: NetworkUserConfig = {
     messengers: [
       {
         contract: CONTRACT_NAMES.SEMessenger,
-        specificationPath: `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_EFFICIENCY}/${CONTRACT_NAMES.SEMessenger}.json`,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl: 'http://host.docker.internal:6060',
       },

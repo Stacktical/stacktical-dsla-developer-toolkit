@@ -1,5 +1,4 @@
 import {
-  appRoot,
   CONTRACT_NAMES,
   PERIOD_TYPE,
   TOKEN_NAMES,
@@ -54,6 +53,7 @@ export const harmonytestnet: NetworkUserConfig = {
     chainlink: {
       deployLocal: false,
       deleteOldJobs: true,
+      cleanLocalFolder: false,
       nodeFunds: '0.01',
       gasLimit: undefined,
       ethWsUrl: process.env.HARMONYTESTNET_WS_URI,
@@ -96,7 +96,6 @@ export const harmonytestnet: NetworkUserConfig = {
     messengers: [
       {
         contract: CONTRACT_NAMES.SEMessenger,
-        specificationPath: `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_EFFICIENCY}/${CONTRACT_NAMES.SEMessenger}.json`,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl: 'http://host.docker.internal:6060',
       },

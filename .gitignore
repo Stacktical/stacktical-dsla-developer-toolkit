@@ -12,3 +12,4 @@ exported-data/networks/develop.ts
 services/chainlink-nodes/**
 services/ipfs/data
 services/graph-protocol/postgres
+networks/index.ts
