@@ -9,7 +9,13 @@
     "export-data": "cp -r exported-data/* ../stacktical-dsla-frontend/src/addresses && cp -r typechain/* ../stacktical-dsla-frontend/src/typechain",
     "release:patch": "standard-version --release-as patch",
     "release:minor": "standard-version --release-as minor",
-    "release:major": "standard-version --release-as major"
+    "release:major": "standard-version --release-as major",
+    "graph:create": "graph create stacktical/dsla-protocol --node https://api.thegraph.com/deploy/",
+    "graph:create-local": "graph create stacktical/dsla-protocol --node http://127.0.0.1:8020",
+    "graph:codegen": "graph codegen subgraph/subgraph.yaml -o subgraph/generated",
+    "graph:build": "graph build subgraph/subgraph.yaml -o subgraph/build",
+    "graph:deploy": "graph deploy stacktical/dsla-protocol subgraph/subgraph.yaml --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
+    "graph:deploy-local": "graph deploy stacktical/dsla-protocol subgraph/subgraph.yaml --ipfs http://localhost:5001 --node http://127.0.0.1:8020"
   },
   "repository": {
     "type": "git",
@@ -34,6 +40,8 @@
   },
   "homepage": "https://github.com/Stacktical/stacktical-developer-toolkit#readme",
   "dependencies": {
+    "@graphprotocol/graph-cli": "^0.21.0",
+    "@graphprotocol/graph-ts": "^0.20.1",
     "@harmony-js/core": "^0.1.57",
     "@nomiclabs/hardhat-waffle": "^2.0.1",
     "@stacktical/dsla-contracts": "^2.3.1",
