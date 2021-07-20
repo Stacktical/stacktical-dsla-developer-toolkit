@@ -13,6 +13,7 @@ import { subtask } from 'hardhat/config';
 import { ChainlinkNodeConfiguration } from './types';
 import {
   ERC20__factory,
+  ERC20PresetMinterPauser,
   IMessenger,
   IMessenger__factory,
   MessengerRegistry__factory,
@@ -161,6 +162,9 @@ subtask(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE, undefined).setAction(async () => {
   await compose.down({
     cwd: path.join(`${appRoot.path}/services/graph-protocol/`),
     log: true,
+  });
+  fs.rmdirSync(`${appRoot.path}/services/graph-protocol/postgres`, {
+    recursive: true,
   });
 });
 
@@ -1550,15 +1554,23 @@ subtask(SUB_TASK_NAMES.GET_VALID_SLAS, undefined).setAction(
       const finalPeriodId = await sla.finalPeriodId();
       const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
       const periodType = await sla.periodType();
-      console.log('slaAddress', slaAddress);
-      console.log('breachedContract', breachedContract);
-      console.log('contractFinished', contractFinished);
-      console.log('messengerAddress', messengerAddress);
-      console.log('periodType', PERIOD_TYPE[periodType]);
-      console.log('creationBlockNumber', creationBlockNumber.toString());
-      console.log('initialPeriodId', initialPeriodId.toString());
-      console.log('finalPeriodId', finalPeriodId.toString());
-      console.log('nextVerifiablePeriod', nextVerifiablePeriod.toString());
+      const DSLAtoken = <ERC20PresetMinterPauser>(
+        await ethers.getContract('DSLA')
+      );
+      const DSLASPtokenAddress = await sla.duTokenRegistry(DSLAtoken.address);
+      const DSLALPtokenAddress = await sla.dpTokenRegistry(DSLAtoken.address);
+
+      consola.info('slaAddress', slaAddress);
+      consola.info('breachedContract', breachedContract);
+      consola.info('contractFinished', contractFinished);
+      consola.info('messengerAddress', messengerAddress);
+      consola.info('periodType', PERIOD_TYPE[periodType]);
+      consola.info('creationBlockNumber', creationBlockNumber.toString());
+      consola.info('initialPeriodId', initialPeriodId.toString());
+      consola.info('finalPeriodId', finalPeriodId.toString());
+      consola.info('nextVerifiablePeriod', nextVerifiablePeriod.toString());
+      consola.info('DSLA SP token address', DSLASPtokenAddress);
+      consola.info('DSLA LP token address', DSLALPtokenAddress);
       printSeparator();
     }
   }
