@@ -15,7 +15,7 @@
     "graph:codegen": "graph codegen subgraph/subgraph.yaml -o subgraph/generated",
     "graph:build": "graph build subgraph/subgraph.yaml -o subgraph/build",
     "graph:deploy": "graph deploy stacktical/dsla-protocol subgraph/subgraph.yaml --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
-    "graph:deploy-local": "graph deploy stacktical/dsla-protocol subgraph/subgraph.yaml --ipfs http://localhost:5001 --node http://127.0.0.1:8020"
+    "graph:deploy-local": "graph deploy -o subgraph/build stacktical/dsla-protocol subgraph/subgraph.yaml --ipfs http://localhost:5001 --node http://127.0.0.1:8020"
   },
   "repository": {
     "type": "git",
