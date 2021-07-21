@@ -983,6 +983,8 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       },
     } = hre;
     const { deployer, notDeployer } = await getNamedAccounts();
+    consola.info('deployer', deployer);
+    consola.info('notDeployer', notDeployer);
     const signer = await ethers.getSigner(deployer);
     const { get } = deployments;
     const { stacktical } = hre.network.config;
@@ -1538,9 +1540,9 @@ subtask(SUB_TASK_NAMES.GET_VALID_SLAS, undefined).setAction(
       signer
     );
     const allSLAs = await slaRegistry.allSLAs();
-    console.log('SLA registry address:');
-    console.log(slaRegistry.address);
-    console.log('All valid SLAs:');
+    consola.info('SLA registry address:');
+    consola.info(slaRegistry.address);
+    consola.info('All valid SLAs:');
     for (let slaAddress of allSLAs) {
       printSeparator();
       const sla = <SLA>(

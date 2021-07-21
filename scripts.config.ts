@@ -115,7 +115,7 @@ export const scripts: ScriptsConfiguration = {
       },
     },
     {
-      sloValue: 11,
+      sloValue: 200,
       sloType: SLO_TYPE.GreaterThan,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
