@@ -4,18 +4,18 @@
   "description": "Toolkit to deploy develop Chainlink Node, Graph Node, IPFS node, dev blockhain and DSLA contracts to multiple networks seamlessly",
   "scripts": {
     "hardhat-node": "hardhat node",
+    "develop:deploy": "hh deploy --network develop --reset && hh stacktical:bootstrap --network develop && hh stacktical:deploy-sla --network develop --id 0",
+    "develop:deploy-reset": "hh stacktical:restart-services --network develop && npm run develop:deploy",
     "custom-ganache": "ganache-cli --accounts 10 --defaultBalanceEther 100000 -d -i 1337 -l 12000000 -h 0.0.0.0",
     "external-adapter": "pm2 delete external-adapter 2> /dev/null || true && pm2 start services/external-adapter/index.ts --name external-adapter --watch ./services/external-adapter --no-daemon",
     "export-data": "cp -r exported-data/* ../stacktical-dsla-frontend/src/addresses && cp -r typechain/* ../stacktical-dsla-frontend/src/typechain",
     "release:patch": "standard-version --release-as patch",
     "release:minor": "standard-version --release-as minor",
     "release:major": "standard-version --release-as major",
-    "graph:create": "graph create stacktical/dsla-protocol --node https://api.thegraph.com/deploy/",
     "graph:create-local": "graph create stacktical/dsla-protocol --node http://127.0.0.1:8020",
     "graph:codegen": "graph codegen subgraph/subgraph.yaml -o subgraph/generated",
     "graph:build": "graph build subgraph/subgraph.yaml -o subgraph/build",
-    "graph:deploy": "graph deploy stacktical/dsla-protocol subgraph/subgraph.yaml --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
-    "graph:deploy-local": "graph deploy -o subgraph/build stacktical/dsla-protocol subgraph/subgraph.yaml --ipfs http://localhost:5001 --node http://127.0.0.1:8020"
+    "graph:deploy-local": "npm run graph:codegen && npm run graph:build && graph deploy -o subgraph/build stacktical/dsla-protocol subgraph/subgraph.yaml --ipfs http://localhost:5001 --node http://127.0.0.1:8020"
   },
   "repository": {
     "type": "git",
