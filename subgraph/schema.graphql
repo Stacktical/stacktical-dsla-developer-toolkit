@@ -3,7 +3,7 @@ type SLA @entity {
   slaId: BigInt
   owner: Bytes
   address: Bytes
-  DTokens: [DToken!]
+  dTokens: [DToken!]
   SLIs: [SLI!]
   deposits: [Deposit!]
   withdrawals: [Withdrawal!]
@@ -34,11 +34,11 @@ type SLI @entity {
 type DToken @entity {
   id: ID!
   name: String!
+  type: String!
   symbol: String!
+  address: Bytes!
   slaAddress: Bytes!
   tokenAddress: Bytes!
-  spAddress: Bytes!
-  lpAddress: Bytes!
 }
 
 type Deposit @entity {

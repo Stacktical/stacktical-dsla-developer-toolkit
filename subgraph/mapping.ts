@@ -1,17 +1,18 @@
 import { SLA as SLATemplate } from './generated/templates';
-import { Deposit, SLA, SLI, Withdrawal } from './generated/schema';
+import { Deposit, DToken, SLA, SLI, Withdrawal } from './generated/schema';
 
 import {
   Stake,
   SLICreated,
   ProviderWithdraw,
+  DTokensCreated,
 } from './generated/templates/SLA/SLA';
 
 import { SLACreated } from './generated/SLARegistry/SLARegistry';
 import { SLA as SLAContract } from './generated/SLARegistry/SLA';
 
 import { SLORegistered } from './generated/SLORegistry/SLORegistry';
-import { log } from '@graphprotocol/graph-ts';
+import { ERC20 } from './generated/templates/SLA/ERC20';
 
 export function handleNewSLA(event: SLACreated): void {
   let slaContract = SLAContract.bind(event.params.sla);
@@ -103,5 +104,33 @@ export function handleSLORegistered(event: SLORegistered): void {
   }
   sla.sloType = event.params.sloType;
   sla.sloValue = event.params.sloValue;
+  sla.save();
+}
+
+export function handleDTokensCreated(event: DTokensCreated): void {
+  let sla = SLA.load(event.address.toHexString());
+  // SP token
+  let spToken = new DToken(event.params.duTokenAddress.toHexString());
+  let spTokenContract = ERC20.bind(event.params.duTokenAddress);
+  spToken.name = spTokenContract.name();
+  spToken.type = 'user';
+  spToken.address = event.params.duTokenAddress;
+  spToken.symbol = spTokenContract.symbol();
+  spToken.slaAddress = event.address;
+  spToken.tokenAddress = event.params.tokenAddress;
+  sla.dTokens = sla.dTokens.concat([spToken.id]);
+
+  // LP token
+  let lpToken = new DToken(event.params.dpTokenAddress.toHexString());
+  let lpTokenContract = ERC20.bind(event.params.dpTokenAddress);
+  lpToken.name = lpTokenContract.name();
+  lpToken.type = 'provider';
+  lpToken.address = event.params.dpTokenAddress;
+  lpToken.symbol = lpTokenContract.symbol();
+  lpToken.slaAddress = event.address;
+  lpToken.tokenAddress = event.params.tokenAddress;
+  sla.dTokens = sla.dTokens.concat([lpToken.id]);
+  spToken.save();
+  lpToken.save();
   sla.save();
 }
