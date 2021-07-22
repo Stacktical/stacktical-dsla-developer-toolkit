@@ -1,5 +1,5 @@
 import { SLA as SLATemplate } from './generated/templates';
-import { Deposit, SLA, SLI, Withdraw } from './generated/schema';
+import { Deposit, SLA, SLI, Withdrawal } from './generated/schema';
 
 import {
   Stake,
@@ -72,27 +72,27 @@ export function handleStake(event: Stake): void {
 
 export function handleProviderWithdraw(event: ProviderWithdraw): void {
   let sla = SLA.load(event.address.toHexString());
-  let withdraw = new Withdraw(event.transaction.hash.toHexString());
-  withdraw.type = 'provider';
-  withdraw.amount = event.params.amount;
-  withdraw.tokenAddress = event.params.tokenAddress;
-  withdraw.callerAddress = event.params.caller;
-  withdraw.slaAddress = event.address;
-  withdraw.save();
-  sla.withdraws = sla.withdraws.concat([withdraw.id]);
+  let withdrawal = new Withdrawal(event.transaction.hash.toHexString());
+  withdrawal.type = 'provider';
+  withdrawal.amount = event.params.amount;
+  withdrawal.tokenAddress = event.params.tokenAddress;
+  withdrawal.callerAddress = event.params.caller;
+  withdrawal.slaAddress = event.address;
+  withdrawal.save();
+  sla.withdrawals = sla.withdrawals.concat([withdrawal.id]);
   sla.save();
 }
 
 export function handleUserWithdraw(event: ProviderWithdraw): void {
   let sla = SLA.load(event.address.toHexString());
-  let withdraw = new Withdraw(event.transaction.hash.toHexString());
-  withdraw.type = 'user';
-  withdraw.amount = event.params.amount;
-  withdraw.tokenAddress = event.params.tokenAddress;
-  withdraw.callerAddress = event.params.caller;
-  withdraw.slaAddress = event.address;
-  withdraw.save();
-  sla.withdraws = sla.withdraws.concat([withdraw.id]);
+  let withdrawal = new Withdrawal(event.transaction.hash.toHexString());
+  withdrawal.type = 'user';
+  withdrawal.amount = event.params.amount;
+  withdrawal.tokenAddress = event.params.tokenAddress;
+  withdrawal.callerAddress = event.params.caller;
+  withdrawal.slaAddress = event.address;
+  withdrawal.save();
+  sla.withdrawals = sla.withdrawals.concat([withdrawal.id]);
   sla.save();
 }
 
