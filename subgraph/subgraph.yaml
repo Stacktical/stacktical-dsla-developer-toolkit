@@ -66,6 +66,10 @@ templates:
           handler: handleSLICreated
         - event: Stake(indexed address,indexed uint256,indexed address,uint256)
           handler: handleStake
+        - event: ProviderWithdraw(indexed address,indexed uint256,indexed address,uint256)
+          handler: handleProviderWithdraw
+        - event: UserWithdraw(indexed address,indexed uint256,indexed address,uint256)
+          handler: handleUserWithdraw
       abis:
         - name: SLA
           file: ./abis/@stacktical/dsla-contracts/contracts/SLA.sol/SLA.json

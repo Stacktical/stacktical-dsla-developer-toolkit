@@ -43,17 +43,18 @@ type DToken @entity {
 
 type Deposit @entity {
   id: ID!
-  depositType: String!
+  type: String!
   amount: BigInt!
   tokenAddress: Bytes!
-  userAddress: Bytes!
+  callerAddress: Bytes!
   slaAddress: Bytes!
 }
 
 type Withdraw @entity {
   id: ID!
-  depositType: String!
+  type: String!
   amount: BigInt!
   tokenAddress: Bytes!
-  userAddress: Bytes!
+  callerAddress: Bytes!
+  slaAddress: Bytes!
 }

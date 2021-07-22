@@ -1,7 +1,11 @@
 import { SLA as SLATemplate } from './generated/templates';
-import { Deposit, SLA, SLI } from './generated/schema';
+import { Deposit, SLA, SLI, Withdraw } from './generated/schema';
 
-import { Stake, SLICreated } from './generated/templates/SLA/SLA';
+import {
+  Stake,
+  SLICreated,
+  ProviderWithdraw,
+} from './generated/templates/SLA/SLA';
 
 import { SLACreated } from './generated/SLARegistry/SLARegistry';
 import { SLA as SLAContract } from './generated/SLARegistry/SLA';
@@ -53,16 +57,42 @@ export function handleSLICreated(event: SLICreated): void {
 export function handleStake(event: Stake): void {
   let sla = SLA.load(event.address.toHexString());
   let deposit = new Deposit(event.transaction.hash.toHexString());
-  deposit.depositType =
+  deposit.type =
     sla.owner.toHexString() == event.params.caller.toHexString()
       ? 'provider-stake'
       : 'user-stake';
   deposit.amount = event.params.amount;
   deposit.tokenAddress = event.params.tokenAddress;
-  deposit.userAddress = event.params.caller;
+  deposit.callerAddress = event.params.caller;
   deposit.slaAddress = event.address;
   deposit.save();
   sla.deposits = sla.deposits.concat([deposit.id]);
+  sla.save();
+}
+
+export function handleProviderWithdraw(event: ProviderWithdraw): void {
+  let sla = SLA.load(event.address.toHexString());
+  let withdraw = new Withdraw(event.transaction.hash.toHexString());
+  withdraw.type = 'provider';
+  withdraw.amount = event.params.amount;
+  withdraw.tokenAddress = event.params.tokenAddress;
+  withdraw.callerAddress = event.params.caller;
+  withdraw.slaAddress = event.address;
+  withdraw.save();
+  sla.withdraws = sla.withdraws.concat([withdraw.id]);
+  sla.save();
+}
+
+export function handleUserWithdraw(event: ProviderWithdraw): void {
+  let sla = SLA.load(event.address.toHexString());
+  let withdraw = new Withdraw(event.transaction.hash.toHexString());
+  withdraw.type = 'user';
+  withdraw.amount = event.params.amount;
+  withdraw.tokenAddress = event.params.tokenAddress;
+  withdraw.callerAddress = event.params.caller;
+  withdraw.slaAddress = event.address;
+  withdraw.save();
+  sla.withdraws = sla.withdraws.concat([withdraw.id]);
   sla.save();
 }
 
