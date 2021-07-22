@@ -9,7 +9,14 @@ services/chainlink/log.jsonl
 services/postgres/
 deployments/develop
 exported-data/networks/develop.ts
-services/chainlink-nodes/**
+services/chainlink-nodes/develop**
+services/chainlink-nodes/kovan**
+services/chainlink-nodes/rinkeby**
+services/chainlink-nodes/ethereum**
+services/chainlink-nodes/polygon**
+services/chainlink-nodes/mumbai**
+services/chainlink-nodes/harmony**
+services/chainlink-nodes/harmonytestnet**
 services/ipfs/data
 services/graph-protocol/postgres
 networks/index.ts
