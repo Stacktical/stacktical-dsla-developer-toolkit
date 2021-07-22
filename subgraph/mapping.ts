@@ -7,6 +7,7 @@ import { SLACreated } from './generated/SLARegistry/SLARegistry';
 import { SLA as SLAContract } from './generated/SLARegistry/SLA';
 
 import { SLORegistered } from './generated/SLORegistry/SLORegistry';
+import { log } from '@graphprotocol/graph-ts';
 
 export function handleNewSLA(event: SLACreated): void {
   let slaContract = SLAContract.bind(event.params.sla);
@@ -49,13 +50,21 @@ export function handleSLICreated(event: SLICreated): void {
   sli.save();
 }
 
-// export function handleStake(event: Stake): void {
-//   let deposit = Deposit.load(event.transaction.hash.toHexString());
-//   if (!deposit) {
-//     deposit = new Deposit(event.transaction.hash.toHexString());
-//   }
-//   deposit.depositType = '';
-// }
+export function handleStake(event: Stake): void {
+  let sla = SLA.load(event.address.toHexString());
+  let deposit = new Deposit(event.transaction.hash.toHexString());
+  deposit.depositType =
+    sla.owner.toHexString() == event.params.caller.toHexString()
+      ? 'provider-stake'
+      : 'user-stake';
+  deposit.amount = event.params.amount;
+  deposit.tokenAddress = event.params.tokenAddress;
+  deposit.userAddress = event.params.caller;
+  deposit.slaAddress = event.address;
+  deposit.save();
+  sla.deposits = sla.deposits.concat([deposit.id]);
+  sla.save();
+}
 
 export function handleSLORegistered(event: SLORegistered): void {
   let sla = SLA.load(event.params.sla.toHexString());

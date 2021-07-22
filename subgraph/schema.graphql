@@ -5,8 +5,8 @@ type SLA @entity {
   address: Bytes
   DTokens: [DToken!]
   SLIs: [SLI!]
-  deposits:[Deposit!]
-  withdraws:[Withdraw!]
+  deposits: [Deposit!]
+  withdraws: [Withdraw!]
   sloValue: BigInt
   sloType: Int
   messengerAddress: Bytes
@@ -47,6 +47,7 @@ type Deposit @entity {
   amount: BigInt!
   tokenAddress: Bytes!
   userAddress: Bytes!
+  slaAddress: Bytes!
 }
 
 type Withdraw @entity {

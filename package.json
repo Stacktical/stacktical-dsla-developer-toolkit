@@ -12,10 +12,10 @@
     "release:patch": "standard-version --release-as patch",
     "release:minor": "standard-version --release-as minor",
     "release:major": "standard-version --release-as major",
-    "graph:create-local": "graph create stacktical/dsla-protocol --node http://127.0.0.1:8020",
+    "graph:create": "graph create stacktical/dsla-protocol --node http://127.0.0.1:8020",
     "graph:codegen": "graph codegen subgraph/subgraph.yaml -o subgraph/generated",
     "graph:build": "graph build subgraph/subgraph.yaml -o subgraph/build",
-    "graph:deploy-local": "npm run graph:codegen && npm run graph:build && graph deploy -o subgraph/build stacktical/dsla-protocol subgraph/subgraph.yaml --ipfs http://localhost:5001 --node http://127.0.0.1:8020"
+    "graph:deploy": "npm run graph:codegen && npm run graph:build && graph deploy --debug -o subgraph/build stacktical/dsla-protocol subgraph/subgraph.yaml --ipfs http://localhost:5001 --node http://127.0.0.1:8020"
   },
   "repository": {
     "type": "git",

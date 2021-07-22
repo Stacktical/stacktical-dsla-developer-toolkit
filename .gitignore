@@ -20,3 +20,5 @@ services/chainlink-nodes/harmonytestnet**
 services/ipfs/data
 services/graph-protocol/postgres
 networks/index.ts
+subgraph/generated
+subgraph/build
