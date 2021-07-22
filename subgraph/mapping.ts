@@ -59,8 +59,8 @@ export function handleStake(event: Stake): void {
   let deposit = new Deposit(event.transaction.hash.toHexString());
   deposit.type =
     sla.owner.toHexString() == event.params.caller.toHexString()
-      ? 'provider-stake'
-      : 'user-stake';
+      ? 'provider'
+      : 'user';
   deposit.amount = event.params.amount;
   deposit.tokenAddress = event.params.tokenAddress;
   deposit.callerAddress = event.params.caller;

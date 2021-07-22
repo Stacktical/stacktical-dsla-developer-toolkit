@@ -23,6 +23,7 @@ enum TASK_NAMES {
   DEPLOY_MESSENGER = 'stacktical:deploy-messenger',
   GET_MESSENGER = 'stacktical:get-messenger',
   TRANSFER_OWNERSHIP = 'stacktical:transfer-ownership',
+  PROVIDER_WITHDRAW = 'stacktical:provider-withdraw',
 }
 
 task(TASK_NAMES.DEPLOY_SLA, 'Deploy customized SLA from stacktical config')
@@ -32,6 +33,22 @@ task(TASK_NAMES.DEPLOY_SLA, 'Deploy customized SLA from stacktical config')
   )
   .setAction(async (taskArgs, { run }) => {
     await run(SUB_TASK_NAMES.DEPLOY_SLA, taskArgs);
+  });
+
+task(
+  TASK_NAMES.PROVIDER_WITHDRAW,
+  'Deploy customized SLA from stacktical config'
+)
+  .addOptionalParam(
+    'slaAddress',
+    '(optional) The SLA address. Defaults to last deployed SLA by deployer address'
+  )
+  .addParam(
+    'tokenAddress',
+    'Address of the token to withdraw from e.g. DSLA = 0x3aFfCCa64c2A6f4e3B6Bd9c64CD2C969EFd1ECBe in Mainnet'
+  )
+  .setAction(async (taskArgs, { run }) => {
+    await run(SUB_TASK_NAMES.PROVIDER_WITHDRAW, taskArgs);
   });
 
 task(TASK_NAMES.EXPORT_DATA, 'Export data to exported-data folder').setAction(
