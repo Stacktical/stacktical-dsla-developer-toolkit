@@ -39,6 +39,7 @@ type DToken @entity {
   address: Bytes!
   slaAddress: Bytes!
   tokenAddress: Bytes!
+  totalSupply: BigInt!
 }
 
 type Deposit @entity {
@@ -57,4 +58,19 @@ type Withdrawal @entity {
   tokenAddress: Bytes!
   callerAddress: Bytes!
   slaAddress: Bytes!
+}
+
+type User @entity {
+  id: ID!
+  slas: [SLA!]
+  dTokensBalances: [DtokenBalance!]
+  deposits: [Deposit!]
+  withdrawals: [Withdrawal!]
+}
+
+type DtokenBalance @entity {
+  id: ID!
+  dtoken: DToken!
+  slaAllowance: BigInt!
+  balance: BigInt!
 }

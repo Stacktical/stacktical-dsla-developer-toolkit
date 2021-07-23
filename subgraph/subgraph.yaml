@@ -78,3 +78,25 @@ templates:
           file: ./abis/@stacktical/dsla-contracts/contracts/SLA.sol/SLA.json
         - name: ERC20
           file: ./abis/@openzeppelin/contracts/presets/ERC20PresetMinterPauser.sol/ERC20PresetMinterPauser.json
+  - kind: ethereum/contract
+    name: DToken
+    network: mainnet
+    source:
+      abi: DToken
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: mapping.ts
+      entities:
+        - DToken
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleDTokenTransfer
+#        - event: Approval(indexed address,indexed address,uint256)
+#          handler: handleDTokenApproval
+      abis:
+        - name: DToken
+          file: ./abis/@openzeppelin/contracts/presets/ERC20PresetMinterPauser.sol/ERC20PresetMinterPauser.json
+        - name: ERC20
+          file: ./abis/@openzeppelin/contracts/presets/ERC20PresetMinterPauser.sol/ERC20PresetMinterPauser.json
