@@ -39,7 +39,6 @@ export const develop: NetworkUserConfig = {
       deleteOldJobs: true,
       cleanLocalFolder: true,
       nodeFunds: '10',
-      gasLimit: undefined,
       ethWsUrl: 'ws://host.docker.internal:8545',
       ethHttpUrl: 'http://host.docker.internal:8545',
       nodesConfiguration: [

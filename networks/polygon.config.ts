@@ -28,7 +28,8 @@ if (error) {
 
 export const polygon: NetworkUserConfig = {
   chainId: 137,
-  gasPrice: 150 * 10 ** 9,
+  gasPrice: 100 * 10 ** 9,
+  gas: 19000000,
   // accounts: [process.env.PRIV_KEY],
   accounts: {
     mnemonic: process.env.MAINNET_MNEMONIC,
@@ -59,7 +60,6 @@ export const polygon: NetworkUserConfig = {
       deleteOldJobs: true,
       cleanLocalFolder: false,
       nodeFunds: '1',
-      gasLimit: undefined,
       ethWsUrl: process.env.POLYGON_WS_URI,
       nodesConfiguration: [
         {
@@ -69,13 +69,13 @@ export const polygon: NetworkUserConfig = {
           email: process.env.POLYGON_CHAINLINK_NODE_1_USER,
           password: process.env.POLYGON_CHAINLINK_NODE_1_PASS,
         },
-        // {
-        //   name: 'NewYork',
-        //   restApiUrl: process.env.POLYGON_CHAINLINK_NODE_2_URL,
-        //   restApiPort: process.env.POLYGON_CHAINLINK_NODE_2_PORT,
-        //   email: process.env.POLYGON_CHAINLINK_NODE_2_USER,
-        //   password: process.env.POLYGON_CHAINLINK_NODE_2_PASS,
-        // },
+        {
+          name: 'NewYork',
+          restApiUrl: process.env.POLYGON_CHAINLINK_NODE_2_URL,
+          restApiPort: process.env.POLYGON_CHAINLINK_NODE_2_PORT,
+          email: process.env.POLYGON_CHAINLINK_NODE_2_USER,
+          password: process.env.POLYGON_CHAINLINK_NODE_2_PASS,
+        },
         {
           name: 'Paris',
           restApiUrl: process.env.POLYGON_CHAINLINK_NODE_3_URL,
