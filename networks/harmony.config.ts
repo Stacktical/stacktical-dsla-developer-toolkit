@@ -64,7 +64,6 @@ export const harmony: NetworkUserConfig = {
       deleteOldJobs: true,
       cleanLocalFolder: false,
       nodeFunds: '1',
-      gasLimit: undefined,
       ethWsUrl: process.env.HARMONY_WS_URI,
       ethHttpUrl: process.env.HARMONY_URI,
       nodesConfiguration: [

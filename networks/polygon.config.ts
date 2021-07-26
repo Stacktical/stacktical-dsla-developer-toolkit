@@ -28,8 +28,9 @@ if (error) {
 
 export const polygon: NetworkUserConfig = {
   chainId: 137,
+  gasPrice: 100 * 10 ** 9,
   gas: 19000000,
-  gasPrice: 20 * 10 ** 9,
+  // accounts: [process.env.PRIV_KEY],
   accounts: {
     mnemonic: process.env.MAINNET_MNEMONIC,
   },
@@ -59,7 +60,6 @@ export const polygon: NetworkUserConfig = {
       deleteOldJobs: true,
       cleanLocalFolder: false,
       nodeFunds: '1',
-      gasLimit: undefined,
       ethWsUrl: process.env.POLYGON_WS_URI,
       nodesConfiguration: [
         {

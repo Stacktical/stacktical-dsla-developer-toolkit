@@ -55,7 +55,6 @@ export const harmonytestnet: NetworkUserConfig = {
       deleteOldJobs: true,
       cleanLocalFolder: false,
       nodeFunds: '0.01',
-      gasLimit: undefined,
       ethWsUrl: process.env.HARMONYTESTNET_WS_URI,
       nodesConfiguration: [
         {

@@ -43,7 +43,6 @@ export type ChainlinkConfiguration = {
   deleteOldJobs: boolean;
   cleanLocalFolder: boolean;
   nodeFunds: string;
-  gasLimit?: string;
   ethWsUrl: string;
   ethHttpUrl?: string;
   nodesConfiguration: Array<ChainlinkNodeConfiguration>;
