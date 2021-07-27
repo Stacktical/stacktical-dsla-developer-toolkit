@@ -40,7 +40,6 @@ export const kovan: NetworkUserConfig = {
       deleteOldJobs: true,
       cleanLocalFolder: false,
       nodeFunds: '0.1',
-      gasLimit: undefined,
       ethWsUrl: process.env.KOVAN_WS_URI,
       ethHttpUrl: process.env.KOVAN_URI,
       nodesConfiguration: [

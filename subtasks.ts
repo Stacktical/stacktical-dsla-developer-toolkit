@@ -472,7 +472,7 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
         chainlinkNodeAddress = await updatedAddress(node);
       }
       console.log(`Chainlink Node Address: ${chainlinkNodeAddress}`);
-      const { nodeFunds, gasLimit } = stacktical.chainlink;
+      const { nodeFunds } = stacktical.chainlink;
       const [defaultAccount] = await web3.eth.getAccounts();
       let balance = await web3.eth.getBalance(chainlinkNodeAddress);
       if (Number(web3.utils.fromWei(balance)) < Number(nodeFunds)) {
@@ -480,7 +480,9 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
           from: defaultAccount,
           to: chainlinkNodeAddress,
           value: web3.utils.toWei(String(nodeFunds), 'ether'),
-          gas: gasLimit,
+          ...(network.config.gas !== 'auto' && {
+            gasLimit: network.config.gas,
+          }),
         });
       }
       balance = await web3.eth.getBalance(chainlinkNodeAddress);
@@ -499,7 +501,12 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
       if (!permissions) {
         const tx = await oracleContract.setFulfillmentPermission(
           chainlinkNodeAddress,
-          true
+          true,
+          {
+            ...(network.config.gas !== 'auto' && {
+              gasLimit: network.config.gas,
+            }),
+          }
         );
         await tx.wait();
       }
