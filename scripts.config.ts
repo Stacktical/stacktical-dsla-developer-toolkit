@@ -30,7 +30,7 @@ export const scripts: ScriptsConfiguration = {
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
-      notDeployerStakeTimes: 2,
+      notDeployerStakeTimes: 1,
       leverage: 50,
       serviceMetadata: {
         serviceName: 'P-OPS',

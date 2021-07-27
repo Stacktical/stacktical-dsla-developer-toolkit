@@ -27,13 +27,7 @@ import { SLORegistered } from './generated/SLORegistry/SLORegistry';
 import { ERC20 } from './generated/templates/SLA/ERC20';
 import { Approval, Transfer } from './generated/templates/DToken/DToken';
 
-import {
-  BigDecimal,
-  BigInt,
-  ByteArray,
-  log,
-  crypto,
-} from '@graphprotocol/graph-ts';
+import { BigInt } from '@graphprotocol/graph-ts';
 
 export function handleNewSLA(event: SLACreated): void {
   let slaContract = SLAContract.bind(event.params.sla);
@@ -55,6 +49,7 @@ export function handleNewSLA(event: SLACreated): void {
   sla.initialPeriodId = slaContract.initialPeriodId();
   sla.finalPeriodId = slaContract.finalPeriodId();
   sla.leverage = slaContract.leverage();
+  sla.maxHedge = BigInt.fromI32(0);
   sla.save();
   SLATemplate.create(event.params.sla);
   let user = User.load(event.params.owner.toHexString());
@@ -68,6 +63,9 @@ export function handleNewSLA(event: SLACreated): void {
 export function handleSLICreated(event: SLICreated): void {
   let slaContract = SLAContract.bind(event.address);
   let sla = SLA.load(event.address.toHexString());
+  if (!sla) {
+    sla = new SLA(event.address.toHexString());
+  }
   let sliID =
     sla.address.toHexString() + '-' + event.params.periodId.toString();
   let sli = new SLI(sliID);
@@ -86,6 +84,7 @@ export function handleSLICreated(event: SLICreated): void {
 export function handleStake(event: Stake): void {
   let sla = SLA.load(event.address.toHexString());
   let deposit = new Deposit(event.transaction.hash.toHexString());
+  let slaContract = SLAContract.bind(event.address);
   deposit.type =
     sla.owner.toHexString() == event.params.caller.toHexString()
       ? 'provider'
@@ -96,6 +95,10 @@ export function handleStake(event: Stake): void {
   deposit.slaAddress = event.address;
   deposit.save();
   sla.deposits = sla.deposits.concat([deposit.id]);
+  sla.maxHedge = slaContract
+    .providerPool(event.params.tokenAddress)
+    .div(sla.leverage)
+    .minus(slaContract.usersPool(event.params.tokenAddress));
   sla.save();
   let user = User.load(event.params.caller.toHexString());
   if (!user) {
@@ -115,6 +118,7 @@ export function handleStake(event: Stake): void {
 
 export function handleProviderWithdraw(event: ProviderWithdraw): void {
   let sla = SLA.load(event.address.toHexString());
+  let slaContract = SLAContract.bind(event.address);
   let withdrawal = new Withdrawal(event.transaction.hash.toHexString());
   withdrawal.type = 'provider';
   withdrawal.amount = event.params.amount;
@@ -123,6 +127,10 @@ export function handleProviderWithdraw(event: ProviderWithdraw): void {
   withdrawal.slaAddress = event.address;
   withdrawal.save();
   sla.withdrawals = sla.withdrawals.concat([withdrawal.id]);
+  sla.maxHedge = slaContract
+    .providerPool(event.params.tokenAddress)
+    .div(sla.leverage)
+    .minus(slaContract.usersPool(event.params.tokenAddress));
   sla.save();
   let user = User.load(event.params.caller.toHexString());
   if (!user) {
@@ -142,6 +150,10 @@ export function handleProviderWithdraw(event: ProviderWithdraw): void {
 
 export function handleUserWithdraw(event: ProviderWithdraw): void {
   let sla = SLA.load(event.address.toHexString());
+  if (!sla) {
+    sla = new SLA(event.address.toHexString());
+  }
+  let slaContract = SLAContract.bind(event.address);
   let withdrawal = new Withdrawal(event.transaction.hash.toHexString());
   withdrawal.type = 'user';
   withdrawal.amount = event.params.amount;
@@ -150,6 +162,10 @@ export function handleUserWithdraw(event: ProviderWithdraw): void {
   withdrawal.slaAddress = event.address;
   withdrawal.save();
   sla.withdrawals = sla.withdrawals.concat([withdrawal.id]);
+  sla.maxHedge = slaContract
+    .providerPool(event.params.tokenAddress)
+    .div(sla.leverage)
+    .minus(slaContract.usersPool(event.params.tokenAddress));
   sla.save();
   let user = User.load(event.params.caller.toHexString());
   if (!user) {
@@ -171,6 +187,7 @@ export function handleSLORegistered(event: SLORegistered): void {
   let sla = SLA.load(event.params.sla.toHexString());
   if (!sla) {
     sla = new SLA(event.params.sla.toHexString());
+    sla.leverage = BigInt.fromI32(0);
   }
   sla.sloType = event.params.sloType;
   sla.sloValue = event.params.sloValue;
@@ -179,6 +196,9 @@ export function handleSLORegistered(event: SLORegistered): void {
 
 export function handleDTokensCreated(event: DTokensCreated): void {
   let sla = SLA.load(event.address.toHexString());
+  if (!sla) {
+    sla = new SLA(event.address.toHexString());
+  }
   // SP token
   let spToken = new DToken(event.params.duTokenAddress.toHexString());
   let spTokenContract = ERC20.bind(event.params.duTokenAddress);
@@ -242,13 +262,3 @@ export function handleDTokenTransfer(event: Transfer): void {
   user.dTokensBalances = user.dTokensBalances.concat([dTokenBalance.id]);
   user.save();
 }
-
-// export function handleDTokenApproval(event: Approval): void {
-//   let sla = SLA.load(event.params.sla.toHexString());
-//   if (!sla) {
-//     sla = new SLA(event.params.sla.toHexString());
-//   }
-//   sla.sloType = event.params.sloType;
-//   sla.sloValue = event.params.sloValue;
-//   sla.save();
-// }

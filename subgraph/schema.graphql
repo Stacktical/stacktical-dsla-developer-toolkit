@@ -19,7 +19,8 @@ type SLA @entity {
   whiteListed: Boolean
   initialPeriodId: BigInt
   finalPeriodId: BigInt
-  leverage: BigInt
+  leverage: BigInt!
+  maxHedge: BigInt
 }
 
 type SLI @entity {
