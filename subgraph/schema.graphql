@@ -60,6 +60,13 @@ type Withdrawal @entity {
   slaAddress: Bytes!
 }
 
+type TVL @entity {
+  id: ID!
+  amount: BigInt
+  deposits: [Deposit!]
+  withdrawals: [Withdrawal!]
+}
+
 type User @entity {
   id: ID!
   slas: [SLA!]

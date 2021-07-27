@@ -8,6 +8,7 @@ import {
   DtokenBalance,
   SLA,
   SLI,
+  TVL,
   User,
   Withdrawal,
 } from './generated/schema';
@@ -102,6 +103,14 @@ export function handleStake(event: Stake): void {
   }
   user.deposits = user.deposits.concat([deposit.id]);
   user.save();
+
+  let tvl = TVL.load('0');
+  if (!tvl) {
+    tvl = new TVL('0');
+  }
+  tvl.amount = tvl.amount.plus(event.params.amount);
+  tvl.deposits = tvl.deposits.concat([deposit.id]);
+  tvl.save();
 }
 
 export function handleProviderWithdraw(event: ProviderWithdraw): void {
@@ -121,6 +130,14 @@ export function handleProviderWithdraw(event: ProviderWithdraw): void {
   }
   user.withdrawals = user.withdrawals.concat([withdrawal.id]);
   user.save();
+
+  let tvl = TVL.load('0');
+  if (!tvl) {
+    tvl = new TVL('0');
+  }
+  tvl.amount = tvl.amount.minus(event.params.amount);
+  tvl.withdrawals = tvl.withdrawals.concat([withdrawal.id]);
+  tvl.save();
 }
 
 export function handleUserWithdraw(event: ProviderWithdraw): void {
@@ -140,6 +157,14 @@ export function handleUserWithdraw(event: ProviderWithdraw): void {
   }
   user.withdrawals = user.withdrawals.concat([withdrawal.id]);
   user.save();
+
+  let tvl = TVL.load('0');
+  if (!tvl) {
+    tvl = new TVL('0');
+  }
+  tvl.amount = tvl.amount.minus(event.params.amount);
+  tvl.withdrawals = tvl.withdrawals.concat([withdrawal.id]);
+  tvl.save();
 }
 
 export function handleSLORegistered(event: SLORegistered): void {
