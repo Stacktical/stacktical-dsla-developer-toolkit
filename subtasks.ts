@@ -91,14 +91,47 @@ export enum SUB_TASK_NAMES {
   GET_MESSENGER = 'GET_MESSENGER',
   TRANSFER_OWNERSHIP = 'TRANSFER_OWNERSHIP',
   PROVIDER_WITHDRAW = 'PROVIDER_WITHDRAW',
+  UNLOCK_TOKENS = 'UNLOCK_TOKENS',
 }
+
+subtask(SUB_TASK_NAMES.UNLOCK_TOKENS, undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    const { ethers, getNamedAccounts } = hre;
+    const { deployer } = await getNamedAccounts();
+    const slaRegistry = <SLARegistry>(
+      await ethers.getContract(CONTRACT_NAMES.SLARegistry)
+    );
+
+    const slaAddress = taskArgs.slaAddress
+      ? ethers.utils.getAddress(taskArgs.slaAddress)
+      : (await slaRegistry.allSLAs()).slice(-1)[0];
+    const slaContract = <SLA>(
+      await ethers.getContractAt(CONTRACT_NAMES.SLA, slaAddress)
+    );
+
+    printSeparator();
+    consola.info('SLA address:', slaContract.address);
+    consola.info('Requester address:', deployer);
+    const tx = await slaRegistry.returnLockedValue(slaAddress);
+    await tx.wait();
+    const stakeRegistry = <StakeRegistry>(
+      await ethers.getContract(CONTRACT_NAMES.StakeRegistry)
+    );
+    const filter = stakeRegistry.filters.LockedValueReturned(
+      slaAddress,
+      deployer
+    );
+    const query = await stakeRegistry.queryFilter(filter);
+    consola.info('DSLA returned:', fromWei(query[0].args.amount.toString()));
+
+    printSeparator();
+  }
+);
 
 subtask(SUB_TASK_NAMES.PROVIDER_WITHDRAW, undefined).setAction(
   async (taskArgs, hre: HardhatRuntimeEnvironment) => {
-    const { deployments, ethers, getNamedAccounts } = hre;
+    const { ethers, getNamedAccounts } = hre;
     const { deployer } = await getNamedAccounts();
-    const { get } = deployments;
-    const { stacktical } = hre.network.config;
     const slaRegistry = <SLARegistry>(
       await ethers.getContract(CONTRACT_NAMES.SLARegistry)
     );

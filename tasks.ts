@@ -24,7 +24,17 @@ enum TASK_NAMES {
   GET_MESSENGER = 'stacktical:get-messenger',
   TRANSFER_OWNERSHIP = 'stacktical:transfer-ownership',
   PROVIDER_WITHDRAW = 'stacktical:provider-withdraw',
+  UNLOCK_TOKENS = 'stacktical:unlock-tokens',
 }
+
+task(TASK_NAMES.UNLOCK_TOKENS, 'Unlock value from a finished SLA contract')
+  .addOptionalParam(
+    'slaAddress',
+    '(optional) The SLA address. Defaults to last deployed SLA by deployer address'
+  )
+  .setAction(async (taskArgs, { run }) => {
+    await run(SUB_TASK_NAMES.UNLOCK_TOKENS, taskArgs);
+  });
 
 task(TASK_NAMES.DEPLOY_SLA, 'Deploy customized SLA from stacktical config')
   .addOptionalParam(
