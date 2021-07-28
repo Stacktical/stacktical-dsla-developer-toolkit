@@ -22,7 +22,7 @@ import { SLA as SLAContract } from './generated/SLARegistry/SLA';
 import { SLORegistered } from './generated/SLORegistry/SLORegistry';
 import { ERC20 } from './generated/templates/SLA/ERC20';
 
-import { BigInt } from '@graphprotocol/graph-ts';
+import { BigInt, Address } from '@graphprotocol/graph-ts';
 
 export function handleNewSLA(event: SLACreated): void {
   let slaContract = SLAContract.bind(event.params.sla);
@@ -45,6 +45,7 @@ export function handleNewSLA(event: SLACreated): void {
   sla.finalPeriodId = slaContract.finalPeriodId();
   sla.leverage = slaContract.leverage();
   sla.maxHedge = BigInt.fromI32(0);
+  sla.finished = slaContract.contractFinished();
   sla.save();
   SLATemplate.create(event.params.sla);
   let user = User.load(event.params.owner.toHexString());
@@ -66,6 +67,7 @@ export function handleSLICreated(event: SLICreated): void {
   let sli = new SLI(sliID);
   sla.SLIs = sla.SLIs.concat([sli.id]);
   sla.nextVerifiablePeriod = slaContract.nextVerifiablePeriod();
+  sla.finished = slaContract.contractFinished();
   sla.save();
 
   sli.periodId = event.params.periodId;
@@ -94,6 +96,9 @@ export function handleStake(event: Stake): void {
     .providerPool(event.params.tokenAddress)
     .div(sla.leverage)
     .minus(slaContract.usersPool(event.params.tokenAddress));
+  if (sla.maxHedge.lt(BigInt.fromI32(0))) {
+    sla.maxHedge = BigInt.fromI32(0);
+  }
   sla.save();
   let user = User.load(event.params.caller.toHexString());
   if (!user) {
@@ -138,6 +143,9 @@ export function handleProviderWithdraw(event: ProviderWithdraw): void {
     .providerPool(event.params.tokenAddress)
     .div(sla.leverage)
     .minus(slaContract.usersPool(event.params.tokenAddress));
+  if (sla.maxHedge.lt(BigInt.fromI32(0))) {
+    sla.maxHedge = BigInt.fromI32(0);
+  }
   sla.save();
   let user = User.load(event.params.caller.toHexString());
   if (!user) {
@@ -179,6 +187,9 @@ export function handleUserWithdraw(event: ProviderWithdraw): void {
     .providerPool(event.params.tokenAddress)
     .div(sla.leverage)
     .minus(slaContract.usersPool(event.params.tokenAddress));
+  if (sla.maxHedge.lt(BigInt.fromI32(0))) {
+    sla.maxHedge = BigInt.fromI32(0);
+  }
   sla.save();
   let user = User.load(event.params.caller.toHexString());
   if (!user) {

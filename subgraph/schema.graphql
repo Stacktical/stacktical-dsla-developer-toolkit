@@ -21,6 +21,7 @@ type SLA @entity {
   finalPeriodId: BigInt
   leverage: BigInt!
   maxHedge: BigInt
+  finished: Boolean
 }
 
 type SLI @entity {
