@@ -64,6 +64,8 @@ dataSources:
       eventHandlers:
         - event: ValueLocked(indexed address,indexed address,uint256)
           handler: handleValueLocked
+        - event: LockedValueReturned(indexed address,indexed address,uint256)
+          handler: handleLockedValueReturned
       file: ./mapping.ts
 templates:
   - kind: ethereum/contract

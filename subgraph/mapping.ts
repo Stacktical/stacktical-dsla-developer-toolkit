@@ -24,6 +24,7 @@ import { ERC20 } from './generated/templates/SLA/ERC20';
 
 import { BigInt, Address } from '@graphprotocol/graph-ts';
 import {
+  LockedValueReturned,
   StakeRegistry,
   ValueLocked,
 } from './generated/StakeRegistry/StakeRegistry';
@@ -267,7 +268,7 @@ export function handleDTokensCreated(event: DTokensCreated): void {
 export function handleValueLocked(event: ValueLocked): void {
   let deposit = new Deposit(event.transaction.hash.toHexString());
   let stakeRegistryContract = StakeRegistry.bind(event.address);
-  deposit.type = 'value-locked';
+  deposit.type = 'dsla-locked';
   deposit.amount = event.params.amount;
   deposit.slaAddress = event.params.sla;
   deposit.callerAddress = event.params.owner;
@@ -280,5 +281,24 @@ export function handleValueLocked(event: ValueLocked): void {
   }
   tvl.amount = tvl.amount.plus(event.params.amount);
   tvl.deposits = tvl.deposits.concat([deposit.id]);
+  tvl.save();
+}
+
+export function handleLockedValueReturned(event: LockedValueReturned): void {
+  let withdrawal = new Withdrawal(event.transaction.hash.toHexString());
+  let stakeRegistryContract = StakeRegistry.bind(event.address);
+  withdrawal.type = 'dsla-returned';
+  withdrawal.amount = event.params.amount;
+  withdrawal.slaAddress = event.params.sla;
+  withdrawal.callerAddress = event.params.owner;
+  withdrawal.tokenAddress = stakeRegistryContract.DSLATokenAddress();
+  withdrawal.save();
+
+  let tvl = TVL.load('0');
+  if (!tvl) {
+    tvl = new TVL('0');
+  }
+  tvl.amount = tvl.amount.minus(event.params.amount);
+  tvl.withdrawals = tvl.withdrawals.concat([withdrawal.id]);
   tvl.save();
 }
