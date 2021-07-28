@@ -46,6 +46,25 @@ dataSources:
         - event: SLORegistered(indexed address,uint256,uint8)
           handler: handleSLORegistered
       file: ./mapping.ts
+  - kind: ethereum/contract
+    name: StakeRegistry
+    network: mainnet
+    source:
+      address: '0xA57B8a5584442B467b4689F1144D269d096A3daF'
+      abi: StakeRegistry
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - StakeRegistry
+      abis:
+        - name: StakeRegistry
+          file: ./abis/@stacktical/dsla-contracts/contracts/StakeRegistry.sol/StakeRegistry.json
+      eventHandlers:
+        - event: ValueLocked(indexed address,indexed address,uint256)
+          handler: handleValueLocked
+      file: ./mapping.ts
 templates:
   - kind: ethereum/contract
     name: SLA

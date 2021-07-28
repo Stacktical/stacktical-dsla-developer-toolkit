@@ -23,6 +23,10 @@ import { SLORegistered } from './generated/SLORegistry/SLORegistry';
 import { ERC20 } from './generated/templates/SLA/ERC20';
 
 import { BigInt, Address } from '@graphprotocol/graph-ts';
+import {
+  StakeRegistry,
+  ValueLocked,
+} from './generated/StakeRegistry/StakeRegistry';
 
 export function handleNewSLA(event: SLACreated): void {
   let slaContract = SLAContract.bind(event.params.sla);
@@ -68,6 +72,7 @@ export function handleSLICreated(event: SLICreated): void {
   sla.SLIs = sla.SLIs.concat([sli.id]);
   sla.nextVerifiablePeriod = slaContract.nextVerifiablePeriod();
   sla.finished = slaContract.contractFinished();
+  sla.breachedContract = slaContract.breachedContract();
   sla.save();
 
   sli.periodId = event.params.periodId;
@@ -257,4 +262,23 @@ export function handleDTokensCreated(event: DTokensCreated): void {
   spToken.save();
   lpToken.save();
   sla.save();
+}
+
+export function handleValueLocked(event: ValueLocked): void {
+  let deposit = new Deposit(event.transaction.hash.toHexString());
+  let stakeRegistryContract = StakeRegistry.bind(event.address);
+  deposit.type = 'value-locked';
+  deposit.amount = event.params.amount;
+  deposit.slaAddress = event.params.sla;
+  deposit.callerAddress = event.params.owner;
+  deposit.tokenAddress = stakeRegistryContract.DSLATokenAddress();
+  deposit.save();
+
+  let tvl = TVL.load('0');
+  if (!tvl) {
+    tvl = new TVL('0');
+  }
+  tvl.amount = tvl.amount.plus(event.params.amount);
+  tvl.deposits = tvl.deposits.concat([deposit.id]);
+  tvl.save();
 }
