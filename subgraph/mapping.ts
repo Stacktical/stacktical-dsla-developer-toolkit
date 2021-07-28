@@ -1,11 +1,7 @@
-import {
-  SLA as SLATemplate,
-  DToken as DTokenTemplate,
-} from './generated/templates';
+import { SLA as SLATemplate } from './generated/templates';
 import {
   Deposit,
   DToken,
-  DtokenBalance,
   SLA,
   SLI,
   TVL,
@@ -25,7 +21,6 @@ import { SLA as SLAContract } from './generated/SLARegistry/SLA';
 
 import { SLORegistered } from './generated/SLORegistry/SLORegistry';
 import { ERC20 } from './generated/templates/SLA/ERC20';
-import { Approval, Transfer } from './generated/templates/DToken/DToken';
 
 import { BigInt } from '@graphprotocol/graph-ts';
 
@@ -107,6 +102,18 @@ export function handleStake(event: Stake): void {
   user.deposits = user.deposits.concat([deposit.id]);
   user.save();
 
+  let dpTokenAddress = slaContract.dpTokenRegistry(event.params.tokenAddress);
+  let dpTokenContract = ERC20.bind(dpTokenAddress);
+  let dpToken = DToken.load(dpTokenAddress.toHexString());
+  dpToken.totalSupply = dpTokenContract.totalSupply();
+  dpToken.save();
+
+  let duTokenAddress = slaContract.duTokenRegistry(event.params.tokenAddress);
+  let duTokenContract = ERC20.bind(duTokenAddress);
+  let duToken = DToken.load(duTokenAddress.toHexString());
+  duToken.totalSupply = duTokenContract.totalSupply();
+  duToken.save();
+
   let tvl = TVL.load('0');
   if (!tvl) {
     tvl = new TVL('0');
@@ -138,6 +145,12 @@ export function handleProviderWithdraw(event: ProviderWithdraw): void {
   }
   user.withdrawals = user.withdrawals.concat([withdrawal.id]);
   user.save();
+
+  let dpTokenAddress = slaContract.dpTokenRegistry(event.params.tokenAddress);
+  let dpTokenContract = ERC20.bind(dpTokenAddress);
+  let dpToken = DToken.load(dpTokenAddress.toHexString());
+  dpToken.totalSupply = dpTokenContract.totalSupply();
+  dpToken.save();
 
   let tvl = TVL.load('0');
   if (!tvl) {
@@ -173,6 +186,12 @@ export function handleUserWithdraw(event: ProviderWithdraw): void {
   }
   user.withdrawals = user.withdrawals.concat([withdrawal.id]);
   user.save();
+
+  let duTokenAddress = slaContract.duTokenRegistry(event.params.tokenAddress);
+  let duTokenContract = ERC20.bind(duTokenAddress);
+  let duToken = DToken.load(duTokenAddress.toHexString());
+  duToken.totalSupply = duTokenContract.totalSupply();
+  duToken.save();
 
   let tvl = TVL.load('0');
   if (!tvl) {
@@ -227,38 +246,4 @@ export function handleDTokensCreated(event: DTokensCreated): void {
   spToken.save();
   lpToken.save();
   sla.save();
-  DTokenTemplate.create(event.params.duTokenAddress);
-  DTokenTemplate.create(event.params.dpTokenAddress);
-}
-
-export function handleDTokenTransfer(event: Transfer): void {
-  let dToken = DToken.load(event.address.toHexString());
-  let dTokenContract = ERC20.bind(event.address);
-  dToken.totalSupply = dTokenContract.totalSupply();
-  // if from is 0, then is mint and corresponds the 'to' address
-  let userAddress =
-    event.params.from.toI32() !== 0 ? event.params.from : event.params.to;
-  let user = User.load(userAddress.toHexString());
-  if (!user) {
-    user = new User(userAddress.toHexString());
-  }
-  let dTokenBalance = DtokenBalance.load(
-    userAddress.toHexString() + event.address.toHexString()
-  );
-  if (!dTokenBalance) {
-    dTokenBalance = new DtokenBalance(
-      userAddress.toHexString() + event.address.toHexString()
-    );
-  }
-  dTokenBalance.dtoken = dToken.id;
-  dTokenBalance.slaAllowance = dTokenContract.allowance(
-    userAddress,
-    event.transaction.from
-  );
-  dTokenBalance.balance = dTokenContract.balanceOf(userAddress);
-  dToken.save();
-  dTokenBalance.save();
-
-  user.dTokensBalances = user.dTokensBalances.concat([dTokenBalance.id]);
-  user.save();
 }
