@@ -19,7 +19,7 @@ const SENetworkNames = SEMessengerSpec.ipfsData.serviceTicker.values;
 export const scripts: ScriptsConfiguration = {
   deploy_sla: [
     {
-      sloValue: 7,
+      sloValue: 700,
       sloType: SLO_TYPE.GreaterThan,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
