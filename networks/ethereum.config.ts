@@ -56,7 +56,6 @@ export const ethereum: NetworkUserConfig = {
       deleteOldJobs: false,
       cleanLocalFolder: false,
       nodeFunds: '1',
-      gasLimit: undefined,
       ethWsUrl: process.env.ETHEREUM_WS_URI,
       nodesConfiguration: [
         {

@@ -330,8 +330,8 @@ export class EthereumERC20 extends BaseContract {
     ): Promise<ContractTransaction>;
 
     mint(
-      to: string,
-      amount: BigNumberish,
+      to_: string,
+      amount_: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -448,8 +448,8 @@ export class EthereumERC20 extends BaseContract {
   ): Promise<ContractTransaction>;
 
   mint(
-    to: string,
-    amount: BigNumberish,
+    to_: string,
+    amount_: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -563,8 +563,8 @@ export class EthereumERC20 extends BaseContract {
     ): Promise<boolean>;
 
     mint(
-      to: string,
-      amount: BigNumberish,
+      to_: string,
+      amount_: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -732,8 +732,8 @@ export class EthereumERC20 extends BaseContract {
     ): Promise<BigNumber>;
 
     mint(
-      to: string,
-      amount: BigNumberish,
+      to_: string,
+      amount_: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -859,8 +859,8 @@ export class EthereumERC20 extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     mint(
-      to: string,
-      amount: BigNumberish,
+      to_: string,
+      amount_: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

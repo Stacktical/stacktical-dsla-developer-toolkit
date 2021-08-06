@@ -15,4 +15,8 @@ contract EthereumERC20 is ERC20PresetMinterPauser {
     {
         mint(msg.sender, 10**27);
     }
+
+    function mint(address to_, uint256 amount_) public override {
+        _mint(to_, amount_);
+    }
 }

@@ -55,7 +55,6 @@ export const mumbai: NetworkUserConfig = {
       deleteOldJobs: true,
       cleanLocalFolder: false,
       nodeFunds: '0.001',
-      gasLimit: undefined,
       ethWsUrl: process.env.MUMBAI_WS_URI,
       nodesConfiguration: [
         {
