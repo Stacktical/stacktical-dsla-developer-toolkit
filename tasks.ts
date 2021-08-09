@@ -23,7 +23,18 @@ enum TASK_NAMES {
   DEPLOY_MESSENGER = 'stacktical:deploy-messenger',
   GET_MESSENGER = 'stacktical:get-messenger',
   TRANSFER_OWNERSHIP = 'stacktical:transfer-ownership',
+  PROVIDER_WITHDRAW = 'stacktical:provider-withdraw',
+  UNLOCK_TOKENS = 'stacktical:unlock-tokens',
 }
+
+task(TASK_NAMES.UNLOCK_TOKENS, 'Unlock value from a finished SLA contract')
+  .addOptionalParam(
+    'slaAddress',
+    '(optional) The SLA address. Defaults to last deployed SLA by deployer address'
+  )
+  .setAction(async (taskArgs, { run }) => {
+    await run(SUB_TASK_NAMES.UNLOCK_TOKENS, taskArgs);
+  });
 
 task(TASK_NAMES.DEPLOY_SLA, 'Deploy customized SLA from stacktical config')
   .addOptionalParam(
@@ -32,6 +43,22 @@ task(TASK_NAMES.DEPLOY_SLA, 'Deploy customized SLA from stacktical config')
   )
   .setAction(async (taskArgs, { run }) => {
     await run(SUB_TASK_NAMES.DEPLOY_SLA, taskArgs);
+  });
+
+task(
+  TASK_NAMES.PROVIDER_WITHDRAW,
+  'Deploy customized SLA from stacktical config'
+)
+  .addOptionalParam(
+    'slaAddress',
+    '(optional) The SLA address. Defaults to last deployed SLA by deployer address'
+  )
+  .addParam(
+    'tokenAddress',
+    'Address of the token to withdraw from e.g. DSLA = 0x3aFfCCa64c2A6f4e3B6Bd9c64CD2C969EFd1ECBe in Mainnet'
+  )
+  .setAction(async (taskArgs, { run }) => {
+    await run(SUB_TASK_NAMES.PROVIDER_WITHDRAW, taskArgs);
   });
 
 task(TASK_NAMES.EXPORT_DATA, 'Export data to exported-data folder').setAction(
@@ -93,15 +120,19 @@ task(
   await run(SUB_TASK_NAMES.STOP_LOCAL_GANACHE);
   console.log(SUB_TASK_NAMES.STOP_LOCAL_IPFS);
   await run(SUB_TASK_NAMES.STOP_LOCAL_IPFS);
-  // console.log(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
-  // await run(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
+  console.log(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
+  await run(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
+  console.log(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
+  await run(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
 
   console.log(SUB_TASK_NAMES.START_LOCAL_GANACHE);
   await run(SUB_TASK_NAMES.START_LOCAL_GANACHE);
   console.log(SUB_TASK_NAMES.START_LOCAL_IPFS);
   await run(SUB_TASK_NAMES.START_LOCAL_IPFS);
-  // console.log(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE);
-  // await run(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE);
+  console.log(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE);
+  await run(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE);
+  console.log(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE);
+  await run(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE);
 });
 
 task(
