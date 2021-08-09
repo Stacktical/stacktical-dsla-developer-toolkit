@@ -786,6 +786,8 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
             }),
           }
         );
+        consola.info('Transaction receipt:');
+        consola.info(tx);
         await tx.wait();
         const newParameters = await stakeRegistry.getStakingParameters();
         console.log('DSLAburnRate: ' + newParameters.DSLAburnRate.toString());
@@ -1764,8 +1766,7 @@ subtask(SUB_TASK_NAMES.GET_MESSENGER, undefined).setAction(
 
 subtask(SUB_TASK_NAMES.TRANSFER_OWNERSHIP, undefined).setAction(
   async (taskArgs, hre: HardhatRuntimeEnvironment) => {
-    const { ethers, network } = hre;
-    const { stacktical } = network.config;
+    const { ethers } = hre;
     const periodRegistry = <PeriodRegistry>(
       await ethers.getContract(CONTRACT_NAMES.PeriodRegistry)
     );
@@ -1783,6 +1784,7 @@ subtask(SUB_TASK_NAMES.TRANSFER_OWNERSHIP, undefined).setAction(
       printSeparator();
       consola.info('Transferring PeriodRegistry ownership');
       tx = await periodRegistry.transferOwnership(newOwner);
+      consola.info(tx);
       await tx.wait();
       consola.success(
         'PeriodRegistry ownership successfully transferred, new owner:',
@@ -1798,6 +1800,7 @@ subtask(SUB_TASK_NAMES.TRANSFER_OWNERSHIP, undefined).setAction(
         'StakeRegistry ownership successfully transferred, new owner:',
         await stakeRegistry.owner()
       );
+      consola.info(tx);
     }
     printSeparator();
   }

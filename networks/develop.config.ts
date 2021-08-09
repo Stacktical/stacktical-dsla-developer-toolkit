@@ -87,7 +87,14 @@ export const develop: NetworkUserConfig = {
           },
         ],
         stake: {
-          stakingParameters: {},
+          stakingParameters: {
+            dslaBurnedByVerification: '1000',
+            dslaPlatformReward: '500',
+            dslaDepositByPeriod: '2000',
+            dslaMessengerReward: '250',
+            dslaUserReward: '250',
+            burnDSLA: false,
+          },
         },
       },
     },
