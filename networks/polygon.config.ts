@@ -28,12 +28,12 @@ if (error) {
 
 export const polygon: NetworkUserConfig = {
   chainId: 137,
-  gasPrice: 100 * 10 ** 9,
+  gasPrice: 50 * 10 ** 9,
   gas: 19000000,
-  // accounts: [process.env.PRIV_KEY],
-  accounts: {
-    mnemonic: process.env.MAINNET_MNEMONIC,
-  },
+  accounts: [process.env.PRIV_KEY],
+  // accounts: {
+  //   mnemonic: process.env.MAINNET_MNEMONIC,
+  // },
   url: process.env.POLYGON_URI,
   stacktical: {
     deployTokens: false,

@@ -50,7 +50,7 @@ type Deposit @entity {
   amount: BigInt!
   tokenAddress: Bytes!
   callerAddress: Bytes!
-  slaAddress: Bytes!
+  slaAddress: Bytes
 }
 
 type Withdrawal @entity {

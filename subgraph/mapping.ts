@@ -22,7 +22,7 @@ import { SLA as SLAContract } from './generated/SLARegistry/SLA';
 import { SLORegistered } from './generated/SLORegistry/SLORegistry';
 import { ERC20 } from './generated/templates/SLA/ERC20';
 
-import { BigInt, Address } from '@graphprotocol/graph-ts';
+import { BigInt } from '@graphprotocol/graph-ts';
 import {
   LockedValueReturned,
   StakeRegistry,
@@ -260,9 +260,9 @@ export function handleDTokensCreated(event: DTokensCreated): void {
 
   sla.dTokens = sla.dTokens.concat([lpToken.id]);
 
+  sla.save();
   spToken.save();
   lpToken.save();
-  sla.save();
 }
 
 export function handleValueLocked(event: ValueLocked): void {

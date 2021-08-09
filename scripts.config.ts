@@ -19,13 +19,13 @@ const SENetworkNames = SEMessengerSpec.ipfsData.serviceTicker.values;
 export const scripts: ScriptsConfiguration = {
   deploy_sla: [
     {
-      sloValue: 700,
+      sloValue: 100,
       sloType: SLO_TYPE.GreaterThan,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.SEMessenger,
       initialPeriodId: 0,
-      finalPeriodId: 9,
+      finalPeriodId: 3,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
