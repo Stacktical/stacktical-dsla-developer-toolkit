@@ -4,12 +4,19 @@
   "description": "Toolkit to deploy develop Chainlink Node, Graph Node, IPFS node, dev blockhain and DSLA contracts to multiple networks seamlessly",
   "scripts": {
     "hardhat-node": "hardhat node",
+    "develop:deploy": "hh deploy --network develop --reset && hh stacktical:bootstrap --network develop && hh stacktical:deploy-sla --network develop --id 0 && npm run export-data:develop",
+    "develop:deploy-reset": "hh stacktical:restart-services --network develop && npm run develop:deploy",
     "custom-ganache": "ganache-cli --accounts 10 --defaultBalanceEther 100000 -d -i 1337 -l 12000000 -h 0.0.0.0",
     "external-adapter": "pm2 delete external-adapter 2> /dev/null || true && pm2 start services/external-adapter/index.ts --name external-adapter --watch ./services/external-adapter --no-daemon",
     "export-data": "cp -r exported-data/* ../stacktical-dsla-frontend/src/addresses && cp -r typechain/* ../stacktical-dsla-frontend/src/typechain",
+    "export-data:develop": "hh stacktical:export-data --network develop && cp -r exported-data/* ../stacktical-dsla-frontend/src/addresses && cp -r typechain/* ../stacktical-dsla-frontend/src/typechain",
     "release:patch": "standard-version --release-as patch",
     "release:minor": "standard-version --release-as minor",
-    "release:major": "standard-version --release-as major"
+    "release:major": "standard-version --release-as major",
+    "graph:create": "graph create stacktical/dsla-protocol --node http://127.0.0.1:8020",
+    "graph:codegen": "graph codegen subgraph/subgraph.yaml -o subgraph/generated",
+    "graph:build": "graph build subgraph/subgraph.yaml -o subgraph/build",
+    "graph:deploy": "npm run graph:codegen && npm run graph:build && graph deploy --debug -o subgraph/build stacktical/dsla-protocol subgraph/subgraph.yaml --ipfs http://localhost:5001 --node http://127.0.0.1:8020"
   },
   "repository": {
     "type": "git",
@@ -34,6 +41,8 @@
   },
   "homepage": "https://github.com/Stacktical/stacktical-developer-toolkit#readme",
   "dependencies": {
+    "@graphprotocol/graph-cli": "^0.21.0",
+    "@graphprotocol/graph-ts": "^0.20.1",
     "@harmony-js/core": "^0.1.57",
     "@nomiclabs/hardhat-waffle": "^2.0.1",
     "@stacktical/dsla-contracts": "^2.3.1",

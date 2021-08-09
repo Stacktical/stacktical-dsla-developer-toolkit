@@ -27,10 +27,12 @@ async function getSLAData(address): Promise<SLAData> {
   const web3 = new Web3(web3Uri);
   const slaContract = new web3.eth.Contract(SLAABI, address);
   const ipfsCID = await slaContract.methods.ipfsHash().call();
-  console.log(`SLA IPFS url: https://ipfs.io/ipfs/${ipfsCID}`);
+  console.log(`SLA IPFS url: ${process.env.IPFS_GATEWAY_URI}/ipfs/${ipfsCID}`);
   const periodType = await slaContract.methods.periodType().call();
   const messengerAddress = await slaContract.methods.messengerAddress().call();
-  const { data } = await axios.get(`https://ipfs.io/ipfs/${ipfsCID}`);
+  const { data } = await axios.get(
+    `${process.env.IPFS_GATEWAY_URI}/ipfs/${ipfsCID}`
+  );
   return { ...data, periodType, messengerAddress };
 }
 

@@ -13,6 +13,7 @@ import { subtask } from 'hardhat/config';
 import { ChainlinkNodeConfiguration } from './types';
 import {
   ERC20__factory,
+  ERC20PresetMinterPauser,
   IMessenger,
   IMessenger__factory,
   MessengerRegistry__factory,
@@ -22,9 +23,9 @@ import {
   PeriodRegistry__factory,
   PreCoordinator,
   PreCoordinator__factory,
-  SEMessenger__factory,
   SLA,
   SLA__factory,
+  SLARegistry,
   SLARegistry__factory,
   StakeRegistry,
   StakeRegistry__factory,
@@ -35,7 +36,6 @@ import {
   PERIOD_STATUS,
   PERIOD_TYPE,
   TOKEN_NAMES,
-  USE_CASES,
 } from './constants';
 import {
   bootstrapStrings,
@@ -90,7 +90,119 @@ export enum SUB_TASK_NAMES {
   DEPLOY_MESSENGER = 'DEPLOY_MESSENGER',
   GET_MESSENGER = 'GET_MESSENGER',
   TRANSFER_OWNERSHIP = 'TRANSFER_OWNERSHIP',
+  PROVIDER_WITHDRAW = 'PROVIDER_WITHDRAW',
+  UNLOCK_TOKENS = 'UNLOCK_TOKENS',
 }
+
+subtask(SUB_TASK_NAMES.UNLOCK_TOKENS, undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    const { ethers, getNamedAccounts } = hre;
+    const { deployer } = await getNamedAccounts();
+    const slaRegistry = <SLARegistry>(
+      await ethers.getContract(CONTRACT_NAMES.SLARegistry)
+    );
+
+    const slaAddress = taskArgs.slaAddress
+      ? ethers.utils.getAddress(taskArgs.slaAddress)
+      : (await slaRegistry.allSLAs()).slice(-1)[0];
+    const slaContract = <SLA>(
+      await ethers.getContractAt(CONTRACT_NAMES.SLA, slaAddress)
+    );
+
+    printSeparator();
+    consola.info('SLA address:', slaContract.address);
+    consola.info('Requester address:', deployer);
+    const tx = await slaRegistry.returnLockedValue(slaAddress);
+    await tx.wait();
+    const stakeRegistry = <StakeRegistry>(
+      await ethers.getContract(CONTRACT_NAMES.StakeRegistry)
+    );
+    const filter = stakeRegistry.filters.LockedValueReturned(
+      slaAddress,
+      deployer
+    );
+    const query = await stakeRegistry.queryFilter(filter);
+    consola.info('DSLA returned:', fromWei(query[0].args.amount.toString()));
+
+    printSeparator();
+  }
+);
+
+subtask(SUB_TASK_NAMES.PROVIDER_WITHDRAW, undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    const { ethers, getNamedAccounts } = hre;
+    const { deployer } = await getNamedAccounts();
+    const slaRegistry = <SLARegistry>(
+      await ethers.getContract(CONTRACT_NAMES.SLARegistry)
+    );
+
+    const slaAddress = taskArgs.slaAddress
+      ? ethers.utils.getAddress(taskArgs.slaAddress)
+      : (await slaRegistry.allSLAs()).slice(-1)[0];
+    const slaContract = <SLA>(
+      await ethers.getContractAt(CONTRACT_NAMES.SLA, slaAddress)
+    );
+
+    printSeparator();
+    consola.info('SLA address:', slaContract.address);
+    consola.info('Requester address:', deployer);
+    const LPtokenAddress = await slaContract.dpTokenRegistry(
+      taskArgs.tokenAddress
+    );
+    consola.info('LP token address:', LPtokenAddress);
+    const lpToken = <ERC20PresetMinterPauser>(
+      await ethers.getContractAt('ERC20PresetMinterPauser', LPtokenAddress)
+    );
+    const lpTokenUserBalance = await lpToken.balanceOf(deployer);
+    consola.info(
+      'LP token user balance:',
+      fromWei(lpTokenUserBalance.toString())
+    );
+    // const token = <ERC20PresetMinterPauser>(
+    //   await ethers.getContractAt(
+    //     'ERC20PresetMinterPauser',
+    //     taskArgs.tokenAddress
+    //   )
+    // );
+    const supply = await lpToken.totalSupply();
+    consola.info('LP token total supply:', fromWei(supply.toString()));
+    const slaProviderPool = await slaContract.providerPool(
+      taskArgs.tokenAddress
+    );
+    const slaUserPool = await slaContract.usersPool(taskArgs.tokenAddress);
+    consola.info(
+      'SLA provider pool balance:',
+      fromWei(slaProviderPool.toString())
+    );
+    const poolPercentage = lpTokenUserBalance.div(supply).mul(100);
+    consola.info('Accrued pool percentage:', poolPercentage.toString() + '%');
+    const leverage = await slaContract.leverage();
+    consola.info('SLA leverage:', leverage.toString() + 'x');
+    const poolSpread = slaProviderPool.sub(slaUserPool.mul(leverage));
+    consola.info(
+      'Provider pool allowed withdraw amount:',
+      fromWei(poolSpread.toString())
+    );
+    await lpToken.approve(slaAddress, lpTokenUserBalance);
+    const accruedBalance = lpTokenUserBalance.mul(slaProviderPool).div(supply);
+    const allowedWithdraw = accruedBalance.gt(poolSpread)
+      ? poolSpread
+      : accruedBalance;
+    if (allowedWithdraw.gt(0)) {
+      consola.info(
+        'User allowed withdraw amount:',
+        fromWei(allowedWithdraw.toString())
+      );
+      await slaContract.withdrawProviderTokens(
+        allowedWithdraw,
+        taskArgs.tokenAddress
+      );
+    } else {
+      consola.warn('Allowed withdraw amount is 0');
+    }
+    printSeparator();
+  }
+);
 
 subtask(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES, undefined).setAction(
   async (_, hre: HardhatRuntimeEnvironment) => {
@@ -161,6 +273,9 @@ subtask(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE, undefined).setAction(async () => {
   await compose.down({
     cwd: path.join(`${appRoot.path}/services/graph-protocol/`),
     log: true,
+  });
+  fs.rmdirSync(`${appRoot.path}/services/graph-protocol/postgres`, {
+    recursive: true,
   });
 });
 
@@ -986,6 +1101,8 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       },
     } = hre;
     const { deployer, notDeployer } = await getNamedAccounts();
+    consola.info('deployer', deployer);
+    consola.info('notDeployer', notDeployer);
     const signer = await ethers.getSigner(deployer);
     const { get } = deployments;
     const { stacktical } = hre.network.config;
@@ -1541,9 +1658,9 @@ subtask(SUB_TASK_NAMES.GET_VALID_SLAS, undefined).setAction(
       signer
     );
     const allSLAs = await slaRegistry.allSLAs();
-    console.log('SLA registry address:');
-    console.log(slaRegistry.address);
-    console.log('All valid SLAs:');
+    consola.info('SLA registry address:');
+    consola.info(slaRegistry.address);
+    consola.info('All valid SLAs:');
     for (let slaAddress of allSLAs) {
       printSeparator();
       const sla = <SLA>(
@@ -1557,15 +1674,23 @@ subtask(SUB_TASK_NAMES.GET_VALID_SLAS, undefined).setAction(
       const finalPeriodId = await sla.finalPeriodId();
       const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
       const periodType = await sla.periodType();
-      console.log('slaAddress', slaAddress);
-      console.log('breachedContract', breachedContract);
-      console.log('contractFinished', contractFinished);
-      console.log('messengerAddress', messengerAddress);
-      console.log('periodType', PERIOD_TYPE[periodType]);
-      console.log('creationBlockNumber', creationBlockNumber.toString());
-      console.log('initialPeriodId', initialPeriodId.toString());
-      console.log('finalPeriodId', finalPeriodId.toString());
-      console.log('nextVerifiablePeriod', nextVerifiablePeriod.toString());
+      const DSLAtoken = <ERC20PresetMinterPauser>(
+        await ethers.getContract('DSLA')
+      );
+      const DSLASPtokenAddress = await sla.duTokenRegistry(DSLAtoken.address);
+      const DSLALPtokenAddress = await sla.dpTokenRegistry(DSLAtoken.address);
+
+      consola.info('slaAddress', slaAddress);
+      consola.info('breachedContract', breachedContract);
+      consola.info('contractFinished', contractFinished);
+      consola.info('messengerAddress', messengerAddress);
+      consola.info('periodType', PERIOD_TYPE[periodType]);
+      consola.info('creationBlockNumber', creationBlockNumber.toString());
+      consola.info('initialPeriodId', initialPeriodId.toString());
+      consola.info('finalPeriodId', finalPeriodId.toString());
+      consola.info('nextVerifiablePeriod', nextVerifiablePeriod.toString());
+      consola.info('DSLA SP token address', DSLASPtokenAddress);
+      consola.info('DSLA LP token address', DSLALPtokenAddress);
       printSeparator();
     }
   }

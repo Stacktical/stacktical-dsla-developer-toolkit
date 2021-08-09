@@ -2723,7 +2723,7 @@
       "artifacts": []
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/contracts/tokens/EthereumERC20.sol": {
-      "lastModificationDate": 1627326516067,
+      "lastModificationDate": 1627429210822,
       "contentHash": "e850b9dcdbaab0114158515348ab1ea9",
       "sourceName": "contracts/tokens/EthereumERC20.sol",
       "solcConfig": {
