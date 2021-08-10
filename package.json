@@ -1,7 +1,7 @@
 {
   "name": "stacktical-developer-toolkit",
   "version": "2.3.0",
-  "description": "Toolkit to deploy develop Chainlink Node, Graph Node, IPFS node, dev blockhain and DSLA contracts to multiple networks seamlessly",
+  "description": "Toolkit to deploy develop Chainlink Node, Graph Node, IPFS node, dev blockchain and DSLA contracts to multiple networks seamlessly",
   "scripts": {
     "hardhat-node": "hardhat node",
     "develop:deploy": "hh deploy --network develop --reset && hh stacktical:bootstrap --network develop && hh stacktical:deploy-sla --network develop --id 0 && npm run export-data:develop",

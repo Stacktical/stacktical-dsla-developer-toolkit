@@ -8,4 +8,5 @@ export const networks = [
   { name: NETWORKS.ETHEREUM, enabled: false, exportable: true },
   { name: NETWORKS.HARMONY, enabled: false, exportable: true },
   { name: NETWORKS.POLYGON, enabled: false, exportable: false },
+  { name: NETWORKS.RINKEBY, enabled: true, exportable: true },
 ];
