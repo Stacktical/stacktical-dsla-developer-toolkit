@@ -45,7 +45,7 @@ export const rinkeby: NetworkUserConfig = {
       ethHttpUrl: process.env.RINKEBY_URI,
       nodesConfiguration: [
         {
-          name: 'rinkeby-1',
+          name: 'node-1',
           restApiUrl: 'http://localhost',
           restApiPort: '6799',
           email: 'test@stacktical.com',
@@ -93,7 +93,7 @@ export const rinkeby: NetworkUserConfig = {
       {
         contract: CONTRACT_NAMES.SEMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
-        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
+        externalAdapterUrl: 'http://host.docker.internal:6060',
       },
     ],
     scripts: scripts,
