@@ -17,7 +17,7 @@ services:
       postgres_db: graph-node
       ipfs: 'http://host.docker.internal:5001'
       # Change next line if you want to connect to a different JSON-RPC endpoint
-      ethereum: 'mainnet:http://host.docker.internal:8545'
+      ethereum: 'rinkeby:https://rinkeby.infura.io/v3/e8dc03e5684a4dd5872f4e0da2187dca'
       GRAPH_LOG: info
   postgres-graph-service:
     image: postgres

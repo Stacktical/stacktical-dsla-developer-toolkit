@@ -55,6 +55,7 @@ export enum NETWORKS {
   HARMONY = 'harmony',
   KOVAN = 'kovan',
   FUJI = 'fuji',
+  RINKEBY = 'rinkeby',
 }
 
 export enum PERIOD_TYPE {
