@@ -2,11 +2,11 @@ specVersion: 0.0.2
 description: DSLA protocol
 repository: https://github.com/Stacktical/stacktical-dsla-contracts
 schema:
-  file: ./schema.graphql
+  file: ../schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: SLARegistry
-    network: rinkeby
+    network: mainnet
     source:
       address: '0x285F560A7E35754b4283Fc63321090C7DA758535'
       startBlock: 9091468
@@ -19,16 +19,16 @@ dataSources:
         - SLA
       abis:
         - name: SLARegistry
-          file: ./abis/@stacktical/dsla-contracts/contracts/SLARegistry.sol/SLARegistry.json
+          file: ../abis/@stacktical/dsla-contracts/contracts/SLARegistry.sol/SLARegistry.json
         - name: SLA
-          file: ./abis/@stacktical/dsla-contracts/contracts/SLA.sol/SLA.json
+          file: ../abis/@stacktical/dsla-contracts/contracts/SLA.sol/SLA.json
       eventHandlers:
         - event: SLACreated(indexed address,indexed address)
           handler: handleNewSLA
-      file: ./mapping.ts
+      file: ../mapping.ts
   - kind: ethereum/contract
     name: SLORegistry
-    network: rinkeby
+    network: mainnet
     source:
       address: '0xCCdc0BBE69D428485241b3f322cf308c57AEf409'
       startBlock: 9091463
@@ -41,16 +41,16 @@ dataSources:
         - SLA
       abis:
         - name: SLORegistry
-          file: ./abis/@stacktical/dsla-contracts/contracts/SLORegistry.sol/SLORegistry.json
+          file: ../abis/@stacktical/dsla-contracts/contracts/SLORegistry.sol/SLORegistry.json
         - name: SLA
-          file: ./abis/@stacktical/dsla-contracts/contracts/SLA.sol/SLA.json
+          file: ../abis/@stacktical/dsla-contracts/contracts/SLA.sol/SLA.json
       eventHandlers:
         - event: SLORegistered(indexed address,uint256,uint8)
           handler: handleSLORegistered
-      file: ./mapping.ts
+      file: ../mapping.ts
   - kind: ethereum/contract
     name: StakeRegistry
-    network: rinkeby
+    network: mainnet
     source:
       address: '0x598C8BeD2fA8d82959550DD82d9C942B917B9b99'
       startBlock: 9091465
@@ -63,24 +63,24 @@ dataSources:
         - StakeRegistry
       abis:
         - name: StakeRegistry
-          file: ./abis/@stacktical/dsla-contracts/contracts/StakeRegistry.sol/StakeRegistry.json
+          file: ../abis/@stacktical/dsla-contracts/contracts/StakeRegistry.sol/StakeRegistry.json
       eventHandlers:
         - event: ValueLocked(indexed address,indexed address,uint256)
           handler: handleValueLocked
         - event: LockedValueReturned(indexed address,indexed address,uint256)
           handler: handleLockedValueReturned
-      file: ./mapping.ts
+      file: ../mapping.ts
 templates:
   - kind: ethereum/contract
     name: SLA
-    network: rinkeby
+    network: mainnet
     source:
       abi: SLA
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: mapping.ts
+      file: ../mapping.ts
       entities:
         - SLA
         - DToken
@@ -99,6 +99,6 @@ templates:
           handler: handleDTokensCreated
       abis:
         - name: SLA
-          file: ./abis/@stacktical/dsla-contracts/contracts/SLA.sol/SLA.json
+          file: ../abis/@stacktical/dsla-contracts/contracts/SLA.sol/SLA.json
         - name: ERC20
-          file: ./abis/@openzeppelin/contracts/presets/ERC20PresetMinterPauser.sol/ERC20PresetMinterPauser.json
+          file: ../abis/@openzeppelin/contracts/presets/ERC20PresetMinterPauser.sol/ERC20PresetMinterPauser.json

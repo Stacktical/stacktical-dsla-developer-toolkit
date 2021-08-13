@@ -25,11 +25,11 @@ enum TASK_NAMES {
   TRANSFER_OWNERSHIP = 'stacktical:transfer-ownership',
   PROVIDER_WITHDRAW = 'stacktical:provider-withdraw',
   UNLOCK_TOKENS = 'stacktical:unlock-tokens',
-  DEPLOY_GRAPH = 'stacktical:deploy-graph',
+  GRAPH_MANIFESTOS = 'stacktical:graph-manifestos',
 }
 
 task(
-  TASK_NAMES.DEPLOY_GRAPH,
+  TASK_NAMES.GRAPH_MANIFESTOS,
   'Unlock value from a finished SLA contract'
 ).setAction(async (taskArgs, { run }) => {
   await run(SUB_TASK_NAMES.EXPORT_SUBGRAPH_DATA, taskArgs);

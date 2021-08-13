@@ -480,7 +480,7 @@
       "artifacts": []
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@chainlink/contracts/src/v0.6/Oracle.sol": {
-      "lastModificationDate": 1626963402902,
+      "lastModificationDate": 1628803919688,
       "contentHash": "19ace193216613d46c2bf54bc55c9012",
       "sourceName": "@chainlink/contracts/src/v0.6/Oracle.sol",
       "solcConfig": {
@@ -530,7 +530,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@chainlink/contracts/src/v0.6/LinkTokenReceiver.sol": {
-      "lastModificationDate": 1626963402888,
+      "lastModificationDate": 1628803919687,
       "contentHash": "e5f10eabb7e683f8d7069194b3f42909",
       "sourceName": "@chainlink/contracts/src/v0.6/LinkTokenReceiver.sol",
       "solcConfig": {
@@ -572,7 +572,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@chainlink/contracts/src/v0.6/interfaces/ChainlinkRequestInterface.sol": {
-      "lastModificationDate": 1626963405370,
+      "lastModificationDate": 1628803919787,
       "contentHash": "c610d8ab810921779c582395fabc0ea8",
       "sourceName": "@chainlink/contracts/src/v0.6/interfaces/ChainlinkRequestInterface.sol",
       "solcConfig": {
@@ -614,7 +614,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@chainlink/contracts/src/v0.6/interfaces/OracleInterface.sol": {
-      "lastModificationDate": 1626963405402,
+      "lastModificationDate": 1628803919787,
       "contentHash": "d64b796cc9373f31ed8a7775a3168d18",
       "sourceName": "@chainlink/contracts/src/v0.6/interfaces/OracleInterface.sol",
       "solcConfig": {
@@ -656,7 +656,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@chainlink/contracts/src/v0.6/interfaces/LinkTokenInterface.sol": {
-      "lastModificationDate": 1626963405399,
+      "lastModificationDate": 1628803919787,
       "contentHash": "ac0c594c3db465d48e3a56d510b2447f",
       "sourceName": "@chainlink/contracts/src/v0.6/interfaces/LinkTokenInterface.sol",
       "solcConfig": {
@@ -698,7 +698,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@chainlink/contracts/src/v0.6/interfaces/WithdrawalInterface.sol": {
-      "lastModificationDate": 1626963405408,
+      "lastModificationDate": 1628803919788,
       "contentHash": "286e276c9f868a6bbb1c0d0cbea7c8b7",
       "sourceName": "@chainlink/contracts/src/v0.6/interfaces/WithdrawalInterface.sol",
       "solcConfig": {
@@ -740,7 +740,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@chainlink/contracts/src/v0.6/vendor/Ownable.sol": {
-      "lastModificationDate": 1626963405505,
+      "lastModificationDate": 1628803919791,
       "contentHash": "487b025f9a5ea766d3d628160e4f2e19",
       "sourceName": "@chainlink/contracts/src/v0.6/vendor/Ownable.sol",
       "solcConfig": {
@@ -782,7 +782,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@chainlink/contracts/src/v0.6/vendor/SafeMathChainlink.sol": {
-      "lastModificationDate": 1626963405508,
+      "lastModificationDate": 1628803919791,
       "contentHash": "17c5f2133a4ec2a8a7ab5e39aac71a03",
       "sourceName": "@chainlink/contracts/src/v0.6/vendor/SafeMathChainlink.sol",
       "solcConfig": {
@@ -824,7 +824,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@chainlink/contracts/src/v0.6/Median.sol": {
-      "lastModificationDate": 1626963402894,
+      "lastModificationDate": 1628803919687,
       "contentHash": "793a2c9fab4d01bdfb3f8ad0c6b90ae0",
       "sourceName": "@chainlink/contracts/src/v0.6/Median.sol",
       "solcConfig": {
@@ -869,7 +869,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@chainlink/contracts/src/v0.6/SignedSafeMath.sol": {
-      "lastModificationDate": 1626963402933,
+      "lastModificationDate": 1628803919690,
       "contentHash": "b0c4036339aa4f225eba20f6e72f81bf",
       "sourceName": "@chainlink/contracts/src/v0.6/SignedSafeMath.sol",
       "solcConfig": {
@@ -911,7 +911,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@chainlink/contracts/src/v0.6/PreCoordinator.sol": {
-      "lastModificationDate": 1626963402919,
+      "lastModificationDate": 1628803919689,
       "contentHash": "74a7883a7e27df7ea412f08d66d2f2e0",
       "sourceName": "@chainlink/contracts/src/v0.6/PreCoordinator.sol",
       "solcConfig": {
@@ -959,7 +959,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@chainlink/contracts/src/v0.6/ChainlinkClient.sol": {
-      "lastModificationDate": 1626963402859,
+      "lastModificationDate": 1628803919685,
       "contentHash": "9104bbbac4bb6b57f820f647a50496e8",
       "sourceName": "@chainlink/contracts/src/v0.6/ChainlinkClient.sol",
       "solcConfig": {
@@ -1009,7 +1009,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@chainlink/contracts/src/v0.6/Chainlink.sol": {
-      "lastModificationDate": 1626963402855,
+      "lastModificationDate": 1628803919685,
       "contentHash": "9d74868adb9c32a5a3ada33670d976c6",
       "sourceName": "@chainlink/contracts/src/v0.6/Chainlink.sol",
       "solcConfig": {
@@ -1054,7 +1054,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@chainlink/contracts/src/v0.6/interfaces/ENSInterface.sol": {
-      "lastModificationDate": 1626963405373,
+      "lastModificationDate": 1628803919787,
       "contentHash": "80772d8a43b031a295c4f833329e8d00",
       "sourceName": "@chainlink/contracts/src/v0.6/interfaces/ENSInterface.sol",
       "solcConfig": {
@@ -1096,7 +1096,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@chainlink/contracts/src/v0.6/interfaces/PointerInterface.sol": {
-      "lastModificationDate": 1626963405405,
+      "lastModificationDate": 1628803919787,
       "contentHash": "249ee1a1738569d70ea0c717b49911c4",
       "sourceName": "@chainlink/contracts/src/v0.6/interfaces/PointerInterface.sol",
       "solcConfig": {
@@ -1138,7 +1138,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@chainlink/contracts/src/v0.6/vendor/ENSResolver.sol": {
-      "lastModificationDate": 1626963405502,
+      "lastModificationDate": 1628803919791,
       "contentHash": "f045d4f73163716e8a1e6e03c0fd9f38",
       "sourceName": "@chainlink/contracts/src/v0.6/vendor/ENSResolver.sol",
       "solcConfig": {
@@ -1180,7 +1180,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@chainlink/contracts/src/v0.6/vendor/CBORChainlink.sol": {
-      "lastModificationDate": 1626963405497,
+      "lastModificationDate": 1628803919791,
       "contentHash": "41aeff760ca5154d3a211241ff7ec170",
       "sourceName": "@chainlink/contracts/src/v0.6/vendor/CBORChainlink.sol",
       "solcConfig": {
@@ -1224,7 +1224,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@chainlink/contracts/src/v0.6/vendor/BufferChainlink.sol": {
-      "lastModificationDate": 1626963405486,
+      "lastModificationDate": 1628803919791,
       "contentHash": "8be5b6767ed8aa15e0477af2348e4614",
       "sourceName": "@chainlink/contracts/src/v0.6/vendor/BufferChainlink.sol",
       "solcConfig": {
@@ -1317,7 +1317,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@stacktical/dsla-contracts/contracts/interfaces/IMessenger.sol": {
-      "lastModificationDate": 1626963396041,
+      "lastModificationDate": 1628803905505,
       "contentHash": "a543190d6e56e717528f64a46ed8192c",
       "sourceName": "@stacktical/dsla-contracts/contracts/interfaces/IMessenger.sol",
       "solcConfig": {
@@ -1361,7 +1361,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@stacktical/dsla-contracts/contracts/SLA.sol": {
-      "lastModificationDate": 1626963396073,
+      "lastModificationDate": 1628803906564,
       "contentHash": "2b142d62b67c01add98084cee3518d9d",
       "sourceName": "@stacktical/dsla-contracts/contracts/SLA.sol",
       "solcConfig": {
@@ -1412,7 +1412,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@stacktical/dsla-contracts/contracts/PeriodRegistry.sol": {
-      "lastModificationDate": 1626963396066,
+      "lastModificationDate": 1628803906438,
       "contentHash": "75dbf1fd931d9f2657650fe3402445a3",
       "sourceName": "@stacktical/dsla-contracts/contracts/PeriodRegistry.sol",
       "solcConfig": {
@@ -1458,7 +1458,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@stacktical/dsla-contracts/contracts/StringUtils.sol": {
-      "lastModificationDate": 1626963396115,
+      "lastModificationDate": 1628803907302,
       "contentHash": "01bbcb20be42b74cb71d928e2fecce46",
       "sourceName": "@stacktical/dsla-contracts/contracts/StringUtils.sol",
       "solcConfig": {
@@ -1500,7 +1500,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@stacktical/dsla-contracts/contracts/StakeRegistry.sol": {
-      "lastModificationDate": 1626963396094,
+      "lastModificationDate": 1628803906817,
       "contentHash": "908c18d21b9bd8b548b1ded4133fc269",
       "sourceName": "@stacktical/dsla-contracts/contracts/StakeRegistry.sol",
       "solcConfig": {
@@ -1554,7 +1554,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol": {
-      "lastModificationDate": 1626963408694,
+      "lastModificationDate": 1628803917279,
       "contentHash": "8065b340476f61365c076897199425f1",
       "sourceName": "@openzeppelin/contracts/token/ERC20/ERC20.sol",
       "solcConfig": {
@@ -1600,7 +1600,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@openzeppelin/contracts/token/ERC20/SafeERC20.sol": {
-      "lastModificationDate": 1626963408785,
+      "lastModificationDate": 1628803917576,
       "contentHash": "33e22842646d746e5c4124c2fdc051aa",
       "sourceName": "@openzeppelin/contracts/token/ERC20/SafeERC20.sol",
       "solcConfig": {
@@ -1646,7 +1646,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@openzeppelin/contracts/access/Ownable.sol": {
-      "lastModificationDate": 1626963408774,
+      "lastModificationDate": 1628803917504,
       "contentHash": "6748815a5b45c4aeeda56819f41190e0",
       "sourceName": "@openzeppelin/contracts/access/Ownable.sol",
       "solcConfig": {
@@ -1690,7 +1690,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@openzeppelin/contracts/utils/Context.sol": {
-      "lastModificationDate": 1626963408677,
+      "lastModificationDate": 1628803917176,
       "contentHash": "2adbd82f6d055a4751566d4671512b03",
       "sourceName": "@openzeppelin/contracts/utils/Context.sol",
       "solcConfig": {
@@ -1732,7 +1732,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol": {
-      "lastModificationDate": 1626963408751,
+      "lastModificationDate": 1628803917452,
       "contentHash": "e0a41531d159d3a32f84b7a3ecf9fabb",
       "sourceName": "@openzeppelin/contracts/token/ERC20/IERC20.sol",
       "solcConfig": {
@@ -1774,7 +1774,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@openzeppelin/contracts/math/SafeMath.sol": {
-      "lastModificationDate": 1626963408785,
+      "lastModificationDate": 1628803917582,
       "contentHash": "e03e12206057e809eb76c5f681170c32",
       "sourceName": "@openzeppelin/contracts/math/SafeMath.sol",
       "solcConfig": {
@@ -1816,7 +1816,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@stacktical/dsla-contracts/contracts/interfaces/ISLARegistry.sol": {
-      "lastModificationDate": 1626963396052,
+      "lastModificationDate": 1628803906121,
       "contentHash": "d62de3b9990531bebad871fc480a4eca",
       "sourceName": "@stacktical/dsla-contracts/contracts/interfaces/ISLARegistry.sol",
       "solcConfig": {
@@ -1858,7 +1858,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@stacktical/dsla-contracts/contracts/interfaces/IStakeRegistry.sol": {
-      "lastModificationDate": 1626963396056,
+      "lastModificationDate": 1628803906192,
       "contentHash": "21c2e9f75b0d2723f1ec1d7b3d1e158b",
       "sourceName": "@stacktical/dsla-contracts/contracts/interfaces/IStakeRegistry.sol",
       "solcConfig": {
@@ -1900,7 +1900,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@stacktical/dsla-contracts/contracts/interfaces/IPeriodRegistry.sol": {
-      "lastModificationDate": 1626963396048,
+      "lastModificationDate": 1628803905822,
       "contentHash": "f884f71f4329b8a7b857a1d1722c1245",
       "sourceName": "@stacktical/dsla-contracts/contracts/interfaces/IPeriodRegistry.sol",
       "solcConfig": {
@@ -1942,7 +1942,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@stacktical/dsla-contracts/contracts/SLORegistry.sol": {
-      "lastModificationDate": 1626963396085,
+      "lastModificationDate": 1628803906707,
       "contentHash": "41864f41630b4ff3843698e03cc30de4",
       "sourceName": "@stacktical/dsla-contracts/contracts/SLORegistry.sol",
       "solcConfig": {
@@ -1984,7 +1984,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@stacktical/dsla-contracts/contracts/Staking.sol": {
-      "lastModificationDate": 1626963396107,
+      "lastModificationDate": 1628803906971,
       "contentHash": "d098e8ae3b86c4349bb11e175ea44f97",
       "sourceName": "@stacktical/dsla-contracts/contracts/Staking.sol",
       "solcConfig": {
@@ -2036,7 +2036,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@openzeppelin/contracts/presets/ERC20PresetMinterPauser.sol": {
-      "lastModificationDate": 1626963408701,
+      "lastModificationDate": 1628803917310,
       "contentHash": "683b54445da8c95e82d8d8e20e81e544",
       "sourceName": "@openzeppelin/contracts/presets/ERC20PresetMinterPauser.sol",
       "solcConfig": {
@@ -2084,7 +2084,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@openzeppelin/contracts/utils/Address.sol": {
-      "lastModificationDate": 1626963408668,
+      "lastModificationDate": 1628803917095,
       "contentHash": "7aa46886ff5abe7515496208a5e2ce5a",
       "sourceName": "@openzeppelin/contracts/utils/Address.sol",
       "solcConfig": {
@@ -2126,7 +2126,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@openzeppelin/contracts/access/AccessControl.sol": {
-      "lastModificationDate": 1626963408666,
+      "lastModificationDate": 1628803917086,
       "contentHash": "54eb0b53c109558e8312811342e95bf0",
       "sourceName": "@openzeppelin/contracts/access/AccessControl.sol",
       "solcConfig": {
@@ -2172,7 +2172,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@openzeppelin/contracts/token/ERC20/ERC20Burnable.sol": {
-      "lastModificationDate": 1626963408695,
+      "lastModificationDate": 1628803917287,
       "contentHash": "1603b7aab78c87467dde869fd19ec86b",
       "sourceName": "@openzeppelin/contracts/token/ERC20/ERC20Burnable.sol",
       "solcConfig": {
@@ -2217,7 +2217,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@openzeppelin/contracts/token/ERC20/ERC20Pausable.sol": {
-      "lastModificationDate": 1626963408697,
+      "lastModificationDate": 1628803917294,
       "contentHash": "42c0638e45b2c33154488610fe3091fe",
       "sourceName": "@openzeppelin/contracts/token/ERC20/ERC20Pausable.sol",
       "solcConfig": {
@@ -2262,7 +2262,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@openzeppelin/contracts/utils/EnumerableSet.sol": {
-      "lastModificationDate": 1626963408685,
+      "lastModificationDate": 1628803917211,
       "contentHash": "db7b1afdb2c204e1e52100b79f0c847e",
       "sourceName": "@openzeppelin/contracts/utils/EnumerableSet.sol",
       "solcConfig": {
@@ -2304,7 +2304,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@openzeppelin/contracts/utils/Pausable.sol": {
-      "lastModificationDate": 1626963408776,
+      "lastModificationDate": 1628803917508,
       "contentHash": "6960b40911542e6004ab95031ef9c3b9",
       "sourceName": "@openzeppelin/contracts/utils/Pausable.sol",
       "solcConfig": {
@@ -2348,7 +2348,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@openzeppelin/contracts/utils/ReentrancyGuard.sol": {
-      "lastModificationDate": 1626963408781,
+      "lastModificationDate": 1628803917568,
       "contentHash": "1c60f58cee45c61469e1aea31e4dd879",
       "sourceName": "@openzeppelin/contracts/utils/ReentrancyGuard.sol",
       "solcConfig": {
@@ -2486,7 +2486,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@stacktical/dsla-contracts/contracts/SLARegistry.sol": {
-      "lastModificationDate": 1626963396081,
+      "lastModificationDate": 1628803906679,
       "contentHash": "e30ebc0f756fc3fa22ac6c0b951f56d3",
       "sourceName": "@stacktical/dsla-contracts/contracts/SLARegistry.sol",
       "solcConfig": {
@@ -2537,7 +2537,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@stacktical/dsla-contracts/contracts/interfaces/IMessengerRegistry.sol": {
-      "lastModificationDate": 1626963396046,
+      "lastModificationDate": 1628803905742,
       "contentHash": "8a44960c05296c0589174b0482ea355a",
       "sourceName": "@stacktical/dsla-contracts/contracts/interfaces/IMessengerRegistry.sol",
       "solcConfig": {
@@ -2629,7 +2629,7 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/node_modules/@stacktical/dsla-contracts/contracts/MessengerRegistry.sol": {
-      "lastModificationDate": 1626963396060,
+      "lastModificationDate": 1628803906334,
       "contentHash": "72d952fcfba311fada23dddb73a5e51a",
       "sourceName": "@stacktical/dsla-contracts/contracts/MessengerRegistry.sol",
       "solcConfig": {
@@ -2674,8 +2674,8 @@
       ]
     },
     "/Users/matiasbn/stacktical/stacktical-dsla-developer-toolkit/contracts/DSLA.sol": {
-      "lastModificationDate": 1626963252486,
-      "contentHash": "a14b5484e4a14ebb15e5a826c79e28ee",
+      "lastModificationDate": 1628873616477,
+      "contentHash": "c7046a94d8ca47fe81b145ddbe82313b",
       "sourceName": "contracts/DSLA.sol",
       "solcConfig": {
         "version": "0.6.6",
@@ -2714,8 +2714,7 @@
         "@stacktical/dsla-contracts/contracts/SLORegistry.sol",
         "@stacktical/dsla-contracts/contracts/SLA.sol",
         "@stacktical/dsla-contracts/contracts/SLARegistry.sol",
-        "@stacktical/dsla-contracts/contracts/StringUtils.sol",
-        "@stacktical/dsla-contracts/contracts/Details.sol"
+        "@stacktical/dsla-contracts/contracts/StringUtils.sol"
       ],
       "versionPragmas": [
         "0.6.6"
