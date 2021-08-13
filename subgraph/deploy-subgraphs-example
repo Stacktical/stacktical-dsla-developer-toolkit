@@ -1,0 +1,26 @@
+export IPFS_URL=
+export ETHEREUM_GRAPH_NODE=
+export HARMONY_GRAPH_NODE=
+export POLYGON_GRAPH_NODE=
+
+#Ethereum
+npx graph codegen subgraph/networks/ethereum.subgraph.yaml -o subgraph/generated
+npx graph build subgraph/networks/ethereum.subgraph.yaml -o subgraph/build
+npx graph create stacktical/dsla-protocol --node $ETHEREUM_GRAPH_NODE
+npx graph deploy -o subgraph/build stacktical/dsla-protocol subgraph/networks/ethereum.subgraph.yaml --ipfs $IPFS_URL --node $ETHEREUM_GRAPH_NODE
+
+Harmony
+npx graph codegen subgraph/networks/harmony.subgraph.yaml -o subgraph/generated
+npx graph build subgraph/networks/harmony.subgraph.yaml -o subgraph/build
+npx graph create stacktical/dsla-protocol --node $HARMONY_GRAPH_NODE
+npx graph deploy -o subgraph/build stacktical/dsla-protocol subgraph/networks/harmony.subgraph.yaml --ipfs $IPFS_URL --node $HARMONY_GRAPH_NODE
+
+#Polygon
+npx graph codegen subgraph/networks/polygon.subgraph.yaml -o subgraph/generated
+npx graph build subgraph/networks/polygon.subgraph.yaml -o subgraph/build
+npx graph create stacktical/dsla-protocol --node $POLYGON_GRAPH_NODE
+npx graph deploy -o subgraph/build stacktical/dsla-protocol subgraph/networks/polygon.subgraph.yaml --ipfs $IPFS_URL --node $POLYGON_GRAPH_NODE
+
+
+
+

@@ -1,5 +1,4 @@
 import {
-  appRoot,
   CONTRACT_NAMES,
   PERIOD_TYPE,
   TOKEN_NAMES,
@@ -39,7 +38,6 @@ export const develop: NetworkUserConfig = {
       deleteOldJobs: true,
       cleanLocalFolder: true,
       nodeFunds: '10',
-      gasLimit: undefined,
       ethWsUrl: 'ws://host.docker.internal:8545',
       ethHttpUrl: 'http://host.docker.internal:8545',
       nodesConfiguration: [
@@ -88,7 +86,14 @@ export const develop: NetworkUserConfig = {
           },
         ],
         stake: {
-          stakingParameters: {},
+          stakingParameters: {
+            dslaBurnedByVerification: '1000',
+            dslaPlatformReward: '500',
+            dslaDepositByPeriod: '2000',
+            dslaMessengerReward: '250',
+            dslaUserReward: '250',
+            burnDSLA: false,
+          },
         },
       },
     },

@@ -4,7 +4,7 @@ import { HardhatConfig, HardhatUserConfig } from 'hardhat/types';
 import './type-extensions';
 
 const Joi = require('joi');
-require('dotenv').config();
+require('dotenv').config({ path: '../.env' });
 
 const schema = Joi.object({
   IPFS_URI: Joi.string().required(),

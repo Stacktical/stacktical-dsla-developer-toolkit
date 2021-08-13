@@ -1,0 +1,104 @@
+specVersion: 0.0.2
+description: DSLA protocol
+repository: https://github.com/Stacktical/stacktical-dsla-contracts
+schema:
+  file: ../schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: SLARegistry
+    network: mainnet
+    source:
+      address: '{{slaRegistryAddress}}'
+      startBlock: {{slaRegistryStartBlock}}
+      abi: SLARegistry
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - SLA
+      abis:
+        - name: SLARegistry
+          file: ../abis/@stacktical/dsla-contracts/contracts/SLARegistry.sol/SLARegistry.json
+        - name: SLA
+          file: ../abis/@stacktical/dsla-contracts/contracts/SLA.sol/SLA.json
+      eventHandlers:
+        - event: SLACreated(indexed address,indexed address)
+          handler: handleNewSLA
+      file: ../mapping.ts
+  - kind: ethereum/contract
+    name: SLORegistry
+    network: mainnet
+    source:
+      address: '{{sloRegistryAddress}}'
+      startBlock: {{sloRegistryStartBlock}}
+      abi: SLORegistry
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - SLA
+      abis:
+        - name: SLORegistry
+          file: ../abis/@stacktical/dsla-contracts/contracts/SLORegistry.sol/SLORegistry.json
+        - name: SLA
+          file: ../abis/@stacktical/dsla-contracts/contracts/SLA.sol/SLA.json
+      eventHandlers:
+        - event: SLORegistered(indexed address,uint256,uint8)
+          handler: handleSLORegistered
+      file: ../mapping.ts
+  - kind: ethereum/contract
+    name: StakeRegistry
+    network: mainnet
+    source:
+      address: '{{stakeRegistryAddress}}'
+      startBlock: {{stakeRegistryStartBlock}}
+      abi: StakeRegistry
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - StakeRegistry
+      abis:
+        - name: StakeRegistry
+          file: ../abis/@stacktical/dsla-contracts/contracts/StakeRegistry.sol/StakeRegistry.json
+      eventHandlers:
+        - event: ValueLocked(indexed address,indexed address,uint256)
+          handler: handleValueLocked
+        - event: LockedValueReturned(indexed address,indexed address,uint256)
+          handler: handleLockedValueReturned
+      file: ../mapping.ts
+templates:
+  - kind: ethereum/contract
+    name: SLA
+    network: mainnet
+    source:
+      abi: SLA
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ../mapping.ts
+      entities:
+        - SLA
+        - DToken
+        - ERC20
+        - SLI
+      eventHandlers:
+        - event: SLICreated(uint256,uint256,uint256)
+          handler: handleSLICreated
+        - event: Stake(indexed address,indexed uint256,indexed address,uint256)
+          handler: handleStake
+        - event: ProviderWithdraw(indexed address,indexed uint256,indexed address,uint256)
+          handler: handleProviderWithdraw
+        - event: UserWithdraw(indexed address,indexed uint256,indexed address,uint256)
+          handler: handleUserWithdraw
+        - event: DTokensCreated(indexed address,indexed address,string,string,indexed address,string,string)
+          handler: handleDTokensCreated
+      abis:
+        - name: SLA
+          file: ../abis/@stacktical/dsla-contracts/contracts/SLA.sol/SLA.json
+        - name: ERC20
+          file: ../abis/@openzeppelin/contracts/presets/ERC20PresetMinterPauser.sol/ERC20PresetMinterPauser.json
