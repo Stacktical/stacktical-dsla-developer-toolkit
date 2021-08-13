@@ -51,7 +51,7 @@ import { networks } from './networks';
 
 const prettier = require('prettier');
 const appRoot = require('app-root-path');
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 const yaml = require('js-yaml');
 const compose = require('docker-compose');
@@ -72,6 +72,7 @@ export enum SUB_TASK_NAMES {
   INITIALIZE_DEFAULT_ADDRESSES = 'INITIALIZE_DEFAULT_ADDRESSES',
   EXPORT_NETWORKS = 'EXPORT_NETWORKS',
   EXPORT_SUBGRAPH_DATA = 'EXPORT_SUBGRAPH_DATA',
+  EXPORT_TO_FRONT_END = 'EXPORT_TO_FRONT_END',
   DEPLOY_SLA = 'DEPLOY_SLA',
   BOOTSTRAP_MESSENGER_REGISTRY = 'BOOTSTRAP_MESSENGER_REGISTRY',
   BOOTSTRAP_PERIOD_REGISTRY = 'BOOTSTRAP_PERIOD_REGISTRY',
@@ -710,6 +711,19 @@ subtask(SUB_TASK_NAMES.EXPORT_NETWORKS, undefined).setAction(
     consola.success('Contract addresses exported correctly');
   }
 );
+
+subtask(SUB_TASK_NAMES.EXPORT_TO_FRONT_END, undefined).setAction(async () => {
+  consola.info('Exporting contracts addresses to frontend');
+  let srcPath = `${appRoot}/exported-data`;
+  let destPath = `${appRoot}/../stacktical-dsla-frontend/src/addresses`;
+  fs.copySync(srcPath, destPath, { overwrite: true });
+  consola.success('Contract address export to frontend finished');
+  consola.info('Exporting typechain to frontend');
+  srcPath = `${appRoot}/typechain`;
+  destPath = `${appRoot}/../stacktical-dsla-frontend/src/typechain`;
+  fs.copySync(srcPath, destPath, { overwrite: true });
+  consola.success('Typechain export to frontend finished');
+});
 
 // subtask(SUB_TASK_NAMES.EXPORT_NETWORKS, undefined).setAction(
 //   async (_, hre: HardhatRuntimeEnvironment) => {

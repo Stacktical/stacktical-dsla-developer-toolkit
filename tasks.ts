@@ -65,6 +65,7 @@ task(TASK_NAMES.EXPORT_DATA, 'Export data to exported-data folder').setAction(
   async (_, { run }) => {
     await run(SUB_TASK_NAMES.EXPORT_NETWORKS);
     await run(SUB_TASK_NAMES.EXPORT_SUBGRAPH_DATA);
+    await run(SUB_TASK_NAMES.EXPORT_TO_FRONT_END);
   }
 );
 
