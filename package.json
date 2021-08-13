@@ -64,6 +64,7 @@
     "joi": "^17.4.0",
     "js-yaml": "^4.1.0",
     "moment": "^2.29.1",
+    "mustache": "^4.2.0",
     "node-fetch": "^2.6.1",
     "openzeppelin-solidity": "^2.5.1",
     "pm2": "^4.5.6",

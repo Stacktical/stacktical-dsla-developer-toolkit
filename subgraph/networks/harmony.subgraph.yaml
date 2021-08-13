@@ -8,8 +8,8 @@ dataSources:
     name: SLARegistry
     network: rinkeby
     source:
-      address: '0x285F560A7E35754b4283Fc63321090C7DA758535'
-      startBlock: 9091468
+      address: '0xC084329D3115eE3b2172DA953D3f880aB742620D'
+      startBlock: 14508876
       abi: SLARegistry
     mapping:
       kind: ethereum/events
@@ -30,8 +30,8 @@ dataSources:
     name: SLORegistry
     network: rinkeby
     source:
-      address: '0xCCdc0BBE69D428485241b3f322cf308c57AEf409'
-      startBlock: 9091463
+      address: '0xDf43eED59B0f9fc639Ec80Ac2BAF4ABf1c70c370'
+      startBlock: 14508862
       abi: SLORegistry
     mapping:
       kind: ethereum/events
@@ -52,8 +52,8 @@ dataSources:
     name: StakeRegistry
     network: rinkeby
     source:
-      address: '0x598C8BeD2fA8d82959550DD82d9C942B917B9b99'
-      startBlock: 9091465
+      address: '0xcfbEF648380D891D7037A8da1741fc7Af64053e1'
+      startBlock: 14508871
       abi: StakeRegistry
     mapping:
       kind: ethereum/events

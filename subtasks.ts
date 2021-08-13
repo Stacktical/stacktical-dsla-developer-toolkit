@@ -57,6 +57,7 @@ const yaml = require('js-yaml');
 const compose = require('docker-compose');
 const moment = require('moment');
 const consola = require('consola');
+const Mustache = require('mustache');
 
 export enum SUB_TASK_NAMES {
   PREPARE_CHAINLINK_NODES = 'PREPARE_CHAINLINK_NODES',
@@ -73,6 +74,7 @@ export enum SUB_TASK_NAMES {
   EXPORT_NETWORKS = 'EXPORT_NETWORKS',
   EXPORT_SUBGRAPH_DATA = 'EXPORT_SUBGRAPH_DATA',
   EXPORT_TO_FRONT_END = 'EXPORT_TO_FRONT_END',
+  SETUP_GRAPH_MANIFESTOS = 'SETUP_GRAPH_MANIFESTOS',
   DEPLOY_SLA = 'DEPLOY_SLA',
   BOOTSTRAP_MESSENGER_REGISTRY = 'BOOTSTRAP_MESSENGER_REGISTRY',
   BOOTSTRAP_PERIOD_REGISTRY = 'BOOTSTRAP_PERIOD_REGISTRY',
@@ -280,6 +282,26 @@ subtask(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE, undefined).setAction(async () => {
     recursive: true,
   });
 });
+
+subtask(SUB_TASK_NAMES.SETUP_GRAPH_MANIFESTOS, undefined).setAction(
+  async () => {
+    const networks = fs
+      .readdirSync(`${appRoot}/subgraph/networks`)
+      .filter((dir) => /.subgraph.json/.test(dir))
+      .map((dir) => dir.split('.')[0]);
+    for (let network of networks) {
+      consola.info('Preparing Graph Protocol manifesto for network ' + network);
+      const yamlPath = `${appRoot}/subgraph/networks/${network}.subgraph.yaml`;
+      const jsonPath = `${appRoot}/subgraph/networks/${network}.subgraph.json`;
+      const specs = JSON.parse(fs.readFileSync(jsonPath));
+      fs.copyFileSync(`${appRoot}/subgraph/subgraph.template.yaml`, yamlPath);
+      const template = fs.readFileSync(yamlPath, 'utf8');
+      const manifesto = Mustache.render(template, specs);
+      fs.writeFileSync(yamlPath, manifesto);
+    }
+    consola.success('Graph Protocol manifestos correctly created');
+  }
+);
 
 subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
   async (_, hre: HardhatRuntimeEnvironment) => {
