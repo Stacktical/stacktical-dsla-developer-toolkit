@@ -25,7 +25,16 @@ enum TASK_NAMES {
   TRANSFER_OWNERSHIP = 'stacktical:transfer-ownership',
   PROVIDER_WITHDRAW = 'stacktical:provider-withdraw',
   UNLOCK_TOKENS = 'stacktical:unlock-tokens',
+  GRAPH_MANIFESTOS = 'stacktical:graph-manifestos',
 }
+
+task(
+  TASK_NAMES.GRAPH_MANIFESTOS,
+  'Unlock value from a finished SLA contract'
+).setAction(async (taskArgs, { run }) => {
+  await run(SUB_TASK_NAMES.EXPORT_SUBGRAPH_DATA, taskArgs);
+  await run(SUB_TASK_NAMES.SETUP_GRAPH_MANIFESTOS, taskArgs);
+});
 
 task(TASK_NAMES.UNLOCK_TOKENS, 'Unlock value from a finished SLA contract')
   .addOptionalParam(
@@ -63,8 +72,8 @@ task(
 
 task(TASK_NAMES.EXPORT_DATA, 'Export data to exported-data folder').setAction(
   async (_, { run }) => {
-    await run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
     await run(SUB_TASK_NAMES.EXPORT_NETWORKS);
+    await run(SUB_TASK_NAMES.EXPORT_TO_FRONT_END);
   }
 );
 

@@ -22,3 +22,4 @@ services/graph-protocol/postgres
 networks/index.ts
 subgraph/generated
 subgraph/build
+subgraph/deploy-subgraphs.sh

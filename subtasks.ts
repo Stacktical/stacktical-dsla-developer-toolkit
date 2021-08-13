@@ -47,16 +47,16 @@ import {
 import axios from 'axios';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { formatBytes32String } from 'ethers/lib/utils';
-import { networks } from './networks';
 
 const prettier = require('prettier');
 const appRoot = require('app-root-path');
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 const yaml = require('js-yaml');
 const compose = require('docker-compose');
 const moment = require('moment');
 const consola = require('consola');
+const Mustache = require('mustache');
 
 export enum SUB_TASK_NAMES {
   PREPARE_CHAINLINK_NODES = 'PREPARE_CHAINLINK_NODES',
@@ -71,6 +71,9 @@ export enum SUB_TASK_NAMES {
   START_LOCAL_GRAPH_NODE = 'START_LOCAL_GRAPH_NODE',
   INITIALIZE_DEFAULT_ADDRESSES = 'INITIALIZE_DEFAULT_ADDRESSES',
   EXPORT_NETWORKS = 'EXPORT_NETWORKS',
+  EXPORT_SUBGRAPH_DATA = 'EXPORT_SUBGRAPH_DATA',
+  EXPORT_TO_FRONT_END = 'EXPORT_TO_FRONT_END',
+  SETUP_GRAPH_MANIFESTOS = 'SETUP_GRAPH_MANIFESTOS',
   DEPLOY_SLA = 'DEPLOY_SLA',
   BOOTSTRAP_MESSENGER_REGISTRY = 'BOOTSTRAP_MESSENGER_REGISTRY',
   BOOTSTRAP_PERIOD_REGISTRY = 'BOOTSTRAP_PERIOD_REGISTRY',
@@ -278,6 +281,26 @@ subtask(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE, undefined).setAction(async () => {
     recursive: true,
   });
 });
+
+subtask(SUB_TASK_NAMES.SETUP_GRAPH_MANIFESTOS, undefined).setAction(
+  async () => {
+    const networks = fs
+      .readdirSync(`${appRoot}/subgraph/networks`)
+      .filter((dir) => /.subgraph.json/.test(dir))
+      .map((dir) => dir.split('.')[0]);
+    for (let network of networks) {
+      consola.info('Preparing Graph Protocol manifesto for network ' + network);
+      const yamlPath = `${appRoot}/subgraph/networks/${network}.subgraph.yaml`;
+      const jsonPath = `${appRoot}/subgraph/networks/${network}.subgraph.json`;
+      const specs = JSON.parse(fs.readFileSync(jsonPath));
+      fs.copyFileSync(`${appRoot}/subgraph/subgraph.template.yaml`, yamlPath);
+      const template = fs.readFileSync(yamlPath, 'utf8');
+      const manifesto = Mustache.render(template, specs);
+      fs.writeFileSync(yamlPath, manifesto);
+    }
+    consola.success('Graph Protocol manifestos correctly created');
+  }
+);
 
 subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
   async (_, hre: HardhatRuntimeEnvironment) => {
@@ -596,76 +619,106 @@ subtask(
 
 subtask(SUB_TASK_NAMES.EXPORT_NETWORKS, undefined).setAction(
   async (_, hre: HardhatRuntimeEnvironment) => {
-    const { network, deployments } = hre;
-    const { get } = deployments;
-    const { stacktical } = network.config;
-
     consola.info('Starting export contracts addresses process');
-    const SLORegistry = await get(CONTRACT_NAMES.SLORegistry);
-    const SLARegistry = await get(CONTRACT_NAMES.SLARegistry);
-    const MessengerRegistry = await get(CONTRACT_NAMES.MessengerRegistry);
-    const PeriodRegistry = await get(CONTRACT_NAMES.PeriodRegistry);
-    const StakeRegistry = await get(CONTRACT_NAMES.StakeRegistry);
-    const Details = await get(CONTRACT_NAMES.Details);
-    const PreCoordinator = await get(CONTRACT_NAMES.PreCoordinator);
-    const StringUtils = await get(CONTRACT_NAMES.StringUtils);
-
-    const addresses = {
-      SLORegistry: SLORegistry.address,
-      SLARegistry: SLARegistry.address,
-      MessengerRegistry: MessengerRegistry.address,
-      PeriodRegistry: PeriodRegistry.address,
-      StakeRegistry: StakeRegistry.address,
-      Details: Details.address,
-      PreCoordinator: PreCoordinator.address,
-      StringUtils: StringUtils.address,
-      ...stacktical.tokens.reduce(
-        (r, token) => ({
-          ...r,
-          [token.name + 'Token']: require(appRoot.path +
-            '/deployments/' +
-            network.name +
-            '/' +
-            token.name).address,
-        }),
-        {}
-      ),
-      ...stacktical.messengers.reduce(
-        (r, messenger) => ({
-          ...r,
-          [messenger.contract]: require(appRoot.path +
-            '/deployments/' +
-            network.name +
-            '/' +
-            messenger.contract).address,
-        }),
-        {}
-      ),
-    };
-    consola.info('Resulting addresses');
-    console.log(addresses);
+    const exportedNetworks = [];
     const base_path = `${appRoot}/exported-data`;
-    const prettifiedAddresses = prettier.format(
-      `export const ${network.name} = ` + JSON.stringify(addresses),
-      {
-        useTabs: false,
-        tabWidth: 2,
-        singleQuote: true,
-        parser: 'typescript',
-      }
-    );
-    fs.writeFileSync(
-      path.resolve(__dirname, `${base_path}/${network.name}.ts`),
-      prettifiedAddresses
-    );
 
-    const exportLines = networks
-      .filter((network) => network.exportable)
-      .reduce(
-        (r, network) =>
-          (r += `export {${network.name}} from './${network.name}'\n`),
-        ''
-      );
+    for (let network of Object.keys(hre.config.networks).filter(
+      (network) => !['localhost', 'hardhat'].includes(network)
+    )) {
+      try {
+        consola.info('Exporting ' + network + ' data');
+        const SLORegistry = JSON.parse(
+          fs.readFileSync(`${appRoot}/deployments/${network}/SLORegistry.json`)
+        );
+        const SLARegistry = JSON.parse(
+          fs.readFileSync(`${appRoot}/deployments/${network}/SLARegistry.json`)
+        );
+        const MessengerRegistry = JSON.parse(
+          fs.readFileSync(
+            `${appRoot}/deployments/${network}/MessengerRegistry.json`
+          )
+        );
+        const PeriodRegistry = JSON.parse(
+          fs.readFileSync(
+            `${appRoot}/deployments/${network}/PeriodRegistry.json`
+          )
+        );
+        const StakeRegistry = JSON.parse(
+          fs.readFileSync(
+            `${appRoot}/deployments/${network}/StakeRegistry.json`
+          )
+        );
+        const Details = JSON.parse(
+          fs.readFileSync(`${appRoot}/deployments/${network}/Details.json`)
+        );
+        const PreCoordinator = JSON.parse(
+          fs.readFileSync(
+            `${appRoot}/deployments/${network}/PreCoordinator.json`
+          )
+        );
+        const StringUtils = JSON.parse(
+          fs.readFileSync(`${appRoot}/deployments/${network}/StringUtils.json`)
+        );
+        const { tokens, messengers } = hre.config.networks[network].stacktical;
+        const addresses = {
+          SLORegistry: SLORegistry.address,
+          SLARegistry: SLARegistry.address,
+          MessengerRegistry: MessengerRegistry.address,
+          PeriodRegistry: PeriodRegistry.address,
+          StakeRegistry: StakeRegistry.address,
+          Details: Details.address,
+          PreCoordinator: PreCoordinator.address,
+          StringUtils: StringUtils.address,
+          ...tokens.reduce(
+            (r, token) => ({
+              ...r,
+              [token.name + 'Token']:
+                require(appRoot.path +
+                  '/deployments/' +
+                  network +
+                  '/' +
+                  token.name).address + '.json',
+            }),
+            {}
+          ),
+          ...messengers.reduce(
+            (r, messenger) => ({
+              ...r,
+              [messenger.contract]: require(appRoot.path +
+                '/deployments/' +
+                network +
+                '/' +
+                messenger.contract).address,
+            }),
+            {}
+          ),
+        };
+        consola.info('Resulting addresses');
+        console.log(addresses);
+        const prettifiedAddresses = prettier.format(
+          `export const ${network} = ` + JSON.stringify(addresses),
+          {
+            useTabs: false,
+            tabWidth: 2,
+            singleQuote: true,
+            parser: 'typescript',
+          }
+        );
+        fs.writeFileSync(
+          path.resolve(__dirname, `${base_path}/${network}.ts`),
+          prettifiedAddresses
+        );
+        exportedNetworks.push(network);
+      } catch (error) {
+        consola.error('Error getting data for ' + network + ' network');
+        consola.error(error.message);
+      }
+    }
+    const exportLines = exportedNetworks.reduce(
+      (r, network) => (r += `export {${network}} from './${network}'\n`),
+      ''
+    );
     const prettifiedIndex = prettier.format(`${exportLines}\n`, {
       useTabs: false,
       tabWidth: 2,
@@ -677,6 +730,155 @@ subtask(SUB_TASK_NAMES.EXPORT_NETWORKS, undefined).setAction(
       prettifiedIndex
     );
     consola.success('Contract addresses exported correctly');
+  }
+);
+
+subtask(SUB_TASK_NAMES.EXPORT_TO_FRONT_END, undefined).setAction(async () => {
+  consola.info('Exporting contracts addresses to frontend');
+  let srcPath = `${appRoot}/exported-data`;
+  let destPath = `${appRoot}/../stacktical-dsla-frontend/src/addresses`;
+  fs.copySync(srcPath, destPath, { overwrite: true });
+  consola.success('Contract address export to frontend finished');
+  consola.info('Exporting typechain to frontend');
+  srcPath = `${appRoot}/typechain`;
+  destPath = `${appRoot}/../stacktical-dsla-frontend/src/typechain`;
+  fs.copySync(srcPath, destPath, { overwrite: true });
+  consola.success('Typechain export to frontend finished');
+});
+
+// subtask(SUB_TASK_NAMES.EXPORT_NETWORKS, undefined).setAction(
+//   async (_, hre: HardhatRuntimeEnvironment) => {
+//     const { network, deployments } = hre;
+//     const { get } = deployments;
+//     const { stacktical } = network.config;
+//
+//     consola.info('Starting export contracts addresses process');
+//     const SLORegistry = await get(CONTRACT_NAMES.SLORegistry);
+//     const SLARegistry = await get(CONTRACT_NAMES.SLARegistry);
+//     const MessengerRegistry = await get(CONTRACT_NAMES.MessengerRegistry);
+//     const PeriodRegistry = await get(CONTRACT_NAMES.PeriodRegistry);
+//     const StakeRegistry = await get(CONTRACT_NAMES.StakeRegistry);
+//     const Details = await get(CONTRACT_NAMES.Details);
+//     const PreCoordinator = await get(CONTRACT_NAMES.PreCoordinator);
+//     const StringUtils = await get(CONTRACT_NAMES.StringUtils);
+//
+//     const addresses = {
+//       SLORegistry: SLORegistry.address,
+//       SLARegistry: SLARegistry.address,
+//       MessengerRegistry: MessengerRegistry.address,
+//       PeriodRegistry: PeriodRegistry.address,
+//       StakeRegistry: StakeRegistry.address,
+//       Details: Details.address,
+//       PreCoordinator: PreCoordinator.address,
+//       StringUtils: StringUtils.address,
+//       ...stacktical.tokens.reduce(
+//         (r, token) => ({
+//           ...r,
+//           [token.name + 'Token']: require(appRoot.path +
+//             '/deployments/' +
+//             network.name +
+//             '/' +
+//             token.name).address,
+//         }),
+//         {}
+//       ),
+//       ...stacktical.messengers.reduce(
+//         (r, messenger) => ({
+//           ...r,
+//           [messenger.contract]: require(appRoot.path +
+//             '/deployments/' +
+//             network.name +
+//             '/' +
+//             messenger.contract).address,
+//         }),
+//         {}
+//       ),
+//     };
+//     consola.info('Resulting addresses');
+//     console.log(addresses);
+//     const base_path = `${appRoot}/exported-data`;
+//     const prettifiedAddresses = prettier.format(
+//       `export const ${network.name} = ` + JSON.stringify(addresses),
+//       {
+//         useTabs: false,
+//         tabWidth: 2,
+//         singleQuote: true,
+//         parser: 'typescript',
+//       }
+//     );
+//     fs.writeFileSync(
+//       path.resolve(__dirname, `${base_path}/${network.name}.ts`),
+//       prettifiedAddresses
+//     );
+//
+//     const exportLines = networks
+//       .filter((network) => network.exportable)
+//       .reduce(
+//         (r, network) =>
+//           (r += `export {${network.name}} from './${network.name}'\n`),
+//         ''
+//       );
+//     const prettifiedIndex = prettier.format(`${exportLines}\n`, {
+//       useTabs: false,
+//       tabWidth: 2,
+//       singleQuote: true,
+//       parser: 'typescript',
+//     });
+//     fs.writeFileSync(
+//       path.resolve(__dirname, `${base_path}/index.ts`),
+//       prettifiedIndex
+//     );
+//     consola.success('Contract addresses exported correctly');
+//   }
+// );
+
+subtask(SUB_TASK_NAMES.EXPORT_SUBGRAPH_DATA, undefined).setAction(
+  async (_, hre: HardhatRuntimeEnvironment) => {
+    consola.info('Starting subgraph json data file creation process');
+    for (let network of Object.keys(hre.config.networks).filter(
+      (network) => !['localhost', 'hardhat'].includes(network)
+    )) {
+      consola.info('Exporting ' + network + ' data');
+      try {
+        const SLORegistry = JSON.parse(
+          fs.readFileSync(`${appRoot}/deployments/${network}/SLORegistry.json`)
+        );
+        const SLARegistry = JSON.parse(
+          fs.readFileSync(`${appRoot}/deployments/${network}/SLARegistry.json`)
+        );
+        const StakeRegistry = JSON.parse(
+          fs.readFileSync(
+            `${appRoot}/deployments/${network}/StakeRegistry.json`
+          )
+        );
+        const data = {
+          slaRegistryAddress: SLARegistry.address,
+          slaRegistryStartBlock: SLARegistry.receipt.blockNumber,
+          sloRegistryAddress: SLORegistry.address,
+          sloRegistryStartBlock: SLORegistry.receipt.blockNumber,
+          stakeRegistryAddress: StakeRegistry.address,
+          stakeRegistryStartBlock: StakeRegistry.receipt.blockNumber,
+        };
+        consola.info('Resulting data');
+        consola.info(data);
+        const base_path = `${appRoot}/subgraph/networks`;
+        const prettifiedAddresses = prettier.format(JSON.stringify(data), {
+          useTabs: false,
+          tabWidth: 2,
+          singleQuote: true,
+          parser: 'json',
+        });
+        fs.writeFileSync(
+          path.resolve(__dirname, `${base_path}/${network}.subgraph.json`),
+          prettifiedAddresses
+        );
+      } catch (error) {
+        consola.error('Error getting data for ' + network + ' network');
+        consola.error(error.message);
+      }
+    }
+
+    consola.success('Subgraph json data file creation process finished');
   }
 );
 
