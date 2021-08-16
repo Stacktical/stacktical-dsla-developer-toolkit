@@ -849,55 +849,52 @@ subtask(SUB_TASK_NAMES.EXPORT_TO_FRONT_END, undefined).setAction(async () => {
 //   }
 // );
 
-subtask(SUB_TASK_NAMES.EXPORT_SUBGRAPH_DATA, undefined).setAction(
-  async (_, hre: HardhatRuntimeEnvironment) => {
-    consola.info('Starting subgraph json data file creation process');
-    for (let network of Object.keys(hre.config.networks).filter(
-      (network) => !['localhost', 'hardhat'].includes(network)
-    )) {
-      consola.info('Exporting ' + network + ' data');
-      try {
-        const SLORegistry = JSON.parse(
-          fs.readFileSync(`${appRoot}/deployments/${network}/SLORegistry.json`)
-        );
-        const SLARegistry = JSON.parse(
-          fs.readFileSync(`${appRoot}/deployments/${network}/SLARegistry.json`)
-        );
-        const StakeRegistry = JSON.parse(
-          fs.readFileSync(
-            `${appRoot}/deployments/${network}/StakeRegistry.json`
-          )
-        );
-        const data = {
-          slaRegistryAddress: SLARegistry.address,
-          slaRegistryStartBlock: SLARegistry.receipt.blockNumber,
-          sloRegistryAddress: SLORegistry.address,
-          sloRegistryStartBlock: SLORegistry.receipt.blockNumber,
-          stakeRegistryAddress: StakeRegistry.address,
-          stakeRegistryStartBlock: StakeRegistry.receipt.blockNumber,
-        };
-        consola.info('Resulting data');
-        consola.info(data);
-        const base_path = `${appRoot}/subgraph/networks`;
-        const prettifiedAddresses = prettier.format(JSON.stringify(data), {
-          useTabs: false,
-          tabWidth: 2,
-          singleQuote: true,
-          parser: 'json',
-        });
-        fs.writeFileSync(
-          path.resolve(__dirname, `${base_path}/${network}.subgraph.json`),
-          prettifiedAddresses
-        );
-      } catch (error) {
-        consola.error('Error getting data for ' + network + ' network');
-        consola.error(error.message);
-      }
+subtask(SUB_TASK_NAMES.EXPORT_SUBGRAPH_DATA, undefined).setAction(async () => {
+  consola.info('Starting subgraph json data file creation process');
+  const networks = fs.readdirSync(`${appRoot}/deployments/`);
+  for (let network of networks.filter(
+    (network) => !['localhost', 'hardhat'].includes(network)
+  )) {
+    consola.info('Exporting ' + network + ' data');
+    try {
+      const SLORegistry = JSON.parse(
+        fs.readFileSync(`${appRoot}/deployments/${network}/SLORegistry.json`)
+      );
+      const SLARegistry = JSON.parse(
+        fs.readFileSync(`${appRoot}/deployments/${network}/SLARegistry.json`)
+      );
+      const StakeRegistry = JSON.parse(
+        fs.readFileSync(`${appRoot}/deployments/${network}/StakeRegistry.json`)
+      );
+      const data = {
+        slaRegistryAddress: SLARegistry.address,
+        slaRegistryStartBlock: SLARegistry.receipt.blockNumber,
+        sloRegistryAddress: SLORegistry.address,
+        sloRegistryStartBlock: SLORegistry.receipt.blockNumber,
+        stakeRegistryAddress: StakeRegistry.address,
+        stakeRegistryStartBlock: StakeRegistry.receipt.blockNumber,
+      };
+      consola.info('Resulting data');
+      consola.info(data);
+      const base_path = `${appRoot}/subgraph/networks`;
+      const prettifiedAddresses = prettier.format(JSON.stringify(data), {
+        useTabs: false,
+        tabWidth: 2,
+        singleQuote: true,
+        parser: 'json',
+      });
+      fs.writeFileSync(
+        path.resolve(__dirname, `${base_path}/${network}.subgraph.json`),
+        prettifiedAddresses
+      );
+    } catch (error) {
+      consola.error('Error getting data for ' + network + ' network');
+      consola.error(error.message);
     }
-
-    consola.success('Subgraph json data file creation process finished');
   }
-);
+
+  consola.success('Subgraph json data file creation process finished');
+});
 
 subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
   async (_, hre: HardhatRuntimeEnvironment) => {
