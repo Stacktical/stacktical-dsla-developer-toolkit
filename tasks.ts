@@ -2,6 +2,7 @@ import { task, types } from 'hardhat/config';
 import { SUB_TASK_NAMES } from './subtasks';
 import { printSeparator } from './utils';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
+import { PARAMS_NAMES } from './constants';
 
 enum TASK_NAMES {
   EXPORT_DATA = 'stacktical:export-data',
@@ -26,6 +27,7 @@ enum TASK_NAMES {
   PROVIDER_WITHDRAW = 'stacktical:provider-withdraw',
   UNLOCK_TOKENS = 'stacktical:unlock-tokens',
   GRAPH_MANIFESTOS = 'stacktical:graph-manifestos',
+  GET_SLA_FROM_TX = 'stacktical:get-sla-from-tx',
 }
 
 task(
@@ -38,16 +40,25 @@ task(
 
 task(TASK_NAMES.UNLOCK_TOKENS, 'Unlock value from a finished SLA contract')
   .addOptionalParam(
-    'slaAddress',
+    PARAMS_NAMES.SLA_ADDRESS,
     '(optional) The SLA address. Defaults to last deployed SLA by deployer address'
   )
   .setAction(async (taskArgs, { run }) => {
     await run(SUB_TASK_NAMES.UNLOCK_TOKENS, taskArgs);
   });
 
+task(
+  TASK_NAMES.GET_SLA_FROM_TX,
+  'Get a transaction along with the events of it'
+)
+  .addParam(PARAMS_NAMES.TRANSACTION_HASH, 'Transaction hash')
+  .setAction(async (taskArgs, { run }) => {
+    await run(SUB_TASK_NAMES.GET_SLA_FROM_TX, taskArgs);
+  });
+
 task(TASK_NAMES.DEPLOY_SLA, 'Deploy customized SLA from stacktical config')
   .addOptionalParam(
-    'id',
+    PARAMS_NAMES.INDEX,
     'id of the arrays of SLAs of the deploy_sla stacktical config'
   )
   .setAction(async (taskArgs, { run }) => {
@@ -59,7 +70,7 @@ task(
   'Deploy customized SLA from stacktical config'
 )
   .addOptionalParam(
-    'slaAddress',
+    PARAMS_NAMES.SLA_ADDRESS,
     '(optional) The SLA address. Defaults to last deployed SLA by deployer address'
   )
   .addParam(
@@ -99,7 +110,7 @@ task(
   'Request a SLI verification for next verifiable period'
 )
   .addOptionalParam(
-    'slaAddress',
+    PARAMS_NAMES.SLA_ADDRESS,
     '(optional) The SLA address. Defaults to last deployed SLA by deployer address'
   )
   .addFlag('retry', ' pass the flag retry to trigger the retry mechanism')
@@ -245,7 +256,7 @@ task(TASK_NAMES.GET_REVERT_MESSAGE, 'Get revert message for transaction hash')
 
 task(TASK_NAMES.DEPLOY_MESSENGER, 'deploy a messenger in the MessengerRegistry')
   .addParam(
-    'id',
+    PARAMS_NAMES.INDEX,
     'Id of the messenger on the messengers list of the network config'
   )
   .setAction(async (taskArgs, hre: any) => {
@@ -254,7 +265,7 @@ task(TASK_NAMES.DEPLOY_MESSENGER, 'deploy a messenger in the MessengerRegistry')
 
 task(TASK_NAMES.GET_MESSENGER, 'get messenger data')
   .addOptionalParam(
-    'id',
+    PARAMS_NAMES.INDEX,
     'Id of the messenger on the messengers list of the network config'
   )
   .setAction(async (taskArgs, hre: HardhatRuntimeEnvironment) => {

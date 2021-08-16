@@ -9,7 +9,7 @@ import {
   postChainlinkBridge,
   postChainlinkJob,
 } from './chainlink-utils';
-import { subtask } from 'hardhat/config';
+import { subtask, task } from 'hardhat/config';
 import { ChainlinkNodeConfiguration } from './types';
 import {
   ERC20__factory,
@@ -95,7 +95,24 @@ export enum SUB_TASK_NAMES {
   TRANSFER_OWNERSHIP = 'TRANSFER_OWNERSHIP',
   PROVIDER_WITHDRAW = 'PROVIDER_WITHDRAW',
   UNLOCK_TOKENS = 'UNLOCK_TOKENS',
+  GET_SLA_FROM_TX = 'GET_SLA_FROM_TX',
 }
+
+subtask(SUB_TASK_NAMES.GET_SLA_FROM_TX, undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    const { ethers } = hre;
+    const { provider, getContract } = ethers;
+    const { getTransactionReceipt } = provider;
+    const { transactionHash } = taskArgs;
+    const transaction = await getTransactionReceipt(transactionHash);
+    const slaRegistry: SLARegistry = await getContract(
+      CONTRACT_NAMES.SLARegistry
+    );
+    const filter = slaRegistry.filters.SLACreated(null, transaction.from);
+    const events = await slaRegistry.queryFilter(filter, transaction.blockHash);
+    console.log(events);
+  }
+);
 
 subtask(SUB_TASK_NAMES.UNLOCK_TOKENS, undefined).setAction(
   async (taskArgs, hre: HardhatRuntimeEnvironment) => {
@@ -1103,7 +1120,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
       signer
     );
 
-    const messenger = messengers[taskArgs.id];
+    const messenger = messengers[taskArgs.index];
 
     consola.info('Deploying ' + messenger.contract + ' to ' + hre.network.name);
     const preCoordinator = await get(CONTRACT_NAMES.PreCoordinator);
@@ -1164,11 +1181,11 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
           ' messenger successfully registered on the MessengerRegistry'
       );
       await hre.run(SUB_TASK_NAMES.SET_PRECOORDINATOR, {
-        id: taskArgs.id,
+        id: taskArgs.index,
       });
       consola.info('Creating saId in messenger ' + messenger.contract);
       await hre.run(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, {
-        id: taskArgs.id,
+        id: taskArgs.index,
       });
     } else {
       consola.warn(
@@ -1312,7 +1329,9 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
     const { stacktical } = hre.network.config;
     console.log('Starting SLA deployment process');
     const { deploy_sla } = scripts;
-    const slaConfigs = taskArgs.id ? [deploy_sla[taskArgs.id]] : deploy_sla;
+    const slaConfigs = taskArgs.index
+      ? [deploy_sla[taskArgs.index]]
+      : deploy_sla;
     for (let config of slaConfigs) {
       printSeparator();
       console.log('Deploying SLA:');
@@ -1556,7 +1575,7 @@ subtask(SUB_TASK_NAMES.SET_PRECOORDINATOR, undefined).setAction(
     console.log('Nodes configuration from stacktical config:');
     console.log(stacktical.chainlink.nodesConfiguration);
     const oracle = await get(CONTRACT_NAMES.Oracle);
-    const messenger = stacktical.messengers[taskArgs.id];
+    const messenger = stacktical.messengers[taskArgs.index];
     const preCoordinatorConfiguration = await getPreCoordinatorConfiguration(
       stacktical.chainlink.nodesConfiguration,
       messenger.useCaseName,
@@ -1632,7 +1651,7 @@ subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
     const lastEvent = events.slice(-1)[0];
     const { saId } = lastEvent.args;
     const serviceAgreement = await precoordinator.getServiceAgreement(saId);
-    const messengerName = stacktical.messengers[taskArgs.id].contract;
+    const messengerName = stacktical.messengers[taskArgs.index].contract;
     const messenger = await IMessenger__factory.connect(
       (
         await get(messengerName)
@@ -1938,8 +1957,8 @@ subtask(SUB_TASK_NAMES.GET_MESSENGER, undefined).setAction(
   async (taskArgs, hre: HardhatRuntimeEnvironment) => {
     const { ethers, network } = hre;
     const { stacktical } = network.config;
-    const messengers = taskArgs.id
-      ? [stacktical.messengers[taskArgs.id]]
+    const messengers = taskArgs.index
+      ? [stacktical.messengers[taskArgs.index]]
       : stacktical.messengers;
     for (let messenger of messengers) {
       const messengerArtifact = <IMessenger>(

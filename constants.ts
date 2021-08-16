@@ -81,4 +81,10 @@ export enum SLO_TYPE {
   GreaterThan,
   GreaterOrEqualTo,
 }
+
+export enum PARAMS_NAMES {
+  SLA_ADDRESS = 'slaAddress',
+  INDEX = 'index',
+  TRANSACTION_HASH = 'transactionHash',
+}
 export const appRoot = require('app-root-path');
