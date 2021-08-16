@@ -6,7 +6,7 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: SLARegistry
-    network: mainnet
+    network: polygon
     source:
       address: "0x62DbAD2Fc2acDaaF7E40737d87AE3E2EDB10FdAb"
       startBlock: 17302790
@@ -28,7 +28,7 @@ dataSources:
       file: SLARegistry/SLARegistry.wasm
   - kind: ethereum/contract
     name: SLORegistry
-    network: mainnet
+    network: polygon
     source:
       address: "0x90128B50530897a951062DbD630810B8dE0Cfb8D"
       startBlock: 17302707
@@ -50,7 +50,7 @@ dataSources:
       file: SLARegistry/SLARegistry.wasm
   - kind: ethereum/contract
     name: StakeRegistry
-    network: mainnet
+    network: polygon
     source:
       address: "0x700CEf3A4F86C7D3724584723061A43554b297ab"
       startBlock: 17302785
@@ -73,7 +73,7 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: SLA
-    network: mainnet
+    network: polygon
     source:
       abi: SLA
     mapping:

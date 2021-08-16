@@ -58,6 +58,18 @@ export enum NETWORKS {
   RINKEBY = 'rinkeby',
 }
 
+export const GRAPH_NETWORKS = {
+  [NETWORKS.DEVELOP]: 'mainnet',
+  [NETWORKS.ETHEREUM]: 'mainnet',
+  [NETWORKS.HARMONY]: 'mainnet',
+  [NETWORKS.HARMONYTESTNET]: 'mainnet',
+  [NETWORKS.MUMBAI]: 'mumbai',
+  [NETWORKS.POLYGON]: 'polygon',
+  [NETWORKS.KOVAN]: 'kovan',
+  [NETWORKS.FUJI]: 'fuji',
+  [NETWORKS.RINKEBY]: 'rinkeby',
+};
+
 export enum PERIOD_TYPE {
   HOURLY,
   DAILY,

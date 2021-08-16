@@ -6,7 +6,7 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: SLARegistry
-    network: mainnet
+    network: {{graphNetwork}}
     source:
       address: '{{slaRegistryAddress}}'
       startBlock: {{slaRegistryStartBlock}}
@@ -28,7 +28,7 @@ dataSources:
       file: ../mapping.ts
   - kind: ethereum/contract
     name: SLORegistry
-    network: mainnet
+    network: {{graphNetwork}}
     source:
       address: '{{sloRegistryAddress}}'
       startBlock: {{sloRegistryStartBlock}}
@@ -50,7 +50,7 @@ dataSources:
       file: ../mapping.ts
   - kind: ethereum/contract
     name: StakeRegistry
-    network: mainnet
+    network: {{graphNetwork}}
     source:
       address: '{{stakeRegistryAddress}}'
       startBlock: {{stakeRegistryStartBlock}}
@@ -73,7 +73,7 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: SLA
-    network: mainnet
+    network: {{graphNetwork}}
     source:
       abi: SLA
     mapping:

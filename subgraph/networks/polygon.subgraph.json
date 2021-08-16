@@ -4,5 +4,6 @@
   "sloRegistryAddress": "0x90128B50530897a951062DbD630810B8dE0Cfb8D",
   "sloRegistryStartBlock": 17302707,
   "stakeRegistryAddress": "0x700CEf3A4F86C7D3724584723061A43554b297ab",
-  "stakeRegistryStartBlock": 17302785
+  "stakeRegistryStartBlock": 17302785,
+  "graphNetwork": "polygon"
 }

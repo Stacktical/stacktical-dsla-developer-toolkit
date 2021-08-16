@@ -9,7 +9,7 @@ import {
   postChainlinkBridge,
   postChainlinkJob,
 } from './chainlink-utils';
-import { subtask, task } from 'hardhat/config';
+import { subtask } from 'hardhat/config';
 import { ChainlinkNodeConfiguration } from './types';
 import {
   ERC20__factory,
@@ -33,6 +33,8 @@ import {
 
 import {
   CONTRACT_NAMES,
+  GRAPH_NETWORKS,
+  NETWORKS,
   PERIOD_STATUS,
   PERIOD_TYPE,
   TOKEN_NAMES,
@@ -639,8 +641,9 @@ subtask(SUB_TASK_NAMES.EXPORT_NETWORKS, undefined).setAction(
     consola.info('Starting export contracts addresses process');
     const exportedNetworks = [];
     const base_path = `${appRoot}/exported-data`;
+    const networks = fs.readdirSync(`${appRoot}/deployments/`);
 
-    for (let network of Object.keys(hre.config.networks).filter(
+    for (let network of networks.filter(
       (network) => !['localhost', 'hardhat'].includes(network)
     )) {
       try {
@@ -866,6 +869,7 @@ subtask(SUB_TASK_NAMES.EXPORT_SUBGRAPH_DATA, undefined).setAction(async () => {
       const StakeRegistry = JSON.parse(
         fs.readFileSync(`${appRoot}/deployments/${network}/StakeRegistry.json`)
       );
+
       const data = {
         slaRegistryAddress: SLARegistry.address,
         slaRegistryStartBlock: SLARegistry.receipt.blockNumber,
@@ -873,6 +877,7 @@ subtask(SUB_TASK_NAMES.EXPORT_SUBGRAPH_DATA, undefined).setAction(async () => {
         sloRegistryStartBlock: SLORegistry.receipt.blockNumber,
         stakeRegistryAddress: StakeRegistry.address,
         stakeRegistryStartBlock: StakeRegistry.receipt.blockNumber,
+        graphNetwork: GRAPH_NETWORKS[network],
       };
       consola.info('Resulting data');
       consola.info(data);
@@ -1178,11 +1183,11 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
           ' messenger successfully registered on the MessengerRegistry'
       );
       await hre.run(SUB_TASK_NAMES.SET_PRECOORDINATOR, {
-        id: taskArgs.index,
+        index: taskArgs.index,
       });
       consola.info('Creating saId in messenger ' + messenger.contract);
       await hre.run(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, {
-        id: taskArgs.index,
+        index: taskArgs.index,
       });
     } else {
       consola.warn(
