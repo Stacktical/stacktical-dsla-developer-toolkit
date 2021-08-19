@@ -9,7 +9,6 @@
     "custom-ganache": "ganache-cli --accounts 10 --defaultBalanceEther 100000 -d -i 1337 -l 12000000 -h 0.0.0.0",
     "external-adapter": "pm2 delete external-adapter 2> /dev/null || true && pm2 start services/external-adapter/index.ts --name external-adapter --watch ./services/external-adapter --no-daemon",
     "export-data": "hh stacktical:export-data",
-    "export-data:develop": "hh stacktical:export-data --network develop && cp -r exported-data/* ../stacktical-dsla-frontend/src/addresses && cp -r typechain/* ../stacktical-dsla-frontend/src/typechain",
     "release:patch": "standard-version --release-as patch",
     "release:minor": "standard-version --release-as minor",
     "release:major": "standard-version --release-as major",
