@@ -98,6 +98,7 @@ export enum SUB_TASK_NAMES {
   PROVIDER_WITHDRAW = 'PROVIDER_WITHDRAW',
   UNLOCK_TOKENS = 'UNLOCK_TOKENS',
   GET_SLA_FROM_TX = 'GET_SLA_FROM_TX',
+  GET_TOKEN_BALANCES = 'GET_TOKEN_BALANCES',
 }
 
 subtask(SUB_TASK_NAMES.GET_SLA_FROM_TX, undefined).setAction(
@@ -669,9 +670,6 @@ subtask(SUB_TASK_NAMES.EXPORT_NETWORKS, undefined).setAction(
             `${appRoot}/deployments/${network}/StakeRegistry.json`
           )
         );
-        const Details = JSON.parse(
-          fs.readFileSync(`${appRoot}/deployments/${network}/Details.json`)
-        );
         const PreCoordinator = JSON.parse(
           fs.readFileSync(
             `${appRoot}/deployments/${network}/PreCoordinator.json`
@@ -687,7 +685,6 @@ subtask(SUB_TASK_NAMES.EXPORT_NETWORKS, undefined).setAction(
           MessengerRegistry: MessengerRegistry.address,
           PeriodRegistry: PeriodRegistry.address,
           StakeRegistry: StakeRegistry.address,
-          Details: Details.address,
           PreCoordinator: PreCoordinator.address,
           StringUtils: StringUtils.address,
           ...tokens.reduce(
@@ -1702,6 +1699,7 @@ subtask(SUB_TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE, undefined).setAction(
       let allowance = await token.allowance(owner, contract.address);
       console.log('Allowance: ' + fromWei(allowance.toString()));
       const ownerBalance = await token.balanceOf(owner);
+      console.log('Allower address: ' + owner);
       console.log('Allower balance: ' + fromWei(ownerBalance.toString()));
     }
   }
@@ -1989,7 +1987,9 @@ subtask(SUB_TASK_NAMES.GET_MESSENGER, undefined).setAction(
 
 subtask(SUB_TASK_NAMES.TRANSFER_OWNERSHIP, undefined).setAction(
   async (taskArgs, hre: HardhatRuntimeEnvironment) => {
-    const { ethers } = hre;
+    const { ethers, network, getNamedAccounts } = hre;
+    const { stacktical } = network.config;
+    const { deployer } = await getNamedAccounts();
     const periodRegistry = <PeriodRegistry>(
       await ethers.getContract(CONTRACT_NAMES.PeriodRegistry)
     );
@@ -2003,7 +2003,7 @@ subtask(SUB_TASK_NAMES.TRANSFER_OWNERSHIP, undefined).setAction(
     consola.info('StakeRegistry owner address:', stakeRegistryOwner);
     consola.info('New owner address:', newOwner);
     let tx;
-    if (newOwner !== periodRegistryOwner) {
+    if (newOwner !== periodRegistryOwner && periodRegistryOwner === deployer) {
       printSeparator();
       consola.info('Transferring PeriodRegistry ownership');
       tx = await periodRegistry.transferOwnership(newOwner);
@@ -2014,7 +2014,7 @@ subtask(SUB_TASK_NAMES.TRANSFER_OWNERSHIP, undefined).setAction(
         await periodRegistry.owner()
       );
     }
-    if (newOwner !== stakeRegistryOwner) {
+    if (newOwner !== stakeRegistryOwner && stakeRegistryOwner === deployer) {
       printSeparator();
       consola.info('Transferring StakeRegistry ownership');
       tx = await stakeRegistry.transferOwnership(newOwner);
@@ -2024,6 +2024,27 @@ subtask(SUB_TASK_NAMES.TRANSFER_OWNERSHIP, undefined).setAction(
         await stakeRegistry.owner()
       );
       consola.info(tx);
+    }
+
+    for (let messenger of stacktical.messengers) {
+      const messengerContract: IMessenger = await ethers.getContract(
+        messenger.contract
+      );
+      const messengerOwner = await messengerContract.owner();
+      consola.info(`${messenger.useCaseName} owner: ${messengerOwner}`);
+      if (newOwner !== messengerOwner && messengerOwner === deployer) {
+        printSeparator();
+        consola.info(
+          `Transferring ${messenger.useCaseName} messenger ownership`
+        );
+        tx = await messengerContract.transferOwnership(newOwner);
+        await tx.wait();
+        consola.success(
+          `${messenger.useCaseName} ownership successfully transferred, new owner: `,
+          await messengerContract.owner()
+        );
+        consola.info(tx);
+      }
     }
     printSeparator();
   }
