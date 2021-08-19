@@ -5,7 +5,6 @@ import {
   TOKEN_NAMES,
   USE_CASES,
 } from './constants';
-import { ContractFactory } from 'ethers';
 
 export type StackticalConfiguration = {
   checkPastPeriods: boolean;

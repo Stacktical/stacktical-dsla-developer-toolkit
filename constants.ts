@@ -62,7 +62,7 @@ export const GRAPH_NETWORKS = {
   [NETWORKS.DEVELOP]: 'mainnet',
   [NETWORKS.ETHEREUM]: 'mainnet',
   [NETWORKS.HARMONY]: 'mainnet',
-  [NETWORKS.HARMONYTESTNET]: 'mainnet',
+  [NETWORKS.HARMONYTESTNET]: 'testnet',
   [NETWORKS.MUMBAI]: 'mumbai',
   [NETWORKS.POLYGON]: 'polygon',
   [NETWORKS.KOVAN]: 'kovan',

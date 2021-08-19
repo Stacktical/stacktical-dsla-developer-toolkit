@@ -2,13 +2,13 @@ specVersion: 0.0.2
 description: DSLA protocol
 repository: https://github.com/Stacktical/stacktical-dsla-contracts
 schema:
-  file: schema.graphql
+  file: ../schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: SLARegistry
     network: testnet
     source:
-      address: "0xBed12978D750feB78Dce7a6E01ecdcf39416A3d6"
+      address: '0xBed12978D750feB78Dce7a6E01ecdcf39416A3d6'
       startBlock: 13820676
       abi: SLARegistry
     mapping:
@@ -19,18 +19,18 @@ dataSources:
         - SLA
       abis:
         - name: SLARegistry
-          file: abis/@stacktical/dsla-contracts/contracts/SLARegistry.sol/SLARegistry.json
+          file: ../abis/@stacktical/dsla-contracts/contracts/SLARegistry.sol/SLARegistry.json
         - name: SLA
-          file: abis/@stacktical/dsla-contracts/contracts/SLA.sol/SLA.json
+          file: ../abis/@stacktical/dsla-contracts/contracts/SLA.sol/SLA.json
       eventHandlers:
         - event: SLACreated(indexed address,indexed address)
           handler: handleNewSLA
-      file: SLARegistry/SLARegistry.wasm
+      file: ../mapping.ts
   - kind: ethereum/contract
     name: SLORegistry
     network: testnet
     source:
-      address: "0xCc407675823592b1D06F229a4741Cd884f9e3137"
+      address: '0xCc407675823592b1D06F229a4741Cd884f9e3137'
       startBlock: 13820664
       abi: SLORegistry
     mapping:
@@ -41,18 +41,18 @@ dataSources:
         - SLA
       abis:
         - name: SLORegistry
-          file: abis/@stacktical/dsla-contracts/contracts/SLORegistry.sol/SLORegistry.json
+          file: ../abis/@stacktical/dsla-contracts/contracts/SLORegistry.sol/SLORegistry.json
         - name: SLA
-          file: abis/@stacktical/dsla-contracts/contracts/SLA.sol/SLA.json
+          file: ../abis/@stacktical/dsla-contracts/contracts/SLA.sol/SLA.json
       eventHandlers:
         - event: SLORegistered(indexed address,uint256,uint8)
           handler: handleSLORegistered
-      file: SLARegistry/SLARegistry.wasm
+      file: ../mapping.ts
   - kind: ethereum/contract
     name: StakeRegistry
     network: testnet
     source:
-      address: "0x10Ae2fFB5a1b4Ba0De8fEd2185895a14011E5b70"
+      address: '0x10Ae2fFB5a1b4Ba0De8fEd2185895a14011E5b70'
       startBlock: 13820672
       abi: StakeRegistry
     mapping:
@@ -63,13 +63,13 @@ dataSources:
         - StakeRegistry
       abis:
         - name: StakeRegistry
-          file: abis/@stacktical/dsla-contracts/contracts/StakeRegistry.sol/StakeRegistry.json
+          file: ../abis/@stacktical/dsla-contracts/contracts/StakeRegistry.sol/StakeRegistry.json
       eventHandlers:
         - event: ValueLocked(indexed address,indexed address,uint256)
           handler: handleValueLocked
         - event: LockedValueReturned(indexed address,indexed address,uint256)
           handler: handleLockedValueReturned
-      file: SLARegistry/SLARegistry.wasm
+      file: ../mapping.ts
 templates:
   - kind: ethereum/contract
     name: SLA
@@ -80,7 +80,7 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.4
       language: wasm/assemblyscript
-      file: SLARegistry/SLARegistry.wasm
+      file: ../mapping.ts
       entities:
         - SLA
         - DToken
@@ -95,11 +95,10 @@ templates:
           handler: handleProviderWithdraw
         - event: UserWithdraw(indexed address,indexed uint256,indexed address,uint256)
           handler: handleUserWithdraw
-        - event: DTokensCreated(indexed address,indexed address,string,string,indexed
-            address,string,string)
+        - event: DTokensCreated(indexed address,indexed address,string,string,indexed address,string,string)
           handler: handleDTokensCreated
       abis:
         - name: SLA
-          file: abis/@stacktical/dsla-contracts/contracts/SLA.sol/SLA.json
+          file: ../abis/@stacktical/dsla-contracts/contracts/SLA.sol/SLA.json
         - name: ERC20
-          file: abis/@openzeppelin/contracts/presets/ERC20PresetMinterPauser.sol/ERC20PresetMinterPauser.json
+          file: ../abis/@openzeppelin/contracts/presets/ERC20PresetMinterPauser.sol/ERC20PresetMinterPauser.json

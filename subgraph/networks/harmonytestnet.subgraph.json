@@ -1,0 +1,9 @@
+{
+  "slaRegistryAddress": "0xBed12978D750feB78Dce7a6E01ecdcf39416A3d6",
+  "slaRegistryStartBlock": 13820676,
+  "sloRegistryAddress": "0xCc407675823592b1D06F229a4741Cd884f9e3137",
+  "sloRegistryStartBlock": 13820664,
+  "stakeRegistryAddress": "0x10Ae2fFB5a1b4Ba0De8fEd2185895a14011E5b70",
+  "stakeRegistryStartBlock": 13820672,
+  "graphNetwork": "testnet"
+}
