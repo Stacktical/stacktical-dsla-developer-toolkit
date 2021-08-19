@@ -449,6 +449,7 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
         );
         return httpRequestJobRes.data;
       } catch (error) {
+        console.log(error);
         return false;
       }
     };

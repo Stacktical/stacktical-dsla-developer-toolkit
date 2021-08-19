@@ -58,11 +58,11 @@ export const harmonytestnet: NetworkUserConfig = {
       ethWsUrl: process.env.HARMONYTESTNET_WS_URI,
       nodesConfiguration: [
         {
-          name: 'node-1',
-          restApiUrl: 'http://localhost',
-          restApiPort: '6690',
-          email: 'test@stacktical.com',
-          password: 'PaSSword123456',
+          name: 'newyork',
+          restApiUrl: process.env.HARMONYTESTNET_CHAINLINK_NODE_1_URL,
+          restApiPort: process.env.HARMONYTESTNET_CHAINLINK_NODE_1_PORT,
+          email: process.env.HARMONYTESTNET_CHAINLINK_NODE_1_USER,
+          password: process.env.HARMONYTESTNET_CHAINLINK_NODE_1_PASS,
         },
       ],
     },

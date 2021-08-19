@@ -6,10 +6,10 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: SLARegistry
-    network: polygon
+    network: rinkeby
     source:
-      address: "0x62DbAD2Fc2acDaaF7E40737d87AE3E2EDB10FdAb"
-      startBlock: 17302790
+      address: "0x285F560A7E35754b4283Fc63321090C7DA758535"
+      startBlock: 9091468
       abi: SLARegistry
     mapping:
       kind: ethereum/events
@@ -28,10 +28,10 @@ dataSources:
       file: SLARegistry/SLARegistry.wasm
   - kind: ethereum/contract
     name: SLORegistry
-    network: polygon
+    network: rinkeby
     source:
-      address: "0x90128B50530897a951062DbD630810B8dE0Cfb8D"
-      startBlock: 17302707
+      address: "0xCCdc0BBE69D428485241b3f322cf308c57AEf409"
+      startBlock: 9091463
       abi: SLORegistry
     mapping:
       kind: ethereum/events
@@ -50,10 +50,10 @@ dataSources:
       file: SLARegistry/SLARegistry.wasm
   - kind: ethereum/contract
     name: StakeRegistry
-    network: polygon
+    network: rinkeby
     source:
-      address: "0x700CEf3A4F86C7D3724584723061A43554b297ab"
-      startBlock: 17302785
+      address: "0x598C8BeD2fA8d82959550DD82d9C942B917B9b99"
+      startBlock: 9091465
       abi: StakeRegistry
     mapping:
       kind: ethereum/events
@@ -73,7 +73,7 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: SLA
-    network: polygon
+    network: rinkeby
     source:
       abi: SLA
     mapping:
