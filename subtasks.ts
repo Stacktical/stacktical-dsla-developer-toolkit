@@ -98,7 +98,6 @@ export enum SUB_TASK_NAMES {
   PROVIDER_WITHDRAW = 'PROVIDER_WITHDRAW',
   UNLOCK_TOKENS = 'UNLOCK_TOKENS',
   GET_SLA_FROM_TX = 'GET_SLA_FROM_TX',
-  GET_TOKEN_BALANCES = 'GET_TOKEN_BALANCES',
 }
 
 subtask(SUB_TASK_NAMES.GET_SLA_FROM_TX, undefined).setAction(
@@ -752,16 +751,40 @@ subtask(SUB_TASK_NAMES.EXPORT_NETWORKS, undefined).setAction(
 );
 
 subtask(SUB_TASK_NAMES.EXPORT_TO_FRONT_END, undefined).setAction(async () => {
-  consola.info('Exporting contracts addresses to frontend');
-  let srcPath = `${appRoot}/exported-data`;
-  let destPath = `${appRoot}/../stacktical-dsla-frontend/src/addresses`;
-  fs.copySync(srcPath, destPath, { overwrite: true });
-  consola.success('Contract address export to frontend finished');
-  consola.info('Exporting typechain to frontend');
-  srcPath = `${appRoot}/typechain`;
-  destPath = `${appRoot}/../stacktical-dsla-frontend/src/typechain`;
-  fs.copySync(srcPath, destPath, { overwrite: true });
-  consola.success('Typechain export to frontend finished');
+  consola.info('Exporting contracts addresses to frontend apps');
+  if (fs.existsSync(`${appRoot}/../stacktical-dsla-frontend`)) {
+    printSeparator();
+    let srcPath = `${appRoot}/exported-data`;
+    consola.info('Exporting to Stacktical dApp frontend');
+    let destPath = `${appRoot}/../stacktical-dsla-frontend/src/addresses`;
+    fs.copySync(srcPath, destPath, { overwrite: true });
+    consola.success('Contract address export to Stacktical dApp finished');
+    consola.info('Exporting typechain to Stacktical dApp');
+    srcPath = `${appRoot}/typechain`;
+    destPath = `${appRoot}/../stacktical-dsla-frontend/src/typechain`;
+    fs.copySync(srcPath, destPath, { overwrite: true });
+    consola.success('Typechain export to Stacktical dApp finished');
+  } else {
+    printSeparator();
+    consola.warn('Stacktical dApp frontend folder not found');
+  }
+  if (fs.existsSync(`${appRoot}/../dsla-protocol-app`)) {
+    printSeparator();
+    let srcPath = `${appRoot}/exported-data`;
+    consola.info('Exporting to DSLA protocol dApp frontend');
+    let destPath = `${appRoot}/../dsla-protocol-app/src/addresses`;
+    fs.copySync(srcPath, destPath, { overwrite: true });
+    consola.success('Contract address export DSLA protocol dApp finished');
+    consola.info('Exporting typechain DSLA protocol dApp');
+    srcPath = `${appRoot}/typechain`;
+    destPath = `${appRoot}/../dsla-protocol-app/src/typechain`;
+    fs.copySync(srcPath, destPath, { overwrite: true });
+    consola.success('Typechain export DSLA protocol dApp finished');
+  } else {
+    printSeparator();
+    consola.warn(' DSLA protocol dApp folder not found');
+  }
+  printSeparator();
 });
 
 // subtask(SUB_TASK_NAMES.EXPORT_NETWORKS, undefined).setAction(
