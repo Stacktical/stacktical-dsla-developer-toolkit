@@ -96,7 +96,7 @@ export const harmonytestnet: NetworkUserConfig = {
       {
         contract: CONTRACT_NAMES.SEMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
-        externalAdapterUrl: 'http://host.docker.internal:6060',
+        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
       },
     ],
     scripts: scripts,
