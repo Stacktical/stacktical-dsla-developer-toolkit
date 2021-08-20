@@ -6,10 +6,10 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: SLARegistry
-    network: rinkeby
+    network: testnet
     source:
-      address: '0x285F560A7E35754b4283Fc63321090C7DA758535'
-      startBlock: 9091468
+      address: '0xBed12978D750feB78Dce7a6E01ecdcf39416A3d6'
+      startBlock: 13820676
       abi: SLARegistry
     mapping:
       kind: ethereum/events
@@ -28,10 +28,10 @@ dataSources:
       file: ../mapping.ts
   - kind: ethereum/contract
     name: SLORegistry
-    network: rinkeby
+    network: testnet
     source:
-      address: '0xCCdc0BBE69D428485241b3f322cf308c57AEf409'
-      startBlock: 9091463
+      address: '0xCc407675823592b1D06F229a4741Cd884f9e3137'
+      startBlock: 13820664
       abi: SLORegistry
     mapping:
       kind: ethereum/events
@@ -50,10 +50,10 @@ dataSources:
       file: ../mapping.ts
   - kind: ethereum/contract
     name: StakeRegistry
-    network: rinkeby
+    network: testnet
     source:
-      address: '0x598C8BeD2fA8d82959550DD82d9C942B917B9b99'
-      startBlock: 9091465
+      address: '0x10Ae2fFB5a1b4Ba0De8fEd2185895a14011E5b70'
+      startBlock: 13820672
       abi: StakeRegistry
     mapping:
       kind: ethereum/events
@@ -73,7 +73,7 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: SLA
-    network: rinkeby
+    network: testnet
     source:
       abi: SLA
     mapping:

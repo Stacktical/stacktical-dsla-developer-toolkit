@@ -1,19 +1,18 @@
 {
   "name": "stacktical-developer-toolkit",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "Toolkit to deploy develop Chainlink Node, Graph Node, IPFS node, dev blockchain and DSLA contracts to multiple networks seamlessly",
   "scripts": {
     "hardhat-node": "hardhat node",
-    "develop:deploy": "hh deploy --network develop --reset && hh stacktical:bootstrap --network develop && hh stacktical:deploy-sla --network develop --id 0 && npm run export-data:develop",
+    "develop:deploy": "hh deploy --network develop --reset && hh stacktical:bootstrap --network develop && hh stacktical:deploy-sla --network develop --index 0 && npm run export-data:develop",
     "develop:deploy-reset": "hh stacktical:restart-services --network develop && npm run develop:deploy",
     "custom-ganache": "ganache-cli --accounts 10 --defaultBalanceEther 100000 -d -i 1337 -l 12000000 -h 0.0.0.0",
     "external-adapter": "pm2 delete external-adapter 2> /dev/null || true && pm2 start services/external-adapter/index.ts --name external-adapter --watch ./services/external-adapter --no-daemon",
     "export-data": "hh stacktical:export-data",
-    "export-data:develop": "hh stacktical:export-data --network develop && cp -r exported-data/* ../stacktical-dsla-frontend/src/addresses && cp -r typechain/* ../stacktical-dsla-frontend/src/typechain",
     "release:patch": "standard-version --release-as patch",
     "release:minor": "standard-version --release-as minor",
     "release:major": "standard-version --release-as major",
-    "graph:deploy": "sh subgraph/deploy-subgraphs.sh",
+    "graph:deploy:production": "sh subgraph/deploy-subgraphs.sh",
     "graph:deploy:develop": "sh subgraph/deploy-develop.sh",
     "postinstall": "./node_modules/.bin/pm2 install typescript"
   },

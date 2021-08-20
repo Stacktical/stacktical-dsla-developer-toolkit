@@ -125,9 +125,9 @@ export function handleStake(event: Stake): void {
   duToken.totalSupply = duTokenContract.totalSupply();
   duToken.save();
 
-  let tvl = TVL.load('0');
+  let tvl = TVL.load(event.params.tokenAddress.toHexString());
   if (!tvl) {
-    tvl = new TVL('0');
+    tvl = new TVL(event.params.tokenAddress.toHexString());
   }
   tvl.amount = tvl.amount.plus(event.params.amount);
   tvl.deposits = tvl.deposits.concat([deposit.id]);
@@ -166,9 +166,9 @@ export function handleProviderWithdraw(event: ProviderWithdraw): void {
   dpToken.totalSupply = dpTokenContract.totalSupply();
   dpToken.save();
 
-  let tvl = TVL.load('0');
+  let tvl = TVL.load(event.params.tokenAddress.toHexString());
   if (!tvl) {
-    tvl = new TVL('0');
+    tvl = new TVL(event.params.tokenAddress.toHexString());
   }
   tvl.amount = tvl.amount.minus(event.params.amount);
   tvl.withdrawals = tvl.withdrawals.concat([withdrawal.id]);
@@ -210,9 +210,9 @@ export function handleUserWithdraw(event: ProviderWithdraw): void {
   duToken.totalSupply = duTokenContract.totalSupply();
   duToken.save();
 
-  let tvl = TVL.load('0');
+  let tvl = TVL.load(event.params.tokenAddress.toHexString());
   if (!tvl) {
-    tvl = new TVL('0');
+    tvl = new TVL(event.params.tokenAddress.toHexString());
   }
   tvl.amount = tvl.amount.minus(event.params.amount);
   tvl.withdrawals = tvl.withdrawals.concat([withdrawal.id]);
@@ -275,9 +275,9 @@ export function handleValueLocked(event: ValueLocked): void {
   deposit.tokenAddress = stakeRegistryContract.DSLATokenAddress();
   deposit.save();
 
-  let tvl = TVL.load('0');
+  let tvl = TVL.load(stakeRegistryContract.DSLATokenAddress().toHexString());
   if (!tvl) {
-    tvl = new TVL('0');
+    tvl = new TVL(stakeRegistryContract.DSLATokenAddress().toHexString());
   }
   tvl.amount = tvl.amount.plus(event.params.amount);
   tvl.deposits = tvl.deposits.concat([deposit.id]);
@@ -294,9 +294,9 @@ export function handleLockedValueReturned(event: LockedValueReturned): void {
   withdrawal.tokenAddress = stakeRegistryContract.DSLATokenAddress();
   withdrawal.save();
 
-  let tvl = TVL.load('0');
+  let tvl = TVL.load(stakeRegistryContract.DSLATokenAddress().toHexString());
   if (!tvl) {
-    tvl = new TVL('0');
+    tvl = new TVL(stakeRegistryContract.DSLATokenAddress().toHexString());
   }
   tvl.amount = tvl.amount.minus(event.params.amount);
   tvl.withdrawals = tvl.withdrawals.concat([withdrawal.id]);
