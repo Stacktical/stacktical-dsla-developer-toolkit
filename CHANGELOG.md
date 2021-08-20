@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.4.2](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v2.4.1...v2.4.2) (2021-08-20)
+
+
+### Features
+
+* subgraph deployment documentation ([71886c8](https://github.com/Stacktical/stacktical-developer-toolkit/commit/71886c8515b4b3aa515543519b380a03e310d6d0))
+
 ### [2.4.1](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v2.4.0...v2.4.1) (2021-08-20)
 
 
