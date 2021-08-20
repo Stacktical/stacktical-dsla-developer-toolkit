@@ -448,7 +448,6 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
         );
         return httpRequestJobRes.data;
       } catch (error) {
-        console.log(error);
         return false;
       }
     };
@@ -891,6 +890,12 @@ subtask(SUB_TASK_NAMES.EXPORT_SUBGRAPH_DATA, undefined).setAction(async () => {
         fs.readFileSync(`${appRoot}/deployments/${network}/StakeRegistry.json`)
       );
 
+      const MessengerRegistry = JSON.parse(
+        fs.readFileSync(
+          `${appRoot}/deployments/${network}/MessengerRegistry.json`
+        )
+      );
+
       const data = {
         slaRegistryAddress: SLARegistry.address,
         slaRegistryStartBlock: SLARegistry.receipt.blockNumber,
@@ -898,6 +903,8 @@ subtask(SUB_TASK_NAMES.EXPORT_SUBGRAPH_DATA, undefined).setAction(async () => {
         sloRegistryStartBlock: SLORegistry.receipt.blockNumber,
         stakeRegistryAddress: StakeRegistry.address,
         stakeRegistryStartBlock: StakeRegistry.receipt.blockNumber,
+        messengerRegistryAddress: MessengerRegistry.address,
+        messengerRegistryStartBlock: MessengerRegistry.receipt.blockNumber,
         graphNetwork: GRAPH_NETWORKS[network],
       };
       consola.info('Resulting data');

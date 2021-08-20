@@ -5,5 +5,7 @@
   "sloRegistryStartBlock": 12,
   "stakeRegistryAddress": "0xA57B8a5584442B467b4689F1144D269d096A3daF",
   "stakeRegistryStartBlock": 14,
+  "messengerRegistryAddress": "0x2612Af3A521c2df9EAF28422Ca335b04AdF3ac66",
+  "messengerRegistryStartBlock": 13,
   "graphNetwork": "mainnet"
 }

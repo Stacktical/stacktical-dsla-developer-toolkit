@@ -83,3 +83,11 @@ type DtokenBalance @entity {
   slaAllowance: BigInt!
   balance: BigInt!
 }
+
+type Messenger @entity {
+  id: ID!
+  owner: Bytes!
+  specificationUrl: String!
+  precision: BigInt!
+  messengerId: BigInt!
+}

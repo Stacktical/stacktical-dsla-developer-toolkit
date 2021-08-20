@@ -940,3 +940,70 @@ export class DtokenBalance extends Entity {
     this.set("balance", Value.fromBigInt(value));
   }
 }
+
+export class Messenger extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id !== null, "Cannot save Messenger entity without an ID");
+    assert(
+      id.kind == ValueKind.STRING,
+      "Cannot save Messenger entity with non-string ID. " +
+        'Considering using .toHex() to convert the "id" to a string.'
+    );
+    store.set("Messenger", id.toString(), this);
+  }
+
+  static load(id: string): Messenger | null {
+    return store.get("Messenger", id) as Messenger | null;
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get owner(): Bytes {
+    let value = this.get("owner");
+    return value.toBytes();
+  }
+
+  set owner(value: Bytes) {
+    this.set("owner", Value.fromBytes(value));
+  }
+
+  get specificationUrl(): string {
+    let value = this.get("specificationUrl");
+    return value.toString();
+  }
+
+  set specificationUrl(value: string) {
+    this.set("specificationUrl", Value.fromString(value));
+  }
+
+  get precision(): BigInt {
+    let value = this.get("precision");
+    return value.toBigInt();
+  }
+
+  set precision(value: BigInt) {
+    this.set("precision", Value.fromBigInt(value));
+  }
+
+  get messengerId(): BigInt {
+    let value = this.get("messengerId");
+    return value.toBigInt();
+  }
+
+  set messengerId(value: BigInt) {
+    this.set("messengerId", Value.fromBigInt(value));
+  }
+}

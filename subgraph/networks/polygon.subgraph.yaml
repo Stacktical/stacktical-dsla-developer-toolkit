@@ -70,6 +70,29 @@ dataSources:
         - event: LockedValueReturned(indexed address,indexed address,uint256)
           handler: handleLockedValueReturned
       file: ../mapping.ts
+  - kind: ethereum/contract
+    name: MessengerRegistry
+    network: polygon
+    source:
+      address: '0xB4E5ea2F77F63514365Cbe901f0ad2E5159fBB2D'
+      startBlock: 17302720
+      abi: MessengerRegistry
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - MessengerRegistry
+        - IMessenger
+      abis:
+        - name: MessengerRegistry
+          file: ../abis/@stacktical/dsla-contracts/contracts/MessengerRegistry.sol/MessengerRegistry.json
+        - name: IMessenger
+          file: ../abis/@stacktical/dsla-contracts/contracts/interfaces/IMessenger.sol/IMessenger.json
+      eventHandlers:
+        - event: MessengerRegistered(indexed address,indexed address,string,uint256,uint256)
+          handler: handleMessengerRegistered
+      file: ../mapping.ts
 templates:
   - kind: ethereum/contract
     name: SLA

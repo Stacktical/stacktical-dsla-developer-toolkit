@@ -1,6 +1,9 @@
 export IPFS_URL="http://localhost:5001"
 export DEVELOP_GRAPH_NODE="http://127.0.0.1:8020"
 
+npx hardhat stacktical:graph-manifestos
+
+
 npx graph codegen subgraph/networks/develop.subgraph.yaml -o subgraph/generated
 npx graph build subgraph/networks/develop.subgraph.yaml -o subgraph/build
 npx graph create stacktical/dsla-protocol --node $DEVELOP_GRAPH_NODE

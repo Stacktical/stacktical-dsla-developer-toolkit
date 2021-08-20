@@ -5,5 +5,7 @@
   "sloRegistryStartBlock": 9091463,
   "stakeRegistryAddress": "0x598C8BeD2fA8d82959550DD82d9C942B917B9b99",
   "stakeRegistryStartBlock": 9091465,
+  "messengerRegistryAddress": "0x45D5E52AFB831a56B7c667222522c944f797A858",
+  "messengerRegistryStartBlock": 9091464,
   "graphNetwork": "rinkeby"
 }
