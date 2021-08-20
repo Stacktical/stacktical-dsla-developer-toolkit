@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.4.1](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v2.4.0...v2.4.1) (2021-08-20)
+
+
+### Features
+
+* getting SLA from transaction hash ([868b26f](https://github.com/Stacktical/stacktical-developer-toolkit/commit/868b26f86f4a2b0371c79bbc30c1c5c98da86bb3))
+* graph network as graph data ([4766d64](https://github.com/Stacktical/stacktical-developer-toolkit/commit/4766d644d275fdd6327139bcac2c7fadb5823e1c))
+* harmonytestnet exported data ([5a518ec](https://github.com/Stacktical/stacktical-developer-toolkit/commit/5a518ec1275b720e97dc45b95d84c5d91251f427))
+* harmonytestnet subgraph deployment ([f881496](https://github.com/Stacktical/stacktical-developer-toolkit/commit/f881496d4b3d1ff4fb39fc541559b789a450962f))
+* new harmonytestnet deployment ([891eb44](https://github.com/Stacktical/stacktical-developer-toolkit/commit/891eb44bac82952c05a68362475ac713c63c801a))
+* transfer ownership of messengers ([a7552bf](https://github.com/Stacktical/stacktical-developer-toolkit/commit/a7552bfba290c2d0202bded220ff01dcbfb1331a))
+
+
+### Bug Fixes
+
+* external adapter url for harmony testnet ([5959fb1](https://github.com/Stacktical/stacktical-developer-toolkit/commit/5959fb1d9de058163d74dab687729ba03914efc6))
+* only develop enabled as default ([365e460](https://github.com/Stacktical/stacktical-developer-toolkit/commit/365e460fcf5bc3826d723793ce57b596753e951d))
+* pm2 ts node after install ([718d59a](https://github.com/Stacktical/stacktical-developer-toolkit/commit/718d59a96f39350eae46a9fe78868f4f1cf85bde))
+* reading network folder for graph manifestos ([7eb964b](https://github.com/Stacktical/stacktical-developer-toolkit/commit/7eb964b1ecb01ad1d86c5e94c2555c3f6590e36b))
+* tvl by token ([669bc04](https://github.com/Stacktical/stacktical-developer-toolkit/commit/669bc044faacca85d6597b1e693915dff4de94d8))
+
 ## [2.4.0](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v2.3.0...v2.4.0) (2021-08-13)
 
 
