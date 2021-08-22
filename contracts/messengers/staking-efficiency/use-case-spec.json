@@ -8,26 +8,32 @@
   "timestamp": "2021-07-07T00:00:00+00:00",
   "ipfsData": {
     "serviceName": {
+      "name": "Service Name",
       "type": "string",
       "description": "The Validator service name"
     },
     "serviceDescription": {
+      "name": "Service Description",
       "type": "string",
       "description": "The Validator service description"
     },
     "serviceImage": {
+      "name": "Service Image",
       "type": "url",
       "description": "The Validator service image to display"
     },
     "serviceURL": {
+      "name": "Service URL",
       "type": "url",
       "description": "The Validator service URL"
     },
     "serviceAddress": {
+      "name": "Service Address",
       "type": "address",
       "description": "The Validator service blockchain address"
     },
     "serviceTicker": {
+      "name": "Service Ticker",
       "type": "string",
       "description": "The Validator service ticker",
       "values": ["ONE", "DOT", "ATOM", "BAND", "eGLD", "XTZ", "AVAX", "ROSE"]
