@@ -29,7 +29,10 @@ import {
   StakeRegistry,
   ValueLocked,
 } from './generated/StakeRegistry/StakeRegistry';
-import { MessengerRegistered } from './generated/MessengerRegistry/MessengerRegistry';
+import {
+  MessengerModified,
+  MessengerRegistered,
+} from './generated/MessengerRegistry/MessengerRegistry';
 import { IMessenger } from './generated/MessengerRegistry/IMessenger';
 
 export function handleNewSLA(event: SLACreated): void {
@@ -307,6 +310,16 @@ export function handleLockedValueReturned(event: LockedValueReturned): void {
 }
 
 export function handleMessengerRegistered(event: MessengerRegistered): void {
+  let messenger = new Messenger(event.params.messengerAddress.toHexString());
+  let messengerContract = IMessenger.bind(event.params.messengerAddress);
+  messenger.precision = messengerContract.messengerPrecision();
+  messenger.owner = messengerContract.owner();
+  messenger.specificationUrl = event.params.specificationUrl;
+  messenger.messengerId = event.params.id;
+  messenger.save();
+}
+
+export function handleMessengerModified(event: MessengerModified): void {
   let messenger = new Messenger(event.params.messengerAddress.toHexString());
   let messengerContract = IMessenger.bind(event.params.messengerAddress);
   messenger.precision = messengerContract.messengerPrecision();

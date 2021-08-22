@@ -92,6 +92,8 @@ dataSources:
       eventHandlers:
         - event: MessengerRegistered(indexed address,indexed address,string,uint256,uint256)
           handler: handleMessengerRegistered
+        - event: MessengerModified(indexed address,indexed address,string,uint256,uint256)
+          handler: handleMessengerModified
       file: SLARegistry/SLARegistry.wasm
 templates:
   - kind: ethereum/contract

@@ -16,6 +16,7 @@ import {
   ERC20PresetMinterPauser,
   IMessenger,
   IMessenger__factory,
+  MessengerRegistry,
   MessengerRegistry__factory,
   Oracle__factory,
   Ownable__factory,
@@ -98,6 +99,7 @@ export enum SUB_TASK_NAMES {
   PROVIDER_WITHDRAW = 'PROVIDER_WITHDRAW',
   UNLOCK_TOKENS = 'UNLOCK_TOKENS',
   GET_SLA_FROM_TX = 'GET_SLA_FROM_TX',
+  UPDATE_MESSENGER_SPEC = 'UPDATE_MESSENGER_SPEC',
 }
 
 subtask(SUB_TASK_NAMES.GET_SLA_FROM_TX, undefined).setAction(
@@ -113,6 +115,45 @@ subtask(SUB_TASK_NAMES.GET_SLA_FROM_TX, undefined).setAction(
     const filter = slaRegistry.filters.SLACreated(null, transaction.from);
     const events = await slaRegistry.queryFilter(filter, transaction.blockHash);
     console.log(events);
+  }
+);
+
+subtask(SUB_TASK_NAMES.UPDATE_MESSENGER_SPEC, undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    const { network, ethers, getNamedAccounts } = hre;
+    const { deployer } = await getNamedAccounts();
+    const { stacktical } = network.config;
+    const { index } = taskArgs;
+    const messenger = stacktical.messengers[index];
+    consola.info('Selected Messenger');
+    consola.info(messenger);
+    const messengerContract = <IMessenger>(
+      await ethers.getContract(messenger.contract)
+    );
+    const messengerRegistry = <MessengerRegistry>(
+      await ethers.getContract(CONTRACT_NAMES.MessengerRegistry)
+    );
+    const filter = messengerRegistry.filters.MessengerRegistered(
+      deployer,
+      messengerContract.address
+    );
+    const events = await messengerRegistry.queryFilter(filter);
+    const messengerId = events[0].args.id;
+
+    const specificationPath = `${appRoot.path}/contracts/messengers/${messenger.useCaseName}/use-case-spec.json`;
+    const messengerSpec = JSON.parse(fs.readFileSync(specificationPath));
+    const updatedSpec = {
+      ...messengerSpec,
+      timestamp: new Date().toISOString(),
+    };
+    consola.info('New spec');
+    consola.info(updatedSpec);
+    const seMessengerSpecIPFS = await getIPFSHash(updatedSpec);
+    const specUrl = `${process.env.IPFS_URI}/ipfs/${seMessengerSpecIPFS}`;
+    consola.info('New specification url');
+    consola.info(specUrl);
+    const tx = await messengerRegistry.modifyMessenger(specUrl, messengerId);
+    await tx.wait();
   }
 );
 
