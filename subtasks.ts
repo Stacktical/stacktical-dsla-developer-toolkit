@@ -936,6 +936,9 @@ subtask(SUB_TASK_NAMES.EXPORT_SUBGRAPH_DATA, undefined).setAction(async () => {
           `${appRoot}/deployments/${network}/MessengerRegistry.json`
         )
       );
+      const PeriodRegistry = JSON.parse(
+        fs.readFileSync(`${appRoot}/deployments/${network}/PeriodRegistry.json`)
+      );
 
       const data = {
         slaRegistryAddress: SLARegistry.address,
@@ -946,6 +949,8 @@ subtask(SUB_TASK_NAMES.EXPORT_SUBGRAPH_DATA, undefined).setAction(async () => {
         stakeRegistryStartBlock: StakeRegistry.receipt.blockNumber,
         messengerRegistryAddress: MessengerRegistry.address,
         messengerRegistryStartBlock: MessengerRegistry.receipt.blockNumber,
+        periodRegistryAddress: PeriodRegistry.address,
+        periodRegistryStartBlock: PeriodRegistry.receipt.blockNumber,
         graphNetwork: GRAPH_NETWORKS[network],
       };
       consola.info('Resulting data');

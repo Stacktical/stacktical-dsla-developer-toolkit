@@ -7,5 +7,7 @@
   "stakeRegistryStartBlock": 14,
   "messengerRegistryAddress": "0x2612Af3A521c2df9EAF28422Ca335b04AdF3ac66",
   "messengerRegistryStartBlock": 13,
+  "periodRegistryAddress": "0x9b1f7F645351AF3631a656421eD2e40f2802E6c0",
+  "periodRegistryStartBlock": 11,
   "graphNetwork": "mainnet"
 }
