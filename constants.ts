@@ -56,6 +56,7 @@ export enum NETWORKS {
   KOVAN = 'kovan',
   FUJI = 'fuji',
   RINKEBY = 'rinkeby',
+  BSC = 'bsc',
 }
 
 export const GRAPH_NETWORKS = {
@@ -68,6 +69,7 @@ export const GRAPH_NETWORKS = {
   [NETWORKS.KOVAN]: 'kovan',
   [NETWORKS.FUJI]: 'fuji',
   [NETWORKS.RINKEBY]: 'rinkeby',
+  [NETWORKS.BSC]: 'bsc',
 };
 
 export enum PERIOD_TYPE {
