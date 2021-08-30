@@ -13,8 +13,10 @@ import { subtask } from 'hardhat/config';
 import { ChainlinkNodeConfiguration } from './types';
 import {
   ERC20__factory,
+  ERC20PresetMinterPauser,
   IMessenger,
   IMessenger__factory,
+  MessengerRegistry,
   MessengerRegistry__factory,
   Oracle__factory,
   Ownable__factory,
@@ -22,9 +24,9 @@ import {
   PeriodRegistry__factory,
   PreCoordinator,
   PreCoordinator__factory,
-  SEMessenger__factory,
   SLA,
   SLA__factory,
+  SLARegistry,
   SLARegistry__factory,
   StakeRegistry,
   StakeRegistry__factory,
@@ -32,10 +34,11 @@ import {
 
 import {
   CONTRACT_NAMES,
+  GRAPH_NETWORKS,
+  NETWORKS,
   PERIOD_STATUS,
   PERIOD_TYPE,
   TOKEN_NAMES,
-  USE_CASES,
 } from './constants';
 import {
   bootstrapStrings,
@@ -47,16 +50,16 @@ import {
 import axios from 'axios';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { formatBytes32String } from 'ethers/lib/utils';
-import { networks } from './networks';
 
 const prettier = require('prettier');
 const appRoot = require('app-root-path');
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 const yaml = require('js-yaml');
 const compose = require('docker-compose');
 const moment = require('moment');
 const consola = require('consola');
+const Mustache = require('mustache');
 
 export enum SUB_TASK_NAMES {
   PREPARE_CHAINLINK_NODES = 'PREPARE_CHAINLINK_NODES',
@@ -71,6 +74,9 @@ export enum SUB_TASK_NAMES {
   START_LOCAL_GRAPH_NODE = 'START_LOCAL_GRAPH_NODE',
   INITIALIZE_DEFAULT_ADDRESSES = 'INITIALIZE_DEFAULT_ADDRESSES',
   EXPORT_NETWORKS = 'EXPORT_NETWORKS',
+  EXPORT_SUBGRAPH_DATA = 'EXPORT_SUBGRAPH_DATA',
+  EXPORT_TO_FRONT_END = 'EXPORT_TO_FRONT_END',
+  SETUP_GRAPH_MANIFESTOS = 'SETUP_GRAPH_MANIFESTOS',
   DEPLOY_SLA = 'DEPLOY_SLA',
   BOOTSTRAP_MESSENGER_REGISTRY = 'BOOTSTRAP_MESSENGER_REGISTRY',
   BOOTSTRAP_PERIOD_REGISTRY = 'BOOTSTRAP_PERIOD_REGISTRY',
@@ -90,7 +96,176 @@ export enum SUB_TASK_NAMES {
   DEPLOY_MESSENGER = 'DEPLOY_MESSENGER',
   GET_MESSENGER = 'GET_MESSENGER',
   TRANSFER_OWNERSHIP = 'TRANSFER_OWNERSHIP',
+  PROVIDER_WITHDRAW = 'PROVIDER_WITHDRAW',
+  UNLOCK_TOKENS = 'UNLOCK_TOKENS',
+  GET_SLA_FROM_TX = 'GET_SLA_FROM_TX',
+  UPDATE_MESSENGER_SPEC = 'UPDATE_MESSENGER_SPEC',
 }
+
+subtask(SUB_TASK_NAMES.GET_SLA_FROM_TX, undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    const { ethers } = hre;
+    const { provider, getContract } = ethers;
+    const { getTransactionReceipt } = provider;
+    const { transactionHash } = taskArgs;
+    const transaction = await getTransactionReceipt(transactionHash);
+    const slaRegistry: SLARegistry = await getContract(
+      CONTRACT_NAMES.SLARegistry
+    );
+    const filter = slaRegistry.filters.SLACreated(null, transaction.from);
+    const events = await slaRegistry.queryFilter(filter, transaction.blockHash);
+    console.log(events);
+  }
+);
+
+subtask(SUB_TASK_NAMES.UPDATE_MESSENGER_SPEC, undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    const { network, ethers, getNamedAccounts } = hre;
+    const { deployer } = await getNamedAccounts();
+    const { stacktical } = network.config;
+    const { index } = taskArgs;
+    const messenger = stacktical.messengers[index];
+    consola.info('Selected Messenger');
+    consola.info(messenger);
+    const messengerContract = <IMessenger>(
+      await ethers.getContract(messenger.contract)
+    );
+    const messengerRegistry = <MessengerRegistry>(
+      await ethers.getContract(CONTRACT_NAMES.MessengerRegistry)
+    );
+    const filter = messengerRegistry.filters.MessengerRegistered(
+      deployer,
+      messengerContract.address
+    );
+    const events = await messengerRegistry.queryFilter(filter);
+    const messengerId = events[0].args.id;
+
+    const specificationPath = `${appRoot.path}/contracts/messengers/${messenger.useCaseName}/use-case-spec.json`;
+    const messengerSpec = JSON.parse(fs.readFileSync(specificationPath));
+    const updatedSpec = {
+      ...messengerSpec,
+      timestamp: new Date().toISOString(),
+    };
+    consola.info('New spec');
+    consola.info(updatedSpec);
+    const seMessengerSpecIPFS = await getIPFSHash(updatedSpec);
+    const specUrl = `${process.env.IPFS_URI}/ipfs/${seMessengerSpecIPFS}`;
+    consola.info('New specification url');
+    consola.info(specUrl);
+    const tx = await messengerRegistry.modifyMessenger(specUrl, messengerId);
+    await tx.wait();
+  }
+);
+
+subtask(SUB_TASK_NAMES.UNLOCK_TOKENS, undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    const { ethers, getNamedAccounts } = hre;
+    const { deployer } = await getNamedAccounts();
+    const slaRegistry = <SLARegistry>(
+      await ethers.getContract(CONTRACT_NAMES.SLARegistry)
+    );
+
+    const slaAddress = taskArgs.slaAddress
+      ? ethers.utils.getAddress(taskArgs.slaAddress)
+      : (await slaRegistry.allSLAs()).slice(-1)[0];
+    const slaContract = <SLA>(
+      await ethers.getContractAt(CONTRACT_NAMES.SLA, slaAddress)
+    );
+
+    printSeparator();
+    consola.info('SLA address:', slaContract.address);
+    consola.info('Requester address:', deployer);
+    const tx = await slaRegistry.returnLockedValue(slaAddress);
+    await tx.wait();
+    const stakeRegistry = <StakeRegistry>(
+      await ethers.getContract(CONTRACT_NAMES.StakeRegistry)
+    );
+    const filter = stakeRegistry.filters.LockedValueReturned(
+      slaAddress,
+      deployer
+    );
+    const query = await stakeRegistry.queryFilter(filter);
+    consola.info('DSLA returned:', fromWei(query[0].args.amount.toString()));
+
+    printSeparator();
+  }
+);
+
+subtask(SUB_TASK_NAMES.PROVIDER_WITHDRAW, undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    const { ethers, getNamedAccounts } = hre;
+    const { deployer } = await getNamedAccounts();
+    const slaRegistry = <SLARegistry>(
+      await ethers.getContract(CONTRACT_NAMES.SLARegistry)
+    );
+
+    const slaAddress = taskArgs.slaAddress
+      ? ethers.utils.getAddress(taskArgs.slaAddress)
+      : (await slaRegistry.allSLAs()).slice(-1)[0];
+    const slaContract = <SLA>(
+      await ethers.getContractAt(CONTRACT_NAMES.SLA, slaAddress)
+    );
+
+    printSeparator();
+    consola.info('SLA address:', slaContract.address);
+    consola.info('Requester address:', deployer);
+    const LPtokenAddress = await slaContract.dpTokenRegistry(
+      taskArgs.tokenAddress
+    );
+    consola.info('LP token address:', LPtokenAddress);
+    const lpToken = <ERC20PresetMinterPauser>(
+      await ethers.getContractAt('ERC20PresetMinterPauser', LPtokenAddress)
+    );
+    const lpTokenUserBalance = await lpToken.balanceOf(deployer);
+    consola.info(
+      'LP token user balance:',
+      fromWei(lpTokenUserBalance.toString())
+    );
+    // const token = <ERC20PresetMinterPauser>(
+    //   await ethers.getContractAt(
+    //     'ERC20PresetMinterPauser',
+    //     taskArgs.tokenAddress
+    //   )
+    // );
+    const supply = await lpToken.totalSupply();
+    consola.info('LP token total supply:', fromWei(supply.toString()));
+    const slaProviderPool = await slaContract.providerPool(
+      taskArgs.tokenAddress
+    );
+    const slaUserPool = await slaContract.usersPool(taskArgs.tokenAddress);
+    consola.info(
+      'SLA provider pool balance:',
+      fromWei(slaProviderPool.toString())
+    );
+    const poolPercentage = lpTokenUserBalance.div(supply).mul(100);
+    consola.info('Accrued pool percentage:', poolPercentage.toString() + '%');
+    const leverage = await slaContract.leverage();
+    consola.info('SLA leverage:', leverage.toString() + 'x');
+    const poolSpread = slaProviderPool.sub(slaUserPool.mul(leverage));
+    consola.info(
+      'Provider pool allowed withdraw amount:',
+      fromWei(poolSpread.toString())
+    );
+    await lpToken.approve(slaAddress, lpTokenUserBalance);
+    const accruedBalance = lpTokenUserBalance.mul(slaProviderPool).div(supply);
+    const allowedWithdraw = accruedBalance.gt(poolSpread)
+      ? poolSpread
+      : accruedBalance;
+    if (allowedWithdraw.gt(0)) {
+      consola.info(
+        'User allowed withdraw amount:',
+        fromWei(allowedWithdraw.toString())
+      );
+      await slaContract.withdrawProviderTokens(
+        allowedWithdraw,
+        taskArgs.tokenAddress
+      );
+    } else {
+      consola.warn('Allowed withdraw amount is 0');
+    }
+    printSeparator();
+  }
+);
 
 subtask(SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES, undefined).setAction(
   async (_, hre: HardhatRuntimeEnvironment) => {
@@ -162,7 +337,30 @@ subtask(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE, undefined).setAction(async () => {
     cwd: path.join(`${appRoot.path}/services/graph-protocol/`),
     log: true,
   });
+  fs.rmdirSync(`${appRoot.path}/services/graph-protocol/postgres`, {
+    recursive: true,
+  });
 });
+
+subtask(SUB_TASK_NAMES.SETUP_GRAPH_MANIFESTOS, undefined).setAction(
+  async () => {
+    const networks = fs
+      .readdirSync(`${appRoot}/subgraph/networks`)
+      .filter((dir) => /.subgraph.json/.test(dir))
+      .map((dir) => dir.split('.')[0]);
+    for (let network of networks) {
+      consola.info('Preparing Graph Protocol manifesto for network ' + network);
+      const yamlPath = `${appRoot}/subgraph/networks/${network}.subgraph.yaml`;
+      const jsonPath = `${appRoot}/subgraph/networks/${network}.subgraph.json`;
+      const specs = JSON.parse(fs.readFileSync(jsonPath));
+      fs.copyFileSync(`${appRoot}/subgraph/subgraph.template.yaml`, yamlPath);
+      const template = fs.readFileSync(yamlPath, 'utf8');
+      const manifesto = Mustache.render(template, specs);
+      fs.writeFileSync(yamlPath, manifesto);
+    }
+    consola.success('Graph Protocol manifestos correctly created');
+  }
+);
 
 subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
   async (_, hre: HardhatRuntimeEnvironment) => {
@@ -481,76 +679,103 @@ subtask(
 
 subtask(SUB_TASK_NAMES.EXPORT_NETWORKS, undefined).setAction(
   async (_, hre: HardhatRuntimeEnvironment) => {
-    const { network, deployments } = hre;
-    const { get } = deployments;
-    const { stacktical } = network.config;
-
     consola.info('Starting export contracts addresses process');
-    const SLORegistry = await get(CONTRACT_NAMES.SLORegistry);
-    const SLARegistry = await get(CONTRACT_NAMES.SLARegistry);
-    const MessengerRegistry = await get(CONTRACT_NAMES.MessengerRegistry);
-    const PeriodRegistry = await get(CONTRACT_NAMES.PeriodRegistry);
-    const StakeRegistry = await get(CONTRACT_NAMES.StakeRegistry);
-    const Details = await get(CONTRACT_NAMES.Details);
-    const PreCoordinator = await get(CONTRACT_NAMES.PreCoordinator);
-    const StringUtils = await get(CONTRACT_NAMES.StringUtils);
-
-    const addresses = {
-      SLORegistry: SLORegistry.address,
-      SLARegistry: SLARegistry.address,
-      MessengerRegistry: MessengerRegistry.address,
-      PeriodRegistry: PeriodRegistry.address,
-      StakeRegistry: StakeRegistry.address,
-      Details: Details.address,
-      PreCoordinator: PreCoordinator.address,
-      StringUtils: StringUtils.address,
-      ...stacktical.tokens.reduce(
-        (r, token) => ({
-          ...r,
-          [token.name + 'Token']: require(appRoot.path +
-            '/deployments/' +
-            network.name +
-            '/' +
-            token.name).address,
-        }),
-        {}
-      ),
-      ...stacktical.messengers.reduce(
-        (r, messenger) => ({
-          ...r,
-          [messenger.contract]: require(appRoot.path +
-            '/deployments/' +
-            network.name +
-            '/' +
-            messenger.contract).address,
-        }),
-        {}
-      ),
-    };
-    consola.info('Resulting addresses');
-    console.log(addresses);
+    const exportedNetworks = [];
     const base_path = `${appRoot}/exported-data`;
-    const prettifiedAddresses = prettier.format(
-      `export const ${network.name} = ` + JSON.stringify(addresses),
-      {
-        useTabs: false,
-        tabWidth: 2,
-        singleQuote: true,
-        parser: 'typescript',
-      }
-    );
-    fs.writeFileSync(
-      path.resolve(__dirname, `${base_path}/${network.name}.ts`),
-      prettifiedAddresses
-    );
+    const networks = fs.readdirSync(`${appRoot}/deployments/`);
 
-    const exportLines = networks
-      .filter((network) => network.exportable)
-      .reduce(
-        (r, network) =>
-          (r += `export {${network.name}} from './${network.name}'\n`),
-        ''
-      );
+    for (let network of networks.filter(
+      (network) => !['localhost', 'hardhat'].includes(network)
+    )) {
+      try {
+        consola.info('Exporting ' + network + ' data');
+        const SLORegistry = JSON.parse(
+          fs.readFileSync(`${appRoot}/deployments/${network}/SLORegistry.json`)
+        );
+        const SLARegistry = JSON.parse(
+          fs.readFileSync(`${appRoot}/deployments/${network}/SLARegistry.json`)
+        );
+        const MessengerRegistry = JSON.parse(
+          fs.readFileSync(
+            `${appRoot}/deployments/${network}/MessengerRegistry.json`
+          )
+        );
+        const PeriodRegistry = JSON.parse(
+          fs.readFileSync(
+            `${appRoot}/deployments/${network}/PeriodRegistry.json`
+          )
+        );
+        const StakeRegistry = JSON.parse(
+          fs.readFileSync(
+            `${appRoot}/deployments/${network}/StakeRegistry.json`
+          )
+        );
+        const PreCoordinator = JSON.parse(
+          fs.readFileSync(
+            `${appRoot}/deployments/${network}/PreCoordinator.json`
+          )
+        );
+        const StringUtils = JSON.parse(
+          fs.readFileSync(`${appRoot}/deployments/${network}/StringUtils.json`)
+        );
+        const { tokens, messengers } = hre.config.networks[network].stacktical;
+        const addresses = {
+          SLORegistry: SLORegistry.address,
+          SLARegistry: SLARegistry.address,
+          MessengerRegistry: MessengerRegistry.address,
+          PeriodRegistry: PeriodRegistry.address,
+          StakeRegistry: StakeRegistry.address,
+          PreCoordinator: PreCoordinator.address,
+          StringUtils: StringUtils.address,
+          ...tokens.reduce(
+            (r, token) => ({
+              ...r,
+              [token.name + 'Token']:
+                require(appRoot.path +
+                  '/deployments/' +
+                  network +
+                  '/' +
+                  token.name).address + '.json',
+            }),
+            {}
+          ),
+          ...messengers.reduce(
+            (r, messenger) => ({
+              ...r,
+              [messenger.contract]: require(appRoot.path +
+                '/deployments/' +
+                network +
+                '/' +
+                messenger.contract).address,
+            }),
+            {}
+          ),
+        };
+        consola.info('Resulting addresses');
+        console.log(addresses);
+        const prettifiedAddresses = prettier.format(
+          `export const ${network} = ` + JSON.stringify(addresses),
+          {
+            useTabs: false,
+            tabWidth: 2,
+            singleQuote: true,
+            parser: 'typescript',
+          }
+        );
+        fs.writeFileSync(
+          path.resolve(__dirname, `${base_path}/${network}.ts`),
+          prettifiedAddresses
+        );
+        exportedNetworks.push(network);
+      } catch (error) {
+        consola.error('Error getting data for ' + network + ' network');
+        consola.error(error.message);
+      }
+    }
+    const exportLines = exportedNetworks.reduce(
+      (r, network) => (r += `export {${network}} from './${network}'\n`),
+      ''
+    );
     const prettifiedIndex = prettier.format(`${exportLines}\n`, {
       useTabs: false,
       tabWidth: 2,
@@ -564,6 +789,191 @@ subtask(SUB_TASK_NAMES.EXPORT_NETWORKS, undefined).setAction(
     consola.success('Contract addresses exported correctly');
   }
 );
+
+subtask(SUB_TASK_NAMES.EXPORT_TO_FRONT_END, undefined).setAction(async () => {
+  consola.info('Exporting contracts addresses to frontend apps');
+  if (fs.existsSync(`${appRoot}/../stacktical-dsla-frontend`)) {
+    printSeparator();
+    let srcPath = `${appRoot}/exported-data`;
+    consola.info('Exporting to Stacktical dApp frontend');
+    let destPath = `${appRoot}/../stacktical-dsla-frontend/src/addresses`;
+    fs.copySync(srcPath, destPath, { overwrite: true });
+    consola.success('Contract address export to Stacktical dApp finished');
+    consola.info('Exporting typechain to Stacktical dApp');
+    srcPath = `${appRoot}/typechain`;
+    destPath = `${appRoot}/../stacktical-dsla-frontend/src/typechain`;
+    fs.copySync(srcPath, destPath, { overwrite: true });
+    consola.success('Typechain export to Stacktical dApp finished');
+  } else {
+    printSeparator();
+    consola.warn('Stacktical dApp frontend folder not found');
+  }
+  if (fs.existsSync(`${appRoot}/../dsla-protocol-app`)) {
+    printSeparator();
+    let srcPath = `${appRoot}/exported-data`;
+    consola.info('Exporting to DSLA protocol dApp frontend');
+    let destPath = `${appRoot}/../dsla-protocol-app/src/addresses`;
+    fs.copySync(srcPath, destPath, { overwrite: true });
+    consola.success('Contract address export DSLA protocol dApp finished');
+    consola.info('Exporting typechain DSLA protocol dApp');
+    srcPath = `${appRoot}/typechain`;
+    destPath = `${appRoot}/../dsla-protocol-app/src/typechain`;
+    fs.copySync(srcPath, destPath, { overwrite: true });
+    consola.success('Typechain export DSLA protocol dApp finished');
+  } else {
+    printSeparator();
+    consola.warn(' DSLA protocol dApp folder not found');
+  }
+  printSeparator();
+});
+
+// subtask(SUB_TASK_NAMES.EXPORT_NETWORKS, undefined).setAction(
+//   async (_, hre: HardhatRuntimeEnvironment) => {
+//     const { network, deployments } = hre;
+//     const { get } = deployments;
+//     const { stacktical } = network.config;
+//
+//     consola.info('Starting export contracts addresses process');
+//     const SLORegistry = await get(CONTRACT_NAMES.SLORegistry);
+//     const SLARegistry = await get(CONTRACT_NAMES.SLARegistry);
+//     const MessengerRegistry = await get(CONTRACT_NAMES.MessengerRegistry);
+//     const PeriodRegistry = await get(CONTRACT_NAMES.PeriodRegistry);
+//     const StakeRegistry = await get(CONTRACT_NAMES.StakeRegistry);
+//     const Details = await get(CONTRACT_NAMES.Details);
+//     const PreCoordinator = await get(CONTRACT_NAMES.PreCoordinator);
+//     const StringUtils = await get(CONTRACT_NAMES.StringUtils);
+//
+//     const addresses = {
+//       SLORegistry: SLORegistry.address,
+//       SLARegistry: SLARegistry.address,
+//       MessengerRegistry: MessengerRegistry.address,
+//       PeriodRegistry: PeriodRegistry.address,
+//       StakeRegistry: StakeRegistry.address,
+//       Details: Details.address,
+//       PreCoordinator: PreCoordinator.address,
+//       StringUtils: StringUtils.address,
+//       ...stacktical.tokens.reduce(
+//         (r, token) => ({
+//           ...r,
+//           [token.name + 'Token']: require(appRoot.path +
+//             '/deployments/' +
+//             network.name +
+//             '/' +
+//             token.name).address,
+//         }),
+//         {}
+//       ),
+//       ...stacktical.messengers.reduce(
+//         (r, messenger) => ({
+//           ...r,
+//           [messenger.contract]: require(appRoot.path +
+//             '/deployments/' +
+//             network.name +
+//             '/' +
+//             messenger.contract).address,
+//         }),
+//         {}
+//       ),
+//     };
+//     consola.info('Resulting addresses');
+//     console.log(addresses);
+//     const base_path = `${appRoot}/exported-data`;
+//     const prettifiedAddresses = prettier.format(
+//       `export const ${network.name} = ` + JSON.stringify(addresses),
+//       {
+//         useTabs: false,
+//         tabWidth: 2,
+//         singleQuote: true,
+//         parser: 'typescript',
+//       }
+//     );
+//     fs.writeFileSync(
+//       path.resolve(__dirname, `${base_path}/${network.name}.ts`),
+//       prettifiedAddresses
+//     );
+//
+//     const exportLines = networks
+//       .filter((network) => network.exportable)
+//       .reduce(
+//         (r, network) =>
+//           (r += `export {${network.name}} from './${network.name}'\n`),
+//         ''
+//       );
+//     const prettifiedIndex = prettier.format(`${exportLines}\n`, {
+//       useTabs: false,
+//       tabWidth: 2,
+//       singleQuote: true,
+//       parser: 'typescript',
+//     });
+//     fs.writeFileSync(
+//       path.resolve(__dirname, `${base_path}/index.ts`),
+//       prettifiedIndex
+//     );
+//     consola.success('Contract addresses exported correctly');
+//   }
+// );
+
+subtask(SUB_TASK_NAMES.EXPORT_SUBGRAPH_DATA, undefined).setAction(async () => {
+  consola.info('Starting subgraph json data file creation process');
+  const networks = fs.readdirSync(`${appRoot}/deployments/`);
+  for (let network of networks.filter(
+    (network) => !['localhost', 'hardhat'].includes(network)
+  )) {
+    consola.info('Exporting ' + network + ' data');
+    try {
+      const SLORegistry = JSON.parse(
+        fs.readFileSync(`${appRoot}/deployments/${network}/SLORegistry.json`)
+      );
+      const SLARegistry = JSON.parse(
+        fs.readFileSync(`${appRoot}/deployments/${network}/SLARegistry.json`)
+      );
+      const StakeRegistry = JSON.parse(
+        fs.readFileSync(`${appRoot}/deployments/${network}/StakeRegistry.json`)
+      );
+
+      const MessengerRegistry = JSON.parse(
+        fs.readFileSync(
+          `${appRoot}/deployments/${network}/MessengerRegistry.json`
+        )
+      );
+      const PeriodRegistry = JSON.parse(
+        fs.readFileSync(`${appRoot}/deployments/${network}/PeriodRegistry.json`)
+      );
+
+      const data = {
+        slaRegistryAddress: SLARegistry.address,
+        slaRegistryStartBlock: SLARegistry.receipt.blockNumber,
+        sloRegistryAddress: SLORegistry.address,
+        sloRegistryStartBlock: SLORegistry.receipt.blockNumber,
+        stakeRegistryAddress: StakeRegistry.address,
+        stakeRegistryStartBlock: StakeRegistry.receipt.blockNumber,
+        messengerRegistryAddress: MessengerRegistry.address,
+        messengerRegistryStartBlock: MessengerRegistry.receipt.blockNumber,
+        periodRegistryAddress: PeriodRegistry.address,
+        periodRegistryStartBlock: PeriodRegistry.receipt.blockNumber,
+        graphNetwork: GRAPH_NETWORKS[network],
+      };
+      consola.info('Resulting data');
+      consola.info(data);
+      const base_path = `${appRoot}/subgraph/networks`;
+      const prettifiedAddresses = prettier.format(JSON.stringify(data), {
+        useTabs: false,
+        tabWidth: 2,
+        singleQuote: true,
+        parser: 'json',
+      });
+      fs.writeFileSync(
+        path.resolve(__dirname, `${base_path}/${network}.subgraph.json`),
+        prettifiedAddresses
+      );
+    } catch (error) {
+      consola.error('Error getting data for ' + network + ' network');
+      consola.error(error.message);
+    }
+  }
+
+  consola.success('Subgraph json data file creation process finished');
+});
 
 subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
   async (_, hre: HardhatRuntimeEnvironment) => {
@@ -671,6 +1081,8 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
             }),
           }
         );
+        consola.info('Transaction receipt:');
+        consola.info(tx);
         await tx.wait();
         const newParameters = await stakeRegistry.getStakingParameters();
         console.log('DSLAburnRate: ' + newParameters.DSLAburnRate.toString());
@@ -784,7 +1196,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
       signer
     );
 
-    const messenger = messengers[taskArgs.id];
+    const messenger = messengers[taskArgs.index];
 
     consola.info('Deploying ' + messenger.contract + ' to ' + hre.network.name);
     const preCoordinator = await get(CONTRACT_NAMES.PreCoordinator);
@@ -845,11 +1257,11 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
           ' messenger successfully registered on the MessengerRegistry'
       );
       await hre.run(SUB_TASK_NAMES.SET_PRECOORDINATOR, {
-        id: taskArgs.id,
+        index: taskArgs.index,
       });
       consola.info('Creating saId in messenger ' + messenger.contract);
       await hre.run(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, {
-        id: taskArgs.id,
+        index: taskArgs.index,
       });
     } else {
       consola.warn(
@@ -986,12 +1398,16 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       },
     } = hre;
     const { deployer, notDeployer } = await getNamedAccounts();
+    consola.info('deployer', deployer);
+    consola.info('notDeployer', notDeployer);
     const signer = await ethers.getSigner(deployer);
     const { get } = deployments;
     const { stacktical } = hre.network.config;
     console.log('Starting SLA deployment process');
     const { deploy_sla } = scripts;
-    const slaConfigs = taskArgs.id ? [deploy_sla[taskArgs.id]] : deploy_sla;
+    const slaConfigs = taskArgs.index
+      ? [deploy_sla[taskArgs.index]]
+      : deploy_sla;
     for (let config of slaConfigs) {
       printSeparator();
       console.log('Deploying SLA:');
@@ -1235,7 +1651,7 @@ subtask(SUB_TASK_NAMES.SET_PRECOORDINATOR, undefined).setAction(
     console.log('Nodes configuration from stacktical config:');
     console.log(stacktical.chainlink.nodesConfiguration);
     const oracle = await get(CONTRACT_NAMES.Oracle);
-    const messenger = stacktical.messengers[taskArgs.id];
+    const messenger = stacktical.messengers[taskArgs.index];
     const preCoordinatorConfiguration = await getPreCoordinatorConfiguration(
       stacktical.chainlink.nodesConfiguration,
       messenger.useCaseName,
@@ -1311,7 +1727,7 @@ subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
     const lastEvent = events.slice(-1)[0];
     const { saId } = lastEvent.args;
     const serviceAgreement = await precoordinator.getServiceAgreement(saId);
-    const messengerName = stacktical.messengers[taskArgs.id].contract;
+    const messengerName = stacktical.messengers[taskArgs.index].contract;
     const messenger = await IMessenger__factory.connect(
       (
         await get(messengerName)
@@ -1360,6 +1776,7 @@ subtask(SUB_TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE, undefined).setAction(
       let allowance = await token.allowance(owner, contract.address);
       console.log('Allowance: ' + fromWei(allowance.toString()));
       const ownerBalance = await token.balanceOf(owner);
+      console.log('Allower address: ' + owner);
       console.log('Allower balance: ' + fromWei(ownerBalance.toString()));
     }
   }
@@ -1541,9 +1958,9 @@ subtask(SUB_TASK_NAMES.GET_VALID_SLAS, undefined).setAction(
       signer
     );
     const allSLAs = await slaRegistry.allSLAs();
-    console.log('SLA registry address:');
-    console.log(slaRegistry.address);
-    console.log('All valid SLAs:');
+    consola.info('SLA registry address:');
+    consola.info(slaRegistry.address);
+    consola.info('All valid SLAs:');
     for (let slaAddress of allSLAs) {
       printSeparator();
       const sla = <SLA>(
@@ -1557,15 +1974,23 @@ subtask(SUB_TASK_NAMES.GET_VALID_SLAS, undefined).setAction(
       const finalPeriodId = await sla.finalPeriodId();
       const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
       const periodType = await sla.periodType();
-      console.log('slaAddress', slaAddress);
-      console.log('breachedContract', breachedContract);
-      console.log('contractFinished', contractFinished);
-      console.log('messengerAddress', messengerAddress);
-      console.log('periodType', PERIOD_TYPE[periodType]);
-      console.log('creationBlockNumber', creationBlockNumber.toString());
-      console.log('initialPeriodId', initialPeriodId.toString());
-      console.log('finalPeriodId', finalPeriodId.toString());
-      console.log('nextVerifiablePeriod', nextVerifiablePeriod.toString());
+      const DSLAtoken = <ERC20PresetMinterPauser>(
+        await ethers.getContract('DSLA')
+      );
+      const DSLASPtokenAddress = await sla.duTokenRegistry(DSLAtoken.address);
+      const DSLALPtokenAddress = await sla.dpTokenRegistry(DSLAtoken.address);
+
+      consola.info('slaAddress', slaAddress);
+      consola.info('breachedContract', breachedContract);
+      consola.info('contractFinished', contractFinished);
+      consola.info('messengerAddress', messengerAddress);
+      consola.info('periodType', PERIOD_TYPE[periodType]);
+      consola.info('creationBlockNumber', creationBlockNumber.toString());
+      consola.info('initialPeriodId', initialPeriodId.toString());
+      consola.info('finalPeriodId', finalPeriodId.toString());
+      consola.info('nextVerifiablePeriod', nextVerifiablePeriod.toString());
+      consola.info('DSLA SP token address', DSLASPtokenAddress);
+      consola.info('DSLA LP token address', DSLALPtokenAddress);
       printSeparator();
     }
   }
@@ -1609,8 +2034,8 @@ subtask(SUB_TASK_NAMES.GET_MESSENGER, undefined).setAction(
   async (taskArgs, hre: HardhatRuntimeEnvironment) => {
     const { ethers, network } = hre;
     const { stacktical } = network.config;
-    const messengers = taskArgs.id
-      ? [stacktical.messengers[taskArgs.id]]
+    const messengers = taskArgs.index
+      ? [stacktical.messengers[taskArgs.index]]
       : stacktical.messengers;
     for (let messenger of messengers) {
       const messengerArtifact = <IMessenger>(
@@ -1639,8 +2064,9 @@ subtask(SUB_TASK_NAMES.GET_MESSENGER, undefined).setAction(
 
 subtask(SUB_TASK_NAMES.TRANSFER_OWNERSHIP, undefined).setAction(
   async (taskArgs, hre: HardhatRuntimeEnvironment) => {
-    const { ethers, network } = hre;
+    const { ethers, network, getNamedAccounts } = hre;
     const { stacktical } = network.config;
+    const { deployer } = await getNamedAccounts();
     const periodRegistry = <PeriodRegistry>(
       await ethers.getContract(CONTRACT_NAMES.PeriodRegistry)
     );
@@ -1654,17 +2080,18 @@ subtask(SUB_TASK_NAMES.TRANSFER_OWNERSHIP, undefined).setAction(
     consola.info('StakeRegistry owner address:', stakeRegistryOwner);
     consola.info('New owner address:', newOwner);
     let tx;
-    if (newOwner !== periodRegistryOwner) {
+    if (newOwner !== periodRegistryOwner && periodRegistryOwner === deployer) {
       printSeparator();
       consola.info('Transferring PeriodRegistry ownership');
       tx = await periodRegistry.transferOwnership(newOwner);
+      consola.info(tx);
       await tx.wait();
       consola.success(
         'PeriodRegistry ownership successfully transferred, new owner:',
         await periodRegistry.owner()
       );
     }
-    if (newOwner !== stakeRegistryOwner) {
+    if (newOwner !== stakeRegistryOwner && stakeRegistryOwner === deployer) {
       printSeparator();
       consola.info('Transferring StakeRegistry ownership');
       tx = await stakeRegistry.transferOwnership(newOwner);
@@ -1673,6 +2100,28 @@ subtask(SUB_TASK_NAMES.TRANSFER_OWNERSHIP, undefined).setAction(
         'StakeRegistry ownership successfully transferred, new owner:',
         await stakeRegistry.owner()
       );
+      consola.info(tx);
+    }
+
+    for (let messenger of stacktical.messengers) {
+      const messengerContract: IMessenger = await ethers.getContract(
+        messenger.contract
+      );
+      const messengerOwner = await messengerContract.owner();
+      consola.info(`${messenger.useCaseName} owner: ${messengerOwner}`);
+      if (newOwner !== messengerOwner && messengerOwner === deployer) {
+        printSeparator();
+        consola.info(
+          `Transferring ${messenger.useCaseName} messenger ownership`
+        );
+        tx = await messengerContract.transferOwnership(newOwner);
+        await tx.wait();
+        consola.success(
+          `${messenger.useCaseName} ownership successfully transferred, new owner: `,
+          await messengerContract.owner()
+        );
+        consola.info(tx);
+      }
     }
     printSeparator();
   }

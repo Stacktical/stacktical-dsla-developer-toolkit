@@ -1,5 +1,4 @@
 import {
-  appRoot,
   CONTRACT_NAMES,
   PERIOD_TYPE,
   TOKEN_NAMES,

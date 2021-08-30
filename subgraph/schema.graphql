@@ -1,0 +1,105 @@
+type SLA @entity {
+  id: ID!
+  slaId: BigInt
+  owner: Bytes
+  address: Bytes
+  dTokens: [DToken!]
+  SLIs: [SLI!]
+  deposits: [Deposit!]
+  withdrawals: [Withdrawal!]
+  sloValue: BigInt
+  sloType: Int
+  messengerAddress: Bytes
+  ipfsHash: String
+  stakersCount: BigInt
+  periodType: Int
+  breachedContract: Boolean
+  creationBlockNumber: BigInt
+  nextVerifiablePeriod: BigInt
+  whiteListed: Boolean
+  initialPeriodId: BigInt
+  finalPeriodId: BigInt
+  leverage: BigInt!
+  maxHedge: BigInt
+  finished: Boolean
+}
+
+type SLI @entity {
+  id: ID!
+  sla: Bytes!
+  periodId: BigInt!
+  timestamp: BigInt!
+  sli: BigInt!
+  status: Int!
+}
+
+type DToken @entity {
+  id: ID!
+  name: String!
+  type: String!
+  symbol: String!
+  address: Bytes!
+  slaAddress: Bytes!
+  tokenAddress: Bytes!
+  totalSupply: BigInt!
+}
+
+type Deposit @entity {
+  id: ID!
+  type: String!
+  amount: BigInt!
+  tokenAddress: Bytes!
+  callerAddress: Bytes!
+  slaAddress: Bytes
+}
+
+type Withdrawal @entity {
+  id: ID!
+  type: String!
+  amount: BigInt!
+  tokenAddress: Bytes!
+  callerAddress: Bytes!
+  slaAddress: Bytes!
+}
+
+type TVL @entity {
+  id: ID!
+  amount: BigInt
+  deposits: [Deposit!]
+  withdrawals: [Withdrawal!]
+}
+
+type User @entity {
+  id: ID!
+  slas: [SLA!]
+  dTokensBalances: [DtokenBalance!]
+  deposits: [Deposit!]
+  withdrawals: [Withdrawal!]
+}
+
+type DtokenBalance @entity {
+  id: ID!
+  dtoken: DToken!
+  slaAllowance: BigInt!
+  balance: BigInt!
+}
+
+type Messenger @entity {
+  id: ID!
+  owner: Bytes!
+  specificationUrl: String!
+  precision: BigInt!
+  messengerId: BigInt!
+}
+
+type Period @entity {
+  id: ID!
+  amountOfPeriods: BigInt!
+  periodDefinitions: [PeriodDefinition!]
+}
+
+type PeriodDefinition @entity {
+  id: ID!
+  start: BigInt!
+  end: BigInt!
+}

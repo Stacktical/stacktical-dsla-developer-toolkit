@@ -43,20 +43,20 @@ export const kovan: NetworkUserConfig = {
       ethWsUrl: process.env.KOVAN_WS_URI,
       ethHttpUrl: process.env.KOVAN_URI,
       nodesConfiguration: [
-        {
-          name: 'berlin',
-          restApiUrl: process.env.KOVAN_CHAINLINK_NODE_1_URL,
-          restApiPort: process.env.KOVAN_CHAINLINK_NODE_1_PORT,
-          email: process.env.KOVAN_CHAINLINK_NODE_1_USER,
-          password: process.env.KOVAN_CHAINLINK_NODE_1_PASS,
-        },
         // {
-        //   name: 'newyork',
-        //   restApiUrl: process.env.KOVAN_CHAINLINK_NODE_2_URL,
-        //   restApiPort: process.env.KOVAN_CHAINLINK_NODE_2_PORT,
-        //   email: process.env.KOVAN_CHAINLINK_NODE_2_USER,
-        //   password: process.env.KOVAN_CHAINLINK_NODE_2_PASS,
+        //   name: 'berlin',
+        //   restApiUrl: process.env.KOVAN_CHAINLINK_NODE_1_URL,
+        //   restApiPort: process.env.KOVAN_CHAINLINK_NODE_1_PORT,
+        //   email: process.env.KOVAN_CHAINLINK_NODE_1_USER,
+        //   password: process.env.KOVAN_CHAINLINK_NODE_1_PASS,
         // },
+        {
+          name: 'newyork',
+          restApiUrl: process.env.KOVAN_CHAINLINK_NODE_2_URL,
+          restApiPort: process.env.KOVAN_CHAINLINK_NODE_2_PORT,
+          email: process.env.KOVAN_CHAINLINK_NODE_2_USER,
+          password: process.env.KOVAN_CHAINLINK_NODE_2_PASS,
+        },
         // {
         //   name: 'paris',
         //   restApiUrl: process.env.KOVAN_CHAINLINK_NODE_3_URL,

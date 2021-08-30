@@ -1,4 +1,6 @@
 export { develop } from './develop';
-export { kovan } from './kovan';
 export { ethereum } from './ethereum';
 export { harmony } from './harmony';
+export { harmonytestnet } from './harmonytestnet';
+export { polygon } from './polygon';
+export { rinkeby } from './rinkeby';

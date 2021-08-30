@@ -1,0 +1,13 @@
+{
+  "slaRegistryAddress": "0x62DbAD2Fc2acDaaF7E40737d87AE3E2EDB10FdAb",
+  "slaRegistryStartBlock": 17302790,
+  "sloRegistryAddress": "0x90128B50530897a951062DbD630810B8dE0Cfb8D",
+  "sloRegistryStartBlock": 17302707,
+  "stakeRegistryAddress": "0x700CEf3A4F86C7D3724584723061A43554b297ab",
+  "stakeRegistryStartBlock": 17302785,
+  "messengerRegistryAddress": "0xB4E5ea2F77F63514365Cbe901f0ad2E5159fBB2D",
+  "messengerRegistryStartBlock": 17302720,
+  "periodRegistryAddress": "0x8B87CCC1A4E0485691BD173D1c96cd1f84e4f436",
+  "periodRegistryStartBlock": 17302704,
+  "graphNetwork": "polygon"
+}

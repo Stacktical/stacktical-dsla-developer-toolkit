@@ -7,7 +7,7 @@ module.exports = async ({ network, run }: HardhatRuntimeEnvironment) => {
 
   for (let messenger in stacktical.messengers) {
     await run(SUB_TASK_NAMES.DEPLOY_MESSENGER, {
-      id: messenger,
+      index: messenger,
     });
   }
 };

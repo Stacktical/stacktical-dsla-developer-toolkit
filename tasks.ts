@@ -2,6 +2,7 @@ import { task, types } from 'hardhat/config';
 import { SUB_TASK_NAMES } from './subtasks';
 import { printSeparator } from './utils';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
+import { PARAMS_NAMES } from './constants';
 
 enum TASK_NAMES {
   EXPORT_DATA = 'stacktical:export-data',
@@ -23,21 +24,74 @@ enum TASK_NAMES {
   DEPLOY_MESSENGER = 'stacktical:deploy-messenger',
   GET_MESSENGER = 'stacktical:get-messenger',
   TRANSFER_OWNERSHIP = 'stacktical:transfer-ownership',
+  PROVIDER_WITHDRAW = 'stacktical:provider-withdraw',
+  UNLOCK_TOKENS = 'stacktical:unlock-tokens',
+  GRAPH_MANIFESTOS = 'stacktical:graph-manifestos',
+  GET_SLA_FROM_TX = 'stacktical:get-sla-from-tx',
+  UPDATE_MESSENGER_SPEC = 'stacktical:update-messenger-spec',
 }
+
+task(
+  TASK_NAMES.GRAPH_MANIFESTOS,
+  'Unlock value from a finished SLA contract'
+).setAction(async (taskArgs, { run }) => {
+  await run(SUB_TASK_NAMES.EXPORT_SUBGRAPH_DATA, taskArgs);
+  await run(SUB_TASK_NAMES.SETUP_GRAPH_MANIFESTOS, taskArgs);
+});
+
+task(TASK_NAMES.UPDATE_MESSENGER_SPEC, 'Update messenger spec')
+  .addParam(PARAMS_NAMES.INDEX, 'Messenger index')
+  .setAction(async (taskArgs, { run }) => {
+    await run(SUB_TASK_NAMES.UPDATE_MESSENGER_SPEC, taskArgs);
+  });
+
+task(TASK_NAMES.UNLOCK_TOKENS, 'Unlock value from a finished SLA contract')
+  .addOptionalParam(
+    PARAMS_NAMES.SLA_ADDRESS,
+    '(optional) The SLA address. Defaults to last deployed SLA by deployer address'
+  )
+  .setAction(async (taskArgs, { run }) => {
+    await run(SUB_TASK_NAMES.UNLOCK_TOKENS, taskArgs);
+  });
+
+task(
+  TASK_NAMES.GET_SLA_FROM_TX,
+  'Get a transaction along with the events of it'
+)
+  .addParam(PARAMS_NAMES.TRANSACTION_HASH, 'Transaction hash')
+  .setAction(async (taskArgs, { run }) => {
+    await run(SUB_TASK_NAMES.GET_SLA_FROM_TX, taskArgs);
+  });
 
 task(TASK_NAMES.DEPLOY_SLA, 'Deploy customized SLA from stacktical config')
   .addOptionalParam(
-    'id',
+    PARAMS_NAMES.INDEX,
     'id of the arrays of SLAs of the deploy_sla stacktical config'
   )
   .setAction(async (taskArgs, { run }) => {
     await run(SUB_TASK_NAMES.DEPLOY_SLA, taskArgs);
   });
 
+task(
+  TASK_NAMES.PROVIDER_WITHDRAW,
+  'Deploy customized SLA from stacktical config'
+)
+  .addOptionalParam(
+    PARAMS_NAMES.SLA_ADDRESS,
+    '(optional) The SLA address. Defaults to last deployed SLA by deployer address'
+  )
+  .addParam(
+    'tokenAddress',
+    'Address of the token to withdraw from e.g. DSLA = 0x3aFfCCa64c2A6f4e3B6Bd9c64CD2C969EFd1ECBe in Mainnet'
+  )
+  .setAction(async (taskArgs, { run }) => {
+    await run(SUB_TASK_NAMES.PROVIDER_WITHDRAW, taskArgs);
+  });
+
 task(TASK_NAMES.EXPORT_DATA, 'Export data to exported-data folder').setAction(
   async (_, { run }) => {
-    await run(SUB_TASK_NAMES.INITIALIZE_DEFAULT_ADDRESSES);
     await run(SUB_TASK_NAMES.EXPORT_NETWORKS);
+    await run(SUB_TASK_NAMES.EXPORT_TO_FRONT_END);
   }
 );
 
@@ -63,7 +117,7 @@ task(
   'Request a SLI verification for next verifiable period'
 )
   .addOptionalParam(
-    'slaAddress',
+    PARAMS_NAMES.SLA_ADDRESS,
     '(optional) The SLA address. Defaults to last deployed SLA by deployer address'
   )
   .addFlag('retry', ' pass the flag retry to trigger the retry mechanism')
@@ -93,15 +147,19 @@ task(
   await run(SUB_TASK_NAMES.STOP_LOCAL_GANACHE);
   console.log(SUB_TASK_NAMES.STOP_LOCAL_IPFS);
   await run(SUB_TASK_NAMES.STOP_LOCAL_IPFS);
-  // console.log(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
-  // await run(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
+  console.log(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
+  await run(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
+  console.log(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
+  await run(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
 
   console.log(SUB_TASK_NAMES.START_LOCAL_GANACHE);
   await run(SUB_TASK_NAMES.START_LOCAL_GANACHE);
   console.log(SUB_TASK_NAMES.START_LOCAL_IPFS);
   await run(SUB_TASK_NAMES.START_LOCAL_IPFS);
-  // console.log(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE);
-  // await run(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE);
+  console.log(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE);
+  await run(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE);
+  console.log(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE);
+  await run(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE);
 });
 
 task(
@@ -115,7 +173,7 @@ task(
   TASK_NAMES.SET_PRECOORDINATOR,
   'Set the PreCoordinator service configuration from stacktical configuration'
 )
-  .addParam('id', 'Messenger id of stacktical.messengers')
+  .addParam(PARAMS_NAMES.INDEX, 'Messenger id of stacktical.messengers')
   .setAction(async (taskArgs, { run }) => {
     printSeparator();
     await run(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE);
@@ -205,7 +263,7 @@ task(TASK_NAMES.GET_REVERT_MESSAGE, 'Get revert message for transaction hash')
 
 task(TASK_NAMES.DEPLOY_MESSENGER, 'deploy a messenger in the MessengerRegistry')
   .addParam(
-    'id',
+    PARAMS_NAMES.INDEX,
     'Id of the messenger on the messengers list of the network config'
   )
   .setAction(async (taskArgs, hre: any) => {
@@ -214,7 +272,7 @@ task(TASK_NAMES.DEPLOY_MESSENGER, 'deploy a messenger in the MessengerRegistry')
 
 task(TASK_NAMES.GET_MESSENGER, 'get messenger data')
   .addOptionalParam(
-    'id',
+    PARAMS_NAMES.INDEX,
     'Id of the messenger on the messengers list of the network config'
   )
   .setAction(async (taskArgs, hre: HardhatRuntimeEnvironment) => {

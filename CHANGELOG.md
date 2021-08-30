@@ -2,6 +2,80 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.4.2](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v2.4.1...v2.4.2) (2021-08-20)
+
+
+### Features
+
+* subgraph deployment documentation ([71886c8](https://github.com/Stacktical/stacktical-developer-toolkit/commit/71886c8515b4b3aa515543519b380a03e310d6d0))
+
+### [2.4.1](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v2.4.0...v2.4.1) (2021-08-20)
+
+
+### Features
+
+* getting SLA from transaction hash ([868b26f](https://github.com/Stacktical/stacktical-developer-toolkit/commit/868b26f86f4a2b0371c79bbc30c1c5c98da86bb3))
+* graph network as graph data ([4766d64](https://github.com/Stacktical/stacktical-developer-toolkit/commit/4766d644d275fdd6327139bcac2c7fadb5823e1c))
+* harmonytestnet exported data ([5a518ec](https://github.com/Stacktical/stacktical-developer-toolkit/commit/5a518ec1275b720e97dc45b95d84c5d91251f427))
+* harmonytestnet subgraph deployment ([f881496](https://github.com/Stacktical/stacktical-developer-toolkit/commit/f881496d4b3d1ff4fb39fc541559b789a450962f))
+* new harmonytestnet deployment ([891eb44](https://github.com/Stacktical/stacktical-developer-toolkit/commit/891eb44bac82952c05a68362475ac713c63c801a))
+* transfer ownership of messengers ([a7552bf](https://github.com/Stacktical/stacktical-developer-toolkit/commit/a7552bfba290c2d0202bded220ff01dcbfb1331a))
+
+
+### Bug Fixes
+
+* external adapter url for harmony testnet ([5959fb1](https://github.com/Stacktical/stacktical-developer-toolkit/commit/5959fb1d9de058163d74dab687729ba03914efc6))
+* only develop enabled as default ([365e460](https://github.com/Stacktical/stacktical-developer-toolkit/commit/365e460fcf5bc3826d723793ce57b596753e951d))
+* pm2 ts node after install ([718d59a](https://github.com/Stacktical/stacktical-developer-toolkit/commit/718d59a96f39350eae46a9fe78868f4f1cf85bde))
+* reading network folder for graph manifestos ([7eb964b](https://github.com/Stacktical/stacktical-developer-toolkit/commit/7eb964b1ecb01ad1d86c5e94c2555c3f6590e36b))
+* tvl by token ([669bc04](https://github.com/Stacktical/stacktical-developer-toolkit/commit/669bc044faacca85d6597b1e693915dff4de94d8))
+
+## [2.4.0](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v2.3.0...v2.4.0) (2021-08-13)
+
+
+### Features
+
+* calculating tvl ([17ddc62](https://github.com/Stacktical/stacktical-developer-toolkit/commit/17ddc62d8adb15f18b60e98306d019e14da5bf76))
+* deploying from sh script ([3c79e81](https://github.com/Stacktical/stacktical-developer-toolkit/commit/3c79e81a20b23d5dd328398c0106262132792c75))
+* deposits and withdraws entities ([42e52a5](https://github.com/Stacktical/stacktical-developer-toolkit/commit/42e52a524768905f5e4be9ee3cd1813e6d8704e0))
+* export data from hh from all networks ([76bc8a6](https://github.com/Stacktical/stacktical-developer-toolkit/commit/76bc8a6f3a1e6703796ba4a1a2a79063cd375c37))
+* exporting all networks data at once ([1d219b4](https://github.com/Stacktical/stacktical-developer-toolkit/commit/1d219b4ad050cdc7a6af00f0242231417e790baa))
+* external adapter ipfs gateway from env ([7fa24fa](https://github.com/Stacktical/stacktical-developer-toolkit/commit/7fa24fa59d83931b75a222df9b9301e637f07449))
+* gas limit from network config for chainlink nodes ([f34c58a](https://github.com/Stacktical/stacktical-developer-toolkit/commit/f34c58ac338aff15a692fd9dcf5a7d433041cb81))
+* get valid slas with LP tokens ([1fb4208](https://github.com/Stacktical/stacktical-developer-toolkit/commit/1fb42084d3d2cd67657dc17f8521fef845e207b9))
+* indexing deployed SLAs ([5a2df14](https://github.com/Stacktical/stacktical-developer-toolkit/commit/5a2df1464dfe93ee01731287af6eaf334851a5af))
+* indexing deposits and withdraws from SLA ([57752a8](https://github.com/Stacktical/stacktical-developer-toolkit/commit/57752a8106a3e2f654ea1729a19a7d49ef1f14be))
+* indexing sla before dtoken ([60a50ed](https://github.com/Stacktical/stacktical-developer-toolkit/commit/60a50edfba6f79be0638cc789912fcb36f80af95))
+* indexing SLAs with sla ID ([ca06f01](https://github.com/Stacktical/stacktical-developer-toolkit/commit/ca06f01f48902ad8a7df5738462876ada99496cd))
+* max hedge from stake/withdraw ([b96f9db](https://github.com/Stacktical/stacktical-developer-toolkit/commit/b96f9db8f9267c4dfd9232d62ea2d3ba223d2172))
+* max hedge to 0 if smaller than 0 ([b342d18](https://github.com/Stacktical/stacktical-developer-toolkit/commit/b342d18c4496ccd071e0a912961da28f36654604))
+* new kovan deployment ([34d1c3f](https://github.com/Stacktical/stacktical-developer-toolkit/commit/34d1c3fddcb4146311b962cf25a365b217937a67))
+* new polygon deployment ([0a6aadf](https://github.com/Stacktical/stacktical-developer-toolkit/commit/0a6aadf724df7cf48cf5e3189d9af6dd6afc768a))
+* open minting on erc20 contract ([afb76d1](https://github.com/Stacktical/stacktical-developer-toolkit/commit/afb76d144f04b415efb255567c503e83d255d10e))
+* printing transaction receipt on stk parameters update ([c3cbe30](https://github.com/Stacktical/stacktical-developer-toolkit/commit/c3cbe3073e3ee18c70d08fbdc1151806b108b915))
+* provider withdraw task ([739481a](https://github.com/Stacktical/stacktical-developer-toolkit/commit/739481a5fb20bba932064162b18b74e167b64eb6))
+* rinkeby deployment ([4328d36](https://github.com/Stacktical/stacktical-developer-toolkit/commit/4328d363b983c88de6b2c8d675417072385380d6))
+* rinkeby ngrok integration ([c7013f3](https://github.com/Stacktical/stacktical-developer-toolkit/commit/c7013f340d38af994a556afa3a3f991cfdec3672))
+* setting up graph manifestos ([2d47cf3](https://github.com/Stacktical/stacktical-developer-toolkit/commit/2d47cf3d1de7aa6eb391ef6888dcb9ce17000b26))
+* sla with slis ([805b7f9](https://github.com/Stacktical/stacktical-developer-toolkit/commit/805b7f9fadaa3ffbf832863716b2ce0a8df385be))
+* sloType and sloValue for deployed SLA ([cc29aa4](https://github.com/Stacktical/stacktical-developer-toolkit/commit/cc29aa4f0445cb50013fee3e3beed1db02a4e16e))
+* unlock tokens script ([02ad834](https://github.com/Stacktical/stacktical-developer-toolkit/commit/02ad834344e043241a2458d79499d95a05d67b3b))
+* **graph:** handle locked value returned ([82b2542](https://github.com/Stacktical/stacktical-developer-toolkit/commit/82b25424b9118df0a0b46a218457db0f46a174e6))
+* **graph:** indexing value locked ([fefffa8](https://github.com/Stacktical/stacktical-developer-toolkit/commit/fefffa8b8952ac8e6d39b1c215d9b5ce35534247))
+* **graph:** max hedge from ([07f1deb](https://github.com/Stacktical/stacktical-developer-toolkit/commit/07f1debf912080dcac8592b2c157569303dccd15))
+* sla deposits ([88bd33e](https://github.com/Stacktical/stacktical-developer-toolkit/commit/88bd33eaa7c391be186b6bd69a2eb5676223f4b7))
+* subgraph created ([a2a5aa2](https://github.com/Stacktical/stacktical-developer-toolkit/commit/a2a5aa255e9dba8a966e7ef1a2b63571f5f19330))
+* subgraph scripts on main package json ([c617643](https://github.com/Stacktical/stacktical-developer-toolkit/commit/c617643f569c5924816adb27a35bbc1f499fc104))
+* user balances subgraph ([843cdf0](https://github.com/Stacktical/stacktical-developer-toolkit/commit/843cdf047a9effcb7464b853c6f0a3baacf16781))
+
+
+### Bug Fixes
+
+* dtokens in sla contract ([fa82e3f](https://github.com/Stacktical/stacktical-developer-toolkit/commit/fa82e3fdcc88f9ca8f02705702e2f0bcf2daad5e))
+* gitkeep chainlink-nodes ([65e7e9b](https://github.com/Stacktical/stacktical-developer-toolkit/commit/65e7e9bbc579f7a5eaa6347bb0c9fe6e8269bfc7))
+* subgraph submodule ([33f51e5](https://github.com/Stacktical/stacktical-developer-toolkit/commit/33f51e5231395e2073310771d59b16fd2e62b242))
+* withdrawals typo ([16af066](https://github.com/Stacktical/stacktical-developer-toolkit/commit/16af066d824fb685861a4b6fee678784af2b4a6b))
+
 ## [2.3.0](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v2.2.1...v2.3.0) (2021-07-16)
 
 

@@ -55,7 +55,20 @@ export enum NETWORKS {
   HARMONY = 'harmony',
   KOVAN = 'kovan',
   FUJI = 'fuji',
+  RINKEBY = 'rinkeby',
 }
+
+export const GRAPH_NETWORKS = {
+  [NETWORKS.DEVELOP]: 'mainnet',
+  [NETWORKS.ETHEREUM]: 'mainnet',
+  [NETWORKS.HARMONY]: 'mainnet',
+  [NETWORKS.HARMONYTESTNET]: 'testnet',
+  [NETWORKS.MUMBAI]: 'mumbai',
+  [NETWORKS.POLYGON]: 'polygon',
+  [NETWORKS.KOVAN]: 'kovan',
+  [NETWORKS.FUJI]: 'fuji',
+  [NETWORKS.RINKEBY]: 'rinkeby',
+};
 
 export enum PERIOD_TYPE {
   HOURLY,
@@ -79,5 +92,11 @@ export enum SLO_TYPE {
   SmallerOrEqualTo,
   GreaterThan,
   GreaterOrEqualTo,
+}
+
+export enum PARAMS_NAMES {
+  SLA_ADDRESS = 'slaAddress',
+  INDEX = 'index',
+  TRANSACTION_HASH = 'transactionHash',
 }
 export const appRoot = require('app-root-path');

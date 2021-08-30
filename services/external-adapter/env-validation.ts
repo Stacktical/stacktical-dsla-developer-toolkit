@@ -11,7 +11,7 @@ const schema = Joi.object(
         ...r,
         [`${network.toUpperCase()}_URI`]: Joi.string().uri().required(),
       }),
-      {}
+      { IPFS_GATEWAY_URI: Joi.string().uri().required() }
     )
 ).unknown();
 

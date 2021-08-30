@@ -1,21 +1,7 @@
-version: "3.5"
+version: '3'
 services:
-  postgres-graph-service:
-    container_name: postgres-graph-service
-    image: postgres:13.1-alpine
-    volumes:
-      - ./postgres:/var/lib/postgresql/data
-    environment:
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: graph-service
-    networks:
-      - graph-service-network
-
-  graph-service:
-    container_name: graph-service
-    image: graphprotocol/graph-node
-    networks:
-      - graph-service-network
+  graph-node-service:
+    image: graphprotocol/graph-node:v0.22.0
     ports:
       - '8000:8000'
       - '8001:8001'
@@ -25,14 +11,22 @@ services:
     depends_on:
       - postgres-graph-service
     environment:
-      postgres_host: postgres
-      postgres_user: postgres
-      postgres_pass: password
-      postgres_db: graph-service
-      ipfs: 'ipfs:5001'
-      ethereum: 'mainnet:http://ganache:8545'
-      RUST_LOG: info
-
-networks:
-  graph-service-network:
-    name: graph-service-network
+      postgres_host: postgres-graph-service
+      postgres_user: graph-node
+      postgres_pass: let-me-in
+      postgres_db: graph-node
+      ipfs: 'http://host.docker.internal:5001'
+      # Change next line if you want to connect to a different JSON-RPC endpoint
+      ethereum: 'mainnet:http://host.docker.internal:8545'
+      GRAPH_LOG: info
+  postgres-graph-service:
+    image: postgres
+    ports:
+      - '5432:5432'
+    command: ["postgres", "-cshared_preload_libraries=pg_stat_statements"]
+    environment:
+      POSTGRES_USER: graph-node
+      POSTGRES_PASSWORD: let-me-in
+      POSTGRES_DB: graph-node
+    volumes:
+      - ./postgres:/var/lib/postgresql/data

@@ -58,11 +58,11 @@ export const harmonytestnet: NetworkUserConfig = {
       ethWsUrl: process.env.HARMONYTESTNET_WS_URI,
       nodesConfiguration: [
         {
-          name: 'node-1',
-          restApiUrl: 'http://localhost',
-          restApiPort: '6690',
-          email: 'test@stacktical.com',
-          password: 'PaSSword123456',
+          name: 'newyork',
+          restApiUrl: process.env.HARMONYTESTNET_CHAINLINK_NODE_1_URL,
+          restApiPort: process.env.HARMONYTESTNET_CHAINLINK_NODE_1_PORT,
+          email: process.env.HARMONYTESTNET_CHAINLINK_NODE_1_USER,
+          password: process.env.HARMONYTESTNET_CHAINLINK_NODE_1_PASS,
         },
       ],
     },
@@ -96,7 +96,7 @@ export const harmonytestnet: NetworkUserConfig = {
       {
         contract: CONTRACT_NAMES.SEMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
-        externalAdapterUrl: 'http://host.docker.internal:6060',
+        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
       },
     ],
     scripts: scripts,
