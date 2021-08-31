@@ -5,7 +5,7 @@ import {
   TOKEN_NAMES,
   USE_CASES,
 } from '../constants';
-import { BscERC20__factory } from '../typechain';
+import { EthereumERC20__factory } from '../typechain';
 import { NetworkUserConfig } from 'hardhat/types';
 import { scripts } from '../scripts.config';
 import Joi from 'joi';
@@ -26,7 +26,7 @@ if (error) {
 }
 
 export const bsc: NetworkUserConfig = {
-  chainId: 1,
+  chainId: 56,
   accounts: {
     mnemonic: process.env.MAINNET_MNEMONIC,
   },
@@ -36,17 +36,17 @@ export const bsc: NetworkUserConfig = {
     deployTokens: false,
     tokens: [
       {
-        factory: BscERC20__factory,
+        factory: EthereumERC20__factory,
         name: TOKEN_NAMES.DSLA,
         address: '0x1861c9058577c3b48e73d91d6f25c18b17fbffe0',
       },
       {
-        factory: BscERC20__factory,
+        factory: EthereumERC20__factory,
         name: TOKEN_NAMES.DAI,
-        address: '0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d',
+        address: '0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3',
       },
       {
-        factory: BscERC20__factory,
+        factory: EthereumERC20__factory,
         name: TOKEN_NAMES.USDC,
         address: '0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d',
       },
