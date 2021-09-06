@@ -12,8 +12,8 @@ import Joi from 'joi';
 
 const schema = Joi.object({
   MAINNET_MNEMONIC: Joi.string().required(),
-  AVALANCHE_URI: Joi.string().required(),
-  AVALANCHE_WS_URI: Joi.string().required(),
+  FUJI_URI: Joi.string().required(),
+  FUJI_WS_URI: Joi.string().required(),
   STAKING_EFFICIENCY_INDEXER_URI: Joi.string().required(),
 }).unknown();
 
@@ -26,11 +26,11 @@ if (error) {
 }
 
 export const avalanche: NetworkUserConfig = {
-  chainId: 43114,
+  chainId: 43113,
   accounts: {
     mnemonic: process.env.MAINNET_MNEMONIC,
   },
-  url: process.env.AVALANCHE_URI,
+  url: "https://avalanche--fuji--rpc.datahub.figment.io/apikey/a86cfb440f77c1beec794e87f39917a1/ext/bc/C/rpc",
   stacktical: {
     checkPastPeriods: true,
     deployTokens: false,
@@ -38,17 +38,14 @@ export const avalanche: NetworkUserConfig = {
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.DSLA,
-        address: '0xD7c295E399CA928A3a14b01D760E794f1AdF8990',
       },
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.DAI,
-        address: '0xd586E7F844cEa2F87f50152665BCbc2C279D8d70',
       },
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.USDC,
-        address: '0xA7D7079b0FEaD91F3e65f86E8915Cb59c1a4C664',
       },
     ],
     chainlink: {
@@ -56,33 +53,19 @@ export const avalanche: NetworkUserConfig = {
       deleteOldJobs: false,
       cleanLocalFolder: false,
       nodeFunds: '1',
-      ethWsUrl: process.env.AVALANCHE_WS_URI,
+      ethWsUrl: process.env.FUJI_WS_URI,
       nodesConfiguration: [
         {
-          name: 'berlin',
-          restApiUrl: process.env.AVALANCHE_CHAINLINK_NODE_1_URL,
-          restApiPort: process.env.AVALANCHE_CHAINLINK_NODE_1_PORT,
-          email: process.env.AVALANCHE_CHAINLINK_NODE_1_USER,
-          password: process.env.AVALANCHE_CHAINLINK_NODE_1_PASS,
-        },
-        {
           name: 'newyork',
-          restApiUrl: process.env.AVALANCHE_CHAINLINK_NODE_2_URL,
-          restApiPort: process.env.AVALANCHE_CHAINLINK_NODE_2_PORT,
-          email: process.env.AVALANCHE_CHAINLINK_NODE_2_USER,
-          password: process.env.AVALANCHE_CHAINLINK_NODE_2_PASS,
-        },
-        {
-          name: 'paris',
-          restApiUrl: process.env.AVALANCHE_CHAINLINK_NODE_3_URL,
-          restApiPort: process.env.AVALANCHE_CHAINLINK_NODE_3_PORT,
-          email: process.env.AVALANCHE_CHAINLINK_NODE_3_USER,
-          password: process.env.AVALANCHE_CHAINLINK_NODE_3_PASS,
+          restApiUrl: process.env.FUJI_CHAINLINK_NODE_2_URL,
+          restApiPort: process.env.FUJI_CHAINLINK_NODE_2_PORT,
+          email: process.env.FUJI_CHAINLINK_NODE_2_USER,
+          password: process.env.FUJI_CHAINLINK_NODE_2_PASS,
         },
       ],
     },
     addresses: {
-      [CONTRACT_NAMES.LinkToken]: '0xB3fe5374F67D7a22886A0eE082b2E2f9d2651651',
+      //[CONTRACT_NAMES.LinkToken]: '0xB3fe5374F67D7a22886A0eE082b2E2f9d2651651',
     },
     bootstrap: {
       allowance: [
