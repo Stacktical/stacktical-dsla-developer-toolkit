@@ -23,6 +23,7 @@ export enum CONTRACT_NAMES {
   HarmonyERC20 = 'HarmonyERC20',
   PolygonERC20 = 'PolygonERC20',
   AvalancheERC20 = 'AvalancheERC20',
+  FantomERC20 = 'FantomERC20',
   BaseMessenger = 'BaseMessenger',
 }
 
@@ -53,6 +54,7 @@ export enum NETWORKS {
   ETHEREUM = 'ethereum',
   POLYGON = 'polygon',
   HARMONY = 'harmony',
+  FANTOM = 'fantom',
   KOVAN = 'kovan',
   FUJI = 'fuji',
   RINKEBY = 'rinkeby',
@@ -62,6 +64,7 @@ export const GRAPH_NETWORKS = {
   [NETWORKS.DEVELOP]: 'mainnet',
   [NETWORKS.ETHEREUM]: 'mainnet',
   [NETWORKS.HARMONY]: 'mainnet',
+  [NETWORKS.FANTOM]: 'mainnet',
   [NETWORKS.HARMONYTESTNET]: 'testnet',
   [NETWORKS.MUMBAI]: 'mumbai',
   [NETWORKS.POLYGON]: 'polygon',
