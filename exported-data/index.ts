@@ -5,3 +5,4 @@ export { harmonytestnet } from './harmonytestnet';
 export { polygon } from './polygon';
 export { rinkeby } from './rinkeby';
 export { avalanche } from './avalanche';
+export { bsc } from './bsc';

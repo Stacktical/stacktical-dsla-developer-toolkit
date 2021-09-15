@@ -483,7 +483,9 @@ export class BaseMessenger__factory extends ContractFactory {
 
     linkedBytecode = linkedBytecode.replace(
       new RegExp("__\\$a50a81560717ba31a37cba6af2d185101e\\$__", "g"),
-      linkLibraryAddresses["__$a50a81560717ba31a37cba6af2d185101e$__"]
+      linkLibraryAddresses[
+        "@stacktical/dsla-contracts/contracts/StringUtils.sol:StringUtils"
+      ]
         .replace(/^0x/, "")
         .toLowerCase()
     );
@@ -549,5 +551,5 @@ export class BaseMessenger__factory extends ContractFactory {
 }
 
 export interface BaseMessengerLibraryAddresses {
-  ["__$a50a81560717ba31a37cba6af2d185101e$__"]: string;
+  ["@stacktical/dsla-contracts/contracts/StringUtils.sol:StringUtils"]: string;
 }
