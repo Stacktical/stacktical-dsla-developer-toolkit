@@ -5,15 +5,15 @@ import {
   TOKEN_NAMES,
   USE_CASES,
 } from '../constants';
-import { EthereumERC20__factory } from '../typechain';
+import { FantomERC20__factory } from '../typechain';
 import { NetworkUserConfig } from 'hardhat/types';
 import { scripts } from '../scripts.config';
 import Joi from 'joi';
 
 const schema = Joi.object({
   MAINNET_MNEMONIC: Joi.string().required(),
-  ETHEREUM_URI: Joi.string().required(),
-  ETHEREUM_WS_URI: Joi.string().required(),
+  FANTOM_URI: Joi.string().required(),
+  FANTOM_WS_URI: Joi.string().required(),
   STAKING_EFFICIENCY_INDEXER_URI: Joi.string().required(),
 }).unknown();
 
@@ -25,30 +25,30 @@ if (error) {
   process.env = value;
 }
 
-export const ethereum: NetworkUserConfig = {
+export const fantom: NetworkUserConfig = {
   chainId: 1,
   accounts: {
     mnemonic: process.env.MAINNET_MNEMONIC,
   },
-  url: process.env.ETHEREUM_URI,
+  url: process.env.FANTOM_URI,
   stacktical: {
     checkPastPeriods: true,
     deployTokens: false,
     tokens: [
       {
-        factory: EthereumERC20__factory,
+        factory: FantomERC20__factory,
         name: TOKEN_NAMES.DSLA,
-        address: '0x3aFfCCa64c2A6f4e3B6Bd9c64CD2C969EFd1ECBe',
+       address: '0x25a528af62e56512a19ce8c3cab427807c28cc19',
       },
       {
-        factory: EthereumERC20__factory,
+        factory: FantomERC20__factory,
         name: TOKEN_NAMES.DAI,
-        address: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+        address: '0x8d11ec38a3eb5e956b052f67da8bdc9bef8abf3e',
       },
       {
-        factory: EthereumERC20__factory,
+        factory: FantomERC20__factory,
         name: TOKEN_NAMES.USDC,
-        address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+        address: '0x04068da6c83afcfa0e13ba15a6696662335d5b75',
       },
     ],
     chainlink: {
@@ -56,33 +56,19 @@ export const ethereum: NetworkUserConfig = {
       deleteOldJobs: false,
       cleanLocalFolder: false,
       nodeFunds: '1',
-      ethWsUrl: process.env.ETHEREUM_WS_URI,
+      ethWsUrl: process.env.FANTOM_WS_URI,
       nodesConfiguration: [
         {
-          name: 'berlin',
-          restApiUrl: process.env.ETHEREUM_CHAINLINK_NODE_1_URL,
-          restApiPort: process.env.ETHEREUM_CHAINLINK_NODE_1_PORT,
-          email: process.env.ETHEREUM_CHAINLINK_NODE_1_USER,
-          password: process.env.ETHEREUM_CHAINLINK_NODE_1_PASS,
-        },
-        {
           name: 'newyork',
-          restApiUrl: process.env.ETHEREUM_CHAINLINK_NODE_2_URL,
-          restApiPort: process.env.ETHEREUM_CHAINLINK_NODE_2_PORT,
-          email: process.env.ETHEREUM_CHAINLINK_NODE_2_USER,
-          password: process.env.ETHEREUM_CHAINLINK_NODE_2_PASS,
-        },
-        {
-          name: 'paris',
-          restApiUrl: process.env.ETHEREUM_CHAINLINK_NODE_3_URL,
-          restApiPort: process.env.ETHEREUM_CHAINLINK_NODE_3_PORT,
-          email: process.env.ETHEREUM_CHAINLINK_NODE_3_USER,
-          password: process.env.ETHEREUM_CHAINLINK_NODE_3_PASS,
+          restApiUrl: process.env.FANTOM_CHAINLINK_NODE_1_URL,
+          restApiPort: process.env.FANTOM_CHAINLINK_NODE_1_PORT,
+          email: process.env.FANTOM_CHAINLINK_NODE_1_USER,
+          password: process.env.FANTOM_CHAINLINK_NODE_1_PASS,
         },
       ],
     },
     addresses: {
-      [CONTRACT_NAMES.LinkToken]: '0x514910771af9ca656af840dff83e8264ecf986ca',
+      [CONTRACT_NAMES.LinkToken]: '0xb3654dc3d10ea7645f8319668e8f54d2574fbdc8',
     },
     bootstrap: {
       allowance: [
@@ -102,12 +88,12 @@ export const ethereum: NetworkUserConfig = {
         ],
         stake: {
           stakingParameters: {
-            dslaBurnedByVerification: '10000',
-            dslaPlatformReward: '75',
+            dslaBurnedByVerification: '0',
+            dslaPlatformReward: '10075',
             dslaDepositByPeriod: '25000',
             dslaMessengerReward: '4925',
             dslaUserReward: '10000',
-            burnDSLA: true,
+            burnDSLA: false,
           },
         },
       },
