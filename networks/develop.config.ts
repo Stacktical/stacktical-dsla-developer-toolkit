@@ -76,6 +76,11 @@ export const develop: NetworkUserConfig = {
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
+        {
+          contract: CONTRACT_NAMES.DummyUseCase,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
       ],
       registry: {
         periods: [
@@ -101,6 +106,11 @@ export const develop: NetworkUserConfig = {
       {
         contract: CONTRACT_NAMES.SEMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
+        externalAdapterUrl: 'http://host.docker.internal:6060',
+      },
+      {
+        contract: CONTRACT_NAMES.DummyUseCase,
+        useCaseName: USE_CASES.DUMMY_USE_CASE,
         externalAdapterUrl: 'http://host.docker.internal:6060',
       },
     ],

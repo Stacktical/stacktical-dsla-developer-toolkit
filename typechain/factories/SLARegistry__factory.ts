@@ -372,9 +372,7 @@ export class SLARegistry__factory extends ContractFactory {
 
     linkedBytecode = linkedBytecode.replace(
       new RegExp("__\\$a50a81560717ba31a37cba6af2d185101e\\$__", "g"),
-      linkLibraryAddresses[
-        "@stacktical/dsla-contracts/contracts/StringUtils.sol:StringUtils"
-      ]
+      linkLibraryAddresses["__$a50a81560717ba31a37cba6af2d185101e$__"]
         .replace(/^0x/, "")
         .toLowerCase()
     );
@@ -436,5 +434,5 @@ export class SLARegistry__factory extends ContractFactory {
 }
 
 export interface SLARegistryLibraryAddresses {
-  ["@stacktical/dsla-contracts/contracts/StringUtils.sol:StringUtils"]: string;
+  ["__$a50a81560717ba31a37cba6af2d185101e$__"]: string;
 }
