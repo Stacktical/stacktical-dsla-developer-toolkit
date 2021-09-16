@@ -26,7 +26,7 @@ if (error) {
 }
 
 export const fantom: NetworkUserConfig = {
-  chainId: 1,
+  chainId: 250,
   accounts: {
     mnemonic: process.env.MAINNET_MNEMONIC,
   },
