@@ -730,12 +730,11 @@ subtask(SUB_TASK_NAMES.EXPORT_NETWORKS, undefined).setAction(
           ...tokens.reduce(
             (r, token) => ({
               ...r,
-              [token.name + 'Token']:
-                require(appRoot.path +
-                  '/deployments/' +
-                  network +
-                  '/' +
-                  token.name).address + '.json',
+              [token.name + 'Token']: require(appRoot.path +
+                '/deployments/' +
+                network +
+                '/' +
+                token.name).address,
             }),
             {}
           ),

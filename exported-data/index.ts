@@ -1,3 +1,5 @@
+export { avalanche } from './avalanche';
+export { bsc } from './bsc';
 export { develop } from './develop';
 export { ethereum } from './ethereum';
 export { harmony } from './harmony';
