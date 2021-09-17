@@ -45,6 +45,7 @@ export type { BaseMessenger } from "./BaseMessenger";
 export type { DummyUseCase } from "./DummyUseCase";
 export type { SEMessenger } from "./SEMessenger";
 export type { EthereumERC20 } from "./EthereumERC20";
+export type { FantomERC20 } from "./FantomERC20";
 export type { PolygonERC20 } from "./PolygonERC20";
 
 export { ERC677Token__factory } from "./factories/ERC677Token__factory";
@@ -91,4 +92,5 @@ export { BaseMessenger__factory } from "./factories/BaseMessenger__factory";
 export { DummyUseCase__factory } from "./factories/DummyUseCase__factory";
 export { SEMessenger__factory } from "./factories/SEMessenger__factory";
 export { EthereumERC20__factory } from "./factories/EthereumERC20__factory";
+export { FantomERC20__factory } from "./factories/FantomERC20__factory";
 export { PolygonERC20__factory } from "./factories/PolygonERC20__factory";
