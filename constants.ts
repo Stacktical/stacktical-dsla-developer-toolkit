@@ -25,7 +25,7 @@ export enum CONTRACT_NAMES {
   AvalancheERC20 = 'AvalancheERC20',
   FantomERC20 = 'FantomERC20',
   FujiERC20 = 'FujiERC20',
-  DummyUseCase = 'DummyUseCase',
+  BaseMessenger = 'BaseMessenger',
 }
 
 export enum TOKEN_NAMES {
@@ -46,7 +46,7 @@ export enum DEPLOYMENT_TAGS {
 
 export enum USE_CASES {
   STAKING_EFFICIENCY = 'staking-efficiency',
-  DUMMY_USE_CASE = 'dummy-use-case',
+  BASE_MESSENGER = 'dummy-use-case',
 }
 
 export enum NETWORKS {

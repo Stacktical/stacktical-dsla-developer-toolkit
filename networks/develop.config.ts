@@ -77,7 +77,7 @@ export const develop: NetworkUserConfig = {
           allowance: '10',
         },
         {
-          contract: CONTRACT_NAMES.DummyUseCase,
+          contract: CONTRACT_NAMES.BaseMessenger,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
@@ -109,8 +109,8 @@ export const develop: NetworkUserConfig = {
         externalAdapterUrl: 'http://host.docker.internal:6060',
       },
       {
-        contract: CONTRACT_NAMES.DummyUseCase,
-        useCaseName: USE_CASES.DUMMY_USE_CASE,
+        contract: CONTRACT_NAMES.BaseMessenger,
+        useCaseName: USE_CASES.BASE_MESSENGER,
         externalAdapterUrl: 'http://host.docker.internal:6060',
       },
     ],

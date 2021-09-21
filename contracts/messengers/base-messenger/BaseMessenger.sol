@@ -13,7 +13,7 @@ import '@stacktical/dsla-contracts/contracts/StakeRegistry.sol';
 import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
 import '@openzeppelin/contracts/token/ERC20/SafeERC20.sol';
 
-contract DummyUseCase is ChainlinkClient, IMessenger, ReentrancyGuard {
+contract BaseMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
     using SafeERC20 for ERC20;
 
     mapping(bytes32 => SLIRequest) public requestIdToSLIRequest;
