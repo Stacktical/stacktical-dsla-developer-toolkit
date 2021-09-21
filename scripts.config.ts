@@ -23,7 +23,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.GreaterThan,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
-      messengerContract: CONTRACT_NAMES.SEMessenger,
+      messengerContract: CONTRACT_NAMES.BaseMessenger,
       initialPeriodId: 4,
       finalPeriodId: 3,
       extraData: [],
