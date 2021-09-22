@@ -46,6 +46,7 @@ export enum DEPLOYMENT_TAGS {
 
 export enum USE_CASES {
   STAKING_EFFICIENCY = 'staking-efficiency',
+  BASE_MESSENGER = 'dummy-use-case',
 }
 
 export enum NETWORKS {

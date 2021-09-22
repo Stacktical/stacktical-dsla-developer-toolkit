@@ -459,7 +459,7 @@ subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
 );
 
 subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
-  async (_, hre: HardhatRuntimeEnvironment) => {
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
     const { deployments, network, ethers, getNamedAccounts, web3 } = hre;
     const { deployer } = await getNamedAccounts();
     const { get } = deployments;
@@ -541,8 +541,11 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
     for (let node of stacktical.chainlink.nodesConfiguration) {
       printSeparator();
       console.log('Preparing node: ' + node.name);
-      for (let messenger of stacktical.messengers) {
-        console.log('Creating use case configuration: ' + messenger.contract);
+      const messengers = taskArgs.index
+        ? [stacktical.messengers[taskArgs.index]]
+        : stacktical.messengers;
+      for (let messenger of messengers) {
+        consola.info('Creating use case configuration: ' + messenger.contract);
         let bridge = await updatedBridge(
           node,
           messenger.useCaseName,
@@ -1651,6 +1654,24 @@ subtask(SUB_TASK_NAMES.SET_PRECOORDINATOR, undefined).setAction(
     console.log(stacktical.chainlink.nodesConfiguration);
     const oracle = await get(CONTRACT_NAMES.Oracle);
     const messenger = stacktical.messengers[taskArgs.index];
+    for (let node of stacktical.chainlink.nodesConfiguration) {
+      const jobs = await getChainlinkJobs(node);
+      const job = jobs.find(
+        (postedJob) =>
+          postedJob.attributes.tasks.some(
+            (task) => task.type === messenger.useCaseName
+          ) &&
+          postedJob.attributes.initiators.some(
+            (initiator) =>
+              toChecksumAddress(initiator.params.address) === oracle.address
+          )
+      );
+      if (!job) {
+        await hre.run(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, {
+          index: taskArgs.index,
+        });
+      }
+    }
     const preCoordinatorConfiguration = await getPreCoordinatorConfiguration(
       stacktical.chainlink.nodesConfiguration,
       messenger.useCaseName,

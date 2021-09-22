@@ -1,26 +1,43 @@
 {
-  "useCaseName": "awesome-indexer",
-  "symbol": "AI",
-  "ownerUrl": "https://www.awesome.com",
-  "useCaseDocs": "https://readme.awesome.com/",
-  "externalAdapterRepo": "https://www.github.com/awesome-company/awesome-indexer",
-  "keywords": ["awesome"],
+  "useCaseName": "staking-efficiency",
+  "symbol": "SE",
+  "ownerUrl": "https://www.stacktical.com",
+  "useCaseDocs": "https://readme.stacktical.com/developer-guide/use-cases-1/staking-efficiency/introduction",
+  "externalAdapterRepo": "https://github.com/Stacktical/staking-efficiency-indexer",
+  "unit": "%",
+  "keywords": ["dpos", "staking", "validator", "delegator"],
   "timestamp": "2021-07-07T00:00:00+00:00",
   "ipfsData": {
-    "parameter1": {
-      "type": "parameter 1 type",
-      "values": ["value1", "value2", "value3"],
-      "description": "parameter 1 description"
+    "serviceName": {
+      "name": "Service Name",
+      "type": "string",
+      "description": "The Validator service name"
     },
-    "parameter2": {
-      "type": "parameter 2 type",
-      "values": ["value1", "value2", "value3"],
-      "description": "parameter 2 description"
+    "serviceDescription": {
+      "name": "Service Description",
+      "type": "string",
+      "description": "The Validator service description"
     },
-    "parameter3": {
-      "type": "parameter 3 type",
-      "values": ["value1", "value2", "value3"],
-      "description": "parameter 3 description"
+    "serviceImage": {
+      "name": "Service Image",
+      "type": "url",
+      "description": "The Validator service image url to display"
+    },
+    "serviceURL": {
+      "name": "Service URL",
+      "type": "url",
+      "description": "The Validator service URL"
+    },
+    "serviceAddress": {
+      "name": "Service Address",
+      "type": "address",
+      "description": "The Validator service blockchain address"
+    },
+    "serviceTicker": {
+      "name": "Service Ticker",
+      "type": "string",
+      "description": "The Validator service ticker",
+      "values": ["ONE", "DOT", "ATOM", "BAND", "eGLD", "XTZ", "AVAX", "ROSE"]
     }
   },
   "version": {
