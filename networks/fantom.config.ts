@@ -53,7 +53,7 @@ export const fantom: NetworkUserConfig = {
     ],
     chainlink: {
       deployLocal: false,
-      deleteOldJobs: false,
+      deleteOldJobs: true,
       cleanLocalFolder: false,
       nodeFunds: '1',
       ethWsUrl: process.env.FANTOM_WS_URI,
