@@ -28,6 +28,7 @@ enum TASK_NAMES {
   UNLOCK_TOKENS = 'stacktical:unlock-tokens',
   GRAPH_MANIFESTOS = 'stacktical:graph-manifestos',
   GET_SLA_FROM_TX = 'stacktical:get-sla-from-tx',
+  UPDATE_MESSENGER_SPEC = 'stacktical:update-messenger-spec',
 }
 
 task(
@@ -37,6 +38,12 @@ task(
   await run(SUB_TASK_NAMES.EXPORT_SUBGRAPH_DATA, taskArgs);
   await run(SUB_TASK_NAMES.SETUP_GRAPH_MANIFESTOS, taskArgs);
 });
+
+task(TASK_NAMES.UPDATE_MESSENGER_SPEC, 'Update messenger spec')
+  .addParam(PARAMS_NAMES.INDEX, 'Messenger index')
+  .setAction(async (taskArgs, { run }) => {
+    await run(SUB_TASK_NAMES.UPDATE_MESSENGER_SPEC, taskArgs);
+  });
 
 task(TASK_NAMES.UNLOCK_TOKENS, 'Unlock value from a finished SLA contract')
   .addOptionalParam(

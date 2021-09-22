@@ -16,6 +16,7 @@ import {
   ERC20PresetMinterPauser,
   IMessenger,
   IMessenger__factory,
+  MessengerRegistry,
   MessengerRegistry__factory,
   Oracle__factory,
   Ownable__factory,
@@ -98,7 +99,7 @@ export enum SUB_TASK_NAMES {
   PROVIDER_WITHDRAW = 'PROVIDER_WITHDRAW',
   UNLOCK_TOKENS = 'UNLOCK_TOKENS',
   GET_SLA_FROM_TX = 'GET_SLA_FROM_TX',
-  GET_TOKEN_BALANCES = 'GET_TOKEN_BALANCES',
+  UPDATE_MESSENGER_SPEC = 'UPDATE_MESSENGER_SPEC',
 }
 
 subtask(SUB_TASK_NAMES.GET_SLA_FROM_TX, undefined).setAction(
@@ -114,6 +115,45 @@ subtask(SUB_TASK_NAMES.GET_SLA_FROM_TX, undefined).setAction(
     const filter = slaRegistry.filters.SLACreated(null, transaction.from);
     const events = await slaRegistry.queryFilter(filter, transaction.blockHash);
     console.log(events);
+  }
+);
+
+subtask(SUB_TASK_NAMES.UPDATE_MESSENGER_SPEC, undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    const { network, ethers, getNamedAccounts } = hre;
+    const { deployer } = await getNamedAccounts();
+    const { stacktical } = network.config;
+    const { index } = taskArgs;
+    const messenger = stacktical.messengers[index];
+    consola.info('Selected Messenger');
+    consola.info(messenger);
+    const messengerContract = <IMessenger>(
+      await ethers.getContract(messenger.contract)
+    );
+    const messengerRegistry = <MessengerRegistry>(
+      await ethers.getContract(CONTRACT_NAMES.MessengerRegistry)
+    );
+    const filter = messengerRegistry.filters.MessengerRegistered(
+      deployer,
+      messengerContract.address
+    );
+    const events = await messengerRegistry.queryFilter(filter);
+    const messengerId = events[0].args.id;
+
+    const specificationPath = `${appRoot.path}/contracts/messengers/${messenger.useCaseName}/use-case-spec.json`;
+    const messengerSpec = JSON.parse(fs.readFileSync(specificationPath));
+    const updatedSpec = {
+      ...messengerSpec,
+      timestamp: new Date().toISOString(),
+    };
+    consola.info('New spec');
+    consola.info(updatedSpec);
+    const seMessengerSpecIPFS = await getIPFSHash(updatedSpec);
+    const specUrl = `${process.env.IPFS_URI}/ipfs/${seMessengerSpecIPFS}`;
+    consola.info('New specification url');
+    consola.info(specUrl);
+    const tx = await messengerRegistry.modifyMessenger(specUrl, messengerId);
+    await tx.wait();
   }
 );
 
@@ -419,7 +459,7 @@ subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
 );
 
 subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
-  async (_, hre: HardhatRuntimeEnvironment) => {
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
     const { deployments, network, ethers, getNamedAccounts, web3 } = hre;
     const { deployer } = await getNamedAccounts();
     const { get } = deployments;
@@ -449,7 +489,6 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
         );
         return httpRequestJobRes.data;
       } catch (error) {
-        console.log(error);
         return false;
       }
     };
@@ -502,8 +541,11 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
     for (let node of stacktical.chainlink.nodesConfiguration) {
       printSeparator();
       console.log('Preparing node: ' + node.name);
-      for (let messenger of stacktical.messengers) {
-        console.log('Creating use case configuration: ' + messenger.contract);
+      const messengers = taskArgs.index
+        ? [stacktical.messengers[taskArgs.index]]
+        : stacktical.messengers;
+      for (let messenger of messengers) {
+        consola.info('Creating use case configuration: ' + messenger.contract);
         let bridge = await updatedBridge(
           node,
           messenger.useCaseName,
@@ -691,12 +733,11 @@ subtask(SUB_TASK_NAMES.EXPORT_NETWORKS, undefined).setAction(
           ...tokens.reduce(
             (r, token) => ({
               ...r,
-              [token.name + 'Token']:
-                require(appRoot.path +
-                  '/deployments/' +
-                  network +
-                  '/' +
-                  token.name).address + '.json',
+              [token.name + 'Token']: require(appRoot.path +
+                '/deployments/' +
+                network +
+                '/' +
+                token.name).address,
             }),
             {}
           ),
@@ -752,16 +793,40 @@ subtask(SUB_TASK_NAMES.EXPORT_NETWORKS, undefined).setAction(
 );
 
 subtask(SUB_TASK_NAMES.EXPORT_TO_FRONT_END, undefined).setAction(async () => {
-  consola.info('Exporting contracts addresses to frontend');
-  let srcPath = `${appRoot}/exported-data`;
-  let destPath = `${appRoot}/../stacktical-dsla-frontend/src/addresses`;
-  fs.copySync(srcPath, destPath, { overwrite: true });
-  consola.success('Contract address export to frontend finished');
-  consola.info('Exporting typechain to frontend');
-  srcPath = `${appRoot}/typechain`;
-  destPath = `${appRoot}/../stacktical-dsla-frontend/src/typechain`;
-  fs.copySync(srcPath, destPath, { overwrite: true });
-  consola.success('Typechain export to frontend finished');
+  consola.info('Exporting contracts addresses to frontend apps');
+  if (fs.existsSync(`${appRoot}/../stacktical-dsla-frontend`)) {
+    printSeparator();
+    let srcPath = `${appRoot}/exported-data`;
+    consola.info('Exporting to Stacktical dApp frontend');
+    let destPath = `${appRoot}/../stacktical-dsla-frontend/src/addresses`;
+    fs.copySync(srcPath, destPath, { overwrite: true });
+    consola.success('Contract address export to Stacktical dApp finished');
+    consola.info('Exporting typechain to Stacktical dApp');
+    srcPath = `${appRoot}/typechain`;
+    destPath = `${appRoot}/../stacktical-dsla-frontend/src/typechain`;
+    fs.copySync(srcPath, destPath, { overwrite: true });
+    consola.success('Typechain export to Stacktical dApp finished');
+  } else {
+    printSeparator();
+    consola.warn('Stacktical dApp frontend folder not found');
+  }
+  if (fs.existsSync(`${appRoot}/../dsla-protocol-app`)) {
+    printSeparator();
+    let srcPath = `${appRoot}/exported-data`;
+    consola.info('Exporting to DSLA protocol dApp frontend');
+    let destPath = `${appRoot}/../dsla-protocol-app/src/addresses`;
+    fs.copySync(srcPath, destPath, { overwrite: true });
+    consola.success('Contract address export DSLA protocol dApp finished');
+    consola.info('Exporting typechain DSLA protocol dApp');
+    srcPath = `${appRoot}/typechain`;
+    destPath = `${appRoot}/../dsla-protocol-app/src/typechain`;
+    fs.copySync(srcPath, destPath, { overwrite: true });
+    consola.success('Typechain export DSLA protocol dApp finished');
+  } else {
+    printSeparator();
+    consola.warn(' DSLA protocol dApp folder not found');
+  }
+  printSeparator();
 });
 
 // subtask(SUB_TASK_NAMES.EXPORT_NETWORKS, undefined).setAction(
@@ -868,6 +933,15 @@ subtask(SUB_TASK_NAMES.EXPORT_SUBGRAPH_DATA, undefined).setAction(async () => {
         fs.readFileSync(`${appRoot}/deployments/${network}/StakeRegistry.json`)
       );
 
+      const MessengerRegistry = JSON.parse(
+        fs.readFileSync(
+          `${appRoot}/deployments/${network}/MessengerRegistry.json`
+        )
+      );
+      const PeriodRegistry = JSON.parse(
+        fs.readFileSync(`${appRoot}/deployments/${network}/PeriodRegistry.json`)
+      );
+
       const data = {
         slaRegistryAddress: SLARegistry.address,
         slaRegistryStartBlock: SLARegistry.receipt.blockNumber,
@@ -875,6 +949,10 @@ subtask(SUB_TASK_NAMES.EXPORT_SUBGRAPH_DATA, undefined).setAction(async () => {
         sloRegistryStartBlock: SLORegistry.receipt.blockNumber,
         stakeRegistryAddress: StakeRegistry.address,
         stakeRegistryStartBlock: StakeRegistry.receipt.blockNumber,
+        messengerRegistryAddress: MessengerRegistry.address,
+        messengerRegistryStartBlock: MessengerRegistry.receipt.blockNumber,
+        periodRegistryAddress: PeriodRegistry.address,
+        periodRegistryStartBlock: PeriodRegistry.receipt.blockNumber,
         graphNetwork: GRAPH_NETWORKS[network],
       };
       consola.info('Resulting data');
@@ -1576,6 +1654,24 @@ subtask(SUB_TASK_NAMES.SET_PRECOORDINATOR, undefined).setAction(
     console.log(stacktical.chainlink.nodesConfiguration);
     const oracle = await get(CONTRACT_NAMES.Oracle);
     const messenger = stacktical.messengers[taskArgs.index];
+    for (let node of stacktical.chainlink.nodesConfiguration) {
+      const jobs = await getChainlinkJobs(node);
+      const job = jobs.find(
+        (postedJob) =>
+          postedJob.attributes.tasks.some(
+            (task) => task.type === messenger.useCaseName
+          ) &&
+          postedJob.attributes.initiators.some(
+            (initiator) =>
+              toChecksumAddress(initiator.params.address) === oracle.address
+          )
+      );
+      if (!job) {
+        await hre.run(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, {
+          index: taskArgs.index,
+        });
+      }
+    }
     const preCoordinatorConfiguration = await getPreCoordinatorConfiguration(
       stacktical.chainlink.nodesConfiguration,
       messenger.useCaseName,

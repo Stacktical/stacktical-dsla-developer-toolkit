@@ -101,7 +101,14 @@ export const ethereum: NetworkUserConfig = {
           },
         ],
         stake: {
-          stakingParameters: {},
+          stakingParameters: {
+            dslaBurnedByVerification: '10000',
+            dslaPlatformReward: '75',
+            dslaDepositByPeriod: '25000',
+            dslaMessengerReward: '4925',
+            dslaUserReward: '10000',
+            burnDSLA: true,
+          },
         },
       },
     },

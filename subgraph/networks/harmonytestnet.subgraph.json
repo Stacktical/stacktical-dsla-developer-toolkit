@@ -5,5 +5,9 @@
   "sloRegistryStartBlock": 13820664,
   "stakeRegistryAddress": "0x10Ae2fFB5a1b4Ba0De8fEd2185895a14011E5b70",
   "stakeRegistryStartBlock": 13820672,
+  "messengerRegistryAddress": "0x8afe7a354A9b850C9eA6b7E80a675A159F5c79f9",
+  "messengerRegistryStartBlock": 13820668,
+  "periodRegistryAddress": "0x2A905636c4ae26957Eb8B48318969dCa5b9Ff502",
+  "periodRegistryStartBlock": 13820660,
   "graphNetwork": "testnet"
 }

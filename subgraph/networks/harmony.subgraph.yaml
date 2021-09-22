@@ -70,6 +70,53 @@ dataSources:
         - event: LockedValueReturned(indexed address,indexed address,uint256)
           handler: handleLockedValueReturned
       file: ../mapping.ts
+  - kind: ethereum/contract
+    name: MessengerRegistry
+    network: mainnet
+    source:
+      address: '0x551264EBEdd316A173680Ea956dB0a7cE2864682'
+      startBlock: 14508866
+      abi: MessengerRegistry
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - MessengerRegistry
+        - IMessenger
+      abis:
+        - name: MessengerRegistry
+          file: ../abis/@stacktical/dsla-contracts/contracts/MessengerRegistry.sol/MessengerRegistry.json
+        - name: IMessenger
+          file: ../abis/@stacktical/dsla-contracts/contracts/interfaces/IMessenger.sol/IMessenger.json
+      eventHandlers:
+        - event: MessengerRegistered(indexed address,indexed address,string,uint256,uint256)
+          handler: handleMessengerRegistered
+        - event: MessengerModified(indexed address,indexed address,string,uint256,uint256)
+          handler: handleMessengerModified
+      file: ../mapping.ts
+  - kind: ethereum/contract
+    name: PeriodRegistry
+    network: mainnet
+    source:
+      address: '0x96f6620265d3f206f221990e5c9160D82428A862'
+      startBlock: 14508857
+      abi: PeriodRegistry
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - PeriodRegistry
+      abis:
+        - name: PeriodRegistry
+          file: ../abis/@stacktical/dsla-contracts/contracts/PeriodRegistry.sol/PeriodRegistry.json
+      eventHandlers:
+        - event: PeriodInitialized(uint8,uint256)
+          handler: handlePeriodInitialized
+        - event: PeriodModified(uint8,uint256)
+          handler: handlePeriodModified
+      file: ../mapping.ts
 templates:
   - kind: ethereum/contract
     name: SLA

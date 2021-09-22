@@ -76,6 +76,11 @@ export const develop: NetworkUserConfig = {
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
+        {
+          contract: CONTRACT_NAMES.BaseMessenger,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
       ],
       registry: {
         periods: [
@@ -87,12 +92,12 @@ export const develop: NetworkUserConfig = {
         ],
         stake: {
           stakingParameters: {
-            dslaBurnedByVerification: '1000',
-            dslaPlatformReward: '500',
-            dslaDepositByPeriod: '2000',
-            dslaMessengerReward: '250',
-            dslaUserReward: '250',
-            burnDSLA: false,
+            dslaBurnedByVerification: '10000',
+            dslaPlatformReward: '75',
+            dslaDepositByPeriod: '25000',
+            dslaMessengerReward: '4925',
+            dslaUserReward: '10000',
+            burnDSLA: true,
           },
         },
       },
@@ -101,6 +106,11 @@ export const develop: NetworkUserConfig = {
       {
         contract: CONTRACT_NAMES.SEMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
+        externalAdapterUrl: 'http://host.docker.internal:6060',
+      },
+      {
+        contract: CONTRACT_NAMES.BaseMessenger,
+        useCaseName: USE_CASES.BASE_MESSENGER,
         externalAdapterUrl: 'http://host.docker.internal:6060',
       },
     ],
