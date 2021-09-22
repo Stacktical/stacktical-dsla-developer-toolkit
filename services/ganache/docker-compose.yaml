@@ -9,7 +9,7 @@ services:
       - 8545:8545
     networks:
       - dsla-test
-    command: --accounts 10 --defaultBalanceEther 100000 -d -i 1337 -l 12000000 -h 0.0.0.0 --blockTime 2
+    command: --accounts 10 --defaultBalanceEther 100000 -d -i 1337 -l 12000000 -h 0.0.0.0
 
 networks:
   dsla-test:
