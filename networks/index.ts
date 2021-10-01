@@ -10,6 +10,6 @@ export const networks = [
   { name: NETWORKS.POLYGON, enabled: false },
   { name: NETWORKS.RINKEBY, enabled: false },
   { name: NETWORKS.BSC, enabled: false },
-  { name: NETWORKS.AVALANCHE, enabled: true },
-  { name: NETWORKS.FANTOM, enabled: false },
+  { name: NETWORKS.AVALANCHE, enabled: false },
+  { name: NETWORKS.FANTOM, enabled: true },
 ];
