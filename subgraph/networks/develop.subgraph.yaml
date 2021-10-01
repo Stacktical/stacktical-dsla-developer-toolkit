@@ -8,8 +8,8 @@ dataSources:
     name: SLARegistry
     network: mainnet
     source:
-      address: '0x26b4AFb60d6C903165150C6F0AA14F8016bE4aec'
-      startBlock: 61
+      address: '0xD86C8F0327494034F60e25074420BcCF560D5610'
+      startBlock: 25
       abi: SLARegistry
     mapping:
       kind: ethereum/events
@@ -30,8 +30,8 @@ dataSources:
     name: SLORegistry
     network: mainnet
     source:
-      address: '0x67B5656d60a809915323Bf2C40A8bEF15A152e3e'
-      startBlock: 55
+      address: '0xFC628dd79137395F3C9744e33b1c5DE554D94882'
+      startBlock: 22
       abi: SLORegistry
     mapping:
       kind: ethereum/events
@@ -52,8 +52,8 @@ dataSources:
     name: StakeRegistry
     network: mainnet
     source:
-      address: '0xA57B8a5584442B467b4689F1144D269d096A3daF'
-      startBlock: 59
+      address: '0x21a59654176f2689d12E828B77a783072CD26680'
+      startBlock: 24
       abi: StakeRegistry
     mapping:
       kind: ethereum/events
@@ -74,8 +74,8 @@ dataSources:
     name: MessengerRegistry
     network: mainnet
     source:
-      address: '0x2612Af3A521c2df9EAF28422Ca335b04AdF3ac66'
-      startBlock: 57
+      address: '0x5f8e26fAcC23FA4cbd87b8d9Dbbd33D5047abDE1'
+      startBlock: 23
       abi: MessengerRegistry
     mapping:
       kind: ethereum/events
@@ -99,8 +99,8 @@ dataSources:
     name: PeriodRegistry
     network: mainnet
     source:
-      address: '0x9b1f7F645351AF3631a656421eD2e40f2802E6c0'
-      startBlock: 53
+      address: '0xb09bCc172050fBd4562da8b229Cf3E45Dc3045A6'
+      startBlock: 21
       abi: PeriodRegistry
     mapping:
       kind: ethereum/events
