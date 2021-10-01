@@ -68,7 +68,7 @@ export const bsc: NetworkUserConfig = {
       ],
     },
     addresses: {
-      [CONTRACT_NAMES.LinkToken]: '0xf8a0bf9cf54bb92f17374d9e9a321e6a111a51bd',
+      [CONTRACT_NAMES.LinkToken]: '0x404460c6a5ede2d891e8297795264fde62adbb75',
     },
     bootstrap: {
       allowance: [
