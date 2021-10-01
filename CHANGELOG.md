@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.5.0](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v2.4.2...v2.5.0) (2021-09-22)
+
+
+### Features
+
+* Add bsc network ([7978101](https://github.com/Stacktical/stacktical-developer-toolkit/commit/7978101b92a37622c7fca98694adcb8893a698bb))
+* Add exported data ([69606e2](https://github.com/Stacktical/stacktical-developer-toolkit/commit/69606e2a154aee2d9bd85badd0f222e8241f329b))
+* Add fantom network ([6acfe19](https://github.com/Stacktical/stacktical-developer-toolkit/commit/6acfe19f04f0a4055dcb339cea4997f48d54d288))
+* Added fantom network ([ddf4d98](https://github.com/Stacktical/stacktical-developer-toolkit/commit/ddf4d9868d33e82e73a4ad2dd1d570d2f4f63fc1))
+* Added Fuji configuration ([ab888bb](https://github.com/Stacktical/stacktical-developer-toolkit/commit/ab888bb59bc9549a2c461827c34ffe37e6651771))
+* dummy use case for demo ([0570381](https://github.com/Stacktical/stacktical-developer-toolkit/commit/0570381df826dfb1e8d5d3f66d67a9f3e6328a7e))
+* dummy use case to base messenger ([0248901](https://github.com/Stacktical/stacktical-developer-toolkit/commit/0248901bdf9811f4e9a31daf1a94f8091f25834e))
+* exporting data to dsla protocol app ([066881d](https://github.com/Stacktical/stacktical-developer-toolkit/commit/066881d5b0f5a5430e4f388b94259b41e5af0a1c))
+* Fix config parameters ([16eb02f](https://github.com/Stacktical/stacktical-developer-toolkit/commit/16eb02f0aa15705c0ef322bf56a6ad775fe0bb0f))
+* ganache with 2s blocktime ([b40b86f](https://github.com/Stacktical/stacktical-developer-toolkit/commit/b40b86f20905b49add3c75fec101d98dd84bfd23))
+* ganache without blocktime ([18387ae](https://github.com/Stacktical/stacktical-developer-toolkit/commit/18387aec6fa0e61e6d337737aa82935313b3132f))
+* indexing initialized periods ([70eb492](https://github.com/Stacktical/stacktical-developer-toolkit/commit/70eb4926fe327e8075ac5e25d4684554c996157b))
+* indexing registered messengers ([ff481e7](https://github.com/Stacktical/stacktical-developer-toolkit/commit/ff481e76557b2e27bc9652260efdc1c306f7ebd1))
+* messenger spec ipfs data field name ([fcc5483](https://github.com/Stacktical/stacktical-developer-toolkit/commit/fcc548394d51024e73bd153353ff24e492f9fd0c))
+* new staking parameters ([ade0cde](https://github.com/Stacktical/stacktical-developer-toolkit/commit/ade0cde739fbae667528d2d098c863bac2113bd2))
+* scripts updated ([692d189](https://github.com/Stacktical/stacktical-developer-toolkit/commit/692d1898535cca4c03c5ead84983d4eb13461428))
+* Set avalanche network parameters ([92ac493](https://github.com/Stacktical/stacktical-developer-toolkit/commit/92ac493428ce20312174ad6e9ab0bbefdf376699))
+* update messenger spec task ([588d097](https://github.com/Stacktical/stacktical-developer-toolkit/commit/588d097f1fdf2180bd0d0d07d1aef532aeb87867))
+* using base messenger ([c191eea](https://github.com/Stacktical/stacktical-developer-toolkit/commit/c191eea81ce8ccfde7f01f92316f702aa9cd616e))
+
+
+### Bug Fixes
+
+* exporting tokens without .json ([ed39c4b](https://github.com/Stacktical/stacktical-developer-toolkit/commit/ed39c4b7dba7702a7f8382d5f70e64d6ab06483a))
+* Fantom redeploy ([79d50ac](https://github.com/Stacktical/stacktical-developer-toolkit/commit/79d50ac1f64318fcfe05ca85d6df6db98822269a))
+
 ### [2.4.2](https://github.com/Stacktical/stacktical-developer-toolkit/compare/v2.4.1...v2.4.2) (2021-08-20)
 
 
