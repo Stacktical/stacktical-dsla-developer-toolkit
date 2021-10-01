@@ -8,8 +8,8 @@ dataSources:
     name: SLARegistry
     network: avalanche
     source:
-      address: '0xEF12BDcF5E5D5ae4c950a9FaEb2A274d1646b48D'
-      startBlock: 3708751
+      address: '0xBa4FC6E06276Fd5402e3edb52EE39Cf7b6B2E678'
+      startBlock: 5074796
       abi: SLARegistry
     mapping:
       kind: ethereum/events
@@ -30,8 +30,8 @@ dataSources:
     name: SLORegistry
     network: avalanche
     source:
-      address: '0x33065a04993BeEd06C2415349DbF976B941e80D1'
-      startBlock: 3708724
+      address: '0x2C092604e3A3a934DFE3D0Bc2c1CaeEc4AEb3E74'
+      startBlock: 5074782
       abi: SLORegistry
     mapping:
       kind: ethereum/events
@@ -52,8 +52,8 @@ dataSources:
     name: StakeRegistry
     network: avalanche
     source:
-      address: '0x143c0e6cB35AC53C7f06d4914199E4cAc3977AC7'
-      startBlock: 3708738
+      address: '0x9c78f8FB7B5944255bDCA8f81083Fb0a452b10EE'
+      startBlock: 5074791
       abi: StakeRegistry
     mapping:
       kind: ethereum/events
@@ -74,8 +74,8 @@ dataSources:
     name: MessengerRegistry
     network: avalanche
     source:
-      address: '0x857533E7d9DE216E8BdBd1620018099B88cDD792'
-      startBlock: 3708728
+      address: '0xd41352bCacc58cbbF14E2F8c52D4cD3d41AB5697'
+      startBlock: 5074786
       abi: MessengerRegistry
     mapping:
       kind: ethereum/events
@@ -99,8 +99,8 @@ dataSources:
     name: PeriodRegistry
     network: avalanche
     source:
-      address: '0x7229e7cb280cb55741B13485ded35C1df3790BC0'
-      startBlock: 3708719
+      address: '0x97e219620F7dAba283fE9b1099586E274D1E55da'
+      startBlock: 5074778
       abi: PeriodRegistry
     mapping:
       kind: ethereum/events

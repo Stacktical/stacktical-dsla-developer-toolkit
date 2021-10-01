@@ -1,13 +1,13 @@
 {
-  "slaRegistryAddress": "0xEF12BDcF5E5D5ae4c950a9FaEb2A274d1646b48D",
-  "slaRegistryStartBlock": 3708751,
-  "sloRegistryAddress": "0x33065a04993BeEd06C2415349DbF976B941e80D1",
-  "sloRegistryStartBlock": 3708724,
-  "stakeRegistryAddress": "0x143c0e6cB35AC53C7f06d4914199E4cAc3977AC7",
-  "stakeRegistryStartBlock": 3708738,
-  "messengerRegistryAddress": "0x857533E7d9DE216E8BdBd1620018099B88cDD792",
-  "messengerRegistryStartBlock": 3708728,
-  "periodRegistryAddress": "0x7229e7cb280cb55741B13485ded35C1df3790BC0",
-  "periodRegistryStartBlock": 3708719,
+  "slaRegistryAddress": "0xBa4FC6E06276Fd5402e3edb52EE39Cf7b6B2E678",
+  "slaRegistryStartBlock": 5074796,
+  "sloRegistryAddress": "0x2C092604e3A3a934DFE3D0Bc2c1CaeEc4AEb3E74",
+  "sloRegistryStartBlock": 5074782,
+  "stakeRegistryAddress": "0x9c78f8FB7B5944255bDCA8f81083Fb0a452b10EE",
+  "stakeRegistryStartBlock": 5074791,
+  "messengerRegistryAddress": "0xd41352bCacc58cbbF14E2F8c52D4cD3d41AB5697",
+  "messengerRegistryStartBlock": 5074786,
+  "periodRegistryAddress": "0x97e219620F7dAba283fE9b1099586E274D1E55da",
+  "periodRegistryStartBlock": 5074778,
   "graphNetwork": "avalanche"
 }
