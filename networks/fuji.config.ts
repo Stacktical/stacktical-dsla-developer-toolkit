@@ -25,15 +25,15 @@ if (error) {
   process.env = value;
 }
 
-export const avalanche: NetworkUserConfig = {
+export const fuji: NetworkUserConfig = {
   chainId: 43113,
   accounts: {
     mnemonic: process.env.MAINNET_MNEMONIC,
   },
-  url: 'TBD',
+  url: process.env.FUJI_URI,
   stacktical: {
     checkPastPeriods: true,
-    deployTokens: false,
+    deployTokens: true,
     tokens: [
       {
         factory: EthereumERC20__factory,
@@ -65,7 +65,7 @@ export const avalanche: NetworkUserConfig = {
       ],
     },
     addresses: {
-      //[CONTRACT_NAMES.LinkToken]: '0xB3fe5374F67D7a22886A0eE082b2E2f9d2651651',
+      [CONTRACT_NAMES.LinkToken]: '0x0b9d5D9136855f6FEc3c0993feE6E9CE8a297846',
     },
     bootstrap: {
       allowance: [
@@ -104,7 +104,7 @@ export const avalanche: NetworkUserConfig = {
       {
         contract: CONTRACT_NAMES.SEAMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
-        externalAdapterUrl: 'http://host.docker.internal:6060',
+        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
       },
     ],
     scripts: scripts,
