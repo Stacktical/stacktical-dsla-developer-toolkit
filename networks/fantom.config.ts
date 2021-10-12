@@ -68,7 +68,7 @@ export const fantom: NetworkUserConfig = {
       ],
     },
     addresses: {
-      [CONTRACT_NAMES.LinkToken]: '0xb3654dc3d10ea7645f8319668e8f54d2574fbdc8',
+      [CONTRACT_NAMES.LinkToken]: '0x6F43FF82CCA38001B6699a8AC47A2d0E66939407',
     },
     bootstrap: {
       allowance: [

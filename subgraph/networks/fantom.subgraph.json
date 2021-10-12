@@ -1,13 +1,13 @@
 {
-  "slaRegistryAddress": "0xF60e967f36277e8589965Aa1a44cFa990a7e1bb4",
-  "slaRegistryStartBlock": 17485583,
-  "sloRegistryAddress": "0x2f5F25F158cb7Ae0BF1f7eBfDF4ed9A58E3BcB58",
-  "sloRegistryStartBlock": 17485345,
-  "stakeRegistryAddress": "0x279b1B7B41A86205E0219bE590A470b301B4C3b2",
-  "stakeRegistryStartBlock": 17485382,
-  "messengerRegistryAddress": "0x3eBe46d0d873B635D1e003BEe76de67cE2F3a584",
-  "messengerRegistryStartBlock": 17485348,
-  "periodRegistryAddress": "0xef20eE1dE7007D11a512017d5B84d3AD9C976bF5",
-  "periodRegistryStartBlock": 17485315,
+  "slaRegistryAddress": "0xC33492F8D76918A9527165A9fD71089980656357",
+  "slaRegistryStartBlock": 18069409,
+  "sloRegistryAddress": "0x6BDd971179559439c052D4A4b4C9B02b33a0dfc8",
+  "sloRegistryStartBlock": 18069365,
+  "stakeRegistryAddress": "0xC76EaC6B2eBb3554271Ec48d1CABF953FC6fA211",
+  "stakeRegistryStartBlock": 18069391,
+  "messengerRegistryAddress": "0x7db551Ce6677211309db39A67F73cA923e9d4944",
+  "messengerRegistryStartBlock": 18069374,
+  "periodRegistryAddress": "0xB63a13825e129fBa2f2205847158461bec5f265A",
+  "periodRegistryStartBlock": 18069355,
   "graphNetwork": "mainnet"
 }
