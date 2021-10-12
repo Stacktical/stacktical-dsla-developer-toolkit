@@ -30,7 +30,7 @@ export const avalanche: NetworkUserConfig = {
   accounts: {
     mnemonic: process.env.MAINNET_MNEMONIC,
   },
-  url: "https://avalanche--fuji--rpc.datahub.figment.io/apikey/a86cfb440f77c1beec794e87f39917a1/ext/bc/C/rpc",
+  url: 'https://avalanche--fuji--rpc.datahub.figment.io/apikey/a86cfb440f77c1beec794e87f39917a1/ext/bc/C/rpc',
   stacktical: {
     checkPastPeriods: true,
     deployTokens: false,
@@ -100,6 +100,11 @@ export const avalanche: NetworkUserConfig = {
         contract: CONTRACT_NAMES.SEMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
+      },
+      {
+        contract: CONTRACT_NAMES.SEAMessenger,
+        useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
+        externalAdapterUrl: 'http://host.docker.internal:6060',
       },
     ],
     scripts: scripts,

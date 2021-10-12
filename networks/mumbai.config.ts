@@ -101,6 +101,11 @@ export const mumbai: NetworkUserConfig = {
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl: 'http://host.docker.internal:6060',
       },
+      {
+        contract: CONTRACT_NAMES.SEAMessenger,
+        useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
+        externalAdapterUrl: 'http://host.docker.internal:6060',
+      },
     ],
     scripts: scripts,
   },
