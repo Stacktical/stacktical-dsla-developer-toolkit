@@ -30,7 +30,7 @@ export const avalanche: NetworkUserConfig = {
   accounts: {
     mnemonic: process.env.MAINNET_MNEMONIC,
   },
-  url: 'https://avalanche--fuji--rpc.datahub.figment.io/apikey/a86cfb440f77c1beec794e87f39917a1/ext/bc/C/rpc',
+  url: 'TBD',
   stacktical: {
     checkPastPeriods: true,
     deployTokens: false,
