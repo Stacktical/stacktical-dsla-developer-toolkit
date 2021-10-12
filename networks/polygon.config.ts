@@ -28,12 +28,12 @@ if (error) {
 
 export const polygon: NetworkUserConfig = {
   chainId: 137,
-  gasPrice: 200 * 10 ** 9,
-  gas: 10000000,
-  accounts: [process.env.PRIV_KEY],
-  // accounts: {
-  //   mnemonic: process.env.MAINNET_MNEMONIC,
-  // },
+  //gasPrice: 200 * 10 ** 9,
+  //gas: 10000000,
+  //accounts: [process.env.PRIV_KEY],
+  accounts: {
+     mnemonic: process.env.MAINNET_MNEMONIC,
+   },
   url: process.env.POLYGON_URI,
   stacktical: {
     deployTokens: false,
@@ -125,7 +125,7 @@ export const polygon: NetworkUserConfig = {
       {
         contract: CONTRACT_NAMES.SEAMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
-        externalAdapterUrl: process.env.STAKING_EFFICIENCY_ALT_INDEXER_URI,
+        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
       },
     ],
     scripts: scripts,

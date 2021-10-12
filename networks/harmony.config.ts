@@ -123,7 +123,7 @@ export const harmony: NetworkUserConfig = {
       {
         contract: CONTRACT_NAMES.SEAMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
-        externalAdapterUrl: process.env.STAKING_EFFICIENCY_ALT_INDEXER_URI,
+        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
       },
     ],
     scripts: scripts,
