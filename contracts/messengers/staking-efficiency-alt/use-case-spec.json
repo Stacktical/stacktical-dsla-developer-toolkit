@@ -1,12 +1,12 @@
 {
-  "useCaseName": "staking-efficiency",
-  "symbol": "SE",
+  "useCaseName": "staking-efficiency-alt",
+  "symbol": "SEA",
   "ownerUrl": "https://stacktical.com",
   "useCaseDocs": "https://readme.stacktical.com/developer-guide",
-  "externalAdapterRepo": "https://github.com/Stacktical/stacktical-dsla-oracle-se",
+  "externalAdapterRepo": "https://github.com/Stacktical/stacktical-dsla-oracle-se-alt",
   "unit": "%",
-  "keywords": ["blockchain", "cryptocurrency", "staking", "validator", "delegator", "apr"],
-  "timestamp": "2021-04-30T00:00:00+00:00",
+  "keywords": ["blockchain", "cryptocurrency", "staking", "validator", "delegator", "uptime"],
+  "timestamp": "2021-10-11T00:00:00+00:00",
   "ipfsData": {
     "serviceName": {
       "name": "Service Name",
