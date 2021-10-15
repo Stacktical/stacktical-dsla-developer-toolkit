@@ -33,19 +33,27 @@ export const fuji: NetworkUserConfig = {
   url: process.env.FUJI_URI,
   stacktical: {
     checkPastPeriods: true,
-    deployTokens: true,
+    deployTokens: false,
     tokens: [
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.DSLA,
+        address: '0x99F4e62a317cc666589c9e370c73c15B158f3c61',
       },
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.DAI,
+        /**
+         * Generic deployed at: 
+         * https://cchain.explorer.avax-test.network/address/0x5f5e076Ea19c21F4265ddA0231AA9AFddE0714f5/transactions
+         * */
+        address: '0x5f5e076Ea19c21F4265ddA0231AA9AFddE0714f5',
       },
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.USDC,
+        /** Generic Token */
+        address: '0xf7DeA391219a9028DF68e54263Ad43b24e4D5288',
       },
     ],
     chainlink: {

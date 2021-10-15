@@ -34,8 +34,25 @@ export const rinkeby: NetworkUserConfig = {
   gas: 19000000,
   url: process.env.RINKEBY_URI,
   stacktical: {
+    checkPastPeriods: true,
     deployTokens: true,
-    checkPastPeriods: false,
+    tokens: [
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.DSLA,
+        address: '0x973f2ECb8c7585061854e22628d9b1d972aED2aF',
+      },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.DAI,
+        address: '0x8D871ad02643D315adEd547B2801E1948d5F9042',
+      },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.USDC,
+        address: '0xC54BA80Bd18413143220c6c2FB0B4a3267d49061',
+      },
+    ],
     chainlink: {
       deployLocal: true,
       deleteOldJobs: true,
@@ -44,30 +61,18 @@ export const rinkeby: NetworkUserConfig = {
       ethWsUrl: process.env.RINKEBY_WS_URI,
       ethHttpUrl: process.env.RINKEBY_URI,
       nodesConfiguration: [
-        {
-          name: 'node-1',
-          restApiUrl: 'http://localhost',
-          restApiPort: '6799',
-          email: 'test@stacktical.com',
-          password: 'PaSSword123456',
-        },
+          {
+            name: 'newyork',
+            restApiUrl: process.env.RINKEBY_CHAINLINK_NODE_1_URL,
+            restApiPort: process.env.RINKEBY_CHAINLINK_NODE_1_PORT,
+            email: process.env.RINKEBY_CHAINLINK_NODE_1_USER,
+            password: process.env.RINKEBY_CHAINLINK_NODE_1_PASS,
+          },
       ],
     },
-    addresses: {},
-    tokens: [
-      {
-        factory: EthereumERC20__factory,
-        name: TOKEN_NAMES.DSLA,
-      },
-      {
-        factory: EthereumERC20__factory,
-        name: TOKEN_NAMES.DAI,
-      },
-      {
-        factory: EthereumERC20__factory,
-        name: TOKEN_NAMES.USDC,
-      },
-    ],
+    addresses: {
+      [CONTRACT_NAMES.LinkToken]: '0x01BE23585060835E02B77ef475b0Cc51aA1e0709',
+    },
     bootstrap: {
       allowance: [
         {
@@ -93,12 +98,12 @@ export const rinkeby: NetworkUserConfig = {
       {
         contract: CONTRACT_NAMES.SEMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
-        externalAdapterUrl: 'http://host.docker.internal:6060',
+        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
       },
       {
         contract: CONTRACT_NAMES.SEAMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
-        externalAdapterUrl: 'http://host.docker.internal:6060',
+        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
       },
     ],
     scripts: scripts,

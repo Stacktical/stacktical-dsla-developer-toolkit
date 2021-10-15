@@ -34,6 +34,7 @@ export const avalanche: NetworkUserConfig = {
   stacktical: {
     checkPastPeriods: true,
     deployTokens: false,
+    /** Ref: https://github.com/pangolindex/tokenlists/blob/main/ab.tokenlist.json  */
     tokens: [
       {
         factory: EthereumERC20__factory,

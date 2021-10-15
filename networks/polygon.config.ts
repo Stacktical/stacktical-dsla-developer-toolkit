@@ -86,6 +86,7 @@ export const polygon: NetworkUserConfig = {
       ],
     },
     addresses: {
+      /** https://pegswap.chain.link/ */
       [CONTRACT_NAMES.LinkToken]: '0xb0897686c545045afc77cf20ec7a532e3120e0f1',
     },
     bootstrap: {

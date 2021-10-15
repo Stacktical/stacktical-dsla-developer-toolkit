@@ -34,20 +34,23 @@ export const harmonytestnet: NetworkUserConfig = {
   url: process.env.HARMONYTESTNET_URI,
   saveDeployments: true,
   stacktical: {
-    deployTokens: true,
+    deployTokens: false,
     checkPastPeriods: false,
     tokens: [
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.DSLA,
+        address: '0xab85235ec77b2c54d22fb051910e7355959e2464',
       },
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.DAI,
+        address: '0xa6610f1ba3523352d5da5fb2e25c0d8859da4007',
       },
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.USDC,
+        address: '0x2e89d104f10e1d480d47e924f3f43672c09d12a2',
       },
     ],
     chainlink: {
