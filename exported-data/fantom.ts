@@ -10,4 +10,5 @@ export const fantom = {
   DAIToken: '0x8d11ec38a3eb5e956b052f67da8bdc9bef8abf3e',
   USDCToken: '0x04068da6c83afcfa0e13ba15a6696662335d5b75',
   SEMessenger: '0xFB29aFC3F4B78755f07faD5B86448595D2EEC86C',
+  SEAMessenger: '0xAc1a14C87Bc99F33C36F22893FF4272C8cA86C4b',
 };

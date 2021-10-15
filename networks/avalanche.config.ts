@@ -34,6 +34,7 @@ export const avalanche: NetworkUserConfig = {
   stacktical: {
     checkPastPeriods: true,
     deployTokens: false,
+    /** Ref: https://github.com/pangolindex/tokenlists/blob/main/ab.tokenlist.json  */
     tokens: [
       {
         factory: EthereumERC20__factory,
@@ -117,6 +118,11 @@ export const avalanche: NetworkUserConfig = {
         contract: CONTRACT_NAMES.SEMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
+      },
+      {
+        contract: CONTRACT_NAMES.SEAMessenger,
+        useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
+        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
       },
     ],
     scripts: scripts,

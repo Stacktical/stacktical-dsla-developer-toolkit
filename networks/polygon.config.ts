@@ -28,12 +28,12 @@ if (error) {
 
 export const polygon: NetworkUserConfig = {
   chainId: 137,
-  gasPrice: 200 * 10 ** 9,
-  gas: 10000000,
-  accounts: [process.env.PRIV_KEY],
-  // accounts: {
-  //   mnemonic: process.env.MAINNET_MNEMONIC,
-  // },
+  //gasPrice: 200 * 10 ** 9,
+  //gas: 10000000,
+  //accounts: [process.env.PRIV_KEY],
+  accounts: {
+     mnemonic: process.env.MAINNET_MNEMONIC,
+   },
   url: process.env.POLYGON_URI,
   stacktical: {
     deployTokens: false,
@@ -86,6 +86,7 @@ export const polygon: NetworkUserConfig = {
       ],
     },
     addresses: {
+      /** https://pegswap.chain.link/ */
       [CONTRACT_NAMES.LinkToken]: '0xb0897686c545045afc77cf20ec7a532e3120e0f1',
     },
     bootstrap: {
@@ -121,6 +122,11 @@ export const polygon: NetworkUserConfig = {
         contract: CONTRACT_NAMES.SEMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
+      },
+      {
+        contract: CONTRACT_NAMES.SEAMessenger,
+        useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
+        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
       },
     ],
     scripts: scripts,

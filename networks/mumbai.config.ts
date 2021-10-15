@@ -66,7 +66,9 @@ export const mumbai: NetworkUserConfig = {
         },
       ],
     },
-    addresses: {},
+    addresses: {
+      [CONTRACT_NAMES.LinkToken]: '0x326C977E6efc84E512bB9C30f76E30c160eD06FB',
+    },
     bootstrap: {
       allowance: [
         {
@@ -99,7 +101,12 @@ export const mumbai: NetworkUserConfig = {
       {
         contract: CONTRACT_NAMES.SEMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
-        externalAdapterUrl: 'http://host.docker.internal:6060',
+        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
+      },
+      {
+        contract: CONTRACT_NAMES.SEAMessenger,
+        useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
+        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
       },
     ],
     scripts: scripts,

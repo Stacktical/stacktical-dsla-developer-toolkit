@@ -38,7 +38,7 @@ export const fantom: NetworkUserConfig = {
       {
         factory: FantomERC20__factory,
         name: TOKEN_NAMES.DSLA,
-       address: '0x25a528af62e56512a19ce8c3cab427807c28cc19',
+        address: '0x25a528af62e56512a19ce8c3cab427807c28cc19',
       },
       {
         factory: FantomERC20__factory,
@@ -103,6 +103,11 @@ export const fantom: NetworkUserConfig = {
         contract: CONTRACT_NAMES.SEMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
+      },
+      {
+        contract: CONTRACT_NAMES.SEAMessenger,
+        useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
+        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
       },
     ],
     scripts: scripts,

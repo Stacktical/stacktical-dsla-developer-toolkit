@@ -12,6 +12,7 @@ export enum CONTRACT_NAMES {
   Oracle = 'Oracle',
   PeriodRegistry = 'PeriodRegistry',
   SEMessenger = 'SEMessenger',
+  SEAMessenger = 'SEAMessenger',
   SLA = 'SLA',
   SLORegistry = 'SLORegistry',
   SLARegistry = 'SLARegistry',
@@ -46,6 +47,7 @@ export enum DEPLOYMENT_TAGS {
 
 export enum USE_CASES {
   STAKING_EFFICIENCY = 'staking-efficiency',
+  STAKING_EFFICIENCY_ALT = 'staking-efficiency-alt',
   BASE_MESSENGER = 'dummy-use-case',
 }
 

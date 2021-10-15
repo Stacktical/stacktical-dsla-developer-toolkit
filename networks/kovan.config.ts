@@ -115,6 +115,11 @@ export const kovan: NetworkUserConfig = {
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
       },
+      {
+        contract: CONTRACT_NAMES.SEAMessenger,
+        useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
+        externalAdapterUrl: 'http://host.docker.internal:6060',
+      },
     ],
     scripts: scripts,
   },

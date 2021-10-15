@@ -25,12 +25,12 @@ if (error) {
   process.env = value;
 }
 
-export const avalanche: NetworkUserConfig = {
+export const fuji: NetworkUserConfig = {
   chainId: 43113,
   accounts: {
     mnemonic: process.env.MAINNET_MNEMONIC,
   },
-  url: "https://avalanche--fuji--rpc.datahub.figment.io/apikey/a86cfb440f77c1beec794e87f39917a1/ext/bc/C/rpc",
+  url: process.env.FUJI_URI,
   stacktical: {
     checkPastPeriods: true,
     deployTokens: false,
@@ -38,14 +38,22 @@ export const avalanche: NetworkUserConfig = {
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.DSLA,
+        address: '0x99F4e62a317cc666589c9e370c73c15B158f3c61',
       },
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.DAI,
+        /**
+         * Generic deployed at: 
+         * https://cchain.explorer.avax-test.network/address/0x5f5e076Ea19c21F4265ddA0231AA9AFddE0714f5/transactions
+         * */
+        address: '0x5f5e076Ea19c21F4265ddA0231AA9AFddE0714f5',
       },
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.USDC,
+        /** Generic Token */
+        address: '0xf7DeA391219a9028DF68e54263Ad43b24e4D5288',
       },
     ],
     chainlink: {
@@ -65,7 +73,7 @@ export const avalanche: NetworkUserConfig = {
       ],
     },
     addresses: {
-      //[CONTRACT_NAMES.LinkToken]: '0xB3fe5374F67D7a22886A0eE082b2E2f9d2651651',
+      [CONTRACT_NAMES.LinkToken]: '0x0b9d5D9136855f6FEc3c0993feE6E9CE8a297846',
     },
     bootstrap: {
       allowance: [
@@ -100,6 +108,11 @@ export const avalanche: NetworkUserConfig = {
         contract: CONTRACT_NAMES.SEMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
+      },
+      {
+        contract: CONTRACT_NAMES.SEAMessenger,
+        useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
+        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
       },
     ],
     scripts: scripts,

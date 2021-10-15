@@ -10,4 +10,5 @@ export const bsc = {
   DAIToken: '0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3',
   USDCToken: '0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d',
   SEMessenger: '0x38b0cd8BB4C4608E32EE75b25A8846459cEAd513',
+  SEAMessenger: '0xC76EaC6B2eBb3554271Ec48d1CABF953FC6fA211',
 };
