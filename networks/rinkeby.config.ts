@@ -35,7 +35,7 @@ export const rinkeby: NetworkUserConfig = {
   url: process.env.RINKEBY_URI,
   stacktical: {
     checkPastPeriods: true,
-    deployTokens: true,
+    deployTokens: false,
     tokens: [
       {
         factory: EthereumERC20__factory,
@@ -51,6 +51,11 @@ export const rinkeby: NetworkUserConfig = {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.USDC,
         address: '0xC54BA80Bd18413143220c6c2FB0B4a3267d49061',
+      },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.USDT,
+        address: '0x71bae6022b61fa06dacfb6cc099f68c62d852c8a',
       },
     ],
     chainlink: {

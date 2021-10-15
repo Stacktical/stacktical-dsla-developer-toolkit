@@ -51,6 +51,11 @@ export const avalanche: NetworkUserConfig = {
         name: TOKEN_NAMES.USDC,
         address: '0xA7D7079b0FEaD91F3e65f86E8915Cb59c1a4C664',
       },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.USDT,
+        address: '0xc7198437980c041c805A1EDcbA50c1Ce5db95118',
+      },
     ],
     chainlink: {
       deployLocal: false,

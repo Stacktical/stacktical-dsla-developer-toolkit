@@ -52,6 +52,11 @@ export const harmonytestnet: NetworkUserConfig = {
         name: TOKEN_NAMES.USDC,
         address: '0x2e89d104f10e1d480d47e924f3f43672c09d12a2',
       },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.USDT,
+        address: '0x922337914e641e830ce174f52288bd7660ef83c6',
+      },
     ],
     chainlink: {
       deployLocal: false,
