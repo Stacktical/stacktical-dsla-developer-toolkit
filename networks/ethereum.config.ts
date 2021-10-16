@@ -77,13 +77,13 @@ export const ethereum: NetworkUserConfig = {
           email: process.env.ETHEREUM_CHAINLINK_NODE_2_USER,
           password: process.env.ETHEREUM_CHAINLINK_NODE_2_PASS,
         },
-        {
-          name: 'paris',
-          restApiUrl: process.env.ETHEREUM_CHAINLINK_NODE_3_URL,
-          restApiPort: process.env.ETHEREUM_CHAINLINK_NODE_3_PORT,
-          email: process.env.ETHEREUM_CHAINLINK_NODE_3_USER,
-          password: process.env.ETHEREUM_CHAINLINK_NODE_3_PASS,
-        },
+        //{
+        //  name: 'paris',
+        //  restApiUrl: process.env.ETHEREUM_CHAINLINK_NODE_3_URL,
+        //  restApiPort: process.env.ETHEREUM_CHAINLINK_NODE_3_PORT,
+        //  email: process.env.ETHEREUM_CHAINLINK_NODE_3_USER,
+        //  password: process.env.ETHEREUM_CHAINLINK_NODE_3_PASS,
+        //},
       ],
     },
     addresses: {

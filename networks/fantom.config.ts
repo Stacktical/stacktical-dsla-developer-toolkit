@@ -53,6 +53,7 @@ export const fantom: NetworkUserConfig = {
       {
         factory: FantomERC20__factory,
         name: TOKEN_NAMES.USDT,
+        // https://ftmscan.com/address/0x049d68029688eAbF473097a2fC38ef61633A3C7A
         address: '0x049d68029688eAbF473097a2fC38ef61633A3C7A',
       },
     ],
