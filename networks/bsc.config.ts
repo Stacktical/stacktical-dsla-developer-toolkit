@@ -50,6 +50,12 @@ export const bsc: NetworkUserConfig = {
         name: TOKEN_NAMES.USDC,
         address: '0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d',
       },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.USDT,
+        // https://bscscan.com/token/0x55d398326f99059ff775485246999027b3197955
+        address: '0x55d398326f99059ff775485246999027b3197955',
+      },
     ],
     chainlink: {
       deployLocal: false,
