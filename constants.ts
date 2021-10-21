@@ -42,6 +42,7 @@ export enum TOKEN_NAMES {
   USDT = 'USDT',
   WETH = 'WETH',
   WAVAX = 'WAVAX',
+  WONE = 'WONE',
   WBNB = 'WBNB',
   WFTM = 'WFTM',
   WMATIC = 'WMATIC',

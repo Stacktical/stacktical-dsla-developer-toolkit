@@ -62,7 +62,7 @@ export const harmony: NetworkUserConfig = {
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.WONE,
-        address: '0xcf664087a5bb0237a0bad6742852ec6c8d69a27a',
+        address: '0xcF664087a5bB0237a0BAd6742852ec6c8d69A27a',
       },
     ],
     chainlink: {
