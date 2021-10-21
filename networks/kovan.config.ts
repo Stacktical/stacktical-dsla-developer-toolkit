@@ -82,7 +82,7 @@ export const kovan: NetworkUserConfig = {
       },
       {
         factory: EthereumERC20__factory,
-        name: TOKEN_NAMES.KETH,
+        name: TOKEN_NAMES.WETH,
       },
     ],
     bootstrap: {
