@@ -54,6 +54,11 @@ export const polygon: NetworkUserConfig = {
         name: TOKEN_NAMES.USDC,
         address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
       },
+      {
+        factory: PolygonERC20__factory,
+        name: TOKEN_NAMES.WMATIC,
+        address: '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270',
+      },
     ],
     chainlink: {
       deployLocal: false,

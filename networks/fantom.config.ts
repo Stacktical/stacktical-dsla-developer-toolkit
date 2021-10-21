@@ -50,6 +50,11 @@ export const fantom: NetworkUserConfig = {
         name: TOKEN_NAMES.USDC,
         address: '0x04068da6c83afcfa0e13ba15a6696662335d5b75',
       },
+      {
+        factory: FantomERC20__factory,
+        name: TOKEN_NAMES.WFTM,
+        address: '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83',
+      },
     ],
     chainlink: {
       deployLocal: false,

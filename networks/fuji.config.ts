@@ -33,7 +33,7 @@ export const fuji: NetworkUserConfig = {
   url: process.env.FUJI_URI,
   stacktical: {
     checkPastPeriods: true,
-    deployTokens: false,
+    deployTokens: true,
     tokens: [
       {
         factory: EthereumERC20__factory,
@@ -54,6 +54,12 @@ export const fuji: NetworkUserConfig = {
         name: TOKEN_NAMES.USDC,
         /** Generic Token */
         address: '0xf7DeA391219a9028DF68e54263Ad43b24e4D5288',
+      },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.WAVAX,
+        /** Generic Token */
+        address: '',
       },
     ],
     chainlink: {

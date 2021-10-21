@@ -80,6 +80,10 @@ export const kovan: NetworkUserConfig = {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.USDC,
       },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.KETH,
+      },
     ],
     bootstrap: {
       allowance: [

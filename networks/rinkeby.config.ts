@@ -52,6 +52,11 @@ export const rinkeby: NetworkUserConfig = {
         name: TOKEN_NAMES.USDC,
         address: '0xC54BA80Bd18413143220c6c2FB0B4a3267d49061',
       },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.WETH,
+        address: '0xc778417e063141139fce010982780140aa0cd5ab',
+      },
     ],
     chainlink: {
       deployLocal: true,

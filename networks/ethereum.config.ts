@@ -35,6 +35,7 @@ export const ethereum: NetworkUserConfig = {
     checkPastPeriods: true,
     deployTokens: false,
     tokens: [
+      /** https://etherscan.io/tokens */
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.DSLA,
@@ -49,6 +50,11 @@ export const ethereum: NetworkUserConfig = {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.USDC,
         address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+      },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.WETH,
+        address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
       },
     ],
     chainlink: {
