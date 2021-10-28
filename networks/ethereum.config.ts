@@ -53,6 +53,11 @@ export const ethereum: NetworkUserConfig = {
       },
       {
         factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.USDT,
+        address: '0xdac17f958d2ee523a2206206994597c13d831ec7',
+      },
+      {
+        factory: EthereumERC20__factory,
         name: TOKEN_NAMES.WETH,
         address: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
       },
@@ -78,13 +83,13 @@ export const ethereum: NetworkUserConfig = {
           email: process.env.ETHEREUM_CHAINLINK_NODE_2_USER,
           password: process.env.ETHEREUM_CHAINLINK_NODE_2_PASS,
         },
-        {
-          name: 'paris',
-          restApiUrl: process.env.ETHEREUM_CHAINLINK_NODE_3_URL,
-          restApiPort: process.env.ETHEREUM_CHAINLINK_NODE_3_PORT,
-          email: process.env.ETHEREUM_CHAINLINK_NODE_3_USER,
-          password: process.env.ETHEREUM_CHAINLINK_NODE_3_PASS,
-        },
+        //{
+        //  name: 'paris',
+        //  restApiUrl: process.env.ETHEREUM_CHAINLINK_NODE_3_URL,
+        //  restApiPort: process.env.ETHEREUM_CHAINLINK_NODE_3_PORT,
+        //  email: process.env.ETHEREUM_CHAINLINK_NODE_3_USER,
+        //  password: process.env.ETHEREUM_CHAINLINK_NODE_3_PASS,
+        //},
       ],
     },
     addresses: {

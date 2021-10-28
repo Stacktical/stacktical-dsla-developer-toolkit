@@ -784,7 +784,7 @@ subtask(SUB_TASK_NAMES.EXPORT_NETWORKS, undefined).setAction(
       singleQuote: true,
       parser: 'typescript',
     });
-    fs.writeFileSync(
+    fs.appendFile(
       path.resolve(__dirname, `${base_path}/index.ts`),
       prettifiedIndex
     );
