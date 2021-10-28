@@ -8,6 +8,7 @@ export enum CONTRACT_NAMES {
   WONE = 'WONE',
   WBNB = 'WBNB',
   WFTM = 'WFTM',
+  STEPH = 'STEPH',
   WMATIC = 'WMATIC',
   ONE = 'ONE',
   ERC20 = 'ERC20',
@@ -46,6 +47,7 @@ export enum TOKEN_NAMES {
   WBNB = 'WBNB',
   WFTM = 'WFTM',
   WMATIC = 'WMATIC',
+  STEPH = 'STEPH',
 }
 
 export enum DEPLOYMENT_TAGS {

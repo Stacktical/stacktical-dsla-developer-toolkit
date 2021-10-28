@@ -61,6 +61,11 @@ export const ethereum: NetworkUserConfig = {
         name: TOKEN_NAMES.WETH,
         address: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
       },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.STETH,
+        address: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
+      },
     ],
     chainlink: {
       deployLocal: false,
