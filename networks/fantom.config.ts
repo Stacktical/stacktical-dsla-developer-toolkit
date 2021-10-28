@@ -88,6 +88,11 @@ export const fantom: NetworkUserConfig = {
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
+        {
+          contract: CONTRACT_NAMES.SEAMessenger,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
       ],
       registry: {
         periods: [
