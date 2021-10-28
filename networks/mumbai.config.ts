@@ -53,6 +53,10 @@ export const mumbai: NetworkUserConfig = {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.USDT,
       },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.WMATIC,
+      },
     ],
     chainlink: {
       deployLocal: false,

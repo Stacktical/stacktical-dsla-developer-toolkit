@@ -38,6 +38,7 @@ export const harmony: NetworkUserConfig = {
     deployTokens: false,
     checkPastPeriods: true,
     tokens: [
+      /** https://explorer.harmony.one/hrc20 */
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.DSLA,
@@ -57,6 +58,11 @@ export const harmony: NetworkUserConfig = {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.USDT,
         address: '0x3C2B8Be99c50593081EAA2A724F0B8285F5aba8f',
+      },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.WONE,
+        address: '0xcF664087a5bB0237a0BAd6742852ec6c8d69A27a',
       },
     ],
     chainlink: {

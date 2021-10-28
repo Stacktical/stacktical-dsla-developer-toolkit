@@ -35,6 +35,7 @@ export const bsc: NetworkUserConfig = {
     checkPastPeriods: true,
     deployTokens: false,
     tokens: [
+      /** https://bscscan.com/tokens */
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.DSLA,
@@ -56,6 +57,12 @@ export const bsc: NetworkUserConfig = {
         // https://bscscan.com/token/0x55d398326f99059ff775485246999027b3197955
         address: '0x55d398326f99059ff775485246999027b3197955',
       },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.WBNB,
+        address: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+      },
+
     ],
     chainlink: {
       deployLocal: false,

@@ -56,9 +56,15 @@ export const fuji: NetworkUserConfig = {
         address: '0xf7DeA391219a9028DF68e54263Ad43b24e4D5288',
       },
       {
+        /** Generic Token */
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.USDT,
       },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.WAVAX,
+      },
+
     ],
     chainlink: {
       deployLocal: false,

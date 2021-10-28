@@ -3,6 +3,12 @@ export enum CONTRACT_NAMES {
   DAI = 'DAI',
   USDC = 'USDC',
   USDT = 'USDT',
+  WETH = 'WETH',
+  WAVAX = 'WAVAX',
+  WONE = 'WONE',
+  WBNB = 'WBNB',
+  WFTM = 'WFTM',
+  WMATIC = 'WMATIC',
   ONE = 'ONE',
   ERC20 = 'ERC20',
   Details = 'Details',
@@ -34,6 +40,12 @@ export enum TOKEN_NAMES {
   DAI = 'DAI',
   USDC = 'USDC',
   USDT = 'USDT',
+  WETH = 'WETH',
+  WAVAX = 'WAVAX',
+  WONE = 'WONE',
+  WBNB = 'WBNB',
+  WFTM = 'WFTM',
+  WMATIC = 'WMATIC',
 }
 
 export enum DEPLOYMENT_TAGS {
