@@ -18,6 +18,7 @@ enum TASK_NAMES {
   INITIALIZE_DEFAULT_ADDRESSES = 'stacktical:initialize-addresses',
   RESTART_CHAINLINK_NODES = 'stacktical:restart-chainlink-nodes',
   CHECK_CONTRACTS_ALLOWANCE = 'stacktical:check-contracts-allowance',
+  SET_CONTRACTS_ALLOWANCE = 'stacktical:set-contracts-allowance',
   REGISTRIES_CONFIGURATION = 'stacktical:registries-config',
   GET_VALID_SLAS = 'stacktical:get-valid-slas',
   GET_REVERT_MESSAGE = 'stacktical:get-revert-message',
@@ -127,9 +128,16 @@ task(
 
 task(
   TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE,
-  'Request network analytics'
+  'Check token allowances'
 ).setAction(async (_, { run }) => {
   await run(SUB_TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE);
+});
+
+task(
+  TASK_NAMES.SET_CONTRACTS_ALLOWANCE,
+  'Set token allowances'
+).setAction(async (_, { run }) => {
+  await run(SUB_TASK_NAMES.SET_CONTRACTS_ALLOWANCE);
 });
 
 task(

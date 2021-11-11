@@ -99,6 +99,11 @@ export const harmony: NetworkUserConfig = {
           token: CONTRACT_NAMES.LinkToken,
           allowance: '100',
         },
+        {
+          contract: CONTRACT_NAMES.SEAMessenger,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
       ],
       registry: {
         periods: [
