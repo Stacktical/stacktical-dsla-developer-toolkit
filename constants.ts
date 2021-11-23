@@ -67,6 +67,7 @@ export enum USE_CASES {
 
 export enum NETWORKS {
   DEVELOP = 'develop',
+  DEVELOP_AVALANCHE = 'develop_avalanche',
   MUMBAI = 'mumbai',
   HARMONYTESTNET = 'harmonytestnet',
   ETHEREUM = 'ethereum',
@@ -82,6 +83,7 @@ export enum NETWORKS {
 
 export const GRAPH_NETWORKS = {
   [NETWORKS.DEVELOP]: 'mainnet',
+  [NETWORKS.DEVELOP_AVALANCHE]: 'mainnet',
   [NETWORKS.ETHEREUM]: 'mainnet',
   [NETWORKS.HARMONY]: 'mainnet',
   [NETWORKS.FANTOM]: 'mainnet',

@@ -10,6 +10,7 @@ export type StackticalConfiguration = {
   checkPastPeriods: boolean;
   deployTokens: boolean;
   tokens: Array<TokenConfiguration>;
+  ipfs: string;
   chainlink: ChainlinkConfiguration;
   addresses: DeployedContractAddresses;
   bootstrap: BootstrapConfiguration;

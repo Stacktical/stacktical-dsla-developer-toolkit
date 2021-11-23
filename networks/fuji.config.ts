@@ -66,6 +66,7 @@ export const fuji: NetworkUserConfig = {
       },
 
     ],
+    ipfs: process.env.IPFS_URI,
     chainlink: {
       deployLocal: false,
       deleteOldJobs: false,

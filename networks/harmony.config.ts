@@ -34,6 +34,7 @@ export const harmony: NetworkUserConfig = {
   },
   url: process.env.HARMONY_URI,
   saveDeployments: true,
+  ipfs: process.env.IPFS_URI,
   stacktical: {
     deployTokens: false,
     checkPastPeriods: true,

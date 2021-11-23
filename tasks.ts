@@ -3,6 +3,8 @@ import { SUB_TASK_NAMES } from './subtasks';
 import { printSeparator } from './utils';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { PARAMS_NAMES } from './constants';
+import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signers";
+import { BigNumber } from "ethers";
 
 enum TASK_NAMES {
   EXPORT_DATA = 'stacktical:export-data',
@@ -30,7 +32,26 @@ enum TASK_NAMES {
   GRAPH_MANIFESTOS = 'stacktical:graph-manifestos',
   GET_SLA_FROM_TX = 'stacktical:get-sla-from-tx',
   UPDATE_MESSENGER_SPEC = 'stacktical:update-messenger-spec',
+  AVAX_ACCOUNTS = 'accounts',
+  AVAX_BALANCES = 'balances',
 }
+
+task(TASK_NAMES.AVAX_ACCOUNTS, "Prints the list of accounts", async (args, hre): Promise<void> => {
+  const accounts: SignerWithAddress[] = await hre.ethers.getSigners()
+  accounts.forEach((account: SignerWithAddress): void => {
+    console.log(account.address)
+  })
+})
+
+task(TASK_NAMES.AVAX_BALANCES, "Prints the list of AVAX account balances", async (args, hre): Promise<void> => {
+  const accounts: SignerWithAddress[] = await hre.ethers.getSigners()
+  for(const account of accounts){
+    const balance: BigNumber = await hre.ethers.provider.getBalance(
+      account.address
+    );
+    console.log(`${account.address} has balance ${balance.toString()}`);
+  }
+})
 
 task(
   TASK_NAMES.GRAPH_MANIFESTOS,
