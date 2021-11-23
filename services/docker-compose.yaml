@@ -34,8 +34,7 @@ services:
       - ETH_URL=ws://host.docker.internal:8545
       - ETH_HTTP_URL=http://host.docker.internal:8545
       - DEFAULT_HTTP_TIMEOUT=200s
-      - >-
-        DATABASE_URL=postgresql://postgres:password@postgres:5432/chainlink?sslmode=disable
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/chainlink?sslmode=disable
     command: local n -p /chainlink/.password -a /chainlink/.api
     extra_hosts:
       - "host.docker.internal:host-gateway"

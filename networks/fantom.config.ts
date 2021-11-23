@@ -62,6 +62,7 @@ export const fantom: NetworkUserConfig = {
         address: '0x21be370D5312f44cB42ce377BC9b8a0cEF1A4C83',
       },
     ],
+    ipfs: process.env.IPFS_URI,
     chainlink: {
       deployLocal: false,
       deleteOldJobs: true,

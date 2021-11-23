@@ -1163,7 +1163,8 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_MESSENGER_REGISTRY, undefined).setAction(
       if (!registeredMessenger) {
         const tx = await slaRegistry.registerMessenger(
           messengerArtifact.address,
-          `${process.env.IPFS_URI}/ipfs/${seMessengerSpecIPFS}`
+          //`${process.env.IPFS_URI}/ipfs/${seMessengerSpecIPFS}`
+          `${process.env.DEVELOP_IPFS_URI}/ipfs/${seMessengerSpecIPFS}`
         );
         await tx.wait();
       } else {
@@ -1252,7 +1253,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
       const seMessengerSpecIPFS = await getIPFSHash(updatedSpec);
       let tx = await slaRegistry.registerMessenger(
         deployedMessenger.address,
-        `${process.env.IPFS_URI}/ipfs/${seMessengerSpecIPFS}`
+        `${network.config.stacktical.ipfs}/ipfs/${seMessengerSpecIPFS}`
       );
       await tx.wait();
       consola.success(

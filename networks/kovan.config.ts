@@ -35,6 +35,7 @@ export const kovan: NetworkUserConfig = {
   stacktical: {
     deployTokens: true,
     checkPastPeriods: false,
+    ipfs: process.env.IPFS_URI,
     chainlink: {
       deployLocal: false,
       deleteOldJobs: true,
