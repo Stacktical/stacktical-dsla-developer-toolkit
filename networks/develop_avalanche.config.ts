@@ -121,9 +121,9 @@ export const develop_avalanche: NetworkUserConfig = {
     },
     messengers: [
       {
-        contract: CONTRACT_NAMES.BaseMessenger,
-        useCaseName: USE_CASES.BASE_MESSENGER,
-        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
+        contract: CONTRACT_NAMES.SEMessenger,
+        useCaseName: USE_CASES.STAKING_EFFICIENCY,
+        externalAdapterUrl: 'http://localhost:6060',
       },      
       {
         contract: CONTRACT_NAMES.SEAMessenger,
