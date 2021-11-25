@@ -33,6 +33,7 @@ export const develop: NetworkUserConfig = {
   stacktical: {
     checkPastPeriods: false,
     deployTokens: true,
+    ipfs: process.env.DEVELOP_IPFS_URI,
     chainlink: {
       deployLocal: true,
       deleteOldJobs: true,
@@ -67,6 +68,10 @@ export const develop: NetworkUserConfig = {
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.USDT,
+      },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.WETH,
       },
     ],
     bootstrap: {

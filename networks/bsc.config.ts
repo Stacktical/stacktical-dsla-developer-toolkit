@@ -35,6 +35,7 @@ export const bsc: NetworkUserConfig = {
     checkPastPeriods: true,
     deployTokens: false,
     tokens: [
+      /** https://bscscan.com/tokens */
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.DSLA,
@@ -50,7 +51,20 @@ export const bsc: NetworkUserConfig = {
         name: TOKEN_NAMES.USDC,
         address: '0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d',
       },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.USDT,
+        // https://bscscan.com/token/0x55d398326f99059ff775485246999027b3197955
+        address: '0x55d398326f99059ff775485246999027b3197955',
+      },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.WBNB,
+        address: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+      },
+
     ],
+    ipfs: process.env.IPFS_URI,
     chainlink: {
       deployLocal: false,
       deleteOldJobs: false,
@@ -74,6 +88,11 @@ export const bsc: NetworkUserConfig = {
       allowance: [
         {
           contract: CONTRACT_NAMES.SEMessenger,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
+        {
+          contract: CONTRACT_NAMES.SEAMessenger,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
@@ -103,6 +122,11 @@ export const bsc: NetworkUserConfig = {
         contract: CONTRACT_NAMES.SEMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
+      },
+      {
+        contract: CONTRACT_NAMES.SEAMessenger,
+        useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
+        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
       },
     ],
     scripts: scripts,

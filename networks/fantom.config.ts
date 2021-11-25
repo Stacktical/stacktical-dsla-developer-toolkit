@@ -38,7 +38,7 @@ export const fantom: NetworkUserConfig = {
       {
         factory: FantomERC20__factory,
         name: TOKEN_NAMES.DSLA,
-       address: '0x25a528af62e56512a19ce8c3cab427807c28cc19',
+        address: '0x25a528af62e56512a19ce8c3cab427807c28cc19',
       },
       {
         factory: FantomERC20__factory,
@@ -50,7 +50,19 @@ export const fantom: NetworkUserConfig = {
         name: TOKEN_NAMES.USDC,
         address: '0x04068da6c83afcfa0e13ba15a6696662335d5b75',
       },
+      {
+        factory: FantomERC20__factory,
+        name: TOKEN_NAMES.USDT,
+        // https://ftmscan.com/address/0x049d68029688eAbF473097a2fC38ef61633A3C7A
+        address: '0x049d68029688eAbF473097a2fC38ef61633A3C7A',
+      },
+      {
+        factory: FantomERC20__factory,
+        name: TOKEN_NAMES.WFTM,
+        address: '0x21be370D5312f44cB42ce377BC9b8a0cEF1A4C83',
+      },
     ],
+    ipfs: process.env.IPFS_URI,
     chainlink: {
       deployLocal: false,
       deleteOldJobs: true,
@@ -74,6 +86,11 @@ export const fantom: NetworkUserConfig = {
       allowance: [
         {
           contract: CONTRACT_NAMES.SEMessenger,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
+        {
+          contract: CONTRACT_NAMES.SEAMessenger,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
@@ -103,6 +120,11 @@ export const fantom: NetworkUserConfig = {
         contract: CONTRACT_NAMES.SEMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
+      },
+      {
+        contract: CONTRACT_NAMES.SEAMessenger,
+        useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
+        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
       },
     ],
     scripts: scripts,

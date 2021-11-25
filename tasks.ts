@@ -3,6 +3,8 @@ import { SUB_TASK_NAMES } from './subtasks';
 import { printSeparator } from './utils';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { PARAMS_NAMES } from './constants';
+import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signers";
+import { BigNumber } from "ethers";
 
 enum TASK_NAMES {
   EXPORT_DATA = 'stacktical:export-data',
@@ -18,6 +20,7 @@ enum TASK_NAMES {
   INITIALIZE_DEFAULT_ADDRESSES = 'stacktical:initialize-addresses',
   RESTART_CHAINLINK_NODES = 'stacktical:restart-chainlink-nodes',
   CHECK_CONTRACTS_ALLOWANCE = 'stacktical:check-contracts-allowance',
+  SET_CONTRACTS_ALLOWANCE = 'stacktical:set-contracts-allowance',
   REGISTRIES_CONFIGURATION = 'stacktical:registries-config',
   GET_VALID_SLAS = 'stacktical:get-valid-slas',
   GET_REVERT_MESSAGE = 'stacktical:get-revert-message',
@@ -29,7 +32,26 @@ enum TASK_NAMES {
   GRAPH_MANIFESTOS = 'stacktical:graph-manifestos',
   GET_SLA_FROM_TX = 'stacktical:get-sla-from-tx',
   UPDATE_MESSENGER_SPEC = 'stacktical:update-messenger-spec',
+  AVAX_ACCOUNTS = 'accounts',
+  AVAX_BALANCES = 'balances',
 }
+
+task(TASK_NAMES.AVAX_ACCOUNTS, "Prints the list of accounts", async (args, hre): Promise<void> => {
+  const accounts: SignerWithAddress[] = await hre.ethers.getSigners()
+  accounts.forEach((account: SignerWithAddress): void => {
+    console.log(account.address)
+  })
+})
+
+task(TASK_NAMES.AVAX_BALANCES, "Prints the list of AVAX account balances", async (args, hre): Promise<void> => {
+  const accounts: SignerWithAddress[] = await hre.ethers.getSigners()
+  for(const account of accounts){
+    const balance: BigNumber = await hre.ethers.provider.getBalance(
+      account.address
+    );
+    console.log(`${account.address} has balance ${balance.toString()}`);
+  }
+})
 
 task(
   TASK_NAMES.GRAPH_MANIFESTOS,
@@ -127,9 +149,16 @@ task(
 
 task(
   TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE,
-  'Request network analytics'
+  'Check token allowances'
 ).setAction(async (_, { run }) => {
   await run(SUB_TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE);
+});
+
+task(
+  TASK_NAMES.SET_CONTRACTS_ALLOWANCE,
+  'Set token allowances'
+).setAction(async (_, { run }) => {
+  await run(SUB_TASK_NAMES.SET_CONTRACTS_ALLOWANCE);
 });
 
 task(
@@ -149,15 +178,11 @@ task(
   await run(SUB_TASK_NAMES.STOP_LOCAL_IPFS);
   console.log(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
   await run(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
-  console.log(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
-  await run(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
 
   console.log(SUB_TASK_NAMES.START_LOCAL_GANACHE);
   await run(SUB_TASK_NAMES.START_LOCAL_GANACHE);
   console.log(SUB_TASK_NAMES.START_LOCAL_IPFS);
   await run(SUB_TASK_NAMES.START_LOCAL_IPFS);
-  console.log(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE);
-  await run(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE);
   console.log(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE);
   await run(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE);
 });

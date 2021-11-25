@@ -38,6 +38,7 @@ export const harmony: NetworkUserConfig = {
     deployTokens: false,
     checkPastPeriods: true,
     tokens: [
+      /** https://explorer.harmony.one/hrc20 */
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.DSLA,
@@ -58,7 +59,13 @@ export const harmony: NetworkUserConfig = {
         name: TOKEN_NAMES.USDT,
         address: '0x3C2B8Be99c50593081EAA2A724F0B8285F5aba8f',
       },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.WONE,
+        address: '0xcF664087a5bB0237a0BAd6742852ec6c8d69A27a',
+      },
     ],
+    ipfs: process.env.IPFS_URI,
     chainlink: {
       deployLocal: false,
       deleteOldJobs: true,
@@ -93,6 +100,11 @@ export const harmony: NetworkUserConfig = {
           token: CONTRACT_NAMES.LinkToken,
           allowance: '100',
         },
+        {
+          contract: CONTRACT_NAMES.SEAMessenger,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
       ],
       registry: {
         periods: [
@@ -119,6 +131,11 @@ export const harmony: NetworkUserConfig = {
         contract: CONTRACT_NAMES.SEMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
+      },
+      {
+        contract: CONTRACT_NAMES.SEAMessenger,
+        useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
+        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
       },
     ],
     scripts: scripts,

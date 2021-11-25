@@ -337,8 +337,9 @@ subtask(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE, undefined).setAction(async () => {
     cwd: path.join(`${appRoot.path}/services/graph-protocol/`),
     log: true,
   });
-  fs.rmdirSync(`${appRoot.path}/services/graph-protocol/postgres`, {
+  fs.rmSync(`${appRoot.path}/services/graph-protocol/postgres`, {
     recursive: true,
+    force: true,
   });
 });
 
@@ -374,7 +375,7 @@ subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
         .readdirSync(`${appRoot.path}/services/chainlink-nodes/`)
         .filter((folder) => new RegExp(`${network.name}`).test(folder));
       for (let folder of folders) {
-        fs.rmdirSync(`${appRoot.path}/services/chainlink-nodes/${folder}`, {
+        fs.rmSync(`${appRoot.path}/services/chainlink-nodes/${folder}`, {
           recursive: true,
         });
       }
@@ -784,7 +785,7 @@ subtask(SUB_TASK_NAMES.EXPORT_NETWORKS, undefined).setAction(
       singleQuote: true,
       parser: 'typescript',
     });
-    fs.writeFileSync(
+    fs.appendFile(
       path.resolve(__dirname, `${base_path}/index.ts`),
       prettifiedIndex
     );
@@ -1162,7 +1163,7 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_MESSENGER_REGISTRY, undefined).setAction(
       if (!registeredMessenger) {
         const tx = await slaRegistry.registerMessenger(
           messengerArtifact.address,
-          `${process.env.IPFS_URI}/ipfs/${seMessengerSpecIPFS}`
+          `${process.env.DEVELOP_IPFS_URI}/ipfs/${seMessengerSpecIPFS}`
         );
         await tx.wait();
       } else {
@@ -1251,7 +1252,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
       const seMessengerSpecIPFS = await getIPFSHash(updatedSpec);
       let tx = await slaRegistry.registerMessenger(
         deployedMessenger.address,
-        `${process.env.IPFS_URI}/ipfs/${seMessengerSpecIPFS}`
+        `${network.config.stacktical.ipfs}/ipfs/${seMessengerSpecIPFS}`
       );
       await tx.wait();
       consola.success(

@@ -49,7 +49,16 @@ export const mumbai: NetworkUserConfig = {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.USDC,
       },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.USDT,
+      },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.WMATIC,
+      },
     ],
+    ipfs: process.env.IPFS_URI,
     chainlink: {
       deployLocal: false,
       deleteOldJobs: true,
@@ -66,11 +75,18 @@ export const mumbai: NetworkUserConfig = {
         },
       ],
     },
-    addresses: {},
+    addresses: {
+      [CONTRACT_NAMES.LinkToken]: '0x326C977E6efc84E512bB9C30f76E30c160eD06FB',
+    },
     bootstrap: {
       allowance: [
         {
           contract: CONTRACT_NAMES.SEMessenger,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
+        {
+          contract: CONTRACT_NAMES.SEAMessenger,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
@@ -99,7 +115,12 @@ export const mumbai: NetworkUserConfig = {
       {
         contract: CONTRACT_NAMES.SEMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
-        externalAdapterUrl: 'http://host.docker.internal:6060',
+        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
+      },
+      {
+        contract: CONTRACT_NAMES.SEAMessenger,
+        useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
+        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
       },
     ],
     scripts: scripts,

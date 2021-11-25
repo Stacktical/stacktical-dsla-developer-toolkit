@@ -35,6 +35,7 @@ export const ethereum: NetworkUserConfig = {
     checkPastPeriods: true,
     deployTokens: false,
     tokens: [
+      /** https://etherscan.io/tokens */
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.DSLA,
@@ -50,7 +51,24 @@ export const ethereum: NetworkUserConfig = {
         name: TOKEN_NAMES.USDC,
         address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
       },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.USDT,
+        address: '0xdac17f958d2ee523a2206206994597c13d831ec7',
+      },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.WETH,
+        address: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+      },
+      {
+        /** https://docs.lido.fi/contracts/wsteth/ */
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.WSTETH,
+        address: '0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0',
+      },
     ],
+    ipfs: process.env.IPFS_URI,
     chainlink: {
       deployLocal: false,
       deleteOldJobs: false,
@@ -72,13 +90,13 @@ export const ethereum: NetworkUserConfig = {
           email: process.env.ETHEREUM_CHAINLINK_NODE_2_USER,
           password: process.env.ETHEREUM_CHAINLINK_NODE_2_PASS,
         },
-        {
-          name: 'paris',
-          restApiUrl: process.env.ETHEREUM_CHAINLINK_NODE_3_URL,
-          restApiPort: process.env.ETHEREUM_CHAINLINK_NODE_3_PORT,
-          email: process.env.ETHEREUM_CHAINLINK_NODE_3_USER,
-          password: process.env.ETHEREUM_CHAINLINK_NODE_3_PASS,
-        },
+        //{
+        //  name: 'paris',
+        //  restApiUrl: process.env.ETHEREUM_CHAINLINK_NODE_3_URL,
+        //  restApiPort: process.env.ETHEREUM_CHAINLINK_NODE_3_PORT,
+        //  email: process.env.ETHEREUM_CHAINLINK_NODE_3_USER,
+        //  password: process.env.ETHEREUM_CHAINLINK_NODE_3_PASS,
+        //},
       ],
     },
     addresses: {
@@ -88,6 +106,11 @@ export const ethereum: NetworkUserConfig = {
       allowance: [
         {
           contract: CONTRACT_NAMES.SEMessenger,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
+        {
+          contract: CONTRACT_NAMES.SEAMessenger,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
@@ -117,6 +140,11 @@ export const ethereum: NetworkUserConfig = {
         contract: CONTRACT_NAMES.SEMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
+      },
+      {
+        contract: CONTRACT_NAMES.SEAMessenger,
+        useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
+        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
       },
     ],
     scripts: scripts,

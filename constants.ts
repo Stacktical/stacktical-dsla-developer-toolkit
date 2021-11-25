@@ -3,6 +3,13 @@ export enum CONTRACT_NAMES {
   DAI = 'DAI',
   USDC = 'USDC',
   USDT = 'USDT',
+  WETH = 'WETH',
+  WAVAX = 'WAVAX',
+  WONE = 'WONE',
+  WBNB = 'WBNB',
+  WFTM = 'WFTM',
+  WMATIC = 'WMATIC',
+  WSTETH = 'WSTETH',
   ONE = 'ONE',
   ERC20 = 'ERC20',
   Details = 'Details',
@@ -12,6 +19,7 @@ export enum CONTRACT_NAMES {
   Oracle = 'Oracle',
   PeriodRegistry = 'PeriodRegistry',
   SEMessenger = 'SEMessenger',
+  SEAMessenger = 'SEAMessenger',
   SLA = 'SLA',
   SLORegistry = 'SLORegistry',
   SLARegistry = 'SLARegistry',
@@ -33,6 +41,13 @@ export enum TOKEN_NAMES {
   DAI = 'DAI',
   USDC = 'USDC',
   USDT = 'USDT',
+  WETH = 'WETH',
+  WAVAX = 'WAVAX',
+  WONE = 'WONE',
+  WBNB = 'WBNB',
+  WFTM = 'WFTM',
+  WMATIC = 'WMATIC',
+  WSTETH = 'WSTETH',
 }
 
 export enum DEPLOYMENT_TAGS {
@@ -46,11 +61,13 @@ export enum DEPLOYMENT_TAGS {
 
 export enum USE_CASES {
   STAKING_EFFICIENCY = 'staking-efficiency',
-  BASE_MESSENGER = 'dummy-use-case',
+  STAKING_EFFICIENCY_ALT = 'staking-efficiency-alt',
+  BASE_MESSENGER = 'base-messenger',
 }
 
 export enum NETWORKS {
   DEVELOP = 'develop',
+  DEVELOP_AVALANCHE = 'develop_avalanche',
   MUMBAI = 'mumbai',
   HARMONYTESTNET = 'harmonytestnet',
   ETHEREUM = 'ethereum',
@@ -66,6 +83,7 @@ export enum NETWORKS {
 
 export const GRAPH_NETWORKS = {
   [NETWORKS.DEVELOP]: 'mainnet',
+  [NETWORKS.DEVELOP_AVALANCHE]: 'mainnet',
   [NETWORKS.ETHEREUM]: 'mainnet',
   [NETWORKS.HARMONY]: 'mainnet',
   [NETWORKS.FANTOM]: 'mainnet',

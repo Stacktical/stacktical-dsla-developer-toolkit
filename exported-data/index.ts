@@ -1,4 +1,10 @@
+export { ethereum } from './ethereum';
+export { harmony } from './harmony';
+export { fantom } from './fantom';
 export { avalanche } from './avalanche';
+export { polygon } from './polygon';
 export { bsc } from './bsc';
 export { fantom } from './fantom';
 export { develop } from './develop';
+export { fuji } from './fuji';
+export { harmonytestnet } from './harmonytestnet';

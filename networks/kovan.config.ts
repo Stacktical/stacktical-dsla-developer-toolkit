@@ -35,6 +35,7 @@ export const kovan: NetworkUserConfig = {
   stacktical: {
     deployTokens: true,
     checkPastPeriods: false,
+    ipfs: process.env.IPFS_URI,
     chainlink: {
       deployLocal: false,
       deleteOldJobs: true,
@@ -80,11 +81,20 @@ export const kovan: NetworkUserConfig = {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.USDC,
       },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.WETH,
+      },
     ],
     bootstrap: {
       allowance: [
         {
           contract: CONTRACT_NAMES.SEMessenger,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
+        {
+          contract: CONTRACT_NAMES.SEAMessenger,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
@@ -114,6 +124,11 @@ export const kovan: NetworkUserConfig = {
         contract: CONTRACT_NAMES.SEMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
+      },
+      {
+        contract: CONTRACT_NAMES.SEAMessenger,
+        useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
+        externalAdapterUrl: 'http://host.docker.internal:6060',
       },
     ],
     scripts: scripts,

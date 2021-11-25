@@ -28,12 +28,12 @@ if (error) {
 
 export const polygon: NetworkUserConfig = {
   chainId: 137,
-  gasPrice: 200 * 10 ** 9,
-  gas: 10000000,
-  accounts: [process.env.PRIV_KEY],
-  // accounts: {
-  //   mnemonic: process.env.MAINNET_MNEMONIC,
-  // },
+  //gasPrice: 200 * 10 ** 9,
+  //gas: 10000000,
+  //accounts: [process.env.PRIV_KEY],
+  accounts: {
+     mnemonic: process.env.MAINNET_MNEMONIC,
+   },
   url: process.env.POLYGON_URI,
   stacktical: {
     deployTokens: false,
@@ -54,7 +54,18 @@ export const polygon: NetworkUserConfig = {
         name: TOKEN_NAMES.USDC,
         address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
       },
+      {
+        factory: PolygonERC20__factory,
+        name: TOKEN_NAMES.USDT,
+        address: '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
+      },
+      {
+        factory: PolygonERC20__factory,
+        name: TOKEN_NAMES.WMATIC,
+        address: '0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270',
+      },
     ],
+    ipfs: process.env.IPFS_URI,
     chainlink: {
       deployLocal: false,
       deleteOldJobs: true,
@@ -86,12 +97,18 @@ export const polygon: NetworkUserConfig = {
       ],
     },
     addresses: {
+      /** https://pegswap.chain.link/ */
       [CONTRACT_NAMES.LinkToken]: '0xb0897686c545045afc77cf20ec7a532e3120e0f1',
     },
     bootstrap: {
       allowance: [
         {
           contract: CONTRACT_NAMES.SEMessenger,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
+        {
+          contract: CONTRACT_NAMES.SEAMessenger,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
@@ -121,6 +138,11 @@ export const polygon: NetworkUserConfig = {
         contract: CONTRACT_NAMES.SEMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
+      },
+      {
+        contract: CONTRACT_NAMES.SEAMessenger,
+        useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
+        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
       },
     ],
     scripts: scripts,

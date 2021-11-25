@@ -34,22 +34,37 @@ export const harmonytestnet: NetworkUserConfig = {
   url: process.env.HARMONYTESTNET_URI,
   saveDeployments: true,
   stacktical: {
-    deployTokens: true,
+    deployTokens: false,
     checkPastPeriods: false,
     tokens: [
+      /** https://explorer.testnet.harmony.one/hrc20 */
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.DSLA,
+        address: '0xab85235ec77b2c54d22fb051910e7355959e2464',
       },
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.DAI,
+        address: '0xa6610f1ba3523352d5da5fb2e25c0d8859da4007',
       },
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.USDC,
+        address: '0x2e89d104f10e1d480d47e924f3f43672c09d12a2',
+      },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.USDT,
+        address: '0x922337914e641e830ce174f52288bd7660ef83c6',
+      },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.WONE,
+        address: '0x7466d7d0C21Fa05F32F5a0Fa27e12bdC06348Ce2',
       },
     ],
+    ipfs: process.env.IPFS_URI,
     chainlink: {
       deployLocal: false,
       deleteOldJobs: true,
@@ -71,6 +86,11 @@ export const harmonytestnet: NetworkUserConfig = {
       allowance: [
         {
           contract: CONTRACT_NAMES.SEMessenger,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
+        {
+          contract: CONTRACT_NAMES.SEAMessenger,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
@@ -97,6 +117,11 @@ export const harmonytestnet: NetworkUserConfig = {
         contract: CONTRACT_NAMES.SEMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
+      },
+      {
+        contract: CONTRACT_NAMES.SEAMessenger,
+        useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
+        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
       },
     ],
     scripts: scripts,

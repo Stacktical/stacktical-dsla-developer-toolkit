@@ -2,13 +2,17 @@ version: "3.5"
 services:
   ipfs-service:
     container_name: ipfs-service
-    image: ipfs/go-ipfs:v0.4.23
+    image: ipfs/go-ipfs:v0.10.0
     ports:
-      - '5001:5001'
+      - '4001:4001'
+      - '127.0.0.1:5001:5001'
+      - '127.0.0.1:8080:8080'
     networks:
       - ipfs-service-network
     volumes:
       - ./data:/data/ipfs
+    entrypoint: ipfs
+    command: daemon --writable
 networks:
   ipfs-service-network:
     name: ipfs-service-network

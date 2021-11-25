@@ -34,6 +34,7 @@ export const avalanche: NetworkUserConfig = {
   stacktical: {
     checkPastPeriods: true,
     deployTokens: false,
+    /** Ref: https://github.com/pangolindex/tokenlists/blob/main/ab.tokenlist.json  */
     tokens: [
       {
         factory: EthereumERC20__factory,
@@ -50,7 +51,18 @@ export const avalanche: NetworkUserConfig = {
         name: TOKEN_NAMES.USDC,
         address: '0xA7D7079b0FEaD91F3e65f86E8915Cb59c1a4C664',
       },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.USDT,
+        address: '0xc7198437980c041c805A1EDcbA50c1Ce5db95118',
+      },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.WAVAX,
+        address: '0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7',
+      },
     ],
+    ipfs: process.env.IPFS_URI,
     chainlink: {
       deployLocal: false,
       deleteOldJobs: false,
@@ -91,6 +103,11 @@ export const avalanche: NetworkUserConfig = {
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
+        {
+          contract: CONTRACT_NAMES.SEAMessenger,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
       ],
       registry: {
         periods: [
@@ -117,6 +134,11 @@ export const avalanche: NetworkUserConfig = {
         contract: CONTRACT_NAMES.SEMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
+      },
+      {
+        contract: CONTRACT_NAMES.SEAMessenger,
+        useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
+        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
       },
     ],
     scripts: scripts,
