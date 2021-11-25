@@ -25,6 +25,7 @@ extendConfig(
       // Check if potentially env parameters fields (private data such as credentials) is parsed correctly before executing
       if (stackticalConfig) {
         const schema = Joi.object({
+          ipfs: Joi.string().required(),
           chainlink: Joi.object({
             ethWsUrl: Joi.string().required(),
             nodesConfiguration: Joi.array().items(

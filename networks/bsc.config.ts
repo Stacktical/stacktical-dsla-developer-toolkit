@@ -64,6 +64,7 @@ export const bsc: NetworkUserConfig = {
       },
 
     ],
+    ipfs: process.env.IPFS_URI,
     chainlink: {
       deployLocal: false,
       deleteOldJobs: false,

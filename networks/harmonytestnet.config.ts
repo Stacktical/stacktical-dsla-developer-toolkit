@@ -64,6 +64,7 @@ export const harmonytestnet: NetworkUserConfig = {
         address: '0x7466d7d0C21Fa05F32F5a0Fa27e12bdC06348Ce2',
       },
     ],
+    ipfs: process.env.IPFS_URI,
     chainlink: {
       deployLocal: false,
       deleteOldJobs: true,
