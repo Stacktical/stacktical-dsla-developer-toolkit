@@ -25,7 +25,7 @@ export const scripts: ScriptsConfiguration = {
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseMessenger,
       initialPeriodId: 4,
-      finalPeriodId: 3,
+      finalPeriodId: 5,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
