@@ -12,6 +12,7 @@ enum TASK_NAMES {
   BOOTSTRAP_DSLA_PROTOCOL = 'stacktical:bootstrap',
   REQUEST_SLI = 'stacktical:request-sli',
   RESTART_SERVICES = 'stacktical:restart-services',
+  STOP_SERVICES = 'stacktical:stop-services',
   GET_PRECOORDINATOR = 'stacktical:get-precoordinator',
   SET_PRECOORDINATOR = 'stacktical:set-precoordinator',
   CHAINLINK_DOCKER_COMPOSE = 'stacktical:chainlink-docker-compose',
@@ -185,6 +186,18 @@ task(
   await run(SUB_TASK_NAMES.START_LOCAL_IPFS);
   console.log(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE);
   await run(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE);
+});
+
+task(
+  TASK_NAMES.STOP_SERVICES,
+  'Stops local services (IPFS, Ganache, Graph protocol node)'
+).setAction(async (_, { run }) => {
+  console.log(SUB_TASK_NAMES.STOP_LOCAL_GANACHE);
+  await run(SUB_TASK_NAMES.STOP_LOCAL_GANACHE);
+  console.log(SUB_TASK_NAMES.STOP_LOCAL_IPFS);
+  await run(SUB_TASK_NAMES.STOP_LOCAL_IPFS);
+  console.log(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
+  await run(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
 });
 
 task(

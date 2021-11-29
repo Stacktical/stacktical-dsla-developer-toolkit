@@ -1,0 +1,19 @@
+service:
+ name: par-peg
+
+plugins:
+ - serverless-plugin-typescript
+ - serverless-plugin-optimize
+ - serverless-offline
+
+provider:
+ name: aws
+ runtime: nodejs12.x
+
+functions:
+  main:
+    handler: services/par-peg-adapter/lambda.handler
+    events:
+      - http:
+         method: ANY
+         path: /

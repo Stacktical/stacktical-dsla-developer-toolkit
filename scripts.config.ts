@@ -25,7 +25,7 @@ export const scripts: ScriptsConfiguration = {
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseMessenger,
       initialPeriodId: 4,
-      finalPeriodId: 5,
+      finalPeriodId: 3,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
@@ -128,6 +128,31 @@ export const scripts: ScriptsConfiguration = {
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 2,
       leverage: 50,
+      serviceMetadata: {
+        serviceName: 'P-OPS',
+        serviceDescription: 'Official bDSLA Beta Partner.',
+        serviceImage:
+          'https://storage.googleapis.com/bdsla-incentivized-beta/validators/chainode.svg',
+        serviceURL: 'https://bdslaToken.network',
+        serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
+        serviceTicker: SENetworkNames[0],
+      },
+    },
+    {
+      // This SLA agrees that the price of PAR must be greater than or equal to 99% of an EUR, so €0.99
+      sloValue: 0.99,
+      sloType: SLO_TYPE.GreaterOrEqualTo,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.WEEKLY,
+      messengerContract: CONTRACT_NAMES.PPMessenger,
+      initialPeriodId: 12, // Nov 15
+      finalPeriodId: 13,
+      extraData: [],
+      initialTokenSupply: '10000000',
+      initialTokenSupplyDivisor: 100,
+      deployerStakeTimes: 100,
+      notDeployerStakeTimes: 2,
+      leverage: 50, // 100 / 50 = 2% premium
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
