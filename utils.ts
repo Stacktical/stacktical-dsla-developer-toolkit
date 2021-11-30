@@ -9,9 +9,9 @@ import { toWei, padRight, toChecksumAddress } from 'web3-utils';
 const moment = require('moment');
 const createClient = require('ipfs-http-client');
 
-const ipfsClient = createClient({ url: process.env.IPFS_URI });
-
-export async function getIPFSHash(ipfsData) {
+// Writes on IPFS and returns the IPFS hash
+export async function getIPFSHash(ipfsData, ipfsURI) {
+  const ipfsClient = createClient({ url: ipfsURI });
   const dataString = JSON.stringify(ipfsData);
   const buffer = Buffer.from(dataString, 'utf-8');
   const { path: ipfsHash } = await ipfsClient.add(buffer);
