@@ -39,7 +39,7 @@ async function getSLAData(address): Promise<SLAData> {
   console.log("periodType", periodType);
   const messengerAddress = await slaContract.messengerAddress();
   const { data } = await axios.get(
-    `${process.env.IPFS_GATEWAY_URI}/ipfs/${ipfsCID}`
+    `${process.env.DEVELOP_IPFS_URI}/ipfs/${ipfsCID}`
   );
   return { ...data, periodType, messengerAddress };
 }
