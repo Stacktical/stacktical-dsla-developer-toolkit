@@ -1,21 +1,32 @@
 version: "3.5"
 services:
   ipfs-service:
-    container_name: ipfs-service
+    container_name: ipfs-daemon
     image: ipfs/go-ipfs:v0.10.0
     ports:
       - '4001:4001'
-      - '127.0.0.1:5001:5001'
-      - '127.0.0.1:8080:8080'
+      - '5001:5001'
+      - '8080:8080'
     networks:
-      - ipfs-service-network
+      - ipfs-network
     volumes:
       - ./data:/data/ipfs
     entrypoint: ipfs
     command: daemon --writable
+  ipfs-server:
+    image: nginx:stable-alpine
+    container_name: ipfs-server
+    depends_on:
+      - ipfs-daemon
+    ports:
+      - 8888:80
+    volumes:
+    - ./nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - ipfs-network
 networks:
-  ipfs-service-network:
-    name: ipfs-service-network
+  ipfs-network:
+    name: ipfs-network
 
 volumes:
   ipfs:
