@@ -9,7 +9,9 @@ Our SLA example in `scripts.config.ts` verifies that the price of PAR stays abov
 For a more indepth quick start please refer to the original documentation at https://readme.stacktical.com/developer-guide/developer-toolkit-1/quick-start. This quick start only lists what is needed to get the PAR Peg proof of concept up and running.
 
 
-First run `npm run par-peg-adapter` in a seperate tab.
+First run `IPFS_GATEWAY_URI="https://ipfs.dsla.network" npm run par-peg-adapter` in a seperate tab.
+
+*For another coin pass the coin id as: `COIN_ID=par-stablecoin`*
 
 After that run the following commands:
 

@@ -8,8 +8,10 @@ import { SLAABI, MessengerABI } from "./abis";
 
 let web3Uri;
 let provider: JsonRpcProvider;
-
-const COINGECKO_URL = "https://api.coingecko.com/api/v3/coins/par-stablecoin";
+let COINGECKO_URL = "https://api.coingecko.com/api/v3/coins/par-stablecoin";
+if (typeof process.env.COIN_ID !== 'undefined'){
+  COINGECKO_URL = `https://api.coingecko.com/api/v3/coins/${process.env.COIN_ID}`
+}
 
 type SLAData = {
   serviceName: string;
