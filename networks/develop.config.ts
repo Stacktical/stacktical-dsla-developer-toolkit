@@ -86,6 +86,11 @@ export const develop: NetworkUserConfig = {
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
+        {
+          contract: CONTRACT_NAMES.PPMessenger,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
       ],
       registry: {
         periods: [
@@ -117,6 +122,11 @@ export const develop: NetworkUserConfig = {
         contract: CONTRACT_NAMES.BaseMessenger,
         useCaseName: USE_CASES.BASE_MESSENGER,
         externalAdapterUrl: 'http://host.docker.internal:6060',
+      },
+      {
+        contract: CONTRACT_NAMES.PPMessenger,
+        useCaseName: USE_CASES.PAR_PEG,
+        externalAdapterUrl: 'http://host.docker.internal:6080',
       },
     ],
     scripts: scripts,
