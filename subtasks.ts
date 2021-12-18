@@ -148,8 +148,8 @@ subtask(SUB_TASK_NAMES.UPDATE_MESSENGER_SPEC, undefined).setAction(
     };
     consola.info('New spec');
     consola.info(updatedSpec);
-    const seMessengerSpecIPFS = await getIPFSHash(updatedSpec);
-    const specUrl = `${process.env.IPFS_URI}/ipfs/${seMessengerSpecIPFS}`;
+    const seMessengerSpecIPFS = await getIPFSHash(updatedSpec, stacktical.ipfs);
+    const specUrl = `${stacktical.ipfs}/ipfs/${seMessengerSpecIPFS}`;
     consola.info('New specification url');
     consola.info(specUrl);
     const tx = await messengerRegistry.modifyMessenger(specUrl, messengerId);
@@ -1128,6 +1128,7 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_MESSENGER_REGISTRY, undefined).setAction(
     const {
       stacktical: { messengers },
     } = hre.network.config;
+    const ipfs = hre.network.config.stacktical.ipfs;
     const [startBootstrap, finishBootstrap] = bootstrapStrings(
       CONTRACT_NAMES.MessengerRegistry
     );
@@ -1156,14 +1157,14 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_MESSENGER_REGISTRY, undefined).setAction(
         ...messengerSpec,
         timestamp: new Date().toISOString(),
       };
-      const seMessengerSpecIPFS = await getIPFSHash(updatedSpec);
+      const seMessengerSpecIPFS = await getIPFSHash(updatedSpec, ipfs);
       const registeredMessenger = await messengerRegistry.registeredMessengers(
         messengerArtifact.address
       );
       if (!registeredMessenger) {
         const tx = await slaRegistry.registerMessenger(
           messengerArtifact.address,
-          `${process.env.DEVELOP_IPFS_URI}/ipfs/${seMessengerSpecIPFS}`
+          `${ipfs}/ipfs/${seMessengerSpecIPFS}`
         );
         await tx.wait();
       } else {
@@ -1207,6 +1208,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
     const stringUtils = await get(CONTRACT_NAMES.StringUtils);
     const periodRegistry = await get(CONTRACT_NAMES.PeriodRegistry);
     const linkToken = await get(CONTRACT_NAMES.LinkToken);
+    const ipfs = hre.network.config.stacktical.ipfs;
     const feeMultiplier =
       network.config.stacktical.chainlink.nodesConfiguration.length;
     const deployedMessenger = await deploy(messenger.contract, {
@@ -1249,7 +1251,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
         ...messengerSpec,
         timestamp: new Date().toISOString(),
       };
-      const seMessengerSpecIPFS = await getIPFSHash(updatedSpec);
+      const seMessengerSpecIPFS = await getIPFSHash(updatedSpec, ipfs);
       let tx = await slaRegistry.registerMessenger(
         deployedMessenger.address,
         `${network.config.stacktical.ipfs}/ipfs/${seMessengerSpecIPFS}`
@@ -1384,7 +1386,7 @@ subtask(SUB_TASK_NAMES.SET_CONTRACTS_ALLOWANCE, undefined).setAction(
       );
       await tx.wait();
     }
-    console.log('Alowance setted to contracts');
+    console.log('Allowance set to contracts');
   }
 );
 
@@ -1436,7 +1438,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       const messenger: IMessenger = await ethers.getContract(
         config.messengerContract
       );
-      const ipfsHash = await getIPFSHash(serviceMetadata);
+      const ipfsHash = await getIPFSHash(serviceMetadata, stacktical.ipfs);
       const stakeRegistryArtifact = await get(CONTRACT_NAMES.StakeRegistry);
       const dslaTokenArtifact = await get(CONTRACT_NAMES.DSLA);
       const slaRegistryArtifact = await get(CONTRACT_NAMES.SLARegistry);
