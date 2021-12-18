@@ -27,12 +27,15 @@ enum TASK_NAMES {
   GET_REVERT_MESSAGE = 'stacktical:get-revert-message',
   DEPLOY_MESSENGER = 'stacktical:deploy-messenger',
   GET_MESSENGER = 'stacktical:get-messenger',
+  GET_START_STOP_PERIODS = 'stacktical:get-start-stop-periods',
   TRANSFER_OWNERSHIP = 'stacktical:transfer-ownership',
   PROVIDER_WITHDRAW = 'stacktical:provider-withdraw',
   UNLOCK_TOKENS = 'stacktical:unlock-tokens',
   GRAPH_MANIFESTOS = 'stacktical:graph-manifestos',
   GET_SLA_FROM_TX = 'stacktical:get-sla-from-tx',
   UPDATE_MESSENGER_SPEC = 'stacktical:update-messenger-spec',
+  UPDATE_PERIOD_REGISTRY = 'stacktical:update-period-registry',
+  ADD_DATES_TO_PERIOD = 'stacktical:add-dates-to-period',
   AVAX_ACCOUNTS = 'accounts',
   AVAX_BALANCES = 'balances',
 }
@@ -115,6 +118,24 @@ task(TASK_NAMES.EXPORT_DATA, 'Export data to exported-data folder').setAction(
   async (_, { run }) => {
     await run(SUB_TASK_NAMES.EXPORT_NETWORKS);
     await run(SUB_TASK_NAMES.EXPORT_TO_FRONT_END);
+  }
+);
+
+task(TASK_NAMES.UPDATE_PERIOD_REGISTRY, 'Update Period Registry').setAction(
+  async (_, { run }) => {
+    await run(SUB_TASK_NAMES.BOOTSTRAP_PERIOD_REGISTRY);
+  }
+);
+
+task(TASK_NAMES.ADD_DATES_TO_PERIOD, 'Appends amountofPeriods to initialized PeriodTypes').setAction(
+  async (_, { run }) => {
+    await run(SUB_TASK_NAMES.ADD_DATES_TO_PERIOD);
+  }
+);
+
+task(TASK_NAMES.GET_START_STOP_PERIODS, 'Get the start...end date ranges of initialized PeriodTypes').setAction(
+  async (_, { run }) => {
+    await run(SUB_TASK_NAMES.GET_START_STOP_PERIODS);
   }
 );
 

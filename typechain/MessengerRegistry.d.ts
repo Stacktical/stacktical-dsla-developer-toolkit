@@ -17,7 +17,7 @@ import {
 import { BytesLike } from "@ethersproject/bytes";
 import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
-import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
+import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface MessengerRegistryInterface extends ethers.utils.Interface {
   functions: {
@@ -87,6 +87,26 @@ interface MessengerRegistryInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "MessengerModified"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "MessengerRegistered"): EventFragment;
 }
+
+export type MessengerModifiedEvent = TypedEvent<
+  [string, string, string, BigNumber, BigNumber] & {
+    ownerAddress: string;
+    messengerAddress: string;
+    specificationUrl: string;
+    precision: BigNumber;
+    id: BigNumber;
+  }
+>;
+
+export type MessengerRegisteredEvent = TypedEvent<
+  [string, string, string, BigNumber, BigNumber] & {
+    ownerAddress: string;
+    messengerAddress: string;
+    specificationUrl: string;
+    precision: BigNumber;
+    id: BigNumber;
+  }
+>;
 
 export class MessengerRegistry extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -258,7 +278,41 @@ export class MessengerRegistry extends BaseContract {
   };
 
   filters: {
+    "MessengerModified(address,address,string,uint256,uint256)"(
+      ownerAddress?: string | null,
+      messengerAddress?: string | null,
+      specificationUrl?: null,
+      precision?: null,
+      id?: null
+    ): TypedEventFilter<
+      [string, string, string, BigNumber, BigNumber],
+      {
+        ownerAddress: string;
+        messengerAddress: string;
+        specificationUrl: string;
+        precision: BigNumber;
+        id: BigNumber;
+      }
+    >;
+
     MessengerModified(
+      ownerAddress?: string | null,
+      messengerAddress?: string | null,
+      specificationUrl?: null,
+      precision?: null,
+      id?: null
+    ): TypedEventFilter<
+      [string, string, string, BigNumber, BigNumber],
+      {
+        ownerAddress: string;
+        messengerAddress: string;
+        specificationUrl: string;
+        precision: BigNumber;
+        id: BigNumber;
+      }
+    >;
+
+    "MessengerRegistered(address,address,string,uint256,uint256)"(
       ownerAddress?: string | null,
       messengerAddress?: string | null,
       specificationUrl?: null,

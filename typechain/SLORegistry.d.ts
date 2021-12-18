@@ -17,7 +17,7 @@ import {
 import { BytesLike } from "@ethersproject/bytes";
 import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
-import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
+import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface SLORegistryInterface extends ethers.utils.Interface {
   functions: {
@@ -67,6 +67,14 @@ interface SLORegistryInterface extends ethers.utils.Interface {
 
   getEvent(nameOrSignatureOrTopic: "SLORegistered"): EventFragment;
 }
+
+export type SLORegisteredEvent = TypedEvent<
+  [string, BigNumber, number] & {
+    sla: string;
+    sloValue: BigNumber;
+    sloType: number;
+  }
+>;
 
 export class SLORegistry extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -180,6 +188,15 @@ export class SLORegistry extends BaseContract {
   };
 
   filters: {
+    "SLORegistered(address,uint256,uint8)"(
+      sla?: string | null,
+      sloValue?: null,
+      sloType?: null
+    ): TypedEventFilter<
+      [string, BigNumber, number],
+      { sla: string; sloValue: BigNumber; sloType: number }
+    >;
+
     SLORegistered(
       sla?: string | null,
       sloValue?: null,

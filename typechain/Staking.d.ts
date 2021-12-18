@@ -17,7 +17,7 @@ import {
 import { BytesLike } from "@ethersproject/bytes";
 import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
-import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
+import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface StakingInterface extends ethers.utils.Interface {
   functions: {
@@ -193,6 +193,42 @@ interface StakingInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "ProviderRewardGenerated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "UserCompensationGenerated"): EventFragment;
 }
+
+export type DTokensCreatedEvent = TypedEvent<
+  [string, string, string, string, string, string, string] & {
+    tokenAddress: string;
+    dpTokenAddress: string;
+    dpTokenName: string;
+    dpTokenSymbol: string;
+    duTokenAddress: string;
+    duTokenName: string;
+    duTokenSymbol: string;
+  }
+>;
+
+export type OwnershipTransferredEvent = TypedEvent<
+  [string, string] & { previousOwner: string; newOwner: string }
+>;
+
+export type ProviderRewardGeneratedEvent = TypedEvent<
+  [BigNumber, string, BigNumber, BigNumber, BigNumber] & {
+    periodId: BigNumber;
+    tokenAddress: string;
+    rewardPercentage: BigNumber;
+    rewardPercentagePrecision: BigNumber;
+    rewardAmount: BigNumber;
+  }
+>;
+
+export type UserCompensationGeneratedEvent = TypedEvent<
+  [BigNumber, string, BigNumber, BigNumber, BigNumber] & {
+    periodId: BigNumber;
+    tokenAddress: string;
+    usersStake: BigNumber;
+    leverage: BigNumber;
+    compensation: BigNumber;
+  }
+>;
 
 export class Staking extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -445,6 +481,27 @@ export class Staking extends BaseContract {
   };
 
   filters: {
+    "DTokensCreated(address,address,string,string,address,string,string)"(
+      tokenAddress?: string | null,
+      dpTokenAddress?: string | null,
+      dpTokenName?: null,
+      dpTokenSymbol?: null,
+      duTokenAddress?: string | null,
+      duTokenName?: null,
+      duTokenSymbol?: null
+    ): TypedEventFilter<
+      [string, string, string, string, string, string, string],
+      {
+        tokenAddress: string;
+        dpTokenAddress: string;
+        dpTokenName: string;
+        dpTokenSymbol: string;
+        duTokenAddress: string;
+        duTokenName: string;
+        duTokenSymbol: string;
+      }
+    >;
+
     DTokensCreated(
       tokenAddress?: string | null,
       dpTokenAddress?: string | null,
@@ -466,12 +523,37 @@ export class Staking extends BaseContract {
       }
     >;
 
+    "OwnershipTransferred(address,address)"(
+      previousOwner?: string | null,
+      newOwner?: string | null
+    ): TypedEventFilter<
+      [string, string],
+      { previousOwner: string; newOwner: string }
+    >;
+
     OwnershipTransferred(
       previousOwner?: string | null,
       newOwner?: string | null
     ): TypedEventFilter<
       [string, string],
       { previousOwner: string; newOwner: string }
+    >;
+
+    "ProviderRewardGenerated(uint256,address,uint256,uint256,uint256)"(
+      periodId?: BigNumberish | null,
+      tokenAddress?: string | null,
+      rewardPercentage?: null,
+      rewardPercentagePrecision?: null,
+      rewardAmount?: null
+    ): TypedEventFilter<
+      [BigNumber, string, BigNumber, BigNumber, BigNumber],
+      {
+        periodId: BigNumber;
+        tokenAddress: string;
+        rewardPercentage: BigNumber;
+        rewardPercentagePrecision: BigNumber;
+        rewardAmount: BigNumber;
+      }
     >;
 
     ProviderRewardGenerated(
@@ -488,6 +570,23 @@ export class Staking extends BaseContract {
         rewardPercentage: BigNumber;
         rewardPercentagePrecision: BigNumber;
         rewardAmount: BigNumber;
+      }
+    >;
+
+    "UserCompensationGenerated(uint256,address,uint256,uint256,uint256)"(
+      periodId?: BigNumberish | null,
+      tokenAddress?: string | null,
+      usersStake?: null,
+      leverage?: null,
+      compensation?: null
+    ): TypedEventFilter<
+      [BigNumber, string, BigNumber, BigNumber, BigNumber],
+      {
+        periodId: BigNumber;
+        tokenAddress: string;
+        usersStake: BigNumber;
+        leverage: BigNumber;
+        compensation: BigNumber;
       }
     >;
 

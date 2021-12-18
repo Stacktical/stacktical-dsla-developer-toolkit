@@ -17,7 +17,7 @@ import {
 import { BytesLike } from "@ethersproject/bytes";
 import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
-import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
+import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface BaseMessengerInterface extends ethers.utils.Interface {
   functions: {
@@ -172,6 +172,37 @@ interface BaseMessengerInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "SLIReceived"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SLIRequested"): EventFragment;
 }
+
+export type ChainlinkCancelledEvent = TypedEvent<[string] & { id: string }>;
+
+export type ChainlinkFulfilledEvent = TypedEvent<[string] & { id: string }>;
+
+export type ChainlinkRequestedEvent = TypedEvent<[string] & { id: string }>;
+
+export type JobIdModifiedEvent = TypedEvent<
+  [string, string, BigNumber] & { owner: string; jobId: string; fee: BigNumber }
+>;
+
+export type OwnershipTransferredEvent = TypedEvent<
+  [string, string] & { previousOwner: string; newOwner: string }
+>;
+
+export type SLIReceivedEvent = TypedEvent<
+  [string, BigNumber, string, string] & {
+    slaAddress: string;
+    periodId: BigNumber;
+    requestId: string;
+    chainlinkResponse: string;
+  }
+>;
+
+export type SLIRequestedEvent = TypedEvent<
+  [string, BigNumber, string] & {
+    caller: string;
+    requestsCounter: BigNumber;
+    requestId: string;
+  }
+>;
 
 export class BaseMessenger extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -413,7 +444,15 @@ export class BaseMessenger extends BaseContract {
   };
 
   filters: {
+    "ChainlinkCancelled(bytes32)"(
+      id?: BytesLike | null
+    ): TypedEventFilter<[string], { id: string }>;
+
     ChainlinkCancelled(
+      id?: BytesLike | null
+    ): TypedEventFilter<[string], { id: string }>;
+
+    "ChainlinkFulfilled(bytes32)"(
       id?: BytesLike | null
     ): TypedEventFilter<[string], { id: string }>;
 
@@ -421,9 +460,22 @@ export class BaseMessenger extends BaseContract {
       id?: BytesLike | null
     ): TypedEventFilter<[string], { id: string }>;
 
+    "ChainlinkRequested(bytes32)"(
+      id?: BytesLike | null
+    ): TypedEventFilter<[string], { id: string }>;
+
     ChainlinkRequested(
       id?: BytesLike | null
     ): TypedEventFilter<[string], { id: string }>;
+
+    "JobIdModified(address,bytes32,uint256)"(
+      owner?: string | null,
+      jobId?: null,
+      fee?: null
+    ): TypedEventFilter<
+      [string, string, BigNumber],
+      { owner: string; jobId: string; fee: BigNumber }
+    >;
 
     JobIdModified(
       owner?: string | null,
@@ -434,12 +486,35 @@ export class BaseMessenger extends BaseContract {
       { owner: string; jobId: string; fee: BigNumber }
     >;
 
+    "OwnershipTransferred(address,address)"(
+      previousOwner?: string | null,
+      newOwner?: string | null
+    ): TypedEventFilter<
+      [string, string],
+      { previousOwner: string; newOwner: string }
+    >;
+
     OwnershipTransferred(
       previousOwner?: string | null,
       newOwner?: string | null
     ): TypedEventFilter<
       [string, string],
       { previousOwner: string; newOwner: string }
+    >;
+
+    "SLIReceived(address,uint256,bytes32,bytes32)"(
+      slaAddress?: string | null,
+      periodId?: null,
+      requestId?: BytesLike | null,
+      chainlinkResponse?: null
+    ): TypedEventFilter<
+      [string, BigNumber, string, string],
+      {
+        slaAddress: string;
+        periodId: BigNumber;
+        requestId: string;
+        chainlinkResponse: string;
+      }
     >;
 
     SLIReceived(
@@ -455,6 +530,15 @@ export class BaseMessenger extends BaseContract {
         requestId: string;
         chainlinkResponse: string;
       }
+    >;
+
+    "SLIRequested(address,uint256,bytes32)"(
+      caller?: string | null,
+      requestsCounter?: null,
+      requestId?: null
+    ): TypedEventFilter<
+      [string, BigNumber, string],
+      { caller: string; requestsCounter: BigNumber; requestId: string }
     >;
 
     SLIRequested(
