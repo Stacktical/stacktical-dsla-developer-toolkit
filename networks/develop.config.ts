@@ -92,7 +92,7 @@ export const develop: NetworkUserConfig = {
           {
             periodType: PERIOD_TYPE.WEEKLY,
             amountOfPeriods: 52,
-            expiredPeriods: 14,
+            expiredPeriods: 26,
           },
         ],
         stake: {
@@ -108,11 +108,6 @@ export const develop: NetworkUserConfig = {
       },
     },
     messengers: [
-      {
-        contract: CONTRACT_NAMES.SEMessenger,
-        useCaseName: USE_CASES.STAKING_EFFICIENCY,
-        externalAdapterUrl: 'http://host.docker.internal:6060',
-      },
       {
         contract: CONTRACT_NAMES.BaseMessenger,
         useCaseName: USE_CASES.BASE_MESSENGER,
