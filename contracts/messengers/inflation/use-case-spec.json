@@ -1,0 +1,48 @@
+{
+  "useCaseName": "staking-efficiency",
+  "symbol": "SE",
+  "ownerUrl": "https://www.stacktical.com",
+  "useCaseDocs": "https://readme.stacktical.com/developer-guide/use-cases-1/staking-efficiency/introduction",
+  "externalAdapterRepo": "https://github.com/Stacktical/staking-efficiency-indexer",
+  "unit": "%",
+  "keywords": ["dpos", "staking", "validator", "delegator"],
+  "timestamp": "2021-07-07T00:00:00+00:00",
+  "ipfsData": {
+    "serviceName": {
+      "name": "Service Name",
+      "type": "string",
+      "description": "The Validator service name"
+    },
+    "serviceDescription": {
+      "name": "Service Description",
+      "type": "string",
+      "description": "The Validator service description"
+    },
+    "serviceImage": {
+      "name": "Service Image",
+      "type": "url",
+      "description": "The Validator service image url to display"
+    },
+    "serviceURL": {
+      "name": "Service URL",
+      "type": "url",
+      "description": "The Validator service URL"
+    },
+    "serviceAddress": {
+      "name": "Service Address",
+      "type": "address",
+      "description": "The Validator service blockchain address"
+    },
+    "serviceTicker": {
+      "name": "Service Ticker",
+      "type": "string",
+      "description": "The Validator service ticker",
+      "values": ["ONE", "DOT", "ATOM", "BAND", "eGLD", "XTZ", "AVAX", "ROSE"]
+    }
+  },
+  "version": {
+    "major": 1,
+    "minor": 0,
+    "patch": 0
+  }
+}
