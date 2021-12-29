@@ -58,6 +58,31 @@ export function generateBootstrapPeriods(
   return [periodStarts, periodEnds];
 }
 
+export function addPeriods(
+  periodType: PERIOD_TYPE,
+  amountOfPeriods: number,
+  initDate: number,
+) {
+  const periodStarts = [];
+  const periodEnds = [];
+  const [parsedPeriod, parsedUnit] = parsePeriod(periodType);
+  for (let index = 0; index < amountOfPeriods; index++) {
+    const start = moment(initDate*1000)
+      .utc(0)
+      .add(index +1, parsedPeriod)
+      .startOf(parsedUnit)
+      .unix();
+    const end = moment(initDate*1000)
+      .utc(0)
+      .add(index +1, parsedPeriod)
+      .endOf(parsedUnit)
+      .unix();
+    periodStarts.push(start);
+    periodEnds.push(end);
+  }
+  return [periodStarts, periodEnds];
+}
+
 export const getPreCoordinatorConfiguration = async (
   nodes: Array<ChainlinkNodeConfiguration>,
   useCaseName,
@@ -97,6 +122,6 @@ export const printSeparator = () => {
 export const bootstrapStrings = (contractName: string) => [
   'Starting automated jobs to bootstrap ' +
     contractName +
-    ' contract correctly',
-  'Automated jobs to bootstrap ' + contractName + ' finished correctly',
+    ' contract...',
+  'Automated jobs to bootstrap ' + contractName + ' complete!',
 ];

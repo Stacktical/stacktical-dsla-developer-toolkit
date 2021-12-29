@@ -17,7 +17,7 @@ import {
 import { BytesLike } from "@ethersproject/bytes";
 import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
-import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
+import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface PreCoordinatorInterface extends ethers.utils.Interface {
   functions: {
@@ -147,6 +147,53 @@ interface PreCoordinatorInterface extends ethers.utils.Interface {
     nameOrSignatureOrTopic: "ServiceAgreementResponseReceived"
   ): EventFragment;
 }
+
+export type ChainlinkCancelledEvent = TypedEvent<[string] & { id: string }>;
+
+export type ChainlinkFulfilledEvent = TypedEvent<[string] & { id: string }>;
+
+export type ChainlinkRequestedEvent = TypedEvent<[string] & { id: string }>;
+
+export type NewServiceAgreementEvent = TypedEvent<
+  [string, BigNumber, BigNumber] & {
+    saId: string;
+    payment: BigNumber;
+    minresponses: BigNumber;
+  }
+>;
+
+export type OwnershipTransferredEvent = TypedEvent<
+  [string, string] & { previousOwner: string; newOwner: string }
+>;
+
+export type ServiceAgreementAnswerUpdatedEvent = TypedEvent<
+  [string, string, BigNumber] & {
+    saId: string;
+    requestId: string;
+    answer: BigNumber;
+  }
+>;
+
+export type ServiceAgreementDeletedEvent = TypedEvent<
+  [string] & { saId: string }
+>;
+
+export type ServiceAgreementRequestedEvent = TypedEvent<
+  [string, string, BigNumber] & {
+    saId: string;
+    requestId: string;
+    payment: BigNumber;
+  }
+>;
+
+export type ServiceAgreementResponseReceivedEvent = TypedEvent<
+  [string, string, string, BigNumber] & {
+    saId: string;
+    requestId: string;
+    oracle: string;
+    answer: BigNumber;
+  }
+>;
 
 export class PreCoordinator extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -401,7 +448,15 @@ export class PreCoordinator extends BaseContract {
   };
 
   filters: {
+    "ChainlinkCancelled(bytes32)"(
+      id?: BytesLike | null
+    ): TypedEventFilter<[string], { id: string }>;
+
     ChainlinkCancelled(
+      id?: BytesLike | null
+    ): TypedEventFilter<[string], { id: string }>;
+
+    "ChainlinkFulfilled(bytes32)"(
       id?: BytesLike | null
     ): TypedEventFilter<[string], { id: string }>;
 
@@ -409,9 +464,22 @@ export class PreCoordinator extends BaseContract {
       id?: BytesLike | null
     ): TypedEventFilter<[string], { id: string }>;
 
+    "ChainlinkRequested(bytes32)"(
+      id?: BytesLike | null
+    ): TypedEventFilter<[string], { id: string }>;
+
     ChainlinkRequested(
       id?: BytesLike | null
     ): TypedEventFilter<[string], { id: string }>;
+
+    "NewServiceAgreement(bytes32,uint256,uint256)"(
+      saId?: BytesLike | null,
+      payment?: null,
+      minresponses?: null
+    ): TypedEventFilter<
+      [string, BigNumber, BigNumber],
+      { saId: string; payment: BigNumber; minresponses: BigNumber }
+    >;
 
     NewServiceAgreement(
       saId?: BytesLike | null,
@@ -422,12 +490,29 @@ export class PreCoordinator extends BaseContract {
       { saId: string; payment: BigNumber; minresponses: BigNumber }
     >;
 
+    "OwnershipTransferred(address,address)"(
+      previousOwner?: string | null,
+      newOwner?: string | null
+    ): TypedEventFilter<
+      [string, string],
+      { previousOwner: string; newOwner: string }
+    >;
+
     OwnershipTransferred(
       previousOwner?: string | null,
       newOwner?: string | null
     ): TypedEventFilter<
       [string, string],
       { previousOwner: string; newOwner: string }
+    >;
+
+    "ServiceAgreementAnswerUpdated(bytes32,bytes32,int256)"(
+      saId?: BytesLike | null,
+      requestId?: BytesLike | null,
+      answer?: null
+    ): TypedEventFilter<
+      [string, string, BigNumber],
+      { saId: string; requestId: string; answer: BigNumber }
     >;
 
     ServiceAgreementAnswerUpdated(
@@ -439,9 +524,22 @@ export class PreCoordinator extends BaseContract {
       { saId: string; requestId: string; answer: BigNumber }
     >;
 
+    "ServiceAgreementDeleted(bytes32)"(
+      saId?: BytesLike | null
+    ): TypedEventFilter<[string], { saId: string }>;
+
     ServiceAgreementDeleted(
       saId?: BytesLike | null
     ): TypedEventFilter<[string], { saId: string }>;
+
+    "ServiceAgreementRequested(bytes32,bytes32,uint256)"(
+      saId?: BytesLike | null,
+      requestId?: BytesLike | null,
+      payment?: null
+    ): TypedEventFilter<
+      [string, string, BigNumber],
+      { saId: string; requestId: string; payment: BigNumber }
+    >;
 
     ServiceAgreementRequested(
       saId?: BytesLike | null,
@@ -450,6 +548,16 @@ export class PreCoordinator extends BaseContract {
     ): TypedEventFilter<
       [string, string, BigNumber],
       { saId: string; requestId: string; payment: BigNumber }
+    >;
+
+    "ServiceAgreementResponseReceived(bytes32,bytes32,address,int256)"(
+      saId?: BytesLike | null,
+      requestId?: BytesLike | null,
+      oracle?: string | null,
+      answer?: null
+    ): TypedEventFilter<
+      [string, string, string, BigNumber],
+      { saId: string; requestId: string; oracle: string; answer: BigNumber }
     >;
 
     ServiceAgreementResponseReceived(

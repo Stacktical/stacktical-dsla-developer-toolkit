@@ -34,6 +34,7 @@ export enum CONTRACT_NAMES {
   FantomERC20 = 'FantomERC20',
   FujiERC20 = 'FujiERC20',
   BaseMessenger = 'BaseMessenger',
+  PPMessenger = 'PPMessenger',
 }
 
 export enum TOKEN_NAMES {
@@ -63,6 +64,7 @@ export enum USE_CASES {
   STAKING_EFFICIENCY = 'staking-efficiency',
   STAKING_EFFICIENCY_ALT = 'staking-efficiency-alt',
   BASE_MESSENGER = 'base-messenger',
+  PAR_PEG = 'par-peg-messenger',
 }
 
 export enum NETWORKS {

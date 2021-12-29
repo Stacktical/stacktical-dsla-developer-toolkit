@@ -17,7 +17,7 @@ import {
 import { BytesLike } from "@ethersproject/bytes";
 import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
-import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
+import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface SLAInterface extends ethers.utils.Interface {
   functions: {
@@ -357,6 +357,77 @@ interface SLAInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "UserCompensationGenerated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "UserWithdraw"): EventFragment;
 }
+
+export type DTokensCreatedEvent = TypedEvent<
+  [string, string, string, string, string, string, string] & {
+    tokenAddress: string;
+    dpTokenAddress: string;
+    dpTokenName: string;
+    dpTokenSymbol: string;
+    duTokenAddress: string;
+    duTokenName: string;
+    duTokenSymbol: string;
+  }
+>;
+
+export type OwnershipTransferredEvent = TypedEvent<
+  [string, string] & { previousOwner: string; newOwner: string }
+>;
+
+export type ProviderRewardGeneratedEvent = TypedEvent<
+  [BigNumber, string, BigNumber, BigNumber, BigNumber] & {
+    periodId: BigNumber;
+    tokenAddress: string;
+    rewardPercentage: BigNumber;
+    rewardPercentagePrecision: BigNumber;
+    rewardAmount: BigNumber;
+  }
+>;
+
+export type ProviderWithdrawEvent = TypedEvent<
+  [string, BigNumber, string, BigNumber] & {
+    tokenAddress: string;
+    periodId: BigNumber;
+    caller: string;
+    amount: BigNumber;
+  }
+>;
+
+export type SLICreatedEvent = TypedEvent<
+  [BigNumber, BigNumber, BigNumber] & {
+    timestamp: BigNumber;
+    sli: BigNumber;
+    periodId: BigNumber;
+  }
+>;
+
+export type StakeEvent = TypedEvent<
+  [string, BigNumber, string, BigNumber] & {
+    tokenAddress: string;
+    periodId: BigNumber;
+    caller: string;
+    amount: BigNumber;
+  }
+>;
+
+export type UserCompensationGeneratedEvent = TypedEvent<
+  [BigNumber, string, BigNumber, BigNumber, BigNumber] & {
+    periodId: BigNumber;
+    tokenAddress: string;
+    usersStake: BigNumber;
+    leverage: BigNumber;
+    compensation: BigNumber;
+  }
+>;
+
+export type UserWithdrawEvent = TypedEvent<
+  [string, BigNumber, string, BigNumber] & {
+    tokenAddress: string;
+    periodId: BigNumber;
+    caller: string;
+    amount: BigNumber;
+  }
+>;
 
 export class SLA extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -811,6 +882,27 @@ export class SLA extends BaseContract {
   };
 
   filters: {
+    "DTokensCreated(address,address,string,string,address,string,string)"(
+      tokenAddress?: string | null,
+      dpTokenAddress?: string | null,
+      dpTokenName?: null,
+      dpTokenSymbol?: null,
+      duTokenAddress?: string | null,
+      duTokenName?: null,
+      duTokenSymbol?: null
+    ): TypedEventFilter<
+      [string, string, string, string, string, string, string],
+      {
+        tokenAddress: string;
+        dpTokenAddress: string;
+        dpTokenName: string;
+        dpTokenSymbol: string;
+        duTokenAddress: string;
+        duTokenName: string;
+        duTokenSymbol: string;
+      }
+    >;
+
     DTokensCreated(
       tokenAddress?: string | null,
       dpTokenAddress?: string | null,
@@ -832,12 +924,37 @@ export class SLA extends BaseContract {
       }
     >;
 
+    "OwnershipTransferred(address,address)"(
+      previousOwner?: string | null,
+      newOwner?: string | null
+    ): TypedEventFilter<
+      [string, string],
+      { previousOwner: string; newOwner: string }
+    >;
+
     OwnershipTransferred(
       previousOwner?: string | null,
       newOwner?: string | null
     ): TypedEventFilter<
       [string, string],
       { previousOwner: string; newOwner: string }
+    >;
+
+    "ProviderRewardGenerated(uint256,address,uint256,uint256,uint256)"(
+      periodId?: BigNumberish | null,
+      tokenAddress?: string | null,
+      rewardPercentage?: null,
+      rewardPercentagePrecision?: null,
+      rewardAmount?: null
+    ): TypedEventFilter<
+      [BigNumber, string, BigNumber, BigNumber, BigNumber],
+      {
+        periodId: BigNumber;
+        tokenAddress: string;
+        rewardPercentage: BigNumber;
+        rewardPercentagePrecision: BigNumber;
+        rewardAmount: BigNumber;
+      }
     >;
 
     ProviderRewardGenerated(
@@ -857,6 +974,21 @@ export class SLA extends BaseContract {
       }
     >;
 
+    "ProviderWithdraw(address,uint256,address,uint256)"(
+      tokenAddress?: string | null,
+      periodId?: BigNumberish | null,
+      caller?: string | null,
+      amount?: null
+    ): TypedEventFilter<
+      [string, BigNumber, string, BigNumber],
+      {
+        tokenAddress: string;
+        periodId: BigNumber;
+        caller: string;
+        amount: BigNumber;
+      }
+    >;
+
     ProviderWithdraw(
       tokenAddress?: string | null,
       periodId?: BigNumberish | null,
@@ -872,6 +1004,15 @@ export class SLA extends BaseContract {
       }
     >;
 
+    "SLICreated(uint256,uint256,uint256)"(
+      timestamp?: null,
+      sli?: null,
+      periodId?: null
+    ): TypedEventFilter<
+      [BigNumber, BigNumber, BigNumber],
+      { timestamp: BigNumber; sli: BigNumber; periodId: BigNumber }
+    >;
+
     SLICreated(
       timestamp?: null,
       sli?: null,
@@ -879,6 +1020,21 @@ export class SLA extends BaseContract {
     ): TypedEventFilter<
       [BigNumber, BigNumber, BigNumber],
       { timestamp: BigNumber; sli: BigNumber; periodId: BigNumber }
+    >;
+
+    "Stake(address,uint256,address,uint256)"(
+      tokenAddress?: string | null,
+      periodId?: BigNumberish | null,
+      caller?: string | null,
+      amount?: null
+    ): TypedEventFilter<
+      [string, BigNumber, string, BigNumber],
+      {
+        tokenAddress: string;
+        periodId: BigNumber;
+        caller: string;
+        amount: BigNumber;
+      }
     >;
 
     Stake(
@@ -896,6 +1052,23 @@ export class SLA extends BaseContract {
       }
     >;
 
+    "UserCompensationGenerated(uint256,address,uint256,uint256,uint256)"(
+      periodId?: BigNumberish | null,
+      tokenAddress?: string | null,
+      usersStake?: null,
+      leverage?: null,
+      compensation?: null
+    ): TypedEventFilter<
+      [BigNumber, string, BigNumber, BigNumber, BigNumber],
+      {
+        periodId: BigNumber;
+        tokenAddress: string;
+        usersStake: BigNumber;
+        leverage: BigNumber;
+        compensation: BigNumber;
+      }
+    >;
+
     UserCompensationGenerated(
       periodId?: BigNumberish | null,
       tokenAddress?: string | null,
@@ -910,6 +1083,21 @@ export class SLA extends BaseContract {
         usersStake: BigNumber;
         leverage: BigNumber;
         compensation: BigNumber;
+      }
+    >;
+
+    "UserWithdraw(address,uint256,address,uint256)"(
+      tokenAddress?: string | null,
+      periodId?: BigNumberish | null,
+      caller?: string | null,
+      amount?: null
+    ): TypedEventFilter<
+      [string, BigNumber, string, BigNumber],
+      {
+        tokenAddress: string;
+        periodId: BigNumber;
+        caller: string;
+        amount: BigNumber;
       }
     >;
 

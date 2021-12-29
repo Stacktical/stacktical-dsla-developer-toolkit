@@ -81,19 +81,33 @@ export const develop: NetworkUserConfig = {
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
+        /*
         {
           contract: CONTRACT_NAMES.BaseMessenger,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
+        {
+          contract: CONTRACT_NAMES.PPMessenger,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
+        */
       ],
       registry: {
         periods: [
           {
             periodType: PERIOD_TYPE.WEEKLY,
-            amountOfPeriods: 52,
+            amountOfPeriods: 52, // Number of periods from now
             expiredPeriods: 14,
           },
+          /*
+          {
+            periodType: PERIOD_TYPE.DAILY,
+            amountOfPeriods: 365,
+            expiredPeriods: 336,
+          },
+          */
         ],
         stake: {
           stakingParameters: {
@@ -109,15 +123,22 @@ export const develop: NetworkUserConfig = {
     },
     messengers: [
       {
-        contract: CONTRACT_NAMES.SEMessenger,
-        useCaseName: USE_CASES.STAKING_EFFICIENCY,
-        externalAdapterUrl: 'http://host.docker.internal:6060',
+        contract: CONTRACT_NAMES.SEMessenger,  //  Name of the Messenger
+        useCaseName: USE_CASES.STAKING_EFFICIENCY,  // Name of the Use-Case
+        externalAdapterUrl: 'http://host.docker.internal:6060',   // Your local serverless endpoint
       },
+      /*
       {
         contract: CONTRACT_NAMES.BaseMessenger,
         useCaseName: USE_CASES.BASE_MESSENGER,
         externalAdapterUrl: 'http://host.docker.internal:6060',
       },
+      {
+        contract: CONTRACT_NAMES.PPMessenger,
+        useCaseName: USE_CASES.PAR_PEG,
+        externalAdapterUrl: 'http://host.docker.internal:6080',
+      },
+      */  
     ],
     scripts: scripts,
   },

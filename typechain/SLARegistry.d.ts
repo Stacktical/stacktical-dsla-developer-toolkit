@@ -17,7 +17,7 @@ import {
 import { BytesLike } from "@ethersproject/bytes";
 import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
-import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
+import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface SLARegistryInterface extends ethers.utils.Interface {
   functions: {
@@ -139,6 +139,22 @@ interface SLARegistryInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "SLACreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SLIRequested"): EventFragment;
 }
+
+export type ReturnLockedValueEvent = TypedEvent<
+  [string, string] & { sla: string; caller: string }
+>;
+
+export type SLACreatedEvent = TypedEvent<
+  [string, string] & { sla: string; owner: string }
+>;
+
+export type SLIRequestedEvent = TypedEvent<
+  [BigNumber, string, string] & {
+    periodId: BigNumber;
+    sla: string;
+    caller: string;
+  }
+>;
 
 export class SLARegistry extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -344,15 +360,34 @@ export class SLARegistry extends BaseContract {
   };
 
   filters: {
+    "ReturnLockedValue(address,address)"(
+      sla?: string | null,
+      caller?: string | null
+    ): TypedEventFilter<[string, string], { sla: string; caller: string }>;
+
     ReturnLockedValue(
       sla?: string | null,
       caller?: string | null
     ): TypedEventFilter<[string, string], { sla: string; caller: string }>;
 
+    "SLACreated(address,address)"(
+      sla?: string | null,
+      owner?: string | null
+    ): TypedEventFilter<[string, string], { sla: string; owner: string }>;
+
     SLACreated(
       sla?: string | null,
       owner?: string | null
     ): TypedEventFilter<[string, string], { sla: string; owner: string }>;
+
+    "SLIRequested(uint256,address,address)"(
+      periodId?: null,
+      sla?: string | null,
+      caller?: string | null
+    ): TypedEventFilter<
+      [BigNumber, string, string],
+      { periodId: BigNumber; sla: string; caller: string }
+    >;
 
     SLIRequested(
       periodId?: null,

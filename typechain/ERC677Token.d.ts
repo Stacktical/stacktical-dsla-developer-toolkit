@@ -17,7 +17,7 @@ import {
 import { BytesLike } from "@ethersproject/bytes";
 import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
-import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
+import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface ERC677TokenInterface extends ethers.utils.Interface {
   functions: {
@@ -81,6 +81,27 @@ interface ERC677TokenInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
 }
+
+export type Transfer_address_address_uint256_bytes_Event = TypedEvent<
+  [string, string, BigNumber, string] & {
+    from: string;
+    to: string;
+    value: BigNumber;
+    data: string;
+  }
+>;
+
+export type Transfer_address_address_uint256_Event = TypedEvent<
+  [string, string, BigNumber] & { from: string; to: string; value: BigNumber }
+>;
+
+export type ApprovalEvent = TypedEvent<
+  [string, string, BigNumber] & {
+    owner: string;
+    spender: string;
+    value: BigNumber;
+  }
+>;
 
 export class ERC677Token extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -238,7 +259,7 @@ export class ERC677Token extends BaseContract {
   };
 
   filters: {
-    Transfer(
+    "Transfer(address,address,uint256,bytes)"(
       from?: string | null,
       to?: string | null,
       value?: null,
@@ -246,6 +267,24 @@ export class ERC677Token extends BaseContract {
     ): TypedEventFilter<
       [string, string, BigNumber, string],
       { from: string; to: string; value: BigNumber; data: string }
+    >;
+
+    "Transfer(address,address,uint256)"(
+      from?: string | null,
+      to?: string | null,
+      value?: null
+    ): TypedEventFilter<
+      [string, string, BigNumber],
+      { from: string; to: string; value: BigNumber }
+    >;
+
+    "Approval(address,address,uint256)"(
+      owner?: string | null,
+      spender?: string | null,
+      value?: null
+    ): TypedEventFilter<
+      [string, string, BigNumber],
+      { owner: string; spender: string; value: BigNumber }
     >;
 
     Approval(

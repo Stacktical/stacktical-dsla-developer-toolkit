@@ -17,7 +17,7 @@ import {
 import { BytesLike } from "@ethersproject/bytes";
 import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
-import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
+import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface StakeRegistryInterface extends ethers.utils.Interface {
   functions: {
@@ -236,6 +236,70 @@ interface StakeRegistryInterface extends ethers.utils.Interface {
     nameOrSignatureOrTopic: "VerificationRewardDistributed"
   ): EventFragment;
 }
+
+export type DTokenCreatedEvent = TypedEvent<
+  [string, string, string, string] & {
+    dTokenAddress: string;
+    sla: string;
+    name: string;
+    symbol: string;
+  }
+>;
+
+export type LockedValueReturnedEvent = TypedEvent<
+  [string, string, BigNumber] & {
+    sla: string;
+    owner: string;
+    amount: BigNumber;
+  }
+>;
+
+export type OwnershipTransferredEvent = TypedEvent<
+  [string, string] & { previousOwner: string; newOwner: string }
+>;
+
+export type StakingParametersModifiedEvent = TypedEvent<
+  [
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    BigNumber,
+    boolean
+  ] & {
+    DSLAburnRate: BigNumber;
+    dslaDepositByPeriod: BigNumber;
+    dslaPlatformReward: BigNumber;
+    dslaMessengerReward: BigNumber;
+    dslaUserReward: BigNumber;
+    dslaBurnedByVerification: BigNumber;
+    maxTokenLength: BigNumber;
+    maxLeverage: BigNumber;
+    burnDSLA: boolean;
+  }
+>;
+
+export type ValueLockedEvent = TypedEvent<
+  [string, string, BigNumber] & {
+    sla: string;
+    owner: string;
+    amount: BigNumber;
+  }
+>;
+
+export type VerificationRewardDistributedEvent = TypedEvent<
+  [string, string, BigNumber, BigNumber, BigNumber, BigNumber] & {
+    sla: string;
+    requester: string;
+    userReward: BigNumber;
+    platformReward: BigNumber;
+    messengerReward: BigNumber;
+    burnedDSLA: BigNumber;
+  }
+>;
 
 export class StakeRegistry extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -745,6 +809,16 @@ export class StakeRegistry extends BaseContract {
   };
 
   filters: {
+    "DTokenCreated(address,address,string,string)"(
+      dTokenAddress?: string | null,
+      sla?: string | null,
+      name?: null,
+      symbol?: null
+    ): TypedEventFilter<
+      [string, string, string, string],
+      { dTokenAddress: string; sla: string; name: string; symbol: string }
+    >;
+
     DTokenCreated(
       dTokenAddress?: string | null,
       sla?: string | null,
@@ -753,6 +827,15 @@ export class StakeRegistry extends BaseContract {
     ): TypedEventFilter<
       [string, string, string, string],
       { dTokenAddress: string; sla: string; name: string; symbol: string }
+    >;
+
+    "LockedValueReturned(address,address,uint256)"(
+      sla?: string | null,
+      owner?: string | null,
+      amount?: null
+    ): TypedEventFilter<
+      [string, string, BigNumber],
+      { sla: string; owner: string; amount: BigNumber }
     >;
 
     LockedValueReturned(
@@ -764,12 +847,55 @@ export class StakeRegistry extends BaseContract {
       { sla: string; owner: string; amount: BigNumber }
     >;
 
+    "OwnershipTransferred(address,address)"(
+      previousOwner?: string | null,
+      newOwner?: string | null
+    ): TypedEventFilter<
+      [string, string],
+      { previousOwner: string; newOwner: string }
+    >;
+
     OwnershipTransferred(
       previousOwner?: string | null,
       newOwner?: string | null
     ): TypedEventFilter<
       [string, string],
       { previousOwner: string; newOwner: string }
+    >;
+
+    "StakingParametersModified(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint64,bool)"(
+      DSLAburnRate?: null,
+      dslaDepositByPeriod?: null,
+      dslaPlatformReward?: null,
+      dslaMessengerReward?: null,
+      dslaUserReward?: null,
+      dslaBurnedByVerification?: null,
+      maxTokenLength?: null,
+      maxLeverage?: null,
+      burnDSLA?: null
+    ): TypedEventFilter<
+      [
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        boolean
+      ],
+      {
+        DSLAburnRate: BigNumber;
+        dslaDepositByPeriod: BigNumber;
+        dslaPlatformReward: BigNumber;
+        dslaMessengerReward: BigNumber;
+        dslaUserReward: BigNumber;
+        dslaBurnedByVerification: BigNumber;
+        maxTokenLength: BigNumber;
+        maxLeverage: BigNumber;
+        burnDSLA: boolean;
+      }
     >;
 
     StakingParametersModified(
@@ -807,6 +933,15 @@ export class StakeRegistry extends BaseContract {
       }
     >;
 
+    "ValueLocked(address,address,uint256)"(
+      sla?: string | null,
+      owner?: string | null,
+      amount?: null
+    ): TypedEventFilter<
+      [string, string, BigNumber],
+      { sla: string; owner: string; amount: BigNumber }
+    >;
+
     ValueLocked(
       sla?: string | null,
       owner?: string | null,
@@ -814,6 +949,25 @@ export class StakeRegistry extends BaseContract {
     ): TypedEventFilter<
       [string, string, BigNumber],
       { sla: string; owner: string; amount: BigNumber }
+    >;
+
+    "VerificationRewardDistributed(address,address,uint256,uint256,uint256,uint256)"(
+      sla?: string | null,
+      requester?: string | null,
+      userReward?: null,
+      platformReward?: null,
+      messengerReward?: null,
+      burnedDSLA?: null
+    ): TypedEventFilter<
+      [string, string, BigNumber, BigNumber, BigNumber, BigNumber],
+      {
+        sla: string;
+        requester: string;
+        userReward: BigNumber;
+        platformReward: BigNumber;
+        messengerReward: BigNumber;
+        burnedDSLA: BigNumber;
+      }
     >;
 
     VerificationRewardDistributed(

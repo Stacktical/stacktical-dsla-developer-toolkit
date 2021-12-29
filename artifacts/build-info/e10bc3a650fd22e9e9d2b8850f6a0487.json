@@ -3153,20 +3153,20 @@
                       {
                         "externalReferences": [
                           {
-                            "_addr": {
-                              "declaration": 72,
-                              "isOffset": false,
-                              "isSlot": false,
-                              "src": "1042:5:0",
-                              "valueSize": 1
-                            }
-                          },
-                          {
                             "length": {
                               "declaration": 78,
                               "isOffset": false,
                               "isSlot": false,
                               "src": "1020:6:0",
+                              "valueSize": 1
+                            }
+                          },
+                          {
+                            "_addr": {
+                              "declaration": 72,
+                              "isOffset": false,
+                              "isSlot": false,
+                              "src": "1042:5:0",
                               "valueSize": 1
                             }
                           }

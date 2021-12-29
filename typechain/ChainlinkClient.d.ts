@@ -15,7 +15,7 @@ import {
 import { BytesLike } from "@ethersproject/bytes";
 import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
-import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
+import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface ChainlinkClientInterface extends ethers.utils.Interface {
   functions: {};
@@ -30,6 +30,12 @@ interface ChainlinkClientInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "ChainlinkFulfilled"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ChainlinkRequested"): EventFragment;
 }
+
+export type ChainlinkCancelledEvent = TypedEvent<[string] & { id: string }>;
+
+export type ChainlinkFulfilledEvent = TypedEvent<[string] & { id: string }>;
+
+export type ChainlinkRequestedEvent = TypedEvent<[string] & { id: string }>;
 
 export class ChainlinkClient extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -79,11 +85,23 @@ export class ChainlinkClient extends BaseContract {
   callStatic: {};
 
   filters: {
+    "ChainlinkCancelled(bytes32)"(
+      id?: BytesLike | null
+    ): TypedEventFilter<[string], { id: string }>;
+
     ChainlinkCancelled(
       id?: BytesLike | null
     ): TypedEventFilter<[string], { id: string }>;
 
+    "ChainlinkFulfilled(bytes32)"(
+      id?: BytesLike | null
+    ): TypedEventFilter<[string], { id: string }>;
+
     ChainlinkFulfilled(
+      id?: BytesLike | null
+    ): TypedEventFilter<[string], { id: string }>;
+
+    "ChainlinkRequested(bytes32)"(
       id?: BytesLike | null
     ): TypedEventFilter<[string], { id: string }>;
 

@@ -17,7 +17,7 @@ import {
 import { BytesLike } from "@ethersproject/bytes";
 import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
-import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
+import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface IMessengerInterface extends ethers.utils.Interface {
   functions: {
@@ -138,6 +138,19 @@ interface IMessengerInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SLIReceived"): EventFragment;
 }
+
+export type OwnershipTransferredEvent = TypedEvent<
+  [string, string] & { previousOwner: string; newOwner: string }
+>;
+
+export type SLIReceivedEvent = TypedEvent<
+  [string, BigNumber, string, string] & {
+    slaAddress: string;
+    periodId: BigNumber;
+    requestId: string;
+    chainlinkResponse: string;
+  }
+>;
 
 export class IMessenger extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -348,12 +361,35 @@ export class IMessenger extends BaseContract {
   };
 
   filters: {
+    "OwnershipTransferred(address,address)"(
+      previousOwner?: string | null,
+      newOwner?: string | null
+    ): TypedEventFilter<
+      [string, string],
+      { previousOwner: string; newOwner: string }
+    >;
+
     OwnershipTransferred(
       previousOwner?: string | null,
       newOwner?: string | null
     ): TypedEventFilter<
       [string, string],
       { previousOwner: string; newOwner: string }
+    >;
+
+    "SLIReceived(address,uint256,bytes32,bytes32)"(
+      slaAddress?: string | null,
+      periodId?: null,
+      requestId?: BytesLike | null,
+      chainlinkResponse?: null
+    ): TypedEventFilter<
+      [string, BigNumber, string, string],
+      {
+        slaAddress: string;
+        periodId: BigNumber;
+        requestId: string;
+        chainlinkResponse: string;
+      }
     >;
 
     SLIReceived(
