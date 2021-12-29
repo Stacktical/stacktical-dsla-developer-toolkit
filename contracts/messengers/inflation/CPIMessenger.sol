@@ -13,7 +13,7 @@ import '@stacktical/dsla-contracts/contracts/StakeRegistry.sol';
 import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
 import '@openzeppelin/contracts/token/ERC20/SafeERC20.sol';
 
-contract BaseMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
+contract CPIMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
     using SafeERC20 for ERC20;
 
     mapping(bytes32 => SLIRequest) public requestIdToSLIRequest;
@@ -30,7 +30,7 @@ contract BaseMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
     PeriodRegistry private periodRegistry;
     StakeRegistry private stakeRegistry;
     bool private retry = false;
-    bytes32 public networkName;
+    bytes32 public countryCode;
 
     constructor(
         address _messengerChainlinkOracle,
@@ -38,14 +38,14 @@ contract BaseMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
         uint256 _feeMultiplier,
         PeriodRegistry _periodRegistry,
         StakeRegistry _stakeRegistry,
-        bytes32 _networkName
+        bytes32 _countryCode
     ) public {
         setChainlinkToken(_messengerChainlinkToken);
         _oracle = _messengerChainlinkOracle;
         _fee = _feeMultiplier * _baseFee;
         periodRegistry = _periodRegistry;
         stakeRegistry = _stakeRegistry;
-        networkName = _networkName;
+        countryCode = _countryCode;
     }
 
     event JobIdModified(address indexed owner, bytes32 jobId, uint256 fee);
@@ -87,7 +87,7 @@ contract BaseMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
         bool _messengerOwnerApproval,
         address _callerAddress
     ) public override onlySLARegistry nonReentrant {
-        require(_jobId != 0, '_jobI empty');
+        require(_jobId != 0, '_jobId empty');
         SLA sla = SLA(_slaAddress);
         if (_messengerOwnerApproval) {
             ERC20(chainlinkTokenAddress()).safeTransferFrom(
@@ -120,7 +120,7 @@ contract BaseMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
             StringUtils.uintToStr(sla_monitoring_end)
         );
         request.add('sla_address', StringUtils.addressToString(_slaAddress));
-        request.add('network_name', StringUtils.bytes32ToStr(networkName));
+        request.add('network_name', StringUtils.bytes32ToStr(countryCode));
 
         // Sends the request with 0.1 LINK to the oracle contract
         bytes32 requestId = sendChainlinkRequestTo(_oracle, request, _fee);
