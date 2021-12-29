@@ -1,48 +1,15 @@
 {
-  "useCaseName": "staking-efficiency",
-  "symbol": "SE",
+  "useCaseName": "stacktical-dsla-oracle-cpi",
+  "symbol": "CPI",
   "ownerUrl": "https://www.stacktical.com",
-  "useCaseDocs": "https://readme.stacktical.com/developer-guide/use-cases-1/staking-efficiency/introduction",
-  "externalAdapterRepo": "https://github.com/Stacktical/staking-efficiency-indexer",
+  "useCaseDocs": "https://readme.stacktical.com/developer-guide/use-cases-1/inflation-cpi/introduction",
+  "externalAdapterRepo": "https://github.com/Stacktical/staking-dsla-oracle-cpi",
   "unit": "%",
-  "keywords": ["dpos", "staking", "validator", "delegator"],
-  "timestamp": "2021-07-07T00:00:00+00:00",
-  "ipfsData": {
-    "serviceName": {
-      "name": "Service Name",
-      "type": "string",
-      "description": "The Validator service name"
-    },
-    "serviceDescription": {
-      "name": "Service Description",
-      "type": "string",
-      "description": "The Validator service description"
-    },
-    "serviceImage": {
-      "name": "Service Image",
-      "type": "url",
-      "description": "The Validator service image url to display"
-    },
-    "serviceURL": {
-      "name": "Service URL",
-      "type": "url",
-      "description": "The Validator service URL"
-    },
-    "serviceAddress": {
-      "name": "Service Address",
-      "type": "address",
-      "description": "The Validator service blockchain address"
-    },
-    "serviceTicker": {
-      "name": "Service Ticker",
-      "type": "string",
-      "description": "The Validator service ticker",
-      "values": ["ONE", "DOT", "ATOM", "BAND", "eGLD", "XTZ", "AVAX", "ROSE"]
-    }
-  },
+  "keywords": ["inflation", "cpi"],
+  "timestamp": "2021-12-24T00:00:00+00:00",
   "version": {
-    "major": 1,
+    "major": 0,
     "minor": 0,
-    "patch": 0
+    "patch": 1
   }
 }
