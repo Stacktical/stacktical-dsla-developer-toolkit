@@ -116,6 +116,11 @@ export const avalanche: NetworkUserConfig = {
             amountOfPeriods: 52,
             expiredPeriods: 0,
           },
+          {
+            periodType: PERIOD_TYPE.MONTHLY,
+            amountOfPeriods: 12, // until 22
+            expiredPeriods: 10,
+          },
         ],
         stake: {
           stakingParameters: {

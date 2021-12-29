@@ -1,6 +1,6 @@
 version: "3.5"
 services:
-  ipfs-service:
+  ipfs-daemon:
     container_name: ipfs-daemon
     image: ipfs/go-ipfs:v0.10.0
     ports:

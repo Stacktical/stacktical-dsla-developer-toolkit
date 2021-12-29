@@ -89,12 +89,7 @@ export const develop_avalanche: NetworkUserConfig = {
     bootstrap: {
       allowance: [
         {
-          contract: CONTRACT_NAMES.SEMessenger,
-          token: CONTRACT_NAMES.LinkToken,
-          allowance: '10',
-        },
-        {
-          contract: CONTRACT_NAMES.SEAMessenger,
+          contract: CONTRACT_NAMES.PPMessenger,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
@@ -103,9 +98,26 @@ export const develop_avalanche: NetworkUserConfig = {
         periods: [
           {
             periodType: PERIOD_TYPE.WEEKLY,
-            amountOfPeriods: 52,
-            expiredPeriods: 14,
+            amountOfPeriods: 1,
+            expiredPeriods: 0,
           },
+          {
+            periodType: PERIOD_TYPE.MONTHLY,
+            amountOfPeriods: 2,
+            expiredPeriods: 0,
+          },
+          {
+            periodType: PERIOD_TYPE.YEARLY,
+            amountOfPeriods: 3,
+            expiredPeriods: 1,
+          },
+          /*         
+          {
+            periodType: PERIOD_TYPE.HOURLY,
+            amountOfPeriods: 168,
+            expiredPeriods: 20,
+          },
+          */
         ],
         stake: {
           stakingParameters: {
@@ -121,14 +133,9 @@ export const develop_avalanche: NetworkUserConfig = {
     },
     messengers: [
       {
-        contract: CONTRACT_NAMES.SEMessenger,
-        useCaseName: USE_CASES.STAKING_EFFICIENCY,
-        externalAdapterUrl: 'http://localhost:6060',
-      },      
-      {
-        contract: CONTRACT_NAMES.SEAMessenger,
-        useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
-        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
+        contract: CONTRACT_NAMES.PPMessenger,
+        useCaseName: USE_CASES.PAR_PEG,
+        externalAdapterUrl: 'http://host.docker.internal:6080',
       },
     ],
     scripts: scripts,

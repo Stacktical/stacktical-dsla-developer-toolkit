@@ -55,8 +55,14 @@ const _bytecode =
   "0x60806040526001600455348015601457600080fd5b50603f8060226000396000f3fe6080604052600080fdfea264697066735822122023607e05162b530351d6deb5ce9870ae063a601b3d11682e35b1562546159c8f64736f6c63430006060033";
 
 export class ChainlinkClient__factory extends ContractFactory {
-  constructor(signer?: Signer) {
-    super(_abi, _bytecode, signer);
+  constructor(
+    ...args: [signer: Signer] | ConstructorParameters<typeof ContractFactory>
+  ) {
+    if (args.length === 1) {
+      super(_abi, _bytecode, args[0]);
+    } else {
+      super(...args);
+    }
   }
 
   deploy(
