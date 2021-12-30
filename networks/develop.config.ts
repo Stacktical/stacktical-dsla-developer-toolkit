@@ -83,6 +83,11 @@ export const develop: NetworkUserConfig = {
         },
         /*
         {
+          contract: CONTRACT_NAMES.ILMessenger,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
+        {
           contract: CONTRACT_NAMES.BaseMessenger,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
@@ -93,6 +98,11 @@ export const develop: NetworkUserConfig = {
           allowance: '10',
         },
         */
+        {
+          contract: CONTRACT_NAMES.ILMessenger,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
       ],
       registry: {
         periods: [
@@ -139,6 +149,11 @@ export const develop: NetworkUserConfig = {
         externalAdapterUrl: 'http://host.docker.internal:6080',
       },
       */  
+      {
+        contract: CONTRACT_NAMES.ILMessenger,
+        useCaseName: USE_CASES.IMPERMANENT_LOSS,
+        externalAdapterUrl: 'http://host.docker.internal:6080',
+      },
     ],
     scripts: scripts,
   },

@@ -36,6 +36,7 @@ export enum CONTRACT_NAMES {
   BaseMessenger = 'BaseMessenger',
   PPMessenger = 'PPMessenger',
   CPIMessenger = 'CPIMessenger',
+  ILMessenger = 'ILMessenger',
 }
 
 export enum TOKEN_NAMES {
@@ -67,6 +68,7 @@ export enum USE_CASES {
   BASE_MESSENGER = 'base-messenger',
   PAR_PEG = 'par-peg-messenger',
   INFLATION = 'inflation',
+  IMPERMANENT_LOSS = 'impermanent-loss-messenger'
 }
 
 export enum NETWORKS {
