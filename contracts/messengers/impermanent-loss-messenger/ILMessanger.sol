@@ -13,9 +13,11 @@ import '@stacktical/dsla-contracts/contracts/StakeRegistry.sol';
 
 import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
 import '@openzeppelin/contracts/token/ERC20/SafeERC20.sol';
+import '@openzeppelin/contracts/math/SafeMath.sol';
 
 contract ILMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
 	using SafeERC20 for ERC20;
+    using SafeMath for uint;
 
     mapping(bytes32 => SLIRequest) public requestIdToSLIRequest;
     bytes32[] public requests;
@@ -215,5 +217,27 @@ contract ILMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
 
     function fulfillsCounter() external view override returns (uint256) {
         return _fulfillsCounter;
+    }
+
+    function getImpermanentLoss(uint priceAOrig, uint priceBOrig, uint priceANow, uint priceBNow) internal returns (uint) {
+        // ImpermanentLoss Formula from Uniswap
+        // impermanent_loss = 2 * sqrt(price_ratio) / (1+price_ratio) — 1
+        // price_ratio = (priceAOrig/priceBOrig) / (priceANow/priceBNow)
+        // -------------------
+        // priceA: 10 -> 15
+        // priceB: 5 -> 5
+        // impermanent_loss = 203 (2.03%)
+        uint price_ratio = priceAOrig.mul(priceBNow).mul(100000000).div(priceANow).div(priceBOrig);
+        uint impermanent_loss = 10000 - sqrt(price_ratio).mul(20000).mul(10000).div(price_ratio.add(100000000));
+        return impermanent_loss;
+    }
+
+    function sqrt(uint x) returns (uint y) {
+        uint z = (x + 1) / 2;
+        y = x;
+        while (z < y) {
+            y = z;
+            z = (x / z + z) / 2;
+        }
     }
 }
