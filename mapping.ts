@@ -2,6 +2,9 @@ import { SLA as SLATemplate } from './generated/templates';
 import {
   Deposit,
   DToken,
+  Messenger,
+  Period,
+  PeriodDefinition,
   SLA,
   SLI,
   TVL,
@@ -28,6 +31,16 @@ import {
   StakeRegistry,
   ValueLocked,
 } from './generated/StakeRegistry/StakeRegistry';
+import {
+  MessengerModified,
+  MessengerRegistered,
+} from './generated/MessengerRegistry/MessengerRegistry';
+import { IMessenger } from './generated/MessengerRegistry/IMessenger';
+import {
+  PeriodInitialized,
+  PeriodModified,
+  PeriodRegistry,
+} from './generated/PeriodRegistry/PeriodRegistry';
 
 export function handleNewSLA(event: SLACreated): void {
   let slaContract = SLAContract.bind(event.params.sla);
@@ -301,4 +314,78 @@ export function handleLockedValueReturned(event: LockedValueReturned): void {
   tvl.amount = tvl.amount.minus(event.params.amount);
   tvl.withdrawals = tvl.withdrawals.concat([withdrawal.id]);
   tvl.save();
+}
+
+export function handleMessengerRegistered(event: MessengerRegistered): void {
+  let messenger = new Messenger(event.params.messengerAddress.toHexString());
+  let messengerContract = IMessenger.bind(event.params.messengerAddress);
+  messenger.precision = messengerContract.messengerPrecision();
+  messenger.owner = messengerContract.owner();
+  messenger.specificationUrl = event.params.specificationUrl;
+  messenger.messengerId = event.params.id;
+  messenger.save();
+}
+
+export function handleMessengerModified(event: MessengerModified): void {
+  let messenger = new Messenger(event.params.messengerAddress.toHexString());
+  let messengerContract = IMessenger.bind(event.params.messengerAddress);
+  messenger.precision = messengerContract.messengerPrecision();
+  messenger.owner = messengerContract.owner();
+  messenger.specificationUrl = event.params.specificationUrl;
+  messenger.messengerId = event.params.id;
+  messenger.save();
+}
+
+export function handlePeriodInitialized(event: PeriodInitialized): void {
+  let period = new Period(BigInt.fromI32(event.params.periodType).toString());
+  let periodRegistry = PeriodRegistry.bind(event.address);
+  let index: BigInt;
+  for (
+    index = BigInt.fromI32(0);
+    event.params.periodsAdded.gt(index);
+    index = index.plus(BigInt.fromI32(1))
+  ) {
+    let periodDefinition = new PeriodDefinition(
+      period.id.toString() + '-' + index.toString()
+    );
+    let periodDates = periodRegistry.getPeriodStartAndEnd(
+      event.params.periodType,
+      index
+    );
+    periodDefinition.start = periodDates.value0;
+    periodDefinition.end = periodDates.value1;
+    periodDefinition.save();
+    period.periodDefinitions = period.periodDefinitions.concat([
+      periodDefinition.id,
+    ]);
+  }
+  period.amountOfPeriods = index;
+  period.save();
+}
+
+export function handlePeriodModified(event: PeriodModified): void {
+  let period = new Period(BigInt.fromI32(event.params.periodType).toString());
+  let periodRegistry = PeriodRegistry.bind(event.address);
+  let index: BigInt;
+  for (
+    index = BigInt.fromString(period.amountOfPeriods.toString());
+    event.params.periodsAdded.gt(index);
+    index = index.plus(BigInt.fromI32(1))
+  ) {
+    let periodDefinition = new PeriodDefinition(
+      period.id.toString() + '-' + index.toString()
+    );
+    let periodDates = periodRegistry.getPeriodStartAndEnd(
+      event.params.periodType,
+      index
+    );
+    periodDefinition.start = periodDates.value0;
+    periodDefinition.end = periodDates.value1;
+    periodDefinition.save();
+    period.periodDefinitions = period.periodDefinitions.concat([
+      periodDefinition.id,
+    ]);
+  }
+  period.amountOfPeriods = period.amountOfPeriods.plus(index);
+  period.save();
 }
