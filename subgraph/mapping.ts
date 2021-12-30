@@ -368,7 +368,7 @@ export function handlePeriodModified(event: PeriodModified): void {
   let periodRegistry = PeriodRegistry.bind(event.address);
   let index: BigInt;
   for (
-    index = BigInt.fromI32(period.amountOfPeriods);
+    index = BigInt.fromString(period.amountOfPeriods.toString());
     event.params.periodsAdded.gt(index);
     index = index.plus(BigInt.fromI32(1))
   ) {
