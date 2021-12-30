@@ -363,29 +363,4 @@ export function handlePeriodInitialized(event: PeriodInitialized): void {
   period.save();
 }
 
-export function handlePeriodModified(event: PeriodModified): void {
-  let period = new Period(BigInt.fromI32(event.params.periodType).toString());
-  let periodRegistry = PeriodRegistry.bind(event.address);
-  let index: BigInt;
-  for (
-    index = period.amountOfPeriods;
-    event.params.periodsAdded.gt(index);
-    index = index.plus(BigInt.fromI32(1))
-  ) {
-    let periodDefinition = new PeriodDefinition(
-      period.id.toString() + '-' + index.toString()
-    );
-    let periodDates = periodRegistry.getPeriodStartAndEnd(
-      event.params.periodType,
-      index
-    );
-    periodDefinition.start = periodDates.value0;
-    periodDefinition.end = periodDates.value1;
-    periodDefinition.save();
-    period.periodDefinitions = period.periodDefinitions.concat([
-      periodDefinition.id,
-    ]);
-  }
-  period.amountOfPeriods = period.amountOfPeriods.plus(index);
-  period.save();
-}
+

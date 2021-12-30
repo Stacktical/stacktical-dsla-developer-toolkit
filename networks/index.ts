@@ -6,7 +6,7 @@ export const networks = [
   { name: NETWORKS.MUMBAI, enabled: false },
   { name: NETWORKS.HARMONYTESTNET, enabled: true },
   { name: NETWORKS.ETHEREUM, enabled: false },
-  { name: NETWORKS.HARMONY, enabled: false },
+  { name: NETWORKS.HARMONY, enabled: true },
   { name: NETWORKS.POLYGON, enabled: false },
   { name: NETWORKS.RINKEBY, enabled: false },
   { name: NETWORKS.BSC, enabled: false },

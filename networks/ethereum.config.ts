@@ -119,9 +119,16 @@ export const ethereum: NetworkUserConfig = {
         periods: [
           {
             periodType: PERIOD_TYPE.WEEKLY,
-            amountOfPeriods: 52,
+            amountOfPeriods: 14,
             expiredPeriods: 0,
           },
+          /*
+          {
+            periodType: PERIOD_TYPE.MONTHLY,
+            amountOfPeriods: 9,
+            expiredPeriods: 0,
+          },
+          */
         ],
         stake: {
           stakingParameters: {
