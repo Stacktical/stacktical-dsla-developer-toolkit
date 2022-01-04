@@ -2,6 +2,7 @@ import { SLA as SLATemplate } from './generated/templates';
 import {
   Deposit,
   DToken,
+  Messenger,
   SLA,
   SLI,
   TVL,
@@ -28,6 +29,11 @@ import {
   StakeRegistry,
   ValueLocked,
 } from './generated/StakeRegistry/StakeRegistry';
+import {
+  MessengerModified,
+  MessengerRegistered,
+} from './generated/MessengerRegistry/MessengerRegistry';
+import { IMessenger } from './generated/MessengerRegistry/IMessenger';
 
 export function handleNewSLA(event: SLACreated): void {
   let slaContract = SLAContract.bind(event.params.sla);
@@ -301,4 +307,24 @@ export function handleLockedValueReturned(event: LockedValueReturned): void {
   tvl.amount = tvl.amount.minus(event.params.amount);
   tvl.withdrawals = tvl.withdrawals.concat([withdrawal.id]);
   tvl.save();
+}
+
+export function handleMessengerRegistered(event: MessengerRegistered): void {
+  let messenger = new Messenger(event.params.messengerAddress.toHexString());
+  let messengerContract = IMessenger.bind(event.params.messengerAddress);
+  messenger.precision = messengerContract.messengerPrecision();
+  messenger.owner = messengerContract.owner();
+  messenger.specificationUrl = event.params.specificationUrl;
+  messenger.messengerId = event.params.id;
+  messenger.save();
+}
+
+export function handleMessengerModified(event: MessengerModified): void {
+  let messenger = new Messenger(event.params.messengerAddress.toHexString());
+  let messengerContract = IMessenger.bind(event.params.messengerAddress);
+  messenger.precision = messengerContract.messengerPrecision();
+  messenger.owner = messengerContract.owner();
+  messenger.specificationUrl = event.params.specificationUrl;
+  messenger.messengerId = event.params.id;
+  messenger.save();
 }

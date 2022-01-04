@@ -8,8 +8,8 @@ dataSources:
     name: SLARegistry
     network: mainnet
     source:
-      address: '0xD86C8F0327494034F60e25074420BcCF560D5610'
-      startBlock: 25
+      address: '0x630589690929E9cdEFDeF0734717a9eF3Ec7Fcfe'
+      startBlock: 16
       abi: SLARegistry
     mapping:
       kind: ethereum/events
@@ -30,8 +30,8 @@ dataSources:
     name: SLORegistry
     network: mainnet
     source:
-      address: '0xFC628dd79137395F3C9744e33b1c5DE554D94882'
-      startBlock: 22
+      address: '0x2612Af3A521c2df9EAF28422Ca335b04AdF3ac66'
+      startBlock: 13
       abi: SLORegistry
     mapping:
       kind: ethereum/events
@@ -52,8 +52,8 @@ dataSources:
     name: StakeRegistry
     network: mainnet
     source:
-      address: '0x21a59654176f2689d12E828B77a783072CD26680'
-      startBlock: 24
+      address: '0x26b4AFb60d6C903165150C6F0AA14F8016bE4aec'
+      startBlock: 15
       abi: StakeRegistry
     mapping:
       kind: ethereum/events
@@ -74,8 +74,8 @@ dataSources:
     name: MessengerRegistry
     network: mainnet
     source:
-      address: '0x5f8e26fAcC23FA4cbd87b8d9Dbbd33D5047abDE1'
-      startBlock: 23
+      address: '0xA57B8a5584442B467b4689F1144D269d096A3daF'
+      startBlock: 14
       abi: MessengerRegistry
     mapping:
       kind: ethereum/events
@@ -94,28 +94,6 @@ dataSources:
           handler: handleMessengerRegistered
         - event: MessengerModified(indexed address,indexed address,string,uint256,uint256)
           handler: handleMessengerModified
-      file: ../mapping.ts
-  - kind: ethereum/contract
-    name: PeriodRegistry
-    network: mainnet
-    source:
-      address: '0xb09bCc172050fBd4562da8b229Cf3E45Dc3045A6'
-      startBlock: 21
-      abi: PeriodRegistry
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      entities:
-        - PeriodRegistry
-      abis:
-        - name: PeriodRegistry
-          file: ../abis/@stacktical/dsla-contracts/contracts/PeriodRegistry.sol/PeriodRegistry.json
-      eventHandlers:
-        - event: PeriodInitialized(uint8,uint256)
-          handler: handlePeriodInitialized
-        - event: PeriodModified(uint8,uint256)
-          handler: handlePeriodModified
       file: ../mapping.ts
 templates:
   - kind: ethereum/contract

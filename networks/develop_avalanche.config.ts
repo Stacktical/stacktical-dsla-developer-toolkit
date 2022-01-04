@@ -96,22 +96,24 @@ export const develop_avalanche: NetworkUserConfig = {
       ],
       registry: {
         periods: [
+          /*
           {
             periodType: PERIOD_TYPE.WEEKLY,
-            amountOfPeriods: 1,
+            amountOfPeriods: 14, 
             expiredPeriods: 0,
-          },
+          },*/
           {
             periodType: PERIOD_TYPE.MONTHLY,
-            amountOfPeriods: 2,
+            amountOfPeriods: 9,
             expiredPeriods: 0,
           },
+          /*
           {
             periodType: PERIOD_TYPE.YEARLY,
             amountOfPeriods: 3,
             expiredPeriods: 1,
           },
-          /*         
+          /*
           {
             periodType: PERIOD_TYPE.HOURLY,
             amountOfPeriods: 168,

@@ -113,13 +113,14 @@ export const avalanche: NetworkUserConfig = {
         periods: [
           {
             periodType: PERIOD_TYPE.WEEKLY,
-            amountOfPeriods: 52,
+            amountOfPeriods: 9,
             expiredPeriods: 0,
           },
+          // Commented out for adding periods
           {
             periodType: PERIOD_TYPE.MONTHLY,
-            amountOfPeriods: 12, // until 22
-            expiredPeriods: 10,
+            amountOfPeriods: 9,
+            expiredPeriods: 0,
           },
         ],
         stake: {

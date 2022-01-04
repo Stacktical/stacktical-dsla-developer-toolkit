@@ -68,7 +68,7 @@ export const harmony: NetworkUserConfig = {
     ipfs: process.env.IPFS_URI,
     chainlink: {
       deployLocal: false,
-      deleteOldJobs: true,
+      deleteOldJobs: false,
       cleanLocalFolder: false,
       nodeFunds: '1',
       ethWsUrl: process.env.HARMONY_WS_URI,
@@ -110,9 +110,17 @@ export const harmony: NetworkUserConfig = {
         periods: [
           {
             periodType: PERIOD_TYPE.WEEKLY,
-            amountOfPeriods: 52,
+            amountOfPeriods: 9,
             expiredPeriods: 0,
           },
+          // Commented out for adding periods
+          /*
+          {
+            periodType: PERIOD_TYPE.MONTHLY,
+            amountOfPeriods: 9,
+            expiredPeriods: 0,
+          },
+          */
         ],
         stake: {
           stakingParameters: {
