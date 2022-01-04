@@ -120,7 +120,7 @@ contract CPIMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
             StringUtils.uintToStr(sla_monitoring_end)
         );
         request.add('sla_address', StringUtils.addressToString(_slaAddress));
-        request.add('network_name', StringUtils.bytes32ToStr(countryCode));
+        request.add('country_code', StringUtils.bytes32ToStr(countryCode));
 
         // Sends the request with 0.1 LINK to the oracle contract
         bytes32 requestId = sendChainlinkRequestTo(_oracle, request, _fee);
