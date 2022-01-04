@@ -30,7 +30,7 @@ contract CPIMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
     PeriodRegistry private periodRegistry;
     StakeRegistry private stakeRegistry;
     bool private retry = false;
-    bytes32 public countryCode;
+    bytes32 public networkName;
 
     constructor(
         address _messengerChainlinkOracle,
@@ -38,14 +38,14 @@ contract CPIMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
         uint256 _feeMultiplier,
         PeriodRegistry _periodRegistry,
         StakeRegistry _stakeRegistry,
-        bytes32 _countryCode
+        bytes32 _networkName
     ) public {
         setChainlinkToken(_messengerChainlinkToken);
         _oracle = _messengerChainlinkOracle;
         _fee = _feeMultiplier * _baseFee;
         periodRegistry = _periodRegistry;
         stakeRegistry = _stakeRegistry;
-        countryCode = _countryCode;
+        networkName = _networkName;
     }
 
     event JobIdModified(address indexed owner, bytes32 jobId, uint256 fee);
@@ -120,7 +120,7 @@ contract CPIMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
             StringUtils.uintToStr(sla_monitoring_end)
         );
         request.add('sla_address', StringUtils.addressToString(_slaAddress));
-        request.add('country_code', StringUtils.bytes32ToStr(countryCode));
+        request.add('network_name', StringUtils.bytes32ToStr(networkName));
 
         // Sends the request with 0.1 LINK to the oracle contract
         bytes32 requestId = sendChainlinkRequestTo(_oracle, request, _fee);
