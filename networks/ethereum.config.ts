@@ -122,6 +122,7 @@ export const ethereum: NetworkUserConfig = {
             amountOfPeriods: 14,
             expiredPeriods: 0,
           },
+          // Commented out for adding periods
           /*
           {
             periodType: PERIOD_TYPE.MONTHLY,

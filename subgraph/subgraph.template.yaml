@@ -95,28 +95,6 @@ dataSources:
         - event: MessengerModified(indexed address,indexed address,string,uint256,uint256)
           handler: handleMessengerModified
       file: ../mapping.ts
-  - kind: ethereum/contract
-    name: PeriodRegistry
-    network: {{graphNetwork}}
-    source:
-      address: '{{periodRegistryAddress}}'
-      startBlock: {{periodRegistryStartBlock}}
-      abi: PeriodRegistry
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      entities:
-        - PeriodRegistry
-      abis:
-        - name: PeriodRegistry
-          file: ../abis/@stacktical/dsla-contracts/contracts/PeriodRegistry.sol/PeriodRegistry.json
-      eventHandlers:
-        - event: PeriodInitialized(uint8,uint256)
-          handler: handlePeriodInitialized
-        - event: PeriodModified(uint8,uint256)
-          handler: handlePeriodModified
-      file: ../mapping.ts
 templates:
   - kind: ethereum/contract
     name: SLA

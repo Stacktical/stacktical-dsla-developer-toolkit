@@ -3,8 +3,6 @@ import {
   Deposit,
   DToken,
   Messenger,
-  Period,
-  PeriodDefinition,
   SLA,
   SLI,
   TVL,
@@ -36,11 +34,6 @@ import {
   MessengerRegistered,
 } from './generated/MessengerRegistry/MessengerRegistry';
 import { IMessenger } from './generated/MessengerRegistry/IMessenger';
-import {
-  PeriodInitialized,
-  PeriodModified,
-  PeriodRegistry,
-} from './generated/PeriodRegistry/PeriodRegistry';
 
 export function handleNewSLA(event: SLACreated): void {
   let slaContract = SLAContract.bind(event.params.sla);
@@ -335,32 +328,3 @@ export function handleMessengerModified(event: MessengerModified): void {
   messenger.messengerId = event.params.id;
   messenger.save();
 }
-
-export function handlePeriodInitialized(event: PeriodInitialized): void {
-  let period = new Period(BigInt.fromI32(event.params.periodType).toString());
-  let periodRegistry = PeriodRegistry.bind(event.address);
-  let index: BigInt;
-  for (
-    index = BigInt.fromI32(0);
-    event.params.periodsAdded.gt(index);
-    index = index.plus(BigInt.fromI32(1))
-  ) {
-    let periodDefinition = new PeriodDefinition(
-      period.id.toString() + '-' + index.toString()
-    );
-    let periodDates = periodRegistry.getPeriodStartAndEnd(
-      event.params.periodType,
-      index
-    );
-    periodDefinition.start = periodDates.value0;
-    periodDefinition.end = periodDates.value1;
-    periodDefinition.save();
-    period.periodDefinitions = period.periodDefinitions.concat([
-      periodDefinition.id,
-    ]);
-  }
-  period.amountOfPeriods = index;
-  period.save();
-}
-
-
