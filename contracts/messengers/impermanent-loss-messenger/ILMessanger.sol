@@ -37,6 +37,8 @@ contract ILMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
 
     EACAggregatorProxy private asset1Oracle;
     EACAggregatorProxy private asset2Oracle;
+    uint private initialAsset1OracleRound;
+    uint private initialAsset2OracleRound;
 
     constructor(
         address _messengerChainlinkOracle,
@@ -56,6 +58,8 @@ contract ILMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
         networkName = _networkName;
         asset1Oracle = EACAggregatorProxy(_chainLinkAsset1FeedProxy);
         asset2Oracle = EACAggregatorProxy(_chainLinkAsset2FeedProxy);
+        initialAsset1OracleRound = asset1Oracle.latestRound();
+        initialAsset2OracleRound = asset2Oracle.latestRound();
     }
 
     event JobIdModified(address indexed owner, bytes32 jobId, uint256 fee);
@@ -217,6 +221,20 @@ contract ILMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
 
     function fulfillsCounter() external view override returns (uint256) {
         return _fulfillsCounter;
+    }
+
+    function calculateIL(uint roundId) public view returns (uint) {
+        uint lastAnswerA = asset1Oracle.getAnswer(roundId);
+        uint lastAnswerB = asset2Oracle.getAnswer(roundId);
+        uint origAnswerA = asset1Oracle.getAnswer(initialAsset1OracleRound);
+        uint origAnswerB = asset2Oracle.getAnswer(initialAsset2OracleRound);
+
+        // make decimals same 18
+        lastAnswerA = lastAnswerA.mul(10**(18-asset1Oracle.decimals()));
+        lastAnswerA = lastAnswerB.mul(10**(18-asset2Oracle.decimals()));
+        origAnswerA = origAnswerA.mul(10**(18-asset1Oracle.decimals()));
+        origAnswerB = origAnswerB.mul(10**(18-asset2Oracle.decimals()));
+        return getImpermanentLoss(origAnswerA, origAnswerB, lastAnswerA, lastAnswerB);
     }
 
     function getImpermanentLoss(uint priceAOrig, uint priceBOrig, uint priceANow, uint priceBNow) internal returns (uint) {
