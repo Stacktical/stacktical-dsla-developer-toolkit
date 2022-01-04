@@ -8,3 +8,7 @@ export { fantom } from './fantom';
 export { develop } from './develop';
 export { fuji } from './fuji';
 export { harmonytestnet } from './harmonytestnet';
+export { develop } from './develop';
+export { develop_avalanche } from './develop_avalanche';
+export { ethereum } from './ethereum';
+export { harmonytestnet } from './harmonytestnet';

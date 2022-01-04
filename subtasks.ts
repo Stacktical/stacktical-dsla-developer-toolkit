@@ -1412,12 +1412,12 @@ subtask(SUB_TASK_NAMES.ADD_DATES_TO_PERIOD, undefined).setAction(
            "\n End: ",periodEnds, periodEndsDate ,
         );
         
-        // let tx = await periodRegistry.addPeriodsToPeriodType(
-        //   periodType,
-        //   periodStarts,
-        //   periodEnds
-        // );
-        // await tx.wait();
+        let tx = await periodRegistry.addPeriodsToPeriodType(
+          periodType,
+          periodStarts,
+          periodEnds
+        );
+        await tx.wait();
       }
     }
 
