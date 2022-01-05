@@ -43,7 +43,7 @@ export const develop_avalanche: NetworkUserConfig = {
   ],
   url: 'http://localhost:9650/ext/bc/C/rpc',
   stacktical: {
-    checkPastPeriods: false,
+    checkPastPeriods: true,
     deployTokens: true,
     ipfs: process.env.DEVELOP_IPFS_URI,
     tokens: [
@@ -89,23 +89,22 @@ export const develop_avalanche: NetworkUserConfig = {
     bootstrap: {
       allowance: [
         {
-          contract: CONTRACT_NAMES.PPMessenger,
+          contract: CONTRACT_NAMES.CPIMessenger,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
       ],
       registry: {
         periods: [
-          /*
           {
             periodType: PERIOD_TYPE.WEEKLY,
-            amountOfPeriods: 14, 
-            expiredPeriods: 0,
-          },*/
+            amountOfPeriods: 52,  // A yr
+            expiredPeriods: 12,
+          },
           {
             periodType: PERIOD_TYPE.MONTHLY,
-            amountOfPeriods: 9,
-            expiredPeriods: 0,
+            amountOfPeriods: 12,
+            expiredPeriods: 6,
           },
           /*
           {
@@ -135,9 +134,9 @@ export const develop_avalanche: NetworkUserConfig = {
     },
     messengers: [
       {
-        contract: CONTRACT_NAMES.PPMessenger,
-        useCaseName: USE_CASES.PAR_PEG,
-        externalAdapterUrl: 'http://host.docker.internal:6080',
+        contract: CONTRACT_NAMES.CPIMessenger,
+        useCaseName: USE_CASES.INFLATION,
+        externalAdapterUrl: 'http://host.docker.internal:6060',
       },
     ],
     scripts: scripts,

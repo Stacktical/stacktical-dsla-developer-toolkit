@@ -63,6 +63,7 @@ export const fuji: NetworkUserConfig = {
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.WAVAX,
+        address: '0xd00ae08403b9bbb9124bb305c09058e32c39a48c'
       },
 
     ],
@@ -98,19 +99,29 @@ export const fuji: NetworkUserConfig = {
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
+        {
+          contract: CONTRACT_NAMES.CPIMessenger,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
       ],
       registry: {
         periods: [
           {
             periodType: PERIOD_TYPE.WEEKLY,
             amountOfPeriods: 52,
-            expiredPeriods: 0,
+            expiredPeriods: 12,
+          },
+          {
+            periodType: PERIOD_TYPE.MONTHLY,
+            amountOfPeriods: 12,
+            expiredPeriods: 6,
           },
         ],
         stake: {
           stakingParameters: {
             dslaBurnedByVerification: '0',
-            dslaPlatformReward: '10075',
+            dslaPlatformReward: '75',
             dslaDepositByPeriod: '25000',
             dslaMessengerReward: '4925',
             dslaUserReward: '10000',
@@ -129,6 +140,11 @@ export const fuji: NetworkUserConfig = {
         contract: CONTRACT_NAMES.SEAMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
+      },
+      {
+        contract: CONTRACT_NAMES.CPIMessenger,
+        useCaseName: USE_CASES.INFLATION,
+        externalAdapterUrl: process.env.INFLATION_INDEXER_URI,
       },
     ],
     scripts: scripts,
