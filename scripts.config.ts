@@ -24,8 +24,8 @@ export const scripts: ScriptsConfiguration = {
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseMessenger,
-      initialPeriodId: 4,
-      finalPeriodId: 3,
+      initialPeriodId: 0,
+      finalPeriodId: 5,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
@@ -214,5 +214,31 @@ export const scripts: ScriptsConfiguration = {
         serviceTicker: SENetworkNames[0],
       },
     },
+        // index 8
+        // Test CPI inflation SLA
+        {
+          sloValue: 0.99,
+          sloType: SLO_TYPE.SmallerOrEqualTo, // You want less inflation :)
+          whitelisted: false,
+          periodType: PERIOD_TYPE.WEEKLY,
+          messengerContract: CONTRACT_NAMES.CPIMessenger,
+          initialPeriodId: 0,
+          finalPeriodId: 12,
+          extraData: [],
+          initialTokenSupply: '10000000',
+          initialTokenSupplyDivisor: 100,
+          deployerStakeTimes: 100,
+          notDeployerStakeTimes: 2,
+          leverage: 50, // 100 / 50 = 2% premium
+          serviceMetadata: {
+            serviceName: 'UZ Bizen Government',
+            serviceDescription: 'Official UZ',
+            serviceImage:
+              'https://wikimedia.org/api/rest_v1/media/math/render/svg/f9e647ca155f3db4fa61dd363fc297aa7ca7f507',
+            serviceURL: 'https://en.wikipedia.org/wiki/Consumer_price_index',
+            serviceAddress: '0x0000000000000000000000000000000000000000',
+            serviceTicker: SENetworkNames[0],
+          },
+        },
   ],
 };

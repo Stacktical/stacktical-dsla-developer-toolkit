@@ -66,7 +66,7 @@ export enum USE_CASES {
   STAKING_EFFICIENCY_ALT = 'staking-efficiency-alt',
   BASE_MESSENGER = 'base-messenger',
   PAR_PEG = 'par-peg-messenger',
-  INFLATION = 'inflation-cpi',
+  INFLATION = 'inflation',
 }
 
 export enum NETWORKS {
