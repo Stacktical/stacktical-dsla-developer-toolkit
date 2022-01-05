@@ -35,6 +35,7 @@ export enum CONTRACT_NAMES {
   FujiERC20 = 'FujiERC20',
   BaseMessenger = 'BaseMessenger',
   PPMessenger = 'PPMessenger',
+  CPIMessenger = 'CPIMessenger',
 }
 
 export enum TOKEN_NAMES {
