@@ -1,0 +1,15 @@
+{
+  "useCaseName": "stacktical-dsla-oracle-cpi",
+  "symbol": "CPI",
+  "ownerUrl": "https://www.stacktical.com",
+  "useCaseDocs": "https://readme.stacktical.com/developer-guide/use-cases-1/inflation-cpi/introduction",
+  "externalAdapterRepo": "https://github.com/Stacktical/staking-dsla-oracle-cpi",
+  "unit": "%",
+  "keywords": ["inflation", "cpi"],
+  "timestamp": "2021-12-24T00:00:00+00:00",
+  "version": {
+    "major": 0,
+    "minor": 0,
+    "patch": 1
+  }
+}

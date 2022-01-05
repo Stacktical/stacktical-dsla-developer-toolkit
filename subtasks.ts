@@ -1330,7 +1330,7 @@ subtask(SUB_TASK_NAMES.GET_START_STOP_PERIODS, undefined).setAction(
 
       console.log(
         'The ' + PERIOD_TYPE[periodType] + ' period type range is:',
-        "\n From ", periodStartsDate.at(+1), "\n Until",periodEndsDate.at(-1)
+        "\n From ", periodStartsDate.at(0), "\n Until",periodEndsDate.at(-1)
       );
 
     }

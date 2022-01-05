@@ -76,6 +76,6 @@ app.post('/', async (req, res) => {
   });
 });
 
-app.listen(6060, () => {
-  console.log(`External adapter initialized at http://localhost:${6060}`);
+app.listen(6070, () => {
+  console.log(`External adapter initialized at http://localhost:${6070}`);
 });
