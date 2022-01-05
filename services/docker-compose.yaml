@@ -12,7 +12,7 @@ services:
       - dsla-test
   chainlink:
     container_name: chainlink-dsla-env
-    image: smartcontract/chainlink:0.10.6
+    image: smartcontract/chainlink:0.10.15
     ports:
       - '6688:6688'
     volumes:
