@@ -31,12 +31,12 @@ export const develop: NetworkUserConfig = {
   },
   url: 'http://localhost:8545',
   stacktical: {
-    checkPastPeriods: true,
+    checkPastPeriods: false,
     deployTokens: true,
     ipfs: process.env.IPFS_URI,
     chainlink: {
-      deployLocal: true, // Deploys local dockers everytime
-      deleteOldJobs: false,
+      deployLocal: false, // Deploys local dockers everytime
+      deleteOldJobs: true,
       cleanLocalFolder: true,
       nodeFunds: '10',
       ethWsUrl: 'ws://host.docker.internal:8545',
@@ -76,44 +76,29 @@ export const develop: NetworkUserConfig = {
     ],
     bootstrap: {
       allowance: [
-        {
-          contract: CONTRACT_NAMES.BaseMessenger,
-          token: CONTRACT_NAMES.LinkToken,
-          allowance: '10',
-        },
+        // {
+        //   contract: CONTRACT_NAMES.BaseMessenger,
+        //   token: CONTRACT_NAMES.LinkToken,
+        //   allowance: '10',
+        // },
         {
           contract: CONTRACT_NAMES.CPIMessenger,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
-        /*
-        {
-          contract: CONTRACT_NAMES.PPMessenger,
-          token: CONTRACT_NAMES.LinkToken,
-          allowance: '10',
-        },
-        */
       ],
       registry: {
         periods: [
           {
             periodType: PERIOD_TYPE.WEEKLY,
-            amountOfPeriods: 52, // Number of periods from now 
+            amountOfPeriods: 52, // Number of periods from now
             expiredPeriods: 12,
           },
-          /*
           {
             periodType: PERIOD_TYPE.MONTHLY,
             amountOfPeriods: 12,
             expiredPeriods: 6,
           },
-          /*
-          {
-            periodType: PERIOD_TYPE.DAILY,
-            amountOfPeriods: 365,
-            expiredPeriods: 336,
-          },
-          */
         ],
         stake: {
           stakingParameters: {
@@ -128,15 +113,15 @@ export const develop: NetworkUserConfig = {
       },
     },
     messengers: [
+      // {
+      //   contract: CONTRACT_NAMES.BaseMessenger,
+      //   useCaseName: USE_CASES.BASE_MESSENGER,
+      //   externalAdapterUrl: 'http://host.docker.internal:6070',
+      // },
       {
-        contract: CONTRACT_NAMES.BaseMessenger,
-        useCaseName: USE_CASES.BASE_MESSENGER,
-        externalAdapterUrl: 'http://host.docker.internal:6070',
-      },
-      {
-        contract: CONTRACT_NAMES.CPIMessenger,  //  Name of the Messenger
-        useCaseName: USE_CASES.INFLATION,  // Name of the Use-Case
-        externalAdapterUrl: process.env.INFLATION_INDEXER_URI,   // Your local serverless endpoint
+        contract: CONTRACT_NAMES.CPIMessenger, //  Name of the Messenger
+        useCaseName: USE_CASES.INFLATION, // Name of the Use-Case
+        externalAdapterUrl: process.env.DEVELOP_INDEXER_URI, // Your local serverless endpoint
       },
       /*
       {

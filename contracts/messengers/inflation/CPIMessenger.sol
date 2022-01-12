@@ -23,7 +23,7 @@ contract CPIMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
     bytes32 private _jobId;
     uint256 private constant _baseFee = 0.1 ether;
     uint256 private _fee;
-    uint256 private constant _messengerPrecision = 10**3;
+    uint256 private constant _messengerPrecision = 10**6;
 
     uint256 private _requestsCounter;
     uint256 private _fulfillsCounter;
