@@ -114,6 +114,11 @@ export const ethereum: NetworkUserConfig = {
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
+        {
+          contract: CONTRACT_NAMES.CPIMessenger,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
       ],
       registry: {
         periods: [
@@ -153,6 +158,11 @@ export const ethereum: NetworkUserConfig = {
         contract: CONTRACT_NAMES.SEAMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
+      },
+      {
+        contract: CONTRACT_NAMES.CPIMessenger,
+        useCaseName: USE_CASES.INFLATION,
+        externalAdapterUrl: process.env.INFLATION_INDEXER_URI,
       },
     ],
     scripts: scripts,
