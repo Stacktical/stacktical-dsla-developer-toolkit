@@ -307,47 +307,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_slaOwner",
-        "type": "address"
-      }
-    ],
-    "name": "getActivePool",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "address",
-            "name": "SLAAddress",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "stake",
-            "type": "uint256"
-          },
-          {
-            "internalType": "string",
-            "name": "assetName",
-            "type": "string"
-          },
-          {
-            "internalType": "address",
-            "name": "assetAddress",
-            "type": "address"
-          }
-        ],
-        "internalType": "struct StakeRegistry.ActivePool[]",
-        "name": "",
-        "type": "tuple[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "getStakingParameters",
     "outputs": [

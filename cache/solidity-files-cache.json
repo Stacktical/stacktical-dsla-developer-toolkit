@@ -1317,7 +1317,7 @@
       ]
     },
     "/Users/wilhempujar/Development/stacktical-dsla-developer-toolkit/node_modules/@stacktical/dsla-contracts/contracts/interfaces/IMessenger.sol": {
-      "lastModificationDate": 1641305028559,
+      "lastModificationDate": 1642167641331,
       "contentHash": "a543190d6e56e717528f64a46ed8192c",
       "sourceName": "@stacktical/dsla-contracts/contracts/interfaces/IMessenger.sol",
       "solcConfig": {
@@ -1361,8 +1361,8 @@
       ]
     },
     "/Users/wilhempujar/Development/stacktical-dsla-developer-toolkit/node_modules/@stacktical/dsla-contracts/contracts/SLA.sol": {
-      "lastModificationDate": 1641305029699,
-      "contentHash": "2b142d62b67c01add98084cee3518d9d",
+      "lastModificationDate": 1642167641333,
+      "contentHash": "8e4cb92d66ee612502242f2781ba2c73",
       "sourceName": "@stacktical/dsla-contracts/contracts/SLA.sol",
       "solcConfig": {
         "version": "0.6.6",
@@ -1412,7 +1412,7 @@
       ]
     },
     "/Users/wilhempujar/Development/stacktical-dsla-developer-toolkit/node_modules/@stacktical/dsla-contracts/contracts/PeriodRegistry.sol": {
-      "lastModificationDate": 1641305029571,
+      "lastModificationDate": 1642167641333,
       "contentHash": "75dbf1fd931d9f2657650fe3402445a3",
       "sourceName": "@stacktical/dsla-contracts/contracts/PeriodRegistry.sol",
       "solcConfig": {
@@ -1458,7 +1458,7 @@
       ]
     },
     "/Users/wilhempujar/Development/stacktical-dsla-developer-toolkit/node_modules/@stacktical/dsla-contracts/contracts/StringUtils.sol": {
-      "lastModificationDate": 1641305030340,
+      "lastModificationDate": 1642167641334,
       "contentHash": "01bbcb20be42b74cb71d928e2fecce46",
       "sourceName": "@stacktical/dsla-contracts/contracts/StringUtils.sol",
       "solcConfig": {
@@ -1500,8 +1500,8 @@
       ]
     },
     "/Users/wilhempujar/Development/stacktical-dsla-developer-toolkit/node_modules/@stacktical/dsla-contracts/contracts/StakeRegistry.sol": {
-      "lastModificationDate": 1641305030006,
-      "contentHash": "908c18d21b9bd8b548b1ded4133fc269",
+      "lastModificationDate": 1642167641333,
+      "contentHash": "7ee14bd7b288a2c0128269d6d10a5e66",
       "sourceName": "@stacktical/dsla-contracts/contracts/StakeRegistry.sol",
       "solcConfig": {
         "version": "0.6.6",
@@ -1816,7 +1816,7 @@
       ]
     },
     "/Users/wilhempujar/Development/stacktical-dsla-developer-toolkit/node_modules/@stacktical/dsla-contracts/contracts/interfaces/ISLARegistry.sol": {
-      "lastModificationDate": 1641305029000,
+      "lastModificationDate": 1642167641331,
       "contentHash": "d62de3b9990531bebad871fc480a4eca",
       "sourceName": "@stacktical/dsla-contracts/contracts/interfaces/ISLARegistry.sol",
       "solcConfig": {
@@ -1858,7 +1858,7 @@
       ]
     },
     "/Users/wilhempujar/Development/stacktical-dsla-developer-toolkit/node_modules/@stacktical/dsla-contracts/contracts/interfaces/IStakeRegistry.sol": {
-      "lastModificationDate": 1641305029210,
+      "lastModificationDate": 1642167641331,
       "contentHash": "21c2e9f75b0d2723f1ec1d7b3d1e158b",
       "sourceName": "@stacktical/dsla-contracts/contracts/interfaces/IStakeRegistry.sol",
       "solcConfig": {
@@ -1900,7 +1900,7 @@
       ]
     },
     "/Users/wilhempujar/Development/stacktical-dsla-developer-toolkit/node_modules/@stacktical/dsla-contracts/contracts/interfaces/IPeriodRegistry.sol": {
-      "lastModificationDate": 1641305028903,
+      "lastModificationDate": 1642167641331,
       "contentHash": "f884f71f4329b8a7b857a1d1722c1245",
       "sourceName": "@stacktical/dsla-contracts/contracts/interfaces/IPeriodRegistry.sol",
       "solcConfig": {
@@ -1942,7 +1942,7 @@
       ]
     },
     "/Users/wilhempujar/Development/stacktical-dsla-developer-toolkit/node_modules/@stacktical/dsla-contracts/contracts/SLORegistry.sol": {
-      "lastModificationDate": 1641305029894,
+      "lastModificationDate": 1642167641333,
       "contentHash": "41864f41630b4ff3843698e03cc30de4",
       "sourceName": "@stacktical/dsla-contracts/contracts/SLORegistry.sol",
       "solcConfig": {
@@ -1984,8 +1984,8 @@
       ]
     },
     "/Users/wilhempujar/Development/stacktical-dsla-developer-toolkit/node_modules/@stacktical/dsla-contracts/contracts/Staking.sol": {
-      "lastModificationDate": 1641305030241,
-      "contentHash": "d098e8ae3b86c4349bb11e175ea44f97",
+      "lastModificationDate": 1642167641333,
+      "contentHash": "173645974d826d42c6e3934fbff06d3b",
       "sourceName": "@stacktical/dsla-contracts/contracts/Staking.sol",
       "solcConfig": {
         "version": "0.6.6",
@@ -2531,8 +2531,8 @@
       ]
     },
     "/Users/wilhempujar/Development/stacktical-dsla-developer-toolkit/node_modules/@stacktical/dsla-contracts/contracts/SLARegistry.sol": {
-      "lastModificationDate": 1641305029828,
-      "contentHash": "e30ebc0f756fc3fa22ac6c0b951f56d3",
+      "lastModificationDate": 1642167641333,
+      "contentHash": "aaf041261e6ed8251aeecf0b4a37e8be",
       "sourceName": "@stacktical/dsla-contracts/contracts/SLARegistry.sol",
       "solcConfig": {
         "version": "0.6.6",
@@ -2582,7 +2582,7 @@
       ]
     },
     "/Users/wilhempujar/Development/stacktical-dsla-developer-toolkit/node_modules/@stacktical/dsla-contracts/contracts/interfaces/IMessengerRegistry.sol": {
-      "lastModificationDate": 1641305028669,
+      "lastModificationDate": 1642167641331,
       "contentHash": "8a44960c05296c0589174b0482ea355a",
       "sourceName": "@stacktical/dsla-contracts/contracts/interfaces/IMessengerRegistry.sol",
       "solcConfig": {
@@ -2675,7 +2675,7 @@
       ]
     },
     "/Users/wilhempujar/Development/stacktical-dsla-developer-toolkit/contracts/messengers/inflation/CPIMessenger.sol": {
-      "lastModificationDate": 1641570173794,
+      "lastModificationDate": 1642164711394,
       "contentHash": "b0d7c861db932d5a6ac55119b239885e",
       "sourceName": "contracts/messengers/inflation/CPIMessenger.sol",
       "solcConfig": {
@@ -2825,7 +2825,7 @@
       "artifacts": []
     },
     "/Users/wilhempujar/Development/stacktical-dsla-developer-toolkit/node_modules/@stacktical/dsla-contracts/contracts/MessengerRegistry.sol": {
-      "lastModificationDate": 1641305029398,
+      "lastModificationDate": 1642167641332,
       "contentHash": "72d952fcfba311fada23dddb73a5e51a",
       "sourceName": "@stacktical/dsla-contracts/contracts/MessengerRegistry.sol",
       "solcConfig": {
