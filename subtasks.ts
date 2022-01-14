@@ -1548,8 +1548,10 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       },
     } = hre;
     const { deployer, notDeployer } = await getNamedAccounts();
-    consola.info('deployer', deployer);
-    consola.info('notDeployer', notDeployer);
+    printSeparator();
+    consola.info('Provider address:', deployer);
+    consola.info('User address:', notDeployer);
+    printSeparator();
     const signer = await ethers.getSigner(deployer);
     const { get } = deployments;
     const { stacktical } = hre.network.config;
@@ -1647,11 +1649,11 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       tx = await sla.addAllowedTokens(dslaToken.address);
       await tx.wait();
 
-      console.log('Starting process 3: Stake on deployer and notOwner pools');
+      console.log('Starting process 3: Stake on Provider and User pools');
 
       const deployerStake = stakeAmountTimesWei(deployerStakeTimes);
       console.log(
-        `Starting process 3.1: deployer: ${fromWei(deployerStake)} DSLA`
+        `Starting process 3.1: Provider: ${fromWei(deployerStake)} DSLA`
       );
       tx = await dslaToken.approve(sla.address, deployerStake);
       await tx.wait();
@@ -1666,7 +1668,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
         await tx.wait();
       }
       console.log(
-        `Starting process 3.2: notDeployer: ${fromWei(notDeployerStake)} DSLA`
+        `Starting process 3.2: User: ${fromWei(notDeployerStake)} DSLA`
       );
       tx = await dslaToken
         .connect(await ethers.getSigner(notDeployer))
