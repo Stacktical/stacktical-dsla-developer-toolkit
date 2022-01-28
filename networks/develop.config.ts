@@ -1,4 +1,5 @@
 import {
+  appRoot,
   CONTRACT_NAMES,
   PERIOD_TYPE,
   TOKEN_NAMES,
@@ -35,7 +36,7 @@ export const develop: NetworkUserConfig = {
     deployTokens: true,
     ipfs: process.env.IPFS_URI,
     chainlink: {
-      deployLocal: false, // Deploys local dockers everytime
+      deployLocal: true, // Deploys local dockers everytime
       deleteOldJobs: true,
       cleanLocalFolder: true,
       nodeFunds: '10',
@@ -76,11 +77,11 @@ export const develop: NetworkUserConfig = {
     ],
     bootstrap: {
       allowance: [
-        // {
-        //   contract: CONTRACT_NAMES.BaseMessenger,
-        //   token: CONTRACT_NAMES.LinkToken,
-        //   allowance: '10',
-        // },
+        {
+          contract: CONTRACT_NAMES.BaseMessenger,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
         {
           contract: CONTRACT_NAMES.CPIMessenger,
           token: CONTRACT_NAMES.LinkToken,
@@ -113,11 +114,11 @@ export const develop: NetworkUserConfig = {
       },
     },
     messengers: [
-      // {
-      //   contract: CONTRACT_NAMES.BaseMessenger,
-      //   useCaseName: USE_CASES.BASE_MESSENGER,
-      //   externalAdapterUrl: 'http://host.docker.internal:6070',
-      // },
+      {
+        contract: CONTRACT_NAMES.BaseMessenger,
+        useCaseName: USE_CASES.BASE_MESSENGER,
+        externalAdapterUrl: 'http://host.docker.internal:6070',
+      },
       {
         contract: CONTRACT_NAMES.CPIMessenger, //  Name of the Messenger
         useCaseName: USE_CASES.INFLATION, // Name of the Use-Case

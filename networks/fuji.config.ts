@@ -32,8 +32,28 @@ export const fuji: NetworkUserConfig = {
   },
   url: process.env.FUJI_URI,
   stacktical: {
-    checkPastPeriods: true,
+    checkPastPeriods: false,
     deployTokens: true,
+    ipfs: process.env.IPFS_URI,
+    chainlink: {
+      deployLocal: false,
+      deleteOldJobs: false,
+      cleanLocalFolder: false,
+      nodeFunds: '1',
+      ethWsUrl: process.env.FUJI_WS_URI,
+      nodesConfiguration: [
+        {
+          name: 'newyork',
+          restApiUrl: process.env.FUJI_CHAINLINK_NODE_2_URL,
+          restApiPort: process.env.FUJI_CHAINLINK_NODE_2_PORT,
+          email: process.env.FUJI_CHAINLINK_NODE_2_USER,
+          password: process.env.FUJI_CHAINLINK_NODE_2_PASS,
+        },
+      ],
+    },
+    addresses: {
+      [CONTRACT_NAMES.LinkToken]: '0x0b9d5D9136855f6FEc3c0993feE6E9CE8a297846',
+    },
     tokens: [
       {
         factory: EthereumERC20__factory,
@@ -67,26 +87,6 @@ export const fuji: NetworkUserConfig = {
       },
 
     ],
-    ipfs: process.env.IPFS_URI,
-    chainlink: {
-      deployLocal: false,
-      deleteOldJobs: false,
-      cleanLocalFolder: false,
-      nodeFunds: '1',
-      ethWsUrl: process.env.FUJI_WS_URI,
-      nodesConfiguration: [
-        {
-          name: 'newyork',
-          restApiUrl: process.env.FUJI_CHAINLINK_NODE_2_URL,
-          restApiPort: process.env.FUJI_CHAINLINK_NODE_2_PORT,
-          email: process.env.FUJI_CHAINLINK_NODE_2_USER,
-          password: process.env.FUJI_CHAINLINK_NODE_2_PASS,
-        },
-      ],
-    },
-    addresses: {
-      [CONTRACT_NAMES.LinkToken]: '0x0b9d5D9136855f6FEc3c0993feE6E9CE8a297846',
-    },
     bootstrap: {
       allowance: [
         {
@@ -109,8 +109,8 @@ export const fuji: NetworkUserConfig = {
         periods: [
           {
             periodType: PERIOD_TYPE.WEEKLY,
-            amountOfPeriods: 52,
-            expiredPeriods: 12,
+            amountOfPeriods: 9,
+            expiredPeriods: 0,
           },
           {
             periodType: PERIOD_TYPE.MONTHLY,
@@ -121,7 +121,7 @@ export const fuji: NetworkUserConfig = {
         stake: {
           stakingParameters: {
             dslaBurnedByVerification: '0',
-            dslaPlatformReward: '75',
+            dslaPlatformReward: '10075',
             dslaDepositByPeriod: '25000',
             dslaMessengerReward: '4925',
             dslaUserReward: '10000',

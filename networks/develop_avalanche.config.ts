@@ -43,9 +43,27 @@ export const develop_avalanche: NetworkUserConfig = {
   ],
   url: 'http://localhost:9650/ext/bc/C/rpc',
   stacktical: {
-    checkPastPeriods: true,
+    checkPastPeriods: false,
     deployTokens: true,
     ipfs: process.env.DEVELOP_IPFS_URI,
+    chainlink: {
+      deployLocal: true,
+      deleteOldJobs: true,
+      cleanLocalFolder: true,
+      nodeFunds: '10',
+      ethWsUrl: 'ws://host.docker.internal:9650/ext/bc/C/ws',
+      ethHttpUrl: 'http://host.docker.internal:9650/ext/bc/C/rpc',
+      nodesConfiguration: [
+        {
+          name: 'node-1',
+          restApiUrl: 'http://localhost',
+          restApiPort: '6688',
+          email: 'test@stacktical.com',
+          password: 'PaSSword123456',
+        },
+      ],
+    },
+    addresses: {},
     tokens: [
       {
         factory: EthereumERC20__factory,
@@ -68,26 +86,13 @@ export const develop_avalanche: NetworkUserConfig = {
         name: TOKEN_NAMES.WAVAX,
       },
     ],
-    chainlink: {
-      deployLocal: true,
-      deleteOldJobs: true,
-      cleanLocalFolder: true,
-      nodeFunds: '10',
-      ethWsUrl: 'ws://host.docker.internal:9650/ext/bc/C/ws',
-      ethHttpUrl: 'http://host.docker.internal:9650/ext/bc/C/rpc',
-      nodesConfiguration: [
-        {
-          name: 'node-1',
-          restApiUrl: 'http://localhost',
-          restApiPort: '6688',
-          email: 'test@stacktical.com',
-          password: 'PaSSword123456',
-        },
-      ],
-    },
-    addresses: {},
     bootstrap: {
       allowance: [
+        {          
+          contract: CONTRACT_NAMES.BaseMessenger,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
         {
           contract: CONTRACT_NAMES.CPIMessenger,
           token: CONTRACT_NAMES.LinkToken,
@@ -98,7 +103,7 @@ export const develop_avalanche: NetworkUserConfig = {
         periods: [
           {
             periodType: PERIOD_TYPE.WEEKLY,
-            amountOfPeriods: 52,  // A yr
+            amountOfPeriods: 52, // A yr
             expiredPeriods: 12,
           },
           {
@@ -134,9 +139,14 @@ export const develop_avalanche: NetworkUserConfig = {
     },
     messengers: [
       {
-        contract: CONTRACT_NAMES.CPIMessenger,
-        useCaseName: USE_CASES.INFLATION,
-        externalAdapterUrl: 'http://host.docker.internal:6060',
+        contract: CONTRACT_NAMES.BaseMessenger,
+        useCaseName: USE_CASES.BASE_MESSENGER,
+        externalAdapterUrl: 'http://host.docker.internal:6070',
+      },
+      {
+        contract: CONTRACT_NAMES.CPIMessenger, //  Name of the Messenger
+        useCaseName: USE_CASES.INFLATION, // Name of the Use-Case
+        externalAdapterUrl: process.env.DEVELOP_INDEXER_URI, // Your local serverless endpoint
       },
     ],
     scripts: scripts,
