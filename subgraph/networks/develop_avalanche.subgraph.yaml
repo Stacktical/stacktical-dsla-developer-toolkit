@@ -112,8 +112,6 @@ dataSources:
         - name: PeriodRegistry
           file: ../abis/PeriodRegistry.json
       eventHandlers:
-        - event: PeriodInitialized(uint8,uint256)
-          handler: handlePeriodInitialized
         - event: PeriodModified(uint8,uint256)
           handler: handlePeriodModified
       file: ../mapping.ts

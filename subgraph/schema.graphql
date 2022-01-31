@@ -90,15 +90,3 @@ type Messenger @entity {
   precision: BigInt!
   messengerId: BigInt!
 }
-
-type Period @entity {
-  id: ID!
-  amountOfPeriods: BigInt!
-  periodDefinitions: [PeriodDefinition!]
-}
-
-type PeriodDefinition @entity {
-  id: ID!
-  start: BigInt!
-  end: BigInt!
-}
