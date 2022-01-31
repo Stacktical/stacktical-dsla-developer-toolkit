@@ -95,26 +95,6 @@ dataSources:
         - event: MessengerModified(indexed address,indexed address,string,uint256,uint256)
           handler: handleMessengerModified
       file: ../mapping.ts
-  - kind: ethereum/contract
-    name: PeriodRegistry
-    network: mainnet
-    source:
-      address: "0xEe5359f02FA1A4D0CB212706b85BF76adA7447AA"
-      startBlock: 12685434
-      abi: PeriodRegistry
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.5
-      language: wasm/assemblyscript
-      entities:
-        - PeriodRegistry
-      abis:
-        - name: PeriodRegistry
-          file: ../abis/PeriodRegistry.json
-      eventHandlers:
-        - event: PeriodModified(uint8,uint256)
-          handler: handlePeriodModified
-      file: ../mapping.ts
 templates:
   - kind: ethereum/contract
     name: SLA
