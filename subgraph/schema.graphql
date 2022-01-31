@@ -13,7 +13,6 @@ type SLA @entity {
   ipfsHash: String
   stakersCount: BigInt
   periodType: Int
-  breachedContract: Boolean
   creationBlockNumber: BigInt
   nextVerifiablePeriod: BigInt
   whiteListed: Boolean
@@ -90,4 +89,16 @@ type Messenger @entity {
   specificationUrl: String!
   precision: BigInt!
   messengerId: BigInt!
+}
+
+type Period @entity {
+  id: ID!
+  amountOfPeriods: BigInt!
+  periodDefinitions: [PeriodDefinition!]
+}
+
+type PeriodDefinition @entity {
+  id: ID!
+  start: BigInt!
+  end: BigInt!
 }

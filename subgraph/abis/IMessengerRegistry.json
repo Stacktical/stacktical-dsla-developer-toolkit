@@ -1,0 +1,69 @@
+{
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "callerAddress_",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "messengerAddress_",
+          "type": "address"
+        },
+        {
+          "internalType": "string",
+          "name": "specificationUrl_",
+          "type": "string"
+        }
+      ],
+      "name": "registerMessenger",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "messengerAddress_",
+          "type": "address"
+        }
+      ],
+      "name": "registeredMessengers",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "setSLARegistry",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "evm": {
+    "bytecode": {
+      "linkReferences": {},
+      "object": "",
+      "opcodes": "",
+      "sourceMap": ""
+    },
+    "deployedBytecode": {
+      "immutableReferences": {},
+      "linkReferences": {},
+      "object": "",
+      "opcodes": "",
+      "sourceMap": ""
+    }
+  },
+  "bytecode": ""
+}

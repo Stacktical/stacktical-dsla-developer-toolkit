@@ -12,7 +12,6 @@ enum TASK_NAMES {
   BOOTSTRAP_DSLA_PROTOCOL = 'stacktical:bootstrap',
   REQUEST_SLI = 'stacktical:request-sli',
   RESTART_SERVICES = 'stacktical:restart-services',
-  STOP_SERVICES = 'stacktical:stop-services',
   GET_PRECOORDINATOR = 'stacktical:get-precoordinator',
   SET_PRECOORDINATOR = 'stacktical:set-precoordinator',
   CHAINLINK_DOCKER_COMPOSE = 'stacktical:chainlink-docker-compose',
@@ -27,15 +26,12 @@ enum TASK_NAMES {
   GET_REVERT_MESSAGE = 'stacktical:get-revert-message',
   DEPLOY_MESSENGER = 'stacktical:deploy-messenger',
   GET_MESSENGER = 'stacktical:get-messenger',
-  GET_START_STOP_PERIODS = 'stacktical:get-start-stop-periods',
   TRANSFER_OWNERSHIP = 'stacktical:transfer-ownership',
   PROVIDER_WITHDRAW = 'stacktical:provider-withdraw',
   UNLOCK_TOKENS = 'stacktical:unlock-tokens',
   GRAPH_MANIFESTOS = 'stacktical:graph-manifestos',
   GET_SLA_FROM_TX = 'stacktical:get-sla-from-tx',
   UPDATE_MESSENGER_SPEC = 'stacktical:update-messenger-spec',
-  UPDATE_PERIOD_REGISTRY = 'stacktical:update-period-registry',
-  ADD_DATES_TO_PERIOD = 'stacktical:add-dates-to-period',
   AVAX_ACCOUNTS = 'accounts',
   AVAX_BALANCES = 'balances',
 }
@@ -121,24 +117,6 @@ task(TASK_NAMES.EXPORT_DATA, 'Export data to exported-data folder').setAction(
   }
 );
 
-task(TASK_NAMES.UPDATE_PERIOD_REGISTRY, 'Update Period Registry').setAction(
-  async (_, { run }) => {
-    await run(SUB_TASK_NAMES.BOOTSTRAP_PERIOD_REGISTRY);
-  }
-);
-
-task(TASK_NAMES.ADD_DATES_TO_PERIOD, 'Appends amountofPeriods to initialized PeriodTypes').setAction(
-  async (_, { run }) => {
-    await run(SUB_TASK_NAMES.ADD_DATES_TO_PERIOD);
-  }
-);
-
-task(TASK_NAMES.GET_START_STOP_PERIODS, 'Get the start...end date ranges of initialized PeriodTypes').setAction(
-  async (_, { run }) => {
-    await run(SUB_TASK_NAMES.GET_START_STOP_PERIODS);
-  }
-);
-
 task(TASK_NAMES.BOOTSTRAP_DSLA_PROTOCOL, 'Bootstrap DSLA protocol').setAction(
   async (_, { run }) => {
     const bootstrapSubtasks = [
@@ -181,7 +159,7 @@ task(
   'Set token allowances'
 ).setAction(async (_, { run }) => {
   await run(SUB_TASK_NAMES.SET_CONTRACTS_ALLOWANCE);
-});
+});   
 
 task(
   TASK_NAMES.PREPARE_CHAINLINK_NODES,
@@ -196,29 +174,17 @@ task(
 ).setAction(async (_, { run }) => {
   console.log(SUB_TASK_NAMES.STOP_LOCAL_GANACHE);
   await run(SUB_TASK_NAMES.STOP_LOCAL_GANACHE);
-  console.log(SUB_TASK_NAMES.STOP_LOCAL_IPFS);
-  await run(SUB_TASK_NAMES.STOP_LOCAL_IPFS);
+  // console.log(SUB_TASK_NAMES.STOP_LOCAL_IPFS);
+  // await run(SUB_TASK_NAMES.STOP_LOCAL_IPFS);
   console.log(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
   await run(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
 
   console.log(SUB_TASK_NAMES.START_LOCAL_GANACHE);
   await run(SUB_TASK_NAMES.START_LOCAL_GANACHE);
-  console.log(SUB_TASK_NAMES.START_LOCAL_IPFS);
-  await run(SUB_TASK_NAMES.START_LOCAL_IPFS);
-  console.log(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE);
+  // console.log(SUB_TASK_NAMES.START_LOCAL_IPFS);
+  // await run(SUB_TASK_NAMES.START_LOCAL_IPFS);
+  console.log(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE); 
   await run(SUB_TASK_NAMES.START_LOCAL_GRAPH_NODE);
-});
-
-task(
-  TASK_NAMES.STOP_SERVICES,
-  'Stops local services (IPFS, Ganache, Graph protocol node)'
-).setAction(async (_, { run }) => {
-  console.log(SUB_TASK_NAMES.STOP_LOCAL_GANACHE);
-  await run(SUB_TASK_NAMES.STOP_LOCAL_GANACHE);
-  console.log(SUB_TASK_NAMES.STOP_LOCAL_IPFS);
-  await run(SUB_TASK_NAMES.STOP_LOCAL_IPFS);
-  console.log(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
-  await run(SUB_TASK_NAMES.STOP_LOCAL_GRAPH_NODE);
 });
 
 task(

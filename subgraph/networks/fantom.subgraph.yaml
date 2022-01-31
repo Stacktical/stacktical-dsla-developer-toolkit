@@ -1,4 +1,4 @@
-specVersion: 0.0.2
+specVersion: 0.0.3
 description: DSLA protocol
 repository: https://github.com/Stacktical/stacktical-dsla-contracts
 schema:
@@ -8,20 +8,20 @@ dataSources:
     name: SLARegistry
     network: mainnet
     source:
-      address: '0xC33492F8D76918A9527165A9fD71089980656357'
+      address: "0xC33492F8D76918A9527165A9fD71089980656357"
       startBlock: 18069409
       abi: SLARegistry
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - SLA
       abis:
         - name: SLARegistry
-          file: ../abis/@stacktical/dsla-contracts/contracts/SLARegistry.sol/SLARegistry.json
+          file: ../abis/SLARegistry.json
         - name: SLA
-          file: ../abis/@stacktical/dsla-contracts/contracts/SLA.sol/SLA.json
+          file: ../abis/SLA.json
       eventHandlers:
         - event: SLACreated(indexed address,indexed address)
           handler: handleNewSLA
@@ -30,20 +30,20 @@ dataSources:
     name: SLORegistry
     network: mainnet
     source:
-      address: '0x6BDd971179559439c052D4A4b4C9B02b33a0dfc8'
+      address: "0x6BDd971179559439c052D4A4b4C9B02b33a0dfc8"
       startBlock: 18069365
       abi: SLORegistry
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - SLA
       abis:
         - name: SLORegistry
-          file: ../abis/@stacktical/dsla-contracts/contracts/SLORegistry.sol/SLORegistry.json
+          file: ../abis/SLORegistry.json
         - name: SLA
-          file: ../abis/@stacktical/dsla-contracts/contracts/SLA.sol/SLA.json
+          file: ../abis/SLA.json
       eventHandlers:
         - event: SLORegistered(indexed address,uint256,uint8)
           handler: handleSLORegistered
@@ -52,18 +52,18 @@ dataSources:
     name: StakeRegistry
     network: mainnet
     source:
-      address: '0xC76EaC6B2eBb3554271Ec48d1CABF953FC6fA211'
+      address: "0xC76EaC6B2eBb3554271Ec48d1CABF953FC6fA211"
       startBlock: 18069391
       abi: StakeRegistry
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - StakeRegistry
       abis:
         - name: StakeRegistry
-          file: ../abis/@stacktical/dsla-contracts/contracts/StakeRegistry.sol/StakeRegistry.json
+          file: ../abis/StakeRegistry.json
       eventHandlers:
         - event: ValueLocked(indexed address,indexed address,uint256)
           handler: handleValueLocked
@@ -74,26 +74,48 @@ dataSources:
     name: MessengerRegistry
     network: mainnet
     source:
-      address: '0x7db551Ce6677211309db39A67F73cA923e9d4944'
+      address: "0x7db551Ce6677211309db39A67F73cA923e9d4944"
       startBlock: 18069374
       abi: MessengerRegistry
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - MessengerRegistry
         - IMessenger
       abis:
         - name: MessengerRegistry
-          file: ../abis/@stacktical/dsla-contracts/contracts/MessengerRegistry.sol/MessengerRegistry.json
+          file: ../abis/MessengerRegistry.json
         - name: IMessenger
-          file: ../abis/@stacktical/dsla-contracts/contracts/interfaces/IMessenger.sol/IMessenger.json
+          file: ../abis/IMessenger.json
       eventHandlers:
         - event: MessengerRegistered(indexed address,indexed address,string,uint256,uint256)
           handler: handleMessengerRegistered
         - event: MessengerModified(indexed address,indexed address,string,uint256,uint256)
           handler: handleMessengerModified
+      file: ../mapping.ts
+  - kind: ethereum/contract
+    name: PeriodRegistry
+    network: mainnet
+    source:
+      address: "0xB63a13825e129fBa2f2205847158461bec5f265A"
+      startBlock: 18069355
+      abi: PeriodRegistry
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - PeriodRegistry
+      abis:
+        - name: PeriodRegistry
+          file: ../abis/PeriodRegistry.json
+      eventHandlers:
+        - event: PeriodInitialized(uint8,uint256)
+          handler: handlePeriodInitialized
+        - event: PeriodModified(uint8,uint256)
+          handler: handlePeriodModified
       file: ../mapping.ts
 templates:
   - kind: ethereum/contract
@@ -103,7 +125,7 @@ templates:
       abi: SLA
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ../mapping.ts
       entities:
@@ -124,6 +146,6 @@ templates:
           handler: handleDTokensCreated
       abis:
         - name: SLA
-          file: ../abis/@stacktical/dsla-contracts/contracts/SLA.sol/SLA.json
+          file: ../abis/SLA.json
         - name: ERC20
-          file: ../abis/@openzeppelin/contracts/presets/ERC20PresetMinterPauser.sol/ERC20PresetMinterPauser.json
+          file: ../abis/ERC20PresetMinterPauser.json

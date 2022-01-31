@@ -42,8 +42,8 @@
   },
   "homepage": "https://github.com/Stacktical/stacktical-developer-toolkit#readme",
   "dependencies": {
-    "@graphprotocol/graph-cli": "^0.21.0",
-    "@graphprotocol/graph-ts": "^0.20.1",
+    "@graphprotocol/graph-cli": "^0.26.0",
+    "@graphprotocol/graph-ts": "^0.24.1",
     "@harmony-js/core": "^0.1.57",
     "@nomiclabs/hardhat-waffle": "^2.0.1",
     "@stacktical/dsla-contracts": "^3.0.0-alpha-1",
