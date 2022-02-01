@@ -34,7 +34,7 @@ export const develop: NetworkUserConfig = {
   stacktical: {
     checkPastPeriods: false,
     deployTokens: true,
-    ipfs: process.env.IPFS_URI,
+    ipfs: process.env.DEVELOP_IPFS_URI,
     chainlink: {
       deployLocal: true, // Deploys local dockers everytime
       deleteOldJobs: true,
