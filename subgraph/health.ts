@@ -1,33 +1,34 @@
-import axios from 'axios';
-const URL = 'http://localhost:8030/graphql/playground';
+const axios = require('axios');
 
+const PLAYGROUND_URL = 'http://127.0.0.1:8030/graphql';
+const DEPLOYMENT_ID = 'QmNTkuTujyCXe3FBAm8YoVwfQaSwcR9AkqCmL8CnAkv7FA';
 axios({
-  url: URL,
+  url: PLAYGROUND_URL,
   method: 'post',
   data: {
-    query: `
-    indexingStatusForCurrentVersion(subgraphName: "org/subgraph") {
-      synced
-      health
-      fatalError {
-        message
-        block {
-          number
-          hash
+    query: `{
+      indexingStatuses(subgraphs: ["${DEPLOYMENT_ID}"]) {
+        synced
+        health
+        fatalError {
+          message
+          block {
+            number
+            hash
+          }
+          handler
         }
-        handler
+        chains {
+          chainHeadBlock {
+            number
+          }
+          latestBlock {
+            number
+          }
+        }
       }
-      chains {
-        chainHeadBlock {
-          number
-        }
-        latestBlock {
-          number
-        }
-      }
-    }
-      `,
+    }`,
   },
 }).then((result) => {
-  console.log(result.data);
+  console.log(JSON.stringify(result.data));
 });
