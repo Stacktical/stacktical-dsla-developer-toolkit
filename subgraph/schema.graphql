@@ -13,7 +13,6 @@ type SLA @entity {
   ipfsHash: String
   stakersCount: BigInt
   periodType: Int
-  breachedContract: Boolean
   creationBlockNumber: BigInt
   nextVerifiablePeriod: BigInt
   whiteListed: Boolean

@@ -44,7 +44,6 @@ export function handleNewSLA(event: SLACreated): void {
   sla.slaId = slaContract.slaID();
   sla.owner = event.params.owner;
   sla.address = event.params.sla;
-  sla.breachedContract = slaContract.breachedContract();
   sla.messengerAddress = slaContract.messengerAddress();
   sla.ipfsHash = slaContract.ipfsHash();
   sla.stakersCount = slaContract.getStakersLength();
@@ -63,7 +62,10 @@ export function handleNewSLA(event: SLACreated): void {
   if (!user) {
     user = new User(event.params.owner.toHexString());
   }
-  user.slas = user.slas.concat([sla.id]);
+  if (!user.slas) {
+    user.slas = [];
+  }
+  user.slas = user.slas!.concat([sla.id]);
   user.save();
 }
 
@@ -74,12 +76,14 @@ export function handleSLICreated(event: SLICreated): void {
     sla = new SLA(event.address.toHexString());
   }
   let sliID =
-    sla.address.toHexString() + '-' + event.params.periodId.toString();
+    sla.address!.toHexString() + '-' + event.params.periodId.toString();
   let sli = new SLI(sliID);
-  sla.SLIs = sla.SLIs.concat([sli.id]);
+  if (!sla.SLIs) {
+    sla.SLIs = [];
+  }
+  sla.SLIs = sla.SLIs!.concat([sli.id]);
   sla.nextVerifiablePeriod = slaContract.nextVerifiablePeriod();
   sla.finished = slaContract.contractFinished();
-  sla.breachedContract = slaContract.breachedContract();
   sla.save();
 
   sli.periodId = event.params.periodId;
@@ -91,11 +95,11 @@ export function handleSLICreated(event: SLICreated): void {
 }
 
 export function handleStake(event: Stake): void {
-  let sla = SLA.load(event.address.toHexString());
+  let sla = SLA.load(event.address.toHexString())!;
   let deposit = new Deposit(event.transaction.hash.toHexString());
   let slaContract = SLAContract.bind(event.address);
   deposit.type =
-    sla.owner.toHexString() == event.params.caller.toHexString()
+    sla.owner!.toHexString() == event.params.caller.toHexString()
       ? 'provider'
       : 'user';
   deposit.amount = event.params.amount;
@@ -103,12 +107,15 @@ export function handleStake(event: Stake): void {
   deposit.callerAddress = event.params.caller;
   deposit.slaAddress = event.address;
   deposit.save();
-  sla.deposits = sla.deposits.concat([deposit.id]);
+  if (!sla.deposits) {
+    sla.deposits = [];
+  }
+  sla.deposits = sla.deposits!.concat([deposit.id]);
   sla.maxHedge = slaContract
     .providerPool(event.params.tokenAddress)
     .div(sla.leverage)
     .minus(slaContract.usersPool(event.params.tokenAddress));
-  if (sla.maxHedge.lt(BigInt.fromI32(0))) {
+  if (sla.maxHedge!.lt(BigInt.fromI32(0))) {
     sla.maxHedge = BigInt.fromI32(0);
   }
   sla.save();
@@ -116,18 +123,21 @@ export function handleStake(event: Stake): void {
   if (!user) {
     user = new User(event.params.caller.toHexString());
   }
-  user.deposits = user.deposits.concat([deposit.id]);
+  if (!user.deposits) {
+    user.deposits = [];
+  }
+  user.deposits = user.deposits!.concat([deposit.id]);
   user.save();
 
   let dpTokenAddress = slaContract.dpTokenRegistry(event.params.tokenAddress);
   let dpTokenContract = ERC20.bind(dpTokenAddress);
-  let dpToken = DToken.load(dpTokenAddress.toHexString());
+  let dpToken = DToken.load(dpTokenAddress.toHexString())!;
   dpToken.totalSupply = dpTokenContract.totalSupply();
   dpToken.save();
 
   let duTokenAddress = slaContract.duTokenRegistry(event.params.tokenAddress);
   let duTokenContract = ERC20.bind(duTokenAddress);
-  let duToken = DToken.load(duTokenAddress.toHexString());
+  let duToken = DToken.load(duTokenAddress.toHexString())!;
   duToken.totalSupply = duTokenContract.totalSupply();
   duToken.save();
 
@@ -135,13 +145,13 @@ export function handleStake(event: Stake): void {
   if (!tvl) {
     tvl = new TVL(event.params.tokenAddress.toHexString());
   }
-  tvl.amount = tvl.amount.plus(event.params.amount);
-  tvl.deposits = tvl.deposits.concat([deposit.id]);
+  tvl.amount = tvl.amount!.plus(event.params.amount);
+  tvl.deposits = tvl.deposits!.concat([deposit.id]);
   tvl.save();
 }
 
 export function handleProviderWithdraw(event: ProviderWithdraw): void {
-  let sla = SLA.load(event.address.toHexString());
+  let sla = SLA.load(event.address.toHexString())!;
   let slaContract = SLAContract.bind(event.address);
   let withdrawal = new Withdrawal(event.transaction.hash.toHexString());
   withdrawal.type = 'provider';
@@ -150,12 +160,15 @@ export function handleProviderWithdraw(event: ProviderWithdraw): void {
   withdrawal.callerAddress = event.params.caller;
   withdrawal.slaAddress = event.address;
   withdrawal.save();
-  sla.withdrawals = sla.withdrawals.concat([withdrawal.id]);
+  if (!sla.withdrawals) {
+    sla.withdrawals = [];
+  }
+  sla.withdrawals = sla.withdrawals!.concat([withdrawal.id]);
   sla.maxHedge = slaContract
     .providerPool(event.params.tokenAddress)
     .div(sla.leverage)
     .minus(slaContract.usersPool(event.params.tokenAddress));
-  if (sla.maxHedge.lt(BigInt.fromI32(0))) {
+  if (sla.maxHedge!.lt(BigInt.fromI32(0))) {
     sla.maxHedge = BigInt.fromI32(0);
   }
   sla.save();
@@ -163,12 +176,12 @@ export function handleProviderWithdraw(event: ProviderWithdraw): void {
   if (!user) {
     user = new User(event.params.caller.toHexString());
   }
-  user.withdrawals = user.withdrawals.concat([withdrawal.id]);
+  user.withdrawals = user.withdrawals!.concat([withdrawal.id]);
   user.save();
 
   let dpTokenAddress = slaContract.dpTokenRegistry(event.params.tokenAddress);
   let dpTokenContract = ERC20.bind(dpTokenAddress);
-  let dpToken = DToken.load(dpTokenAddress.toHexString());
+  let dpToken = DToken.load(dpTokenAddress.toHexString())!;
   dpToken.totalSupply = dpTokenContract.totalSupply();
   dpToken.save();
 
@@ -176,13 +189,16 @@ export function handleProviderWithdraw(event: ProviderWithdraw): void {
   if (!tvl) {
     tvl = new TVL(event.params.tokenAddress.toHexString());
   }
-  tvl.amount = tvl.amount.minus(event.params.amount);
-  tvl.withdrawals = tvl.withdrawals.concat([withdrawal.id]);
+  if (!tvl.amount) {
+    tvl.amount = BigInt.fromI32(0);
+  }
+  tvl.amount = tvl.amount!.minus(event.params.amount);
+  tvl.withdrawals = tvl.withdrawals!.concat([withdrawal.id]);
   tvl.save();
 }
 
 export function handleUserWithdraw(event: ProviderWithdraw): void {
-  let sla = SLA.load(event.address.toHexString());
+  let sla = SLA.load(event.address.toHexString())!;
   if (!sla) {
     sla = new SLA(event.address.toHexString());
   }
@@ -194,12 +210,15 @@ export function handleUserWithdraw(event: ProviderWithdraw): void {
   withdrawal.callerAddress = event.params.caller;
   withdrawal.slaAddress = event.address;
   withdrawal.save();
-  sla.withdrawals = sla.withdrawals.concat([withdrawal.id]);
+  if (!sla.withdrawals) {
+    sla.withdrawals = [];
+  }
+  sla.withdrawals = sla.withdrawals!.concat([withdrawal.id]);
   sla.maxHedge = slaContract
     .providerPool(event.params.tokenAddress)
     .div(sla.leverage)
     .minus(slaContract.usersPool(event.params.tokenAddress));
-  if (sla.maxHedge.lt(BigInt.fromI32(0))) {
+  if (sla.maxHedge!.lt(BigInt.fromI32(0))) {
     sla.maxHedge = BigInt.fromI32(0);
   }
   sla.save();
@@ -207,12 +226,15 @@ export function handleUserWithdraw(event: ProviderWithdraw): void {
   if (!user) {
     user = new User(event.params.caller.toHexString());
   }
-  user.withdrawals = user.withdrawals.concat([withdrawal.id]);
+  if (!user.withdrawals) {
+    user.withdrawals = [];
+  }
+  user.withdrawals = user.withdrawals!.concat([withdrawal.id]);
   user.save();
 
   let duTokenAddress = slaContract.duTokenRegistry(event.params.tokenAddress);
   let duTokenContract = ERC20.bind(duTokenAddress);
-  let duToken = DToken.load(duTokenAddress.toHexString());
+  let duToken = DToken.load(duTokenAddress.toHexString())!;
   duToken.totalSupply = duTokenContract.totalSupply();
   duToken.save();
 
@@ -220,8 +242,14 @@ export function handleUserWithdraw(event: ProviderWithdraw): void {
   if (!tvl) {
     tvl = new TVL(event.params.tokenAddress.toHexString());
   }
-  tvl.amount = tvl.amount.minus(event.params.amount);
-  tvl.withdrawals = tvl.withdrawals.concat([withdrawal.id]);
+  if (!tvl.amount) {
+    tvl.amount = BigInt.fromI32(0);
+  }
+  if (!tvl.withdrawals) {
+    tvl.withdrawals = [];
+  }
+  tvl.amount = tvl.amount!.minus(event.params.amount);
+  tvl.withdrawals = tvl.withdrawals!.concat([withdrawal.id]);
   tvl.save();
 }
 
@@ -237,7 +265,7 @@ export function handleSLORegistered(event: SLORegistered): void {
 }
 
 export function handleDTokensCreated(event: DTokensCreated): void {
-  let sla = SLA.load(event.address.toHexString());
+  let sla = SLA.load(event.address.toHexString())!;
   if (!sla) {
     sla = new SLA(event.address.toHexString());
   }
@@ -251,7 +279,11 @@ export function handleDTokensCreated(event: DTokensCreated): void {
   spToken.slaAddress = event.address;
   spToken.tokenAddress = event.params.tokenAddress;
   spToken.totalSupply = BigInt.fromI32(0);
-  sla.dTokens = sla.dTokens.concat([spToken.id]);
+
+  if (!sla.dTokens) {
+    sla.dTokens = [];
+  }
+  sla.dTokens = sla.dTokens!.concat([spToken.id]);
 
   // LP token
   let lpToken = new DToken(event.params.dpTokenAddress.toHexString());
@@ -263,8 +295,10 @@ export function handleDTokensCreated(event: DTokensCreated): void {
   lpToken.slaAddress = event.address;
   lpToken.totalSupply = BigInt.fromI32(0);
   lpToken.tokenAddress = event.params.tokenAddress;
-
-  sla.dTokens = sla.dTokens.concat([lpToken.id]);
+  if (!sla.dTokens) {
+    sla.dTokens = [];
+  }
+  sla.dTokens = sla.dTokens!.concat([lpToken.id]);
 
   sla.save();
   spToken.save();
@@ -285,8 +319,14 @@ export function handleValueLocked(event: ValueLocked): void {
   if (!tvl) {
     tvl = new TVL(stakeRegistryContract.DSLATokenAddress().toHexString());
   }
-  tvl.amount = tvl.amount.plus(event.params.amount);
-  tvl.deposits = tvl.deposits.concat([deposit.id]);
+  if (!tvl.amount) {
+    tvl.amount = BigInt.fromI32(0);
+  }
+  if (!tvl.deposits) {
+    tvl.deposits = [];
+  }
+  tvl.amount = tvl.amount!.plus(event.params.amount);
+  tvl.deposits = tvl.deposits!.concat([deposit.id]);
   tvl.save();
 }
 
@@ -304,8 +344,14 @@ export function handleLockedValueReturned(event: LockedValueReturned): void {
   if (!tvl) {
     tvl = new TVL(stakeRegistryContract.DSLATokenAddress().toHexString());
   }
-  tvl.amount = tvl.amount.minus(event.params.amount);
-  tvl.withdrawals = tvl.withdrawals.concat([withdrawal.id]);
+  if (!tvl.amount) {
+    tvl.amount = BigInt.fromI32(0);
+  }
+  if (!tvl.withdrawals) {
+    tvl.withdrawals = [];
+  }
+  tvl.amount = tvl.amount!.minus(event.params.amount);
+  tvl.withdrawals = tvl.withdrawals!.concat([withdrawal.id]);
   tvl.save();
 }
 
