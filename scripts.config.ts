@@ -18,8 +18,34 @@ const SENetworkNames = SEMessengerSpec.ipfsData.serviceTicker.values;
 
 export const scripts: ScriptsConfiguration = {
   deploy_sla: [
+    // INDEX 0 | Should be BREACHED
     {
-      sloValue: 100,
+      sloValue: 100,  // Breached as SL0 > SLi is false
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.WEEKLY,
+      messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
+      initialPeriodId: 0,
+      finalPeriodId: 5,
+      extraData: [],
+      initialTokenSupply: '10000000',
+      initialTokenSupplyDivisor: 100,
+      deployerStakeTimes: 100,
+      notDeployerStakeTimes: 1,
+      leverage: 20,
+      serviceMetadata: {
+        serviceName: 'P-OPS',
+        serviceDescription: 'Official bDSLA Beta Partner.',
+        serviceImage:
+          'https://storage.googleapis.com/bdsla-incentivized-beta/validators/chainode.svg',
+        serviceURL: 'https://bdslaToken.network',
+        serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
+        serviceTicker: SENetworkNames[0],
+      },
+    },
+    // INDEX 1 | Should be HONORED
+    {
+      sloValue: 0,  // Honored SLO > SLI of 0 is true
       sloType: SLO_TYPE.GreaterThan,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
@@ -42,20 +68,71 @@ export const scripts: ScriptsConfiguration = {
         serviceTicker: SENetworkNames[0],
       },
     },
+    // INDEX 2 | Should be HONORED
     {
-      sloValue: 8,
+      sloValue: 50, // SLI of 50 >= SLO of 50 is true
+      sloType: SLO_TYPE.GreaterOrEqualTo,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.WEEKLY,
+      messengerContract: CONTRACT_NAMES.BaseMessenger,
+      initialPeriodId: 0,
+      finalPeriodId: 5,
+      extraData: [],
+      initialTokenSupply: '10000000',
+      initialTokenSupplyDivisor: 100,
+      deployerStakeTimes: 100,
+      notDeployerStakeTimes: 1,
+      leverage: 50,
+      serviceMetadata: {
+        serviceName: 'P-OPS',
+        serviceDescription: 'Official bDSLA Beta Partner.',
+        serviceImage:
+          'https://storage.googleapis.com/bdsla-incentivized-beta/validators/chainode.svg',
+        serviceURL: 'https://bdslaToken.network',
+        serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
+        serviceTicker: SENetworkNames[0],
+      },
+    },
+    // INDEX 3 | Should be BREACHED
+    {
+      sloValue: 60, // SLI of 50 >= SLO of 60 is false
+      sloType: SLO_TYPE.GreaterOrEqualTo,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.WEEKLY,
+      messengerContract: CONTRACT_NAMES.BaseMessenger,
+      initialPeriodId: 0,
+      finalPeriodId: 5,
+      extraData: [],
+      initialTokenSupply: '10000000',
+      initialTokenSupplyDivisor: 100,
+      deployerStakeTimes: 100,
+      notDeployerStakeTimes: 1,
+      leverage: 50,
+      serviceMetadata: {
+        serviceName: 'P-OPS',
+        serviceDescription: 'Official bDSLA Beta Partner.',
+        serviceImage:
+          'https://storage.googleapis.com/bdsla-incentivized-beta/validators/chainode.svg',
+        serviceURL: 'https://bdslaToken.network',
+        serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
+        serviceTicker: SENetworkNames[0],
+      },
+    },
+    // INDEX 4 | Should be HONORED
+    {
+      sloValue: 100,  // Honored as SLI 50 < SLO 100 is true
       sloType: SLO_TYPE.SmallerThan,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
-      messengerContract: CONTRACT_NAMES.SEMessenger,
-      initialPeriodId: 4,
-      finalPeriodId: 9,
+      messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
+      initialPeriodId: 0,
+      finalPeriodId: 5,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
-      notDeployerStakeTimes: 2,
-      leverage: 50,
+      notDeployerStakeTimes: 1,
+      leverage: 20,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -66,20 +143,21 @@ export const scripts: ScriptsConfiguration = {
         serviceTicker: SENetworkNames[0],
       },
     },
+    // INDEX 5 | Should be BREACHED
     {
-      sloValue: 9,
-      sloType: SLO_TYPE.GreaterThan,
+      sloValue: 10,  // Breached as SLI 50 < SLO 10 is false
+      sloType: SLO_TYPE.SmallerThan,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
-      messengerContract: CONTRACT_NAMES.SEMessenger,
-      initialPeriodId: 4,
-      finalPeriodId: 9,
+      messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
+      initialPeriodId: 0,
+      finalPeriodId: 5,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
-      notDeployerStakeTimes: 2,
-      leverage: 50,
+      notDeployerStakeTimes: 1,
+      leverage: 20,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -90,20 +168,21 @@ export const scripts: ScriptsConfiguration = {
         serviceTicker: SENetworkNames[0],
       },
     },
+    // INDEX 6 | Should be HONORED
     {
-      sloValue: 10,
-      sloType: SLO_TYPE.GreaterThan,
+      sloValue: 60,  // Honored as SLI 50 < SLO 60 is true
+      sloType: SLO_TYPE.SmallerOrEqualTo,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
-      messengerContract: CONTRACT_NAMES.SEMessenger,
-      initialPeriodId: 4,
-      finalPeriodId: 9,
+      messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
+      initialPeriodId: 0,
+      finalPeriodId: 5,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
-      notDeployerStakeTimes: 2,
-      leverage: 50,
+      notDeployerStakeTimes: 1,
+      leverage: 20,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -114,20 +193,21 @@ export const scripts: ScriptsConfiguration = {
         serviceTicker: SENetworkNames[0],
       },
     },
+    // INDEX 7 | Should be BREACHED
     {
-      sloValue: 200,
-      sloType: SLO_TYPE.GreaterThan,
+      sloValue: 40,  // Breached as SLI 50 < SLO 60 is false
+      sloType: SLO_TYPE.SmallerOrEqualTo,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
-      messengerContract: CONTRACT_NAMES.SEMessenger,
-      initialPeriodId: 40, 
-      finalPeriodId: 52, // Last period of the SLA Contract
+      messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
+      initialPeriodId: 0,
+      finalPeriodId: 5,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
-      notDeployerStakeTimes: 2,
-      leverage: 50,
+      notDeployerStakeTimes: 1,
+      leverage: 20,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -138,66 +218,115 @@ export const scripts: ScriptsConfiguration = {
         serviceTicker: SENetworkNames[0],
       },
     },
+    // INDEX 8 | Should be HONORED
     {
-      // This SLA agrees that the price of PAR must be greater than or equal to 99% of an EUR, so €0.99
+      sloValue: 50,  // Breached as SLI 50 = SLO 50 is true
+      sloType: SLO_TYPE.EqualTo,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.WEEKLY,
+      messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
+      initialPeriodId: 0,
+      finalPeriodId: 5,
+      extraData: [],
+      initialTokenSupply: '10000000',
+      initialTokenSupplyDivisor: 100,
+      deployerStakeTimes: 100,
+      notDeployerStakeTimes: 1,
+      leverage: 20,
+      serviceMetadata: {
+        serviceName: 'P-OPS',
+        serviceDescription: 'Official bDSLA Beta Partner.',
+        serviceImage:
+          'https://storage.googleapis.com/bdsla-incentivized-beta/validators/chainode.svg',
+        serviceURL: 'https://bdslaToken.network',
+        serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
+        serviceTicker: SENetworkNames[0],
+      },
+    },
+    // INDEX 9 | Should be BREACHED
+    {
+      sloValue: 51,  // Breached as SLI 50 = SLO 51 is false
+      sloType: SLO_TYPE.EqualTo,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.WEEKLY,
+      messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
+      initialPeriodId: 0,
+      finalPeriodId: 5,
+      extraData: [],
+      initialTokenSupply: '10000000',
+      initialTokenSupplyDivisor: 100,
+      deployerStakeTimes: 100,
+      notDeployerStakeTimes: 1,
+      leverage: 20,
+      serviceMetadata: {
+        serviceName: 'P-OPS',
+        serviceDescription: 'Official bDSLA Beta Partner.',
+        serviceImage:
+          'https://storage.googleapis.com/bdsla-incentivized-beta/validators/chainode.svg',
+        serviceURL: 'https://bdslaToken.network',
+        serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
+        serviceTicker: SENetworkNames[0],
+      },
+    },
+    // INDEX 10 | Should be HONORED
+    {
+      sloValue: 51,  // Breached as SLI 50 != SLO 51 is true
+      sloType: SLO_TYPE.NotEqualTo,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.WEEKLY,
+      messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
+      initialPeriodId: 0,
+      finalPeriodId: 5,
+      extraData: [],
+      initialTokenSupply: '10000000',
+      initialTokenSupplyDivisor: 100,
+      deployerStakeTimes: 100,
+      notDeployerStakeTimes: 1,
+      leverage: 20,
+      serviceMetadata: {
+        serviceName: 'P-OPS',
+        serviceDescription: 'Official bDSLA Beta Partner.',
+        serviceImage:
+          'https://storage.googleapis.com/bdsla-incentivized-beta/validators/chainode.svg',
+        serviceURL: 'https://bdslaToken.network',
+        serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
+        serviceTicker: SENetworkNames[0],
+      },
+    },
+    // INDEX 11 | Should be BREACHED
+    {
+      sloValue: 50,  // Breached as SLI 50 != SLO 50 is false
+      sloType: SLO_TYPE.NotEqualTo,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.WEEKLY,
+      messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
+      initialPeriodId: 0,
+      finalPeriodId: 5,
+      extraData: [],
+      initialTokenSupply: '10000000',
+      initialTokenSupplyDivisor: 100,
+      deployerStakeTimes: 100,
+      notDeployerStakeTimes: 1,
+      leverage: 20,
+      serviceMetadata: {
+        serviceName: 'P-OPS',
+        serviceDescription: 'Official bDSLA Beta Partner.',
+        serviceImage:
+          'https://storage.googleapis.com/bdsla-incentivized-beta/validators/chainode.svg',
+        serviceURL: 'https://bdslaToken.network',
+        serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
+        serviceTicker: SENetworkNames[0],
+      },
+    },
+    // INDEX 12
+    {
       sloValue: 0.99,
-      sloType: SLO_TYPE.GreaterOrEqualTo,
-      whitelisted: false,
-      periodType: PERIOD_TYPE.WEEKLY,
-      messengerContract: CONTRACT_NAMES.PPMessenger,
-      initialPeriodId: 1,
-      finalPeriodId: 2,
-      extraData: [],
-      initialTokenSupply: '10000000',
-      initialTokenSupplyDivisor: 100,
-      deployerStakeTimes: 100,
-      notDeployerStakeTimes: 2,
-      leverage: 50, // 100 / 50 = 2% premium
-      serviceMetadata: {
-        serviceName: 'P-OPS',
-        serviceDescription: 'Official bDSLA Beta Partner.',
-        serviceImage:
-          'https://storage.googleapis.com/bdsla-incentivized-beta/validators/chainode.svg',
-        serviceURL: 'https://bdslaToken.network',
-        serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
-        serviceTicker: SENetworkNames[0],
-      },
-    },
-    {
-      // This SLA agrees that the price of PAR must be greater than or equal to 99% of an EUR, so €0.99
-      sloValue: 0.99,
-      sloType: SLO_TYPE.GreaterOrEqualTo,
-      whitelisted: false,
-      periodType: PERIOD_TYPE.DAILY,
-      messengerContract: CONTRACT_NAMES.PPMessenger,
-      initialPeriodId: 337, // 3 Dec
-      finalPeriodId: 365, 
-      extraData: [],
-      initialTokenSupply: '10000000',
-      initialTokenSupplyDivisor: 100,
-      deployerStakeTimes: 100,
-      notDeployerStakeTimes: 2,
-      leverage: 50, // 100 / 50 = 2% premium
-      serviceMetadata: {
-        serviceName: 'P-OPS',
-        serviceDescription: 'Official bDSLA Beta Partner.',
-        serviceImage:
-          'https://storage.googleapis.com/bdsla-incentivized-beta/validators/chainode.svg',
-        serviceURL: 'https://bdslaToken.network',
-        serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
-        serviceTicker: SENetworkNames[0],
-      },
-    },
-    // index 7 
-    {
-      // This SLA agrees that the price of PAR must be greater than or equal to 99% of an EUR, so €0.99
-      sloValue: 0.99,
-      sloType: SLO_TYPE.GreaterOrEqualTo,
+      sloType: SLO_TYPE.SmallerThan, // You want less inflation :)
       whitelisted: false,
       periodType: PERIOD_TYPE.MONTHLY,
-      messengerContract: CONTRACT_NAMES.PPMessenger,
-      initialPeriodId: 11,
-      finalPeriodId: 12, 
+      messengerContract: CONTRACT_NAMES.CPIMessenger,
+      initialPeriodId: 0,
+      finalPeriodId: 11,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
@@ -205,40 +334,114 @@ export const scripts: ScriptsConfiguration = {
       notDeployerStakeTimes: 2,
       leverage: 50, // 100 / 50 = 2% premium
       serviceMetadata: {
-        serviceName: 'P-OPS',
-        serviceDescription: 'Official bDSLA Beta Partner.',
-        serviceImage:
-          'https://storage.googleapis.com/bdsla-incentivized-beta/validators/chainode.svg',
-        serviceURL: 'https://bdslaToken.network',
-        serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
-        serviceTicker: SENetworkNames[0],
+        serviceName: 'Federal Reserve',
+        serviceDescription:
+          'The U.S. Federal Reserve (FED) inflation-driven monetary policy updates.',
+        serviceImage: 'https://via.placeholder.com/1200x600',
+        serviceURL: 'https://www.federalreserve.gov/',
+        serviceAddress: '0x0000000000000000000000000000000000000000',
+        serviceTicker: 'CPI',
       },
     },
-        // index 8
-        // Test CPI inflation SLA
-        {
-          sloValue: 0.99,
-          sloType: SLO_TYPE.SmallerOrEqualTo, // You want less inflation :)
-          whitelisted: false,
-          periodType: PERIOD_TYPE.WEEKLY,
-          messengerContract: CONTRACT_NAMES.CPIMessenger,
-          initialPeriodId: 0,
-          finalPeriodId: 12,
-          extraData: [],
-          initialTokenSupply: '10000000',
-          initialTokenSupplyDivisor: 100,
-          deployerStakeTimes: 100,
-          notDeployerStakeTimes: 2,
-          leverage: 50, // 100 / 50 = 2% premium
-          serviceMetadata: {
-            serviceName: 'UZ Bizen Government',
-            serviceDescription: 'Official UZ',
-            serviceImage:
-              'https://wikimedia.org/api/rest_v1/media/math/render/svg/f9e647ca155f3db4fa61dd363fc297aa7ca7f507',
-            serviceURL: 'https://en.wikipedia.org/wiki/Consumer_price_index',
-            serviceAddress: '0x0000000000000000000000000000000000000000',
-            serviceTicker: SENetworkNames[0],
-          },
-        },
+    // INDEX 13
+    {
+      sloValue: 99,
+      sloType: SLO_TYPE.SmallerThan, // You want less inflation :)
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.CPIMessenger,
+      initialPeriodId: 0,
+      finalPeriodId: 11,
+      extraData: [],
+      initialTokenSupply: '10000000',
+      initialTokenSupplyDivisor: 100,
+      deployerStakeTimes: 100,
+      notDeployerStakeTimes: 2,
+      leverage: 50, // 100 / 50 = 2% premium
+      serviceMetadata: {
+        serviceName: 'Federal Reserve',
+        serviceDescription:
+          'The U.S. Federal Reserve (FED) inflation-driven monetary policy updates.',
+        serviceImage: 'https://via.placeholder.com/1200x600',
+        serviceURL: 'https://www.federalreserve.gov/',
+        serviceAddress: '0x0000000000000000000000000000000000000000',
+        serviceTicker: 'CPI',
+      },
+    },
+    // INDEX 14
+    {
+      sloValue: 9,
+      sloType: SLO_TYPE.SmallerOrEqualTo, // You want less inflation :)
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.CPIMessenger,
+      initialPeriodId: 0,
+      finalPeriodId: 11,
+      extraData: [],
+      initialTokenSupply: '10000000',
+      initialTokenSupplyDivisor: 100,
+      deployerStakeTimes: 100,
+      notDeployerStakeTimes: 2,
+      leverage: 50, // 100 / 50 = 2% premium
+      serviceMetadata: {
+        serviceName: 'Federal Reserve',
+        serviceDescription:
+          'The U.S. Federal Reserve (FED) inflation-driven monetary policy updates.',
+        serviceImage: 'https://via.placeholder.com/1200x600',
+        serviceURL: 'https://www.federalreserve.gov/',
+        serviceAddress: '0x0000000000000000000000000000000000000000',
+        serviceTicker: 'CPI',
+      },
+    },
+    // INDEX 15
+    {
+      sloValue: 9,
+      sloType: SLO_TYPE.GreaterOrEqualTo, // You want less inflation :)
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.CPIMessenger,
+      initialPeriodId: 0,
+      finalPeriodId: 11,
+      extraData: [],
+      initialTokenSupply: '10000000',
+      initialTokenSupplyDivisor: 100,
+      deployerStakeTimes: 100,
+      notDeployerStakeTimes: 2,
+      leverage: 50, // 100 / 50 = 2% premium
+      serviceMetadata: {
+        serviceName: 'Federal Reserve',
+        serviceDescription:
+          'The U.S. Federal Reserve (FED) inflation-driven monetary policy updates.',
+        serviceImage: 'https://via.placeholder.com/1200x600',
+        serviceURL: 'https://www.federalreserve.gov/',
+        serviceAddress: '0x0000000000000000000000000000000000000000',
+        serviceTicker: 'CPI',
+      },
+    },
+    // INDEX 16
+    {
+      sloValue: 0.1,
+      sloType: SLO_TYPE.GreaterOrEqualTo, // You want less inflation :)
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.CPIMessenger,
+      initialPeriodId: 0,
+      finalPeriodId: 11,
+      extraData: [],
+      initialTokenSupply: '10000000',
+      initialTokenSupplyDivisor: 100,
+      deployerStakeTimes: 100,
+      notDeployerStakeTimes: 2,
+      leverage: 50, // 100 / 50 = 2% premium
+      serviceMetadata: {
+        serviceName: 'Federal Reserve',
+        serviceDescription:
+          'The U.S. Federal Reserve (FED) inflation-driven monetary policy updates.',
+        serviceImage: 'https://via.placeholder.com/1200x600',
+        serviceURL: 'https://www.federalreserve.gov/',
+        serviceAddress: '0x0000000000000000000000000000000000000000',
+        serviceTicker: 'CPI',
+      },
+    }
   ],
 };

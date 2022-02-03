@@ -375,19 +375,6 @@
   },
   {
     "inputs": [],
-    "name": "breachedContract",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "contractFinished",
     "outputs": [
       {
@@ -502,35 +489,6 @@
       {
         "internalType": "uint256",
         "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_staker",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_allowedTokenIndex",
-        "type": "uint256"
-      }
-    ],
-    "name": "getTokenStake",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "tokenAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "stake",
         "type": "uint256"
       }
     ],
@@ -795,6 +753,11 @@
         "internalType": "address",
         "name": "_token",
         "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "_position",
+        "type": "string"
       }
     ],
     "name": "stakeTokens",
@@ -819,13 +782,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "toggleUserWithdrawLocked",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

@@ -1657,7 +1657,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       );
       tx = await dslaToken.approve(sla.address, deployerStake);
       await tx.wait();
-      tx = await sla.stakeTokens(deployerStake, dslaToken.address);
+      tx = await sla.stakeTokens(deployerStake, dslaToken.address, 'long');
       await tx.wait();
       const notDeployerBalance = await dslaToken.callStatic.balanceOf(
         notDeployer
@@ -1676,7 +1676,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       await tx.wait();
       tx = await sla
         .connect(await ethers.getSigner(notDeployer))
-        .stakeTokens(notDeployerStake, dslaToken.address);
+        .stakeTokens(notDeployerStake, dslaToken.address, 'short');
       await tx.wait();
       printSeparator();
     }
@@ -2136,7 +2136,6 @@ subtask(SUB_TASK_NAMES.GET_VALID_SLAS, undefined).setAction(
       const sla = <SLA>(
         await ethers.getContractAt(CONTRACT_NAMES.SLA, slaAddress)
       );
-      const breachedContract = await sla.breachedContract();
       const contractFinished = await sla.contractFinished();
       const creationBlockNumber = await sla.creationBlockNumber();
       const messengerAddress = await sla.messengerAddress();
@@ -2151,7 +2150,6 @@ subtask(SUB_TASK_NAMES.GET_VALID_SLAS, undefined).setAction(
       const DSLALPtokenAddress = await sla.dpTokenRegistry(DSLAtoken.address);
 
       consola.info('slaAddress', slaAddress);
-      consola.info('breachedContract', breachedContract);
       consola.info('contractFinished', contractFinished);
       consola.info('messengerAddress', messengerAddress);
       consola.info('periodType', PERIOD_TYPE[periodType]);

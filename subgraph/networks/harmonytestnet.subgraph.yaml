@@ -1,4 +1,4 @@
-specVersion: 0.0.2
+specVersion: 0.0.3
 description: DSLA protocol
 repository: https://github.com/Stacktical/stacktical-dsla-contracts
 schema:
@@ -8,20 +8,20 @@ dataSources:
     name: SLARegistry
     network: testnet
     source:
-      address: '0xBed12978D750feB78Dce7a6E01ecdcf39416A3d6'
+      address: "0xBed12978D750feB78Dce7a6E01ecdcf39416A3d6"
       startBlock: 13820676
       abi: SLARegistry
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - SLA
       abis:
         - name: SLARegistry
-          file: ../abis/@stacktical/dsla-contracts/contracts/SLARegistry.sol/SLARegistry.json
+          file: ../abis/SLARegistry.json
         - name: SLA
-          file: ../abis/@stacktical/dsla-contracts/contracts/SLA.sol/SLA.json
+          file: ../abis/SLA.json
       eventHandlers:
         - event: SLACreated(indexed address,indexed address)
           handler: handleNewSLA
@@ -30,20 +30,20 @@ dataSources:
     name: SLORegistry
     network: testnet
     source:
-      address: '0xCc407675823592b1D06F229a4741Cd884f9e3137'
+      address: "0xCc407675823592b1D06F229a4741Cd884f9e3137"
       startBlock: 13820664
       abi: SLORegistry
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - SLA
       abis:
         - name: SLORegistry
-          file: ../abis/@stacktical/dsla-contracts/contracts/SLORegistry.sol/SLORegistry.json
+          file: ../abis/SLORegistry.json
         - name: SLA
-          file: ../abis/@stacktical/dsla-contracts/contracts/SLA.sol/SLA.json
+          file: ../abis/SLA.json
       eventHandlers:
         - event: SLORegistered(indexed address,uint256,uint8)
           handler: handleSLORegistered
@@ -52,18 +52,18 @@ dataSources:
     name: StakeRegistry
     network: testnet
     source:
-      address: '0x10Ae2fFB5a1b4Ba0De8fEd2185895a14011E5b70'
+      address: "0x10Ae2fFB5a1b4Ba0De8fEd2185895a14011E5b70"
       startBlock: 13820672
       abi: StakeRegistry
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - StakeRegistry
       abis:
         - name: StakeRegistry
-          file: ../abis/@stacktical/dsla-contracts/contracts/StakeRegistry.sol/StakeRegistry.json
+          file: ../abis/StakeRegistry.json
       eventHandlers:
         - event: ValueLocked(indexed address,indexed address,uint256)
           handler: handleValueLocked
@@ -74,21 +74,21 @@ dataSources:
     name: MessengerRegistry
     network: testnet
     source:
-      address: '0x8afe7a354A9b850C9eA6b7E80a675A159F5c79f9'
+      address: "0x8afe7a354A9b850C9eA6b7E80a675A159F5c79f9"
       startBlock: 13820668
       abi: MessengerRegistry
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - MessengerRegistry
         - IMessenger
       abis:
         - name: MessengerRegistry
-          file: ../abis/@stacktical/dsla-contracts/contracts/MessengerRegistry.sol/MessengerRegistry.json
+          file: ../abis/MessengerRegistry.json
         - name: IMessenger
-          file: ../abis/@stacktical/dsla-contracts/contracts/interfaces/IMessenger.sol/IMessenger.json
+          file: ../abis/IMessenger.json
       eventHandlers:
         - event: MessengerRegistered(indexed address,indexed address,string,uint256,uint256)
           handler: handleMessengerRegistered
@@ -103,7 +103,7 @@ templates:
       abi: SLA
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.4
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ../mapping.ts
       entities:
@@ -124,6 +124,6 @@ templates:
           handler: handleDTokensCreated
       abis:
         - name: SLA
-          file: ../abis/@stacktical/dsla-contracts/contracts/SLA.sol/SLA.json
+          file: ../abis/SLA.json
         - name: ERC20
-          file: ../abis/@openzeppelin/contracts/presets/ERC20PresetMinterPauser.sol/ERC20PresetMinterPauser.json
+          file: ../abis/ERC20PresetMinterPauser.json
