@@ -46,11 +46,13 @@ export function generateBootstrapPeriods(
       .utc(0)
       .startOf(parsedUnit)
       .add(index, parsedPeriod)
+      .startOf(parsedUnit)
       .unix();
     const end = moment()
       .utc(0)
       .endOf(parsedUnit)
       .add(index, parsedPeriod)
+      .endOf(parsedUnit)
       .unix();
     periodStarts.push(start);
     periodEnds.push(end);
@@ -61,20 +63,20 @@ export function generateBootstrapPeriods(
 export function addPeriods(
   periodType: PERIOD_TYPE,
   amountOfPeriods: number,
-  initDate: number,
+  initDate: number
 ) {
   const periodStarts = [];
   const periodEnds = [];
   const [parsedPeriod, parsedUnit] = parsePeriod(periodType);
   for (let index = 0; index < amountOfPeriods; index++) {
-    const start = moment(initDate*1000)
+    const start = moment(initDate * 1000)
       .utc(0)
-      .add(index +1, parsedPeriod)
+      .add(index + 1, parsedPeriod)
       .startOf(parsedUnit)
       .unix();
-    const end = moment(initDate*1000)
+    const end = moment(initDate * 1000)
       .utc(0)
-      .add(index +1, parsedPeriod)
+      .add(index + 1, parsedPeriod)
       .endOf(parsedUnit)
       .unix();
     periodStarts.push(start);
@@ -120,8 +122,6 @@ export const printSeparator = () => {
 };
 
 export const bootstrapStrings = (contractName: string) => [
-  'Starting automated jobs to bootstrap ' +
-    contractName +
-    ' contract...',
+  'Starting automated jobs to bootstrap ' + contractName + ' contract...',
   'Automated jobs to bootstrap ' + contractName + ' complete!',
 ];
