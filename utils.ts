@@ -46,16 +46,11 @@ export function generateBootstrapPeriods(
       .utc(0)
       .startOf(parsedUnit)
       .add(index, parsedPeriod)
-      .startOf(parsedUnit)
-      .unix();
-    const end = moment()
-      .utc(0)
-      .endOf(parsedUnit)
-      .add(index, parsedPeriod)
-      .endOf(parsedUnit)
-      .unix();
-    periodStarts.push(start);
-    periodEnds.push(end);
+      .startOf(parsedUnit);
+    const end = start.endOf(parsedUnit);
+
+    periodStarts.push(start.unix());
+    periodEnds.push(end.unix());
   }
   return [periodStarts, periodEnds];
 }
