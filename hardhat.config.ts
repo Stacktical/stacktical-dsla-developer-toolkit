@@ -14,6 +14,7 @@ import '@typechain/hardhat';
 import './stacktical.validation';
 import './type-extensions';
 import './tasks';
+import 'solidity-coverage';
 
 const getEnabledNetworks = () =>
   networks

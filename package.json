@@ -17,7 +17,8 @@
     "release:major": "standard-version --release-as major",
     "graph:deploy:production": "sh subgraph/deploy-subgraphs.sh",
     "graph:deploy:develop": "sh subgraph/deploy-develop.sh",
-    "postinstall": "./node_modules/.bin/pm2 install typescript"
+    "postinstall": "./node_modules/.bin/pm2 install typescript",
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'test/**/*.ts'"
   },
   "repository": {
     "type": "git",
@@ -85,6 +86,8 @@
     "@nomiclabs/hardhat-web3": "^2.0.0",
     "@openzeppelin/test-helpers": "^0.5.15",
     "@typechain/web3-v1": "^3.0.0",
+    "@types/chai": "^4.3.0",
+    "@types/mocha": "^9.1.0",
     "avalanche": "^3.9.3",
     "chai": "^4.3.6",
     "docker-compose": "^0.23.13",
