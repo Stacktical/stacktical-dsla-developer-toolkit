@@ -1,4 +1,8 @@
 steps:
+  - id: prepare-env
+    name: node:lts-stretch
+    entrypoint: cp
+    args: ['env-min', '.env']
   - id: npm-install
     name: node:lts-stretch
     entrypoint: npm
