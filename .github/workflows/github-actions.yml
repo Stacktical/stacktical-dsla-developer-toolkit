@@ -17,3 +17,9 @@ jobs:
         name: npm i
       - name: Test
         run: npx hardhat test
+      - name: restart services
+        run: npx hardhat stacktical:restart-services --network develop
+      - name: deploy
+        run: npx hardhat deploy --network develop --reset
+      - run: hh stacktical:bootstrap --network develop
+      - run: hh stacktical:deploy-sla --network develop --index 1
