@@ -37,6 +37,7 @@ FANTOM_WS_URI="http://localhost:1234"
 STAKING_EFFICIENCY_INDEXER_URI="http://localhost:1234"
 STAKING_EFFICIENCY_INDEXER_ALT_URI="http://localhost:1234"
 INFLATION_INDEXER_URI="http://localhost:1234"
+DEVELOP_INDEXER_URI="http://host.docker.internal:6060"
 
 ## Chainlink nodes
 ETHEREUM_CHAINLINK_NODE_1_URL="http://localhost"
