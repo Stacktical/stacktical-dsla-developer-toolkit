@@ -1,0 +1,19 @@
+name: DSLA DTK testing
+on: [push]
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - run: cp 'env-min' .env
+        name: prepare-env
+      - name: Install HH
+        run: npm i -g hardhat-shorthand && hardhat-completion install
+      - run: npm i
+        name: npm i
+      - name: Test
+        run: npx hardhat test
