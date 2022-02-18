@@ -1,0 +1,31 @@
+name: DSLA DTK testing
+on: [push]
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - run: cp 'env-min' .env
+        name: prepare-env
+      - name: Install HH
+        run: npm i -g hardhat-shorthand && hardhat-completion install
+      - run: npm i
+        name: npm i
+      - name: Test
+        run: hh test
+      - name: restart services
+        run: hh stacktical:restart-services --network develop
+      - name: Run External Adapter
+        run: IPFS_GATEWAY_URI="https://ipfs.dsla.network" npm run external-adapter-daemon
+      - name: Deploy Protocol
+        run: hh deploy --network develop --reset
+      - name: Bootstrap
+        run: hh stacktical:bootstrap --network develop
+      - name: Deploy SLA
+        run: hh stacktical:deploy-sla --network develop --index 1
+      - name: Request SLI
+        run: hh stacktical:request-sli --network develop
