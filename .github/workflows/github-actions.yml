@@ -16,13 +16,13 @@ jobs:
       - run: npm i
         name: npm i
       - name: Test
-        run: npx hardhat test
+        run: hh test
       - name: restart services
-        run: hh hardhat stacktical:restart-services --network develop
+        run: hh stacktical:restart-services --network develop
       - name: Run External Adapter
         run: IPFS_GATEWAY_URI="https://ipfs.dsla.network" npm run external-adapter
       - name: Deploy Protocol
-        run: hh hardhat deploy --network develop --reset
+        run: hh deploy --network develop --reset
       - name: Bootstrap
         run: hh stacktical:bootstrap --network develop
       - name: Deploy SLA
