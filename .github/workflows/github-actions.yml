@@ -16,10 +16,15 @@ jobs:
       - run: npm i
         name: npm i
       - name: Test
-        run: npx hardhat test
+        run: hh hardhat test
       - name: restart services
-        run: npx hardhat stacktical:restart-services --network develop
-      - name: deploy
-        run: npx hardhat deploy --network develop --reset
-      - run: hh stacktical:bootstrap --network develop
-      - run: hh stacktical:deploy-sla --network develop --index 1
+        run: hh hardhat stacktical:restart-services --network develop
+      - run: sleep 5
+      - name: Deploy Protocol
+        run: hh hardhat deploy --network develop --reset
+      - name: Bootstrap
+        run: hh stacktical:bootstrap --network develop
+      - name: Deploy SLA
+        run: hh stacktical:deploy-sla --network develop --index 1
+      - name: Request SLI
+        run: hh stacktical:request-sli --network develop
