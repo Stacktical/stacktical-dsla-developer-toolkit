@@ -2,7 +2,7 @@ name: DSLA DTK integration testing
 on: [push]
 jobs:
   run-tests:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js
