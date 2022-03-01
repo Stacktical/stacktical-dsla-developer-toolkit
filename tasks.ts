@@ -3,10 +3,10 @@ import { SUB_TASK_NAMES } from './subtasks';
 import { printSeparator } from './utils';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { PARAMS_NAMES } from './constants';
-import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signers";
-import { BigNumber } from "ethers";
+import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/dist/src/signers';
+import { BigNumber } from 'ethers';
 
-enum TASK_NAMES {
+export enum TASK_NAMES {
   EXPORT_DATA = 'stacktical:export-data',
   DEPLOY_SLA = 'stacktical:deploy-sla',
   BOOTSTRAP_DSLA_PROTOCOL = 'stacktical:bootstrap',
@@ -40,22 +40,30 @@ enum TASK_NAMES {
   AVAX_BALANCES = 'balances',
 }
 
-task(TASK_NAMES.AVAX_ACCOUNTS, "Prints the list of accounts", async (args, hre): Promise<void> => {
-  const accounts: SignerWithAddress[] = await hre.ethers.getSigners()
-  accounts.forEach((account: SignerWithAddress): void => {
-    console.log(account.address)
-  })
-})
-
-task(TASK_NAMES.AVAX_BALANCES, "Prints the list of AVAX account balances", async (args, hre): Promise<void> => {
-  const accounts: SignerWithAddress[] = await hre.ethers.getSigners()
-  for(const account of accounts){
-    const balance: BigNumber = await hre.ethers.provider.getBalance(
-      account.address
-    );
-    console.log(`${account.address} has balance ${balance.toString()}`);
+task(
+  TASK_NAMES.AVAX_ACCOUNTS,
+  'Prints the list of accounts',
+  async (args, hre): Promise<void> => {
+    const accounts: SignerWithAddress[] = await hre.ethers.getSigners();
+    accounts.forEach((account: SignerWithAddress): void => {
+      console.log(account.address);
+    });
   }
-})
+);
+
+task(
+  TASK_NAMES.AVAX_BALANCES,
+  'Prints the list of AVAX account balances',
+  async (args, hre): Promise<void> => {
+    const accounts: SignerWithAddress[] = await hre.ethers.getSigners();
+    for (const account of accounts) {
+      const balance: BigNumber = await hre.ethers.provider.getBalance(
+        account.address
+      );
+      console.log(`${account.address} has balance ${balance.toString()}`);
+    }
+  }
+);
 
 task(
   TASK_NAMES.GRAPH_MANIFESTOS,
@@ -127,17 +135,19 @@ task(TASK_NAMES.UPDATE_PERIOD_REGISTRY, 'Update Period Registry').setAction(
   }
 );
 
-task(TASK_NAMES.ADD_DATES_TO_PERIOD, 'Appends amountofPeriods to initialized PeriodTypes').setAction(
-  async (_, { run }) => {
-    await run(SUB_TASK_NAMES.ADD_DATES_TO_PERIOD);
-  }
-);
+task(
+  TASK_NAMES.ADD_DATES_TO_PERIOD,
+  'Appends amountofPeriods to initialized PeriodTypes'
+).setAction(async (_, { run }) => {
+  await run(SUB_TASK_NAMES.ADD_DATES_TO_PERIOD);
+});
 
-task(TASK_NAMES.GET_START_STOP_PERIODS, 'Get the start...end date ranges of initialized PeriodTypes').setAction(
-  async (_, { run }) => {
-    await run(SUB_TASK_NAMES.GET_START_STOP_PERIODS);
-  }
-);
+task(
+  TASK_NAMES.GET_START_STOP_PERIODS,
+  'Get the start...end date ranges of initialized PeriodTypes'
+).setAction(async (_, { run }) => {
+  await run(SUB_TASK_NAMES.GET_START_STOP_PERIODS);
+});
 
 task(TASK_NAMES.BOOTSTRAP_DSLA_PROTOCOL, 'Bootstrap DSLA protocol').setAction(
   async (_, { run }) => {
@@ -169,19 +179,17 @@ task(
     await run(SUB_TASK_NAMES.REQUEST_SLI, taskArgs);
   });
 
-task(
-  TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE,
-  'Check token allowances'
-).setAction(async (_, { run }) => {
-  await run(SUB_TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE);
-});
+task(TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE, 'Check token allowances').setAction(
+  async (_, { run }) => {
+    await run(SUB_TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE);
+  }
+);
 
-task(
-  TASK_NAMES.SET_CONTRACTS_ALLOWANCE,
-  'Set token allowances'
-).setAction(async (_, { run }) => {
-  await run(SUB_TASK_NAMES.SET_CONTRACTS_ALLOWANCE);
-});
+task(TASK_NAMES.SET_CONTRACTS_ALLOWANCE, 'Set token allowances').setAction(
+  async (_, { run }) => {
+    await run(SUB_TASK_NAMES.SET_CONTRACTS_ALLOWANCE);
+  }
+);
 
 task(
   TASK_NAMES.PREPARE_CHAINLINK_NODES,
@@ -401,4 +409,4 @@ task(
 //     await hre.run(SUB_TASK_NAMES.PREC_FULFILL_ANALYTICS, taskArgs);
 //   });
 
-module.exports = {};
+module.exports = { TASK_NAMES };
