@@ -1,17 +1,10 @@
-import { StackticalConfiguration } from '../../types';
-import { DeployOptionsBase } from 'hardhat-deploy/dist/types';
-import { DeploymentsExtension } from 'hardhat-deploy/dist/types';
 import { scripts } from '../../scripts.config';
 import { TASK_NAMES } from '../../tasks';
 import { SUB_TASK_NAMES } from '../../subtasks';
 
 const hre = require('hardhat');
-const compose = require('docker-compose');
-const appRoot = require('app-root-path');
-const path = require('path');
 const consola = require('consola');
 const pm2 = require('pm2');
-const { deployments, network, getNamedAccounts } = hre;
 
 export async function fixture() {
   // Start local ganache docker image
@@ -53,7 +46,7 @@ export async function fixture() {
     'protocol bootstrapped ',
     await hre.run('deploy', { network: 'develop', reset: true })
   );
-  console.log(scripts.deploy_sla.length);
+
   for (let index = 0; index < scripts.deploy_sla.length; index++) {
     consola.success(
       `deployed sla N: ${index}`,

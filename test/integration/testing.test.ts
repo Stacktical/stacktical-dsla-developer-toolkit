@@ -1,4 +1,3 @@
-const hre = require('hardhat');
 import { expect } from 'chai';
 import { loadFixture, deployContract } from 'ethereum-waffle';
 import { fixture } from '../fixtures/basic';
