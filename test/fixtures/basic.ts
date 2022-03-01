@@ -37,6 +37,8 @@ export async function fixture() {
     })
   );
 
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+
   consola.success(
     'deployed',
     await hre.run('deploy', { network: 'develop', reset: true })
@@ -44,13 +46,16 @@ export async function fixture() {
 
   consola.success(
     'protocol bootstrapped ',
-    await hre.run('deploy', { network: 'develop', reset: true })
+    await hre.run('stacktical:bootstrap', { network: 'develop' })
   );
 
   for (let index = 0; index < scripts.deploy_sla.length; index++) {
     consola.success(
       `deployed sla N: ${index}`,
-      await hre.run(TASK_NAMES.DEPLOY_SLA, { network: 'develop', index: index })
+      await hre.run(TASK_NAMES.DEPLOY_SLA, {
+        network: 'develop',
+        index: index.toString(),
+      })
     );
   }
 }
