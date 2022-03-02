@@ -34,7 +34,6 @@ import {
   MessengerRegistered,
 } from './generated/MessengerRegistry/MessengerRegistry';
 import { IMessenger } from './generated/MessengerRegistry/IMessenger';
-const consola = require('consola');
 
 export function handleNewSLA(event: SLACreated): void {
   let slaContract = SLAContract.bind(event.params.sla);
@@ -98,14 +97,14 @@ export function handleSLICreated(event: SLICreated): void {
 }
 
 export function handleStake(event: Stake): void {
-  consola.info('INFO1001: tring to load SLA');
+  console.log('INFO1001: tring to load SLA');
   let sla = SLA.load(event.address.toHexString())!;
-  consola.info('INFO1002: SLA loaded');
+  console.log('INFO1002: SLA loaded');
 
   let deposit = new Deposit(event.transaction.hash.toHexString());
   let slaContract = SLAContract.bind(event.address);
   if (sla.owner) {
-    consola.error('ERROR1001: no sla owner found');
+    console.log('ERROR1001: no sla owner found');
   }
   deposit.type =
     sla.owner!.toHexString() == event.params.caller.toHexString()
@@ -125,7 +124,7 @@ export function handleStake(event: Stake): void {
     .div(sla.leverage)
     .minus(slaContract.usersPool(event.params.tokenAddress));
   if (sla.maxHedge) {
-    consola.error('ERROR1002: no sla maxHedge found');
+    console.log('ERROR1002: no sla maxHedge found');
   }
   if (sla.maxHedge!.lt(BigInt.fromI32(0))) {
     sla.maxHedge = BigInt.fromI32(0);
