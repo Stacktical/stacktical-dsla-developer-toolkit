@@ -28,6 +28,7 @@ interface StakingInterface extends ethers.utils.Interface {
     "dpTokenRegistry(address)": FunctionFragment;
     "duTokenRegistry(address)": FunctionFragment;
     "getAllowedTokensLength()": FunctionFragment;
+    "getTokenStake(address,uint256)": FunctionFragment;
     "isAllowedToken(address)": FunctionFragment;
     "leverage()": FunctionFragment;
     "owner()": FunctionFragment;
@@ -70,6 +71,10 @@ interface StakingInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "getAllowedTokensLength",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getTokenStake",
+    values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "isAllowedToken",
@@ -135,6 +140,10 @@ interface StakingInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getAllowedTokensLength",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getTokenStake",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -288,6 +297,14 @@ export class Staking extends BaseContract {
 
     getAllowedTokensLength(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    getTokenStake(
+      _staker: string,
+      _allowedTokenIndex: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [string, BigNumber] & { tokenAddress: string; stake: BigNumber }
+    >;
+
     isAllowedToken(
       _tokenAddress: string,
       overrides?: CallOverrides
@@ -349,6 +366,12 @@ export class Staking extends BaseContract {
 
   getAllowedTokensLength(overrides?: CallOverrides): Promise<BigNumber>;
 
+  getTokenStake(
+    _staker: string,
+    _allowedTokenIndex: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<[string, BigNumber] & { tokenAddress: string; stake: BigNumber }>;
+
   isAllowedToken(
     _tokenAddress: string,
     overrides?: CallOverrides
@@ -409,6 +432,14 @@ export class Staking extends BaseContract {
     duTokenRegistry(arg0: string, overrides?: CallOverrides): Promise<string>;
 
     getAllowedTokensLength(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getTokenStake(
+      _staker: string,
+      _allowedTokenIndex: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [string, BigNumber] & { tokenAddress: string; stake: BigNumber }
+    >;
 
     isAllowedToken(
       _tokenAddress: string,
@@ -607,6 +638,12 @@ export class Staking extends BaseContract {
 
     getAllowedTokensLength(overrides?: CallOverrides): Promise<BigNumber>;
 
+    getTokenStake(
+      _staker: string,
+      _allowedTokenIndex: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     isAllowedToken(
       _tokenAddress: string,
       overrides?: CallOverrides
@@ -677,6 +714,12 @@ export class Staking extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     getAllowedTokensLength(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getTokenStake(
+      _staker: string,
+      _allowedTokenIndex: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

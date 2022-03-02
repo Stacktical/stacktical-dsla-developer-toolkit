@@ -41,7 +41,6 @@ import {
   TOKEN_NAMES,
 } from './constants';
 import {
-  addPeriods,
   bootstrapStrings,
   generateBootstrapPeriods,
   getIPFSHash,
@@ -81,7 +80,6 @@ export enum SUB_TASK_NAMES {
   DEPLOY_SLA = 'DEPLOY_SLA',
   BOOTSTRAP_MESSENGER_REGISTRY = 'BOOTSTRAP_MESSENGER_REGISTRY',
   BOOTSTRAP_PERIOD_REGISTRY = 'BOOTSTRAP_PERIOD_REGISTRY',
-  ADD_DATES_TO_PERIOD = 'ADD_DATES_TO_PERIOD',
   BOOTSTRAP_STAKE_REGISTRY = 'BOOTSTRAP_STAKE_REGISTRY',
   SET_CONTRACTS_ALLOWANCE = 'SET_CONTRACTS_ALLOWANCE',
   REQUEST_SLI = 'REQUEST_SLI',
@@ -97,7 +95,6 @@ export enum SUB_TASK_NAMES {
   GET_REVERT_MESSAGE = 'GET_REVERT_MESSAGE',
   DEPLOY_MESSENGER = 'DEPLOY_MESSENGER',
   GET_MESSENGER = 'GET_MESSENGER',
-  GET_START_STOP_PERIODS = 'GET_START_STOP_PERIODS',
   TRANSFER_OWNERSHIP = 'TRANSFER_OWNERSHIP',
   PROVIDER_WITHDRAW = 'PROVIDER_WITHDRAW',
   UNLOCK_TOKENS = 'UNLOCK_TOKENS',
@@ -1283,148 +1280,6 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
   }
 );
 
-subtask(SUB_TASK_NAMES.GET_START_STOP_PERIODS, undefined).setAction(
-  async (_, hre: HardhatRuntimeEnvironment) => {
-    const {
-      stacktical: { bootstrap },
-    } = hre.network.config;
-    const {
-      registry: { periods },
-    } = bootstrap;
-    const { deployments, ethers, getNamedAccounts } = hre;
-    const { deployer } = await getNamedAccounts();
-    const signer = await ethers.getSigner(deployer);
-
-    const { get } = deployments;
-
-    const [startBootstrap, finishBootstrap] = bootstrapStrings(
-      CONTRACT_NAMES.PeriodRegistry
-    );
-
-    const periodRegistryArtifact = await get(CONTRACT_NAMES.PeriodRegistry);
-    const periodRegistry = await PeriodRegistry__factory.connect(
-      periodRegistryArtifact.address,
-      signer
-    );
-
-    for (let period of periods) {
-      const { periodType, amountOfPeriods, expiredPeriods } = period;
-      let initializedPeriod = await periodRegistry.isInitializedPeriod(
-        periodType
-      );
-      const periodDefinitions = await periodRegistry.getPeriodDefinitions();
-
-      const currentStartsDate = periodDefinitions[periodType].starts.map((start) => moment(Number(start)*1000).unix());
-      const currentEndsDate = periodDefinitions[periodType].ends.map((end) => moment(Number(end)*1000).unix());
-
-      const periodStartsDate = currentStartsDate.map((date) =>
-      moment(date * 1000)
-        .utc(0)
-        .format('DD/MM/YYYY HH:mm:ss')
-      );
-      const periodEndsDate = currentEndsDate.map((date) =>
-      moment(date * 1000)
-        .utc(0)
-        .format('DD/MM/YYYY HH:mm:ss')
-      );
-
-      console.log(
-        'The ' + PERIOD_TYPE[periodType] + ' period type range is:',
-        "\n From ", periodStartsDate.at(0), "\n Until",periodEndsDate.at(-1)
-      );
-
-    }
-
-  }
-);
-
-subtask(SUB_TASK_NAMES.ADD_DATES_TO_PERIOD, undefined).setAction(
-  async (_, hre: HardhatRuntimeEnvironment) => {
-    const {
-      stacktical: { bootstrap },
-    } = hre.network.config;
-    const {
-      registry: { periods },
-    } = bootstrap;
-    const { deployments, ethers, getNamedAccounts } = hre;
-    const { deployer } = await getNamedAccounts();
-    const signer = await ethers.getSigner(deployer);
-
-    const { get } = deployments;
-
-    console.log('Starting automated jobs to extend dates of ' +
-    CONTRACT_NAMES.PeriodRegistry +
-    ' contract...');
-
-    const periodRegistryArtifact = await get(CONTRACT_NAMES.PeriodRegistry);
-    const periodRegistry = await PeriodRegistry__factory.connect(
-      periodRegistryArtifact.address,
-      signer
-    );
-
-    for (let period of periods) {
-      const { periodType, amountOfPeriods } = period;
-      let initializedPeriod = await periodRegistry.isInitializedPeriod(
-        periodType
-      );
-      printSeparator();
-      console.log('Updating periods for ' + PERIOD_TYPE[periodType] + ' period type:');
-
-      const periodDefinitions = await periodRegistry.getPeriodDefinitions();
-
-      const currentStartsDate = periodDefinitions[periodType].starts.map((start) => moment(Number(start)*1000).unix());
-      const currentEndsDate = periodDefinitions[periodType].ends.map((end) => moment(Number(end)*1000).unix());
-
-      // New Date list from the last date that had been initialized
-      var [periodStarts, periodEnds] = addPeriods(
-        periodType,
-        amountOfPeriods,
-        currentEndsDate.at(-1)
-      );
-
-      console.log(
-        "Current dates in Registry: \n",currentStartsDate, "\n",currentEndsDate,
-        "\n+ ...adding ", periodStarts.length, " period(s) from:", currentEndsDate.at(-1),
-        "(", moment(currentEndsDate.at(-1) * 1000).utc(0).format('DD/MM/YYYY HH:mm:ss'),") \n"
-      );
-
-      const periodStartsDate = periodStarts.map((date) =>
-      moment(date * 1000)
-        .utc(0)
-        .format('DD/MM/YYYY HH:mm:ss')
-      );
-      const periodEndsDate = periodEnds.map((date) =>
-      moment(date * 1000)
-        .utc(0)
-        .format('DD/MM/YYYY HH:mm:ss')
-      );
-
-      // Diffs the start/end date arrays
-      periodStarts = periodStarts.filter((date) => !currentStartsDate.includes(date));
-      periodEnds = periodEnds.filter((date) => !currentEndsDate.includes(date));
-
-      if (periodStarts.length ===  0 || periodEnds.length === 0 ) {
-        console.log("No changes to be made!")
-      } else {
-        console.log(
-          'Adding the following new dates to ' + PERIOD_TYPE[periodType] + ' period type:',
-          "\n Start: ", periodStarts, periodStartsDate ,
-           "\n End: ",periodEnds, periodEndsDate ,
-        );
-        
-        let tx = await periodRegistry.addPeriodsToPeriodType(
-          periodType,
-          periodStarts,
-          periodEnds
-        );
-        await tx.wait();
-      }
-    }
-
-    console.log('Automated jobs to update ' + CONTRACT_NAMES.PeriodRegistry + ' completed');
-  }
-);
-
 subtask(SUB_TASK_NAMES.BOOTSTRAP_PERIOD_REGISTRY, undefined).setAction(
   async (_, hre: HardhatRuntimeEnvironment) => {
     const {
@@ -1548,10 +1403,8 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       },
     } = hre;
     const { deployer, notDeployer } = await getNamedAccounts();
-    printSeparator();
-    consola.info('Provider address:', deployer);
-    consola.info('User address:', notDeployer);
-    printSeparator();
+    consola.info('deployer', deployer);
+    consola.info('notDeployer', notDeployer);
     const signer = await ethers.getSigner(deployer);
     const { get } = deployments;
     const { stacktical } = hre.network.config;
@@ -1649,15 +1502,15 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       tx = await sla.addAllowedTokens(dslaToken.address);
       await tx.wait();
 
-      console.log('Starting process 3: Stake on Provider and User pools');
+      console.log('Starting process 3: Stake on deployer and notOwner pools');
 
       const deployerStake = stakeAmountTimesWei(deployerStakeTimes);
       console.log(
-        `Starting process 3.1: Provider: ${fromWei(deployerStake)} DSLA`
+        `Starting process 3.1: deployer: ${fromWei(deployerStake)} DSLA`
       );
       tx = await dslaToken.approve(sla.address, deployerStake);
       await tx.wait();
-      tx = await sla.stakeTokens(deployerStake, dslaToken.address, 'long');
+      tx = await sla.stakeTokens(deployerStake, dslaToken.address);
       await tx.wait();
       const notDeployerBalance = await dslaToken.callStatic.balanceOf(
         notDeployer
@@ -1668,7 +1521,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
         await tx.wait();
       }
       console.log(
-        `Starting process 3.2: User: ${fromWei(notDeployerStake)} DSLA`
+        `Starting process 3.2: notDeployer: ${fromWei(notDeployerStake)} DSLA`
       );
       tx = await dslaToken
         .connect(await ethers.getSigner(notDeployer))
@@ -1676,7 +1529,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       await tx.wait();
       tx = await sla
         .connect(await ethers.getSigner(notDeployer))
-        .stakeTokens(notDeployerStake, dslaToken.address, 'short');
+        .stakeTokens(notDeployerStake, dslaToken.address);
       await tx.wait();
       printSeparator();
     }
@@ -2136,6 +1989,7 @@ subtask(SUB_TASK_NAMES.GET_VALID_SLAS, undefined).setAction(
       const sla = <SLA>(
         await ethers.getContractAt(CONTRACT_NAMES.SLA, slaAddress)
       );
+      const breachedContract = await sla.breachedContract();
       const contractFinished = await sla.contractFinished();
       const creationBlockNumber = await sla.creationBlockNumber();
       const messengerAddress = await sla.messengerAddress();
@@ -2150,6 +2004,7 @@ subtask(SUB_TASK_NAMES.GET_VALID_SLAS, undefined).setAction(
       const DSLALPtokenAddress = await sla.dpTokenRegistry(DSLAtoken.address);
 
       consola.info('slaAddress', slaAddress);
+      consola.info('breachedContract', breachedContract);
       consola.info('contractFinished', contractFinished);
       consola.info('messengerAddress', messengerAddress);
       consola.info('periodType', PERIOD_TYPE[periodType]);

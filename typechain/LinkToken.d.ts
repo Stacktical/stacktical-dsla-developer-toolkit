@@ -17,7 +17,7 @@ import {
 import { BytesLike } from "@ethersproject/bytes";
 import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
-import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
+import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface LinkTokenInterface extends ethers.utils.Interface {
   functions: {
@@ -108,27 +108,6 @@ interface LinkTokenInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
 }
-
-export type Transfer_address_address_uint256_bytes_Event = TypedEvent<
-  [string, string, BigNumber, string] & {
-    from: string;
-    to: string;
-    value: BigNumber;
-    data: string;
-  }
->;
-
-export type Transfer_address_address_uint256_Event = TypedEvent<
-  [string, string, BigNumber] & { from: string; to: string; value: BigNumber }
->;
-
-export type ApprovalEvent = TypedEvent<
-  [string, string, BigNumber] & {
-    owner: string;
-    spender: string;
-    value: BigNumber;
-  }
->;
 
 export class LinkToken extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -343,7 +322,7 @@ export class LinkToken extends BaseContract {
   };
 
   filters: {
-    "Transfer(address,address,uint256,bytes)"(
+    Transfer(
       from?: string | null,
       to?: string | null,
       value?: null,
@@ -351,24 +330,6 @@ export class LinkToken extends BaseContract {
     ): TypedEventFilter<
       [string, string, BigNumber, string],
       { from: string; to: string; value: BigNumber; data: string }
-    >;
-
-    "Transfer(address,address,uint256)"(
-      from?: string | null,
-      to?: string | null,
-      value?: null
-    ): TypedEventFilter<
-      [string, string, BigNumber],
-      { from: string; to: string; value: BigNumber }
-    >;
-
-    "Approval(address,address,uint256)"(
-      owner?: string | null,
-      spender?: string | null,
-      value?: null
-    ): TypedEventFilter<
-      [string, string, BigNumber],
-      { owner: string; spender: string; value: BigNumber }
     >;
 
     Approval(

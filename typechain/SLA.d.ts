@@ -25,6 +25,7 @@ interface SLAInterface extends ethers.utils.Interface {
     "addAllowedTokens(address)": FunctionFragment;
     "addUsersToWhitelist(address[])": FunctionFragment;
     "allowedTokens(uint256)": FunctionFragment;
+    "breachedContract()": FunctionFragment;
     "contractFinished()": FunctionFragment;
     "creationBlockNumber()": FunctionFragment;
     "dpTokenRegistry(address)": FunctionFragment;
@@ -33,6 +34,7 @@ interface SLAInterface extends ethers.utils.Interface {
     "finalPeriodId()": FunctionFragment;
     "getAllowedTokensLength()": FunctionFragment;
     "getStakersLength()": FunctionFragment;
+    "getTokenStake(address,uint256)": FunctionFragment;
     "initialPeriodId()": FunctionFragment;
     "ipfsHash()": FunctionFragment;
     "isAllowedPeriod(uint256)": FunctionFragment;
@@ -49,8 +51,9 @@ interface SLAInterface extends ethers.utils.Interface {
     "removeUsersFromWhitelist(address[])": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "slaID()": FunctionFragment;
-    "stakeTokens(uint256,address,string)": FunctionFragment;
+    "stakeTokens(uint256,address)": FunctionFragment;
     "stakers(uint256)": FunctionFragment;
+    "toggleUserWithdrawLocked()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "userWithdrawLocked()": FunctionFragment;
     "usersPool(address)": FunctionFragment;
@@ -75,6 +78,10 @@ interface SLAInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "allowedTokens",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "breachedContract",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "contractFinished",
@@ -107,6 +114,10 @@ interface SLAInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "getStakersLength",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getTokenStake",
+    values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "initialPeriodId",
@@ -162,11 +173,15 @@ interface SLAInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "slaID", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "stakeTokens",
-    values: [BigNumberish, string, string]
+    values: [BigNumberish, string]
   ): string;
   encodeFunctionData(
     functionFragment: "stakers",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "toggleUserWithdrawLocked",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
@@ -208,6 +223,10 @@ interface SLAInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "breachedContract",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "contractFinished",
     data: BytesLike
   ): Result;
@@ -234,6 +253,10 @@ interface SLAInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getStakersLength",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getTokenStake",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -287,6 +310,10 @@ interface SLAInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "stakers", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "toggleUserWithdrawLocked",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
     data: BytesLike
@@ -463,6 +490,8 @@ export class SLA extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
+    breachedContract(overrides?: CallOverrides): Promise<[boolean]>;
+
     contractFinished(overrides?: CallOverrides): Promise<[boolean]>;
 
     creationBlockNumber(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -478,6 +507,14 @@ export class SLA extends BaseContract {
     getAllowedTokensLength(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     getStakersLength(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    getTokenStake(
+      _staker: string,
+      _allowedTokenIndex: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [string, BigNumber] & { tokenAddress: string; stake: BigNumber }
+    >;
 
     initialPeriodId(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -541,11 +578,14 @@ export class SLA extends BaseContract {
     stakeTokens(
       _amount: BigNumberish,
       _token: string,
-      _position: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     stakers(arg0: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
+
+    toggleUserWithdrawLocked(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     transferOwnership(
       newOwner: string,
@@ -587,6 +627,8 @@ export class SLA extends BaseContract {
 
   allowedTokens(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
+  breachedContract(overrides?: CallOverrides): Promise<boolean>;
+
   contractFinished(overrides?: CallOverrides): Promise<boolean>;
 
   creationBlockNumber(overrides?: CallOverrides): Promise<BigNumber>;
@@ -602,6 +644,12 @@ export class SLA extends BaseContract {
   getAllowedTokensLength(overrides?: CallOverrides): Promise<BigNumber>;
 
   getStakersLength(overrides?: CallOverrides): Promise<BigNumber>;
+
+  getTokenStake(
+    _staker: string,
+    _allowedTokenIndex: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<[string, BigNumber] & { tokenAddress: string; stake: BigNumber }>;
 
   initialPeriodId(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -662,11 +710,14 @@ export class SLA extends BaseContract {
   stakeTokens(
     _amount: BigNumberish,
     _token: string,
-    _position: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   stakers(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+  toggleUserWithdrawLocked(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   transferOwnership(
     newOwner: string,
@@ -711,6 +762,8 @@ export class SLA extends BaseContract {
       overrides?: CallOverrides
     ): Promise<string>;
 
+    breachedContract(overrides?: CallOverrides): Promise<boolean>;
+
     contractFinished(overrides?: CallOverrides): Promise<boolean>;
 
     creationBlockNumber(overrides?: CallOverrides): Promise<BigNumber>;
@@ -726,6 +779,14 @@ export class SLA extends BaseContract {
     getAllowedTokensLength(overrides?: CallOverrides): Promise<BigNumber>;
 
     getStakersLength(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getTokenStake(
+      _staker: string,
+      _allowedTokenIndex: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [string, BigNumber] & { tokenAddress: string; stake: BigNumber }
+    >;
 
     initialPeriodId(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -787,11 +848,12 @@ export class SLA extends BaseContract {
     stakeTokens(
       _amount: BigNumberish,
       _token: string,
-      _position: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
     stakers(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+    toggleUserWithdrawLocked(overrides?: CallOverrides): Promise<void>;
 
     transferOwnership(
       newOwner: string,
@@ -1073,6 +1135,8 @@ export class SLA extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    breachedContract(overrides?: CallOverrides): Promise<BigNumber>;
+
     contractFinished(overrides?: CallOverrides): Promise<BigNumber>;
 
     creationBlockNumber(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1097,6 +1161,12 @@ export class SLA extends BaseContract {
     getAllowedTokensLength(overrides?: CallOverrides): Promise<BigNumber>;
 
     getStakersLength(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getTokenStake(
+      _staker: string,
+      _allowedTokenIndex: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     initialPeriodId(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1154,11 +1224,14 @@ export class SLA extends BaseContract {
     stakeTokens(
       _amount: BigNumberish,
       _token: string,
-      _position: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     stakers(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    toggleUserWithdrawLocked(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     transferOwnership(
       newOwner: string,
@@ -1204,6 +1277,8 @@ export class SLA extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    breachedContract(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     contractFinished(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     creationBlockNumber(
@@ -1232,6 +1307,12 @@ export class SLA extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     getStakersLength(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getTokenStake(
+      _staker: string,
+      _allowedTokenIndex: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     initialPeriodId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1294,13 +1375,16 @@ export class SLA extends BaseContract {
     stakeTokens(
       _amount: BigNumberish,
       _token: string,
-      _position: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     stakers(
       arg0: BigNumberish,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    toggleUserWithdrawLocked(
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     transferOwnership(

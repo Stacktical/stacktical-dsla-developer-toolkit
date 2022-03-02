@@ -44,6 +44,7 @@ export function handleNewSLA(event: SLACreated): void {
   sla.slaId = slaContract.slaID();
   sla.owner = event.params.owner;
   sla.address = event.params.sla;
+  sla.breachedContract = slaContract.breachedContract();
   sla.messengerAddress = slaContract.messengerAddress();
   sla.ipfsHash = slaContract.ipfsHash();
   sla.stakersCount = slaContract.getStakersLength();
@@ -84,6 +85,7 @@ export function handleSLICreated(event: SLICreated): void {
   sla.SLIs = sla.SLIs!.concat([sli.id]);
   sla.nextVerifiablePeriod = slaContract.nextVerifiablePeriod();
   sla.finished = slaContract.contractFinished();
+  sla.breachedContract = slaContract.breachedContract();
   sla.save();
 
   sli.periodId = event.params.periodId;
