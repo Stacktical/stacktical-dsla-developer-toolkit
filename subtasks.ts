@@ -1535,6 +1535,180 @@ subtask(SUB_TASK_NAMES.SET_CONTRACTS_ALLOWANCE, undefined).setAction(
   }
 );
 
+subtask("DEPLOY_SLA_CONCURRENCY_ON", undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    const {
+      deployments,
+      ethers,
+      getNamedAccounts,
+      network: {
+        config: {
+          stacktical: { scripts },
+        },
+      },
+    } = hre;
+    const { deployer, notDeployer } = await getNamedAccounts();
+    printSeparator();
+    consola.info('Provider address:', deployer);
+    consola.info('User address:', notDeployer);
+    printSeparator();
+    const signer = await ethers.getSigner(deployer);
+    const { get } = deployments;
+    const { stacktical } = hre.network.config;
+    console.log('Starting SLA deployment process');
+    const { deploy_sla } = scripts;
+
+    let deploySLAPromises = []
+    for (let index = 0; index < scripts.deploy_sla.length; index++) {
+      let deploySLAPromise =  new Promise((resolve, reject) => {
+        (async () => {
+
+          let slaConfigs = index
+          ? [deploy_sla[index]]
+          : deploy_sla;
+
+          for (let config of slaConfigs) {
+            printSeparator();
+            console.log('Deploying SLA DEPLOY_SLA_CONCURRENCY_ON:');
+            console.log(config);
+            const {
+              serviceMetadata,
+              sloValue,
+              sloType,
+              whitelisted,
+              periodType,
+              initialPeriodId,
+              finalPeriodId,
+              extraData,
+              leverage,
+              initialTokenSupply,
+              initialTokenSupplyDivisor,
+              deployerStakeTimes,
+              notDeployerStakeTimes,
+            } = config;
+            const stakeAmount =
+              Number(initialTokenSupply) / initialTokenSupplyDivisor;
+            const stakeAmountTimesWei = (times) => toWei(String(stakeAmount * times));
+            const messenger: IMessenger = await ethers.getContract(
+              config.messengerContract
+            );
+            const ipfsHash = await getIPFSHash(serviceMetadata, stacktical.ipfs);
+            const stakeRegistryArtifact = await get(CONTRACT_NAMES.StakeRegistry);
+            const dslaTokenArtifact = await get(CONTRACT_NAMES.DSLA);
+            const slaRegistryArtifact = await get(CONTRACT_NAMES.SLARegistry);
+            const dslaTokenConfig = stacktical.tokens.find(
+              (token) => token.name === TOKEN_NAMES.DSLA
+            );
+            const dslaToken = await dslaTokenConfig.factory.connect(
+              dslaTokenArtifact.address,
+              signer
+            );
+            const stakeRegistry = await StakeRegistry__factory.connect(
+              stakeRegistryArtifact.address,
+              signer
+            );
+            const slaRegistry = await SLARegistry__factory.connect(
+              slaRegistryArtifact.address,
+              signer
+            );
+            console.log(
+              'Starting process 1: Allowance on Stake registry to deploy SLA'
+            );
+            const { dslaDepositByPeriod } =
+              await stakeRegistry.callStatic.getStakingParameters();
+            const dslaDeposit = toWei(
+              String(
+                Number(fromWei(dslaDepositByPeriod.toString())) *
+                  (finalPeriodId - initialPeriodId + 1)
+              )
+            );
+            let tx = await dslaToken.approve(stakeRegistry.address, dslaDeposit);
+            await tx.wait();
+      
+            console.log('Starting process 2: Deploy SLA');
+            tx = await slaRegistry.createSLA(
+              sloValue * Number(await messenger.messengerPrecision()),
+              sloType,
+              whitelisted,
+              messenger.address,
+              periodType,
+              initialPeriodId,
+              finalPeriodId,
+              ipfsHash,
+              extraData,
+              leverage,
+              {
+                ...(hre.network.config.gas !== 'auto' && {
+                  gasLimit: hre.network.config.gas,
+                }),
+              }
+            );
+            await tx.wait();
+      
+            const slaAddresses = await slaRegistry.userSLAs(deployer);
+            const sla = await SLA__factory.connect(
+              slaAddresses[slaAddresses.length - 1],
+              signer
+            );
+      
+            console.log(`SLA address: ${slaAddresses[slaAddresses.length - 1]}`);
+      
+            tx = await sla.addAllowedTokens(dslaToken.address);
+            await tx.wait();
+      
+            console.log('Starting process 3: Stake on Provider and User pools');
+      
+            const deployerStake = stakeAmountTimesWei(deployerStakeTimes);
+            console.log(
+              `Starting process 3.1: Provider: ${fromWei(deployerStake)} DSLA`
+            );
+            tx = await dslaToken.approve(sla.address, deployerStake);
+            await tx.wait();
+            tx = await sla.stakeTokens(deployerStake, dslaToken.address, 'long');
+            await tx.wait();
+            const notDeployerBalance = await dslaToken.callStatic.balanceOf(
+              notDeployer
+            );
+            const notDeployerStake = stakeAmountTimesWei(notDeployerStakeTimes);
+            if (fromWei(notDeployerStake) > fromWei(notDeployerBalance.toString())) {
+              tx = await dslaToken.transfer(notDeployer, notDeployerStake);
+              await tx.wait();
+            }
+            console.log(
+              `Starting process 3.2: User: ${fromWei(notDeployerStake)} DSLA`
+            );
+            tx = await dslaToken
+              .connect(await ethers.getSigner(notDeployer))
+              .approve(sla.address, notDeployerStake);
+            await tx.wait();
+            tx = await sla
+              .connect(await ethers.getSigner(notDeployer))
+              .stakeTokens(notDeployerStake, dslaToken.address, 'short');
+            await tx.wait();
+            printSeparator();
+          }
+
+
+        })(); // Close function
+
+      }); // Close promise
+
+      deploySLAPromises.push(deploySLAPromise)
+    //close the loop
+    }
+
+    console.log("BEFORE Promise.all -- Deploying SLA contracts")
+    await Promise.all(deploySLAPromises).then((results) => {
+      //const total = results.reduce((p, c) => p + c);
+      console.log(`Results: ${results}`);
+      console.log('SLA deployment process finished for good');
+    });
+
+    console.log("AFTER Promise.all --- ")
+
+  }
+);
+
 subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
   async (taskArgs, hre: HardhatRuntimeEnvironment) => {
     const {

@@ -42,11 +42,63 @@ export async function fixture() {
   await hre.run('stacktical:bootstrap', { network: 'develop' });
   consola.success('protocol bootstrapped ');
 
-  for (let index = 0; index < scripts.deploy_sla.length; index++) {
-    await hre.run(TASK_NAMES.DEPLOY_SLA, {
-      network: 'develop',
-      index: index.toString(),
-    });
-    consola.success(`deployed sla N: ${index}`);
+
+  const enableConcurrency = false
+  let concurrencyFromHere = false
+  let concurrencyFromSubtask = concurrencyFromHere ? false : true
+
+
+  if (!enableConcurrency){
+    // DEPLOY MULTIPLE SLA: SEQUENTIAL MODE
+    for (let index = 0; index < scripts.deploy_sla.length; index++) {
+      await hre.run(TASK_NAMES.DEPLOY_SLA, {
+        network: 'develop',
+        index: index.toString(),
+      });
+      consola.success(`deployed sla N: ${index}`);
+    }
   }
+  else{
+    // DEPLOY MULTIPLE SLA: CONCURRENCY MODE FROM SUBTASK
+    if (concurrencyFromSubtask){
+      await hre.run("DEPLOY_SLA_CONCURRENCY_ON", {
+        network: 'develop',
+      });
+    }
+
+    // DEPLOY MULTIPLE SLA: CONCURRENCY MODE FROM HERE
+    if (concurrencyFromHere){
+      let deploySLAPromises = []
+      for (let index = 0; index < scripts.deploy_sla.length; index++) {
+        let deploySLAPromise =  new Promise((resolve, reject) => {
+          (async () => {
+      
+            await hre.run(TASK_NAMES.DEPLOY_SLA, {
+              network: 'develop',
+              index: index.toString(),
+            });
+            consola.success(`deployed sla N: ${index}`);
+      
+            })(); // Close function
+          }); // Close promise
+        deploySLAPromises.push(deploySLAPromise)
+        //close the loop
+      }
+      
+      consola.info("BEFORE Promise.all -- Deploying SLA contracts")
+      await Promise.all(deploySLAPromises).then((results) => {
+        //const total = results.reduce((p, c) => p + c);
+        consola.info(`Results: ${results}`);
+        consola.info('Complete SLA deployment process finished');
+      });
+      consola.info("AFTER Promise.all --- ")
+
+    }
+
+
+  }
+
+
+
+
 }

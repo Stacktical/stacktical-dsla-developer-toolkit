@@ -27,6 +27,10 @@ describe('Fixtures', () => {
   });
 
   it('needs to be written', async () => {
+
+    console.log('needs to be written test')
+    console.log('allSLAs')
+    console.log(allSLAs)
     const sla: SLA = await ethers.getContractAt(CONTRACT_NAMES.SLA, allSLAs[0]);
   });
 });
