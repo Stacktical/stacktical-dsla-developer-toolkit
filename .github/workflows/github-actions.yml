@@ -9,6 +9,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 16
+          cache: npm
       - run: cp 'env-min' .env
         name: prepare-env
       - name: Install HH
