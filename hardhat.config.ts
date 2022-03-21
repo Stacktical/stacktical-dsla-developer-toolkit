@@ -29,6 +29,7 @@ const getEnabledNetworks = () =>
     );
 
 const config: HardhatUserConfig = {
+  defaultNetwork: 'develop',
   networks: getEnabledNetworks(),
   solidity: {
     compilers: [
@@ -96,6 +97,7 @@ const config: HardhatUserConfig = {
     spacing: 2,
   },
 };
+
 // extendEnvironment((env) => {
 //   networkFromConfig(env, env.network);
 // });
