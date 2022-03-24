@@ -25,6 +25,7 @@ interface BaseMessengerInterface extends ethers.utils.Interface {
     "fulfillSLI(bytes32,uint256)": FunctionFragment;
     "fulfillsCounter()": FunctionFragment;
     "jobId()": FunctionFragment;
+    "lpName()": FunctionFragment;
     "messengerPrecision()": FunctionFragment;
     "networkName()": FunctionFragment;
     "oracle()": FunctionFragment;
@@ -38,6 +39,7 @@ interface BaseMessengerInterface extends ethers.utils.Interface {
     "setChainlinkJobID(bytes32,uint256)": FunctionFragment;
     "setSLARegistry()": FunctionFragment;
     "slaRegistryAddress()": FunctionFragment;
+    "spName()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
   };
 
@@ -51,6 +53,7 @@ interface BaseMessengerInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "jobId", values?: undefined): string;
+  encodeFunctionData(functionFragment: "lpName", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "messengerPrecision",
     values?: undefined
@@ -97,6 +100,7 @@ interface BaseMessengerInterface extends ethers.utils.Interface {
     functionFragment: "slaRegistryAddress",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "spName", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [string]
@@ -109,6 +113,7 @@ interface BaseMessengerInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "jobId", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "lpName", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "messengerPrecision",
     data: BytesLike
@@ -149,6 +154,7 @@ interface BaseMessengerInterface extends ethers.utils.Interface {
     functionFragment: "slaRegistryAddress",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "spName", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
     data: BytesLike
@@ -162,6 +168,7 @@ interface BaseMessengerInterface extends ethers.utils.Interface {
     "OwnershipTransferred(address,address)": EventFragment;
     "SLIReceived(address,uint256,bytes32,bytes32)": EventFragment;
     "SLIRequested(address,uint256,bytes32)": EventFragment;
+    "TestEvent()": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "ChainlinkCancelled"): EventFragment;
@@ -171,6 +178,7 @@ interface BaseMessengerInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SLIReceived"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SLIRequested"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "TestEvent"): EventFragment;
 }
 
 export type ChainlinkCancelledEvent = TypedEvent<[string] & { id: string }>;
@@ -203,6 +211,8 @@ export type SLIRequestedEvent = TypedEvent<
     requestId: string;
   }
 >;
+
+export type TestEventEvent = TypedEvent<[] & {}>;
 
 export class BaseMessenger extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -260,6 +270,8 @@ export class BaseMessenger extends BaseContract {
 
     jobId(overrides?: CallOverrides): Promise<[string]>;
 
+    lpName(overrides?: CallOverrides): Promise<[string]>;
+
     messengerPrecision(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     networkName(overrides?: CallOverrides): Promise<[string]>;
@@ -309,6 +321,8 @@ export class BaseMessenger extends BaseContract {
 
     slaRegistryAddress(overrides?: CallOverrides): Promise<[string]>;
 
+    spName(overrides?: CallOverrides): Promise<[string]>;
+
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -326,6 +340,8 @@ export class BaseMessenger extends BaseContract {
   fulfillsCounter(overrides?: CallOverrides): Promise<BigNumber>;
 
   jobId(overrides?: CallOverrides): Promise<string>;
+
+  lpName(overrides?: CallOverrides): Promise<string>;
 
   messengerPrecision(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -374,6 +390,8 @@ export class BaseMessenger extends BaseContract {
 
   slaRegistryAddress(overrides?: CallOverrides): Promise<string>;
 
+  spName(overrides?: CallOverrides): Promise<string>;
+
   transferOwnership(
     newOwner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -391,6 +409,8 @@ export class BaseMessenger extends BaseContract {
     fulfillsCounter(overrides?: CallOverrides): Promise<BigNumber>;
 
     jobId(overrides?: CallOverrides): Promise<string>;
+
+    lpName(overrides?: CallOverrides): Promise<string>;
 
     messengerPrecision(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -436,6 +456,8 @@ export class BaseMessenger extends BaseContract {
     setSLARegistry(overrides?: CallOverrides): Promise<void>;
 
     slaRegistryAddress(overrides?: CallOverrides): Promise<string>;
+
+    spName(overrides?: CallOverrides): Promise<string>;
 
     transferOwnership(
       newOwner: string,
@@ -549,6 +571,10 @@ export class BaseMessenger extends BaseContract {
       [string, BigNumber, string],
       { caller: string; requestsCounter: BigNumber; requestId: string }
     >;
+
+    "TestEvent()"(): TypedEventFilter<[], {}>;
+
+    TestEvent(): TypedEventFilter<[], {}>;
   };
 
   estimateGas: {
@@ -563,6 +589,8 @@ export class BaseMessenger extends BaseContract {
     fulfillsCounter(overrides?: CallOverrides): Promise<BigNumber>;
 
     jobId(overrides?: CallOverrides): Promise<BigNumber>;
+
+    lpName(overrides?: CallOverrides): Promise<BigNumber>;
 
     messengerPrecision(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -611,6 +639,8 @@ export class BaseMessenger extends BaseContract {
 
     slaRegistryAddress(overrides?: CallOverrides): Promise<BigNumber>;
 
+    spName(overrides?: CallOverrides): Promise<BigNumber>;
+
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -629,6 +659,8 @@ export class BaseMessenger extends BaseContract {
     fulfillsCounter(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     jobId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    lpName(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     messengerPrecision(
       overrides?: CallOverrides
@@ -683,6 +715,8 @@ export class BaseMessenger extends BaseContract {
     slaRegistryAddress(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    spName(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     transferOwnership(
       newOwner: string,

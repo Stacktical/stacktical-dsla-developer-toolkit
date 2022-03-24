@@ -30,6 +30,16 @@
         "internalType": "bytes32",
         "name": "_networkName",
         "type": "bytes32"
+      },
+      {
+        "internalType": "string",
+        "name": "_lpName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_spName",
+        "type": "string"
       }
     ],
     "stateMutability": "nonpayable",
@@ -175,6 +185,12 @@
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [],
+    "name": "TestEvent",
+    "type": "event"
+  },
+  {
     "inputs": [],
     "name": "fee",
     "outputs": [
@@ -226,6 +242,19 @@
         "internalType": "bytes32",
         "name": "",
         "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "lpName",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
       }
     ],
     "stateMutability": "view",
@@ -425,6 +454,19 @@
         "internalType": "address",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "spName",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
       }
     ],
     "stateMutability": "view",

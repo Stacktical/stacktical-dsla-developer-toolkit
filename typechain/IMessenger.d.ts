@@ -133,10 +133,14 @@ interface IMessengerInterface extends ethers.utils.Interface {
   events: {
     "OwnershipTransferred(address,address)": EventFragment;
     "SLIReceived(address,uint256,bytes32,bytes32)": EventFragment;
+    "SLIRequested(address,uint256,bytes32)": EventFragment;
+    "TestEvent()": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SLIReceived"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SLIRequested"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "TestEvent"): EventFragment;
 }
 
 export type OwnershipTransferredEvent = TypedEvent<
@@ -151,6 +155,16 @@ export type SLIReceivedEvent = TypedEvent<
     chainlinkResponse: string;
   }
 >;
+
+export type SLIRequestedEvent = TypedEvent<
+  [string, BigNumber, string] & {
+    caller: string;
+    requestsCounter: BigNumber;
+    requestId: string;
+  }
+>;
+
+export type TestEventEvent = TypedEvent<[] & {}>;
 
 export class IMessenger extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -406,6 +420,28 @@ export class IMessenger extends BaseContract {
         chainlinkResponse: string;
       }
     >;
+
+    "SLIRequested(address,uint256,bytes32)"(
+      caller?: string | null,
+      requestsCounter?: null,
+      requestId?: null
+    ): TypedEventFilter<
+      [string, BigNumber, string],
+      { caller: string; requestsCounter: BigNumber; requestId: string }
+    >;
+
+    SLIRequested(
+      caller?: string | null,
+      requestsCounter?: null,
+      requestId?: null
+    ): TypedEventFilter<
+      [string, BigNumber, string],
+      { caller: string; requestsCounter: BigNumber; requestId: string }
+    >;
+
+    "TestEvent()"(): TypedEventFilter<[], {}>;
+
+    TestEvent(): TypedEventFilter<[], {}>;
   };
 
   estimateGas: {

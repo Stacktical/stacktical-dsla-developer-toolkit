@@ -58,6 +58,37 @@ const _abi = [
     type: "event",
   },
   {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "caller",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "requestsCounter",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "bytes32",
+        name: "requestId",
+        type: "bytes32",
+      },
+    ],
+    name: "SLIRequested",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [],
+    name: "TestEvent",
+    type: "event",
+  },
+  {
     inputs: [],
     name: "fee",
     outputs: [
