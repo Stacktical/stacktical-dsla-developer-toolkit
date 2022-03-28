@@ -42,6 +42,10 @@ export async function fixture() {
   await hre.run('stacktical:bootstrap', { network: 'develop' });
   consola.success('protocol bootstrapped ');
 
+  await hre.run(SUB_TASK_NAMES.DEPLOY_DETAILS, {
+    network: 'develop',
+  });
+
   for (let index = 0; index < scripts.deploy_sla.length; index++) {
     await hre.run(TASK_NAMES.DEPLOY_SLA, {
       network: 'develop',

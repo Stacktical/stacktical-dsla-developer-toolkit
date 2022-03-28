@@ -1,5 +1,5 @@
 /* eslint-disable no-await-in-loop, import/no-extraneous-dependencies */
-import { DeploymentsExtension } from 'hardhat-deploy/dist/types';
+import { DeploymentsExtension, DeployOptionsBase } from 'hardhat-deploy/dist/types';
 import { fromWei, numberToHex, toChecksumAddress, toWei } from 'web3-utils';
 import {
   deleteJob,
@@ -25,6 +25,8 @@ import {
   PreCoordinator,
   PreCoordinator__factory,
   SLA,
+  Details,
+  Details__factory,
   SLA__factory,
   SLARegistry,
   SLARegistry__factory,
@@ -96,6 +98,7 @@ export enum SUB_TASK_NAMES {
   GET_VALID_SLAS = 'GET_VALID_SLAS',
   GET_REVERT_MESSAGE = 'GET_REVERT_MESSAGE',
   DEPLOY_MESSENGER = 'DEPLOY_MESSENGER',
+  DEPLOY_DETAILS = 'DEPLOY_DETAILS',
   GET_MESSENGER = 'GET_MESSENGER',
   GET_START_STOP_PERIODS = 'GET_START_STOP_PERIODS',
   TRANSFER_OWNERSHIP = 'TRANSFER_OWNERSHIP',
@@ -1532,6 +1535,33 @@ subtask(SUB_TASK_NAMES.SET_CONTRACTS_ALLOWANCE, undefined).setAction(
       await tx.wait();
     }
     console.log('Allowance set to contracts');
+  }
+);
+
+subtask(SUB_TASK_NAMES.DEPLOY_DETAILS, undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    const {
+      deployments,
+      ethers,
+      getNamedAccounts,
+      network: {
+        config: {
+          stacktical: { scripts },
+        },
+      },
+    } = hre;
+    const { deployer } = await getNamedAccounts();
+    const { deploy, get } = deployments;
+
+    const baseOptions: DeployOptionsBase = {
+      from: deployer,
+      log: true,
+    };
+    console.log('Details deployment process started');
+    await deploy(CONTRACT_NAMES.Details, {
+      ...baseOptions
+    });
+    console.log('Details deployment process finished');
   }
 );
 
