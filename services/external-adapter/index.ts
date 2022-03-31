@@ -4,6 +4,7 @@ const axios = require('axios');
 const Web3 = require('web3');
 const { SLAABI, MessengerABI } = require('./abis');
 let web3Uri;
+let nextPeriod;
 
 type SLAData = {
   serviceName: string;
@@ -29,6 +30,7 @@ async function getSLAData(address): Promise<SLAData> {
   const ipfsCID = await slaContract.methods.ipfsHash().call();
   console.log(`SLA IPFS url: ${process.env.DEVELOP_IPFS_URI}/ipfs/${ipfsCID}`);
   const periodType = await slaContract.methods.periodType().call();
+  nextPeriod = await slaContract.methods.nextVerifiablePeriod().call();
   const messengerAddress = await slaContract.methods.messengerAddress().call();
   const { data } = await axios.get(
     `${process.env.IPFS_GATEWAY_URI}/ipfs/${ipfsCID}`
@@ -46,10 +48,20 @@ async function getSLI(requestData: RequestData) {
     slaData.messengerAddress
   );
   const precision = await messenger.methods.messengerPrecision().call();
-  // Just a random SLI, multiplied by 100 to get percentage
-  const sli = Math.random() * 100;
-  // times messenger precision to calculate on chain
-  return Math.floor(sli * precision);
+  if ((slaData.useTestExternalAdapter) &&
+    (slaData.sliMockingPlan !== undefined)){
+      console.log('Using pre specified mock sli');
+      const periodId = nextPeriod
+      const sli = slaData['sliMockingPlan'][nextPeriod]
+      console.log('mocking sli value ' + sli + ' for period ' + periodId)
+      return sli
+  }
+  else {
+    // Just a random SLI, multiplied by 100 to get percentage
+    const sli = Math.random() * 100;
+    // times messenger precision to calculate on chain
+    return Math.floor(sli * precision);
+  }
 }
 
 const app = express();
