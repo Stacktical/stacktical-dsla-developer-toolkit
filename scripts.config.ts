@@ -41,6 +41,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        useTestExternalAdapter: true,
+        sliMockingPlan: [98, 97, 95, 99, 91]
       },
     },
     // INDEX 1 | Should be HONORED
@@ -66,6 +68,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        useTestExternalAdapter: false,
+        sliMockingPlan:[],
       },
     },
     // INDEX 2 | Should be HONORED
@@ -91,6 +95,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        useTestExternalAdapter: false,
+        sliMockingPlan:[],
       },
     },
     // INDEX 3 | Should be BREACHED
@@ -116,6 +122,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        useTestExternalAdapter: false,
+        sliMockingPlan:[],
       },
     },
     // INDEX 4 | Should be HONORED
@@ -141,6 +149,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        useTestExternalAdapter: false,
+        sliMockingPlan:[],
       },
     },
     // INDEX 5 | Should be BREACHED
@@ -166,6 +176,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        useTestExternalAdapter: false,
+        sliMockingPlan:[],
       },
     },
     // INDEX 6 | Should be HONORED
@@ -191,6 +203,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        useTestExternalAdapter: false,
+        sliMockingPlan:[],
       },
     },
     // INDEX 7 | Should be BREACHED
@@ -216,6 +230,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        useTestExternalAdapter: false,
+        sliMockingPlan:[],
       },
     },
     // INDEX 8 | Should be HONORED
@@ -241,6 +257,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        useTestExternalAdapter: false,
+        sliMockingPlan:[],
       },
     },
     // INDEX 9 | Should be BREACHED
@@ -266,6 +284,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        useTestExternalAdapter: false,
+        sliMockingPlan:[],
       },
     },
     // INDEX 10 | Should be HONORED
@@ -291,6 +311,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        useTestExternalAdapter: false,
+        sliMockingPlan:[],
       },
     },
     // INDEX 11 | Should be BREACHED
@@ -316,6 +338,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        useTestExternalAdapter: false,
+        sliMockingPlan:[],
       },
     },
     // INDEX 12
@@ -341,6 +365,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://www.federalreserve.gov/',
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
+        useTestExternalAdapter: false,
+        sliMockingPlan:[],
       },
     },
     // INDEX 13
@@ -366,6 +392,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://www.federalreserve.gov/',
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
+        useTestExternalAdapter: false,
+        sliMockingPlan:[],
       },
     },
     // INDEX 14
@@ -391,6 +419,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://www.federalreserve.gov/',
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
+        useTestExternalAdapter: false,
+        sliMockingPlan:[],
       },
     },
     // INDEX 15
@@ -416,6 +446,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://www.federalreserve.gov/',
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
+        useTestExternalAdapter: false,
+        sliMockingPlan:[],
       },
     },
     // INDEX 16
@@ -441,6 +473,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://www.federalreserve.gov/',
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
+        useTestExternalAdapter: false,
+        sliMockingPlan:[],
       },
     }
   ],

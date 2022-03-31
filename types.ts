@@ -103,6 +103,8 @@ export type DeploySLAConfiguration = {
     serviceURL: string;
     serviceAddress: string;
     serviceTicker: string;
+    useTestExternalAdapter: boolean;
+    sliMockingPlan: Array<number>;
   };
   sloValue: number;
   sloType: SLO_TYPE;
