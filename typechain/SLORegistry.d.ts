@@ -21,12 +21,17 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface SLORegistryInterface extends ethers.utils.Interface {
   functions: {
+    "getDeviation(uint256,address,uint256)": FunctionFragment;
     "isRespected(uint256,address)": FunctionFragment;
     "registerSLO(uint256,uint8,address)": FunctionFragment;
     "registeredSLO(address)": FunctionFragment;
     "setSLARegistry()": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "getDeviation",
+    values: [BigNumberish, string, BigNumberish]
+  ): string;
   encodeFunctionData(
     functionFragment: "isRespected",
     values: [BigNumberish, string]
@@ -44,6 +49,10 @@ interface SLORegistryInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "getDeviation",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "isRespected",
     data: BytesLike
@@ -120,6 +129,13 @@ export class SLORegistry extends BaseContract {
   interface: SLORegistryInterface;
 
   functions: {
+    getDeviation(
+      _sli: BigNumberish,
+      _slaAddress: string,
+      _precision: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     isRespected(
       _value: BigNumberish,
       _slaAddress: string,
@@ -142,6 +158,13 @@ export class SLORegistry extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
+
+  getDeviation(
+    _sli: BigNumberish,
+    _slaAddress: string,
+    _precision: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   isRespected(
     _value: BigNumberish,
@@ -166,6 +189,13 @@ export class SLORegistry extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    getDeviation(
+      _sli: BigNumberish,
+      _slaAddress: string,
+      _precision: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     isRespected(
       _value: BigNumberish,
       _slaAddress: string,
@@ -208,6 +238,13 @@ export class SLORegistry extends BaseContract {
   };
 
   estimateGas: {
+    getDeviation(
+      _sli: BigNumberish,
+      _slaAddress: string,
+      _precision: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     isRespected(
       _value: BigNumberish,
       _slaAddress: string,
@@ -229,6 +266,13 @@ export class SLORegistry extends BaseContract {
   };
 
   populateTransaction: {
+    getDeviation(
+      _sli: BigNumberish,
+      _slaAddress: string,
+      _precision: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     isRespected(
       _value: BigNumberish,
       _slaAddress: string,

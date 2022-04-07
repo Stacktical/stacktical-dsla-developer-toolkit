@@ -2,6 +2,7 @@ import {
   appRoot,
   CONTRACT_NAMES,
   PERIOD_TYPE,
+  SERVICE_CREDITS,
   TOKEN_NAMES,
   USE_CASES,
 } from '../constants';
@@ -72,13 +73,13 @@ export const rinkeby: NetworkUserConfig = {
       ethWsUrl: process.env.RINKEBY_WS_URI,
       ethHttpUrl: process.env.RINKEBY_URI,
       nodesConfiguration: [
-          {
-            name: 'newyork',
-            restApiUrl: process.env.RINKEBY_CHAINLINK_NODE_1_URL,
-            restApiPort: process.env.RINKEBY_CHAINLINK_NODE_1_PORT,
-            email: process.env.RINKEBY_CHAINLINK_NODE_1_USER,
-            password: process.env.RINKEBY_CHAINLINK_NODE_1_PASS,
-          },
+        {
+          name: 'newyork',
+          restApiUrl: process.env.RINKEBY_CHAINLINK_NODE_1_URL,
+          restApiPort: process.env.RINKEBY_CHAINLINK_NODE_1_PORT,
+          email: process.env.RINKEBY_CHAINLINK_NODE_1_USER,
+          password: process.env.RINKEBY_CHAINLINK_NODE_1_PASS,
+        },
       ],
     },
     addresses: {
@@ -120,16 +121,22 @@ export const rinkeby: NetworkUserConfig = {
         contract: CONTRACT_NAMES.SEMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
+        dslaLpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP,
+        dslaSpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP,
       },
       {
         contract: CONTRACT_NAMES.SEAMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
+        dslaLpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP,
+        dslaSpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP,
       },
       {
         contract: CONTRACT_NAMES.CPIMessenger,
         useCaseName: USE_CASES.INFLATION,
         externalAdapterUrl: process.env.INFLATION_INDEXER_URI,
+        dslaLpName: SERVICE_CREDITS.INFLATION_RATE.DSLA_LP,
+        dslaSpName: SERVICE_CREDITS.INFLATION_RATE.DSLA_SP,
       },
     ],
     scripts: scripts,
