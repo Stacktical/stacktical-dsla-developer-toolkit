@@ -130,4 +130,28 @@ export enum PARAMS_NAMES {
   INDEX = 'index',
   TRANSACTION_HASH = 'transactionHash',
 }
+
+export const SERVICE_CREDITS = {
+  STAKING_REWARDS: {
+    DSLA_LP: 'APR.ok',
+    DSLA_SP: 'APR.ko'
+  },
+  PROVIDER_UPTIME: {
+    DSLA_LP: 'UPTIME.ok',
+    DSLA_SP: 'UPTIME.ko'
+  },
+  DIGITAL_ASSET_PEG: {
+    DSLA_LP: 'PEG.ok',
+    DSLA_SP: 'PEG.ko'
+  },
+  DIGITAL_ASSET_FLOOR: {
+    DSLA_LP: 'FLOOR.ok',
+    DSLA_SP: 'FLOOR.ko'
+  },
+  INFLATION_RATE: {
+    DSLA_LP: 'INFLATION.ok',
+    DSLA_SP: 'INFLATION.ko'
+  }
+}
+
 export const appRoot = require('app-root-path');

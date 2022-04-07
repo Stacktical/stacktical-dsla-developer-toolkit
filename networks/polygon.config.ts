@@ -2,6 +2,7 @@ import {
   appRoot,
   CONTRACT_NAMES,
   PERIOD_TYPE,
+  SERVICE_CREDITS,
   TOKEN_NAMES,
   USE_CASES,
 } from '../constants';
@@ -32,8 +33,8 @@ export const polygon: NetworkUserConfig = {
   //gas: 10000000,
   //accounts: [process.env.PRIV_KEY],
   accounts: {
-     mnemonic: process.env.MAINNET_MNEMONIC,
-   },
+    mnemonic: process.env.MAINNET_MNEMONIC,
+  },
   url: process.env.POLYGON_URI,
   stacktical: {
     deployTokens: false,
@@ -151,16 +152,22 @@ export const polygon: NetworkUserConfig = {
         contract: CONTRACT_NAMES.SEMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
+        dslaLpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP,
+        dslaSpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP,
       },
       {
         contract: CONTRACT_NAMES.SEAMessenger,
         useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
+        dslaLpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP,
+        dslaSpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP,
       },
       {
         contract: CONTRACT_NAMES.CPIMessenger,
         useCaseName: USE_CASES.INFLATION,
         externalAdapterUrl: process.env.INFLATION_INDEXER_URI,
+        dslaLpName: SERVICE_CREDITS.INFLATION_RATE.DSLA_LP,
+        dslaSpName: SERVICE_CREDITS.INFLATION_RATE.DSLA_SP,
       },
     ],
     scripts: scripts,

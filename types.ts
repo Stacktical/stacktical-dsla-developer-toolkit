@@ -93,6 +93,8 @@ export type MessengerConfiguration = {
   contract: CONTRACT_NAMES;
   useCaseName: USE_CASES;
   externalAdapterUrl: string;
+  dslaLpName: string;
+  dslaSpName: string;
 };
 
 export type DeploySLAConfiguration = {

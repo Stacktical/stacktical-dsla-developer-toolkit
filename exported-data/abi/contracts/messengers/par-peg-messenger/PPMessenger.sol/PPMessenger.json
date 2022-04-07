@@ -30,6 +30,16 @@
         "internalType": "bytes32",
         "name": "_networkName",
         "type": "bytes32"
+      },
+      {
+        "internalType": "string",
+        "name": "_lpName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_spName",
+        "type": "string"
       }
     ],
     "stateMutability": "nonpayable",
@@ -233,6 +243,19 @@
   },
   {
     "inputs": [],
+    "name": "lpName",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "messengerPrecision",
     "outputs": [
       {
@@ -425,6 +448,19 @@
         "internalType": "address",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "spName",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
       }
     ],
     "stateMutability": "view",
