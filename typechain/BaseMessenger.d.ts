@@ -168,7 +168,6 @@ interface BaseMessengerInterface extends ethers.utils.Interface {
     "OwnershipTransferred(address,address)": EventFragment;
     "SLIReceived(address,uint256,bytes32,bytes32)": EventFragment;
     "SLIRequested(address,uint256,bytes32)": EventFragment;
-    "TestEvent()": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "ChainlinkCancelled"): EventFragment;
@@ -178,7 +177,6 @@ interface BaseMessengerInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SLIReceived"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SLIRequested"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "TestEvent"): EventFragment;
 }
 
 export type ChainlinkCancelledEvent = TypedEvent<[string] & { id: string }>;
@@ -211,8 +209,6 @@ export type SLIRequestedEvent = TypedEvent<
     requestId: string;
   }
 >;
-
-export type TestEventEvent = TypedEvent<[] & {}>;
 
 export class BaseMessenger extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -571,10 +567,6 @@ export class BaseMessenger extends BaseContract {
       [string, BigNumber, string],
       { caller: string; requestsCounter: BigNumber; requestId: string }
     >;
-
-    "TestEvent()"(): TypedEventFilter<[], {}>;
-
-    TestEvent(): TypedEventFilter<[], {}>;
   };
 
   estimateGas: {

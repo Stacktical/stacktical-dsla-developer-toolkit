@@ -58,37 +58,6 @@ const _abi = [
     type: "event",
   },
   {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "caller",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "requestsCounter",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "bytes32",
-        name: "requestId",
-        type: "bytes32",
-      },
-    ],
-    name: "SLIRequested",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [],
-    name: "TestEvent",
-    type: "event",
-  },
-  {
     inputs: [],
     name: "fee",
     outputs: [
@@ -140,6 +109,19 @@ const _abi = [
         internalType: "bytes32",
         name: "",
         type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "lpName",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
       },
     ],
     stateMutability: "view",
@@ -283,6 +265,19 @@ const _abi = [
         internalType: "address",
         name: "",
         type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "spName",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
       },
     ],
     stateMutability: "view",

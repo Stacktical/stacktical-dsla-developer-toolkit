@@ -185,12 +185,6 @@
     "type": "event"
   },
   {
-    "anonymous": false,
-    "inputs": [],
-    "name": "TestEvent",
-    "type": "event"
-  },
-  {
     "inputs": [],
     "name": "fee",
     "outputs": [

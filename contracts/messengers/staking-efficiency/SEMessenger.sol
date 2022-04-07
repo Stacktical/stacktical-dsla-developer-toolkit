@@ -32,8 +32,8 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
     bool private retry = false;
     bytes32 public networkName;
 
-    string public lpName;
-    string public spName;
+    string public override lpName;
+    string public override spName;
 
     constructor(
         address _messengerChainlinkOracle,
