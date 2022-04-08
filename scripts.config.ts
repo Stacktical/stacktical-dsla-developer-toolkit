@@ -442,6 +442,31 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
       },
+    },
+    // INDEX 17, Contract for IT staking tests: Not Respected case
+    {
+      sloValue: 90,
+      sloType: SLO_TYPE.GreaterThan, // You want less inflation :)
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.CPIMessenger,
+      initialPeriodId: 0,
+      finalPeriodId: 5,
+      extraData: [],
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 100,
+      deployerStakeTimes: 100,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Staking Integration test moked Not Respected case',
+        serviceDescription:
+          'The U.S. Federal Reserve (FED) inflation-driven monetary policy updates.',
+        serviceImage: 'https://via.placeholder.com/1200x600',
+        serviceURL: 'https://www.federalreserve.gov/',
+        serviceAddress: '0x0000000000000000000000000000000000000000',
+        serviceTicker: 'CPI',
+      },
     }
   ],
 };
