@@ -32,13 +32,18 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
     bool private retry = false;
     bytes32 public networkName;
 
+    string public override lpName;
+    string public override spName;
+
     constructor(
         address _messengerChainlinkOracle,
         address _messengerChainlinkToken,
         uint256 _feeMultiplier,
         PeriodRegistry _periodRegistry,
         StakeRegistry _stakeRegistry,
-        bytes32 _networkName
+        bytes32 _networkName,
+        string memory _lpName,
+        string memory _spName
     ) public {
         setChainlinkToken(_messengerChainlinkToken);
         _oracle = _messengerChainlinkOracle;
@@ -46,6 +51,8 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
         periodRegistry = _periodRegistry;
         stakeRegistry = _stakeRegistry;
         networkName = _networkName;
+        lpName = _lpName;
+        spName = _spName;
     }
 
     event JobIdModified(address indexed owner, bytes32 jobId, uint256 fee);

@@ -2,6 +2,7 @@ import {
   appRoot,
   CONTRACT_NAMES,
   PERIOD_TYPE,
+  SERVICE_CREDITS,
   TOKEN_NAMES,
   USE_CASES,
 } from '../constants';
@@ -118,11 +119,15 @@ export const develop: NetworkUserConfig = {
         contract: CONTRACT_NAMES.BaseMessenger,
         useCaseName: USE_CASES.BASE_MESSENGER,
         externalAdapterUrl: 'http://host.docker.internal:6070',
+        dslaLpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP,
+        dslaSpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP,
       },
       {
         contract: CONTRACT_NAMES.CPIMessenger, //  Name of the Messenger
         useCaseName: USE_CASES.INFLATION, // Name of the Use-Case
         externalAdapterUrl: process.env.DEVELOP_INDEXER_URI, // Your local serverless endpoint
+        dslaLpName: SERVICE_CREDITS.INFLATION_RATE.DSLA_LP,
+        dslaSpName: SERVICE_CREDITS.INFLATION_RATE.DSLA_SP,
       },
       /*
       {

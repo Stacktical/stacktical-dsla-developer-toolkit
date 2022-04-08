@@ -404,9 +404,8 @@ subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
             case /ETH_URL/.test(envVariable):
               return `ETH_URL=${stacktical.chainlink.ethWsUrl}`;
             case /ETH_HTTP_URL/.test(envVariable):
-              return `ETH_HTTP_URL=${
-                stacktical.chainlink.ethHttpUrl || (network.config as any).url
-              }`;
+              return `ETH_HTTP_URL=${stacktical.chainlink.ethHttpUrl || (network.config as any).url
+                }`;
             case /CHAINLINK_PORT/.test(envVariable):
               return `CHAINLINK_PORT=${node.restApiPort}`;
             default:
@@ -1065,21 +1064,21 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
           currentStakingParameters.DSLAburnRate,
           (stakingParameters.dslaDepositByPeriod &&
             toWei(stakingParameters.dslaDepositByPeriod)) ||
-            currentStakingParameters.dslaDepositByPeriod,
+          currentStakingParameters.dslaDepositByPeriod,
           (stakingParameters.dslaPlatformReward &&
             toWei(stakingParameters.dslaPlatformReward)) ||
-            currentStakingParameters.dslaPlatformReward,
+          currentStakingParameters.dslaPlatformReward,
           (stakingParameters.dslaMessengerReward &&
             toWei(stakingParameters.dslaMessengerReward)) ||
-            currentStakingParameters.dslaMessengerReward,
+          currentStakingParameters.dslaMessengerReward,
           (stakingParameters.dslaUserReward &&
             toWei(stakingParameters.dslaUserReward)) ||
-            currentStakingParameters.dslaUserReward,
+          currentStakingParameters.dslaUserReward,
           (stakingParameters.dslaBurnedByVerification &&
             toWei(stakingParameters.dslaBurnedByVerification)) ||
-            currentStakingParameters.dslaBurnedByVerification,
+          currentStakingParameters.dslaBurnedByVerification,
           stakingParameters.maxTokenLength ||
-            currentStakingParameters.maxTokenLength,
+          currentStakingParameters.maxTokenLength,
           stakingParameters.maxLeverage || currentStakingParameters.maxLeverage,
           stakingParameters.burnDSLA !== undefined
             ? stakingParameters.burnDSLA
@@ -1097,22 +1096,22 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
         console.log('DSLAburnRate: ' + newParameters.DSLAburnRate.toString());
         console.log(
           'dslaDepositByPeriod: ' +
-            fromWei(newParameters.dslaDepositByPeriod.toString())
+          fromWei(newParameters.dslaDepositByPeriod.toString())
         );
         console.log(
           'dslaPlatformReward: ' +
-            fromWei(newParameters.dslaPlatformReward.toString())
+          fromWei(newParameters.dslaPlatformReward.toString())
         );
         console.log(
           'dslaMessengerReward: ' +
-            fromWei(newParameters.dslaMessengerReward.toString())
+          fromWei(newParameters.dslaMessengerReward.toString())
         );
         console.log(
           'dslaUserReward: ' + fromWei(newParameters.dslaUserReward.toString())
         );
         console.log(
           'dslaBurnedByVerification: ' +
-            fromWei(newParameters.dslaBurnedByVerification.toString())
+          fromWei(newParameters.dslaBurnedByVerification.toString())
         );
         console.log(
           'maxTokenLength: ' + newParameters.maxTokenLength.toString()
@@ -1227,6 +1226,8 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
         periodRegistry.address,
         stakeRegistry.address,
         formatBytes32String(network.name),
+        messenger.dslaLpName,
+        messenger.dslaSpName,
       ],
       libraries: {
         StringUtils: stringUtils.address,
@@ -1235,8 +1236,8 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
     if (deployedMessenger.newlyDeployed) {
       consola.success(
         messenger.contract +
-          ' successfully deployed at ' +
-          deployedMessenger.address
+        ' successfully deployed at ' +
+        deployedMessenger.address
       );
     } else {
       consola.warn(
@@ -1265,7 +1266,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
       await tx.wait();
       consola.success(
         messenger.contract +
-          ' messenger successfully registered on the MessengerRegistry'
+        ' messenger successfully registered on the MessengerRegistry'
       );
       await hre.run(SUB_TASK_NAMES.SET_PRECOORDINATOR, {
         index: taskArgs.index,
@@ -1317,23 +1318,23 @@ subtask(SUB_TASK_NAMES.GET_START_STOP_PERIODS, undefined).setAction(
       );
       const periodDefinitions = await periodRegistry.getPeriodDefinitions();
 
-      const currentStartsDate = periodDefinitions[periodType].starts.map((start) => moment(Number(start)*1000).unix());
-      const currentEndsDate = periodDefinitions[periodType].ends.map((end) => moment(Number(end)*1000).unix());
+      const currentStartsDate = periodDefinitions[periodType].starts.map((start) => moment(Number(start) * 1000).unix());
+      const currentEndsDate = periodDefinitions[periodType].ends.map((end) => moment(Number(end) * 1000).unix());
 
       const periodStartsDate = currentStartsDate.map((date) =>
-      moment(date * 1000)
-        .utc(0)
-        .format('DD/MM/YYYY HH:mm:ss')
+        moment(date * 1000)
+          .utc(0)
+          .format('DD/MM/YYYY HH:mm:ss')
       );
       const periodEndsDate = currentEndsDate.map((date) =>
-      moment(date * 1000)
-        .utc(0)
-        .format('DD/MM/YYYY HH:mm:ss')
+        moment(date * 1000)
+          .utc(0)
+          .format('DD/MM/YYYY HH:mm:ss')
       );
 
       console.log(
         'The ' + PERIOD_TYPE[periodType] + ' period type range is:',
-        "\n From ", periodStartsDate.at(0), "\n Until",periodEndsDate.at(-1)
+        "\n From ", periodStartsDate.at(0), "\n Until", periodEndsDate.at(-1)
       );
 
     }
@@ -1356,8 +1357,8 @@ subtask(SUB_TASK_NAMES.ADD_DATES_TO_PERIOD, undefined).setAction(
     const { get } = deployments;
 
     console.log('Starting automated jobs to extend dates of ' +
-    CONTRACT_NAMES.PeriodRegistry +
-    ' contract...');
+      CONTRACT_NAMES.PeriodRegistry +
+      ' contract...');
 
     const periodRegistryArtifact = await get(CONTRACT_NAMES.PeriodRegistry);
     const periodRegistry = await PeriodRegistry__factory.connect(
@@ -1375,8 +1376,8 @@ subtask(SUB_TASK_NAMES.ADD_DATES_TO_PERIOD, undefined).setAction(
 
       const periodDefinitions = await periodRegistry.getPeriodDefinitions();
 
-      const currentStartsDate = periodDefinitions[periodType].starts.map((start) => moment(Number(start)*1000).unix());
-      const currentEndsDate = periodDefinitions[periodType].ends.map((end) => moment(Number(end)*1000).unix());
+      const currentStartsDate = periodDefinitions[periodType].starts.map((start) => moment(Number(start) * 1000).unix());
+      const currentEndsDate = periodDefinitions[periodType].ends.map((end) => moment(Number(end) * 1000).unix());
 
       // New Date list from the last date that had been initialized
       var [periodStarts, periodEnds] = addPeriods(
@@ -1386,35 +1387,35 @@ subtask(SUB_TASK_NAMES.ADD_DATES_TO_PERIOD, undefined).setAction(
       );
 
       console.log(
-        "Current dates in Registry: \n",currentStartsDate, "\n",currentEndsDate,
+        "Current dates in Registry: \n", currentStartsDate, "\n", currentEndsDate,
         "\n+ ...adding ", periodStarts.length, " period(s) from:", currentEndsDate.at(-1),
-        "(", moment(currentEndsDate.at(-1) * 1000).utc(0).format('DD/MM/YYYY HH:mm:ss'),") \n"
+        "(", moment(currentEndsDate.at(-1) * 1000).utc(0).format('DD/MM/YYYY HH:mm:ss'), ") \n"
       );
 
       const periodStartsDate = periodStarts.map((date) =>
-      moment(date * 1000)
-        .utc(0)
-        .format('DD/MM/YYYY HH:mm:ss')
+        moment(date * 1000)
+          .utc(0)
+          .format('DD/MM/YYYY HH:mm:ss')
       );
       const periodEndsDate = periodEnds.map((date) =>
-      moment(date * 1000)
-        .utc(0)
-        .format('DD/MM/YYYY HH:mm:ss')
+        moment(date * 1000)
+          .utc(0)
+          .format('DD/MM/YYYY HH:mm:ss')
       );
 
       // Diffs the start/end date arrays
       periodStarts = periodStarts.filter((date) => !currentStartsDate.includes(date));
       periodEnds = periodEnds.filter((date) => !currentEndsDate.includes(date));
 
-      if (periodStarts.length ===  0 || periodEnds.length === 0 ) {
+      if (periodStarts.length === 0 || periodEnds.length === 0) {
         console.log("No changes to be made!")
       } else {
         console.log(
           'Adding the following new dates to ' + PERIOD_TYPE[periodType] + ' period type:',
-          "\n Start: ", periodStarts, periodStartsDate ,
-           "\n End: ",periodEnds, periodEndsDate ,
+          "\n Start: ", periodStarts, periodStartsDate,
+          "\n End: ", periodEnds, periodEndsDate ,
         );
-        
+
         let tx = await periodRegistry.addPeriodsToPeriodType(
           periodType,
           periodStarts,
@@ -1514,12 +1515,12 @@ subtask(SUB_TASK_NAMES.SET_CONTRACTS_ALLOWANCE, undefined).setAction(
     for (let tokenAllowance of allowance) {
       console.log(
         'Setting allowance of ' +
-          tokenAllowance.allowance +
-          ' ' +
-          tokenAllowance.token +
-          ' for ' +
-          tokenAllowance.contract +
-          '  '
+        tokenAllowance.allowance +
+        ' ' +
+        tokenAllowance.token +
+        ' for ' +
+        tokenAllowance.contract +
+        '  '
       );
       const token = await ERC20__factory.connect(
         (
@@ -1642,7 +1643,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       const dslaDeposit = toWei(
         String(
           Number(fromWei(dslaDepositByPeriod.toString())) *
-            (finalPeriodId - initialPeriodId + 1)
+          (finalPeriodId - initialPeriodId + 1)
         )
       );
       let tx = await dslaToken.approve(stakeRegistry.address, dslaDeposit);
@@ -1739,7 +1740,7 @@ subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
     const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
     console.log(
       'Starting SLI request process for period ' +
-        nextVerifiablePeriod.toString()
+      nextVerifiablePeriod.toString()
     );
     console.log(`SLA address: ${slaAddress}`);
     const ownerApproval = true;
@@ -1793,7 +1794,7 @@ subtask(SUB_TASK_NAMES.GET_PRECOORDINATOR, undefined).setAction(
     const events = await precoordinator.queryFilter(
       eventsFilter,
       (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
-        undefined
+      undefined
     );
     for (let event of events) {
       printSeparator();
@@ -1802,8 +1803,8 @@ subtask(SUB_TASK_NAMES.GET_PRECOORDINATOR, undefined).setAction(
       console.log('Service agreement ID: ' + saId);
       console.log(
         'Service agreement payment: ' +
-          ethers.utils.formatEther(payment) +
-          ' LINK'
+        ethers.utils.formatEther(payment) +
+        ' LINK'
       );
       console.log('Service agreement minresponses: ' + minresponses);
       const serviceAgreement = await precoordinator.getServiceAgreement(saId);
@@ -1922,7 +1923,7 @@ subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
     let events = await precoordinator.queryFilter(
       eventFilter,
       (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
-        undefined
+      undefined
     );
     const lastEvent = events.slice(-1)[0];
     const { saId } = lastEvent.args;
@@ -1958,9 +1959,9 @@ subtask(SUB_TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE, undefined).setAction(
     for (let tokenAllowance of allowance) {
       console.log(
         'Getting allowance of ' +
-          tokenAllowance.token +
-          ' for ' +
-          tokenAllowance.contract
+        tokenAllowance.token +
+        ' for ' +
+        tokenAllowance.contract
       );
       const token = await ERC20__factory.connect(
         (
