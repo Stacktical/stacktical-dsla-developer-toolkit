@@ -24,8 +24,6 @@ import {
 
 const consola = require('consola');
 
-//describe("DSLA Protocol Staking Simulation - v1.5", function () {
-
 describe('DSLA Protocol Staking Simulation - v1.5', () => {
   const { network, deployments, ethers, getNamedAccounts, getUnnamedAccounts } = hre;
   const { get } = deployments;
@@ -49,7 +47,6 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
   let user_2_account;
   let user_3_account;
 
-
   // Stacking constants INITIAL
   // PROVIDERS BALANCE
   let initialStakeBalanceProvider1 = 2500;
@@ -65,7 +62,6 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
   let initialUserPool = 180000;
   let initialTotalStake = 565500;
   let initialNumberOfStakers = 6;
-
 
   // Stacking constants P1
   // PROVIDERS BALANCE
@@ -127,7 +123,6 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
   let P4TotalStake = 565500;
   let P4NumberOfStakers = 6;
 
-
     // Stacking constants P5
   // PROVIDERS BALANCE
   let P5StakeBalanceProvider1 = 100;
@@ -142,11 +137,6 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
   let P5UserPool = 565500; 
   let P5TotalStake = 565500;
   let P5NumberOfStakers = 6;
-
-  //
-  /*let currentProviderPool: InstanceType<typeof BigNumber>;
-  let currentUsersPool: InstanceType<typeof BigNumber>;
-  let currentTotalStake: InstanceType<typeof BigNumber>;*/
 
   let currentProviderPool: BigNumber = BigNumber.from("0");
   let currentUsersPool: BigNumber = BigNumber.from("0");
@@ -185,8 +175,7 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
     allSLAs = await slaRegistry.allSLAs();
     _sloRegistry = await slaRegistry.sloRegistry();
 
-    //console.log('DSLA Protocol Staking Simulation - v1.5 initial test')
-    sla = await ethers.getContractAt(CONTRACT_NAMES.SLA, allSLAs[0]); // get the contract INDEX 17, Contract for IT staking tests: Not Respected case
+    sla = await ethers.getContractAt(CONTRACT_NAMES.SLA, allSLAs[17]); // get the contract INDEX 17, Contract for IT staking tests: Not Respected case
     details = await ethers.getContract(CONTRACT_NAMES.Details);
     signersAccounts = await hre.ethers.getSigners();
 
@@ -309,11 +298,6 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
     let stakersLengthFromDd = slaDynamicDetails.stakersCount.toString();
     console.log("stakersLengthFromDd : " + stakersLengthFromDd);
     
-    // GETTING MESSENGER
-    /*const messengerAddress = await sla.messengerAddress();
-    const messengerContract: SEAMessenger = await ethers.getContractAt(CONTRACT_NAMES.SEAMessenger, messengerAddress);*/
-    
-    // REQUEST SLI
     slaRegistry = await SLARegistry__factory.connect(
       (
         await get(CONTRACT_NAMES.SLARegistry)
@@ -396,7 +380,7 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
     describe("P1", function () {
       describe("request SLI P1", function () {
         it('Shoud perform a succesful request SLI for P1', async function () {
-          console.log("request SLI P1")
+          
           //console.log('-----------------------------------------------------------');
           //console.log('Requesting SLI for P1...');
           const ownerApproval = true;
@@ -408,7 +392,8 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
           const periodId_p1 = 0//Number(0)
           const usersStake = 10
           const expectedCompensation = 100
-    
+        
+          console.log("request SLI P1")
           tx = await slaRegistry.requestSLI(
             periodId_p1,
             sla.address,
