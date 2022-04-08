@@ -2,13 +2,10 @@ import { expect } from 'chai';
 import { loadFixture } from 'ethereum-waffle';
 import { fixture } from '../fixtures/basic';
 
-
 const hre = require('hardhat');
 //const { ethers } = hre;
 
 import { BigNumber} from "@ethersproject/bignumber";
-
-
 
 import {
   CONTRACT_NAMES,
@@ -68,11 +65,6 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
   let initialUserPool = 180000;
   let initialTotalStake = 565500;
   let initialNumberOfStakers = 6;
-
-
-  //  
-
-
 
 
   // Stacking constants P1
@@ -175,7 +167,6 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
 
   let slaStaticDetailsP1: any;
 
-
   before(async function () {
     this.timeout(0);
     await loadFixture(fixture);
@@ -194,10 +185,8 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
     allSLAs = await slaRegistry.allSLAs();
     _sloRegistry = await slaRegistry.sloRegistry();
 
-
-    console.log("test phase -2");
     //console.log('DSLA Protocol Staking Simulation - v1.5 initial test')
-    sla = await ethers.getContractAt(CONTRACT_NAMES.SLA, allSLAs[0]);
+    sla = await ethers.getContractAt(CONTRACT_NAMES.SLA, allSLAs[0]); // get the contract INDEX 17, Contract for IT staking tests: Not Respected case
     details = await ethers.getContract(CONTRACT_NAMES.Details);
     signersAccounts = await hre.ethers.getSigners();
 
@@ -308,7 +297,6 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
 
     consola.info('Initial DONE');
 
-
     let slaDetails = await details.getSLADetailsArrays(sla.address);
     let slaDynamicDetails = await details.getSLADynamicDetails(sla.address);
     console.log("slaDetails INIT");
@@ -341,9 +329,6 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
     currentUsersPool = slaDetailsP0.tokensStake[0].usersPool;
     currentTotalStake = slaDetailsP0.tokensStake[0].totalStake;
 
-
-
-
   });
 
   it('needs to be written', async () => {
@@ -351,16 +336,6 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
   });
 
     describe("Initial P0", function () {
-
-      // Initial tests preperation
-      /*describe("P0 tests preperation", function () {
-        before(async function () {
-          //console.log('Before Initial P0')
-
-
-
-        });
-      });*/
 
       describe("P0 tests execution", function () {
 
@@ -417,28 +392,6 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
       });
     })
 
-    // Initial tests
-    /*
-    it('Initial P0', async () => {
-
-      consola.info("currentProviderPool: " + currentProviderPool.toString());
-      consola.info("currentUsersPool: " + currentUsersPool.toString());
-      consola.info("currentTotalStake: " + currentTotalStake.toString());
-
-      // StakersLength should be equal to initialNumberOfStakers
-      /*describe('StakersLength should be equal to initialNumberOfStakers', function () {
-      });
-
-      //expect(stakersLength).equals(initialNumberOfStakers);
-      // Total Provider Pool should be equal to initialized value
-      //expect(initialProviderPool.toString()).equals(currentProviderPool.toString());
-      // Total User Pool should be equal to initialized value
-      //expect(initialUserPool.toString()).equals(currentUsersPool.toString());
-      // Total Liquidity Pool should be equal to initialized value
-      //expect(initialTotalStake.toString()).equals(currentTotalStake.toString());
-
-    });*/
-
     // P1 tests
     describe("P1", function () {
       describe("request SLI P1", function () {
@@ -485,7 +438,9 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
           slaStaticDetailsP1 = await details.getSLAStaticDetails(sla.address, _sloRegistry)
 
           const slaContractSloValue = slaStaticDetailsP1.sloValue
-          const precision = 10000 //10000;
+          const precision = 10000
+
+          ///// DEBUGING DEVIATION /////////////////////////
 
           /*let deviation = await _sloRegistry.getDeviation(
               sli,
@@ -520,8 +475,7 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
 
           console.log("Capped Deviation: ", deviation)
 
-
-          //let rewardPercentage = deviation.mul()
+          ///// END DEBUGING DEVIATION /////////////////////////
           
           console.log("--------------------------------------------------------------")
           

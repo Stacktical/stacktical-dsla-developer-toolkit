@@ -41,6 +41,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        serviceUseTestExternalAdapter: true,
+        serviceSliMockingPlan: []
       },
     },
     // INDEX 1 | Should be HONORED
@@ -66,6 +68,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 2 | Should be HONORED
@@ -91,6 +95,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 3 | Should be BREACHED
@@ -116,6 +122,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 4 | Should be HONORED
@@ -141,6 +149,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 5 | Should be BREACHED
@@ -166,6 +176,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 6 | Should be HONORED
@@ -191,6 +203,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 7 | Should be BREACHED
@@ -216,6 +230,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 8 | Should be HONORED
@@ -241,6 +257,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 9 | Should be BREACHED
@@ -266,6 +284,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 10 | Should be HONORED
@@ -291,6 +311,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 11 | Should be BREACHED
@@ -316,6 +338,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 12
@@ -341,6 +365,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://www.federalreserve.gov/',
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 13
@@ -366,6 +392,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://www.federalreserve.gov/',
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 14
@@ -391,6 +419,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://www.federalreserve.gov/',
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 15
@@ -416,6 +446,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://www.federalreserve.gov/',
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 16
@@ -441,6 +473,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://www.federalreserve.gov/',
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 17, Contract for IT staking tests: Not Respected case
@@ -466,6 +500,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://www.federalreserve.gov/',
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
+        serviceUseTestExternalAdapter: true, // as sloValue is multiplied by prescision before comparison an slo of 90 will be rised to 90000 if precision is 1000
+        serviceSliMockingPlan: [50000, 0, 0, 0, 0] // mocked sli values must be prepared acordingly
       },
     }
   ],
