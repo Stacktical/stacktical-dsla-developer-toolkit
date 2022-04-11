@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import { loadFixture } from 'ethereum-waffle';
 import { fixture } from '../fixtures/basic';
+import { fromWei, toWei } from 'web3-utils';
 
 const hre = require('hardhat');
 //const { ethers } = hre;
@@ -49,98 +50,102 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
 
   // Stacking constants INITIAL
   // PROVIDERS BALANCE
-  let initialStakeBalanceProvider1 = 2500;
-  let initialStakeBalanceProvider2 = 333000;
-  let initialStakeBalanceProvider3 = 50000;
+  let initialStakeBalanceProvider1 = "2500";
+  let initialStakeBalanceProvider2 = "333000";
+  let initialStakeBalanceProvider3 = "50000";
 
   // USERS BALANCE
-  let initialStakeBalanceUser1 = 30000;
-  let initialStakeBalanceUser2 = 60000;
-  let initialStakeBalanceUser3 = 90000;
+  let initialStakeBalanceUser1 = "30000";
+  let initialStakeBalanceUser2 = "60000";
+  let initialStakeBalanceUser3 = "90000";
 
-  let initialProviderPool = 385500;
-  let initialUserPool = 180000;
-  let initialTotalStake = 565500;
+  let initialProviderPool = "385500";
+  let initialUserPool = "180000";
+  let initialTotalStake = "565500";
   let initialNumberOfStakers = 6;
 
   // Stacking constants P1
   // PROVIDERS BALANCE
-  let P1StakeBalanceProvider1 = 2000;
-  let P1StakeBalanceProvider2 = 264000;
-  let P1StakeBalanceProvider3 = 40000;
+  let P1StakeBalanceProvider1 = "2000";
+  let P1StakeBalanceProvider2 = "264000";
+  let P1StakeBalanceProvider3 = "40000";
   // USERS BALANCE
-  let P1StakeBalanceUser1 = 42850;
-  let P1StakeBalanceUser2 = 85700;
-  let P1StakeBalanceUser3 = 128550;
+  let P1StakeBalanceUser1 = "42850";
+  let P1StakeBalanceUser2 = "85700";
+  let P1StakeBalanceUser3 = "128550";
   // POOLS BALANCE
-  let P1ProviderPool = 308400;
-  let P1UserPool = 257100;
-  let P1TotalStake = 565500;
+  let P1ProviderPool = "308400";
+  let P1UserPool = "257100";
+  let P1TotalStake = "565500";
   let P1NumberOfStakers = 6;
 
   // Stacking constants P2
   // PROVIDERS BALANCE
-  let P2StakeBalanceProvider1 = 1300;
-  let P2StakeBalanceProvider2 = 157440;
-  let P2StakeBalanceProvider3 = 24000;
+  let P2StakeBalanceProvider1 = "1300";
+  let P2StakeBalanceProvider2 = "157440";
+  let P2StakeBalanceProvider3 = "24000";
   // USERS BALANCE
-  let P2StakeBalanceUser1 = 63410;
-  let P2StakeBalanceUser2 = 126820;
-  let P2StakeBalanceUser3 = 190230;
+  let P2StakeBalanceUser1 = "63410";
+  let P2StakeBalanceUser2 = "126820";
+  let P2StakeBalanceUser3 = "190230";
   // POOLS BALANCE
-  let P2ProviderPool = 185040;
-  let P2UserPool = 380460;
-  let P2TotalStake = 565500;
+  let P2ProviderPool = "185040";
+  let P2UserPool = "380460";
+  let P2TotalStake = "565500";
   let P2NumberOfStakers = 6;
 
   // Stacking constants P3
   // PROVIDERS BALANCE
-  let P3StakeBalanceProvider1 = 580;
-  let P3StakeBalanceProvider2 = 61536;
-  let P3StakeBalanceProvider3 = 9600;
+  let P3StakeBalanceProvider1 = "580";
+  let P3StakeBalanceProvider2 = "61536";
+  let P3StakeBalanceProvider3 = "9600";
   // USERS BALANCE
-  let P3StakeBalanceUser1 = 81914;
-  let P3StakeBalanceUser2 = 163828;
-  let P3StakeBalanceUser3 = 245742;
+  let P3StakeBalanceUser1 = "81914";
+  let P3StakeBalanceUser2 = "163828";
+  let P3StakeBalanceUser3 = "245742";
   // POOLS BALANCE
-  let P3ProviderPool = 74016;
-  let P3UserPool = 491484;
-  let P3TotalStake = 565500;
+  let P3ProviderPool = "74016";
+  let P3UserPool = "491484";
+  let P3TotalStake = "565500";
   let P3NumberOfStakers = 6;
 
   // Stacking constants P4
   // PROVIDERS BALANCE
-  let P4StakeBalanceProvider1 = 196;
-  let P4StakeBalanceProvider2 = 10387.2;
-  let P4StakeBalanceProvider3 = 1920;
+  let P4StakeBalanceProvider1 = "196";
+  let P4StakeBalanceProvider2 = "10387.2";
+  let P4StakeBalanceProvider3 = "1920";
   // USERS BALANCE
-  let P4StakeBalanceUser1 = 91782.2;
-  let P4StakeBalanceUser2 = 183565.6;
-  let P4StakeBalanceUser3 = 275348.4;
+  let P4StakeBalanceUser1 = "91782.2";
+  let P4StakeBalanceUser2 = "183565.6";
+  let P4StakeBalanceUser3 = "275348.4";
   // POOLS BALANCE
-  let P4ProviderPool = 14803.2;
-  let P4UserPool = 550696.8;
-  let P4TotalStake = 565500;
+  let P4ProviderPool = "14803.2";
+  let P4UserPool = "550696.8";
+  let P4TotalStake = "565500";
   let P4NumberOfStakers = 6;
 
-    // Stacking constants P5
+  // Stacking constants P5
   // PROVIDERS BALANCE
-  let P5StakeBalanceProvider1 = 100;
-  let P5StakeBalanceProvider2 = 0 // CHECK why -2400;
-  let P5StakeBalanceProvider3 = 0;
+  let P5StakeBalanceProvider1 = "100";
+  let P5StakeBalanceProvider2 = "0";
+  let P5StakeBalanceProvider3 = "0";
   // USERS BALANCE
-  let P5StakeBalanceUser1 = 94249.4;
-  let P5StakeBalanceUser2 = 188500;
-  let P5StakeBalanceUser3 = 282750;
+  let P5StakeBalanceUser1 = "94249.4";
+  let P5StakeBalanceUser2 = "188500";
+  let P5StakeBalanceUser3 = "282750";
   // POOLS BALANCE
-  let P5ProviderPool = 0; //CHECK why 100
-  let P5UserPool = 565500; 
-  let P5TotalStake = 565500;
+  let P5ProviderPool = "0";
+  let P5UserPool = "565500"; 
+  let P5TotalStake = "565500";
   let P5NumberOfStakers = 6;
 
   let currentProviderPool: BigNumber = BigNumber.from("0");
   let currentUsersPool: BigNumber = BigNumber.from("0");
   let currentTotalStake: BigNumber = BigNumber.from("0");
+
+  let currentP1ProviderPool: BigNumber = BigNumber.from("0");
+  let currentP1UsersPool: BigNumber = BigNumber.from("0");
+  let currentP1TotalStake: BigNumber = BigNumber.from("0");
 
   let stakersLength: any;
   let slaDetailsP0: any;
@@ -258,31 +263,31 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
     );
 
     // add token to provider DSLA account
-    await provider_1_DSLA.mint(provider_1_account.address, initialStakeBalanceProvider1);
-    await provider_2_DSLA.mint(provider_2_account.address, initialStakeBalanceProvider2);
-    await provider_3_DSLA.mint(provider_3_account.address, initialStakeBalanceProvider3);
+    await provider_1_DSLA.mint(provider_1_account.address, toWei(initialStakeBalanceProvider1));
+    await provider_2_DSLA.mint(provider_2_account.address, toWei(initialStakeBalanceProvider2));
+    await provider_3_DSLA.mint(provider_3_account.address, toWei(initialStakeBalanceProvider3));
     // Add token to provider accounts
-    await provider_1_DSLA.approve(provider_1_SLA.address, initialStakeBalanceProvider1);
-    await provider_2_DSLA.approve(provider_2_SLA.address, initialStakeBalanceProvider2);
-    await provider_3_DSLA.approve(provider_3_SLA.address, initialStakeBalanceProvider3);
+    await provider_1_DSLA.approve(provider_1_SLA.address, toWei(initialStakeBalanceProvider1));
+    await provider_2_DSLA.approve(provider_2_SLA.address, toWei(initialStakeBalanceProvider2));
+    await provider_3_DSLA.approve(provider_3_SLA.address, toWei(initialStakeBalanceProvider3));
     // Stake token for providers
-    tx = await provider_1_SLA.stakeTokens(initialStakeBalanceProvider1, provider_1_DSLA.address, 'long');
-    tx = await provider_2_SLA.stakeTokens(initialStakeBalanceProvider2, provider_2_DSLA.address, 'long');
-    tx = await provider_3_SLA.stakeTokens(initialStakeBalanceProvider3, provider_3_DSLA.address, 'long');
+    tx = await provider_1_SLA.stakeTokens(toWei(initialStakeBalanceProvider1), provider_1_DSLA.address, 'long');
+    tx = await provider_2_SLA.stakeTokens(toWei(initialStakeBalanceProvider2), provider_2_DSLA.address, 'long');
+    tx = await provider_3_SLA.stakeTokens(toWei(initialStakeBalanceProvider3), provider_3_DSLA.address, 'long');
 
     // add token to users DSLA accounts
-    await user_1_DSLA.mint(user_1_account.address, initialStakeBalanceUser1);
-    await user_2_DSLA.mint(user_2_account.address, initialStakeBalanceUser2);
-    await user_3_DSLA.mint(user_3_account.address, initialStakeBalanceUser3);
+    await user_1_DSLA.mint(user_1_account.address, toWei(initialStakeBalanceUser1));
+    await user_2_DSLA.mint(user_2_account.address, toWei(initialStakeBalanceUser2));
+    await user_3_DSLA.mint(user_3_account.address, toWei(initialStakeBalanceUser3));
     // Add token to users accounts
-    await user_1_DSLA.approve(user_1_SLA.address, initialStakeBalanceUser1);
-    await user_2_DSLA.approve(user_2_SLA.address, initialStakeBalanceUser2);
-    await user_3_DSLA.approve(user_3_SLA.address, initialStakeBalanceUser3);
+    await user_1_DSLA.approve(user_1_SLA.address, toWei(initialStakeBalanceUser1));
+    await user_2_DSLA.approve(user_2_SLA.address, toWei(initialStakeBalanceUser2));
+    await user_3_DSLA.approve(user_3_SLA.address, toWei(initialStakeBalanceUser3));
 
     // Stake token for users
-    tx = await user_1_SLA.stakeTokens(initialStakeBalanceUser1, user_1_DSLA.address, 'short');
-    tx = await user_2_SLA.stakeTokens(initialStakeBalanceUser2, user_2_DSLA.address, 'short');
-    tx = await user_3_SLA.stakeTokens(initialStakeBalanceUser3, user_3_DSLA.address, 'short');
+    tx = await user_1_SLA.stakeTokens(toWei(initialStakeBalanceUser1), user_1_DSLA.address, 'short');
+    tx = await user_2_SLA.stakeTokens(toWei(initialStakeBalanceUser2), user_2_DSLA.address, 'short');
+    tx = await user_3_SLA.stakeTokens(toWei(initialStakeBalanceUser3), user_3_DSLA.address, 'short');
 
     consola.info('Initial DONE');
 
@@ -319,77 +324,63 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
     const sla: SLA = await ethers.getContractAt(CONTRACT_NAMES.SLA, allSLAs[0]);
   });
 
-    describe("Initial P0", function () {
-
-      describe("P0 tests execution", function () {
-
-        it('StakersLength should be equal to initialNumberOfStakers', function () {
-          expect(stakersLength).equals(initialNumberOfStakers);
-        });
-        it('Total Provider Pool should be equal to initialized value', function () {
-          expect(initialProviderPool.toString()).equals(currentProviderPool.toString());
-        });
-        it('Total User Pool should be equal to initialized value', function () {
-          expect(initialUserPool.toString()).equals(currentUsersPool.toString());
-        });
-        it('Total Liquidity Pool should be equal to initialized value', function () {
-          expect(initialTotalStake.toString()).equals(currentTotalStake.toString());
-        });
-
-  
-        it('Povider_1 Balance should be equal to initialized value', function () {
-          // CHECK PROVIDERS BALANCE
-          // Note: Thoses values are extrapolated from ProviderPool as it is not yet possible to get stake size by provider
-          currentBalPrv1 = currentProviderPool.sub(initialStakeBalanceProvider2).sub(initialStakeBalanceProvider3);
-          expect(currentBalPrv1.toString()).equals(initialStakeBalanceProvider1.toString());
-        });
-        it('Povider_2 Balance should be equal to initialized value', function () {
-          // CHECK PROVIDERS BALANCE
-          // Note: Thoses values are extrapolated from ProviderPool as it is not yet possible to get stake size by provider
-          currentBalPrv2 = currentProviderPool.sub(initialStakeBalanceProvider1).sub(initialStakeBalanceProvider3);
-          expect(currentBalPrv2.toString()).equals(initialStakeBalanceProvider2.toString());
-        });
-        it('Povider_3 Balance should be equal to initialized value', function () {
-          // CHECK PROVIDERS BALANCE
-          // Note: Thoses values are extrapolated from ProviderPool as it is not yet possible to get stake size by provider
-          currentBalPrv3 = currentProviderPool.sub(initialStakeBalanceProvider1).sub(initialStakeBalanceProvider2);
-          expect(currentBalPrv3.toString()).equals(initialStakeBalanceProvider3.toString());
-        });
-  
-  
-        // CHECK USERS BALANCE
-        // Note: Thoses values are extrapolated from UsersPool as it is not yet possible to get stake size by user
-        it('User_1 Balance should be equal to initialized value', function () {
-          let currentBalUser1 = currentUsersPool.sub(initialStakeBalanceUser2).sub(initialStakeBalanceUser3);
-          expect(initialStakeBalanceUser1.toString()).equals(currentBalUser1.toString());
-        });
-        it('User_2 Balance should be equal to initialized value', function () {
-          let currentBalUser2 = currentUsersPool.sub(initialStakeBalanceUser1).sub(initialStakeBalanceUser3);
-          expect(initialStakeBalanceUser2.toString()).equals(currentBalUser2.toString());
-        });
-        it('User_3 Balance should be equal to initialized value', function () {
-          let currentBalUser3 = currentUsersPool.sub(initialStakeBalanceUser1).sub(initialStakeBalanceUser2);
-          expect(initialStakeBalanceUser3.toString()).equals(currentBalUser3.toString());
-        });
-
-
+  describe("Initial P0", function () {
+    describe("P0 tests execution", function () {
+      it('StakersLength should be equal to initialNumberOfStakers', function () {
+        expect(stakersLength).equals(initialNumberOfStakers);
       });
-    })
+      it('Total Provider Pool should be equal to initialized value', function () {
+        expect(toWei(initialProviderPool)).equals(currentProviderPool.toString());
+      });
+      it('Total User Pool should be equal to initialized value', function () {
+        expect(toWei(initialUserPool)).equals(currentUsersPool.toString());
+      });
+      it('Total Liquidity Pool should be equal to initialized value', function () {
+        expect(toWei(initialTotalStake)).equals(currentTotalStake.toString());
+      });
+
+      it('Povider_1 Balance should be equal to initialized value', function () {
+        // Note: Thoses values are extrapolated from ProviderPool as it is not yet possible to use getTokenStake by provider
+        currentBalPrv1 = currentProviderPool.sub(toWei(initialStakeBalanceProvider2)).sub(toWei(initialStakeBalanceProvider3));
+        expect(currentBalPrv1.toString()).equals(toWei(initialStakeBalanceProvider1));
+      });
+      it('Povider_2 Balance should be equal to initialized value', function () {
+        currentBalPrv2 = currentProviderPool.sub(toWei(initialStakeBalanceProvider1)).sub(toWei(initialStakeBalanceProvider3));
+        expect(currentBalPrv2.toString()).equals(toWei(initialStakeBalanceProvider2));
+      });
+      it('Povider_3 Balance should be equal to initialized value', function () {
+        currentBalPrv3 = currentProviderPool.sub(toWei(initialStakeBalanceProvider1)).sub(toWei(initialStakeBalanceProvider2));
+        expect(currentBalPrv3.toString()).equals(toWei(initialStakeBalanceProvider3));
+      });
+
+
+      // CHECK USERS BALANCE
+      // Note: Thoses values are extrapolated from UsersPool as it is not yet possible to use getTokenStake by user
+      it('User_1 Balance should be equal to initialized value', function () {
+        let currentBalUser1 = currentUsersPool.sub(toWei(initialStakeBalanceUser2)).sub(toWei(initialStakeBalanceUser3));
+        expect(currentBalUser1.toString()).equals(toWei(initialStakeBalanceUser1));
+      });
+      it('User_2 Balance should be equal to initialized value', function () {
+        let currentBalUser2 = currentUsersPool.sub(toWei(initialStakeBalanceUser1)).sub(toWei(initialStakeBalanceUser3));
+        expect(currentBalUser2.toString()).equals(toWei(initialStakeBalanceUser2));
+      });
+      it('User_3 Balance should be equal to initialized value', function () {
+        let currentBalUser3 = currentUsersPool.sub(toWei(initialStakeBalanceUser1)).sub(toWei(initialStakeBalanceUser2));
+        expect(currentBalUser3.toString()).equals(toWei(initialStakeBalanceUser3));
+      });
+    });
+  })
 
     // P1 tests
     describe("P1", function () {
       describe("request SLI P1", function () {
         it('Shoud perform a succesful request SLI for P1', async function () {
-          
-          //console.log('-----------------------------------------------------------');
-          //console.log('Requesting SLI for P1...');
           const ownerApproval = true;
-          // Get dslaToken contract TODO: Do that one time only, at setup 
           const dslaToken: ERC20PresetMinterPauser = await ethers.getContract(
             CONTRACT_NAMES.DSLA
           );
     
-          const periodId_p1 = 0//Number(0)
+          const periodId_p1 = Number(0)
           const usersStake = 10
           const expectedCompensation = 100
         
@@ -423,47 +414,10 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
           slaStaticDetailsP1 = await details.getSLAStaticDetails(sla.address, _sloRegistry)
 
           const slaContractSloValue = slaStaticDetailsP1.sloValue
-          const precision = 10000
-
-          ///// DEBUGING DEVIATION /////////////////////////
-
-          /*let deviation = await _sloRegistry.getDeviation(
-              sli,
-              sla.address,
-              precision
-          );*/
-          /*
-          uint256 deviation = (
-            _sli >= sloValue ? _sli.sub(sloValue) : sloValue.sub(_sli)
-        ).mul(precision).div(sliValue.add(sloValue).div(2));*/
-
-          const getDeviation = (sloValue: number, sliValue: number, precision: number) => {
-
-            return (Math.abs(sliValue - sloValue) * precision) / ((sloValue + sliValue) / 2)
-            //return Math.floor(Math.abs(sliValue - sloValue) * precision / ((sloValue + sliValue) / 2));
-          }
-
 
           console.log('SLO: ', slaContractSloValue.toString())
           console.log('SLI: ', sli.toString())
-          console.log('Precision: ', precision)
-
-
-          let deviation = getDeviation(slaContractSloValue.toNumber(), sli, precision)
-
-          console.log("Original Deviation: ", deviation)
-          
-          // Enforces a deviation capped at 25%
-          if (deviation > (precision * 25) / 100) {
-              deviation = (precision * 25) / 100;
-          }
-
-          console.log("Capped Deviation: ", deviation)
-
-          ///// END DEBUGING DEVIATION /////////////////////////
-          
           console.log("--------------------------------------------------------------")
-          
           console.log('sla.address: ', sla.address);
           console.log('Created SLI timestamp: ', timestamp.toString());
           console.log('Created SLI sli: ', sli.toString());
@@ -499,47 +453,43 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
 
       describe("P1 tests execution", function () {
         it('Total Provider Pool should be equal to P1 expected value', function () {
-          expect(currentProviderPool.toString()).equals(P1ProviderPool.toString());
+          expect(currentP1ProviderPool.toString()).equals(toWei(P1ProviderPool.toString()));
         });
         it('Total User Pool should be equal to P1 expected value', function () {
-          expect(currentUsersPool.toString()).equals(P1UserPool.toString());
+          expect(currentUsersPool.toString()).equals(toWei(P1UserPool.toString()));
         });
         it('Total Liquidity Pool should be equal to P1 expected value', function () {
-          expect(currentTotalStake.toString()).equals(P1TotalStake.toString());
+          expect(currentTotalStake.toString()).equals(toWei(P1TotalStake.toString()));
         });
 
         it('Povider_1 Balance should be equal to P1 expected value', function () {
           // CHECK PROVIDERS BALANCE
-          // Note: Thoses values are extrapolated from ProviderPool as it is not yet possible to get stake size by provider
-          currentBalPrv1 = currentProviderPool.sub(P1StakeBalanceProvider2).sub(P1StakeBalanceProvider3);
-          expect(currentBalPrv1.toString()).equals(P1StakeBalanceProvider1.toString());
+          // Note: Thoses values are extrapolated from ProviderPool as it is not yet possible to use getTokenStake by provider
+          currentBalPrv1 = currentP1ProviderPool.sub(toWei(P1StakeBalanceProvider2)).sub(toWei(P1StakeBalanceProvider3));
+          expect(currentBalPrv1.toString()).equals(toWei(P1StakeBalanceProvider1));
         });
         it('Povider_2 Balance should be equal to P1 expected value', function () {
-          // CHECK PROVIDERS BALANCE
-          // Note: Thoses values are extrapolated from ProviderPool as it is not yet possible to get stake size by provider
-          currentBalPrv2 = currentProviderPool.sub(P1StakeBalanceProvider1).sub(P1StakeBalanceProvider3);
-          expect(currentBalPrv2.toString()).equals(P1StakeBalanceProvider2.toString());
+          currentBalPrv2 = currentP1ProviderPool.sub(toWei(P1StakeBalanceProvider1)).sub(toWei(P1StakeBalanceProvider3));
+          expect(currentBalPrv2.toString()).equals(toWei(P1StakeBalanceProvider2));
         });
         it('Povider_3 Balance should be equal to P1 expected value', function () {
-          // CHECK PROVIDERS BALANCE
-          // Note: Thoses values are extrapolated from ProviderPool as it is not yet possible to get stake size by provider
-          currentBalPrv3 = currentProviderPool.sub(P1StakeBalanceProvider1).sub(P1StakeBalanceProvider2);
-          expect(currentBalPrv3.toString()).equals(P1StakeBalanceProvider3.toString());
+          currentBalPrv3 = currentP1ProviderPool.sub(toWei(P1StakeBalanceProvider1)).sub(toWei(P1StakeBalanceProvider2));
+          expect(currentBalPrv3.toString()).equals(toWei(P1StakeBalanceProvider3));
         });
   
         // CHECK USERS BALANCE
-        // Note: Thoses values are extrapolated from UsersPool as it is not yet possible to get stake size by user
+        // Note: Thoses values are extrapolated from UsersPool as it is not yet possible to use getTokenStake by user
         it('User_1 Balance should be equal to P1 expected value', function () {
-          let currentBalUser1 = currentUsersPool.sub(P1StakeBalanceUser2).sub(P1StakeBalanceUser3);
-          expect(currentBalUser1.toString()).equals(P1StakeBalanceUser1.toString());
+          let currentBalUser1 = currentUsersPool.sub(toWei(P1StakeBalanceUser2)).sub(toWei(P1StakeBalanceUser3));
+          expect(currentBalUser1.toString()).equals(toWei(P1StakeBalanceUser1));
         });
         it('User_2 Balance should be equal to P1 expected value', function () {
-          let currentBalUser2 = currentUsersPool.sub(P1StakeBalanceUser1).sub(P1StakeBalanceUser3);
-          expect(currentBalUser2.toString()).equals(P1StakeBalanceUser2.toString());
+          let currentBalUser2 = currentUsersPool.sub(toWei(P1StakeBalanceUser1)).sub(toWei(P1StakeBalanceUser3));
+          expect(currentBalUser2.toString()).equals(toWei(P1StakeBalanceUser2));
         });
         it('User_3 Balance should be equal to P1 expected value', function () {
-          let currentBalUser3 = currentUsersPool.sub(P1StakeBalanceUser1).sub(P1StakeBalanceUser2);
-          expect(currentBalUser3.toString()).equals(P1StakeBalanceUser3.toString());
+          let currentBalUser3 = currentUsersPool.sub(toWei(P1StakeBalanceUser1)).sub(toWei(P1StakeBalanceUser2));
+          expect(currentBalUser3.toString()).equals(toWei(P1StakeBalanceUser3));
         });
         it('StakersLength should be equal to initialNumberOfStakers', function () {
           expect(stakersLength).equals(initialNumberOfStakers);
