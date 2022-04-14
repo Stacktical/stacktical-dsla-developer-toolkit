@@ -26,7 +26,7 @@ export const scripts: ScriptsConfiguration = {
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
       initialPeriodId: 0,
-      finalPeriodId: 5,
+      finalPeriodId: 51,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
@@ -51,7 +51,7 @@ export const scripts: ScriptsConfiguration = {
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseMessenger,
       initialPeriodId: 0,
-      finalPeriodId: 5,
+      finalPeriodId: 51,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
@@ -76,7 +76,7 @@ export const scripts: ScriptsConfiguration = {
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseMessenger,
       initialPeriodId: 0,
-      finalPeriodId: 5,
+      finalPeriodId: 51,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
@@ -101,7 +101,7 @@ export const scripts: ScriptsConfiguration = {
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseMessenger,
       initialPeriodId: 0,
-      finalPeriodId: 5,
+      finalPeriodId: 51,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
@@ -126,7 +126,7 @@ export const scripts: ScriptsConfiguration = {
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
       initialPeriodId: 0,
-      finalPeriodId: 5,
+      finalPeriodId: 51,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
@@ -151,7 +151,7 @@ export const scripts: ScriptsConfiguration = {
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
       initialPeriodId: 0,
-      finalPeriodId: 5,
+      finalPeriodId: 51,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
@@ -176,7 +176,7 @@ export const scripts: ScriptsConfiguration = {
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
       initialPeriodId: 0,
-      finalPeriodId: 5,
+      finalPeriodId: 51,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
@@ -201,7 +201,7 @@ export const scripts: ScriptsConfiguration = {
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
       initialPeriodId: 0,
-      finalPeriodId: 5,
+      finalPeriodId: 51,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
@@ -226,7 +226,7 @@ export const scripts: ScriptsConfiguration = {
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
       initialPeriodId: 0,
-      finalPeriodId: 5,
+      finalPeriodId: 51,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
@@ -251,7 +251,7 @@ export const scripts: ScriptsConfiguration = {
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
       initialPeriodId: 0,
-      finalPeriodId: 5,
+      finalPeriodId: 51,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
@@ -276,7 +276,7 @@ export const scripts: ScriptsConfiguration = {
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
       initialPeriodId: 0,
-      finalPeriodId: 5,
+      finalPeriodId: 51,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
@@ -301,7 +301,7 @@ export const scripts: ScriptsConfiguration = {
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
       initialPeriodId: 0,
-      finalPeriodId: 5,
+      finalPeriodId: 51,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
