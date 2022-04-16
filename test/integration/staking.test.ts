@@ -180,7 +180,7 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
     allSLAs = await slaRegistry.allSLAs();
     _sloRegistry = await slaRegistry.sloRegistry();
 
-    sla = await ethers.getContractAt(CONTRACT_NAMES.SLA, allSLAs[17]); // get the contract INDEX 17, Contract for IT staking tests: Not Respected case
+    sla = await ethers.getContractAt(CONTRACT_NAMES.SLA, allSLAs[0]); // get the contract INDEX 17, Contract for IT staking tests: Not Respected case
     details = await ethers.getContract(CONTRACT_NAMES.Details);
     signersAccounts = await hre.ethers.getSigners();
 
@@ -271,9 +271,10 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
     await provider_2_DSLA.approve(provider_2_SLA.address, toWei(initialStakeBalanceProvider2));
     await provider_3_DSLA.approve(provider_3_SLA.address, toWei(initialStakeBalanceProvider3));
     // Stake token for providers
-    tx = await provider_1_SLA.stakeTokens(toWei(initialStakeBalanceProvider1), provider_1_DSLA.address, 'long');
-    tx = await provider_2_SLA.stakeTokens(toWei(initialStakeBalanceProvider2), provider_2_DSLA.address, 'long');
-    tx = await provider_3_SLA.stakeTokens(toWei(initialStakeBalanceProvider3), provider_3_DSLA.address, 'long');
+    enum Position {LONG,SHORT}
+    tx = await provider_1_SLA.stakeTokens(toWei(initialStakeBalanceProvider1), provider_1_DSLA.address, Position.LONG);
+    tx = await provider_2_SLA.stakeTokens(toWei(initialStakeBalanceProvider2), provider_2_DSLA.address, Position.LONG);
+    tx = await provider_3_SLA.stakeTokens(toWei(initialStakeBalanceProvider3), provider_3_DSLA.address, Position.LONG);
 
     // add token to users DSLA accounts
     await user_1_DSLA.mint(user_1_account.address, toWei(initialStakeBalanceUser1));
@@ -285,9 +286,9 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
     await user_3_DSLA.approve(user_3_SLA.address, toWei(initialStakeBalanceUser3));
 
     // Stake token for users
-    tx = await user_1_SLA.stakeTokens(toWei(initialStakeBalanceUser1), user_1_DSLA.address, 'short');
-    tx = await user_2_SLA.stakeTokens(toWei(initialStakeBalanceUser2), user_2_DSLA.address, 'short');
-    tx = await user_3_SLA.stakeTokens(toWei(initialStakeBalanceUser3), user_3_DSLA.address, 'short');
+    tx = await user_1_SLA.stakeTokens(toWei(initialStakeBalanceUser1), user_1_DSLA.address, Position.SHORT);
+    tx = await user_2_SLA.stakeTokens(toWei(initialStakeBalanceUser2), user_2_DSLA.address, Position.SHORT);
+    tx = await user_3_SLA.stakeTokens(toWei(initialStakeBalanceUser3), user_3_DSLA.address, Position.SHORT);
 
     consola.info('Initial DONE');
 
@@ -318,10 +319,6 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
     currentUsersPool = slaDetailsP0.tokensStake[0].usersPool;
     currentTotalStake = slaDetailsP0.tokensStake[0].totalStake;
 
-  });
-
-  it('needs to be written', async () => {
-    const sla: SLA = await ethers.getContractAt(CONTRACT_NAMES.SLA, allSLAs[0]);
   });
 
   describe("Initial P0", function () {
