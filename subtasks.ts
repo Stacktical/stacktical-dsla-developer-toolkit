@@ -1681,7 +1681,6 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       await tx.wait();
 
       console.log('Starting process 3: Stake on Provider and User pools');
-
       const deployerStake = stakeAmountTimesWei(deployerStakeTimes);
       console.log(
         `Starting process 3.1: Provider: ${fromWei(deployerStake)} DSLA`
@@ -1689,8 +1688,10 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       tx = await dslaToken.approve(sla.address, deployerStake);
       await tx.wait();
       enum Position {LONG,SHORT}
-      tx = await sla.stakeTokens(deployerStake, dslaToken.address, Position.LONG);
-      await tx.wait();
+      if (deployerStake !== '0'){
+        tx = await sla.stakeTokens(deployerStake, dslaToken.address, Position.LONG);
+        await tx.wait();
+      }
       const notDeployerBalance = await dslaToken.callStatic.balanceOf(
         notDeployer
       );
@@ -1706,10 +1707,12 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
         .connect(await ethers.getSigner(notDeployer))
         .approve(sla.address, notDeployerStake);
       await tx.wait();
-      tx = await sla
-        .connect(await ethers.getSigner(notDeployer))
-        .stakeTokens(notDeployerStake, dslaToken.address, Position.SHORT);
-      await tx.wait();
+      if (notDeployerStake !== '0'){
+          tx = await sla
+            .connect(await ethers.getSigner(notDeployer))
+            .stakeTokens(notDeployerStake, dslaToken.address, Position.SHORT);
+          await tx.wait();
+      }
       printSeparator();
     }
     console.log('SLA deployment process finished');
