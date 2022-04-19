@@ -30,6 +30,7 @@ interface StakingInterface extends ethers.utils.Interface {
     "getAllowedTokensLength()": FunctionFragment;
     "isAllowedToken(address)": FunctionFragment;
     "leverage()": FunctionFragment;
+    "messengerAddress()": FunctionFragment;
     "owner()": FunctionFragment;
     "providerPool(address)": FunctionFragment;
     "registeredStakers(address)": FunctionFragment;
@@ -76,6 +77,10 @@ interface StakingInterface extends ethers.utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(functionFragment: "leverage", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "messengerAddress",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "providerPool",
@@ -142,6 +147,10 @@ interface StakingInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "leverage", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "messengerAddress",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "providerPool",
@@ -295,6 +304,8 @@ export class Staking extends BaseContract {
 
     leverage(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    messengerAddress(overrides?: CallOverrides): Promise<[string]>;
+
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     providerPool(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -356,6 +367,8 @@ export class Staking extends BaseContract {
 
   leverage(overrides?: CallOverrides): Promise<BigNumber>;
 
+  messengerAddress(overrides?: CallOverrides): Promise<string>;
+
   owner(overrides?: CallOverrides): Promise<string>;
 
   providerPool(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
@@ -416,6 +429,8 @@ export class Staking extends BaseContract {
     ): Promise<boolean>;
 
     leverage(overrides?: CallOverrides): Promise<BigNumber>;
+
+    messengerAddress(overrides?: CallOverrides): Promise<string>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -614,6 +629,8 @@ export class Staking extends BaseContract {
 
     leverage(overrides?: CallOverrides): Promise<BigNumber>;
 
+    messengerAddress(overrides?: CallOverrides): Promise<BigNumber>;
+
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     providerPool(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
@@ -686,6 +703,8 @@ export class Staking extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     leverage(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    messengerAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

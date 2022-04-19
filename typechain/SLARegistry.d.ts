@@ -251,7 +251,10 @@ export class SLARegistry extends BaseContract {
 
     stakeRegistry(overrides?: CallOverrides): Promise<[string]>;
 
-    userSLAs(_user: string, overrides?: CallOverrides): Promise<[string[]]>;
+    userSLAs(
+      _user: string,
+      overrides?: CallOverrides
+    ): Promise<[string[]] & { SLAList: string[] }>;
   };
 
   SLAs(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;

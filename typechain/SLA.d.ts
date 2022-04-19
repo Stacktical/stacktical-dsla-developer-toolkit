@@ -49,10 +49,9 @@ interface SLAInterface extends ethers.utils.Interface {
     "removeUsersFromWhitelist(address[])": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "slaID()": FunctionFragment;
-    "stakeTokens(uint256,address,string)": FunctionFragment;
+    "stakeTokens(uint256,address,uint8)": FunctionFragment;
     "stakers(uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "userWithdrawLocked()": FunctionFragment;
     "usersPool(address)": FunctionFragment;
     "whitelist(address)": FunctionFragment;
     "whitelistedContract()": FunctionFragment;
@@ -162,7 +161,7 @@ interface SLAInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "slaID", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "stakeTokens",
-    values: [BigNumberish, string, string]
+    values: [BigNumberish, string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "stakers",
@@ -171,10 +170,6 @@ interface SLAInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "userWithdrawLocked",
-    values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "usersPool", values: [string]): string;
   encodeFunctionData(functionFragment: "whitelist", values: [string]): string;
@@ -291,10 +286,6 @@ interface SLAInterface extends ethers.utils.Interface {
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "userWithdrawLocked",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "usersPool", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "whitelist", data: BytesLike): Result;
   decodeFunctionResult(
@@ -316,7 +307,7 @@ interface SLAInterface extends ethers.utils.Interface {
     "ProviderRewardGenerated(uint256,address,uint256,uint256,uint256)": EventFragment;
     "ProviderWithdraw(address,uint256,address,uint256)": EventFragment;
     "SLICreated(uint256,uint256,uint256)": EventFragment;
-    "Stake(address,uint256,address,uint256)": EventFragment;
+    "Stake(address,uint256,address,uint256,uint8)": EventFragment;
     "UserCompensationGenerated(uint256,address,uint256,uint256,uint256)": EventFragment;
     "UserWithdraw(address,uint256,address,uint256)": EventFragment;
   };
@@ -375,11 +366,12 @@ export type SLICreatedEvent = TypedEvent<
 >;
 
 export type StakeEvent = TypedEvent<
-  [string, BigNumber, string, BigNumber] & {
+  [string, BigNumber, string, BigNumber, number] & {
     tokenAddress: string;
     periodId: BigNumber;
     caller: string;
     amount: BigNumber;
+    position: number;
   }
 >;
 
@@ -541,7 +533,7 @@ export class SLA extends BaseContract {
     stakeTokens(
       _amount: BigNumberish,
       _token: string,
-      _position: string,
+      _position: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -551,8 +543,6 @@ export class SLA extends BaseContract {
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-
-    userWithdrawLocked(overrides?: CallOverrides): Promise<[boolean]>;
 
     usersPool(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -662,7 +652,7 @@ export class SLA extends BaseContract {
   stakeTokens(
     _amount: BigNumberish,
     _token: string,
-    _position: string,
+    _position: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -672,8 +662,6 @@ export class SLA extends BaseContract {
     newOwner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
-
-  userWithdrawLocked(overrides?: CallOverrides): Promise<boolean>;
 
   usersPool(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -787,7 +775,7 @@ export class SLA extends BaseContract {
     stakeTokens(
       _amount: BigNumberish,
       _token: string,
-      _position: string,
+      _position: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -797,8 +785,6 @@ export class SLA extends BaseContract {
       newOwner: string,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    userWithdrawLocked(overrides?: CallOverrides): Promise<boolean>;
 
     usersPool(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -960,18 +946,20 @@ export class SLA extends BaseContract {
       { timestamp: BigNumber; sli: BigNumber; periodId: BigNumber }
     >;
 
-    "Stake(address,uint256,address,uint256)"(
+    "Stake(address,uint256,address,uint256,uint8)"(
       tokenAddress?: string | null,
       periodId?: BigNumberish | null,
       caller?: string | null,
-      amount?: null
+      amount?: null,
+      position?: null
     ): TypedEventFilter<
-      [string, BigNumber, string, BigNumber],
+      [string, BigNumber, string, BigNumber, number],
       {
         tokenAddress: string;
         periodId: BigNumber;
         caller: string;
         amount: BigNumber;
+        position: number;
       }
     >;
 
@@ -979,14 +967,16 @@ export class SLA extends BaseContract {
       tokenAddress?: string | null,
       periodId?: BigNumberish | null,
       caller?: string | null,
-      amount?: null
+      amount?: null,
+      position?: null
     ): TypedEventFilter<
-      [string, BigNumber, string, BigNumber],
+      [string, BigNumber, string, BigNumber, number],
       {
         tokenAddress: string;
         periodId: BigNumber;
         caller: string;
         amount: BigNumber;
+        position: number;
       }
     >;
 
@@ -1154,7 +1144,7 @@ export class SLA extends BaseContract {
     stakeTokens(
       _amount: BigNumberish,
       _token: string,
-      _position: string,
+      _position: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1164,8 +1154,6 @@ export class SLA extends BaseContract {
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
-
-    userWithdrawLocked(overrides?: CallOverrides): Promise<BigNumber>;
 
     usersPool(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1294,7 +1282,7 @@ export class SLA extends BaseContract {
     stakeTokens(
       _amount: BigNumberish,
       _token: string,
-      _position: string,
+      _position: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1306,10 +1294,6 @@ export class SLA extends BaseContract {
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    userWithdrawLocked(
-      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     usersPool(

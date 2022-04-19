@@ -24,7 +24,7 @@ interface StakeRegistryInterface extends ethers.utils.Interface {
     "DSLATokenAddress()": FunctionFragment;
     "addAllowedTokens(address)": FunctionFragment;
     "allowedTokens(uint256)": FunctionFragment;
-    "createDToken(string,string)": FunctionFragment;
+    "createDToken(string,string,uint8)": FunctionFragment;
     "distributeVerificationRewards(address,address,uint256)": FunctionFragment;
     "getStakingParameters()": FunctionFragment;
     "isAllowedToken(address)": FunctionFragment;
@@ -57,7 +57,7 @@ interface StakeRegistryInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "createDToken",
-    values: [string, string]
+    values: [string, string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "distributeVerificationRewards",
@@ -351,6 +351,7 @@ export class StakeRegistry extends BaseContract {
     createDToken(
       _name: string,
       _symbol: string,
+      decimals: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -493,6 +494,7 @@ export class StakeRegistry extends BaseContract {
   createDToken(
     _name: string,
     _symbol: string,
+    decimals: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -638,6 +640,7 @@ export class StakeRegistry extends BaseContract {
     createDToken(
       _name: string,
       _symbol: string,
+      decimals: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
 
@@ -959,6 +962,7 @@ export class StakeRegistry extends BaseContract {
     createDToken(
       _name: string,
       _symbol: string,
+      decimals: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1060,6 +1064,7 @@ export class StakeRegistry extends BaseContract {
     createDToken(
       _name: string,
       _symbol: string,
+      decimals: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
