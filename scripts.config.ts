@@ -483,7 +483,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.GreaterThan, // You want less inflation :)
       whitelisted: false,
       periodType: PERIOD_TYPE.MONTHLY,
-      messengerContract: CONTRACT_NAMES.CPIMessenger,
+      messengerContract: CONTRACT_NAMES.BaseMessenger,
       initialPeriodId: 0,
       finalPeriodId: 5,
       extraData: [],
@@ -501,7 +501,7 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
         serviceUseTestExternalAdapter: true, // as sloValue is multiplied by prescision before comparison an slo of 90 will be rised to 90000 if precision is 1000
-        serviceSliMockingPlan: [50000, 0, 0, 0, 0] // mocked sli values must be prepared acordingly
+        serviceSliMockingPlan: [50000, 50000, 0, 0, 0] // mocked sli values must be prepared acordingly
       },
     }
   ],
