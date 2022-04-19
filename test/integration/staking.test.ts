@@ -21,7 +21,7 @@ import {
    SLARegistry,
    Details,
    IMessenger,
-   SEAMessenger} from '../../typechain';
+   BaseMessenger} from '../../typechain';
 
 const consola = require('consola');
 
@@ -294,15 +294,15 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
 
     let slaDetails = await details.getSLADetailsArrays(sla.address);
     let slaDynamicDetails = await details.getSLADynamicDetails(sla.address);
-    console.log("slaDetails INIT");
-    console.log(slaDetails);
-    console.log("slaDynamicDetails INIT");
-    console.log(slaDynamicDetails);
+    //console.log("slaDetails INIT");
+    //console.log(slaDetails);
+    //console.log("slaDynamicDetails INIT");
+    //console.log(slaDynamicDetails);
 
     stakersLength = await sla.getStakersLength();
-    console.log("stakersLength : " + stakersLength);
+    //console.log("stakersLength : " + stakersLength);
     let stakersLengthFromDd = slaDynamicDetails.stakersCount.toString();
-    console.log("stakersLengthFromDd : " + stakersLengthFromDd);
+    //console.log("stakersLengthFromDd : " + stakersLengthFromDd);
     
     slaRegistry = await SLARegistry__factory.connect(
       (
@@ -312,8 +312,8 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
     );
 
     slaDetailsP0 = await details.getSLADetailsArrays(sla.address);
-    console.log("slaDetails P0 (init)");
-    console.log(slaDetailsP0);
+    //console.log("slaDetails P0 (init)");
+    //console.log(slaDetailsP0);
     
     currentProviderPool = slaDetailsP0.tokensStake[0].providerPool;
     currentUsersPool = slaDetailsP0.tokensStake[0].usersPool;
@@ -371,7 +371,8 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
     // P1 tests
     describe("P1", function () {
       describe("request SLI P1", function () {
-        it('Shoud perform a succesful request SLI for P1', async function () {
+        //it('Shoud perform a succesful request SLI for P1', async function () {
+        it('Shoud perform a succesful request SLI for P1', async () => {
           const ownerApproval = true;
           const dslaToken: ERC20PresetMinterPauser = await ethers.getContract(
             CONTRACT_NAMES.DSLA
@@ -382,7 +383,7 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
           const expectedCompensation = 100
         
           console.log("request SLI P1")
-          tx = await slaRegistry.requestSLI(
+          await expect(slaRegistry.requestSLI(
             periodId_p1,
             sla.address,
             ownerApproval,
@@ -391,22 +392,21 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
                 gasLimit: network.config.gas,
               }),
             }
-          );
-          await tx.wait();
-          //console.log('requestSLI P1 done Transaction receipt: ');
-          //console.log(tx);
+          ))
+          .to.emit(slaRegistry, 'SLIRequested')
+
+          //const messenger: BaseMessenger = await ethers.getContract(CONTRACT_NAMES.BaseMessenger);
   
           const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
-  
-          await tx.wait();
+
           await new Promise((resolve) => sla.on('SLICreated', () => resolve(null)));
-          const createdSLI = await sla.periodSLIs(nextVerifiablePeriod);
+          const createdSLI = await sla.periodSLIs(periodId_p1); //nextVerifiablePeriod
           const { timestamp, sli, status } = createdSLI;
           slaDetailsP1 = await details.getSLADetailsArrays(sla.address)
 
-          currentProviderPool = slaDetailsP1.tokensStake[0].providerPool;
-          currentUsersPool = slaDetailsP1.tokensStake[0].usersPool;
-          currentTotalStake = slaDetailsP1.tokensStake[0].totalStake;
+          currentP1ProviderPool = slaDetailsP1.tokensStake[0].providerPool;
+          currentP1UsersPool = slaDetailsP1.tokensStake[0].usersPool;
+          currentP1TotalStake = slaDetailsP1.tokensStake[0].totalStake;
 
           slaStaticDetailsP1 = await details.getSLAStaticDetails(sla.address, _sloRegistry)
 
@@ -422,8 +422,8 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
           console.log('SLI request process finished');
           console.log("--------------------------------------------------------------")
     
-          console.log("createdSLI")
-          consola.info(createdSLI)
+          //console.log("createdSLI")
+          //consola.info("createdSLI")
           //console.log("timestamp")
           //consola.info(timestamp)
           //console.log("sli")
@@ -432,18 +432,16 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
           //console.log("status : " + status.toString())
           /*console.log("slaDetails P1 Results")
           console.log(slaDetailsP1)*/
-          console.log("slaStaticDetailsP1 Results")
-          console.log(slaStaticDetailsP1)
+          //console.log("slaStaticDetailsP1 Results")
+          //console.log(slaStaticDetailsP1)
+          //console.log("slaContractSloValue: " + slaStaticDetailsP1.sloValue.toString())
 
-          console.log("slaContractSloValue: " + slaStaticDetailsP1.sloValue.toString())
+          //console.log("Registered SLI for P1")
+          //console.log("sli: " + slaDetailsP1.periodSLIs[0].sli.toString())
+          //console.log("status: " +slaDetailsP1.periodSLIs[0].status.toString())
+          //console.log("--------------------------------------------------------------")
 
-          console.log("Registered SLI for P1")
-          console.log("sli: " + slaDetailsP1.periodSLIs[0].sli.toString())
-          console.log("status: " +slaDetailsP1.periodSLIs[0].status.toString())
-
-          console.log("--------------------------------------------------------------")
-
-          expect(true).equals(true)
+          //expect(true).equals(true);
 
         });
       });
@@ -453,10 +451,10 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
           expect(currentP1ProviderPool.toString()).equals(toWei(P1ProviderPool.toString()));
         });
         it('Total User Pool should be equal to P1 expected value', function () {
-          expect(currentUsersPool.toString()).equals(toWei(P1UserPool.toString()));
+          expect(currentP1UsersPool.toString()).equals(toWei(P1UserPool.toString()));
         });
         it('Total Liquidity Pool should be equal to P1 expected value', function () {
-          expect(currentTotalStake.toString()).equals(toWei(P1TotalStake.toString()));
+          expect(currentP1TotalStake.toString()).equals(toWei(P1TotalStake.toString()));
         });
 
         it('Povider_1 Balance should be equal to P1 expected value', function () {
@@ -477,15 +475,15 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
         // CHECK USERS BALANCE
         // Note: Thoses values are extrapolated from UsersPool as it is not yet possible to use getTokenStake by user
         it('User_1 Balance should be equal to P1 expected value', function () {
-          let currentBalUser1 = currentUsersPool.sub(toWei(P1StakeBalanceUser2)).sub(toWei(P1StakeBalanceUser3));
+          let currentBalUser1 = currentP1UsersPool.sub(toWei(P1StakeBalanceUser2)).sub(toWei(P1StakeBalanceUser3));
           expect(currentBalUser1.toString()).equals(toWei(P1StakeBalanceUser1));
         });
         it('User_2 Balance should be equal to P1 expected value', function () {
-          let currentBalUser2 = currentUsersPool.sub(toWei(P1StakeBalanceUser1)).sub(toWei(P1StakeBalanceUser3));
+          let currentBalUser2 = currentP1UsersPool.sub(toWei(P1StakeBalanceUser1)).sub(toWei(P1StakeBalanceUser3));
           expect(currentBalUser2.toString()).equals(toWei(P1StakeBalanceUser2));
         });
         it('User_3 Balance should be equal to P1 expected value', function () {
-          let currentBalUser3 = currentUsersPool.sub(toWei(P1StakeBalanceUser1)).sub(toWei(P1StakeBalanceUser2));
+          let currentBalUser3 = currentP1UsersPool.sub(toWei(P1StakeBalanceUser1)).sub(toWei(P1StakeBalanceUser2));
           expect(currentBalUser3.toString()).equals(toWei(P1StakeBalanceUser3));
         });
         it('StakersLength should be equal to initialNumberOfStakers', function () {
@@ -610,8 +608,6 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
         });
       });
     });
-
-
 
     // P3 tests
     describe("P3", function () {
@@ -1000,16 +996,6 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
       //);
 
 
-      // QUESTIONS
-        // HOW TO TEST END OF PERIOD REWARD?
-          // -> get values from events emit // exemple: https://github.com/fvictorio/hardhat-examples/blob/master/reading-events/test/test.js
-          // -> get values with details contract ---> SELECTED solution
-        // WHY usersPool is not updated after P1? --OK Fixed
-        // validate userPool result
-          // must get sli deviation to compute rewardPercentage
-
-
-
       let totalStake;
       let usersPool;
       let providerPool;
@@ -1042,59 +1028,10 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
           precision
       );
       //let rewardPercentage = deviation.mul()
-      
-
-
       let expectedUserRewards = (providerPool * expectedSliDeviation) * normalizedPeriodNumber / (numberOfPeriods * leverage)
 
       //console.log('expectedSliDeviation: ' + expectedSliDeviation)
       //console.log('expectedUserRewards: ' + expectedUserRewards)
-
-    })*/
-
-
-
-
-
-
-    /*
-    it('P2', async () => {
-      console.log('-----------------------------------------------------------');
-      console.log('Requesting SLI...');
-      const ownerApproval = true;
-      tx = await slaRegistry.requestSLI(
-        Number(1),
-        sla.address,
-        ownerApproval,
-        {
-          ...(network.config.gas !== 'auto' && {
-            gasLimit: network.config.gas,
-          }),
-        }
-      );
-
-      console.log("requestSLI done")
-      consola.info(tx)
-
-      await tx.wait();
-      await new Promise((resolve) => sla.on('SLICreated', () => resolve(null)));
-      const createdSLI = await sla.periodSLIs(0);
-      const { timestamp, sli, status } = createdSLI;
-
-      console.log("createdSLI")
-      consola.info(createdSLI)
-      console.log("timestamp")
-      consola.info(timestamp)
-      console.log("sli")
-      consola.info(sli)
-      console.log("status")
-      consola.info(status)
-
-
-      let slaDetailsP2 = await details.getSLADetailsArrays(sla.address)
-      console.log("slaDetails P2")
-      console.log(slaDetailsP2)
-      console.log('-----------------------------------------------------------');
 
     })*/
 

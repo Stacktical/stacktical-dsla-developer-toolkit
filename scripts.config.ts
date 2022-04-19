@@ -19,7 +19,7 @@ const SENetworkNames = SEMessengerSpec.ipfsData.serviceTicker.values;
 export const scripts: ScriptsConfiguration = {
   deploy_sla: [
     // INDEX 0 | Should be BREACHED
-    {
+    /*{
       sloValue: 100,  // Breached as SL0 > SLi is false
       sloType: SLO_TYPE.GreaterThan,
       whitelisted: false,
@@ -476,7 +476,7 @@ export const scripts: ScriptsConfiguration = {
         serviceUseTestExternalAdapter: false,
         serviceSliMockingPlan:[],
       },
-    },
+    },*/
     // INDEX 17, Contract for IT staking tests: Not Respected case
     {
       sloValue: 90,
@@ -501,7 +501,7 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
         serviceUseTestExternalAdapter: true, // as sloValue is multiplied by prescision before comparison an slo of 90 will be rised to 90000 if precision is 1000
-        serviceSliMockingPlan: [50000, 50000, 0, 0, 0] // mocked sli values must be prepared acordingly
+        serviceSliMockingPlan: [10000, 50000, 0, 0, 0] // mocked sli values must be prepared acordingly
       },
     }
   ],
