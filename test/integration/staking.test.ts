@@ -66,17 +66,17 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
 
   // Stacking constants P1
   // PROVIDERS BALANCE
-  let P1StakeBalanceProvider1 = "2000";
-  let P1StakeBalanceProvider2 = "264000";
-  let P1StakeBalanceProvider3 = "40000";
+  let P1StakeBalanceProvider1 = "2377.12";
+  let P1StakeBalanceProvider2 = "316633.01";
+  let P1StakeBalanceProvider3 = "47542.49";
   // USERS BALANCE
-  let P1StakeBalanceUser1 = "42850";
-  let P1StakeBalanceUser2 = "85700";
-  let P1StakeBalanceUser3 = "128550";
+  let P1StakeBalanceUser1 = "33157.89474";
+  let P1StakeBalanceUser2 = "66315.78947";
+  let P1StakeBalanceUser3 = "99473.68421";
   // POOLS BALANCE
-  let P1ProviderPool = "308400";
-  let P1UserPool = "257100";
-  let P1TotalStake = "565500";
+  let P1ProviderPool = "366564";
+  let P1UserPool = "198936";
+  let P1TotalStake = "565500.00";
   let P1NumberOfStakers = 6;
 
   // Stacking constants P2
@@ -89,8 +89,8 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
   let P2StakeBalanceUser2 = "126820";
   let P2StakeBalanceUser3 = "190230";
   // POOLS BALANCE
-  let P2ProviderPool = "185040";
-  let P2UserPool = "380460";
+  let P2ProviderPool = "345635.9328";
+  let P2UserPool = "219864.0672";
   let P2TotalStake = "565500";
   let P2NumberOfStakers = 6;
 
@@ -104,8 +104,8 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
   let P3StakeBalanceUser2 = "163828";
   let P3StakeBalanceUser3 = "245742";
   // POOLS BALANCE
-  let P3ProviderPool = "74016";
-  let P3UserPool = "491484";
+  let P3ProviderPool = "322506.23293056";
+  let P3UserPool = "242993.76706944";
   let P3TotalStake = "565500";
   let P3NumberOfStakers = 6;
 
@@ -119,8 +119,8 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
   let P4StakeBalanceUser2 = "183565.6";
   let P4StakeBalanceUser3 = "275348.4";
   // POOLS BALANCE
-  let P4ProviderPool = "14803.2";
-  let P4UserPool = "550696.8";
+  let P4ProviderPool = "296943.288634854912";
+  let P4UserPool = "268556.7113651450880";
   let P4TotalStake = "565500";
   let P4NumberOfStakers = 6;
 
@@ -134,8 +134,8 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
   let P5StakeBalanceUser2 = "188500";
   let P5StakeBalanceUser3 = "282750";
   // POOLS BALANCE
-  let P5ProviderPool = "0";
-  let P5UserPool = "565500"; 
+  let P5ProviderPool = "268691.122599241648742400";
+  let P5UserPool = "296808.877400758351257600"; 
   let P5TotalStake = "565500";
   let P5NumberOfStakers = 6;
 
@@ -146,6 +146,22 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
   let currentP1ProviderPool: BigNumber = BigNumber.from("0");
   let currentP1UsersPool: BigNumber = BigNumber.from("0");
   let currentP1TotalStake: BigNumber = BigNumber.from("0");
+
+  let currentP2ProviderPool: BigNumber = BigNumber.from("0");
+  let currentP2UsersPool: BigNumber = BigNumber.from("0");
+  let currentP2TotalStake: BigNumber = BigNumber.from("0");
+
+  let currentP3ProviderPool: BigNumber = BigNumber.from("0");
+  let currentP3UsersPool: BigNumber = BigNumber.from("0");
+  let currentP3TotalStake: BigNumber = BigNumber.from("0");
+
+  let currentP4ProviderPool: BigNumber = BigNumber.from("0");
+  let currentP4UsersPool: BigNumber = BigNumber.from("0");
+  let currentP4TotalStake: BigNumber = BigNumber.from("0");
+
+  let currentP5ProviderPool: BigNumber = BigNumber.from("0");
+  let currentP5UsersPool: BigNumber = BigNumber.from("0");
+  let currentP5TotalStake: BigNumber = BigNumber.from("0");
 
   let stakersLength: any;
   let slaDetailsP0: any;
@@ -161,6 +177,10 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
   let slaDetailsP5: any;
 
   let slaStaticDetailsP1: any;
+  let slaStaticDetailsP2: any;
+  let slaStaticDetailsP3: any;
+  let slaStaticDetailsP4: any;
+  let slaStaticDetailsP5: any;
 
   before(async function () {
     this.timeout(0);
@@ -290,7 +310,7 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
     tx = await user_2_SLA.stakeTokens(toWei(initialStakeBalanceUser2), user_2_DSLA.address, Position.SHORT);
     tx = await user_3_SLA.stakeTokens(toWei(initialStakeBalanceUser3), user_3_DSLA.address, Position.SHORT);
 
-    consola.info('Initial DONE');
+    consola.info('Initial Staking DONE');
 
     let slaDetails = await details.getSLADetailsArrays(sla.address);
     let slaDynamicDetails = await details.getSLADynamicDetails(sla.address);
@@ -336,6 +356,7 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
         expect(toWei(initialTotalStake)).equals(currentTotalStake.toString());
       });
 
+      /*
       it('Povider_1 Balance should be equal to initialized value', function () {
         // Note: Thoses values are extrapolated from ProviderPool as it is not yet possible to use getTokenStake by provider
         currentBalPrv1 = currentProviderPool.sub(toWei(initialStakeBalanceProvider2)).sub(toWei(initialStakeBalanceProvider3));
@@ -365,6 +386,7 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
         let currentBalUser3 = currentUsersPool.sub(toWei(initialStakeBalanceUser1)).sub(toWei(initialStakeBalanceUser2));
         expect(currentBalUser3.toString()).equals(toWei(initialStakeBalanceUser3));
       });
+      */
     });
   })
 
@@ -396,7 +418,6 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
           .to.emit(slaRegistry, 'SLIRequested')
 
           //const messenger: BaseMessenger = await ethers.getContract(CONTRACT_NAMES.BaseMessenger);
-  
           const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
 
           await new Promise((resolve) => sla.on('SLICreated', () => resolve(null)));
@@ -412,14 +433,14 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
 
           const slaContractSloValue = slaStaticDetailsP1.sloValue
 
+          console.log("--------------------------------------------------------------")
           console.log('SLO: ', slaContractSloValue.toString())
           console.log('SLI: ', sli.toString())
-          console.log("--------------------------------------------------------------")
           console.log('sla.address: ', sla.address);
           console.log('Created SLI timestamp: ', timestamp.toString());
           console.log('Created SLI sli: ', sli.toString());
           console.log('Created SLI status: ', PERIOD_STATUS[status]);
-          console.log('SLI request process finished');
+          console.log('SLI request process finished  for P1');
           console.log("--------------------------------------------------------------")
     
           //console.log("createdSLI")
@@ -457,6 +478,7 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
           expect(currentP1TotalStake.toString()).equals(toWei(P1TotalStake.toString()));
         });
 
+        /*
         it('Povider_1 Balance should be equal to P1 expected value', function () {
           // CHECK PROVIDERS BALANCE
           // Note: Thoses values are extrapolated from ProviderPool as it is not yet possible to use getTokenStake by provider
@@ -489,30 +511,20 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
         it('StakersLength should be equal to initialNumberOfStakers', function () {
           expect(stakersLength).equals(initialNumberOfStakers);
         });
+        */
       });
     });
 
-    /*
     // P2 tests
     describe("P2", function () {
       describe("request SLI P2", function () {
-        it('Shoud perform a succesful request SLI for P2', async function () {
-          console.log("request SLI P2")
-          //console.log('-----------------------------------------------------------');
-          //console.log('Requesting SLI for P2...');
+        it('Shoud perform a succesful request SLI for P2', async () => {
           const ownerApproval = true;
-    
-          // Get dslaToken contract TODO: Do that one time only, at setup 
-          const dslaToken: ERC20PresetMinterPauser = await ethers.getContract(
-            CONTRACT_NAMES.DSLA
-          );
-    
-          const periodId_P2 = 1//Number(0)
-          const usersStake = 10
-          const expectedCompensation = 100
-
-          tx = await slaRegistry.requestSLI(
-            periodId_P2,
+          const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
+        
+          console.log("request SLI P2")
+          await expect(slaRegistry.requestSLI(
+            nextVerifiablePeriod,
             sla.address,
             ownerApproval,
             {
@@ -520,91 +532,43 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
                 gasLimit: network.config.gas,
               }),
             }
-          );
-          await tx.wait();
-          //console.log('requestSLI P2 done Transaction receipt: ');
-          //console.log(tx);
-  
-          const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
-  
-          await tx.wait();
+          ))
+          .to.emit(slaRegistry, 'SLIRequested')
+
           await new Promise((resolve) => sla.on('SLICreated', () => resolve(null)));
           const createdSLI = await sla.periodSLIs(nextVerifiablePeriod);
           const { timestamp, sli, status } = createdSLI;
           slaDetailsP2 = await details.getSLADetailsArrays(sla.address)
 
-          currentProviderPool = slaDetailsP2.tokensStake[0].providerPool;
-          currentUsersPool = slaDetailsP2.tokensStake[0].usersPool;
-          currentTotalStake = slaDetailsP2.tokensStake[0].totalStake;
-  
-          //console.log('Created SLI timestamp: ', timestamp.toString());
-          //console.log('Created SLI sli: ', sli.toString());
-          //console.log('Created SLI status: ', PERIOD_STATUS[status]);
-          //console.log('SLI request process finished');
-    
-          //console.log("createdSLI")
-          //consola.info(createdSLI)
-          //console.log("timestamp")
-          //consola.info(timestamp)
-          //console.log("sli")
-          //consola.info(sli)
-          //console.log("sli string : " + sli.toString())
-          //console.log("status : " + status.toString())
-          //console.log("slaDetails P2")
-          //console.log(slaDetailsP2)
+          currentP2ProviderPool = slaDetailsP2.tokensStake[0].providerPool;
+          currentP2UsersPool = slaDetailsP2.tokensStake[0].usersPool;
+          currentP2TotalStake = slaDetailsP2.tokensStake[0].totalStake;
 
-          expect(true).equals(true)
+          slaStaticDetailsP2 = await details.getSLAStaticDetails(sla.address, _sloRegistry)
 
+          const slaContractSloValue = slaStaticDetailsP2.sloValue
+
+          console.log("--------------------------------------------------------------")
+          console.log('sla.address: ', sla.address);
+          console.log('SLO: ', slaContractSloValue.toString())
+          console.log('SLI: ', sli.toString())
+          console.log('Created SLI timestamp: ', timestamp.toString());
+          console.log('Created SLI sli: ', sli.toString());
+          console.log('Created SLI status: ', PERIOD_STATUS[status]);
+          console.log('SLI request process finished for P2');
+          console.log("--------------------------------------------------------------")
         });
       });
 
       describe("P2 tests execution", function () {
         it('Total Provider Pool should be equal to P2 expected value', function () {
-          expect(currentProviderPool.toString()).equals(P2ProviderPool.toString());
+          expect(currentP2ProviderPool.toString()).equals(toWei(P2ProviderPool.toString()));
         });
         it('Total User Pool should be equal to P2 expected value', function () {
-          expect(currentUsersPool.toString()).equals(P2UserPool.toString());
+          expect(currentP2UsersPool.toString()).equals(toWei(P2UserPool.toString()));
         });
         it('Total Liquidity Pool should be equal to P2 expected value', function () {
-          expect(currentTotalStake.toString()).equals(P2TotalStake.toString());
-        });
-
-        it('Povider_1 Balance should be equal to P2 expected value', function () {
-          // CHECK PROVIDERS BALANCE
-          // Note: Thoses values are extrapolated from ProviderPool as it is not yet possible to get stake size by provider
-          currentBalPrv1 = currentProviderPool.sub(P2StakeBalanceProvider2).sub(P2StakeBalanceProvider3);
-          expect(currentBalPrv1.toString()).equals(P2StakeBalanceProvider1.toString());
-        });
-        it('Povider_2 Balance should be equal to P2 expected value', function () {
-          // CHECK PROVIDERS BALANCE
-          // Note: Thoses values are extrapolated from ProviderPool as it is not yet possible to get stake size by provider
-          currentBalPrv2 = currentProviderPool.sub(P2StakeBalanceProvider1).sub(P2StakeBalanceProvider3);
-          expect(currentBalPrv2.toString()).equals(P2StakeBalanceProvider2.toString());
-        });
-        it('Povider_3 Balance should be equal to P2 expected value', function () {
-          // CHECK PROVIDERS BALANCE
-          // Note: Thoses values are extrapolated from ProviderPool as it is not yet possible to get stake size by provider
-          currentBalPrv3 = currentProviderPool.sub(P2StakeBalanceProvider1).sub(P2StakeBalanceProvider2);
-          expect(currentBalPrv3.toString()).equals(P2StakeBalanceProvider3.toString());
-        });
-  
-        // CHECK USERS BALANCE
-        // Note: Thoses values are extrapolated from UsersPool as it is not yet possible to get stake size by user
-        it('User_1 Balance should be equal to P2 expected value', function () {
-          let currentBalUser1 = currentUsersPool.sub(P2StakeBalanceUser2).sub(P2StakeBalanceUser3);
-          expect(currentBalUser1.toString()).equals(P2StakeBalanceUser1.toString());
-        });
-        it('User_2 Balance should be equal to P2 expected value', function () {
-          let currentBalUser2 = currentUsersPool.sub(P2StakeBalanceUser1).sub(P2StakeBalanceUser3);
-          expect(currentBalUser2.toString()).equals(P2StakeBalanceUser2.toString());
-        });
-        it('User_3 Balance should be equal to P2 expected value', function () {
-          let currentBalUser3 = currentUsersPool.sub(P2StakeBalanceUser1).sub(P2StakeBalanceUser2);
-          expect(currentBalUser3.toString()).equals(P2StakeBalanceUser3.toString());
-        });
-  
-        it('StakersLength should be equal to initialNumberOfStakers', function () {
-          expect(stakersLength).equals(initialNumberOfStakers);
+          expect(currentP2TotalStake.toString()).equals(toWei(P2TotalStake.toString()));
         });
       });
     });
@@ -612,23 +576,13 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
     // P3 tests
     describe("P3", function () {
       describe("request SLI P3", function () {
-        it('Shoud perform a succesful request SLI for P3', async function () {
-          console.log("request SLI P3")
-          //console.log('-----------------------------------------------------------');
-          //console.log('Requesting SLI for P3...');
+        it('Shoud perform a succesful request SLI for P3', async () => {
           const ownerApproval = true;
-    
-          // Get dslaToken contract TODO: Do that one time only, at setup 
-          const dslaToken: ERC20PresetMinterPauser = await ethers.getContract(
-            CONTRACT_NAMES.DSLA
-          );
-    
-          const periodId_P3 = 1//Number(0)
-          const usersStake = 10
-          const expectedCompensation = 100
-
-          tx = await slaRegistry.requestSLI(
-            periodId_P3,
+          const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
+        
+          console.log("request SLI P3")
+          await expect(slaRegistry.requestSLI(
+            nextVerifiablePeriod,
             sla.address,
             ownerApproval,
             {
@@ -636,119 +590,57 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
                 gasLimit: network.config.gas,
               }),
             }
-          );
-          await tx.wait();
-          //console.log('requestSLI P3 done Transaction receipt: ');
-          //console.log(tx);
-  
-          const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
-  
-          await tx.wait();
+          ))
+          .to.emit(slaRegistry, 'SLIRequested')
+
           await new Promise((resolve) => sla.on('SLICreated', () => resolve(null)));
           const createdSLI = await sla.periodSLIs(nextVerifiablePeriod);
           const { timestamp, sli, status } = createdSLI;
           slaDetailsP3 = await details.getSLADetailsArrays(sla.address)
 
-          currentProviderPool = slaDetailsP3.tokensStake[0].providerPool;
-          currentUsersPool = slaDetailsP3.tokensStake[0].usersPool;
-          currentTotalStake = slaDetailsP3.tokensStake[0].totalStake;
-  
-          //console.log('Created SLI timestamp: ', timestamp.toString());
-          //console.log('Created SLI sli: ', sli.toString());
-          //console.log('Created SLI status: ', PERIOD_STATUS[status]);
-          //console.log('SLI request process finished');
-    
-          //console.log("createdSLI")
-          //consola.info(createdSLI)
-          //console.log("timestamp")
-          //consola.info(timestamp)
-          //console.log("sli")
-          //consola.info(sli)
-          //console.log("sli string : " + sli.toString())
-          //console.log("status : " + status.toString())
-          //console.log("slaDetails P3")
-          //console.log(slaDetailsP3)
+          currentP3ProviderPool = slaDetailsP3.tokensStake[0].providerPool;
+          currentP3UsersPool = slaDetailsP3.tokensStake[0].usersPool;
+          currentP3TotalStake = slaDetailsP3.tokensStake[0].totalStake;
 
-          expect(true).equals(true)
+          slaStaticDetailsP3 = await details.getSLAStaticDetails(sla.address, _sloRegistry)
 
+          const slaContractSloValue = slaStaticDetailsP3.sloValue
+
+          console.log("--------------------------------------------------------------")
+          console.log('sla.address: ', sla.address);
+          console.log('SLO: ', slaContractSloValue.toString())
+          console.log('SLI: ', sli.toString())
+          console.log('Created SLI timestamp: ', timestamp.toString());
+          console.log('Created SLI sli: ', sli.toString());
+          console.log('Created SLI status: ', PERIOD_STATUS[status]);
+          console.log('SLI request process finished for P3');
+          console.log("--------------------------------------------------------------")
         });
       });
 
       describe("P3 tests execution", function () {
         it('Total Provider Pool should be equal to P3 expected value', function () {
-          expect(currentProviderPool.toString()).equals(P3ProviderPool.toString());
+          expect(currentP3ProviderPool.toString()).equals(toWei(P3ProviderPool.toString()));
         });
         it('Total User Pool should be equal to P3 expected value', function () {
-          expect(currentUsersPool.toString()).equals(P3UserPool.toString());
+          expect(currentP3UsersPool.toString()).equals(toWei(P3UserPool.toString()));
         });
         it('Total Liquidity Pool should be equal to P3 expected value', function () {
-          expect(currentTotalStake.toString()).equals(P3TotalStake.toString());
-        });
-
-        it('Povider_1 Balance should be equal to P3 expected value', function () {
-          // CHECK PROVIDERS BALANCE
-          // Note: Thoses values are extrapolated from ProviderPool as it is not yet possible to get stake size by provider
-          currentBalPrv1 = currentProviderPool.sub(P3StakeBalanceProvider2).sub(P3StakeBalanceProvider3);
-          expect(currentBalPrv1.toString()).equals(P3StakeBalanceProvider1.toString());
-        });
-        it('Povider_2 Balance should be equal to P3 expected value', function () {
-          // CHECK PROVIDERS BALANCE
-          // Note: Thoses values are extrapolated from ProviderPool as it is not yet possible to get stake size by provider
-          currentBalPrv2 = currentProviderPool.sub(P3StakeBalanceProvider1).sub(P3StakeBalanceProvider3);
-          expect(currentBalPrv2.toString()).equals(P3StakeBalanceProvider2.toString());
-        });
-        it('Povider_3 Balance should be equal to P3 expected value', function () {
-          // CHECK PROVIDERS BALANCE
-          // Note: Thoses values are extrapolated from ProviderPool as it is not yet possible to get stake size by provider
-          currentBalPrv3 = currentProviderPool.sub(P3StakeBalanceProvider1).sub(P3StakeBalanceProvider2);
-          expect(currentBalPrv3.toString()).equals(P3StakeBalanceProvider3.toString());
-        });
-  
-        // CHECK USERS BALANCE
-        // Note: Thoses values are extrapolated from UsersPool as it is not yet possible to get stake size by user
-        it('User_1 Balance should be equal to P3 expected value', function () {
-          let currentBalUser1 = currentUsersPool.sub(P3StakeBalanceUser2).sub(P3StakeBalanceUser3);
-          expect(currentBalUser1.toString()).equals(P3StakeBalanceUser1.toString());
-        });
-        it('User_2 Balance should be equal to P3 expected value', function () {
-          let currentBalUser2 = currentUsersPool.sub(P3StakeBalanceUser1).sub(P3StakeBalanceUser3);
-          expect(currentBalUser2.toString()).equals(P3StakeBalanceUser2.toString());
-        });
-        it('User_3 Balance should be equal to P3 expected value', function () {
-          let currentBalUser3 = currentUsersPool.sub(P3StakeBalanceUser1).sub(P3StakeBalanceUser2);
-          expect(currentBalUser3.toString()).equals(P3StakeBalanceUser3.toString());
-        });
-  
-        it('StakersLength should be equal to initialNumberOfStakers', function () {
-          expect(stakersLength).equals(initialNumberOfStakers);
+          expect(currentP3TotalStake.toString()).equals(toWei(P3TotalStake.toString()));
         });
       });
     });
 
-
-
-
-
     // P4 tests
     describe("P4", function () {
       describe("request SLI P4", function () {
-        it('Shoud perform a succesful request SLI for P4', async function () {
-          console.log("request SLI P4")
-          //console.log('-----------------------------------------------------------');
-          //console.log('Requesting SLI for P4...');
+        it('Shoud perform a succesful request SLI for P4', async () => {
           const ownerApproval = true;
-    
-          // Get dslaToken contract TODO: Do that one time only, at setup 
-          const dslaToken: ERC20PresetMinterPauser = await ethers.getContract(
-            CONTRACT_NAMES.DSLA
-          );
-    
-          const periodId_P4 = 1//Number(0)
-          const usersStake = 10
-          const expectedCompensation = 100
-
-          tx = await slaRegistry.requestSLI(
-            periodId_P4,
+          const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
+        
+          console.log("request SLI P4")
+          await expect(slaRegistry.requestSLI(
+            nextVerifiablePeriod,
             sla.address,
             ownerApproval,
             {
@@ -756,116 +648,57 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
                 gasLimit: network.config.gas,
               }),
             }
-          );
-          await tx.wait();
-          //console.log('requestSLI P4 done Transaction receipt: ');
-          //console.log(tx);
-  
-          const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
-  
-          await tx.wait();
+          ))
+          .to.emit(slaRegistry, 'SLIRequested')
+
           await new Promise((resolve) => sla.on('SLICreated', () => resolve(null)));
           const createdSLI = await sla.periodSLIs(nextVerifiablePeriod);
           const { timestamp, sli, status } = createdSLI;
           slaDetailsP4 = await details.getSLADetailsArrays(sla.address)
 
-          currentProviderPool = slaDetailsP4.tokensStake[0].providerPool;
-          currentUsersPool = slaDetailsP4.tokensStake[0].usersPool;
-          currentTotalStake = slaDetailsP4.tokensStake[0].totalStake;
-  
-          //console.log('Created SLI timestamp: ', timestamp.toString());
-          //console.log('Created SLI sli: ', sli.toString());
-          //console.log('Created SLI status: ', PERIOD_STATUS[status]);
-          //console.log('SLI request process finished');
-    
-          //console.log("createdSLI")
-          //consola.info(createdSLI)
-          //console.log("timestamp")
-          //consola.info(timestamp)
-          //console.log("sli")
-          //consola.info(sli)
-          //console.log("sli string : " + sli.toString())
-          //console.log("status : " + status.toString())
-          //console.log("slaDetails P4")
-          //console.log(slaDetailsP4)
+          currentP4ProviderPool = slaDetailsP4.tokensStake[0].providerPool;
+          currentP4UsersPool = slaDetailsP4.tokensStake[0].usersPool;
+          currentP4TotalStake = slaDetailsP4.tokensStake[0].totalStake;
 
-          expect(true).equals(true)
+          slaStaticDetailsP4 = await details.getSLAStaticDetails(sla.address, _sloRegistry)
 
+          const slaContractSloValue = slaStaticDetailsP4.sloValue
+
+          console.log("--------------------------------------------------------------")
+          console.log('sla.address: ', sla.address);
+          console.log('SLO: ', slaContractSloValue.toString())
+          console.log('SLI: ', sli.toString())
+          console.log('Created SLI timestamp: ', timestamp.toString());
+          console.log('Created SLI sli: ', sli.toString());
+          console.log('Created SLI status: ', PERIOD_STATUS[status]);
+          console.log('SLI request process finished for P4');
+          console.log("--------------------------------------------------------------")
         });
       });
 
       describe("P4 tests execution", function () {
         it('Total Provider Pool should be equal to P4 expected value', function () {
-          expect(currentProviderPool.toString()).equals(P4ProviderPool.toString());
+          expect(currentP4ProviderPool.toString()).equals(toWei(P4ProviderPool.toString()));
         });
         it('Total User Pool should be equal to P4 expected value', function () {
-          expect(currentUsersPool.toString()).equals(P4UserPool.toString());
+          expect(currentP4UsersPool.toString()).equals(toWei(P4UserPool.toString()));
         });
         it('Total Liquidity Pool should be equal to P4 expected value', function () {
-          expect(currentTotalStake.toString()).equals(P4TotalStake.toString());
-        });
-
-        it('Povider_1 Balance should be equal to P4 expected value', function () {
-          // CHECK PROVIDERS BALANCE
-          // Note: Thoses values are extrapolated from ProviderPool as it is not yet possible to get stake size by provider
-          currentBalPrv1 = currentProviderPool.sub(P4StakeBalanceProvider2).sub(P4StakeBalanceProvider3);
-          expect(currentBalPrv1.toString()).equals(P4StakeBalanceProvider1.toString());
-        });
-        it('Povider_2 Balance should be equal to P4 expected value', function () {
-          // CHECK PROVIDERS BALANCE
-          // Note: Thoses values are extrapolated from ProviderPool as it is not yet possible to get stake size by provider
-          currentBalPrv2 = currentProviderPool.sub(P4StakeBalanceProvider1).sub(P4StakeBalanceProvider3);
-          expect(currentBalPrv2.toString()).equals(P4StakeBalanceProvider2.toString());
-        });
-        it('Povider_3 Balance should be equal to P4 expected value', function () {
-          // CHECK PROVIDERS BALANCE
-          // Note: Thoses values are extrapolated from ProviderPool as it is not yet possible to get stake size by provider
-          currentBalPrv3 = currentProviderPool.sub(P4StakeBalanceProvider1).sub(P4StakeBalanceProvider2);
-          expect(currentBalPrv3.toString()).equals(P4StakeBalanceProvider3.toString());
-        });
-  
-        // CHECK USERS BALANCE
-        // Note: Thoses values are extrapolated from UsersPool as it is not yet possible to get stake size by user
-        it('User_1 Balance should be equal to P4 expected value', function () {
-          let currentBalUser1 = currentUsersPool.sub(P4StakeBalanceUser2).sub(P4StakeBalanceUser3);
-          expect(currentBalUser1.toString()).equals(P4StakeBalanceUser1.toString());
-        });
-        it('User_2 Balance should be equal to P4 expected value', function () {
-          let currentBalUser2 = currentUsersPool.sub(P4StakeBalanceUser1).sub(P4StakeBalanceUser3);
-          expect(currentBalUser2.toString()).equals(P4StakeBalanceUser2.toString());
-        });
-        it('User_3 Balance should be equal to P4 expected value', function () {
-          let currentBalUser3 = currentUsersPool.sub(P4StakeBalanceUser1).sub(P4StakeBalanceUser2);
-          expect(currentBalUser3.toString()).equals(P4StakeBalanceUser3.toString());
-        });
-  
-        it('StakersLength should be equal to initialNumberOfStakers', function () {
-          expect(stakersLength).equals(initialNumberOfStakers);
+          expect(currentP4TotalStake.toString()).equals(toWei(P4TotalStake.toString()));
         });
       });
     });
 
-
     // P5 tests
     describe("P5", function () {
       describe("request SLI P5", function () {
-        it('Shoud perform a succesful request SLI for P5', async function () {
-          console.log("request SLI P5")
-          //console.log('-----------------------------------------------------------');
-          //console.log('Requesting SLI for P5...');
+        it('Shoud perform a succesful request SLI for P5', async () => {
           const ownerApproval = true;
-    
-          // Get dslaToken contract TODO: Do that one time only, at setup 
-          const dslaToken: ERC20PresetMinterPauser = await ethers.getContract(
-            CONTRACT_NAMES.DSLA
-          );
-    
-          const periodId_P5 = 1//Number(0)
-          const usersStake = 10
-          const expectedCompensation = 100
-
-          tx = await slaRegistry.requestSLI(
-            periodId_P5,
+          const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
+        
+          console.log("request SLI P5")
+          await expect(slaRegistry.requestSLI(
+            nextVerifiablePeriod,
             sla.address,
             ownerApproval,
             {
@@ -873,167 +706,46 @@ describe('DSLA Protocol Staking Simulation - v1.5', () => {
                 gasLimit: network.config.gas,
               }),
             }
-          );
-          await tx.wait();
-          //console.log('requestSLI P5 done Transaction receipt: ');
-          //console.log(tx);
-  
-          const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
-  
-          await tx.wait();
+          ))
+          .to.emit(slaRegistry, 'SLIRequested')
+
           await new Promise((resolve) => sla.on('SLICreated', () => resolve(null)));
           const createdSLI = await sla.periodSLIs(nextVerifiablePeriod);
           const { timestamp, sli, status } = createdSLI;
           slaDetailsP5 = await details.getSLADetailsArrays(sla.address)
 
-          currentProviderPool = slaDetailsP5.tokensStake[0].providerPool;
-          currentUsersPool = slaDetailsP5.tokensStake[0].usersPool;
-          currentTotalStake = slaDetailsP5.tokensStake[0].totalStake;
-  
-          //console.log('Created SLI timestamp: ', timestamp.toString());
-          //console.log('Created SLI sli: ', sli.toString());
-          //console.log('Created SLI status: ', PERIOD_STATUS[status]);
-          //console.log('SLI request process finished');
-    
-          //console.log("createdSLI")
-          //consola.info(createdSLI)
-          //console.log("timestamp")
-          //consola.info(timestamp)
-          //console.log("sli")
-          //consola.info(sli)
-          //console.log("sli string : " + sli.toString())
-          //console.log("status : " + status.toString())
-          //console.log("slaDetails P5")
-          //console.log(slaDetailsP5)
+          currentP5ProviderPool = slaDetailsP5.tokensStake[0].providerPool;
+          currentP5UsersPool = slaDetailsP5.tokensStake[0].usersPool;
+          currentP5TotalStake = slaDetailsP5.tokensStake[0].totalStake;
 
-          expect(true).equals(true)
+          slaStaticDetailsP5 = await details.getSLAStaticDetails(sla.address, _sloRegistry)
 
+          const slaContractSloValue = slaStaticDetailsP5.sloValue
+
+          console.log("--------------------------------------------------------------")
+          console.log('sla.address: ', sla.address);
+          console.log('SLO: ', slaContractSloValue.toString())
+          console.log('SLI: ', sli.toString())
+          console.log('Created SLI timestamp: ', timestamp.toString());
+          console.log('Created SLI sli: ', sli.toString());
+          console.log('Created SLI status: ', PERIOD_STATUS[status]);
+          console.log('SLI request process finished for P5');
+          console.log("--------------------------------------------------------------")
         });
       });
 
       describe("P5 tests execution", function () {
         it('Total Provider Pool should be equal to P5 expected value', function () {
-          expect(currentProviderPool.toString()).equals(P5ProviderPool.toString());
+          expect(currentP5ProviderPool.toString()).equals(toWei(P5ProviderPool.toString()));
         });
         it('Total User Pool should be equal to P5 expected value', function () {
-          expect(currentUsersPool.toString()).equals(P5UserPool.toString());
+          expect(currentP5UsersPool.toString()).equals(toWei(P5UserPool.toString()));
         });
         it('Total Liquidity Pool should be equal to P5 expected value', function () {
-          expect(currentTotalStake.toString()).equals(P5TotalStake.toString());
-        });
-
-        it('Povider_1 Balance should be equal to P5 expected value', function () {
-          // CHECK PROVIDERS BALANCE
-          // Note: Thoses values are extrapolated from ProviderPool as it is not yet possible to get stake size by provider
-          currentBalPrv1 = currentProviderPool.sub(P5StakeBalanceProvider2).sub(P5StakeBalanceProvider3);
-          expect(currentBalPrv1.toString()).equals(P5StakeBalanceProvider1.toString());
-        });
-        it('Povider_2 Balance should be equal to P5 expected value', function () {
-          // CHECK PROVIDERS BALANCE
-          // Note: Thoses values are extrapolated from ProviderPool as it is not yet possible to get stake size by provider
-          currentBalPrv2 = currentProviderPool.sub(P5StakeBalanceProvider1).sub(P5StakeBalanceProvider3);
-          expect(currentBalPrv2.toString()).equals(P5StakeBalanceProvider2.toString());
-        });
-        it('Povider_3 Balance should be equal to P5 expected value', function () {
-          // CHECK PROVIDERS BALANCE
-          // Note: Thoses values are extrapolated from ProviderPool as it is not yet possible to get stake size by provider
-          currentBalPrv3 = currentProviderPool.sub(P5StakeBalanceProvider1).sub(P5StakeBalanceProvider2);
-          expect(currentBalPrv3.toString()).equals(P5StakeBalanceProvider3.toString());
-        });
-  
-        // CHECK USERS BALANCE
-        // Note: Thoses values are extrapolated from UsersPool as it is not yet possible to get stake size by user
-        it('User_1 Balance should be equal to P5 expected value', function () {
-          let currentBalUser1 = currentUsersPool.sub(P5StakeBalanceUser2).sub(P5StakeBalanceUser3);
-          expect(currentBalUser1.toString()).equals(P5StakeBalanceUser1.toString());
-        });
-        it('User_2 Balance should be equal to P5 expected value', function () {
-          let currentBalUser2 = currentUsersPool.sub(P5StakeBalanceUser1).sub(P5StakeBalanceUser3);
-          expect(currentBalUser2.toString()).equals(P5StakeBalanceUser2.toString());
-        });
-        it('User_3 Balance should be equal to P5 expected value', function () {
-          let currentBalUser3 = currentUsersPool.sub(P5StakeBalanceUser1).sub(P5StakeBalanceUser2);
-          expect(currentBalUser3.toString()).equals(P5StakeBalanceUser3.toString());
-        });
-  
-        it('StakersLength should be equal to initialNumberOfStakers', function () {
-          expect(stakersLength).equals(initialNumberOfStakers);
+          expect(currentP5TotalStake.toString()).equals(toWei(P5TotalStake.toString()));
         });
       });
     });
-*/
-
-
-    /*it('P1', async () => {
-
-      await expect(slaRegistry.requestSLI(
-        periodId_p1,
-        sla.address,
-        ownerApproval,
-        {
-          ...(network.config.gas !== 'auto' && {
-            gasLimit: network.config.gas,
-          }),
-        }
-      ))
-      .to.emit(slaRegistry, 'SLIRequested')
-
-      //.withArgs(
-      //  periodId_p1,
-      //  sla.address,
-      //  ownerApproval,
-      //  msg.sender // Who is sender here?
-      //);
-
-
-      //.to.emit(sla, 'UserCompensationGenerated')
-      //.withArgs(
-      //  periodId_p1,
-      //  dslaToken.address,
-      //  usersStake,
-      //  leverage,
-      //  expectedCompensation
-      //);
-
-
-      let totalStake;
-      let usersPool;
-      let providerPool;
-
-      totalStake = slaDetailsP1.tokensStake[0].totalStake
-      usersPool = slaDetailsP1.tokensStake[0].usersPool
-      providerPool = slaDetailsP1.tokensStake[0].providerPool
-
-      consola.info("totalStake: " + totalStake.toString())
-      consola.info("usersPool: " + usersPool.toString())
-      consola.info("providerPool: " + providerPool.toString())
-      console.log('-----------------------------------------------------------');
-
-      let precision = 10000
-      const leverage = 1
-      const periodId_p1 = 0
-
-      // TODO retrieve thoses values from contract details
-      let expectedSliP0 = 99
-      let sloValue = 100
-      let expectedSliDeviation = ((expectedSliP0 - sloValue) * precision) / ((expectedSliP0 + sloValue) / 2)
-
-      let normalizedPeriodNumber = periodId_p1 + 1
-      let numberOfPeriods = 5
-
-      
-      let deviation = _sloRegistry.getDeviation(
-          sli,
-          sla.address,
-          precision
-      );
-      //let rewardPercentage = deviation.mul()
-      let expectedUserRewards = (providerPool * expectedSliDeviation) * normalizedPeriodNumber / (numberOfPeriods * leverage)
-
-      //console.log('expectedSliDeviation: ' + expectedSliDeviation)
-      //console.log('expectedUserRewards: ' + expectedUserRewards)
-
-    })*/
 
   });
 //});
