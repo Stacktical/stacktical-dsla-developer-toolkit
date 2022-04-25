@@ -215,4 +215,12 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
     function fulfillsCounter() external view override returns (uint256) {
         return _fulfillsCounter;
     }
+
+    function lpSymbol(uint128 slaId) external view override returns (string memory) {
+        return string(abi.encodePacked(lpName, '-', StringUtils.uintToStr(slaId)));
+    }
+
+    function spSymbol(uint128 slaId) external view override returns (string memory) {
+        return string(abi.encodePacked(spName, '-', StringUtils.uintToStr(slaId)));
+    }
 }
