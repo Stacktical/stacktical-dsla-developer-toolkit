@@ -4,7 +4,6 @@ import { fixture } from '../../fixtures/basic';
 import { fromWei, toWei } from 'web3-utils';
 
 const hre = require('hardhat');
-//const { ethers } = hre;
 
 import { BigNumber} from "@ethersproject/bignumber";
 
@@ -324,7 +323,7 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Respected, Reward Not Ca
     //console.log("slaDetails P0 (init)");
     //console.log(slaDetailsP0);
     
-    currentProviderPool = slaDetailsP0.tokensStake[0].providerPool;
+    currentProviderPool = slaDetailsP0.tokensStake[0].providersPool;
     currentUsersPool = slaDetailsP0.tokensStake[0].usersPool;
     currentTotalStake = slaDetailsP0.tokensStake[0].totalStake;
 
@@ -414,7 +413,7 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Respected, Reward Not Ca
           const { timestamp, sli, status } = createdSLI;
           slaDetailsP1 = await details.getSLADetailsArrays(sla.address)
 
-          currentP1ProviderPool = slaDetailsP1.tokensStake[0].providerPool;
+          currentP1ProviderPool = slaDetailsP1.tokensStake[0].providersPool;
           currentP1UsersPool = slaDetailsP1.tokensStake[0].usersPool;
           currentP1TotalStake = slaDetailsP1.tokensStake[0].totalStake;
 
@@ -508,7 +507,7 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Respected, Reward Not Ca
           const { timestamp, sli, status } = createdSLI;
           slaDetailsP2 = await details.getSLADetailsArrays(sla.address)
 
-          currentP2ProviderPool = slaDetailsP2.tokensStake[0].providerPool;
+          currentP2ProviderPool = slaDetailsP2.tokensStake[0].providersPool;
           currentP2UsersPool = slaDetailsP2.tokensStake[0].usersPool;
           currentP2TotalStake = slaDetailsP2.tokensStake[0].totalStake;
 
@@ -566,7 +565,7 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Respected, Reward Not Ca
           const { timestamp, sli, status } = createdSLI;
           slaDetailsP3 = await details.getSLADetailsArrays(sla.address)
 
-          currentP3ProviderPool = slaDetailsP3.tokensStake[0].providerPool;
+          currentP3ProviderPool = slaDetailsP3.tokensStake[0].providersPool;
           currentP3UsersPool = slaDetailsP3.tokensStake[0].usersPool;
           currentP3TotalStake = slaDetailsP3.tokensStake[0].totalStake;
 
@@ -624,7 +623,7 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Respected, Reward Not Ca
           const { timestamp, sli, status } = createdSLI;
           slaDetailsP4 = await details.getSLADetailsArrays(sla.address)
 
-          currentP4ProviderPool = slaDetailsP4.tokensStake[0].providerPool;
+          currentP4ProviderPool = slaDetailsP4.tokensStake[0].providersPool;
           currentP4UsersPool = slaDetailsP4.tokensStake[0].usersPool;
           currentP4TotalStake = slaDetailsP4.tokensStake[0].totalStake;
 
@@ -682,7 +681,7 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Respected, Reward Not Ca
           const { timestamp, sli, status } = createdSLI;
           slaDetailsP5 = await details.getSLADetailsArrays(sla.address)
 
-          currentP5ProviderPool = slaDetailsP5.tokensStake[0].providerPool;
+          currentP5ProviderPool = slaDetailsP5.tokensStake[0].providersPool;
           currentP5UsersPool = slaDetailsP5.tokensStake[0].usersPool;
           currentP5TotalStake = slaDetailsP5.tokensStake[0].totalStake;
 

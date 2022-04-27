@@ -242,6 +242,12 @@
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "enum Staking.Position",
+        "name": "position",
+        "type": "uint8"
       }
     ],
     "name": "Stake",
@@ -265,7 +271,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "usersStake",
+        "name": "userStake",
         "type": "uint256"
       },
       {
@@ -410,7 +416,7 @@
     "name": "dpTokenRegistry",
     "outputs": [
       {
-        "internalType": "contract ERC20PresetMinterPauser",
+        "internalType": "contract dToken",
         "name": "",
         "type": "address"
       }
@@ -429,7 +435,7 @@
     "name": "duTokenRegistry",
     "outputs": [
       {
-        "internalType": "contract ERC20PresetMinterPauser",
+        "internalType": "contract dToken",
         "name": "",
         "type": "address"
       }
@@ -560,6 +566,44 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "lastProviderStake",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "lastUserStake",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "leverage",
     "outputs": [
@@ -656,12 +700,31 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "providerRewards",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "",
         "type": "address"
       }
     ],
-    "name": "providerPool",
+    "name": "providersPool",
     "outputs": [
       {
         "internalType": "uint256",
@@ -751,13 +814,13 @@
       },
       {
         "internalType": "address",
-        "name": "_token",
+        "name": "_tokenAddress",
         "type": "address"
       },
       {
-        "internalType": "string",
+        "internalType": "enum Staking.Position",
         "name": "_position",
-        "type": "string"
+        "type": "uint8"
       }
     ],
     "name": "stakeTokens",
@@ -798,13 +861,19 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "userWithdrawLocked",
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "userRewards",
     "outputs": [
       {
-        "internalType": "bool",
+        "internalType": "uint256",
         "name": "",
-        "type": "bool"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",

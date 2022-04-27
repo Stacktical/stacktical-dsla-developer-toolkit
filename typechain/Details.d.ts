@@ -183,7 +183,7 @@ export class Details extends BaseContract {
           tokenAddress: string;
           totalStake: BigNumber;
           usersPool: BigNumber;
-          providerPool: BigNumber;
+          providersPool: BigNumber;
         })[]
       ] & {
         periodSLIs: ([BigNumber, BigNumber, number] & {
@@ -195,7 +195,7 @@ export class Details extends BaseContract {
           tokenAddress: string;
           totalStake: BigNumber;
           usersPool: BigNumber;
-          providerPool: BigNumber;
+          providersPool: BigNumber;
         })[];
       }
     >;
@@ -320,7 +320,7 @@ export class Details extends BaseContract {
         tokenAddress: string;
         totalStake: BigNumber;
         usersPool: BigNumber;
-        providerPool: BigNumber;
+        providersPool: BigNumber;
       })[]
     ] & {
       periodSLIs: ([BigNumber, BigNumber, number] & {
@@ -332,7 +332,7 @@ export class Details extends BaseContract {
         tokenAddress: string;
         totalStake: BigNumber;
         usersPool: BigNumber;
-        providerPool: BigNumber;
+        providersPool: BigNumber;
       })[];
     }
   >;
@@ -457,7 +457,7 @@ export class Details extends BaseContract {
           tokenAddress: string;
           totalStake: BigNumber;
           usersPool: BigNumber;
-          providerPool: BigNumber;
+          providersPool: BigNumber;
         })[]
       ] & {
         periodSLIs: ([BigNumber, BigNumber, number] & {
@@ -469,7 +469,7 @@ export class Details extends BaseContract {
           tokenAddress: string;
           totalStake: BigNumber;
           usersPool: BigNumber;
-          providerPool: BigNumber;
+          providersPool: BigNumber;
         })[];
       }
     >;

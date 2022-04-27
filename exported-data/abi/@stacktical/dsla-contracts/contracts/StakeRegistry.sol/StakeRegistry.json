@@ -270,6 +270,11 @@
         "internalType": "string",
         "name": "_symbol",
         "type": "string"
+      },
+      {
+        "internalType": "uint8",
+        "name": "decimals",
+        "type": "uint8"
       }
     ],
     "name": "createDToken",

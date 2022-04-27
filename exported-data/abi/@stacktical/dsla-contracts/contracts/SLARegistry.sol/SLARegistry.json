@@ -333,7 +333,7 @@
     "outputs": [
       {
         "internalType": "contract SLA[]",
-        "name": "",
+        "name": "SLAList",
         "type": "address[]"
       }
     ],

@@ -235,25 +235,25 @@ subtask(SUB_TASK_NAMES.PROVIDER_WITHDRAW, undefined).setAction(
     // );
     const supply = await lpToken.totalSupply();
     consola.info('LP token total supply:', fromWei(supply.toString()));
-    const slaProviderPool = await slaContract.providerPool(
+    const slaProvidersPool = await slaContract.providersPool(
       taskArgs.tokenAddress
     );
-    const slaUserPool = await slaContract.usersPool(taskArgs.tokenAddress);
+    const slaUsersPool = await slaContract.usersPool(taskArgs.tokenAddress);
     consola.info(
       'SLA provider pool balance:',
-      fromWei(slaProviderPool.toString())
+      fromWei(slaProvidersPool.toString())
     );
     const poolPercentage = lpTokenUserBalance.div(supply).mul(100);
     consola.info('Accrued pool percentage:', poolPercentage.toString() + '%');
     const leverage = await slaContract.leverage();
     consola.info('SLA leverage:', leverage.toString() + 'x');
-    const poolSpread = slaProviderPool.sub(slaUserPool.mul(leverage));
+    const poolSpread = slaProvidersPool.sub(slaUsersPool.mul(leverage));
     consola.info(
       'Provider pool allowed withdraw amount:',
       fromWei(poolSpread.toString())
     );
     await lpToken.approve(slaAddress, lpTokenUserBalance);
-    const accruedBalance = lpTokenUserBalance.mul(slaProviderPool).div(supply);
+    const accruedBalance = lpTokenUserBalance.mul(slaProvidersPool).div(supply);
     const allowedWithdraw = accruedBalance.gt(poolSpread)
       ? poolSpread
       : accruedBalance;

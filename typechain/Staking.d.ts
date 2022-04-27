@@ -29,16 +29,20 @@ interface StakingInterface extends ethers.utils.Interface {
     "duTokenRegistry(address)": FunctionFragment;
     "getAllowedTokensLength()": FunctionFragment;
     "isAllowedToken(address)": FunctionFragment;
+    "lastProviderStake(address)": FunctionFragment;
+    "lastUserStake(address)": FunctionFragment;
     "leverage()": FunctionFragment;
     "messengerAddress()": FunctionFragment;
     "owner()": FunctionFragment;
-    "providerPool(address)": FunctionFragment;
+    "providerRewards(uint256)": FunctionFragment;
+    "providersPool(address)": FunctionFragment;
     "registeredStakers(address)": FunctionFragment;
     "removeUsersFromWhitelist(address[])": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "slaID()": FunctionFragment;
     "stakers(uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
+    "userRewards(uint256)": FunctionFragment;
     "usersPool(address)": FunctionFragment;
     "whitelist(address)": FunctionFragment;
     "whitelistedContract()": FunctionFragment;
@@ -76,6 +80,14 @@ interface StakingInterface extends ethers.utils.Interface {
     functionFragment: "isAllowedToken",
     values: [string]
   ): string;
+  encodeFunctionData(
+    functionFragment: "lastProviderStake",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "lastUserStake",
+    values: [string]
+  ): string;
   encodeFunctionData(functionFragment: "leverage", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "messengerAddress",
@@ -83,7 +95,11 @@ interface StakingInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "providerPool",
+    functionFragment: "providerRewards",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "providersPool",
     values: [string]
   ): string;
   encodeFunctionData(
@@ -106,6 +122,10 @@ interface StakingInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "userRewards",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "usersPool", values: [string]): string;
   encodeFunctionData(functionFragment: "whitelist", values: [string]): string;
@@ -146,6 +166,14 @@ interface StakingInterface extends ethers.utils.Interface {
     functionFragment: "isAllowedToken",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "lastProviderStake",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "lastUserStake",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "leverage", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "messengerAddress",
@@ -153,7 +181,11 @@ interface StakingInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "providerPool",
+    functionFragment: "providerRewards",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "providersPool",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -172,6 +204,10 @@ interface StakingInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "stakers", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "userRewards",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "usersPool", data: BytesLike): Result;
@@ -224,7 +260,7 @@ export type UserCompensationGeneratedEvent = TypedEvent<
   [BigNumber, string, BigNumber, BigNumber, BigNumber] & {
     periodId: BigNumber;
     tokenAddress: string;
-    usersStake: BigNumber;
+    userStake: BigNumber;
     leverage: BigNumber;
     compensation: BigNumber;
   }
@@ -302,13 +338,31 @@ export class Staking extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
+    lastProviderStake(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    lastUserStake(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     leverage(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     messengerAddress(overrides?: CallOverrides): Promise<[string]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
-    providerPool(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
+    providerRewards(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    providersPool(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     registeredStakers(
       arg0: string,
@@ -332,6 +386,11 @@ export class Staking extends BaseContract {
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    userRewards(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     usersPool(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -365,13 +424,25 @@ export class Staking extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
+  lastProviderStake(
+    arg0: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  lastUserStake(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
   leverage(overrides?: CallOverrides): Promise<BigNumber>;
 
   messengerAddress(overrides?: CallOverrides): Promise<string>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
-  providerPool(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+  providerRewards(
+    arg0: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  providersPool(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   registeredStakers(arg0: string, overrides?: CallOverrides): Promise<boolean>;
 
@@ -392,6 +463,11 @@ export class Staking extends BaseContract {
     newOwner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  userRewards(
+    arg0: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   usersPool(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -428,13 +504,25 @@ export class Staking extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
+    lastProviderStake(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    lastUserStake(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
     leverage(overrides?: CallOverrides): Promise<BigNumber>;
 
     messengerAddress(overrides?: CallOverrides): Promise<string>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
-    providerPool(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+    providerRewards(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    providersPool(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     registeredStakers(
       arg0: string,
@@ -456,6 +544,11 @@ export class Staking extends BaseContract {
       newOwner: string,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    userRewards(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     usersPool(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -560,7 +653,7 @@ export class Staking extends BaseContract {
     "UserCompensationGenerated(uint256,address,uint256,uint256,uint256)"(
       periodId?: BigNumberish | null,
       tokenAddress?: string | null,
-      usersStake?: null,
+      userStake?: null,
       leverage?: null,
       compensation?: null
     ): TypedEventFilter<
@@ -568,7 +661,7 @@ export class Staking extends BaseContract {
       {
         periodId: BigNumber;
         tokenAddress: string;
-        usersStake: BigNumber;
+        userStake: BigNumber;
         leverage: BigNumber;
         compensation: BigNumber;
       }
@@ -577,7 +670,7 @@ export class Staking extends BaseContract {
     UserCompensationGenerated(
       periodId?: BigNumberish | null,
       tokenAddress?: string | null,
-      usersStake?: null,
+      userStake?: null,
       leverage?: null,
       compensation?: null
     ): TypedEventFilter<
@@ -585,7 +678,7 @@ export class Staking extends BaseContract {
       {
         periodId: BigNumber;
         tokenAddress: string;
-        usersStake: BigNumber;
+        userStake: BigNumber;
         leverage: BigNumber;
         compensation: BigNumber;
       }
@@ -627,13 +720,25 @@ export class Staking extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    lastProviderStake(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    lastUserStake(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
     leverage(overrides?: CallOverrides): Promise<BigNumber>;
 
     messengerAddress(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
-    providerPool(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+    providerRewards(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    providersPool(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     registeredStakers(
       arg0: string,
@@ -656,6 +761,11 @@ export class Staking extends BaseContract {
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    userRewards(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     usersPool(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
@@ -702,13 +812,28 @@ export class Staking extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    lastProviderStake(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    lastUserStake(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     leverage(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     messengerAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    providerPool(
+    providerRewards(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    providersPool(
       arg0: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -737,6 +862,11 @@ export class Staking extends BaseContract {
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    userRewards(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     usersPool(

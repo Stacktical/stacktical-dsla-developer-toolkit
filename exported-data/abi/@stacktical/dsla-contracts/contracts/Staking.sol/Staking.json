@@ -25,6 +25,11 @@
         "internalType": "address",
         "name": "contractOwner_",
         "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "messengerAddress_",
+        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
@@ -153,7 +158,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "usersStake",
+        "name": "userStake",
         "type": "uint256"
       },
       {
@@ -241,7 +246,7 @@
     "name": "dpTokenRegistry",
     "outputs": [
       {
-        "internalType": "contract ERC20PresetMinterPauser",
+        "internalType": "contract dToken",
         "name": "",
         "type": "address"
       }
@@ -260,7 +265,7 @@
     "name": "duTokenRegistry",
     "outputs": [
       {
-        "internalType": "contract ERC20PresetMinterPauser",
+        "internalType": "contract dToken",
         "name": "",
         "type": "address"
       }
@@ -301,6 +306,44 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "lastProviderStake",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "lastUserStake",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "leverage",
     "outputs": [
@@ -308,6 +351,19 @@
         "internalType": "uint64",
         "name": "",
         "type": "uint64"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "messengerAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -329,12 +385,31 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "providerRewards",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "",
         "type": "address"
       }
     ],
-    "name": "providerPool",
+    "name": "providersPool",
     "outputs": [
       {
         "internalType": "uint256",
@@ -427,6 +502,25 @@
     "name": "transferOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "userRewards",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
