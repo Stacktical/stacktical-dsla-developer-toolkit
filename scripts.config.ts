@@ -477,7 +477,7 @@ export const scripts: ScriptsConfiguration = {
         serviceSliMockingPlan:[],
       },
     },*/
-    // INDEX 17, Contract for IT staking tests: Respected case
+    // INDEX 17, Contract for IT staking tests: Not Respected case
     {
       sloValue: 50,
       sloType: SLO_TYPE.GreaterThan, // You want less inflation :)
@@ -501,7 +501,7 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
         serviceUseTestExternalAdapter: true, // as sloValue is multiplied by prescision before comparison an slo of 90 will be rised to 90000 if precision is 1000
-        serviceSliMockingPlan: [70000, 70000, 70000, 70000, 70000] // mocked sli values must be prepared acordingly
+        serviceSliMockingPlan: [45000, 45000, 45000, 45000, 45000] // mocked sli values must be prepared acordingly
       },
     },
     // INDEX 18, Contract for IT staking tests: Not Respected case
@@ -520,7 +520,7 @@ export const scripts: ScriptsConfiguration = {
       notDeployerStakeTimes: 1,
       leverage: 1,
       serviceMetadata: {
-        serviceName: 'Staking Integration test moked Not Respected case',
+        serviceName: 'Staking Integration test moked Not Respected case raward capped',
         serviceDescription:
           'The U.S. Federal Reserve (FED) inflation-driven monetary policy updates.',
         serviceImage: 'https://via.placeholder.com/1200x600',
@@ -529,6 +529,60 @@ export const scripts: ScriptsConfiguration = {
         serviceTicker: 'CPI',
         serviceUseTestExternalAdapter: true, // as sloValue is multiplied by prescision before comparison an slo of 90 will be rised to 90000 if precision is 1000
         serviceSliMockingPlan: [30000, 30000, 30000, 30000, 30000] // mocked sli values must be prepared acordingly
+      },
+    },
+    // INDEX 19, Contract for IT staking tests: Respected case
+    {
+      sloValue: 50,
+      sloType: SLO_TYPE.GreaterThan, // You want less inflation :)
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.BaseMessenger,
+      initialPeriodId: 0,
+      finalPeriodId: 5,
+      extraData: [],
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 100,
+      deployerStakeTimes: 100,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Staking Integration test moked Respected case raward not capped',
+        serviceDescription:
+          'The U.S. Federal Reserve (FED) inflation-driven monetary policy updates.',
+        serviceImage: 'https://via.placeholder.com/1200x600',
+        serviceURL: 'https://www.federalreserve.gov/',
+        serviceAddress: '0x0000000000000000000000000000000000000000',
+        serviceTicker: 'CPI',
+        serviceUseTestExternalAdapter: true, // as sloValue is multiplied by prescision before comparison an slo of 90 will be rised to 90000 if precision is 1000
+        serviceSliMockingPlan: [60000, 60000, 60000, 60000, 60000] // mocked sli values must be prepared acordingly
+      },
+    },
+    // INDEX 20, Contract for IT staking tests: Respected case
+    {
+      sloValue: 50,
+      sloType: SLO_TYPE.GreaterThan, // You want less inflation :)
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.BaseMessenger,
+      initialPeriodId: 0,
+      finalPeriodId: 5,
+      extraData: [],
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 100,
+      deployerStakeTimes: 100,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Staking Integration test moked Respected case raward capped',
+        serviceDescription:
+          'The U.S. Federal Reserve (FED) inflation-driven monetary policy updates.',
+        serviceImage: 'https://via.placeholder.com/1200x600',
+        serviceURL: 'https://www.federalreserve.gov/',
+        serviceAddress: '0x0000000000000000000000000000000000000000',
+        serviceTicker: 'CPI',
+        serviceUseTestExternalAdapter: true, // as sloValue is multiplied by prescision before comparison an slo of 90 will be rised to 90000 if precision is 1000
+        serviceSliMockingPlan: [90000, 90000, 90000, 90000, 90000] // mocked sli values must be prepared acordingly
       },
     },
   ],
