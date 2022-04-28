@@ -193,7 +193,8 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward No
     allSLAs = await slaRegistry.allSLAs();
     _sloRegistry = await slaRegistry.sloRegistry();
 
-    sla = await ethers.getContractAt(CONTRACT_NAMES.SLA, allSLAs[0]); // get the contract INDEX 17, Contract for IT staking tests: Not Respected case
+    // get the contract INDEX 17, Contract for IT staking tests: Not Respected case reward not capped
+    sla = await ethers.getContractAt(CONTRACT_NAMES.SLA, allSLAs[17]);
     details = await ethers.getContract(CONTRACT_NAMES.Details);
     signersAccounts = await hre.ethers.getSigners();
 
