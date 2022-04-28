@@ -493,7 +493,7 @@ export const scripts: ScriptsConfiguration = {
       notDeployerStakeTimes: 1,
       leverage: 1,
       serviceMetadata: {
-        serviceName: 'Staking Integration test moked Not Respected case',
+        serviceName: 'Staking Integration test moked Not Respected case reward not capped',
         serviceDescription:
           'The U.S. Federal Reserve (FED) inflation-driven monetary policy updates.',
         serviceImage: 'https://via.placeholder.com/1200x600',
@@ -520,7 +520,7 @@ export const scripts: ScriptsConfiguration = {
       notDeployerStakeTimes: 1,
       leverage: 1,
       serviceMetadata: {
-        serviceName: 'Staking Integration test moked Not Respected case raward capped',
+        serviceName: 'Staking Integration test moked Not Respected case reward capped',
         serviceDescription:
           'The U.S. Federal Reserve (FED) inflation-driven monetary policy updates.',
         serviceImage: 'https://via.placeholder.com/1200x600',
@@ -547,7 +547,7 @@ export const scripts: ScriptsConfiguration = {
       notDeployerStakeTimes: 1,
       leverage: 1,
       serviceMetadata: {
-        serviceName: 'Staking Integration test moked Respected case raward not capped',
+        serviceName: 'Staking Integration test moked Respected case reward not capped',
         serviceDescription:
           'The U.S. Federal Reserve (FED) inflation-driven monetary policy updates.',
         serviceImage: 'https://via.placeholder.com/1200x600',
@@ -574,7 +574,7 @@ export const scripts: ScriptsConfiguration = {
       notDeployerStakeTimes: 1,
       leverage: 1,
       serviceMetadata: {
-        serviceName: 'Staking Integration test moked Respected case raward capped',
+        serviceName: 'Staking Integration test moked Respected case reward capped',
         serviceDescription:
           'The U.S. Federal Reserve (FED) inflation-driven monetary policy updates.',
         serviceImage: 'https://via.placeholder.com/1200x600',
