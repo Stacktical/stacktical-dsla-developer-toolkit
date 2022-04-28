@@ -112,8 +112,8 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
   let P4StakeBalanceUser2 = "";
   let P4StakeBalanceUser3 = "";
   // POOLS BALANCE
-  let P4ProviderPool = "126046.8750";
-  let P4UserPool = "439453.1250";
+  let P4ProviderPool = "160453.1250";
+  let P4UserPool = "405046.8750";
   let P4TotalStake = "565500";
   let P4NumberOfStakers = 6;
 
@@ -127,8 +127,8 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
   let P5StakeBalanceUser2 = "";
   let P5StakeBalanceUser3 = "";
   // POOLS BALANCE
-  let P5ProviderPool = "16183.593750";
-  let P5UserPool = "549316.406250"; 
+  let P5ProviderPool = "120339.84375000";
+  let P5UserPool = "445160.1562500"; 
   let P5TotalStake = "565500";
   let P5NumberOfStakers = 6;
 
