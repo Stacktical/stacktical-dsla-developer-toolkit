@@ -18,3 +18,15 @@ A full documentation oabout the DTK is available [here](https://readme.stacktica
 3. Avoid deploying to already deployed graph nodes, since it will replace the current subgraph and it will start indexing again
 4. npm run graph:deploy:production
 5. When prompted, select a subgraph version. You can hit enter without problems, but it will replace the current subgraph.
+
+## Quick start
+
+```
+npm i
+
+hh test
+```
+
+*Troubleshoot*
+
+`sudo chown -R $(whoami): $(pwd)/services`
