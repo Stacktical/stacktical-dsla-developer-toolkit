@@ -33,7 +33,10 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
     bytes32 public networkName;
 
     string public override lpName;
+    string public override lpSymbol;
+
     string public override spName;
+    string public override spSymbol;
 
     constructor(
         address _messengerChainlinkOracle,
@@ -43,7 +46,9 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
         StakeRegistry _stakeRegistry,
         bytes32 _networkName,
         string memory _lpName,
-        string memory _spName
+        string memory _lpSymbol,
+        string memory _spName,
+        string memory _spSymbol
     ) public {
         setChainlinkToken(_messengerChainlinkToken);
         _oracle = _messengerChainlinkOracle;
@@ -52,7 +57,9 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
         stakeRegistry = _stakeRegistry;
         networkName = _networkName;
         lpName = _lpName;
+        lpSymbol = _lpSymbol;
         spName = _spName;
+        spSymbol = _spSymbol;
     }
 
     event JobIdModified(address indexed owner, bytes32 jobId, uint256 fee);
@@ -214,5 +221,13 @@ contract SEMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
 
     function fulfillsCounter() external view override returns (uint256) {
         return _fulfillsCounter;
+    }
+
+    function lpSymbolSlaId(uint128 slaId) external view override returns (string memory) {
+        return string(abi.encodePacked(lpSymbol, '-', StringUtils.uintToStr(slaId)));
+    }
+
+    function spSymbolSlaId(uint128 slaId) external view override returns (string memory) {
+        return string(abi.encodePacked(spSymbol, '-', StringUtils.uintToStr(slaId)));
     }
 }

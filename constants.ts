@@ -133,24 +133,54 @@ export enum PARAMS_NAMES {
 
 export const SERVICE_CREDITS = {
   STAKING_REWARDS: {
-    DSLA_LP: 'APR.ok',
-    DSLA_SP: 'APR.ko'
+    DSLA_LP: {
+      name: 'APR.ok',
+      symbol: 'APR.ok'
+    },
+    DSLA_SP: {
+      name: 'APR.ko',
+      symbol: 'APR.ko'
+    }
   },
   PROVIDER_UPTIME: {
-    DSLA_LP: 'UPTIME.ok',
-    DSLA_SP: 'UPTIME.ko'
+    DSLA_LP: {
+      name: 'UPTIME.ok',
+      symbol: 'UPTIME.ok'
+    },
+    DSLA_SP: {
+      name: 'UPTIME.ko',
+      symbol: 'UPTIME.ko'
+    }
   },
   DIGITAL_ASSET_PEG: {
-    DSLA_LP: 'PEG.ok',
-    DSLA_SP: 'PEG.ko'
+    DSLA_LP: {
+      name: 'PEG.ok',
+      symbol: 'PEG.ok'
+    },
+    DSLA_SP: {
+      name: 'PEG.ko',
+      symbol: 'PEG.ko'
+    }
   },
   DIGITAL_ASSET_FLOOR: {
-    DSLA_LP: 'FLOOR.ok',
-    DSLA_SP: 'FLOOR.ko'
+    DSLA_LP: {
+      name: 'FLOOR.ok',
+      symbol: 'FLOOR.ok'
+    },
+    DSLA_SP: {
+      name: 'FLOOR.ko',
+      symbol: 'FLOOR.ko'
+    }
   },
   INFLATION_RATE: {
-    DSLA_LP: 'INFLATION.ok',
-    DSLA_SP: 'INFLATION.ko'
+    DSLA_LP: {
+      name: 'INFLATION.ok',
+      symbol: 'INFLATION.ok'
+    },
+    DSLA_SP: {
+      name: 'INFLATION.ko',
+      symbol: 'INFLATION.ko'
+    }
   }
 }
 
