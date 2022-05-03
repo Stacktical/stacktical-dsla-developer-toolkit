@@ -1227,7 +1227,9 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
         stakeRegistry.address,
         formatBytes32String(network.name),
         messenger.dslaLpName,
+        messenger.dslaLpSymbol,
         messenger.dslaSpName,
+        messenger.dslaSpSymbol
       ],
       libraries: {
         StringUtils: stringUtils.address,

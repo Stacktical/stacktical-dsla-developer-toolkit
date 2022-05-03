@@ -34,13 +34,13 @@ describe('Fixtures', () => {
   describe("check SP & LP token names of messenger contracts", async () => {
     it(CONTRACT_NAMES.BaseMessenger, async () => {
       const messenger: BaseMessenger = await ethers.getContract(CONTRACT_NAMES.BaseMessenger);
-      expect(await messenger.lpName()).to.be.eq(SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP);
-      expect(await messenger.spName()).to.be.eq(SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP);
+      expect(await messenger.lpName()).to.be.eq(SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.name);
+      expect(await messenger.spName()).to.be.eq(SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.name);
     })
     it(CONTRACT_NAMES.CPIMessenger, async () => {
       const messenger: CPIMessenger = await ethers.getContract(CONTRACT_NAMES.CPIMessenger);
-      expect(await messenger.lpName()).to.be.eq(SERVICE_CREDITS.INFLATION_RATE.DSLA_LP);
-      expect(await messenger.spName()).to.be.eq(SERVICE_CREDITS.INFLATION_RATE.DSLA_SP);
+      expect(await messenger.lpName()).to.be.eq(SERVICE_CREDITS.INFLATION_RATE.DSLA_LP.name);
+      expect(await messenger.spName()).to.be.eq(SERVICE_CREDITS.INFLATION_RATE.DSLA_SP.name);
     })
   })
 });
