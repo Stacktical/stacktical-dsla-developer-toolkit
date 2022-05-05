@@ -1,10 +1,10 @@
 // Entrypoint chainlink
 pragma solidity 0.6.6;
-import '@stacktical/dsla-contracts/contracts/PeriodRegistry.sol';
-import '@stacktical/dsla-contracts/contracts/StakeRegistry.sol';
-import '@stacktical/dsla-contracts/contracts/MessengerRegistry.sol';
-import '@stacktical/dsla-contracts/contracts/SLORegistry.sol';
-import '@stacktical/dsla-contracts/contracts/SLA.sol';
-import '@stacktical/dsla-contracts/contracts/SLARegistry.sol';
-import '@stacktical/dsla-contracts/contracts/StringUtils.sol';
-import '@stacktical/dsla-contracts/contracts/Details.sol';
+import '@dsla-protocol/contracts/contracts/PeriodRegistry.sol';
+import '@dsla-protocol/contracts/contracts/StakeRegistry.sol';
+import '@dsla-protocol/contracts/contracts/MessengerRegistry.sol';
+import '@dsla-protocol/contracts/contracts/SLORegistry.sol';
+import '@dsla-protocol/contracts/contracts/SLA.sol';
+import '@dsla-protocol/contracts/contracts/SLARegistry.sol';
+import '@dsla-protocol/contracts/contracts/StringUtils.sol';
+import '@dsla-protocol/contracts/contracts/Details.sol';
