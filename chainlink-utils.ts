@@ -135,6 +135,28 @@ const postChainlinkJob = async (
   return data;
 };
 
+const postChainlinkJobv2 = async (
+  node: ChainlinkNodeConfiguration,
+  jobName: any,
+  oracleContractAddress: string
+) => {
+  const sessionCookie = await getChainlinkSessionCookie(node);
+  const { data } = await axios({
+    method: 'post',
+    url: `${node.restApiUrl}${
+      node.restApiPort ? ':' + node.restApiPort : undefined
+    }/v2/jobs`,
+    headers: {
+      Cookie: sessionCookie,
+      'Content-Type': 'application/json',
+    },
+    // eslint-disable-next-line global-require,import/no-dynamic-require
+    data: "{\"toml\":\"type                = \\\"directrequest\\\"\\nschemaVersion       = 1\\nname                = \\\"SOME\\\"\\ncontractAddress     = \\\"0xd2A62c5d8d6ED14F8cBf96F40dC11029989c765F\\\"\\n\\nobservationSource   = \\\"\\\"\\\"\\n    decode_log   [type=\\\"ethabidecodelog\\\"\\n                  abi=\\\"OracleRequest(bytes32 indexed specId, address requester, bytes32 requestId, uint256 payment, address callbackAddr, bytes4 callbackFunctionId, uint256 cancelExpiration, uint256 dataVersion, bytes data)\\\"\\n                  data=\\\"$(jobRun.logData)\\\"\\n                  topics=\\\"$(jobRun.logTopics)\\\"]\\n\\n    fetch       [type=\\\"bridge\\\" name=\\\"staking-efficiency\\\"]\\n    encode_data [type=\\\"ethabiencode\\\" abi=\\\"(uint256 value)\\\" data=\\\"{ \\\\\\\\\\\"value\\\\\\\\\\\": $(fetch) }\\\"]\\n    encode_tx   [type=\\\"ethabiencode\\\"\\n                 abi=\\\"fulfillOracleRequest(bytes32 requestId, uint256 payment, address callbackAddress, bytes4 callbackFunctionId, uint256 expiration, bytes32 data)\\\"\\n                 data=\\\"{\\\\\\\\\\\"requestId\\\\\\\\\\\": $(decode_log.requestId), \\\\\\\\\\\"payment\\\\\\\\\\\": $(decode_log.payment), \\\\\\\\\\\"callbackAddress\\\\\\\\\\\": $(decode_log.callbackAddr), \\\\\\\\\\\"callbackFunctionId\\\\\\\\\\\": $(decode_log.callbackFunctionId), \\\\\\\\\\\"expiration\\\\\\\\\\\": $(decode_log.cancelExpiration), \\\\\\\\\\\"data\\\\\\\\\\\": $(encode_data)}\\\"\\n                 ]\\n    submit_tx [type=\\\"ethtx\\\" to=\\\"0xd2A62c5d8d6ED14F8cBf96F40dC11029989c765F\\\" data=\\\"$(encode_tx)\\\"]\\n\\n    decode_log -> fetch -> encode_data -> encode_tx -> submit_tx\\n\\\"\\\"\\\"\"}",
+    withCredentials: true,
+  });
+  return data;
+};
+
 const postChainlinkBridge = async (
   node: ChainlinkNodeConfiguration,
   useCaseName: string,
