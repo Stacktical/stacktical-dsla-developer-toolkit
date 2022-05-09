@@ -4,11 +4,11 @@ pragma experimental ABIEncoderV2;
 
 import '@chainlink/contracts/src/v0.6/ChainlinkClient.sol';
 
-import '@dsla-protocol/contracts/contracts/interfaces/IMessenger.sol';
-import '@dsla-protocol/contracts/contracts/SLA.sol';
-import '@dsla-protocol/contracts/contracts/PeriodRegistry.sol';
-import '@dsla-protocol/contracts/contracts/StringUtils.sol';
-import '@dsla-protocol/contracts/contracts/StakeRegistry.sol';
+import '@dsla-protocol/core/contracts/interfaces/IMessenger.sol';
+import '@dsla-protocol/core/contracts/SLA.sol';
+import '@dsla-protocol/core/contracts/PeriodRegistry.sol';
+import '@dsla-protocol/core/contracts/StringUtils.sol';
+import '@dsla-protocol/core/contracts/StakeRegistry.sol';
 
 import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
 import '@openzeppelin/contracts/token/ERC20/SafeERC20.sol';
