@@ -13,7 +13,7 @@ import '@dsla-protocol/core/contracts/StakeRegistry.sol';
 import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
 import '@openzeppelin/contracts/token/ERC20/SafeERC20.sol';
 
-contract CPIMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
+contract AssetPegOracle is ChainlinkClient, IMessenger, ReentrancyGuard {
     using SafeERC20 for ERC20;
 
     mapping(bytes32 => SLIRequest) public requestIdToSLIRequest;
@@ -23,7 +23,7 @@ contract CPIMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
     bytes32 private _jobId;
     uint256 private constant _baseFee = 0.1 ether;
     uint256 private _fee;
-    uint256 private constant _messengerPrecision = 10**6;
+    uint256 private constant _messengerPrecision = 10**3;
 
     uint256 private _requestsCounter;
     uint256 private _fulfillsCounter;
@@ -101,7 +101,7 @@ contract CPIMessenger is ChainlinkClient, IMessenger, ReentrancyGuard {
         bool _messengerOwnerApproval,
         address _callerAddress
     ) public override onlySLARegistry nonReentrant {
-        require(_jobId != 0, '_jobId empty');
+        require(_jobId != 0, '_jobI empty');
         SLA sla = SLA(_slaAddress);
         if (_messengerOwnerApproval) {
             ERC20(chainlinkTokenAddress()).safeTransferFrom(

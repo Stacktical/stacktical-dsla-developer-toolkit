@@ -1,0 +1,15 @@
+{
+  "useCaseName": "Staking APR",
+  "symbol": "POS-APR",
+  "ownerUrl": "https://dsla.network",
+  "useCaseDocs": "https://dsla.network/metaverse",
+  "externalAdapterRepo": "https://github.com/Stacktical/",
+  "unit": "%",
+  "keywords": ["post", "apr", "staking", "rewards", "delegator"],
+  "timestamp": "2022-04-07T00:00:00+00:00",
+  "version": {
+    "major": 0,
+    "minor": 0,
+    "patch": 1
+  }
+}
