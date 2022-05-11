@@ -2,7 +2,7 @@ version: "3.5"
 services:
   ganache:
     container_name: ganache-service
-    image: trufflesuite/ganache-cli:v6.12.2
+    image: trufflesuite/ganache:v7.1.0
     environment:
       - ETH_CHAIN_ID=1337
     ports:
@@ -14,4 +14,3 @@ services:
 networks:
   dsla-test:
     name: ganache-network
-
