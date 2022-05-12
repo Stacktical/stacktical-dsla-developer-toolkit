@@ -4,7 +4,8 @@ import { loadFixture } from 'ethereum-waffle';
 import { fixture } from '../fixtures/basic';
 const hre = require('hardhat');
 import { CONTRACT_NAMES, SERVICE_CREDITS } from '../../constants';
-import { BaseMessenger, CPIMessenger, SLA, SLARegistry__factory } from '../../typechain';
+import { BaseMessenger, SLA, SLARegistry__factory } from '../../typechain';
+import { InflationOracle } from '../../typechain/InflationOracle';
 const consola = require('consola');
 
 describe('Fixtures', () => {
@@ -37,8 +38,8 @@ describe('Fixtures', () => {
       expect(await messenger.lpName()).to.be.eq(SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.name);
       expect(await messenger.spName()).to.be.eq(SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.name);
     })
-    it(CONTRACT_NAMES.CPIMessenger, async () => {
-      const messenger: CPIMessenger = await ethers.getContract(CONTRACT_NAMES.CPIMessenger);
+    it(CONTRACT_NAMES.InflationOracle, async () => {
+      const messenger: InflationOracle = await ethers.getContract(CONTRACT_NAMES.InflationOracle);
       expect(await messenger.lpName()).to.be.eq(SERVICE_CREDITS.INFLATION_RATE.DSLA_LP.name);
       expect(await messenger.spName()).to.be.eq(SERVICE_CREDITS.INFLATION_RATE.DSLA_SP.name);
     })

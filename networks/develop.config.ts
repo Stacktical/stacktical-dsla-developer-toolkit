@@ -6,7 +6,7 @@ import {
   TOKEN_NAMES,
   USE_CASES,
 } from '../constants';
-import { EthereumERC20__factory } from '../typechain';
+import { EthereumERC20__factory } from '../typechain'; //EthereumERC20__factory ERC20__factory
 import { NetworkUserConfig } from 'hardhat/types';
 import { scripts } from '../scripts.config';
 
@@ -128,10 +128,10 @@ export const develop: NetworkUserConfig = {
         contract: CONTRACT_NAMES.CPIMessenger, //  Name of the Messenger
         useCaseName: USE_CASES.INFLATION, // Name of the Use-Case
         externalAdapterUrl: process.env.DEVELOP_INDEXER_URI, // Your local serverless endpoint
-        dslaLpName: SERVICE_CREDITS.INFLATION_RATE.DSLA_LP.name,
-        dslaLpSymbol: SERVICE_CREDITS.INFLATION_RATE.DSLA_LP.symbol,
-        dslaSpName: SERVICE_CREDITS.INFLATION_RATE.DSLA_SP.name,
-        dslaSpSymbol: SERVICE_CREDITS.INFLATION_RATE.DSLA_SP.symbol,
+        dslaLpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.name,
+        dslaLpSymbol: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.symbol,
+        dslaSpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.name,
+        dslaSpSymbol: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.symbol,
       },
       /*
       {

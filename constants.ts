@@ -36,6 +36,7 @@ export enum CONTRACT_NAMES {
   BaseMessenger = 'BaseMessenger',
   PPMessenger = 'PPMessenger',
   CPIMessenger = 'CPIMessenger',
+  InflationOracle = 'InflationOracle',
 }
 
 export enum TOKEN_NAMES {
@@ -62,7 +63,7 @@ export enum DEPLOYMENT_TAGS {
 }
 
 export enum USE_CASES {
-  STAKING_EFFICIENCY = 'staking-efficiency',
+  STAKING_EFFICIENCY = 'staking-apr',
   STAKING_EFFICIENCY_ALT = 'staking-efficiency-alt',
   BASE_MESSENGER = 'base-messenger',
   PAR_PEG = 'par-peg-messenger',
