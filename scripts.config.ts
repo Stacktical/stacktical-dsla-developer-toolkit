@@ -348,7 +348,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.SmallerThan, // You want less inflation :)
       whitelisted: false,
       periodType: PERIOD_TYPE.MONTHLY,
-      messengerContract: CONTRACT_NAMES.CPIMessenger,
+      messengerContract: CONTRACT_NAMES.InflationOracle,
       initialPeriodId: 0,
       finalPeriodId: 11,
       extraData: [],
@@ -375,7 +375,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.SmallerThan, // You want less inflation :)
       whitelisted: false,
       periodType: PERIOD_TYPE.MONTHLY,
-      messengerContract: CONTRACT_NAMES.CPIMessenger,
+      messengerContract: CONTRACT_NAMES.InflationOracle,
       initialPeriodId: 0,
       finalPeriodId: 11,
       extraData: [],
@@ -402,7 +402,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.SmallerOrEqualTo, // You want less inflation :)
       whitelisted: false,
       periodType: PERIOD_TYPE.MONTHLY,
-      messengerContract: CONTRACT_NAMES.CPIMessenger,
+      messengerContract: CONTRACT_NAMES.InflationOracle,
       initialPeriodId: 0,
       finalPeriodId: 11,
       extraData: [],
@@ -429,7 +429,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.GreaterOrEqualTo, // You want less inflation :)
       whitelisted: false,
       periodType: PERIOD_TYPE.MONTHLY,
-      messengerContract: CONTRACT_NAMES.CPIMessenger,
+      messengerContract: CONTRACT_NAMES.InflationOracle,
       initialPeriodId: 0,
       finalPeriodId: 11,
       extraData: [],
@@ -456,7 +456,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.GreaterOrEqualTo, // You want less inflation :)
       whitelisted: false,
       periodType: PERIOD_TYPE.MONTHLY,
-      messengerContract: CONTRACT_NAMES.CPIMessenger,
+      messengerContract: CONTRACT_NAMES.InflationOracle,
       initialPeriodId: 0,
       finalPeriodId: 11,
       extraData: [],

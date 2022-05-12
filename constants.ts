@@ -35,7 +35,7 @@ export enum CONTRACT_NAMES {
   FujiERC20 = 'FujiERC20',
   BaseMessenger = 'BaseMessenger',
   PPMessenger = 'PPMessenger',
-  CPIMessenger = 'CPIMessenger',
+  //CPIMessenger = 'CPIMessenger',
   InflationOracle = 'InflationOracle',
 }
 
@@ -66,8 +66,8 @@ export enum USE_CASES {
   STAKING_EFFICIENCY = 'staking-apr',
   STAKING_EFFICIENCY_ALT = 'staking-efficiency-alt',
   BASE_MESSENGER = 'base-messenger',
-  PAR_PEG = 'par-peg-messenger',
-  INFLATION = 'inflation',
+  PAR_PEG = 'asset-peg', //par-peg-messenger
+  INFLATION = 'inflation-rate',
 }
 
 export enum NETWORKS {
