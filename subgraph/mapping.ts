@@ -3,6 +3,7 @@ import {
   Deposit,
   DToken,
   Messenger,
+  RewardsDistributed,
   SLA,
   SLI,
   TVL,
@@ -17,7 +18,7 @@ import {
   DTokensCreated,
 } from './generated/templates/SLA/SLA';
 
-import { SLACreated } from './generated/SLARegistry/SLARegistry';
+import { SLACreated, SLIRequested } from './generated/SLARegistry/SLARegistry';
 import { SLA as SLAContract } from './generated/SLARegistry/SLA';
 
 import { SLORegistered } from './generated/SLORegistry/SLORegistry';
@@ -28,12 +29,27 @@ import {
   LockedValueReturned,
   StakeRegistry,
   ValueLocked,
+  VerificationRewardDistributed,
 } from './generated/StakeRegistry/StakeRegistry';
 import {
   MessengerModified,
   MessengerRegistered,
 } from './generated/MessengerRegistry/MessengerRegistry';
 import { IMessenger } from './generated/MessengerRegistry/IMessenger';
+
+function findOrCreateTVL(key: string): TVL {
+  let tvl = TVL.load(key);
+  if (!tvl) {
+    tvl = new TVL(key);
+  }
+  if (!tvl.amount) {
+    tvl.amount = BigInt.fromI32(0);
+  }
+  if (!tvl.deposits) {
+    tvl.deposits = [];
+  }
+  return tvl;
+}
 
 export function handleNewSLA(event: SLACreated): void {
   let slaContract = SLAContract.bind(event.params.sla);
@@ -94,6 +110,10 @@ export function handleSLICreated(event: SLICreated): void {
   sli.save();
 }
 
+export function handleSLIRequested(event: SLIRequested): void {
+  // TODO: 
+}
+
 export function handleStake(event: Stake): void {
   let sla = SLA.load(event.address.toHexString())!;
   let deposit = new Deposit(event.transaction.hash.toHexString());
@@ -102,6 +122,7 @@ export function handleStake(event: Stake): void {
     sla.owner!.toHexString() == event.params.caller.toHexString()
       ? 'provider'
       : 'user';
+  // deposit.position = event.params.position;
   deposit.amount = event.params.amount;
   deposit.tokenAddress = event.params.tokenAddress;
   deposit.callerAddress = event.params.caller;
@@ -141,10 +162,7 @@ export function handleStake(event: Stake): void {
   duToken.totalSupply = duTokenContract.totalSupply();
   duToken.save();
 
-  let tvl = TVL.load(event.params.tokenAddress.toHexString());
-  if (!tvl) {
-    tvl = new TVL(event.params.tokenAddress.toHexString());
-  }
+  let tvl = findOrCreateTVL(event.params.tokenAddress.toHexString());
   tvl.amount = tvl.amount!.plus(event.params.amount);
   tvl.deposits = tvl.deposits!.concat([deposit.id]);
   tvl.save();
@@ -185,13 +203,7 @@ export function handleProviderWithdraw(event: ProviderWithdraw): void {
   dpToken.totalSupply = dpTokenContract.totalSupply();
   dpToken.save();
 
-  let tvl = TVL.load(event.params.tokenAddress.toHexString());
-  if (!tvl) {
-    tvl = new TVL(event.params.tokenAddress.toHexString());
-  }
-  if (!tvl.amount) {
-    tvl.amount = BigInt.fromI32(0);
-  }
+  let tvl = findOrCreateTVL(event.params.tokenAddress.toHexString());
   tvl.amount = tvl.amount!.minus(event.params.amount);
   tvl.withdrawals = tvl.withdrawals!.concat([withdrawal.id]);
   tvl.save();
@@ -238,16 +250,7 @@ export function handleUserWithdraw(event: ProviderWithdraw): void {
   duToken.totalSupply = duTokenContract.totalSupply();
   duToken.save();
 
-  let tvl = TVL.load(event.params.tokenAddress.toHexString());
-  if (!tvl) {
-    tvl = new TVL(event.params.tokenAddress.toHexString());
-  }
-  if (!tvl.amount) {
-    tvl.amount = BigInt.fromI32(0);
-  }
-  if (!tvl.withdrawals) {
-    tvl.withdrawals = [];
-  }
+  let tvl = findOrCreateTVL(event.params.tokenAddress.toHexString());
   tvl.amount = tvl.amount!.minus(event.params.amount);
   tvl.withdrawals = tvl.withdrawals!.concat([withdrawal.id]);
   tvl.save();
@@ -279,6 +282,7 @@ export function handleDTokensCreated(event: DTokensCreated): void {
   spToken.slaAddress = event.address;
   spToken.tokenAddress = event.params.tokenAddress;
   spToken.totalSupply = BigInt.fromI32(0);
+  spToken.decimals = BigInt.fromI32(spTokenContract.decimals());
 
   if (!sla.dTokens) {
     sla.dTokens = [];
@@ -295,6 +299,8 @@ export function handleDTokensCreated(event: DTokensCreated): void {
   lpToken.slaAddress = event.address;
   lpToken.totalSupply = BigInt.fromI32(0);
   lpToken.tokenAddress = event.params.tokenAddress;
+  lpToken.decimals = BigInt.fromI32(lpTokenContract.decimals());
+
   if (!sla.dTokens) {
     sla.dTokens = [];
   }
@@ -315,16 +321,7 @@ export function handleValueLocked(event: ValueLocked): void {
   deposit.tokenAddress = stakeRegistryContract.DSLATokenAddress();
   deposit.save();
 
-  let tvl = TVL.load(stakeRegistryContract.DSLATokenAddress().toHexString());
-  if (!tvl) {
-    tvl = new TVL(stakeRegistryContract.DSLATokenAddress().toHexString());
-  }
-  if (!tvl.amount) {
-    tvl.amount = BigInt.fromI32(0);
-  }
-  if (!tvl.deposits) {
-    tvl.deposits = [];
-  }
+  let tvl = findOrCreateTVL(stakeRegistryContract.DSLATokenAddress().toHexString());
   tvl.amount = tvl.amount!.plus(event.params.amount);
   tvl.deposits = tvl.deposits!.concat([deposit.id]);
   tvl.save();
@@ -340,16 +337,7 @@ export function handleLockedValueReturned(event: LockedValueReturned): void {
   withdrawal.tokenAddress = stakeRegistryContract.DSLATokenAddress();
   withdrawal.save();
 
-  let tvl = TVL.load(stakeRegistryContract.DSLATokenAddress().toHexString());
-  if (!tvl) {
-    tvl = new TVL(stakeRegistryContract.DSLATokenAddress().toHexString());
-  }
-  if (!tvl.amount) {
-    tvl.amount = BigInt.fromI32(0);
-  }
-  if (!tvl.withdrawals) {
-    tvl.withdrawals = [];
-  }
+  let tvl = findOrCreateTVL(stakeRegistryContract.DSLATokenAddress().toHexString());
   tvl.amount = tvl.amount!.minus(event.params.amount);
   tvl.withdrawals = tvl.withdrawals!.concat([withdrawal.id]);
   tvl.save();
@@ -366,11 +354,26 @@ export function handleMessengerRegistered(event: MessengerRegistered): void {
 }
 
 export function handleMessengerModified(event: MessengerModified): void {
-  let messenger = new Messenger(event.params.messengerAddress.toHexString());
+  const messengerAddress = event.params.messengerAddress.toHexString();
+  let messenger = Messenger.load(messengerAddress);
+  if (!messenger) {
+    messenger = new Messenger(event.params.messengerAddress.toHexString());
+  }
   let messengerContract = IMessenger.bind(event.params.messengerAddress);
   messenger.precision = messengerContract.messengerPrecision();
   messenger.owner = messengerContract.owner();
   messenger.specificationUrl = event.params.specificationUrl;
   messenger.messengerId = event.params.id;
   messenger.save();
+}
+
+export function handleVerificationRewardDistributed(event: VerificationRewardDistributed): void {
+  let rewards = new RewardsDistributed(event.params.sla.toHexString());
+  rewards.callerAddress = event.params.requester;
+  rewards.slaAddress = event.params.sla;
+  rewards.userReward = event.params.userReward;
+  rewards.platformReward = event.params.platformReward;
+  rewards.messengerReward = event.params.messengerReward;
+  rewards.dslaBurned = event.params.burnedDSLA;
+  rewards.save();
 }
