@@ -110,10 +110,6 @@ export function handleSLICreated(event: SLICreated): void {
   sli.save();
 }
 
-export function handleSLIRequested(event: SLIRequested): void {
-  // TODO: 
-}
-
 export function handleStake(event: Stake): void {
   let sla = SLA.load(event.address.toHexString())!;
   let deposit = new Deposit(event.transaction.hash.toHexString());
