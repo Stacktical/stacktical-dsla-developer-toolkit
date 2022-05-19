@@ -22,14 +22,17 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 interface IStakeRegistryInterface extends ethers.utils.Interface {
   functions: {
     "DSLATokenAddress()": FunctionFragment;
-    "createDToken(string,string)": FunctionFragment;
+    "createDToken(string,string,uint8)": FunctionFragment;
     "distributeVerificationRewards(address,address,uint256)": FunctionFragment;
     "getStakingParameters()": FunctionFragment;
     "isAllowedToken(address)": FunctionFragment;
     "lockDSLAValue(address,address,uint256)": FunctionFragment;
+    "owner()": FunctionFragment;
     "registerStakedSla(address)": FunctionFragment;
+    "renounceOwnership()": FunctionFragment;
     "returnLockedValue(address)": FunctionFragment;
     "setSLARegistry()": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -38,7 +41,7 @@ interface IStakeRegistryInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "createDToken",
-    values: [string, string]
+    values: [string, string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "distributeVerificationRewards",
@@ -56,9 +59,14 @@ interface IStakeRegistryInterface extends ethers.utils.Interface {
     functionFragment: "lockDSLAValue",
     values: [string, string, BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "registerStakedSla",
     values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "renounceOwnership",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "returnLockedValue",
@@ -67,6 +75,10 @@ interface IStakeRegistryInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "setSLARegistry",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership",
+    values: [string]
   ): string;
 
   decodeFunctionResult(
@@ -93,8 +105,13 @@ interface IStakeRegistryInterface extends ethers.utils.Interface {
     functionFragment: "lockDSLAValue",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "registerStakedSla",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -105,9 +122,21 @@ interface IStakeRegistryInterface extends ethers.utils.Interface {
     functionFragment: "setSLARegistry",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
 
-  events: {};
+  events: {
+    "OwnershipTransferred(address,address)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
 }
+
+export type OwnershipTransferredEvent = TypedEvent<
+  [string, string] & { previousOwner: string; newOwner: string }
+>;
 
 export class IStakeRegistry extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -158,6 +187,7 @@ export class IStakeRegistry extends BaseContract {
     createDToken(
       _name: string,
       _symbol: string,
+      decimals: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -206,8 +236,14 @@ export class IStakeRegistry extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    owner(overrides?: CallOverrides): Promise<[string]>;
+
     registerStakedSla(
       _owner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -219,6 +255,11 @@ export class IStakeRegistry extends BaseContract {
     setSLARegistry(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
   };
 
   DSLATokenAddress(overrides?: CallOverrides): Promise<string>;
@@ -226,6 +267,7 @@ export class IStakeRegistry extends BaseContract {
   createDToken(
     _name: string,
     _symbol: string,
+    decimals: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -274,8 +316,14 @@ export class IStakeRegistry extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  owner(overrides?: CallOverrides): Promise<string>;
+
   registerStakedSla(
     _owner: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -288,12 +336,18 @@ export class IStakeRegistry extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  transferOwnership(
+    newOwner: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   callStatic: {
     DSLATokenAddress(overrides?: CallOverrides): Promise<string>;
 
     createDToken(
       _name: string,
       _symbol: string,
+      decimals: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
 
@@ -342,17 +396,42 @@ export class IStakeRegistry extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    owner(overrides?: CallOverrides): Promise<string>;
+
     registerStakedSla(
       _owner: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
     returnLockedValue(sla_: string, overrides?: CallOverrides): Promise<void>;
 
     setSLARegistry(overrides?: CallOverrides): Promise<void>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
   };
 
-  filters: {};
+  filters: {
+    "OwnershipTransferred(address,address)"(
+      previousOwner?: string | null,
+      newOwner?: string | null
+    ): TypedEventFilter<
+      [string, string],
+      { previousOwner: string; newOwner: string }
+    >;
+
+    OwnershipTransferred(
+      previousOwner?: string | null,
+      newOwner?: string | null
+    ): TypedEventFilter<
+      [string, string],
+      { previousOwner: string; newOwner: string }
+    >;
+  };
 
   estimateGas: {
     DSLATokenAddress(overrides?: CallOverrides): Promise<BigNumber>;
@@ -360,6 +439,7 @@ export class IStakeRegistry extends BaseContract {
     createDToken(
       _name: string,
       _symbol: string,
+      decimals: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -384,8 +464,14 @@ export class IStakeRegistry extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
+
     registerStakedSla(
       _owner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -397,6 +483,11 @@ export class IStakeRegistry extends BaseContract {
     setSLARegistry(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -405,6 +496,7 @@ export class IStakeRegistry extends BaseContract {
     createDToken(
       _name: string,
       _symbol: string,
+      decimals: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -431,8 +523,14 @@ export class IStakeRegistry extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     registerStakedSla(
       _owner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -442,6 +540,11 @@ export class IStakeRegistry extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     setSLARegistry(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    transferOwnership(
+      newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

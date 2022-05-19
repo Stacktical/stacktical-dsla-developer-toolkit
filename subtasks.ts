@@ -1,5 +1,5 @@
 /* eslint-disable no-await-in-loop, import/no-extraneous-dependencies */
-import { DeploymentsExtension } from 'hardhat-deploy/dist/types';
+import { DeploymentsExtension, DeployOptionsBase } from 'hardhat-deploy/dist/types';
 import { fromWei, numberToHex, toChecksumAddress, toWei } from 'web3-utils';
 import {
   deleteJob,
@@ -25,6 +25,8 @@ import {
   PreCoordinator,
   PreCoordinator__factory,
   SLA,
+  Details,
+  Details__factory,
   SLA__factory,
   SLARegistry,
   SLARegistry__factory,
@@ -96,6 +98,7 @@ export enum SUB_TASK_NAMES {
   GET_VALID_SLAS = 'GET_VALID_SLAS',
   GET_REVERT_MESSAGE = 'GET_REVERT_MESSAGE',
   DEPLOY_MESSENGER = 'DEPLOY_MESSENGER',
+  DEPLOY_DETAILS = 'DEPLOY_DETAILS',
   GET_MESSENGER = 'GET_MESSENGER',
   GET_START_STOP_PERIODS = 'GET_START_STOP_PERIODS',
   TRANSFER_OWNERSHIP = 'TRANSFER_OWNERSHIP',
@@ -232,25 +235,25 @@ subtask(SUB_TASK_NAMES.PROVIDER_WITHDRAW, undefined).setAction(
     // );
     const supply = await lpToken.totalSupply();
     consola.info('LP token total supply:', fromWei(supply.toString()));
-    const slaProviderPool = await slaContract.providerPool(
+    const slaProvidersPool = await slaContract.providersPool(
       taskArgs.tokenAddress
     );
-    const slaUserPool = await slaContract.usersPool(taskArgs.tokenAddress);
+    const slaUsersPool = await slaContract.usersPool(taskArgs.tokenAddress);
     consola.info(
       'SLA provider pool balance:',
-      fromWei(slaProviderPool.toString())
+      fromWei(slaProvidersPool.toString())
     );
     const poolPercentage = lpTokenUserBalance.div(supply).mul(100);
     consola.info('Accrued pool percentage:', poolPercentage.toString() + '%');
     const leverage = await slaContract.leverage();
     consola.info('SLA leverage:', leverage.toString() + 'x');
-    const poolSpread = slaProviderPool.sub(slaUserPool.mul(leverage));
+    const poolSpread = slaProvidersPool.sub(slaUsersPool.mul(leverage));
     consola.info(
       'Provider pool allowed withdraw amount:',
       fromWei(poolSpread.toString())
     );
     await lpToken.approve(slaAddress, lpTokenUserBalance);
-    const accruedBalance = lpTokenUserBalance.mul(slaProviderPool).div(supply);
+    const accruedBalance = lpTokenUserBalance.mul(slaProvidersPool).div(supply);
     const allowedWithdraw = accruedBalance.gt(poolSpread)
       ? poolSpread
       : accruedBalance;
@@ -1224,7 +1227,9 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
         stakeRegistry.address,
         formatBytes32String(network.name),
         messenger.dslaLpName,
+        messenger.dslaLpSymbol,
         messenger.dslaSpName,
+        messenger.dslaSpSymbol
       ],
       libraries: {
         StringUtils: stringUtils.address,
@@ -1536,6 +1541,33 @@ subtask(SUB_TASK_NAMES.SET_CONTRACTS_ALLOWANCE, undefined).setAction(
   }
 );
 
+subtask(SUB_TASK_NAMES.DEPLOY_DETAILS, undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    const {
+      deployments,
+      ethers,
+      getNamedAccounts,
+      network: {
+        config: {
+          stacktical: { scripts },
+        },
+      },
+    } = hre;
+    const { deployer } = await getNamedAccounts();
+    const { deploy, get } = deployments;
+
+    const baseOptions: DeployOptionsBase = {
+      from: deployer,
+      log: true,
+    };
+    console.log('Details deployment process started');
+    await deploy(CONTRACT_NAMES.Details, {
+      ...baseOptions
+    });
+    console.log('Details deployment process finished');
+  }
+);
+
 subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
   async (taskArgs, hre: HardhatRuntimeEnvironment) => {
     const {
@@ -1651,15 +1683,17 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       await tx.wait();
 
       console.log('Starting process 3: Stake on Provider and User pools');
-
       const deployerStake = stakeAmountTimesWei(deployerStakeTimes);
       console.log(
         `Starting process 3.1: Provider: ${fromWei(deployerStake)} DSLA`
       );
       tx = await dslaToken.approve(sla.address, deployerStake);
       await tx.wait();
-      tx = await sla.stakeTokens(deployerStake, dslaToken.address, 'long');
-      await tx.wait();
+      enum Position {LONG,SHORT}
+      if (deployerStake !== '0'){
+        tx = await sla.stakeTokens(deployerStake, dslaToken.address, Position.LONG);
+        await tx.wait();
+      }
       const notDeployerBalance = await dslaToken.callStatic.balanceOf(
         notDeployer
       );
@@ -1675,10 +1709,12 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
         .connect(await ethers.getSigner(notDeployer))
         .approve(sla.address, notDeployerStake);
       await tx.wait();
-      tx = await sla
-        .connect(await ethers.getSigner(notDeployer))
-        .stakeTokens(notDeployerStake, dslaToken.address, 'short');
-      await tx.wait();
+      if (notDeployerStake !== '0'){
+          tx = await sla
+            .connect(await ethers.getSigner(notDeployer))
+            .stakeTokens(notDeployerStake, dslaToken.address, Position.SHORT);
+          await tx.wait();
+      }
       printSeparator();
     }
     console.log('SLA deployment process finished');

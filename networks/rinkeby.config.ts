@@ -98,7 +98,7 @@ export const rinkeby: NetworkUserConfig = {
           allowance: '10',
         },
         {
-          contract: CONTRACT_NAMES.CPIMessenger,
+          contract: CONTRACT_NAMES.InflationOracle,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
@@ -136,7 +136,7 @@ export const rinkeby: NetworkUserConfig = {
         dslaSpSymbol: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.symbol,
       },
       {
-        contract: CONTRACT_NAMES.CPIMessenger,
+        contract: CONTRACT_NAMES.InflationOracle,
         useCaseName: USE_CASES.INFLATION,
         externalAdapterUrl: process.env.INFLATION_INDEXER_URI,
         dslaLpName: SERVICE_CREDITS.INFLATION_RATE.DSLA_LP.name,

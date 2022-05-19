@@ -26,7 +26,7 @@ export const scripts: ScriptsConfiguration = {
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
       initialPeriodId: 0,
-      finalPeriodId: 5,
+      finalPeriodId: 51,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
@@ -41,6 +41,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        serviceUseTestExternalAdapter: true,
+        serviceSliMockingPlan: []
       },
     },
     // INDEX 1 | Should be HONORED
@@ -51,7 +53,7 @@ export const scripts: ScriptsConfiguration = {
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseMessenger,
       initialPeriodId: 0,
-      finalPeriodId: 5,
+      finalPeriodId: 51,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
@@ -66,6 +68,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 2 | Should be HONORED
@@ -76,7 +80,7 @@ export const scripts: ScriptsConfiguration = {
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseMessenger,
       initialPeriodId: 0,
-      finalPeriodId: 5,
+      finalPeriodId: 51,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
@@ -91,6 +95,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 3 | Should be BREACHED
@@ -101,7 +107,7 @@ export const scripts: ScriptsConfiguration = {
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseMessenger,
       initialPeriodId: 0,
-      finalPeriodId: 5,
+      finalPeriodId: 51,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
@@ -116,6 +122,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 4 | Should be HONORED
@@ -126,7 +134,7 @@ export const scripts: ScriptsConfiguration = {
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
       initialPeriodId: 0,
-      finalPeriodId: 5,
+      finalPeriodId: 51,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
@@ -141,6 +149,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 5 | Should be BREACHED
@@ -151,7 +161,7 @@ export const scripts: ScriptsConfiguration = {
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
       initialPeriodId: 0,
-      finalPeriodId: 5,
+      finalPeriodId: 51,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
@@ -166,6 +176,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 6 | Should be HONORED
@@ -176,7 +188,7 @@ export const scripts: ScriptsConfiguration = {
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
       initialPeriodId: 0,
-      finalPeriodId: 5,
+      finalPeriodId: 51,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
@@ -191,6 +203,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 7 | Should be BREACHED
@@ -201,7 +215,7 @@ export const scripts: ScriptsConfiguration = {
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
       initialPeriodId: 0,
-      finalPeriodId: 5,
+      finalPeriodId: 51,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
@@ -216,6 +230,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 8 | Should be HONORED
@@ -226,7 +242,7 @@ export const scripts: ScriptsConfiguration = {
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
       initialPeriodId: 0,
-      finalPeriodId: 5,
+      finalPeriodId: 51,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
@@ -241,6 +257,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 9 | Should be BREACHED
@@ -251,7 +269,7 @@ export const scripts: ScriptsConfiguration = {
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
       initialPeriodId: 0,
-      finalPeriodId: 5,
+      finalPeriodId: 51,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
@@ -266,6 +284,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 10 | Should be HONORED
@@ -276,7 +296,7 @@ export const scripts: ScriptsConfiguration = {
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
       initialPeriodId: 0,
-      finalPeriodId: 5,
+      finalPeriodId: 51,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
@@ -291,6 +311,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 11 | Should be BREACHED
@@ -301,7 +323,7 @@ export const scripts: ScriptsConfiguration = {
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
       initialPeriodId: 0,
-      finalPeriodId: 5,
+      finalPeriodId: 51,
       extraData: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
@@ -316,6 +338,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://bdslaToken.network',
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 12
@@ -324,7 +348,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.SmallerThan, // You want less inflation :)
       whitelisted: false,
       periodType: PERIOD_TYPE.MONTHLY,
-      messengerContract: CONTRACT_NAMES.CPIMessenger,
+      messengerContract: CONTRACT_NAMES.InflationOracle,
       initialPeriodId: 0,
       finalPeriodId: 11,
       extraData: [],
@@ -341,6 +365,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://www.federalreserve.gov/',
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 13
@@ -349,7 +375,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.SmallerThan, // You want less inflation :)
       whitelisted: false,
       periodType: PERIOD_TYPE.MONTHLY,
-      messengerContract: CONTRACT_NAMES.CPIMessenger,
+      messengerContract: CONTRACT_NAMES.InflationOracle,
       initialPeriodId: 0,
       finalPeriodId: 11,
       extraData: [],
@@ -366,6 +392,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://www.federalreserve.gov/',
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 14
@@ -374,7 +402,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.SmallerOrEqualTo, // You want less inflation :)
       whitelisted: false,
       periodType: PERIOD_TYPE.MONTHLY,
-      messengerContract: CONTRACT_NAMES.CPIMessenger,
+      messengerContract: CONTRACT_NAMES.InflationOracle,
       initialPeriodId: 0,
       finalPeriodId: 11,
       extraData: [],
@@ -391,6 +419,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://www.federalreserve.gov/',
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 15
@@ -399,7 +429,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.GreaterOrEqualTo, // You want less inflation :)
       whitelisted: false,
       periodType: PERIOD_TYPE.MONTHLY,
-      messengerContract: CONTRACT_NAMES.CPIMessenger,
+      messengerContract: CONTRACT_NAMES.InflationOracle,
       initialPeriodId: 0,
       finalPeriodId: 11,
       extraData: [],
@@ -416,6 +446,8 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://www.federalreserve.gov/',
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
     },
     // INDEX 16
@@ -424,7 +456,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.GreaterOrEqualTo, // You want less inflation :)
       whitelisted: false,
       periodType: PERIOD_TYPE.MONTHLY,
-      messengerContract: CONTRACT_NAMES.CPIMessenger,
+      messengerContract: CONTRACT_NAMES.InflationOracle,
       initialPeriodId: 0,
       finalPeriodId: 11,
       extraData: [],
@@ -441,7 +473,117 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: 'https://www.federalreserve.gov/',
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan:[],
       },
-    }
+    },
+    // INDEX 17, Contract for IT staking tests: Not Respected case
+    {
+      sloValue: 50,
+      sloType: SLO_TYPE.GreaterThan, // You want less inflation :)
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.BaseMessenger,
+      initialPeriodId: 0,
+      finalPeriodId: 5,
+      extraData: [],
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 100,
+      deployerStakeTimes: 100,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Staking Integration test moked Not Respected case reward not capped',
+        serviceDescription:
+          'The U.S. Federal Reserve (FED) inflation-driven monetary policy updates.',
+        serviceImage: 'https://via.placeholder.com/1200x600',
+        serviceURL: 'https://www.federalreserve.gov/',
+        serviceAddress: '0x0000000000000000000000000000000000000000',
+        serviceTicker: 'CPI',
+        serviceUseTestExternalAdapter: true, // as sloValue is multiplied by prescision before comparison an slo of 90 will be rised to 90000 if precision is 1000
+        serviceSliMockingPlan: [45000, 45000, 45000, 45000, 45000] // mocked sli values must be prepared acordingly
+      },
+    },
+    // INDEX 18, Contract for IT staking tests: Not Respected case
+    {
+      sloValue: 50,
+      sloType: SLO_TYPE.GreaterThan, // You want less inflation :)
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.BaseMessenger,
+      initialPeriodId: 0,
+      finalPeriodId: 5,
+      extraData: [],
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 100,
+      deployerStakeTimes: 100,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Staking Integration test moked Not Respected case reward capped',
+        serviceDescription:
+          'The U.S. Federal Reserve (FED) inflation-driven monetary policy updates.',
+        serviceImage: 'https://via.placeholder.com/1200x600',
+        serviceURL: 'https://www.federalreserve.gov/',
+        serviceAddress: '0x0000000000000000000000000000000000000000',
+        serviceTicker: 'CPI',
+        serviceUseTestExternalAdapter: true, // as sloValue is multiplied by prescision before comparison an slo of 90 will be rised to 90000 if precision is 1000
+        serviceSliMockingPlan: [30000, 30000, 30000, 30000, 30000] // mocked sli values must be prepared acordingly
+      },
+    },
+    // INDEX 19, Contract for IT staking tests: Respected case
+    {
+      sloValue: 50,
+      sloType: SLO_TYPE.GreaterThan, // You want less inflation :)
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.BaseMessenger,
+      initialPeriodId: 0,
+      finalPeriodId: 5,
+      extraData: [],
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 100,
+      deployerStakeTimes: 100,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Staking Integration test moked Respected case reward not capped',
+        serviceDescription:
+          'The U.S. Federal Reserve (FED) inflation-driven monetary policy updates.',
+        serviceImage: 'https://via.placeholder.com/1200x600',
+        serviceURL: 'https://www.federalreserve.gov/',
+        serviceAddress: '0x0000000000000000000000000000000000000000',
+        serviceTicker: 'CPI',
+        serviceUseTestExternalAdapter: true, // as sloValue is multiplied by prescision before comparison an slo of 90 will be rised to 90000 if precision is 1000
+        serviceSliMockingPlan: [60000, 60000, 60000, 60000, 60000] // mocked sli values must be prepared acordingly
+      },
+    },
+    // INDEX 20, Contract for IT staking tests: Respected case
+    {
+      sloValue: 50,
+      sloType: SLO_TYPE.GreaterThan, // You want less inflation :)
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.BaseMessenger,
+      initialPeriodId: 0,
+      finalPeriodId: 5,
+      extraData: [],
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 100,
+      deployerStakeTimes: 100,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Staking Integration test moked Respected case reward capped',
+        serviceDescription:
+          'The U.S. Federal Reserve (FED) inflation-driven monetary policy updates.',
+        serviceImage: 'https://via.placeholder.com/1200x600',
+        serviceURL: 'https://www.federalreserve.gov/',
+        serviceAddress: '0x0000000000000000000000000000000000000000',
+        serviceTicker: 'CPI',
+        serviceUseTestExternalAdapter: true, // as sloValue is multiplied by prescision before comparison an slo of 90 will be rised to 90000 if precision is 1000
+        serviceSliMockingPlan: [90000, 90000, 90000, 90000, 90000] // mocked sli values must be prepared acordingly
+      },
+    },
   ],
 };

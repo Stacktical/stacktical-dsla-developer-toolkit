@@ -1,0 +1,15 @@
+{
+  "useCaseName": "Digital Asset Floor",
+  "symbol": "FLOOR",
+  "ownerUrl": "https://dsla.network",
+  "useCaseDocs": "https://dsla.network/metaverse",
+  "externalAdapterRepo": "https://github.com/Stacktical/",
+  "unit": "%",
+  "keywords": ["nft", "floor"],
+  "timestamp": "2022-03-18T00:00:00+00:00",
+  "version": {
+    "major": 0,
+    "minor": 0,
+    "patch": 1
+  }
+}

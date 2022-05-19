@@ -16,7 +16,7 @@ import {
 import { BytesLike } from "@ethersproject/bytes";
 import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
-import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
+import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface DetailsInterface extends ethers.utils.Interface {
   functions: {
@@ -183,7 +183,7 @@ export class Details extends BaseContract {
           tokenAddress: string;
           totalStake: BigNumber;
           usersPool: BigNumber;
-          providerPool: BigNumber;
+          providersPool: BigNumber;
         })[]
       ] & {
         periodSLIs: ([BigNumber, BigNumber, number] & {
@@ -195,7 +195,7 @@ export class Details extends BaseContract {
           tokenAddress: string;
           totalStake: BigNumber;
           usersPool: BigNumber;
-          providerPool: BigNumber;
+          providersPool: BigNumber;
         })[];
       }
     >;
@@ -204,8 +204,7 @@ export class Details extends BaseContract {
       _slaAddress: string,
       overrides?: CallOverrides
     ): Promise<
-      [boolean, BigNumber, BigNumber, BigNumber] & {
-        breachedContract: boolean;
+      [BigNumber, BigNumber, BigNumber] & {
         stakersCount: BigNumber;
         nextVerifiablePeriod: BigNumber;
         leverage: BigNumber;
@@ -321,7 +320,7 @@ export class Details extends BaseContract {
         tokenAddress: string;
         totalStake: BigNumber;
         usersPool: BigNumber;
-        providerPool: BigNumber;
+        providersPool: BigNumber;
       })[]
     ] & {
       periodSLIs: ([BigNumber, BigNumber, number] & {
@@ -333,7 +332,7 @@ export class Details extends BaseContract {
         tokenAddress: string;
         totalStake: BigNumber;
         usersPool: BigNumber;
-        providerPool: BigNumber;
+        providersPool: BigNumber;
       })[];
     }
   >;
@@ -342,8 +341,7 @@ export class Details extends BaseContract {
     _slaAddress: string,
     overrides?: CallOverrides
   ): Promise<
-    [boolean, BigNumber, BigNumber, BigNumber] & {
-      breachedContract: boolean;
+    [BigNumber, BigNumber, BigNumber] & {
       stakersCount: BigNumber;
       nextVerifiablePeriod: BigNumber;
       leverage: BigNumber;
@@ -459,7 +457,7 @@ export class Details extends BaseContract {
           tokenAddress: string;
           totalStake: BigNumber;
           usersPool: BigNumber;
-          providerPool: BigNumber;
+          providersPool: BigNumber;
         })[]
       ] & {
         periodSLIs: ([BigNumber, BigNumber, number] & {
@@ -471,7 +469,7 @@ export class Details extends BaseContract {
           tokenAddress: string;
           totalStake: BigNumber;
           usersPool: BigNumber;
-          providerPool: BigNumber;
+          providersPool: BigNumber;
         })[];
       }
     >;
@@ -480,8 +478,7 @@ export class Details extends BaseContract {
       _slaAddress: string,
       overrides?: CallOverrides
     ): Promise<
-      [boolean, BigNumber, BigNumber, BigNumber] & {
-        breachedContract: boolean;
+      [BigNumber, BigNumber, BigNumber] & {
         stakersCount: BigNumber;
         nextVerifiablePeriod: BigNumber;
         leverage: BigNumber;
