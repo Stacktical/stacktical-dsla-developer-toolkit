@@ -40,12 +40,14 @@ type DToken @entity {
   address: Bytes!
   slaAddress: Bytes!
   tokenAddress: Bytes!
+  decimals: BigInt!
   totalSupply: BigInt!
 }
 
 type Deposit @entity {
   id: ID!
   type: String!
+  position: Int!
   amount: BigInt!
   tokenAddress: Bytes!
   callerAddress: Bytes!
@@ -89,4 +91,14 @@ type Messenger @entity {
   specificationUrl: String!
   precision: BigInt!
   messengerId: BigInt!
+}
+
+type RewardsDistributed @entity {
+  id: ID!
+  slaAddress: Bytes!
+  callerAddress: Bytes!
+  userReward: BigInt!
+  platformReward: BigInt!
+  messengerReward: BigInt!
+  dslaBurned: BigInt!
 }

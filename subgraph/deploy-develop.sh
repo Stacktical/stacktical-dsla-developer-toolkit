@@ -1,5 +1,5 @@
-# export DEVELOP_IPFS_URI="https://api.thegraph.com/ipfs/"
-export DEVELOP_IPFS_URI="http://127.0.0.1:8888"
+export DEVELOP_IPFS_URI="https://api.thegraph.com/ipfs/"
+# export DEVELOP_IPFS_URI="http://127.0.0.1:8888"
 export DEVELOP_GRAPH_NODE="http://127.0.0.1:8020"
 
 npx hardhat stacktical:graph-manifestos
