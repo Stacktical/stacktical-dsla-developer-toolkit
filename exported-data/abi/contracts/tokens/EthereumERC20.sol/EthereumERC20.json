@@ -556,6 +556,25 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "bytes4",
+        "name": "interfaceId",
+        "type": "bytes4"
+      }
+    ],
+    "name": "supportsInterface",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "symbol",
     "outputs": [
@@ -585,7 +604,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "recipient",
+        "name": "to",
         "type": "address"
       },
       {
@@ -609,12 +628,12 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "sender",
+        "name": "from",
         "type": "address"
       },
       {
         "internalType": "address",
-        "name": "recipient",
+        "name": "to",
         "type": "address"
       },
       {

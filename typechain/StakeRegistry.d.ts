@@ -40,7 +40,7 @@ interface StakeRegistryInterface extends ethers.utils.Interface {
     "slaRegistry()": FunctionFragment;
     "slaWasStakedByUser(address,address)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "userStakedSlas(address,uint256)": FunctionFragment;
+    "userStakedSlas(address,address)": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -128,7 +128,7 @@ interface StakeRegistryInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "userStakedSlas",
-    values: [string, BigNumberish]
+    values: [string, string]
   ): string;
 
   decodeFunctionResult(
@@ -351,7 +351,7 @@ export class StakeRegistry extends BaseContract {
     createDToken(
       _name: string,
       _symbol: string,
-      decimals: BigNumberish,
+      _decimals: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -477,9 +477,9 @@ export class StakeRegistry extends BaseContract {
 
     userStakedSlas(
       arg0: string,
-      arg1: BigNumberish,
+      arg1: string,
       overrides?: CallOverrides
-    ): Promise<[string]>;
+    ): Promise<[boolean]>;
   };
 
   DSLATokenAddress(overrides?: CallOverrides): Promise<string>;
@@ -494,7 +494,7 @@ export class StakeRegistry extends BaseContract {
   createDToken(
     _name: string,
     _symbol: string,
-    decimals: BigNumberish,
+    _decimals: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -620,9 +620,9 @@ export class StakeRegistry extends BaseContract {
 
   userStakedSlas(
     arg0: string,
-    arg1: BigNumberish,
+    arg1: string,
     overrides?: CallOverrides
-  ): Promise<string>;
+  ): Promise<boolean>;
 
   callStatic: {
     DSLATokenAddress(overrides?: CallOverrides): Promise<string>;
@@ -640,7 +640,7 @@ export class StakeRegistry extends BaseContract {
     createDToken(
       _name: string,
       _symbol: string,
-      decimals: BigNumberish,
+      _decimals: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
 
@@ -759,9 +759,9 @@ export class StakeRegistry extends BaseContract {
 
     userStakedSlas(
       arg0: string,
-      arg1: BigNumberish,
+      arg1: string,
       overrides?: CallOverrides
-    ): Promise<string>;
+    ): Promise<boolean>;
   };
 
   filters: {
@@ -962,7 +962,7 @@ export class StakeRegistry extends BaseContract {
     createDToken(
       _name: string,
       _symbol: string,
-      decimals: BigNumberish,
+      _decimals: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1043,7 +1043,7 @@ export class StakeRegistry extends BaseContract {
 
     userStakedSlas(
       arg0: string,
-      arg1: BigNumberish,
+      arg1: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
@@ -1064,7 +1064,7 @@ export class StakeRegistry extends BaseContract {
     createDToken(
       _name: string,
       _symbol: string,
-      decimals: BigNumberish,
+      _decimals: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1150,7 +1150,7 @@ export class StakeRegistry extends BaseContract {
 
     userStakedSlas(
       arg0: string,
-      arg1: BigNumberish,
+      arg1: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };

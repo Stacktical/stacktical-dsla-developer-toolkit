@@ -1,20 +1,20 @@
-pragma solidity 0.6.6;
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.9;
 
-pragma experimental ABIEncoderV2;
-
-import '@chainlink/contracts/src/v0.6/ChainlinkClient.sol';
+import '@chainlink/contracts/src/v0.8/ChainlinkClient.sol';
 
 import '@dsla-protocol/core/contracts/interfaces/IMessenger.sol';
 import '@dsla-protocol/core/contracts/SLA.sol';
 import '@dsla-protocol/core/contracts/PeriodRegistry.sol';
-import '@dsla-protocol/core/contracts/StringUtils.sol';
+import '@dsla-protocol/core/contracts/libraries/StringUtils.sol';
 import '@dsla-protocol/core/contracts/StakeRegistry.sol';
 
 import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
-import '@openzeppelin/contracts/token/ERC20/SafeERC20.sol';
+import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 
 contract AssetFloorOracle is ChainlinkClient, IMessenger, ReentrancyGuard {
     using SafeERC20 for ERC20;
+    using Chainlink for Chainlink.Request;
 
     mapping(bytes32 => SLIRequest) public requestIdToSLIRequest;
     bytes32[] public requests;
@@ -49,7 +49,7 @@ contract AssetFloorOracle is ChainlinkClient, IMessenger, ReentrancyGuard {
         string memory _lpSymbol,
         string memory _spName,
         string memory _spSymbol
-    ) public {
+    ) {
         setChainlinkToken(_messengerChainlinkToken);
         _oracle = _messengerChainlinkOracle;
         _fee = _feeMultiplier * _baseFee;
@@ -199,7 +199,7 @@ contract AssetFloorOracle is ChainlinkClient, IMessenger, ReentrancyGuard {
         return _slaRegistryAddress;
     }
 
-    function messengerPrecision() external view override returns (uint256) {
+    function messengerPrecision() external pure override returns (uint256) {
         return _messengerPrecision;
     }
 
@@ -223,12 +223,27 @@ contract AssetFloorOracle is ChainlinkClient, IMessenger, ReentrancyGuard {
         return _fulfillsCounter;
     }
 
-    function lpSymbolSlaId(uint128 slaId) external view override returns (string memory) {
-        return string(abi.encodePacked(lpSymbol, '-', StringUtils.uintToStr(slaId)));
+    function lpSymbolSlaId(uint128 slaId)
+        external
+        view
+        override
+        returns (string memory)
+    {
+        return
+            string(
+                abi.encodePacked(lpSymbol, '-', StringUtils.uintToStr(slaId))
+            );
     }
 
-    function spSymbolSlaId(uint128 slaId) external view override returns (string memory) {
-        return string(abi.encodePacked(spSymbol, '-', StringUtils.uintToStr(slaId)));
+    function spSymbolSlaId(uint128 slaId)
+        external
+        view
+        override
+        returns (string memory)
+    {
+        return
+            string(
+                abi.encodePacked(spSymbol, '-', StringUtils.uintToStr(slaId))
+            );
     }
-
 }

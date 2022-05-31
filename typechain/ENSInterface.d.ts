@@ -143,26 +143,26 @@ export class ENSInterface extends BaseContract {
 
     setOwner(
       node: BytesLike,
-      _owner: string,
+      owner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     setResolver(
       node: BytesLike,
-      _resolver: string,
+      resolver: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     setSubnodeOwner(
       node: BytesLike,
       label: BytesLike,
-      _owner: string,
+      owner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     setTTL(
       node: BytesLike,
-      _ttl: BigNumberish,
+      ttl: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -175,26 +175,26 @@ export class ENSInterface extends BaseContract {
 
   setOwner(
     node: BytesLike,
-    _owner: string,
+    owner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   setResolver(
     node: BytesLike,
-    _resolver: string,
+    resolver: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   setSubnodeOwner(
     node: BytesLike,
     label: BytesLike,
-    _owner: string,
+    owner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   setTTL(
     node: BytesLike,
-    _ttl: BigNumberish,
+    ttl: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -207,26 +207,26 @@ export class ENSInterface extends BaseContract {
 
     setOwner(
       node: BytesLike,
-      _owner: string,
+      owner: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
     setResolver(
       node: BytesLike,
-      _resolver: string,
+      resolver: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
     setSubnodeOwner(
       node: BytesLike,
       label: BytesLike,
-      _owner: string,
+      owner: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
     setTTL(
       node: BytesLike,
-      _ttl: BigNumberish,
+      ttl: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -290,26 +290,26 @@ export class ENSInterface extends BaseContract {
 
     setOwner(
       node: BytesLike,
-      _owner: string,
+      owner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     setResolver(
       node: BytesLike,
-      _resolver: string,
+      resolver: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     setSubnodeOwner(
       node: BytesLike,
       label: BytesLike,
-      _owner: string,
+      owner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     setTTL(
       node: BytesLike,
-      _ttl: BigNumberish,
+      ttl: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -329,26 +329,26 @@ export class ENSInterface extends BaseContract {
 
     setOwner(
       node: BytesLike,
-      _owner: string,
+      owner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     setResolver(
       node: BytesLike,
-      _resolver: string,
+      resolver: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     setSubnodeOwner(
       node: BytesLike,
       label: BytesLike,
-      _owner: string,
+      owner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     setTTL(
       node: BytesLike,
-      _ttl: BigNumberish,
+      ttl: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

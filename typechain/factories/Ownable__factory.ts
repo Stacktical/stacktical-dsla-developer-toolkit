@@ -8,11 +8,6 @@ import type { Ownable, OwnableInterface } from "../Ownable";
 
 const _abi = [
   {
-    inputs: [],
-    stateMutability: "nonpayable",
-    type: "constructor",
-  },
-  {
     anonymous: false,
     inputs: [
       {

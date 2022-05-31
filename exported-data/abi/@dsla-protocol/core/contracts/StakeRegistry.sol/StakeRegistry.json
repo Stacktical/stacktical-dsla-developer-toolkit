@@ -273,7 +273,7 @@
       },
       {
         "internalType": "uint8",
-        "name": "decimals",
+        "name": "_decimals",
         "type": "uint8"
       }
     ],
@@ -649,17 +649,17 @@
         "type": "address"
       },
       {
-        "internalType": "uint256",
+        "internalType": "address",
         "name": "",
-        "type": "uint256"
+        "type": "address"
       }
     ],
     "name": "userStakedSlas",
     "outputs": [
       {
-        "internalType": "contract SLA",
+        "internalType": "bool",
         "name": "",
-        "type": "address"
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
