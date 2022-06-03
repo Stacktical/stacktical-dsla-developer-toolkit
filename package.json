@@ -43,7 +43,7 @@
   },
   "homepage": "https://github.com/Stacktical/stacktical-developer-toolkit#readme",
   "dependencies": {
-    "@dsla-protocol/core": "^1.5.0",
+    "@dsla-protocol/core": "^1.5.2",
     "@graphprotocol/graph-cli": "^0.26.0",
     "@graphprotocol/graph-ts": "^0.24.1",
     "@harmony-js/core": "^0.1.57",
