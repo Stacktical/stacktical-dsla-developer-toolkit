@@ -79,7 +79,7 @@ export const develop: NetworkUserConfig = {
     bootstrap: {
       allowance: [
         {
-          contract: CONTRACT_NAMES.BaseMessenger,
+          contract: CONTRACT_NAMES.BaseOracle,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
@@ -116,7 +116,7 @@ export const develop: NetworkUserConfig = {
     },
     messengers: [
       {
-        contract: CONTRACT_NAMES.BaseMessenger,
+        contract: CONTRACT_NAMES.BaseOracle,
         useCaseName: USE_CASES.BASE_MESSENGER,
         externalAdapterUrl: 'http://host.docker.internal:6070',
         dslaLpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.name,

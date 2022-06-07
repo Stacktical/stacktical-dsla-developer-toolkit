@@ -33,7 +33,7 @@ export enum CONTRACT_NAMES {
   AvalancheERC20 = 'AvalancheERC20',
   FantomERC20 = 'FantomERC20',
   FujiERC20 = 'FujiERC20',
-  BaseMessenger = 'BaseMessenger',
+  BaseOracle = 'BaseOracle',
   PPMessenger = 'PPMessenger',
   //CPIMessenger = 'CPIMessenger',
   InflationOracle = 'InflationOracle',

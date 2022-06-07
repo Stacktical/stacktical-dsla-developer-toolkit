@@ -4,7 +4,7 @@ import { loadFixture } from 'ethereum-waffle';
 import { fixture } from '../fixtures/basic';
 const hre = require('hardhat');
 import { CONTRACT_NAMES, SERVICE_CREDITS } from '../../constants';
-import { BaseMessenger, SLA, SLARegistry__factory } from '../../typechain';
+import { BaseOracle, SLA, SLARegistry__factory } from '../../typechain';
 import { InflationOracle } from '../../typechain/InflationOracle';
 const consola = require('consola');
 
@@ -33,8 +33,8 @@ describe('Fixtures', () => {
   });
 
   describe("check SP & LP token names of messenger contracts", async () => {
-    it(CONTRACT_NAMES.BaseMessenger, async () => {
-      const base_messenger: BaseMessenger = await ethers.getContract(CONTRACT_NAMES.BaseMessenger);
+    it(CONTRACT_NAMES.BaseOracle, async () => {
+      const base_messenger: BaseOracle = await ethers.getContract(CONTRACT_NAMES.BaseOracle);
       expect(await base_messenger.lpName()).to.be.eq(SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.name);
       expect(await base_messenger.spName()).to.be.eq(SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.name);
     })
