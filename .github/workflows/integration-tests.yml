@@ -13,5 +13,7 @@ jobs:
         name: prepare-env
       - run: npm i
         name: npm i
+      - name: Compile
+        run: npx hardhat compile --force
       - name: Test
         run: IPFS_GATEWAY_URI="https://ipfs.dsla.network" npx hardhat test
