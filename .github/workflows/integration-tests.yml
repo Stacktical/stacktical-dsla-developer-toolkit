@@ -7,8 +7,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: Use Node.js
         uses: actions/setup-node@v2
-        # with:
-        #   node-version: latest
+        with:
+          node-version: 16.14.2
       - run: cp 'env-min' .env
         name: prepare-env
       - run: npm i
