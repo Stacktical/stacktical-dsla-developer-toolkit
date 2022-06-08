@@ -406,7 +406,7 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
           ))
           .to.emit(slaRegistry, 'SLIRequested')
 
-          //const messenger: BaseMessenger = await ethers.getContract(CONTRACT_NAMES.BaseMessenger);
+          //const messenger: BaseOracle = await ethers.getContract(CONTRACT_NAMES.BaseOracle);
           const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
 
           await new Promise((resolve) => sla.on('SLICreated', () => resolve(null)));

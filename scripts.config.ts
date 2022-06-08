@@ -24,7 +24,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.GreaterThan,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
-      messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
+      messengerContract: CONTRACT_NAMES.BaseOracle, // BaseOracle returns SLIs (0~100)
       initialPeriodId: 0,
       finalPeriodId: 51,
       extraData: [],
@@ -51,7 +51,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.GreaterThan,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
-      messengerContract: CONTRACT_NAMES.BaseMessenger,
+      messengerContract: CONTRACT_NAMES.BaseOracle,
       initialPeriodId: 0,
       finalPeriodId: 51,
       extraData: [],
@@ -78,7 +78,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.GreaterOrEqualTo,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
-      messengerContract: CONTRACT_NAMES.BaseMessenger,
+      messengerContract: CONTRACT_NAMES.BaseOracle,
       initialPeriodId: 0,
       finalPeriodId: 51,
       extraData: [],
@@ -105,7 +105,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.GreaterOrEqualTo,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
-      messengerContract: CONTRACT_NAMES.BaseMessenger,
+      messengerContract: CONTRACT_NAMES.BaseOracle,
       initialPeriodId: 0,
       finalPeriodId: 51,
       extraData: [],
@@ -132,7 +132,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.SmallerThan,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
-      messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
+      messengerContract: CONTRACT_NAMES.BaseOracle, // BaseOracle returns SLIs (0~100)
       initialPeriodId: 0,
       finalPeriodId: 51,
       extraData: [],
@@ -159,7 +159,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.SmallerThan,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
-      messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
+      messengerContract: CONTRACT_NAMES.BaseOracle, // BaseOracle returns SLIs (0~100)
       initialPeriodId: 0,
       finalPeriodId: 51,
       extraData: [],
@@ -186,7 +186,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.SmallerOrEqualTo,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
-      messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
+      messengerContract: CONTRACT_NAMES.BaseOracle, // BaseOracle returns SLIs (0~100)
       initialPeriodId: 0,
       finalPeriodId: 51,
       extraData: [],
@@ -213,7 +213,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.SmallerOrEqualTo,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
-      messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
+      messengerContract: CONTRACT_NAMES.BaseOracle, // BaseOracle returns SLIs (0~100)
       initialPeriodId: 0,
       finalPeriodId: 51,
       extraData: [],
@@ -240,7 +240,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.EqualTo,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
-      messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
+      messengerContract: CONTRACT_NAMES.BaseOracle, // BaseOracle returns SLIs (0~100)
       initialPeriodId: 0,
       finalPeriodId: 51,
       extraData: [],
@@ -267,7 +267,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.EqualTo,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
-      messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
+      messengerContract: CONTRACT_NAMES.BaseOracle, // BaseOracle returns SLIs (0~100)
       initialPeriodId: 0,
       finalPeriodId: 51,
       extraData: [],
@@ -294,7 +294,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.NotEqualTo,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
-      messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
+      messengerContract: CONTRACT_NAMES.BaseOracle, // BaseOracle returns SLIs (0~100)
       initialPeriodId: 0,
       finalPeriodId: 51,
       extraData: [],
@@ -321,7 +321,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.NotEqualTo,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
-      messengerContract: CONTRACT_NAMES.BaseMessenger, // BaseMessenger returns SLIs (0~100)
+      messengerContract: CONTRACT_NAMES.BaseOracle, // BaseOracle returns SLIs (0~100)
       initialPeriodId: 0,
       finalPeriodId: 51,
       extraData: [],
@@ -483,7 +483,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.GreaterThan, // You want less inflation :)
       whitelisted: false,
       periodType: PERIOD_TYPE.MONTHLY,
-      messengerContract: CONTRACT_NAMES.BaseMessenger,
+      messengerContract: CONTRACT_NAMES.BaseOracle,
       initialPeriodId: 0,
       finalPeriodId: 5,
       extraData: [],
@@ -510,7 +510,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.GreaterThan, // You want less inflation :)
       whitelisted: false,
       periodType: PERIOD_TYPE.MONTHLY,
-      messengerContract: CONTRACT_NAMES.BaseMessenger,
+      messengerContract: CONTRACT_NAMES.BaseOracle,
       initialPeriodId: 0,
       finalPeriodId: 5,
       extraData: [],
@@ -537,7 +537,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.GreaterThan, // You want less inflation :)
       whitelisted: false,
       periodType: PERIOD_TYPE.MONTHLY,
-      messengerContract: CONTRACT_NAMES.BaseMessenger,
+      messengerContract: CONTRACT_NAMES.BaseOracle,
       initialPeriodId: 0,
       finalPeriodId: 5,
       extraData: [],
@@ -564,7 +564,7 @@ export const scripts: ScriptsConfiguration = {
       sloType: SLO_TYPE.GreaterThan, // You want less inflation :)
       whitelisted: false,
       periodType: PERIOD_TYPE.MONTHLY,
-      messengerContract: CONTRACT_NAMES.BaseMessenger,
+      messengerContract: CONTRACT_NAMES.BaseOracle,
       initialPeriodId: 0,
       finalPeriodId: 5,
       extraData: [],

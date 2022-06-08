@@ -29,7 +29,7 @@ if (error) {
 export const harmonytestnet: NetworkUserConfig = {
   chainId: 1666700000,
   gas: 12000000,
-  gasPrice: 1000000000,
+  gasPrice: 100000000000,
   accounts: {
     mnemonic: process.env.TESTNET_MNEMONIC,
   },
@@ -116,18 +116,9 @@ export const harmonytestnet: NetworkUserConfig = {
     },
     messengers: [
       {
-        contract: CONTRACT_NAMES.SEMessenger,
-        useCaseName: USE_CASES.STAKING_EFFICIENCY,
-        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
-        dslaLpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.name,
-        dslaLpSymbol: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.symbol,
-        dslaSpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.name,
-        dslaSpSymbol: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.symbol,
-      },
-      {
-        contract: CONTRACT_NAMES.SEAMessenger,
-        useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
-        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
+        contract: CONTRACT_NAMES.BaseOracle,
+        useCaseName: USE_CASES.BASE_MESSENGER,
+        externalAdapterUrl: 'http://host.docker.internal:6070',
         dslaLpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.name,
         dslaLpSymbol: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.symbol,
         dslaSpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.name,

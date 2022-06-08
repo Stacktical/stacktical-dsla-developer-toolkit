@@ -8,10 +8,12 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: 16
+          node-version: 16.14.2
       - run: cp 'env-min' .env
         name: prepare-env
       - run: npm i
         name: npm i
+      - name: Compile
+        run: npx hardhat compile --force
       - name: Test
         run: IPFS_GATEWAY_URI="https://ipfs.dsla.network" npx hardhat test
