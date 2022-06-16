@@ -43,6 +43,7 @@
   },
   "homepage": "https://github.com/Stacktical/stacktical-developer-toolkit#readme",
   "dependencies": {
+    "@chainlink/token": "^1.1.0",
     "@dsla-protocol/core": "^1.5.2",
     "@graphprotocol/graph-cli": "^0.26.0",
     "@graphprotocol/graph-ts": "^0.24.1",
