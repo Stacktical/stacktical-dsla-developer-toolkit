@@ -22,8 +22,8 @@ import {
   Ownable__factory,
   PeriodRegistry,
   PeriodRegistry__factory,
-  // PreCoordinator,
-  // PreCoordinator__factory,
+  PreCoordinator,
+  PreCoordinator__factory,
   SLA,
   Details,
   Details__factory,
@@ -1784,107 +1784,107 @@ subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
   }
 );
 
-// subtask(SUB_TASK_NAMES.GET_PRECOORDINATOR, undefined).setAction(
-//   async (taskArgs, hre: HardhatRuntimeEnvironment) => {
-//     const { deployments, ethers, getNamedAccounts } = hre;
-//     const { deployer } = await getNamedAccounts();
-//     const signer = await ethers.getSigner(deployer);
-//     const { get } = deployments;
+subtask(SUB_TASK_NAMES.GET_PRECOORDINATOR, undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    const { deployments, ethers, getNamedAccounts } = hre;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    const { get } = deployments;
 
-//     console.log('Getting Chainlink config from PreCoordinator contract');
+    console.log('Getting Chainlink config from PreCoordinator contract');
 
-//     const precoordinator = <PreCoordinator>(
-//       await ethers.getContract(CONTRACT_NAMES.PreCoordinator)
-//     );
-//     const eventsFilter = precoordinator.filters.NewServiceAgreement();
-//     const events = await precoordinator.queryFilter(
-//       eventsFilter,
-//       (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
-//       undefined
-//     );
-//     for (let event of events) {
-//       printSeparator();
-//       const { saId, payment, minresponses } = event.args;
-//       console.log('Service agreement blockNumber: ' + event.blockNumber);
-//       console.log('Service agreement ID: ' + saId);
-//       console.log(
-//         'Service agreement payment: ' +
-//         ethers.utils.formatEther(payment) +
-//         ' LINK'
-//       );
-//       console.log('Service agreement minresponses: ' + minresponses);
-//       const serviceAgreement = await precoordinator.getServiceAgreement(saId);
-//       console.log('Service agreement jobIds array: ');
-//       console.log(serviceAgreement.jobIds);
-//       console.log('Service agreement oracles array: ');
-//       console.log(serviceAgreement.oracles);
-//       console.log('Service agreement payments array: ');
-//       console.log(
-//         serviceAgreement.payments.map((payment) =>
-//           ethers.utils.formatEther(payment)
-//         )
-//       );
-//       printSeparator();
-//     }
-//   }
-// );
+    const precoordinator = <PreCoordinator>(
+      await ethers.getContract(CONTRACT_NAMES.PreCoordinator)
+    );
+    const eventsFilter = precoordinator.filters.NewServiceAgreement();
+    const events = await precoordinator.queryFilter(
+      eventsFilter,
+      (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
+      undefined
+    );
+    for (let event of events) {
+      printSeparator();
+      const { saId, payment, minresponses } = event.args;
+      console.log('Service agreement blockNumber: ' + event.blockNumber);
+      console.log('Service agreement ID: ' + saId);
+      console.log(
+        'Service agreement payment: ' +
+        ethers.utils.formatEther(payment) +
+        ' LINK'
+      );
+      console.log('Service agreement minresponses: ' + minresponses);
+      const serviceAgreement = await precoordinator.getServiceAgreement(saId);
+      console.log('Service agreement jobIds array: ');
+      console.log(serviceAgreement.jobIds);
+      console.log('Service agreement oracles array: ');
+      console.log(serviceAgreement.oracles);
+      console.log('Service agreement payments array: ');
+      console.log(
+        serviceAgreement.payments.map((payment) =>
+          ethers.utils.formatEther(payment)
+        )
+      );
+      printSeparator();
+    }
+  }
+);
 
-// subtask(SUB_TASK_NAMES.SET_PRECOORDINATOR, undefined).setAction(
-//   async (taskArgs, hre: HardhatRuntimeEnvironment) => {
-//     const { deployments, ethers, getNamedAccounts, network } = hre;
-//     const { deployer } = await getNamedAccounts();
-//     const signer = await ethers.getSigner(deployer);
-//     const { get } = deployments;
-//     const { stacktical } = network.config;
-//     console.log('Setting Chainlink config on PreCoordinator contract');
-//     console.log('Nodes configuration from stacktical config:');
-//     console.log(stacktical.chainlink.nodesConfiguration);
-//     const oracle = await get(CONTRACT_NAMES.Oracle);
-//     const messenger = stacktical.messengers[taskArgs.index];
-//     for (let node of stacktical.chainlink.nodesConfiguration) {
-//       const jobs = await getChainlinkJobs(node);
-//       const job = jobs.find(
-//         (postedJob) =>
-//           postedJob.attributes.tasks.some(
-//             (task) => task.type === messenger.useCaseName
-//           ) &&
-//           postedJob.attributes.initiators.some(
-//             (initiator) =>
-//               toChecksumAddress(initiator.params.address) === oracle.address
-//           )
-//       );
-//       if (!job) {
-//         await hre.run(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, {
-//           index: taskArgs.index,
-//         });
-//       }
-//     }
-//     const preCoordinatorConfiguration = await getPreCoordinatorConfiguration(
-//       stacktical.chainlink.nodesConfiguration,
-//       messenger.useCaseName,
-//       oracle.address
-//     );
-//     console.log('PreCoordinator configuration from nodes information:');
-//     console.log(preCoordinatorConfiguration);
-//     const precoordinator = await PreCoordinator__factory.connect(
-//       (
-//         await get(CONTRACT_NAMES.PreCoordinator)
-//       ).address,
-//       signer
-//     );
-//     const minResponses = 1;
-//     const tx = await precoordinator.createServiceAgreement(
-//       minResponses,
-//       preCoordinatorConfiguration.oracles,
-//       preCoordinatorConfiguration.jobIds,
-//       preCoordinatorConfiguration.payments
-//     );
-//     const receipt = await tx.wait();
-//     console.log('Service agreement created: ');
-//     console.log(receipt.events[0].args);
-//     return receipt.events[0].args.saId;
-//   }
-// );
+subtask(SUB_TASK_NAMES.SET_PRECOORDINATOR, undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    const { deployments, ethers, getNamedAccounts, network } = hre;
+    const { deployer } = await getNamedAccounts();
+    const signer = await ethers.getSigner(deployer);
+    const { get } = deployments;
+    const { stacktical } = network.config;
+    console.log('Setting Chainlink config on PreCoordinator contract');
+    console.log('Nodes configuration from stacktical config:');
+    console.log(stacktical.chainlink.nodesConfiguration);
+    const oracle = await get(CONTRACT_NAMES.Oracle);
+    const messenger = stacktical.messengers[taskArgs.index];
+    for (let node of stacktical.chainlink.nodesConfiguration) {
+      const jobs = await getChainlinkJobs(node);
+      const job = jobs.find(
+        (postedJob) =>
+          postedJob.attributes.tasks.some(
+            (task) => task.type === messenger.useCaseName
+          ) &&
+          postedJob.attributes.initiators.some(
+            (initiator) =>
+              toChecksumAddress(initiator.params.address) === oracle.address
+          )
+      );
+      if (!job) {
+        await hre.run(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, {
+          index: taskArgs.index,
+        });
+      }
+    }
+    const preCoordinatorConfiguration = await getPreCoordinatorConfiguration(
+      stacktical.chainlink.nodesConfiguration,
+      messenger.useCaseName,
+      oracle.address
+    );
+    console.log('PreCoordinator configuration from nodes information:');
+    console.log(preCoordinatorConfiguration);
+    const precoordinator = await PreCoordinator__factory.connect(
+      (
+        await get(CONTRACT_NAMES.PreCoordinator)
+      ).address,
+      signer
+    );
+    const minResponses = 1;
+    const tx = await precoordinator.createServiceAgreement(
+      minResponses,
+      preCoordinatorConfiguration.oracles,
+      preCoordinatorConfiguration.jobIds,
+      preCoordinatorConfiguration.payments
+    );
+    const receipt = await tx.wait();
+    console.log('Service agreement created: ');
+    console.log(receipt.events[0].args);
+    return receipt.events[0].args.saId;
+  }
+);
 
 subtask(SUB_TASK_NAMES.DEPLOY_CHAINLINK_CONTRACTS, undefined).setAction(
   async (taskArgs, hre: HardhatRuntimeEnvironment) => {
@@ -1913,44 +1913,44 @@ subtask(SUB_TASK_NAMES.DEPLOY_CHAINLINK_CONTRACTS, undefined).setAction(
   }
 );
 
-// subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
-//   async (taskArgs, hre: HardhatRuntimeEnvironment) => {
-//     const { get } = hre.deployments;
-//     const { deployer } = await hre.getNamedAccounts();
-//     const signer = await hre.ethers.getSigner(deployer);
-//     const { stacktical } = hre.network.config;
-//     const precoordinator = await PreCoordinator__factory.connect(
-//       (
-//         await get(CONTRACT_NAMES.PreCoordinator)
-//       ).address,
-//       signer
-//     );
-//     let eventFilter = precoordinator.filters.NewServiceAgreement();
-//     let events = await precoordinator.queryFilter(
-//       eventFilter,
-//       (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
-//       undefined
-//     );
-//     const lastEvent = events.slice(-1)[0];
-//     const { saId } = lastEvent.args;
-//     const serviceAgreement = await precoordinator.getServiceAgreement(saId);
-//     const messengerName = stacktical.messengers[taskArgs.index].contract;
-//     const messenger = await IMessenger__factory.connect(
-//       (
-//         await get(messengerName)
-//       ).address,
-//       signer
-//     );
+subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    const { get } = hre.deployments;
+    const { deployer } = await hre.getNamedAccounts();
+    const signer = await hre.ethers.getSigner(deployer);
+    const { stacktical } = hre.network.config;
+    const precoordinator = await PreCoordinator__factory.connect(
+      (
+        await get(CONTRACT_NAMES.PreCoordinator)
+      ).address,
+      signer
+    );
+    let eventFilter = precoordinator.filters.NewServiceAgreement();
+    let events = await precoordinator.queryFilter(
+      eventFilter,
+      (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
+      undefined
+    );
+    const lastEvent = events.slice(-1)[0];
+    const { saId } = lastEvent.args;
+    const serviceAgreement = await precoordinator.getServiceAgreement(saId);
+    const messengerName = stacktical.messengers[taskArgs.index].contract;
+    const messenger = await IMessenger__factory.connect(
+      (
+        await get(messengerName)
+      ).address,
+      signer
+    );
 
-//     let tx = await messenger.setChainlinkJobID(
-//       saId,
-//       serviceAgreement.payments.length
-//     );
-//     await tx.wait();
-//     consola.success('Service agreeement id updated in ' + messengerName);
-//     console.log(saId);
-//   }
-// );
+    let tx = await messenger.setChainlinkJobID(
+      saId,
+      serviceAgreement.payments.length
+    );
+    await tx.wait();
+    consola.success('Service agreeement id updated in ' + messengerName);
+    console.log(saId);
+  }
+);
 
 subtask(SUB_TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE, undefined).setAction(
   async (_, hre: HardhatRuntimeEnvironment) => {
