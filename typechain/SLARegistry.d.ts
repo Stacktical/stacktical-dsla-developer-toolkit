@@ -24,7 +24,7 @@ interface SLARegistryInterface extends ethers.utils.Interface {
     "SLAs(uint256)": FunctionFragment;
     "allSLAs()": FunctionFragment;
     "checkPastPeriod()": FunctionFragment;
-    "createSLA(uint256,uint8,bool,address,uint8,uint128,uint128,string,bytes32[],uint64)": FunctionFragment;
+    "createSLA(uint120,uint8,bool,address,uint8,uint128,uint128,string,bytes32[],uint64)": FunctionFragment;
     "isRegisteredSLA(address)": FunctionFragment;
     "messengerRegistry()": FunctionFragment;
     "periodRegistry()": FunctionFragment;

@@ -35,11 +35,6 @@
         "internalType": "address",
         "name": "_slaAddress",
         "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_precision",
-        "type": "uint256"
       }
     ],
     "name": "getDeviation",
@@ -80,9 +75,9 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
+        "internalType": "uint120",
         "name": "_sloValue",
-        "type": "uint256"
+        "type": "uint120"
       },
       {
         "internalType": "enum SLORegistry.SLOType",
@@ -111,9 +106,9 @@
     "name": "registeredSLO",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "uint120",
         "name": "sloValue",
-        "type": "uint256"
+        "type": "uint120"
       },
       {
         "internalType": "enum SLORegistry.SLOType",

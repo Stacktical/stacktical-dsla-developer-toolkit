@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.9;
+pragma solidity ^0.6.0;
 
-import '@chainlink/contracts/src/v0.8/ChainlinkClient.sol';
+import '@chainlink/contracts/src/v0.6/ChainlinkClient.sol';
 import '@chainlink/contracts/src/v0.6/LinkTokenReceiver.sol';
 import '@chainlink/contracts/src/v0.6/Median.sol';
 import '@chainlink/contracts/src/v0.6/vendor/Ownable.sol';
+import '@chainlink/contracts/src/v0.6/vendor/SafeMathChainlink.sol';
 
 /**
  * @title PreCoordinator is a contract that builds on-chain service agreements
@@ -18,6 +19,7 @@ contract PreCoordinator is
     ChainlinkRequestInterface,
     LinkTokenReceiver
 {
+    using SafeMathChainlink for uint256;
     uint256 private constant MAX_ORACLE_COUNT = 45;
 
     uint256 private globalNonce;

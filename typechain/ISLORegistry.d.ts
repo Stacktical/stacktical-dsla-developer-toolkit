@@ -20,13 +20,13 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface ISLORegistryInterface extends ethers.utils.Interface {
   functions: {
-    "getDeviation(uint256,address,uint256)": FunctionFragment;
+    "getDeviation(uint256,address)": FunctionFragment;
     "isRespected(uint256,address)": FunctionFragment;
   };
 
   encodeFunctionData(
     functionFragment: "getDeviation",
-    values: [BigNumberish, string, BigNumberish]
+    values: [BigNumberish, string]
   ): string;
   encodeFunctionData(
     functionFragment: "isRespected",
@@ -92,7 +92,6 @@ export class ISLORegistry extends BaseContract {
     getDeviation(
       _sli: BigNumberish,
       _slaAddress: string,
-      _precision: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
@@ -106,7 +105,6 @@ export class ISLORegistry extends BaseContract {
   getDeviation(
     _sli: BigNumberish,
     _slaAddress: string,
-    _precision: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -120,7 +118,6 @@ export class ISLORegistry extends BaseContract {
     getDeviation(
       _sli: BigNumberish,
       _slaAddress: string,
-      _precision: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -137,7 +134,6 @@ export class ISLORegistry extends BaseContract {
     getDeviation(
       _sli: BigNumberish,
       _slaAddress: string,
-      _precision: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -152,7 +148,6 @@ export class ISLORegistry extends BaseContract {
     getDeviation(
       _sli: BigNumberish,
       _slaAddress: string,
-      _precision: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

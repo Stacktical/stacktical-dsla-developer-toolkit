@@ -19,11 +19,6 @@ const _abi = [
         name: "_slaAddress",
         type: "address",
       },
-      {
-        internalType: "uint256",
-        name: "_precision",
-        type: "uint256",
-      },
     ],
     name: "getDeviation",
     outputs: [
