@@ -2,44 +2,49 @@ import { expect } from 'chai';
 import { loadFixture } from 'ethereum-waffle';
 import { fixture } from '../../fixtures/basic';
 import { fromWei, toWei } from 'web3-utils';
-
-const hre = require('hardhat');
+import { network, deployments, ethers, getNamedAccounts, getUnnamedAccounts } from 'hardhat';
 
 import { BigNumber } from "@ethersproject/bignumber";
 
 import {
   CONTRACT_NAMES,
-  PERIOD_STATUS
+  PERIOD_STATUS,
+  PERIOD_TYPE
 } from '../../../constants';
 import {
   ERC20PresetMinterPauser,
   ERC20PresetMinterPauser__factory,
   SLA__factory,
   SLARegistry__factory,
+  SLARegistry,
+  SLA,
+  SLORegistry,
+  PeriodRegistry,
 } from '../../../typechain';
+import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
+import { evm_increaseTime } from '../../helper';
 
 const consola = require('consola');
 
 describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Capped', () => {
-  const { network, deployments, ethers, getNamedAccounts, getUnnamedAccounts } = hre;
   const { get } = deployments;
   let allSLAs: string[];
   let tx;
 
-  let slaRegistry;
+  let slaRegistry: SLARegistry;
   let _sloRegistry;
+  let periodRegistry: PeriodRegistry;
 
-  let sla;
+  let sla: SLA;
   let details;
-  let signersAccounts;
   let unnamedAccounts;
 
-  let provider_1_account;
-  let provider_2_account;
-  let provider_3_account;
-  let user_1_account;
-  let user_2_account;
-  let user_3_account;
+  let provider_1_account: SignerWithAddress;
+  let provider_2_account: SignerWithAddress;
+  let provider_3_account: SignerWithAddress;
+  let user_1_account: SignerWithAddress;
+  let user_2_account: SignerWithAddress;
+  let user_3_account: SignerWithAddress;
 
   // Stacking constants INITIAL
   // PROVIDERS BALANCE
@@ -184,27 +189,25 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
 
     unnamedAccounts = await getUnnamedAccounts();
 
-    slaRegistry = await SLARegistry__factory.connect(
-      (
-        await get(CONTRACT_NAMES.SLARegistry)
-      ).address,
-      signer
-    );
+    slaRegistry = <SLARegistry>await ethers.getContract(CONTRACT_NAMES.SLARegistry, signer);
     allSLAs = await slaRegistry.allSLAs();
     _sloRegistry = await slaRegistry.sloRegistry();
+    periodRegistry = await ethers.getContractAt(
+      CONTRACT_NAMES.PeriodRegistry,
+      await slaRegistry.periodRegistry()
+    );
 
     // get the contract INDEX 18, Contract for IT staking tests: Not Respected case reward capped
     sla = await ethers.getContractAt(CONTRACT_NAMES.SLA, allSLAs[18]);
     details = await ethers.getContract(CONTRACT_NAMES.Details);
-    signersAccounts = await hre.ethers.getSigners();
-
-    provider_1_account = signersAccounts[0];
-    provider_2_account = signersAccounts[1];
-    provider_3_account = signersAccounts[2];
-
-    user_1_account = signersAccounts[3];
-    user_2_account = signersAccounts[4];
-    user_3_account = signersAccounts[5];
+    [
+      provider_1_account,
+      provider_2_account,
+      provider_3_account,
+      user_1_account,
+      user_2_account,
+      user_3_account,
+    ] = await ethers.getSigners();
 
     // Get dslaToken contract
     const dslaToken: ERC20PresetMinterPauser = await ethers.getContract(
@@ -216,93 +219,35 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
     let amount = 565500;
     tx = await dslaToken.approve(sla.address, amount);
 
-    // Associate Users to SLA contract
-    consola.info('Associate Users to SLA contract');
-    const user_1_SLA = SLA__factory.connect(
-      sla.address,
-      user_1_account
-    )
-    const user_2_SLA = SLA__factory.connect(
-      sla.address,
-      user_2_account
-    )
-    const user_3_SLA = SLA__factory.connect(
-      sla.address,
-      user_3_account
-    )
-
-    // Associate Providers to SLA contract
-    consola.info('Associate Providers to SLA contract');
-    const provider_1_SLA = SLA__factory.connect(
-      sla.address,
-      provider_1_account
-    )
-    const provider_2_SLA = SLA__factory.connect(
-      sla.address,
-      provider_2_account
-    )
-    const provider_3_SLA = SLA__factory.connect(
-      sla.address,
-      provider_3_account
-    )
-
-    // Associate Users to dslaToken
-    consola.info('Associate Users to dslaToken');
-    const user_1_DSLA = ERC20PresetMinterPauser__factory.connect(
-      dslaToken.address,
-      user_1_account
-    );
-    const user_2_DSLA = ERC20PresetMinterPauser__factory.connect(
-      dslaToken.address,
-      user_2_account
-    );
-    const user_3_DSLA = ERC20PresetMinterPauser__factory.connect(
-      dslaToken.address,
-      user_3_account
-    );
-
-    // Associate Providers to dslaToken
-    consola.info('Associate Providers to dslaToken');
-    const provider_1_DSLA = ERC20PresetMinterPauser__factory.connect(
-      dslaToken.address,
-      provider_1_account
-    );
-    const provider_2_DSLA = ERC20PresetMinterPauser__factory.connect(
-      dslaToken.address,
-      provider_2_account
-    );
-    const provider_3_DSLA = ERC20PresetMinterPauser__factory.connect(
-      dslaToken.address,
-      provider_3_account
-    );
-
+    consola.info('Stake DSLA tokens for providers');
     // add token to provider DSLA account
-    await provider_1_DSLA.mint(provider_1_account.address, toWei(initialStakeBalanceProvider1));
-    await provider_2_DSLA.mint(provider_2_account.address, toWei(initialStakeBalanceProvider2));
-    await provider_3_DSLA.mint(provider_3_account.address, toWei(initialStakeBalanceProvider3));
+    await dslaToken.connect(provider_1_account).mint(provider_1_account.address, toWei(initialStakeBalanceProvider1));
+    await dslaToken.connect(provider_2_account).mint(provider_2_account.address, toWei(initialStakeBalanceProvider2));
+    await dslaToken.connect(provider_3_account).mint(provider_3_account.address, toWei(initialStakeBalanceProvider3));
     // Add token to provider accounts
-    await provider_1_DSLA.approve(provider_1_SLA.address, toWei(initialStakeBalanceProvider1));
-    await provider_2_DSLA.approve(provider_2_SLA.address, toWei(initialStakeBalanceProvider2));
-    await provider_3_DSLA.approve(provider_3_SLA.address, toWei(initialStakeBalanceProvider3));
+    await dslaToken.connect(provider_1_account).approve(sla.address, toWei(initialStakeBalanceProvider1));
+    await dslaToken.connect(provider_2_account).approve(sla.address, toWei(initialStakeBalanceProvider2));
+    await dslaToken.connect(provider_3_account).approve(sla.address, toWei(initialStakeBalanceProvider3));
     // Stake token for providers
     enum Position { LONG, SHORT }
-    tx = await provider_1_SLA.stakeTokens(toWei(initialStakeBalanceProvider1), provider_1_DSLA.address, Position.LONG);
-    tx = await provider_2_SLA.stakeTokens(toWei(initialStakeBalanceProvider2), provider_2_DSLA.address, Position.LONG);
-    tx = await provider_3_SLA.stakeTokens(toWei(initialStakeBalanceProvider3), provider_3_DSLA.address, Position.LONG);
+    tx = await sla.connect(provider_1_account).stakeTokens(toWei(initialStakeBalanceProvider1), dslaToken.address, Position.LONG);
+    tx = await sla.connect(provider_2_account).stakeTokens(toWei(initialStakeBalanceProvider2), dslaToken.address, Position.LONG);
+    tx = await sla.connect(provider_3_account).stakeTokens(toWei(initialStakeBalanceProvider3), dslaToken.address, Position.LONG);
 
+    consola.info('Stake DSLA tokens for users');
     // add token to users DSLA accounts
-    await user_1_DSLA.mint(user_1_account.address, toWei(initialStakeBalanceUser1));
-    await user_2_DSLA.mint(user_2_account.address, toWei(initialStakeBalanceUser2));
-    await user_3_DSLA.mint(user_3_account.address, toWei(initialStakeBalanceUser3));
+    await dslaToken.connect(user_1_account).mint(user_1_account.address, toWei(initialStakeBalanceUser1));
+    await dslaToken.connect(user_2_account).mint(user_2_account.address, toWei(initialStakeBalanceUser2));
+    await dslaToken.connect(user_3_account).mint(user_3_account.address, toWei(initialStakeBalanceUser3));
     // Add token to users accounts
-    await user_1_DSLA.approve(user_1_SLA.address, toWei(initialStakeBalanceUser1));
-    await user_2_DSLA.approve(user_2_SLA.address, toWei(initialStakeBalanceUser2));
-    await user_3_DSLA.approve(user_3_SLA.address, toWei(initialStakeBalanceUser3));
+    await dslaToken.connect(user_1_account).approve(sla.address, toWei(initialStakeBalanceUser1));
+    await dslaToken.connect(user_2_account).approve(sla.address, toWei(initialStakeBalanceUser2));
+    await dslaToken.connect(user_3_account).approve(sla.address, toWei(initialStakeBalanceUser3));
 
     // Stake token for users
-    tx = await user_1_SLA.stakeTokens(toWei(initialStakeBalanceUser1), user_1_DSLA.address, Position.SHORT);
-    tx = await user_2_SLA.stakeTokens(toWei(initialStakeBalanceUser2), user_2_DSLA.address, Position.SHORT);
-    tx = await user_3_SLA.stakeTokens(toWei(initialStakeBalanceUser3), user_3_DSLA.address, Position.SHORT);
+    tx = await sla.connect(user_1_account).stakeTokens(toWei(initialStakeBalanceUser1), dslaToken.address, Position.SHORT);
+    tx = await sla.connect(user_2_account).stakeTokens(toWei(initialStakeBalanceUser2), dslaToken.address, Position.SHORT);
+    tx = await sla.connect(user_3_account).stakeTokens(toWei(initialStakeBalanceUser3), dslaToken.address, Position.SHORT);
 
     consola.info('Initial Staking DONE');
 
@@ -394,6 +339,11 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
         const expectedCompensation = 100
 
         console.log("request SLI P1")
+        const periodStartEnd = await periodRegistry.getPeriodStartAndEnd(
+          PERIOD_TYPE.MONTHLY, periodId_p1
+        );
+        console.log("Period starts and ends", periodStartEnd.start.toNumber(), periodStartEnd.end.toNumber())
+        await evm_increaseTime(periodStartEnd.end.toNumber());
         await expect(slaRegistry.requestSLI(
           periodId_p1,
           sla.address,
