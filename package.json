@@ -75,7 +75,6 @@
     "node-fetch": "^2.6.1",
     "openzeppelin-solidity": "^2.5.1",
     "pm2": "^5.1.2",
-    "truffle-hdwallet-provider": "^1.0.17",
     "ts-generator": "^0.1.1",
     "tslib": "^2.2.0",
     "typechain": "^5.0.0",
