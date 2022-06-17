@@ -136,7 +136,7 @@ const _abi = [
       },
       {
         internalType: "address",
-        name: "_owner",
+        name: "owner",
         type: "address",
       },
     ],
@@ -154,7 +154,7 @@ const _abi = [
       },
       {
         internalType: "address",
-        name: "_resolver",
+        name: "resolver",
         type: "address",
       },
     ],
@@ -177,7 +177,7 @@ const _abi = [
       },
       {
         internalType: "address",
-        name: "_owner",
+        name: "owner",
         type: "address",
       },
     ],
@@ -195,7 +195,7 @@ const _abi = [
       },
       {
         internalType: "uint64",
-        name: "_ttl",
+        name: "ttl",
         type: "uint64",
       },
     ],

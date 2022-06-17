@@ -1,18 +1,13 @@
-pragma solidity 0.6.6;
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.9;
 
 import {ERC20} from '@openzeppelin/contracts/token/ERC20/ERC20.sol';
-import '@openzeppelin/contracts/math/SafeMath.sol';
 
 contract FantomERC20 is ERC20 {
-    using SafeMath for uint256;
     // keeping it for checking, whether deposit being called by valid address or not
     address deployer;
 
-    constructor(string memory name, string memory symbol)
-        public
-        ERC20(name, symbol)
-    {
-        _setupDecimals(18);
+    constructor(string memory name, string memory symbol) ERC20(name, symbol) {
         deployer = msg.sender;
 
         _mint(msg.sender, 10**27);

@@ -141,9 +141,9 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
+        "internalType": "uint120",
         "name": "sloValue_",
-        "type": "uint256"
+        "type": "uint120"
       },
       {
         "internalType": "enum SLORegistry.SLOType",

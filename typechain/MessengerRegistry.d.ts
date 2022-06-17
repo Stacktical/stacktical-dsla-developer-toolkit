@@ -21,7 +21,7 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface MessengerRegistryInterface extends ethers.utils.Interface {
   functions: {
-    "getMessengers()": FunctionFragment;
+    "getMessengers(uint256,uint256)": FunctionFragment;
     "getMessengersLength()": FunctionFragment;
     "modifyMessenger(string,uint256)": FunctionFragment;
     "registerMessenger(address,address,string)": FunctionFragment;
@@ -31,7 +31,7 @@ interface MessengerRegistryInterface extends ethers.utils.Interface {
 
   encodeFunctionData(
     functionFragment: "getMessengers",
-    values?: undefined
+    values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getMessengersLength",
@@ -153,6 +153,8 @@ export class MessengerRegistry extends BaseContract {
 
   functions: {
     getMessengers(
+      skip: BigNumberish,
+      num: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
       [
@@ -202,6 +204,8 @@ export class MessengerRegistry extends BaseContract {
   };
 
   getMessengers(
+    skip: BigNumberish,
+    num: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
     ([string, string, string, BigNumber, BigNumber, BigNumber, BigNumber] & {
@@ -241,6 +245,8 @@ export class MessengerRegistry extends BaseContract {
 
   callStatic: {
     getMessengers(
+      skip: BigNumberish,
+      num: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
       ([string, string, string, BigNumber, BigNumber, BigNumber, BigNumber] & {
@@ -348,7 +354,11 @@ export class MessengerRegistry extends BaseContract {
   };
 
   estimateGas: {
-    getMessengers(overrides?: CallOverrides): Promise<BigNumber>;
+    getMessengers(
+      skip: BigNumberish,
+      num: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getMessengersLength(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -376,7 +386,11 @@ export class MessengerRegistry extends BaseContract {
   };
 
   populateTransaction: {
-    getMessengers(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getMessengers(
+      skip: BigNumberish,
+      num: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getMessengersLength(
       overrides?: CallOverrides

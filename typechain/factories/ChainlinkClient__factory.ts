@@ -2,8 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Signer, utils, Contract, ContractFactory, Overrides } from "ethers";
-import { Provider, TransactionRequest } from "@ethersproject/providers";
+import { Contract, Signer, utils } from "ethers";
+import { Provider } from "@ethersproject/providers";
 import type {
   ChainlinkClient,
   ChainlinkClientInterface,
@@ -51,37 +51,7 @@ const _abi = [
   },
 ];
 
-const _bytecode =
-  "0x60806040526001600455348015601457600080fd5b50603f8060226000396000f3fe6080604052600080fdfea264697066735822122023607e05162b530351d6deb5ce9870ae063a601b3d11682e35b1562546159c8f64736f6c63430006060033";
-
-export class ChainlinkClient__factory extends ContractFactory {
-  constructor(
-    ...args: [signer: Signer] | ConstructorParameters<typeof ContractFactory>
-  ) {
-    if (args.length === 1) {
-      super(_abi, _bytecode, args[0]);
-    } else {
-      super(...args);
-    }
-  }
-
-  deploy(
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ChainlinkClient> {
-    return super.deploy(overrides || {}) as Promise<ChainlinkClient>;
-  }
-  getDeployTransaction(
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): TransactionRequest {
-    return super.getDeployTransaction(overrides || {});
-  }
-  attach(address: string): ChainlinkClient {
-    return super.attach(address) as ChainlinkClient;
-  }
-  connect(signer: Signer): ChainlinkClient__factory {
-    return super.connect(signer) as ChainlinkClient__factory;
-  }
-  static readonly bytecode = _bytecode;
+export class ChainlinkClient__factory {
   static readonly abi = _abi;
   static createInterface(): ChainlinkClientInterface {
     return new utils.Interface(_abi) as ChainlinkClientInterface;

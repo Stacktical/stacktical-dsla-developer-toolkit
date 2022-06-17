@@ -1689,8 +1689,8 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       );
       tx = await dslaToken.approve(sla.address, deployerStake);
       await tx.wait();
-      enum Position {LONG,SHORT}
-      if (deployerStake !== '0'){
+      enum Position { LONG, SHORT }
+      if (deployerStake !== '0') {
         tx = await sla.stakeTokens(deployerStake, dslaToken.address, Position.LONG);
         await tx.wait();
       }
@@ -1709,11 +1709,11 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
         .connect(await ethers.getSigner(notDeployer))
         .approve(sla.address, notDeployerStake);
       await tx.wait();
-      if (notDeployerStake !== '0'){
-          tx = await sla
-            .connect(await ethers.getSigner(notDeployer))
-            .stakeTokens(notDeployerStake, dslaToken.address, Position.SHORT);
-          await tx.wait();
+      if (notDeployerStake !== '0') {
+        tx = await sla
+          .connect(await ethers.getSigner(notDeployer))
+          .stakeTokens(notDeployerStake, dslaToken.address, Position.SHORT);
+        await tx.wait();
       }
       printSeparator();
     }
