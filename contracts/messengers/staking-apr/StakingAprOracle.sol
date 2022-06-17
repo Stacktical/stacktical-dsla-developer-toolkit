@@ -11,6 +11,7 @@ import '@dsla-protocol/core/contracts/StakeRegistry.sol';
 
 import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
 import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
+import '@openzeppelin/contracts/utils/Strings.sol';
 
 contract StakingAprOracle is ChainlinkClient, IMessenger, ReentrancyGuard {
     using SafeERC20 for ERC20;
@@ -229,10 +230,7 @@ contract StakingAprOracle is ChainlinkClient, IMessenger, ReentrancyGuard {
         override
         returns (string memory)
     {
-        return
-            string(
-                abi.encodePacked(lpSymbol, '-', StringUtils.uintToStr(slaId))
-            );
+        return string(abi.encodePacked(lpSymbol, '-', Strings.toString(slaId)));
     }
 
     function spSymbolSlaId(uint128 slaId)
@@ -241,9 +239,6 @@ contract StakingAprOracle is ChainlinkClient, IMessenger, ReentrancyGuard {
         override
         returns (string memory)
     {
-        return
-            string(
-                abi.encodePacked(spSymbol, '-', StringUtils.uintToStr(slaId))
-            );
+        return string(abi.encodePacked(spSymbol, '-', Strings.toString(slaId)));
     }
 }
