@@ -198,7 +198,7 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
     );
 
     // get the contract INDEX 18, Contract for IT staking tests: Not Respected case reward capped
-    sla = await ethers.getContractAt(CONTRACT_NAMES.SLA, allSLAs[18]);
+    sla = await ethers.getContractAt(CONTRACT_NAMES.SLA, allSLAs[1]);
     details = await ethers.getContract(CONTRACT_NAMES.Details);
     [
       provider_1_account,
@@ -367,6 +367,27 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
         currentP1ProviderPool = slaDetailsP1.tokensStake[0].providersPool;
         currentP1UsersPool = slaDetailsP1.tokensStake[0].usersPool;
         currentP1TotalStake = slaDetailsP1.tokensStake[0].totalStake;
+
+        let user_1_accound_bal = await dslaToken.balanceOf(user_1_account.address)
+        let user_2_accound_bal = await dslaToken.balanceOf(user_2_account.address)
+        
+        let provider_1_accound_bal = await dslaToken.balanceOf(provider_1_account.address)
+        let provider_2_accound_bal = await dslaToken.balanceOf(provider_2_account.address)
+        
+        console.log("--------------------------------------------------------------")
+        console.log("--------------------------------------------------------------")
+        
+        console.log('user_1_accound_bal: ', user_1_accound_bal.toString())
+        console.log('user_2_accound_bal: ', user_2_accound_bal.toString())
+        
+        console.log('provider_1_accound_bal: ', provider_1_accound_bal.toString())
+        console.log('provider_2_accound_bal: ', provider_2_accound_bal.toString())
+        
+        console.log("--------------------------------------------------------------")
+        console.log("--------------------------------------------------------------")
+        
+        expect(user_1_accound_bal).to.equal("50");
+        expect(user_2_accound_bal).to.equal("50");
 
         slaStaticDetailsP1 = await details.getSLAStaticDetails(sla.address, _sloRegistry)
 

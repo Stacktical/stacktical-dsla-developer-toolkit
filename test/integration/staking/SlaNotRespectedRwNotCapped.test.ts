@@ -20,7 +20,7 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 const consola = require('consola');
 
-describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Not Capped', () => {
+describe.skip('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Not Capped', () => {
   const { get } = deployments;
   let allSLAs: string[];
   let tx;

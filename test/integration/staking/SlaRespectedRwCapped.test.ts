@@ -20,7 +20,7 @@ import {
 
 const consola = require('consola');
 
-describe('DSLA Protocol Staking Simulation - v1.5 - SLA Respected, Reward Not Capped', () => {
+describe.skip('DSLA Protocol Staking Simulation - v1.5 - SLA Respected, Reward Not Capped', () => {
   const { network, deployments, ethers, getNamedAccounts, getUnnamedAccounts } = hre;
   const { get } = deployments;
   let allSLAs: string[];
