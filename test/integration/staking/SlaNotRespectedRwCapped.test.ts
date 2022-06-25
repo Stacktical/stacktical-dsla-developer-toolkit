@@ -225,6 +225,23 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
     await dslaToken.connect(provider_2_account).mint(provider_2_account.address, toWei(initialStakeBalanceProvider2));
     await dslaToken.connect(provider_3_account).mint(provider_3_account.address, toWei(initialStakeBalanceProvider3));
     // Add token to provider accounts
+    
+    let provider_1_accound_bal = await dslaToken.balanceOf(provider_1_account.address)
+    let provider_2_accound_bal = await dslaToken.balanceOf(provider_2_account.address)
+    let provider_3_accound_bal = await dslaToken.balanceOf(provider_3_account.address)
+    
+    console.log("--------------------------------------------------------------")
+    console.log("---------------------PROVIDER BAL AFTER MINT------------------------------")
+    
+    console.log('provider_1_accound_bal: ', provider_1_accound_bal.toString())
+    console.log('provider_2_accound_bal: ', provider_2_accound_bal.toString())
+    console.log('provider_3_accound_bal: ', provider_3_accound_bal.toString())
+    
+    console.log("--------------------------------------------------------------")
+    console.log("--------------------------------------------------------------")
+
+
+
     await dslaToken.connect(provider_1_account).approve(sla.address, toWei(initialStakeBalanceProvider1));
     await dslaToken.connect(provider_2_account).approve(sla.address, toWei(initialStakeBalanceProvider2));
     await dslaToken.connect(provider_3_account).approve(sla.address, toWei(initialStakeBalanceProvider3));
@@ -234,11 +251,41 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
     tx = await sla.connect(provider_2_account).stakeTokens(toWei(initialStakeBalanceProvider2), dslaToken.address, Position.LONG);
     tx = await sla.connect(provider_3_account).stakeTokens(toWei(initialStakeBalanceProvider3), dslaToken.address, Position.LONG);
 
+    let provider_1_accound_bal_2 = await dslaToken.balanceOf(provider_1_account.address)
+    let provider_2_accound_bal_2 = await dslaToken.balanceOf(provider_2_account.address)
+    let provider_3_accound_bal_2 = await dslaToken.balanceOf(provider_3_account.address)
+    
+    console.log("--------------------------------------------------------------")
+    console.log("---------------------PROVIDER BAL AFTER STAKE------------------------------")
+    
+    console.log('provider_1_accound_bal_2: ', provider_1_accound_bal_2.toString())
+    console.log('provider_2_accound_bal_2: ', provider_2_accound_bal_2.toString())
+    console.log('provider_3_accound_bal_2: ', provider_3_accound_bal_2.toString())
+    
+    console.log("--------------------------------------------------------------")
+    console.log("--------------------------------------------------------------")
+
     consola.info('Stake DSLA tokens for users');
     // add token to users DSLA accounts
     await dslaToken.connect(user_1_account).mint(user_1_account.address, toWei(initialStakeBalanceUser1));
     await dslaToken.connect(user_2_account).mint(user_2_account.address, toWei(initialStakeBalanceUser2));
     await dslaToken.connect(user_3_account).mint(user_3_account.address, toWei(initialStakeBalanceUser3));
+
+    let user_1_accound_bal = await dslaToken.balanceOf(user_1_account.address)
+    let user_2_accound_bal = await dslaToken.balanceOf(user_2_account.address)
+    let user_3_accound_bal = await dslaToken.balanceOf(user_3_account.address)
+
+    console.log("--------------------------------------------------------------")
+    console.log("---------------------USER BAL AFTER MINT------------------------------")
+    
+    console.log('user_1_accound_bal: ', user_1_accound_bal.toString())
+    console.log('user_2_accound_bal: ', user_2_accound_bal.toString())
+    console.log('user_3_accound_bal: ', user_3_accound_bal.toString())
+    
+    console.log("--------------------------------------------------------------")
+    console.log("--------------------------------------------------------------")
+
+
     // Add token to users accounts
     await dslaToken.connect(user_1_account).approve(sla.address, toWei(initialStakeBalanceUser1));
     await dslaToken.connect(user_2_account).approve(sla.address, toWei(initialStakeBalanceUser2));
@@ -248,6 +295,21 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
     tx = await sla.connect(user_1_account).stakeTokens(toWei(initialStakeBalanceUser1), dslaToken.address, Position.SHORT);
     tx = await sla.connect(user_2_account).stakeTokens(toWei(initialStakeBalanceUser2), dslaToken.address, Position.SHORT);
     tx = await sla.connect(user_3_account).stakeTokens(toWei(initialStakeBalanceUser3), dslaToken.address, Position.SHORT);
+
+
+    let user_1_accound_bal_2 = await dslaToken.balanceOf(user_1_account.address)
+    let user_2_accound_bal_2 = await dslaToken.balanceOf(user_2_account.address)
+    let user_3_accound_bal_2 = await dslaToken.balanceOf(user_3_account.address)
+
+    console.log("--------------------------------------------------------------")
+    console.log("---------------------USER BAL AFTER STAKE------------------------------")
+    
+    console.log('user_1_accound_bal_2: ', user_1_accound_bal_2.toString())
+    console.log('user_2_accound_bal_2: ', user_2_accound_bal_2.toString())
+    console.log('user_3_accound_bal_2: ', user_3_accound_bal_2.toString())
+    
+    console.log("--------------------------------------------------------------")
+    console.log("--------------------------------------------------------------")
 
     consola.info('Initial Staking DONE');
 
@@ -370,18 +432,22 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
 
         let user_1_accound_bal = await dslaToken.balanceOf(user_1_account.address)
         let user_2_accound_bal = await dslaToken.balanceOf(user_2_account.address)
+        let user_3_accound_bal = await dslaToken.balanceOf(user_3_account.address)
         
         let provider_1_accound_bal = await dslaToken.balanceOf(provider_1_account.address)
         let provider_2_accound_bal = await dslaToken.balanceOf(provider_2_account.address)
+        let provider_3_accound_bal = await dslaToken.balanceOf(provider_3_account.address)
         
         console.log("--------------------------------------------------------------")
-        console.log("--------------------------------------------------------------")
+        console.log("---------------------BAL ATER P1------------------------------")
         
         console.log('user_1_accound_bal: ', user_1_accound_bal.toString())
         console.log('user_2_accound_bal: ', user_2_accound_bal.toString())
+        console.log('user_3_accound_bal: ', user_3_accound_bal.toString())
         
         console.log('provider_1_accound_bal: ', provider_1_accound_bal.toString())
         console.log('provider_2_accound_bal: ', provider_2_accound_bal.toString())
+        console.log('provider_3_accound_bal: ', provider_3_accound_bal.toString())
         
         console.log("--------------------------------------------------------------")
         console.log("--------------------------------------------------------------")
