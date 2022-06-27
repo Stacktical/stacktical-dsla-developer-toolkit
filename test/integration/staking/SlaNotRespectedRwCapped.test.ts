@@ -39,6 +39,7 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
   let details;
   let unnamedAccounts;
 
+  let default_signer_account: SignerWithAddress;
   let provider_1_account: SignerWithAddress;
   let provider_2_account: SignerWithAddress;
   let provider_3_account: SignerWithAddress;
@@ -201,6 +202,7 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
     sla = await ethers.getContractAt(CONTRACT_NAMES.SLA, allSLAs[1]);
     details = await ethers.getContract(CONTRACT_NAMES.Details);
     [
+      default_signer_account,
       provider_1_account,
       provider_2_account,
       provider_3_account,
@@ -217,9 +219,32 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
     // Approve allocation of amount to dslaToken address
     consola.info('Approve allocation of amount to dslaToken address');
     let amount = 565500;
-    tx = await dslaToken.approve(sla.address, amount);
+    //tx = await dslaToken.approve(sla.address, amount);
 
     consola.info('Stake DSLA tokens for providers');
+    consola.info('initialStakeBalanceProvider1: ', initialStakeBalanceProvider1);
+    consola.info('initialStakeBalanceProvider2: ', initialStakeBalanceProvider2);
+    consola.info('initialStakeBalanceProvider3: ', initialStakeBalanceProvider3);
+
+    let provider_1_accound_bal_0 = await dslaToken.balanceOf(provider_1_account.address)
+    let provider_2_accound_bal_0 = await dslaToken.balanceOf(provider_2_account.address)
+    let provider_3_accound_bal_0 = await dslaToken.balanceOf(provider_3_account.address)
+
+
+    console.log('provider_1_account adress: ', provider_1_account.address)
+    console.log('signer adress: ', signer.address)
+    console.log('deployer adress: ', deployer)
+
+    console.log("--------------------------------------------------------------")
+    console.log("---------------------PROVIDER BAL BEFORE MINT------------------------------")
+    
+    console.log('provider_1_accound_bal: ', provider_1_accound_bal_0.toString())
+    console.log('provider_2_accound_bal: ', provider_2_accound_bal_0.toString())
+    console.log('provider_3_accound_bal: ', provider_3_accound_bal_0.toString())
+    
+    console.log("--------------------------------------------------------------")
+    console.log("--------------------------------------------------------------")
+
     // add token to provider DSLA account
     await dslaToken.connect(provider_1_account).mint(provider_1_account.address, toWei(initialStakeBalanceProvider1));
     await dslaToken.connect(provider_2_account).mint(provider_2_account.address, toWei(initialStakeBalanceProvider2));
@@ -248,8 +273,11 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
     // Stake token for providers
     enum Position { LONG, SHORT }
     tx = await sla.connect(provider_1_account).stakeTokens(toWei(initialStakeBalanceProvider1), dslaToken.address, Position.LONG);
+    await tx.wait();
     tx = await sla.connect(provider_2_account).stakeTokens(toWei(initialStakeBalanceProvider2), dslaToken.address, Position.LONG);
+    await tx.wait();
     tx = await sla.connect(provider_3_account).stakeTokens(toWei(initialStakeBalanceProvider3), dslaToken.address, Position.LONG);
+    await tx.wait();
 
     let provider_1_accound_bal_2 = await dslaToken.balanceOf(provider_1_account.address)
     let provider_2_accound_bal_2 = await dslaToken.balanceOf(provider_2_account.address)
@@ -293,8 +321,11 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
 
     // Stake token for users
     tx = await sla.connect(user_1_account).stakeTokens(toWei(initialStakeBalanceUser1), dslaToken.address, Position.SHORT);
+    await tx.wait();
     tx = await sla.connect(user_2_account).stakeTokens(toWei(initialStakeBalanceUser2), dslaToken.address, Position.SHORT);
+    await tx.wait();
     tx = await sla.connect(user_3_account).stakeTokens(toWei(initialStakeBalanceUser3), dslaToken.address, Position.SHORT);
+    await tx.wait();
 
 
     let user_1_accound_bal_2 = await dslaToken.balanceOf(user_1_account.address)
