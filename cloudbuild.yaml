@@ -1,17 +1,19 @@
 steps:
   - id: prepare-env
-    name: node:lts-stretch
+    name: node:lts-gallium
     entrypoint: cp
     args: ['env-min', '.env']
   - id: npm-install
-    name: node:lts-stretch
+    name: node:lts-gallium
     entrypoint: npm
     args: ['install']
   - id: compile
-    name: node:lts-stretch
+    name: node:lts-gallium
     entrypoint: npx
-    args: ['hardhat', 'compile']
+    args: ['hardhat', 'compile', '--force']
   - id: test
-    name: node:lts-stretch
+    name: node:lts-gallium
     entrypoint: npx
     args: ['hardhat', 'test']
+    env:
+      - IPFS_GATEWAY_URI="https://ipfs.dsla.network"
