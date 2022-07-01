@@ -11,8 +11,8 @@ jobs:
           node-version: 16.15.1
       - run: cp 'env-min' .env
         name: prepare-env
-      - run: npm i
-        name: npm i
+      - run: npm ci --legacy-peer-deps
+        name: npm ci
       - name: Compile
         run: npx hardhat compile --force
       - name: Test

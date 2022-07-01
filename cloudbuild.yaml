@@ -3,10 +3,10 @@ steps:
     name: node:lts-stretch
     entrypoint: cp
     args: ['env-min', '.env']
-  - id: npm-install
+  - id: npm-ci
     name: node:lts-stretch
     entrypoint: npm
-    args: ['install']
+    args: ['ci', "--legacy-peer-deps"]
   - id: compile
     name: node:lts-stretch
     entrypoint: npx
