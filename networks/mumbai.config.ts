@@ -13,7 +13,7 @@ import { scripts } from '../scripts.config';
 import Joi from 'joi';
 
 const schema = Joi.object({
-  TESTNET_MNEMONIC: Joi.string().required(),
+  DEVELOP_MNEMONIC: Joi.string().required(),
   MUMBAI_URI: Joi.string().required(),
   MUMBAI_WS_URI: Joi.string().required(),
 }).unknown();
@@ -61,7 +61,7 @@ export const mumbai: NetworkUserConfig = {
     ],
     ipfs: process.env.IPFS_URI,
     chainlink: {
-      deployLocal: false,
+      deployLocal: true,
       deleteOldJobs: true,
       cleanLocalFolder: false,
       nodeFunds: '0.001',
@@ -82,12 +82,12 @@ export const mumbai: NetworkUserConfig = {
     bootstrap: {
       allowance: [
         {
-          contract: CONTRACT_NAMES.SEMessenger,
+          contract: CONTRACT_NAMES.StakingAPR,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
         {
-          contract: CONTRACT_NAMES.SEAMessenger,
+          contract: CONTRACT_NAMES.StakingUptime,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
@@ -119,7 +119,7 @@ export const mumbai: NetworkUserConfig = {
     },
     messengers: [
       {
-        contract: CONTRACT_NAMES.SEMessenger,
+        contract: CONTRACT_NAMES.StakingAPR,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
         dslaLpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.name,
@@ -128,7 +128,7 @@ export const mumbai: NetworkUserConfig = {
         dslaSpSymbol: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.symbol,
       },
       {
-        contract: CONTRACT_NAMES.SEAMessenger,
+        contract: CONTRACT_NAMES.StakingUptime,
         useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
         dslaLpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.name,
