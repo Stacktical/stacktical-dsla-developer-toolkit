@@ -88,12 +88,12 @@ export const bsc: NetworkUserConfig = {
     bootstrap: {
       allowance: [
         {
-          contract: CONTRACT_NAMES.SEMessenger,
+          contract: CONTRACT_NAMES.StakingAPR,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
         {
-          contract: CONTRACT_NAMES.SEAMessenger,
+          contract: CONTRACT_NAMES.StakingUptime,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
@@ -131,7 +131,7 @@ export const bsc: NetworkUserConfig = {
     },
     messengers: [
       {
-        contract: CONTRACT_NAMES.SEMessenger,
+        contract: CONTRACT_NAMES.StakingAPR,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
         dslaLpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.name,
@@ -140,7 +140,7 @@ export const bsc: NetworkUserConfig = {
         dslaSpSymbol: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.symbol,
       },
       {
-        contract: CONTRACT_NAMES.SEAMessenger,
+        contract: CONTRACT_NAMES.StakingUptime,
         useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
         dslaLpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.name,
