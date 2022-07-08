@@ -1,6 +1,5 @@
-
 import { expect } from 'chai';
-import { loadFixture } from 'ethereum-waffle';
+import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { fixture } from '../fixtures/basic';
 const hre = require('hardhat');
 import { CONTRACT_NAMES, SERVICE_CREDITS } from '../../constants';

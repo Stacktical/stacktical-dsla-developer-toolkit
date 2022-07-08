@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { loadFixture } from 'ethereum-waffle';
+import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { fixture } from '../../fixtures/basic';
 import { fromWei, toWei } from 'web3-utils';
 
