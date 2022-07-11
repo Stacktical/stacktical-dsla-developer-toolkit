@@ -110,14 +110,15 @@ export enum SUB_TASK_NAMES {
 
 subtask(SUB_TASK_NAMES.GET_SLA_FROM_TX, undefined).setAction(
   async (taskArgs, hre: HardhatRuntimeEnvironment) => {
-    const { ethers } = hre;
-    const { provider, getContract } = ethers;
+    const { ethers, deployments } = hre;
+    const { provider } = ethers;
     const { getTransactionReceipt } = provider;
     const { transactionHash } = taskArgs;
     const transaction = await getTransactionReceipt(transactionHash);
-    const slaRegistry: SLARegistry = await getContract(
-      CONTRACT_NAMES.SLARegistry
-    );
+
+    const slaRegistryDeployment = await deployments.get(CONTRACT_NAMES.SLARegistry);
+    const slaRegistry = new ethers.Contract(slaRegistryDeployment.address, slaRegistryDeployment.abi, provider)
+    
     const filter = slaRegistry.filters.SLACreated(null, transaction.from);
     const events = await slaRegistry.queryFilter(filter, transaction.blockHash);
     console.log(events);
@@ -126,19 +127,25 @@ subtask(SUB_TASK_NAMES.GET_SLA_FROM_TX, undefined).setAction(
 
 subtask(SUB_TASK_NAMES.UPDATE_MESSENGER_SPEC, undefined).setAction(
   async (taskArgs, hre: HardhatRuntimeEnvironment) => {
-    const { network, ethers, getNamedAccounts } = hre;
+    const { network, ethers, getNamedAccounts, deployments } = hre;
     const { deployer } = await getNamedAccounts();
     const { stacktical } = network.config;
     const { index } = taskArgs;
+    const { provider } = ethers;
+
     const messenger = stacktical.messengers[index];
     consola.info('Selected Messenger');
     consola.info(messenger);
+
+    const messengerDeployment = await deployments.get(messenger.contract);
     const messengerContract = <IMessenger>(
-      await ethers.getContract(messenger.contract)
+      new ethers.Contract(messengerDeployment.address, messengerDeployment.abi, provider)
     );
+
+    const messengerRegistryDeployment = await deployments.get(CONTRACT_NAMES.MessengerRegistry);
     const messengerRegistry = <MessengerRegistry>(
-      await ethers.getContract(CONTRACT_NAMES.MessengerRegistry)
-    );
+      new ethers.Contract(messengerRegistryDeployment.address, messengerRegistryDeployment.abi, provider)
+      );
     const filter = messengerRegistry.filters.MessengerRegistered(
       deployer,
       messengerContract.address
@@ -165,10 +172,14 @@ subtask(SUB_TASK_NAMES.UPDATE_MESSENGER_SPEC, undefined).setAction(
 
 subtask(SUB_TASK_NAMES.UNLOCK_TOKENS, undefined).setAction(
   async (taskArgs, hre: HardhatRuntimeEnvironment) => {
-    const { ethers, getNamedAccounts } = hre;
+    const { ethers, getNamedAccounts, deployments } = hre;
     const { deployer } = await getNamedAccounts();
+    const { provider } = ethers;
+
+    const slaRegistryDeployment = await deployments.get(CONTRACT_NAMES.SLARegistry);
+
     const slaRegistry = <SLARegistry>(
-      await ethers.getContract(CONTRACT_NAMES.SLARegistry)
+      new ethers.Contract(slaRegistryDeployment.address, slaRegistryDeployment.abi, provider)
     );
 
     const slaAddress = taskArgs.slaAddress
@@ -183,8 +194,11 @@ subtask(SUB_TASK_NAMES.UNLOCK_TOKENS, undefined).setAction(
     consola.info('Requester address:', deployer);
     const tx = await slaRegistry.returnLockedValue(slaAddress);
     await tx.wait();
+
+    const stakeRegistryDeployment = await deployments.get(CONTRACT_NAMES.StakeRegistry);
+
     const stakeRegistry = <StakeRegistry>(
-      await ethers.getContract(CONTRACT_NAMES.StakeRegistry)
+      new ethers.Contract(stakeRegistryDeployment.address, stakeRegistryDeployment.abi, provider)
     );
     const filter = stakeRegistry.filters.LockedValueReturned(
       slaAddress,
@@ -199,10 +213,13 @@ subtask(SUB_TASK_NAMES.UNLOCK_TOKENS, undefined).setAction(
 
 subtask(SUB_TASK_NAMES.PROVIDER_WITHDRAW, undefined).setAction(
   async (taskArgs, hre: HardhatRuntimeEnvironment) => {
-    const { ethers, getNamedAccounts } = hre;
+    const { ethers, getNamedAccounts, deployments } = hre;
     const { deployer } = await getNamedAccounts();
+
+    const slaRegistryDeployment = await deployments.get(CONTRACT_NAMES.SLARegistry);
+
     const slaRegistry = <SLARegistry>(
-      await ethers.getContract(CONTRACT_NAMES.SLARegistry)
+      new ethers.Contract(slaRegistryDeployment.address, slaRegistryDeployment.abi, ethers.provider)
     );
 
     const slaAddress = taskArgs.slaAddress
@@ -1612,12 +1629,14 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
         deployerStakeTimes,
         notDeployerStakeTimes,
       } = config;
+      const { provider } = ethers;
+
       const stakeAmount =
         Number(initialTokenSupply) / initialTokenSupplyDivisor;
       const stakeAmountTimesWei = (times) => toWei(String(stakeAmount * times));
-      const messenger: IMessenger = await ethers.getContract(
-        config.messengerContract
-      );
+
+      const messengerDeployment = await get(config.messengerContract);
+      const messenger = new ethers.Contract(messengerDeployment.address, messengerDeployment.abi, provider)
       const ipfsHash = await getIPFSHash(serviceMetadata, stacktical.ipfs);
       const stakeRegistryArtifact = await get(CONTRACT_NAMES.StakeRegistry);
       const dslaTokenArtifact = await get(CONTRACT_NAMES.DSLA);
@@ -1789,17 +1808,19 @@ subtask(SUB_TASK_NAMES.GET_PRECOORDINATOR, undefined).setAction(
     const { deployments, ethers, getNamedAccounts } = hre;
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
-    const { get } = deployments;
 
     console.log('Getting Chainlink config from PreCoordinator contract');
 
+
+    const preCoordinatorDeployment = await deployments.get(CONTRACT_NAMES.PreCoordinator);
+
     const precoordinator = <PreCoordinator>(
-      await ethers.getContract(CONTRACT_NAMES.PreCoordinator)
+      new ethers.Contract(preCoordinatorDeployment.address, preCoordinatorDeployment.abi, ethers.provider)
     );
     const eventsFilter = precoordinator.filters.NewServiceAgreement();
     const events = await precoordinator.queryFilter(
       eventsFilter,
-      (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
+      (await deployments.get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
       undefined
     );
     for (let event of events) {
@@ -2097,8 +2118,11 @@ subtask(SUB_TASK_NAMES.REGISTRIES_CONFIGURATION, undefined).setAction(
     const { get } = deployments;
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
+
+    const stakeRegistryDeployment = await deployments.get(CONTRACT_NAMES.StakeRegistry);
+
     const stakeRegistry = <StakeRegistry>(
-      await ethers.getContract(CONTRACT_NAMES.StakeRegistry)
+      new ethers.Contract(stakeRegistryDeployment.address, stakeRegistryDeployment.abi, ethers.provider)
     );
     const stakingParameters = await stakeRegistry.getStakingParameters();
     console.log('Staking parameters: ');
@@ -2155,12 +2179,11 @@ subtask(SUB_TASK_NAMES.REGISTRIES_CONFIGURATION, undefined).setAction(
 subtask(SUB_TASK_NAMES.GET_VALID_SLAS, undefined).setAction(
   async (taskArgs, hre: HardhatRuntimeEnvironment) => {
     const { deployments, ethers, getNamedAccounts } = hre;
-    const { get } = deployments;
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
     const slaRegistry = await SLARegistry__factory.connect(
       (
-        await get(CONTRACT_NAMES.SLARegistry)
+        await deployments.get(CONTRACT_NAMES.SLARegistry)
       ).address,
       signer
     );
@@ -2180,9 +2203,12 @@ subtask(SUB_TASK_NAMES.GET_VALID_SLAS, undefined).setAction(
       const finalPeriodId = await sla.finalPeriodId();
       const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
       const periodType = await sla.periodType();
+
+      
+      const dslaTokenDeployment = await deployments.get('DSLA');
       const DSLAtoken = <ERC20PresetMinterPauser>(
-        await ethers.getContract('DSLA')
-      );
+        new ethers.Contract(dslaTokenDeployment.address, dslaTokenDeployment.abi, ethers.provider)
+        );
       const DSLASPtokenAddress = await sla.duTokenRegistry(DSLAtoken.address);
       const DSLALPtokenAddress = await sla.dpTokenRegistry(DSLAtoken.address);
 
@@ -2237,14 +2263,15 @@ subtask(SUB_TASK_NAMES.GET_REVERT_MESSAGE, undefined).setAction(
 
 subtask(SUB_TASK_NAMES.GET_MESSENGER, undefined).setAction(
   async (taskArgs, hre: HardhatRuntimeEnvironment) => {
-    const { ethers, network } = hre;
+    const { ethers, network, deployments } = hre;
     const { stacktical } = network.config;
     const messengers = taskArgs.index
       ? [stacktical.messengers[taskArgs.index]]
       : stacktical.messengers;
     for (let messenger of messengers) {
+      const messengerDeployment = await deployments.get(messenger.contract);
       const messengerArtifact = <IMessenger>(
-        await ethers.getContract(messenger.contract)
+        new ethers.Contract(messengerDeployment.address, messengerDeployment.abi, ethers.provider)
       );
       printSeparator();
       consola.info('messenger: ', messenger.contract);
@@ -2269,15 +2296,22 @@ subtask(SUB_TASK_NAMES.GET_MESSENGER, undefined).setAction(
 
 subtask(SUB_TASK_NAMES.TRANSFER_OWNERSHIP, undefined).setAction(
   async (taskArgs, hre: HardhatRuntimeEnvironment) => {
-    const { ethers, network, getNamedAccounts } = hre;
+    const { ethers, network, getNamedAccounts, deployments } = hre;
     const { stacktical } = network.config;
     const { deployer } = await getNamedAccounts();
+
+    const periodRegistryDeployment = await deployments.get(CONTRACT_NAMES.PeriodRegistry);
+
     const periodRegistry = <PeriodRegistry>(
-      await ethers.getContract(CONTRACT_NAMES.PeriodRegistry)
+      new ethers.Contract(periodRegistryDeployment.address, periodRegistryDeployment.abi, ethers.provider)
     );
+ 
+    const stakeRegistryDeployment = await deployments.get(CONTRACT_NAMES.StakeRegistry);
+
     const stakeRegistry = <StakeRegistry>(
-      await ethers.getContract(CONTRACT_NAMES.StakeRegistry)
+      new ethers.Contract(stakeRegistryDeployment.address, stakeRegistryDeployment.abi, ethers.provider)
     );
+    
     const newOwner = toChecksumAddress(taskArgs.newOwner);
     const periodRegistryOwner = await periodRegistry.owner();
     const stakeRegistryOwner = await stakeRegistry.owner();
@@ -2309,9 +2343,11 @@ subtask(SUB_TASK_NAMES.TRANSFER_OWNERSHIP, undefined).setAction(
     }
 
     for (let messenger of stacktical.messengers) {
-      const messengerContract: IMessenger = await ethers.getContract(
-        messenger.contract
+      const messengerDeployment = await deployments.get(messenger.contract);
+      const messengerContract = <IMessenger>(
+        new ethers.Contract(messengerDeployment.address, messengerDeployment.abi, ethers.provider)
       );
+  
       const messengerOwner = await messengerContract.owner();
       consola.info(`${messenger.useCaseName} owner: ${messengerOwner}`);
       if (newOwner !== messengerOwner && messengerOwner === deployer) {

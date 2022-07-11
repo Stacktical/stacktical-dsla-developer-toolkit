@@ -84,9 +84,8 @@ const config: HardhatUserConfig = {
   },
   abiExporter: {
     path: './exported-data/abi',
-    clear: true,
-    spacing: 2,
-  },
+    clear: true
+  }
 };
 
 // extendEnvironment((env) => {
