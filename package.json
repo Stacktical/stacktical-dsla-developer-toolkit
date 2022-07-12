@@ -66,7 +66,7 @@
     "js-yaml": "^4.1.0",
     "moment": "^2.29.4",
     "mustache": "^4.2.0",
-    "node-fetch": "^3.2.6",
+    "node-fetch": "^2.6.6",
     "openzeppelin-solidity": "^4.6.0",
     "pm2": "^5.2.0",
     "tslib": "^2.4.0",
