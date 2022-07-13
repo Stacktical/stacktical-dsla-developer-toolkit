@@ -81,7 +81,6 @@
     "@types/mocha": "^9.1.1",
     "avalanche": "^3.15.3",
     "docker-compose": "^0.23.17",
-    "edit-config": "^1.8.0",
     "eslint": "^8.19.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.5.0",
