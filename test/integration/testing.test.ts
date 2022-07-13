@@ -1,12 +1,12 @@
 import { expect } from 'chai';
 import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { fixture } from '../fixtures/basic';
-const hre = require('hardhat');
+import hre from 'hardhat';
 import { CONTRACT_NAMES, SERVICE_CREDITS } from '../../constants';
 import { SLA, SLARegistry__factory } from '../../typechain';
 import { BaseOracle } from '../../typechain/BaseOracle';
 import { InflationOracle } from '../../typechain/InflationOracle';
-const consola = require('consola');
+import consola from 'consola';
 
 describe('Fixtures', () => {
   const { deployments, ethers, getNamedAccounts } = hre;

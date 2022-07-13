@@ -24,8 +24,7 @@ import {
 } from '../../../typechain';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { evm_increaseTime } from '../../helper';
-
-const consola = require('consola');
+import consola from 'consola';
 
 describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Capped', () => {
   const { get } = deployments;
@@ -181,7 +180,7 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
   let slaStaticDetailsP4: any;
   let slaStaticDetailsP5: any;
 
-  let slaRegistryDeployment ;
+  let slaRegistryDeployment;
   let periodRegistryDeployment;
   let slaDeployment;
   let detailsDeployment;
@@ -230,7 +229,7 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
     details = <Details>(
       new ethers.Contract(detailsDeployment.address, detailsDeployment.abi, signer)
     );
-    
+
 
     [
       provider_1_account,

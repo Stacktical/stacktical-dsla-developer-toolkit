@@ -17,8 +17,7 @@ import {
   SLA__factory,
   SLARegistry__factory,
 } from '../../../typechain';
-
-const consola = require('consola');
+import consola from 'consola';
 
 describe('DSLA Protocol Staking Simulation - v1.5 - SLA Respected, Reward Not Capped', () => {
   const { network, deployments, ethers, getNamedAccounts, getUnnamedAccounts } = hre;

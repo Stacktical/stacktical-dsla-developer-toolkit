@@ -17,8 +17,7 @@ import {
   SLA,
 } from '../../../typechain';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
-
-const consola = require('consola');
+import consola from 'consola';
 
 describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Not Capped', () => {
   const { get } = deployments;
