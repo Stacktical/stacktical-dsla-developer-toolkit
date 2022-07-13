@@ -180,12 +180,14 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Respected, Reward Not Ca
   let detailsDeployment;
   let dslaTokenDeployment;
 
+  let signer;
+
   before(async function () {
     this.timeout(0);
     await loadFixture(fixture);
     consola.success('LODADED FIXTURE');
     const { deployer } = await getNamedAccounts();
-    const signer = await ethers.getSigner(deployer);
+    signer = await ethers.getSigner(deployer);
 
     unnamedAccounts = await getUnnamedAccounts();
     slaRegistryDeployment = await deployments.get(CONTRACT_NAMES.SLARegistry);
@@ -205,9 +207,7 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Respected, Reward Not Ca
     _sloRegistry = await slaRegistry.sloRegistry();
 
     // get the contract INDEX 19, Contract for IT staking tests: Respected case reward not capped
-    sla = <SLA>(
-      new ethers.Contract(allSLAs[19], slaDeployment.abi, ethers.provider)
-    );
+    sla = <SLA>new ethers.Contract(allSLAs[19], slaDeployment.abi, signer);
     details = <Details>(
       new ethers.Contract(
         detailsDeployment.address,
@@ -467,7 +467,7 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Respected, Reward Not Ca
           new ethers.Contract(
             dslaTokenDeployment.address,
             dslaTokenDeployment.abi,
-            ethers.provider
+            signer
           )
         );
 
