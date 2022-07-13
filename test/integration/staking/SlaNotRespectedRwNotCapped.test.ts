@@ -32,6 +32,8 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward No
   let signersAccounts;
   let unnamedAccounts;
 
+
+  
   let provider_1_account: SignerWithAddress;
   let provider_2_account: SignerWithAddress;
   let provider_3_account: SignerWithAddress;
@@ -173,6 +175,12 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward No
   let slaStaticDetailsP4: any;
   let slaStaticDetailsP5: any;
 
+  let slaRegistryDeployment;
+  let periodRegistryDeployment;
+  let slaDeployment;
+  let detailsDeployment;
+  let dslaTokenDeployment;
+
   before(async function () {
     this.timeout(0);
     await loadFixture(fixture);
@@ -180,17 +188,25 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward No
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
 
+    slaRegistryDeployment = await deployments.get(CONTRACT_NAMES.SLARegistry);
+    periodRegistryDeployment = await deployments.get(CONTRACT_NAMES.PeriodRegistry);
+    slaDeployment = await deployments.get(CONTRACT_NAMES.SLA);
+    detailsDeployment = await deployments.get(CONTRACT_NAMES.Details);
+    dslaTokenDeployment = await deployments.get(CONTRACT_NAMES.DSLA);
+
     unnamedAccounts = await getUnnamedAccounts();
 
-    slaRegistry = <SLARegistry>await ethers.getContract(CONTRACT_NAMES.SLARegistry, signer);
+    slaRegistry = <SLARegistry>(new ethers.Contract(slaRegistryDeployment.address, slaRegistryDeployment.abi, ethers.provider));
+
     allSLAs = await slaRegistry.allSLAs();
     _sloRegistry = await slaRegistry.sloRegistry();
 
     // get the contract INDEX 17, Contract for IT staking tests: Not Respected case reward not capped
 
-    const slaDeployment = await deployments.get(CONTRACT_NAMES.SLA);
     sla = <SLA>(new ethers.Contract(allSLAs[17], slaDeployment.abi, ethers.provider));
-    details = await ethers.getContract(CONTRACT_NAMES.Details);
+    details = new ethers.Contract(dslaTokenDeployment.address, dslaTokenDeployment.abi, ethers.provider);
+
+
     [
       provider_1_account,
       provider_2_account,
@@ -200,10 +216,11 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward No
       user_3_account,
     ] = await ethers.getSigners();
 
+
+    
     // Get dslaToken contract
-    const dslaToken: ERC20PresetMinterPauser = await ethers.getContract(
-      CONTRACT_NAMES.DSLA
-    );
+    const dslaToken = <ERC20PresetMinterPauser>(new ethers.Contract(dslaTokenDeployment.address, dslaTokenDeployment.abi, ethers.provider));
+
 
     // Approve allocation of amount to dslaToken address
     consola.info('Approve allocation of amount to dslaToken address');
@@ -321,9 +338,11 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward No
       //it('Shoud perform a succesful request SLI for P1', async function () {
       it('Shoud perform a succesful request SLI for P1', async () => {
         const ownerApproval = true;
-        const dslaToken: ERC20PresetMinterPauser = await ethers.getContract(
-          CONTRACT_NAMES.DSLA
-        );
+
+        
+        const dslaToken  = <ERC20PresetMinterPauser>(new ethers.Contract(
+          dslaTokenDeployment.address,dslaTokenDeployment.abi, ethers.provider
+        ));
 
         const periodId_p1 = Number(0)
         const usersStake = 10
@@ -342,7 +361,6 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward No
         ))
           .to.emit(slaRegistry, 'SLIRequested')
 
-        //const messenger: BaseOracle = await ethers.getContract(CONTRACT_NAMES.BaseOracle);
         const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
 
         await new Promise((resolve) => sla.on('SLICreated', () => resolve(null)));

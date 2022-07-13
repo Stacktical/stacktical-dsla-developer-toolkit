@@ -201,7 +201,6 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
     detailsDeployment = await deployments.get(CONTRACT_NAMES.Details);
     dslaTokenDeployment = await deployments.get(CONTRACT_NAMES.DSLA);
 
-    //slaRegistry = <SLARegistry>await ethers.getContract(CONTRACT_NAMES.SLARegistry, signer);
     slaRegistry = <SLARegistry>(
       new ethers.Contract(slaRegistryDeployment.address, slaRegistryDeployment.abi, signer)
     );
@@ -221,7 +220,6 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
     );
 
 
-    //details = await ethers.getContract(CONTRACT_NAMES.Details);
     details = <Details>(
       new ethers.Contract(detailsDeployment.address, detailsDeployment.abi, signer)
     );
@@ -236,10 +234,7 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
       user_3_account,
     ] = await ethers.getSigners();
 
-    // Get dslaToken contract
-    /*const dslaToken: ERC20PresetMinterPauser = await ethers.getContract(
-      CONTRACT_NAMES.DSLA
-    );*/
+
     const dslaToken = <ERC20PresetMinterPauser>(
       new ethers.Contract(dslaTokenDeployment.address, dslaTokenDeployment.abi, signer)
     );
@@ -361,10 +356,6 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
       it('Shoud perform a succesful request SLI for P1', async () => {
         const ownerApproval = true;
 
-        /*const dslaToken: ERC20PresetMinterPauser = await ethers.getContract(
-          CONTRACT_NAMES.DSLA
-        );*/
-
         const dslaToken = <ERC20PresetMinterPauser>(
           new ethers.Contract(dslaTokenDeployment.address, dslaTokenDeployment.abi)
         );
@@ -391,7 +382,6 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
         ))
           .to.emit(slaRegistry, 'SLIRequested')
 
-        //const messenger: BaseOracle = await ethers.getContract(CONTRACT_NAMES.BaseOracle);
         const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
 
         await new Promise((resolve) => sla.on('SLICreated', () => resolve(null)));
