@@ -244,12 +244,7 @@ subtask(SUB_TASK_NAMES.PROVIDER_WITHDRAW, undefined).setAction(
       'LP token user balance:',
       fromWei(lpTokenUserBalance.toString())
     );
-    // const token = <ERC20PresetMinterPauser>(
-    //   await ethers.getContractAt(
-    //     'ERC20PresetMinterPauser',
-    //     taskArgs.tokenAddress
-    //   )
-    // );
+
     const supply = await lpToken.totalSupply();
     consola.info('LP token total supply:', fromWei(supply.toString()));
     const slaProvidersPool = await slaContract.providersPool(

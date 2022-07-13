@@ -16,6 +16,7 @@ import {
   ERC20PresetMinterPauser__factory,
   SLA__factory,
   SLARegistry__factory,
+  SLA
 } from '../../../typechain';
 import consola from 'consola';
 
@@ -193,7 +194,11 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Respected, Reward Not Ca
     _sloRegistry = await slaRegistry.sloRegistry();
 
     // get the contract INDEX 20, Contract for IT staking tests: Respected case reward capped
-    sla = await ethers.getContractAt(CONTRACT_NAMES.SLA, allSLAs[20]);
+    const slaDeployment = await deployments.get(CONTRACT_NAMES.SLA);
+
+    sla = <SLA>(
+      new ethers.Contract(allSLAs[20], slaDeployment.abi, signer)
+    );
     details = await ethers.getContract(CONTRACT_NAMES.Details);
     signersAccounts = await hre.ethers.getSigners();
 

@@ -28,8 +28,14 @@ describe('Fixtures', () => {
     allSLAs = await slaRegistry.allSLAs();
   });
 
+  //
+
+
+
+  //
   it('needs to be written', async () => {
-    const sla: SLA = await ethers.getContractAt(CONTRACT_NAMES.SLA, allSLAs[0]);
+    const slaDeployment = await deployments.get(CONTRACT_NAMES.SLA);
+    const sla = <SLA>(new ethers.Contract(allSLAs[0], slaDeployment.abi, ethers.provider));
   });
 
   describe("check SP & LP token names of messenger contracts", async () => {
