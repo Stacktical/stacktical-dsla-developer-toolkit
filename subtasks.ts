@@ -1,5 +1,8 @@
 /* eslint-disable no-await-in-loop, import/no-extraneous-dependencies */
-import { DeploymentsExtension, DeployOptionsBase } from 'hardhat-deploy/dist/types';
+import {
+  DeploymentsExtension,
+  DeployOptionsBase,
+} from 'hardhat-deploy/dist/types';
 import { fromWei, numberToHex, toChecksumAddress, toWei } from 'web3-utils';
 import {
   deleteJob,
@@ -116,9 +119,15 @@ subtask(SUB_TASK_NAMES.GET_SLA_FROM_TX, undefined).setAction(
     const { transactionHash } = taskArgs;
     const transaction = await getTransactionReceipt(transactionHash);
 
-    const slaRegistryDeployment = await deployments.get(CONTRACT_NAMES.SLARegistry);
-    const slaRegistry = new ethers.Contract(slaRegistryDeployment.address, slaRegistryDeployment.abi, provider)
-    
+    const slaRegistryDeployment = await deployments.get(
+      CONTRACT_NAMES.SLARegistry
+    );
+    const slaRegistry = new ethers.Contract(
+      slaRegistryDeployment.address,
+      slaRegistryDeployment.abi,
+      provider
+    );
+
     const filter = slaRegistry.filters.SLACreated(null, transaction.from);
     const events = await slaRegistry.queryFilter(filter, transaction.blockHash);
     console.log(events);
@@ -139,13 +148,23 @@ subtask(SUB_TASK_NAMES.UPDATE_MESSENGER_SPEC, undefined).setAction(
 
     const messengerDeployment = await deployments.get(messenger.contract);
     const messengerContract = <IMessenger>(
-      new ethers.Contract(messengerDeployment.address, messengerDeployment.abi, provider)
+      new ethers.Contract(
+        messengerDeployment.address,
+        messengerDeployment.abi,
+        provider
+      )
     );
 
-    const messengerRegistryDeployment = await deployments.get(CONTRACT_NAMES.MessengerRegistry);
+    const messengerRegistryDeployment = await deployments.get(
+      CONTRACT_NAMES.MessengerRegistry
+    );
     const messengerRegistry = <MessengerRegistry>(
-      new ethers.Contract(messengerRegistryDeployment.address, messengerRegistryDeployment.abi, provider)
-      );
+      new ethers.Contract(
+        messengerRegistryDeployment.address,
+        messengerRegistryDeployment.abi,
+        provider
+      )
+    );
     const filter = messengerRegistry.filters.MessengerRegistered(
       deployer,
       messengerContract.address
@@ -176,17 +195,25 @@ subtask(SUB_TASK_NAMES.UNLOCK_TOKENS, undefined).setAction(
     const { deployer } = await getNamedAccounts();
     const { provider } = ethers;
 
-    const slaRegistryDeployment = await deployments.get(CONTRACT_NAMES.SLARegistry);
+    const slaRegistryDeployment = await deployments.get(
+      CONTRACT_NAMES.SLARegistry
+    );
 
     const slaRegistry = <SLARegistry>(
-      new ethers.Contract(slaRegistryDeployment.address, slaRegistryDeployment.abi, provider)
+      new ethers.Contract(
+        slaRegistryDeployment.address,
+        slaRegistryDeployment.abi,
+        provider
+      )
     );
 
     const slaAddress = taskArgs.slaAddress
       ? ethers.utils.getAddress(taskArgs.slaAddress)
       : (await slaRegistry.allSLAs()).slice(-1)[0];
+    const slaDeployment = await deployments.get(CONTRACT_NAMES.SLA);
+
     const slaContract = <SLA>(
-      await ethers.getContractAt(CONTRACT_NAMES.SLA, slaAddress)
+      new ethers.Contract(slaAddress, slaDeployment.abi, ethers.provider)
     );
 
     printSeparator();
@@ -195,10 +222,16 @@ subtask(SUB_TASK_NAMES.UNLOCK_TOKENS, undefined).setAction(
     const tx = await slaRegistry.returnLockedValue(slaAddress);
     await tx.wait();
 
-    const stakeRegistryDeployment = await deployments.get(CONTRACT_NAMES.StakeRegistry);
+    const stakeRegistryDeployment = await deployments.get(
+      CONTRACT_NAMES.StakeRegistry
+    );
 
     const stakeRegistry = <StakeRegistry>(
-      new ethers.Contract(stakeRegistryDeployment.address, stakeRegistryDeployment.abi, provider)
+      new ethers.Contract(
+        stakeRegistryDeployment.address,
+        stakeRegistryDeployment.abi,
+        provider
+      )
     );
     const filter = stakeRegistry.filters.LockedValueReturned(
       slaAddress,
@@ -216,17 +249,26 @@ subtask(SUB_TASK_NAMES.PROVIDER_WITHDRAW, undefined).setAction(
     const { ethers, getNamedAccounts, deployments } = hre;
     const { deployer } = await getNamedAccounts();
 
-    const slaRegistryDeployment = await deployments.get(CONTRACT_NAMES.SLARegistry);
+    const slaRegistryDeployment = await deployments.get(
+      CONTRACT_NAMES.SLARegistry
+    );
 
     const slaRegistry = <SLARegistry>(
-      new ethers.Contract(slaRegistryDeployment.address, slaRegistryDeployment.abi, ethers.provider)
+      new ethers.Contract(
+        slaRegistryDeployment.address,
+        slaRegistryDeployment.abi,
+        ethers.provider
+      )
     );
 
     const slaAddress = taskArgs.slaAddress
       ? ethers.utils.getAddress(taskArgs.slaAddress)
       : (await slaRegistry.allSLAs()).slice(-1)[0];
+
+    const slaDeployment = await deployments.get(CONTRACT_NAMES.SLA);
+
     const slaContract = <SLA>(
-      await ethers.getContractAt(CONTRACT_NAMES.SLA, slaAddress)
+      new ethers.Contract(slaAddress, slaDeployment.abi, ethers.provider)
     );
 
     printSeparator();
@@ -236,8 +278,14 @@ subtask(SUB_TASK_NAMES.PROVIDER_WITHDRAW, undefined).setAction(
       taskArgs.tokenAddress
     );
     consola.info('LP token address:', LPtokenAddress);
+    const lpTokenDeployment = await deployments.get('ERC20PresetMinterPauser');
+
     const lpToken = <ERC20PresetMinterPauser>(
-      await ethers.getContractAt('ERC20PresetMinterPauser', LPtokenAddress)
+      new ethers.Contract(
+        LPtokenAddress,
+        lpTokenDeployment.abi,
+        ethers.provider
+      )
     );
     const lpTokenUserBalance = await lpToken.balanceOf(deployer);
     consola.info(
@@ -416,8 +464,9 @@ subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
             case /ETH_URL/.test(envVariable):
               return `ETH_URL=${stacktical.chainlink.ethWsUrl}`;
             case /ETH_HTTP_URL/.test(envVariable):
-              return `ETH_HTTP_URL=${stacktical.chainlink.ethHttpUrl || (network.config as any).url
-                }`;
+              return `ETH_HTTP_URL=${
+                stacktical.chainlink.ethHttpUrl || (network.config as any).url
+              }`;
             case /CHAINLINK_PORT/.test(envVariable):
               return `CHAINLINK_PORT=${node.restApiPort}`;
             default:
@@ -1076,21 +1125,21 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
           currentStakingParameters.DSLAburnRate,
           (stakingParameters.dslaDepositByPeriod &&
             toWei(stakingParameters.dslaDepositByPeriod)) ||
-          currentStakingParameters.dslaDepositByPeriod,
+            currentStakingParameters.dslaDepositByPeriod,
           (stakingParameters.dslaPlatformReward &&
             toWei(stakingParameters.dslaPlatformReward)) ||
-          currentStakingParameters.dslaPlatformReward,
+            currentStakingParameters.dslaPlatformReward,
           (stakingParameters.dslaMessengerReward &&
             toWei(stakingParameters.dslaMessengerReward)) ||
-          currentStakingParameters.dslaMessengerReward,
+            currentStakingParameters.dslaMessengerReward,
           (stakingParameters.dslaUserReward &&
             toWei(stakingParameters.dslaUserReward)) ||
-          currentStakingParameters.dslaUserReward,
+            currentStakingParameters.dslaUserReward,
           (stakingParameters.dslaBurnedByVerification &&
             toWei(stakingParameters.dslaBurnedByVerification)) ||
-          currentStakingParameters.dslaBurnedByVerification,
+            currentStakingParameters.dslaBurnedByVerification,
           stakingParameters.maxTokenLength ||
-          currentStakingParameters.maxTokenLength,
+            currentStakingParameters.maxTokenLength,
           stakingParameters.maxLeverage || currentStakingParameters.maxLeverage,
           stakingParameters.burnDSLA !== undefined
             ? stakingParameters.burnDSLA
@@ -1108,22 +1157,22 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
         console.log('DSLAburnRate: ' + newParameters.DSLAburnRate.toString());
         console.log(
           'dslaDepositByPeriod: ' +
-          fromWei(newParameters.dslaDepositByPeriod.toString())
+            fromWei(newParameters.dslaDepositByPeriod.toString())
         );
         console.log(
           'dslaPlatformReward: ' +
-          fromWei(newParameters.dslaPlatformReward.toString())
+            fromWei(newParameters.dslaPlatformReward.toString())
         );
         console.log(
           'dslaMessengerReward: ' +
-          fromWei(newParameters.dslaMessengerReward.toString())
+            fromWei(newParameters.dslaMessengerReward.toString())
         );
         console.log(
           'dslaUserReward: ' + fromWei(newParameters.dslaUserReward.toString())
         );
         console.log(
           'dslaBurnedByVerification: ' +
-          fromWei(newParameters.dslaBurnedByVerification.toString())
+            fromWei(newParameters.dslaBurnedByVerification.toString())
         );
         console.log(
           'maxTokenLength: ' + newParameters.maxTokenLength.toString()
@@ -1241,7 +1290,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
         messenger.dslaLpName,
         messenger.dslaLpSymbol,
         messenger.dslaSpName,
-        messenger.dslaSpSymbol
+        messenger.dslaSpSymbol,
       ],
       libraries: {
         StringUtils: stringUtils.address,
@@ -1250,8 +1299,8 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
     if (deployedMessenger.newlyDeployed) {
       consola.success(
         messenger.contract +
-        ' successfully deployed at ' +
-        deployedMessenger.address
+          ' successfully deployed at ' +
+          deployedMessenger.address
       );
     } else {
       consola.warn(
@@ -1280,7 +1329,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
       await tx.wait();
       consola.success(
         messenger.contract +
-        ' messenger successfully registered on the MessengerRegistry'
+          ' messenger successfully registered on the MessengerRegistry'
       );
       await hre.run(SUB_TASK_NAMES.SET_PRECOORDINATOR, {
         index: taskArgs.index,
@@ -1332,8 +1381,12 @@ subtask(SUB_TASK_NAMES.GET_START_STOP_PERIODS, undefined).setAction(
       );
       const periodDefinitions = await periodRegistry.getPeriodDefinitions();
 
-      const currentStartsDate = periodDefinitions[periodType].starts.map((start) => moment(Number(start) * 1000).unix());
-      const currentEndsDate = periodDefinitions[periodType].ends.map((end) => moment(Number(end) * 1000).unix());
+      const currentStartsDate = periodDefinitions[periodType].starts.map(
+        (start) => moment(Number(start) * 1000).unix()
+      );
+      const currentEndsDate = periodDefinitions[periodType].ends.map((end) =>
+        moment(Number(end) * 1000).unix()
+      );
 
       const periodStartsDate = currentStartsDate.map((date) =>
         moment(date * 1000)
@@ -1348,11 +1401,12 @@ subtask(SUB_TASK_NAMES.GET_START_STOP_PERIODS, undefined).setAction(
 
       console.log(
         'The ' + PERIOD_TYPE[periodType] + ' period type range is:',
-        "\n From ", periodStartsDate.at(0), "\n Until", periodEndsDate.at(-1)
+        '\n From ',
+        periodStartsDate.at(0),
+        '\n Until',
+        periodEndsDate.at(-1)
       );
-
     }
-
   }
 );
 
@@ -1370,9 +1424,11 @@ subtask(SUB_TASK_NAMES.ADD_DATES_TO_PERIOD, undefined).setAction(
 
     const { get } = deployments;
 
-    console.log('Starting automated jobs to extend dates of ' +
-      CONTRACT_NAMES.PeriodRegistry +
-      ' contract...');
+    console.log(
+      'Starting automated jobs to extend dates of ' +
+        CONTRACT_NAMES.PeriodRegistry +
+        ' contract...'
+    );
 
     const periodRegistryArtifact = await get(CONTRACT_NAMES.PeriodRegistry);
     const periodRegistry = await PeriodRegistry__factory.connect(
@@ -1386,12 +1442,18 @@ subtask(SUB_TASK_NAMES.ADD_DATES_TO_PERIOD, undefined).setAction(
         periodType
       );
       printSeparator();
-      console.log('Updating periods for ' + PERIOD_TYPE[periodType] + ' period type:');
+      console.log(
+        'Updating periods for ' + PERIOD_TYPE[periodType] + ' period type:'
+      );
 
       const periodDefinitions = await periodRegistry.getPeriodDefinitions();
 
-      const currentStartsDate = periodDefinitions[periodType].starts.map((start) => moment(Number(start) * 1000).unix());
-      const currentEndsDate = periodDefinitions[periodType].ends.map((end) => moment(Number(end) * 1000).unix());
+      const currentStartsDate = periodDefinitions[periodType].starts.map(
+        (start) => moment(Number(start) * 1000).unix()
+      );
+      const currentEndsDate = periodDefinitions[periodType].ends.map((end) =>
+        moment(Number(end) * 1000).unix()
+      );
 
       // New Date list from the last date that had been initialized
       var [periodStarts, periodEnds] = addPeriods(
@@ -1401,9 +1463,19 @@ subtask(SUB_TASK_NAMES.ADD_DATES_TO_PERIOD, undefined).setAction(
       );
 
       console.log(
-        "Current dates in Registry: \n", currentStartsDate, "\n", currentEndsDate,
-        "\n+ ...adding ", periodStarts.length, " period(s) from:", currentEndsDate.at(-1),
-        "(", moment(currentEndsDate.at(-1) * 1000).utc(0).format('DD/MM/YYYY HH:mm:ss'), ") \n"
+        'Current dates in Registry: \n',
+        currentStartsDate,
+        '\n',
+        currentEndsDate,
+        '\n+ ...adding ',
+        periodStarts.length,
+        ' period(s) from:',
+        currentEndsDate.at(-1),
+        '(',
+        moment(currentEndsDate.at(-1) * 1000)
+          .utc(0)
+          .format('DD/MM/YYYY HH:mm:ss'),
+        ') \n'
       );
 
       const periodStartsDate = periodStarts.map((date) =>
@@ -1418,16 +1490,24 @@ subtask(SUB_TASK_NAMES.ADD_DATES_TO_PERIOD, undefined).setAction(
       );
 
       // Diffs the start/end date arrays
-      periodStarts = periodStarts.filter((date) => !currentStartsDate.includes(date));
+      periodStarts = periodStarts.filter(
+        (date) => !currentStartsDate.includes(date)
+      );
       periodEnds = periodEnds.filter((date) => !currentEndsDate.includes(date));
 
       if (periodStarts.length === 0 || periodEnds.length === 0) {
-        console.log("No changes to be made!")
+        console.log('No changes to be made!');
       } else {
         console.log(
-          'Adding the following new dates to ' + PERIOD_TYPE[periodType] + ' period type:',
-          "\n Start: ", periodStarts, periodStartsDate,
-          "\n End: ", periodEnds, periodEndsDate ,
+          'Adding the following new dates to ' +
+            PERIOD_TYPE[periodType] +
+            ' period type:',
+          '\n Start: ',
+          periodStarts,
+          periodStartsDate,
+          '\n End: ',
+          periodEnds,
+          periodEndsDate
         );
 
         let tx = await periodRegistry.addPeriodsToPeriodType(
@@ -1439,7 +1519,9 @@ subtask(SUB_TASK_NAMES.ADD_DATES_TO_PERIOD, undefined).setAction(
       }
     }
 
-    console.log('Automated jobs to update ' + CONTRACT_NAMES.PeriodRegistry + ' completed');
+    console.log(
+      'Automated jobs to update ' + CONTRACT_NAMES.PeriodRegistry + ' completed'
+    );
   }
 );
 
@@ -1529,12 +1611,12 @@ subtask(SUB_TASK_NAMES.SET_CONTRACTS_ALLOWANCE, undefined).setAction(
     for (let tokenAllowance of allowance) {
       console.log(
         'Setting allowance of ' +
-        tokenAllowance.allowance +
-        ' ' +
-        tokenAllowance.token +
-        ' for ' +
-        tokenAllowance.contract +
-        '  '
+          tokenAllowance.allowance +
+          ' ' +
+          tokenAllowance.token +
+          ' for ' +
+          tokenAllowance.contract +
+          '  '
       );
       const token = await ERC20__factory.connect(
         (
@@ -1574,7 +1656,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_DETAILS, undefined).setAction(
     };
     console.log('Details deployment process started');
     await deploy(CONTRACT_NAMES.Details, {
-      ...baseOptions
+      ...baseOptions,
     });
     console.log('Details deployment process finished');
   }
@@ -1631,7 +1713,11 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       const stakeAmountTimesWei = (times) => toWei(String(stakeAmount * times));
 
       const messengerDeployment = await get(config.messengerContract);
-      const messenger = new ethers.Contract(messengerDeployment.address, messengerDeployment.abi, provider)
+      const messenger = new ethers.Contract(
+        messengerDeployment.address,
+        messengerDeployment.abi,
+        provider
+      );
       const ipfsHash = await getIPFSHash(serviceMetadata, stacktical.ipfs);
       const stakeRegistryArtifact = await get(CONTRACT_NAMES.StakeRegistry);
       const dslaTokenArtifact = await get(CONTRACT_NAMES.DSLA);
@@ -1659,7 +1745,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       const dslaDeposit = toWei(
         String(
           Number(fromWei(dslaDepositByPeriod.toString())) *
-          (finalPeriodId - initialPeriodId + 1)
+            (finalPeriodId - initialPeriodId + 1)
         )
       );
       let tx = await dslaToken.approve(stakeRegistry.address, dslaDeposit);
@@ -1703,9 +1789,16 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       );
       tx = await dslaToken.approve(sla.address, deployerStake);
       await tx.wait();
-      enum Position { LONG, SHORT }
+      enum Position {
+        LONG,
+        SHORT,
+      }
       if (deployerStake !== '0') {
-        tx = await sla.stakeTokens(deployerStake, dslaToken.address, Position.LONG);
+        tx = await sla.stakeTokens(
+          deployerStake,
+          dslaToken.address,
+          Position.LONG
+        );
         await tx.wait();
       }
       const notDeployerBalance = await dslaToken.callStatic.balanceOf(
@@ -1760,7 +1853,7 @@ subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
     const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
     console.log(
       'Starting SLI request process for period ' +
-      nextVerifiablePeriod.toString()
+        nextVerifiablePeriod.toString()
     );
     console.log(`SLA address: ${slaAddress}`);
     const ownerApproval = true;
@@ -1806,17 +1899,23 @@ subtask(SUB_TASK_NAMES.GET_PRECOORDINATOR, undefined).setAction(
 
     console.log('Getting Chainlink config from PreCoordinator contract');
 
-
-    const preCoordinatorDeployment = await deployments.get(CONTRACT_NAMES.PreCoordinator);
+    const preCoordinatorDeployment = await deployments.get(
+      CONTRACT_NAMES.PreCoordinator
+    );
 
     const precoordinator = <PreCoordinator>(
-      new ethers.Contract(preCoordinatorDeployment.address, preCoordinatorDeployment.abi, ethers.provider)
+      new ethers.Contract(
+        preCoordinatorDeployment.address,
+        preCoordinatorDeployment.abi,
+        ethers.provider
+      )
     );
     const eventsFilter = precoordinator.filters.NewServiceAgreement();
     const events = await precoordinator.queryFilter(
       eventsFilter,
-      (await deployments.get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
-      undefined
+      (
+        await deployments.get(CONTRACT_NAMES.PreCoordinator)
+      )?.receipt?.blockNumber || undefined
     );
     for (let event of events) {
       printSeparator();
@@ -1825,8 +1924,8 @@ subtask(SUB_TASK_NAMES.GET_PRECOORDINATOR, undefined).setAction(
       console.log('Service agreement ID: ' + saId);
       console.log(
         'Service agreement payment: ' +
-        ethers.utils.formatEther(payment) +
-        ' LINK'
+          ethers.utils.formatEther(payment) +
+          ' LINK'
       );
       console.log('Service agreement minresponses: ' + minresponses);
       const serviceAgreement = await precoordinator.getServiceAgreement(saId);
@@ -1945,7 +2044,7 @@ subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
     let events = await precoordinator.queryFilter(
       eventFilter,
       (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
-      undefined
+        undefined
     );
     const lastEvent = events.slice(-1)[0];
     const { saId } = lastEvent.args;
@@ -1981,9 +2080,9 @@ subtask(SUB_TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE, undefined).setAction(
     for (let tokenAllowance of allowance) {
       console.log(
         'Getting allowance of ' +
-        tokenAllowance.token +
-        ' for ' +
-        tokenAllowance.contract
+          tokenAllowance.token +
+          ' for ' +
+          tokenAllowance.contract
       );
       const token = await ERC20__factory.connect(
         (
@@ -2114,10 +2213,16 @@ subtask(SUB_TASK_NAMES.REGISTRIES_CONFIGURATION, undefined).setAction(
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
 
-    const stakeRegistryDeployment = await deployments.get(CONTRACT_NAMES.StakeRegistry);
+    const stakeRegistryDeployment = await deployments.get(
+      CONTRACT_NAMES.StakeRegistry
+    );
 
     const stakeRegistry = <StakeRegistry>(
-      new ethers.Contract(stakeRegistryDeployment.address, stakeRegistryDeployment.abi, ethers.provider)
+      new ethers.Contract(
+        stakeRegistryDeployment.address,
+        stakeRegistryDeployment.abi,
+        ethers.provider
+      )
     );
     const stakingParameters = await stakeRegistry.getStakingParameters();
     console.log('Staking parameters: ');
@@ -2188,9 +2293,13 @@ subtask(SUB_TASK_NAMES.GET_VALID_SLAS, undefined).setAction(
     consola.info('All valid SLAs:');
     for (let slaAddress of allSLAs) {
       printSeparator();
+
+      const slaDeployment = await deployments.get(CONTRACT_NAMES.SLA);
+
       const sla = <SLA>(
-        await ethers.getContractAt(CONTRACT_NAMES.SLA, slaAddress)
+        new ethers.Contract(slaAddress, slaDeployment.abi, ethers.provider)
       );
+
       const contractFinished = await sla.contractFinished();
       const creationBlockNumber = await sla.creationBlockNumber();
       const messengerAddress = await sla.messengerAddress();
@@ -2199,11 +2308,14 @@ subtask(SUB_TASK_NAMES.GET_VALID_SLAS, undefined).setAction(
       const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
       const periodType = await sla.periodType();
 
-      
       const dslaTokenDeployment = await deployments.get('DSLA');
       const DSLAtoken = <ERC20PresetMinterPauser>(
-        new ethers.Contract(dslaTokenDeployment.address, dslaTokenDeployment.abi, ethers.provider)
-        );
+        new ethers.Contract(
+          dslaTokenDeployment.address,
+          dslaTokenDeployment.abi,
+          ethers.provider
+        )
+      );
       const DSLASPtokenAddress = await sla.duTokenRegistry(DSLAtoken.address);
       const DSLALPtokenAddress = await sla.dpTokenRegistry(DSLAtoken.address);
 
@@ -2266,7 +2378,11 @@ subtask(SUB_TASK_NAMES.GET_MESSENGER, undefined).setAction(
     for (let messenger of messengers) {
       const messengerDeployment = await deployments.get(messenger.contract);
       const messengerArtifact = <IMessenger>(
-        new ethers.Contract(messengerDeployment.address, messengerDeployment.abi, ethers.provider)
+        new ethers.Contract(
+          messengerDeployment.address,
+          messengerDeployment.abi,
+          ethers.provider
+        )
       );
       printSeparator();
       consola.info('messenger: ', messenger.contract);
@@ -2295,18 +2411,30 @@ subtask(SUB_TASK_NAMES.TRANSFER_OWNERSHIP, undefined).setAction(
     const { stacktical } = network.config;
     const { deployer } = await getNamedAccounts();
 
-    const periodRegistryDeployment = await deployments.get(CONTRACT_NAMES.PeriodRegistry);
+    const periodRegistryDeployment = await deployments.get(
+      CONTRACT_NAMES.PeriodRegistry
+    );
 
     const periodRegistry = <PeriodRegistry>(
-      new ethers.Contract(periodRegistryDeployment.address, periodRegistryDeployment.abi, ethers.provider)
+      new ethers.Contract(
+        periodRegistryDeployment.address,
+        periodRegistryDeployment.abi,
+        ethers.provider
+      )
     );
- 
-    const stakeRegistryDeployment = await deployments.get(CONTRACT_NAMES.StakeRegistry);
+
+    const stakeRegistryDeployment = await deployments.get(
+      CONTRACT_NAMES.StakeRegistry
+    );
 
     const stakeRegistry = <StakeRegistry>(
-      new ethers.Contract(stakeRegistryDeployment.address, stakeRegistryDeployment.abi, ethers.provider)
+      new ethers.Contract(
+        stakeRegistryDeployment.address,
+        stakeRegistryDeployment.abi,
+        ethers.provider
+      )
     );
-    
+
     const newOwner = toChecksumAddress(taskArgs.newOwner);
     const periodRegistryOwner = await periodRegistry.owner();
     const stakeRegistryOwner = await stakeRegistry.owner();
@@ -2340,9 +2468,13 @@ subtask(SUB_TASK_NAMES.TRANSFER_OWNERSHIP, undefined).setAction(
     for (let messenger of stacktical.messengers) {
       const messengerDeployment = await deployments.get(messenger.contract);
       const messengerContract = <IMessenger>(
-        new ethers.Contract(messengerDeployment.address, messengerDeployment.abi, ethers.provider)
+        new ethers.Contract(
+          messengerDeployment.address,
+          messengerDeployment.abi,
+          ethers.provider
+        )
       );
-  
+
       const messengerOwner = await messengerContract.owner();
       consola.info(`${messenger.useCaseName} owner: ${messengerOwner}`);
       if (newOwner !== messengerOwner && messengerOwner === deployer) {
