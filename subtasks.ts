@@ -7,7 +7,8 @@ import {
   getChainlinkBridges,
   getChainlinkJobs,
   postChainlinkBridge,
-  postChainlinkJob,
+  postChainlinkJob2,
+  postChainlinkJobv2,
 } from './chainlink-utils';
 import { subtask } from 'hardhat/config';
 import { ChainlinkNodeConfiguration } from './types';
@@ -518,7 +519,7 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
           console.log('Deleting existing jobId: ' + postedJob.id);
           await deleteJob(node, postedJob.id);
         }
-        const httpRequestJobRes = await postChainlinkJob(
+        const httpRequestJobRes = await postChainlinkJobv2(
           node,
           jobName,
           oracle.address
