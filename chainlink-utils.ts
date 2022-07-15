@@ -200,6 +200,7 @@ const deleteJob = async (node: ChainlinkNodeConfiguration, jobId: string) => {
 export {
   deleteJob,
   postChainlinkJob,
+  postChainlinkJobv2,
   postChainlinkBridge,
   getChainlinkJobs,
   getChainlinkJobId,
