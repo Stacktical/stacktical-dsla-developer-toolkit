@@ -22,6 +22,7 @@ A full documentation oabout the DTK is available [here](https://readme.stacktica
 ## Quick start
 
 ```
+nvm use
 npm i
 
 hh test

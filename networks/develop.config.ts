@@ -6,7 +6,7 @@ import {
   TOKEN_NAMES,
   USE_CASES,
 } from '../constants';
-import { EthereumERC20__factory } from '../typechain';
+import { EthereumERC20__factory } from '../typechain'; //EthereumERC20__factory ERC20__factory
 import { NetworkUserConfig } from 'hardhat/types';
 import { scripts } from '../scripts.config';
 
@@ -79,15 +79,25 @@ export const develop: NetworkUserConfig = {
     bootstrap: {
       allowance: [
         {
-          contract: CONTRACT_NAMES.BaseMessenger,
+          contract: CONTRACT_NAMES.BaseOracle,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
         {
-          contract: CONTRACT_NAMES.CPIMessenger,
+          contract: CONTRACT_NAMES.StakingAPR,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
+        {
+          contract: CONTRACT_NAMES.StakingUptime,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
+       {
+         contract: CONTRACT_NAMES.InflationOracle,
+         token: CONTRACT_NAMES.LinkToken,
+         allowance: '10',
+       },
       ],
       registry: {
         periods: [
@@ -116,7 +126,7 @@ export const develop: NetworkUserConfig = {
     },
     messengers: [
       {
-        contract: CONTRACT_NAMES.BaseMessenger,
+        contract: CONTRACT_NAMES.BaseOracle,
         useCaseName: USE_CASES.BASE_MESSENGER,
         externalAdapterUrl: 'http://host.docker.internal:6070',
         dslaLpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.name,
@@ -125,14 +135,32 @@ export const develop: NetworkUserConfig = {
         dslaSpSymbol: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.symbol,
       },
       {
-        contract: CONTRACT_NAMES.CPIMessenger, //  Name of the Messenger
-        useCaseName: USE_CASES.INFLATION, // Name of the Use-Case
-        externalAdapterUrl: process.env.DEVELOP_INDEXER_URI, // Your local serverless endpoint
-        dslaLpName: SERVICE_CREDITS.INFLATION_RATE.DSLA_LP.name,
-        dslaLpSymbol: SERVICE_CREDITS.INFLATION_RATE.DSLA_LP.symbol,
-        dslaSpName: SERVICE_CREDITS.INFLATION_RATE.DSLA_SP.name,
-        dslaSpSymbol: SERVICE_CREDITS.INFLATION_RATE.DSLA_SP.symbol,
+        contract: CONTRACT_NAMES.StakingAPR,
+        useCaseName: USE_CASES.STAKING_EFFICIENCY,
+        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
+        dslaLpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.name,
+        dslaLpSymbol: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.symbol,
+        dslaSpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.name,
+        dslaSpSymbol: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.symbol,
       },
+      {
+        contract: CONTRACT_NAMES.StakingUptime,
+        useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
+        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
+        dslaLpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.name,
+        dslaLpSymbol: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.symbol,
+        dslaSpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.name,
+        dslaSpSymbol: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.symbol,
+      },
+     {
+       contract: CONTRACT_NAMES.InflationOracle, //  Name of the Messenger
+       useCaseName: USE_CASES.INFLATION, // Name of the Use-Case
+       externalAdapterUrl: process.env.DEVELOP_INDEXER_URI, // Your local serverless endpoint
+       dslaLpName: SERVICE_CREDITS.INFLATION_RATE.DSLA_LP.name,
+       dslaLpSymbol: SERVICE_CREDITS.INFLATION_RATE.DSLA_LP.symbol,
+       dslaSpName: SERVICE_CREDITS.INFLATION_RATE.DSLA_SP.name,
+       dslaSpSymbol: SERVICE_CREDITS.INFLATION_RATE.DSLA_SP.symbol,
+     },
       /*
       {
         contract: CONTRACT_NAMES.PPMessenger,

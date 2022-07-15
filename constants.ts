@@ -33,9 +33,12 @@ export enum CONTRACT_NAMES {
   AvalancheERC20 = 'AvalancheERC20',
   FantomERC20 = 'FantomERC20',
   FujiERC20 = 'FujiERC20',
-  BaseMessenger = 'BaseMessenger',
-  PPMessenger = 'PPMessenger',
-  CPIMessenger = 'CPIMessenger',
+  // Needs to match the correspondig Oracle .sol file
+  BaseOracle = 'BaseOracle',
+  PPMessenger = 'PPMessenger',  // ParPeg Messenger (bounty contrib)
+  StakingAPR = 'StakingAprOracle',
+  StakingUptime = 'StakingUptimeOracle',
+  InflationOracle = 'InflationOracle',
 }
 
 export enum TOKEN_NAMES {
@@ -61,12 +64,13 @@ export enum DEPLOYMENT_TAGS {
   DummyTokens = 'dummy-tokens',
 }
 
+// Matches the messenger' folder name
 export enum USE_CASES {
-  STAKING_EFFICIENCY = 'staking-efficiency',
-  STAKING_EFFICIENCY_ALT = 'staking-efficiency-alt',
-  BASE_MESSENGER = 'base-messenger',
-  PAR_PEG = 'par-peg-messenger',
-  INFLATION = 'inflation',
+  STAKING_EFFICIENCY = 'staking-apr',
+  STAKING_EFFICIENCY_ALT = 'staking-uptime',
+  BASE_MESSENGER = 'base', //base-messenger
+  PAR_PEG = 'asset-peg', //par-peg-messenger
+  INFLATION = 'inflation-rate',
 }
 
 export enum NETWORKS {

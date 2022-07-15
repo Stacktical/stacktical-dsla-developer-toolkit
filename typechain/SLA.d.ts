@@ -45,7 +45,6 @@ interface SLAInterface extends ethers.utils.Interface {
     "owner()": FunctionFragment;
     "periodSLIs(uint256)": FunctionFragment;
     "periodType()": FunctionFragment;
-    "providerRewards(uint256)": FunctionFragment;
     "providersPool(address)": FunctionFragment;
     "registerSLI(uint256,uint256)": FunctionFragment;
     "registeredStakers(address)": FunctionFragment;
@@ -53,9 +52,8 @@ interface SLAInterface extends ethers.utils.Interface {
     "renounceOwnership()": FunctionFragment;
     "slaID()": FunctionFragment;
     "stakeTokens(uint256,address,uint8)": FunctionFragment;
-    "stakers(uint256)": FunctionFragment;
+    "stakersNum()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "userRewards(uint256)": FunctionFragment;
     "usersPool(address)": FunctionFragment;
     "whitelist(address)": FunctionFragment;
     "whitelistedContract()": FunctionFragment;
@@ -151,10 +149,6 @@ interface SLAInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "providerRewards",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "providersPool",
     values: [string]
   ): string;
@@ -180,16 +174,12 @@ interface SLAInterface extends ethers.utils.Interface {
     values: [BigNumberish, string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "stakers",
-    values: [BigNumberish]
+    functionFragment: "stakersNum",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "userRewards",
-    values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "usersPool", values: [string]): string;
   encodeFunctionData(functionFragment: "whitelist", values: [string]): string;
@@ -285,10 +275,6 @@ interface SLAInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "periodSLIs", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "periodType", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "providerRewards",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "providersPool",
     data: BytesLike
   ): Result;
@@ -313,13 +299,9 @@ interface SLAInterface extends ethers.utils.Interface {
     functionFragment: "stakeTokens",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "stakers", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "stakersNum", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "userRewards",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "usersPool", data: BytesLike): Result;
@@ -552,11 +534,6 @@ export class SLA extends BaseContract {
 
     periodType(overrides?: CallOverrides): Promise<[number]>;
 
-    providerRewards(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
     providersPool(
       arg0: string,
       overrides?: CallOverrides
@@ -591,17 +568,12 @@ export class SLA extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    stakers(arg0: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
+    stakersNum(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-
-    userRewards(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
 
     usersPool(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -694,11 +666,6 @@ export class SLA extends BaseContract {
 
   periodType(overrides?: CallOverrides): Promise<number>;
 
-  providerRewards(
-    arg0: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
   providersPool(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   registerSLI(
@@ -727,17 +694,12 @@ export class SLA extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  stakers(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+  stakersNum(overrides?: CallOverrides): Promise<BigNumber>;
 
   transferOwnership(
     newOwner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
-
-  userRewards(
-    arg0: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
 
   usersPool(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -833,11 +795,6 @@ export class SLA extends BaseContract {
 
     periodType(overrides?: CallOverrides): Promise<number>;
 
-    providerRewards(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     providersPool(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     registerSLI(
@@ -867,17 +824,12 @@ export class SLA extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    stakers(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+    stakersNum(overrides?: CallOverrides): Promise<BigNumber>;
 
     transferOwnership(
       newOwner: string,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    userRewards(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
 
     usersPool(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1217,11 +1169,6 @@ export class SLA extends BaseContract {
 
     periodType(overrides?: CallOverrides): Promise<BigNumber>;
 
-    providerRewards(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     providersPool(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     registerSLI(
@@ -1253,16 +1200,11 @@ export class SLA extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    stakers(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    stakersNum(overrides?: CallOverrides): Promise<BigNumber>;
 
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    userRewards(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     usersPool(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
@@ -1372,11 +1314,6 @@ export class SLA extends BaseContract {
 
     periodType(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    providerRewards(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     providersPool(
       arg0: string,
       overrides?: CallOverrides
@@ -1411,19 +1348,11 @@ export class SLA extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    stakers(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    stakersNum(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    userRewards(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     usersPool(

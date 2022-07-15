@@ -12,7 +12,7 @@ import { scripts } from '../scripts.config';
 import Joi from 'joi';
 
 const schema = Joi.object({
-  MAINNET_MNEMONIC: Joi.string().required(),
+  TESTNET_MNEMONIC: Joi.string().required(),
   FUJI_URI: Joi.string().required(),
   FUJI_WS_URI: Joi.string().required(),
   STAKING_EFFICIENCY_INDEXER_URI: Joi.string().required(),
@@ -29,7 +29,7 @@ if (error) {
 export const fuji: NetworkUserConfig = {
   chainId: 43113,
   accounts: {
-    mnemonic: process.env.MAINNET_MNEMONIC,
+    mnemonic: process.env.TESTNET_MNEMONIC,
   },
   url: process.env.FUJI_URI,
   stacktical: {
@@ -91,27 +91,27 @@ export const fuji: NetworkUserConfig = {
     bootstrap: {
       allowance: [
         {
-          contract: CONTRACT_NAMES.SEMessenger,
+          contract: CONTRACT_NAMES.StakingAPR,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
         {
-          contract: CONTRACT_NAMES.SEAMessenger,
+          contract: CONTRACT_NAMES.StakingUptime,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
-        {
-          contract: CONTRACT_NAMES.CPIMessenger,
-          token: CONTRACT_NAMES.LinkToken,
-          allowance: '10',
-        },
+        // {
+        //   contract: CONTRACT_NAMES.InflationOracle,
+        //   token: CONTRACT_NAMES.LinkToken,
+        //   allowance: '10',
+        // },
       ],
       registry: {
         periods: [
           {
             periodType: PERIOD_TYPE.WEEKLY,
-            amountOfPeriods: 9,
-            expiredPeriods: 0,
+            amountOfPeriods: 52,
+            expiredPeriods: 12,
           },
           {
             periodType: PERIOD_TYPE.MONTHLY,
@@ -121,19 +121,19 @@ export const fuji: NetworkUserConfig = {
         ],
         stake: {
           stakingParameters: {
-            dslaBurnedByVerification: '0',
-            dslaPlatformReward: '10075',
+            dslaBurnedByVerification: '10000',
+            dslaPlatformReward: '75',
             dslaDepositByPeriod: '25000',
             dslaMessengerReward: '4925',
             dslaUserReward: '10000',
-            burnDSLA: false,
+            burnDSLA: true,
           },
         },
       },
     },
     messengers: [
       {
-        contract: CONTRACT_NAMES.SEMessenger,
+        contract: CONTRACT_NAMES.StakingAPR,
         useCaseName: USE_CASES.STAKING_EFFICIENCY,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
         dslaLpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.name,
@@ -142,7 +142,7 @@ export const fuji: NetworkUserConfig = {
         dslaSpSymbol: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.symbol,
       },
       {
-        contract: CONTRACT_NAMES.SEAMessenger,
+        contract: CONTRACT_NAMES.StakingUptime,
         useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
         externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
         dslaLpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.name,
@@ -150,15 +150,15 @@ export const fuji: NetworkUserConfig = {
         dslaSpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.name,
         dslaSpSymbol: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.symbol,
       },
-      {
-        contract: CONTRACT_NAMES.CPIMessenger,
-        useCaseName: USE_CASES.INFLATION,
-        externalAdapterUrl: process.env.INFLATION_INDEXER_URI,
-        dslaLpName: SERVICE_CREDITS.INFLATION_RATE.DSLA_LP.name,
-        dslaLpSymbol: SERVICE_CREDITS.INFLATION_RATE.DSLA_LP.symbol,
-        dslaSpName: SERVICE_CREDITS.INFLATION_RATE.DSLA_SP.name,
-        dslaSpSymbol: SERVICE_CREDITS.INFLATION_RATE.DSLA_SP.symbol,
-      },
+      // {
+      //   contract: CONTRACT_NAMES.InflationOracle,
+      //   useCaseName: USE_CASES.INFLATION,
+      //   externalAdapterUrl: process.env.INFLATION_INDEXER_URI,
+      //   dslaLpName: SERVICE_CREDITS.INFLATION_RATE.DSLA_LP.name,
+      //   dslaLpSymbol: SERVICE_CREDITS.INFLATION_RATE.DSLA_LP.symbol,
+      //   dslaSpName: SERVICE_CREDITS.INFLATION_RATE.DSLA_SP.name,
+      //   dslaSpSymbol: SERVICE_CREDITS.INFLATION_RATE.DSLA_SP.symbol,
+      // },
     ],
     scripts: scripts,
   },

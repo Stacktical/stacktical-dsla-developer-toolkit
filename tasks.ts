@@ -3,7 +3,7 @@ import { SUB_TASK_NAMES } from './subtasks';
 import { printSeparator } from './utils';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { PARAMS_NAMES } from './constants';
-import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/dist/src/signers';
+import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { BigNumber } from 'ethers';
 
 export enum TASK_NAMES {

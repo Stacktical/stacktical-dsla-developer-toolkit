@@ -1690,8 +1690,8 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       );
       tx = await dslaToken.approve(sla.address, deployerStake);
       await tx.wait();
-      enum Position {LONG,SHORT}
-      if (deployerStake !== '0'){
+      enum Position { LONG, SHORT }
+      if (deployerStake !== '0') {
         tx = await sla.stakeTokens(deployerStake, dslaToken.address, Position.LONG);
         await tx.wait();
       }
@@ -1710,11 +1710,11 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
         .connect(await ethers.getSigner(notDeployer))
         .approve(sla.address, notDeployerStake);
       await tx.wait();
-      if (notDeployerStake !== '0'){
-          tx = await sla
-            .connect(await ethers.getSigner(notDeployer))
-            .stakeTokens(notDeployerStake, dslaToken.address, Position.SHORT);
-          await tx.wait();
+      if (notDeployerStake !== '0') {
+        tx = await sla
+          .connect(await ethers.getSigner(notDeployer))
+          .stakeTokens(notDeployerStake, dslaToken.address, Position.SHORT);
+        await tx.wait();
       }
       printSeparator();
     }
@@ -2002,7 +2002,7 @@ subtask(SUB_TASK_NAMES.FULFILL_SLI, undefined).setAction(
     // const signer = await ethers.getSigner(deployer);
     // const seMessenger = await SEMessenger__factory.connect(
     //   (
-    //     await get(CONTRACT_NAMES.BaseMessenger)
+    //     await get(CONTRACT_NAMES.BaseOracle)
     //   ).address,
     //   signer
     // );

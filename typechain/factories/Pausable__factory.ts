@@ -8,11 +8,6 @@ import type { Pausable, PausableInterface } from "../Pausable";
 
 const _abi = [
   {
-    inputs: [],
-    stateMutability: "nonpayable",
-    type: "constructor",
-  },
-  {
     anonymous: false,
     inputs: [
       {

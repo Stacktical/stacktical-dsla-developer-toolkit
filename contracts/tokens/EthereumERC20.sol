@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.6.6;
+pragma solidity 0.8.9;
 
-import '@openzeppelin/contracts/presets/ERC20PresetMinterPauser.sol';
+import '@openzeppelin/contracts/token/ERC20/presets/ERC20PresetMinterPauser.sol';
 
 contract EthereumERC20 is ERC20PresetMinterPauser {
     /**
@@ -10,7 +10,6 @@ contract EthereumERC20 is ERC20PresetMinterPauser {
      * @notice token name: DSLA , token symbol: DSLA
      */
     constructor(string memory name, string memory symbol)
-        public
         ERC20PresetMinterPauser(name, symbol)
     {
         mint(msg.sender, 10**27);
