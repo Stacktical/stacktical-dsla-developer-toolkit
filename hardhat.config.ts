@@ -29,7 +29,7 @@ const getEnabledNetworks = () =>
     );
 
 const config: HardhatUserConfig = {
-  defaultNetwork: 'develop',
+  defaultNetwork: 'hardhat',
   networks: getEnabledNetworks(),
   solidity: {
     compilers: [
