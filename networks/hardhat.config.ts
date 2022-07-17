@@ -31,7 +31,7 @@ export const hardhat: NetworkUserConfig = {
   accounts: {
     mnemonic: process.env.DEVELOP_MNEMONIC,
   },
-  url: 'http://localhost:8545',
+  //url: 'http://localhost:8545',
   stacktical: {
     checkPastPeriods: false,
     deployTokens: true,
