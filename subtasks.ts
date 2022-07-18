@@ -10,7 +10,7 @@ import {
   getChainlinkBridges,
   getChainlinkJobs,
   postChainlinkBridge,
-  postChainlinkJob2,
+  postChainlinkJob,
   postChainlinkJobv2,
 } from './chainlink-utils';
 import { subtask } from 'hardhat/config';
