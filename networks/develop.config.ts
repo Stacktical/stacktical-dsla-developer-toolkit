@@ -49,7 +49,7 @@ export const develop: NetworkUserConfig = {
           restApiUrl: 'http://localhost',
           restApiPort: '6688',
           email: 'test@stacktical.com',
-          password: 'PaSSword123456',
+          password: 'passwordUPPERCASE!!!777',
         },
       ],
     },
