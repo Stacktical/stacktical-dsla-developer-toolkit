@@ -46,7 +46,7 @@ export const hardhat: NetworkUserConfig = {
       nodesConfiguration: [
         {
           name: 'node-1',
-          restApiUrl: 'http://localhost',
+          restApiUrl: 'http://0.0.0.0',
           restApiPort: '6688',
           email: 'test@stacktical.com',
           password: 'PaSSword123456',
