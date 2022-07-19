@@ -5,11 +5,14 @@ import { SUB_TASK_NAMES } from '../../subtasks';
 const hre = require('hardhat');
 const consola = require('consola');
 const pm2 = require('pm2');
+const developmentNetworkName = 'hardhat'
 
 export async function fixture() {
-  // Start local ganache docker image
-  await hre.run(SUB_TASK_NAMES.START_LOCAL_GANACHE, { network: 'develop' });
-  consola.success('Started local ganache');
+  const networkName = hre.network.name
+  const chainId = hre.network.config.chainId
+
+  consola.info("Network name: ", networkName);
+  consola.info("Network chain id: ", chainId);
 
   // EXTERNAL ADAPTER
   pm2.connect(true, function (err) {
@@ -36,19 +39,19 @@ export async function fixture() {
   // WAITING FOR DOCKER
   await new Promise((resolve) => setTimeout(resolve, 3000));
 
-  await hre.run('deploy', { network: 'develop', reset: true });
+  await hre.run('deploy', { network: developmentNetworkName, reset: true });
   consola.success('deployed');
 
-  await hre.run('stacktical:bootstrap', { network: 'develop' });
+  await hre.run('stacktical:bootstrap', { network: developmentNetworkName });
   consola.success('protocol bootstrapped ');
 
   await hre.run(SUB_TASK_NAMES.DEPLOY_DETAILS, {
-    network: 'develop',
+    network: developmentNetworkName,
   });
 
   for (let index = 0; index < scripts.deploy_sla.length; index++) {
     await hre.run(TASK_NAMES.DEPLOY_SLA, {
-      network: 'develop',
+      network: developmentNetworkName,
       index: index.toString(),
     });
     consola.success(`deployed sla N: ${index}`);
