@@ -18,7 +18,7 @@
     "release:major": "standard-version --release-as major",
     "graph:deploy:production": "sh subgraph/deploy-subgraphs.sh",
     "graph:deploy:develop": "sh subgraph/deploy-develop.sh",
-    "postinstall": "./node_modules/.bin/pm2 install typescript"
+    "postinstall": "pm2 install typescript"
   },
   "repository": {
     "type": "git",
