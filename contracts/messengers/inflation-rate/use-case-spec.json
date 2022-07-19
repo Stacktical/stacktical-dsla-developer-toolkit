@@ -1,6 +1,14 @@
 {
   "useCaseName": "Inflation Rate",
-  "symbol": "CPI",
+  "symbol": "INF",
+  "sp": {
+    "name": "Inflation Credit",
+    "symbol": "INF"
+  },
+  "lp": {
+    "name": "Inflation Credit",
+    "symbol": "INF"
+  },
   "ownerUrl": "https://dsla.network",
   "useCaseDocs": "https://dsla.network/metaverse",
   "externalAdapterRepo": "https://github.com/Stacktical/",

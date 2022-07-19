@@ -15,7 +15,7 @@ const schema = Joi.object({
   TESTNET_MNEMONIC: Joi.string().required(),
   FUJI_URI: Joi.string().required(),
   FUJI_WS_URI: Joi.string().required(),
-  STAKING_EFFICIENCY_INDEXER_URI: Joi.string().required(),
+  STAKING_REWARDS_ADAPTER: Joi.string().required(),
 }).unknown();
 
 const { error, value } = schema.validate(process.env);
@@ -134,8 +134,8 @@ export const fuji: NetworkUserConfig = {
     messengers: [
       {
         contract: CONTRACT_NAMES.StakingAPR,
-        useCaseName: USE_CASES.STAKING_EFFICIENCY,
-        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
+        useCaseName: USE_CASES.STAKING_REWARDS,
+        externalAdapterUrl: process.env.STAKING_REWARDS_ADAPTER,
         dslaLpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.name,
         dslaLpSymbol: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.symbol,
         dslaSpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.name,
@@ -143,8 +143,8 @@ export const fuji: NetworkUserConfig = {
       },
       {
         contract: CONTRACT_NAMES.StakingUptime,
-        useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
-        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
+        useCaseName: USE_CASES.STAKING_UPTIME,
+        externalAdapterUrl: process.env.STAKING_UPTIME_ADAPTER,
         dslaLpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.name,
         dslaLpSymbol: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.symbol,
         dslaSpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.name,
@@ -154,10 +154,10 @@ export const fuji: NetworkUserConfig = {
       //   contract: CONTRACT_NAMES.InflationOracle,
       //   useCaseName: USE_CASES.INFLATION,
       //   externalAdapterUrl: process.env.INFLATION_INDEXER_URI,
-      //   dslaLpName: SERVICE_CREDITS.INFLATION_RATE.DSLA_LP.name,
-      //   dslaLpSymbol: SERVICE_CREDITS.INFLATION_RATE.DSLA_LP.symbol,
-      //   dslaSpName: SERVICE_CREDITS.INFLATION_RATE.DSLA_SP.name,
-      //   dslaSpSymbol: SERVICE_CREDITS.INFLATION_RATE.DSLA_SP.symbol,
+      //   dslaLpName: SERVICE_CREDITS.INFLATION.DSLA_LP.name,
+      //   dslaLpSymbol: SERVICE_CREDITS.INFLATION.DSLA_LP.symbol,
+      //   dslaSpName: SERVICE_CREDITS.INFLATION.DSLA_SP.name,
+      //   dslaSpSymbol: SERVICE_CREDITS.INFLATION.DSLA_SP.symbol,
       // },
     ],
     scripts: scripts,

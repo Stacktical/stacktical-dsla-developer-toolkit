@@ -1,3 +1,7 @@
+export const appRoot = require('app-root-path');
+
+const fs = require('fs');
+
 export enum CONTRACT_NAMES {
   DSLA = 'DSLA',
   DAI = 'DAI',
@@ -18,8 +22,6 @@ export enum CONTRACT_NAMES {
   MessengerRegistry = 'MessengerRegistry',
   Oracle = 'Oracle',
   PeriodRegistry = 'PeriodRegistry',
-  SEMessenger = 'SEMessenger',
-  SEAMessenger = 'SEAMessenger',
   SLA = 'SLA',
   SLORegistry = 'SLORegistry',
   SLARegistry = 'SLARegistry',
@@ -33,11 +35,11 @@ export enum CONTRACT_NAMES {
   AvalancheERC20 = 'AvalancheERC20',
   FantomERC20 = 'FantomERC20',
   FujiERC20 = 'FujiERC20',
-  // Needs to match the correspondig Oracle .sol file
   BaseOracle = 'BaseOracle',
-  PPMessenger = 'PPMessenger',  // ParPeg Messenger (bounty contrib)
-  StakingAPR = 'StakingAprOracle',
-  StakingUptime = 'StakingUptimeOracle',
+  AssetFloorOracle = 'AssetFloorOracle',
+  AssetPegOracle = 'AssetPegOracle',
+  StakingRewardsOracle = 'StakingRewardsOracle',
+  StakingUptimeOracle = 'StakingUptimeOracle',
   InflationOracle = 'InflationOracle',
 }
 
@@ -64,14 +66,49 @@ export enum DEPLOYMENT_TAGS {
   DummyTokens = 'dummy-tokens',
 }
 
-// Matches the messenger' folder name
 export enum USE_CASES {
-  STAKING_EFFICIENCY = 'staking-apr',
-  STAKING_EFFICIENCY_ALT = 'staking-uptime',
-  BASE_MESSENGER = 'base', //base-messenger
-  PAR_PEG = 'asset-peg', //par-peg-messenger
+  STAKING_REWARDS = 'staking-apr',
+  STAKING_UPTIME = 'staking-uptime',
+  BASE_MESSENGER = 'base',
+  ASSET_PEG = 'asset-peg',
+  ASSET_FLOOR = 'asset-floor',
   INFLATION = 'inflation-rate',
 }
+
+const STAKING_REWARDS_SPECS = JSON.parse(
+  // @ts-ignore
+  fs.readFileSync(
+    `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_REWARDS}/use-case-spec.json`
+  )
+);
+
+const STAKING_UPTIME_SPECS = JSON.parse(
+  // @ts-ignore
+  fs.readFileSync(
+    `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_UPTIME}/use-case-spec.json`
+  )
+);
+
+const ASSET_PEG_SPECS = JSON.parse(
+  // @ts-ignore
+  fs.readFileSync(
+    `${appRoot.path}/contracts/messengers/${USE_CASES.ASSET_PEG}/use-case-spec.json`
+  )
+);
+
+const ASSET_FLOOR_SPECS = JSON.parse(
+  // @ts-ignore
+  fs.readFileSync(
+    `${appRoot.path}/contracts/messengers/${USE_CASES.ASSET_FLOOR}/use-case-spec.json`
+  )
+);
+
+const INFLATION_SPECS = JSON.parse(
+  // @ts-ignore
+  fs.readFileSync(
+    `${appRoot.path}/contracts/messengers/${USE_CASES.INFLATION}/use-case-spec.json`
+  )
+);
 
 export enum NETWORKS {
   DEVELOP = 'develop',
@@ -138,54 +175,52 @@ export enum PARAMS_NAMES {
 export const SERVICE_CREDITS = {
   STAKING_REWARDS: {
     DSLA_LP: {
-      name: 'APR.ok',
-      symbol: 'APR.ok'
+      name: STAKING_REWARDS_SPECS.name,
+      symbol: STAKING_REWARDS_SPECS.symbol,
     },
     DSLA_SP: {
-      name: 'APR.ko',
-      symbol: 'APR.ko'
-    }
+      name: STAKING_REWARDS_SPECS.name,
+      symbol: 'APR.du',
+    },
   },
-  PROVIDER_UPTIME: {
+  STAKING_UPTIME: {
     DSLA_LP: {
-      name: 'UPTIME.ok',
-      symbol: 'UPTIME.ok'
+      name: 'Staking Uptime Credit',
+      symbol: 'UPTIME.dp',
     },
     DSLA_SP: {
-      name: 'UPTIME.ko',
-      symbol: 'UPTIME.ko'
-    }
+      name: 'Staking Uptime Credit',
+      symbol: 'UPTIME.du',
+    },
   },
-  DIGITAL_ASSET_PEG: {
+  INFLATION: {
     DSLA_LP: {
-      name: 'PEG.ok',
-      symbol: 'PEG.ok'
+      name: 'Inflation Credit',
+      symbol: 'INFLATION.dp',
     },
     DSLA_SP: {
-      name: 'PEG.ko',
-      symbol: 'PEG.ko'
-    }
+      name: 'Inflation Credit',
+      symbol: 'INFLATION.du',
+    },
   },
-  DIGITAL_ASSET_FLOOR: {
+  ASSET_PEG: {
     DSLA_LP: {
-      name: 'FLOOR.ok',
-      symbol: 'FLOOR.ok'
+      name: 'Peg Parity Credit',
+      symbol: 'PEG.dp',
     },
     DSLA_SP: {
-      name: 'FLOOR.ko',
-      symbol: 'FLOOR.ko'
-    }
+      name: 'Peg Parity Credit',
+      symbol: 'PEG.du',
+    },
   },
-  INFLATION_RATE: {
+  ASSET_FLOOR: {
     DSLA_LP: {
-      name: 'INFLATION.ok',
-      symbol: 'INFLATION.ok'
+      name: 'Floor Credit',
+      symbol: 'FLOOR.dp',
     },
     DSLA_SP: {
-      name: 'INFLATION.ko',
-      symbol: 'INFLATION.ko'
-    }
-  }
-}
-
-export const appRoot = require('app-root-path');
+      name: 'Floor Credit',
+      symbol: 'FLOOR.du',
+    },
+  },
+};

@@ -1,12 +1,53 @@
 {
   "useCaseName": "Staking Uptime",
   "symbol": "POS-UP",
+  "sp": {
+    "name": "Staking Credit",
+    "symbol": "POS-UP"
+  },
+  "lp": {
+    "name": "Staking Credit",
+    "symbol": "POS-UP"
+  },
   "ownerUrl": "https://dsla.network",
   "useCaseDocs": "https://dsla.network/metaverse",
   "externalAdapterRepo": "https://github.com/Stacktical/",
   "unit": "%",
   "keywords": ["pos", "uptime", "staking", "rewards", "validator"],
   "timestamp": "2022-04-07T00:00:00+00:00",
+  "ipfsData": {
+    "serviceName": {
+      "name": "Service Name",
+      "type": "string",
+      "description": "The Validator service name"
+    },
+    "serviceDescription": {
+      "name": "Service Description",
+      "type": "string",
+      "description": "The Validator service description"
+    },
+    "serviceImage": {
+      "name": "Service Image",
+      "type": "url",
+      "description": "The Validator service image url to display"
+    },
+    "serviceURL": {
+      "name": "Service URL",
+      "type": "url",
+      "description": "The Validator service URL"
+    },
+    "serviceAddress": {
+      "name": "Service Address",
+      "type": "address",
+      "description": "The Validator service blockchain address"
+    },
+    "serviceTicker": {
+      "name": "Service Ticker",
+      "type": "string",
+      "description": "The Validator service ticker",
+      "values": ["ETH", "ONE", "DOT", "ATOM", "eGLD", "XTZ", "AVAX", "ROSE"]
+    }
+  },
   "version": {
     "major": 0,
     "minor": 0,

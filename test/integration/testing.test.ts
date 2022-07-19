@@ -41,8 +41,8 @@ describe('Fixtures', () => {
     })
     it(CONTRACT_NAMES.InflationOracle, async () => {
       const inflation_messenger: InflationOracle = await ethers.getContract(CONTRACT_NAMES.InflationOracle);
-      expect(await inflation_messenger.lpName()).to.be.eq(SERVICE_CREDITS.INFLATION_RATE.DSLA_LP.name);
-      expect(await inflation_messenger.spName()).to.be.eq(SERVICE_CREDITS.INFLATION_RATE.DSLA_SP.name);
+      expect(await inflation_messenger.lpName()).to.be.eq(SERVICE_CREDITS.INFLATION.DSLA_LP.name);
+      expect(await inflation_messenger.spName()).to.be.eq(SERVICE_CREDITS.INFLATION.DSLA_SP.name);
     })
   })
 });

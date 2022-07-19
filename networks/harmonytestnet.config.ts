@@ -126,8 +126,8 @@ export const harmonytestnet: NetworkUserConfig = {
       // },
       {
         contract: CONTRACT_NAMES.StakingAPR,
-        useCaseName: USE_CASES.STAKING_EFFICIENCY,
-        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_URI,
+        useCaseName: USE_CASES.STAKING_REWARDS,
+        externalAdapterUrl: process.env.STAKING_REWARDS_ADAPTER,
         dslaLpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.name,
         dslaLpSymbol: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.symbol,
         dslaSpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.name,
@@ -135,8 +135,8 @@ export const harmonytestnet: NetworkUserConfig = {
       },
       {
         contract: CONTRACT_NAMES.StakingUptime,
-        useCaseName: USE_CASES.STAKING_EFFICIENCY_ALT,
-        externalAdapterUrl: process.env.STAKING_EFFICIENCY_INDEXER_ALT_URI,
+        useCaseName: USE_CASES.STAKING_UPTIME,
+        externalAdapterUrl: process.env.STAKING_UPTIME_ADAPTER,
         dslaLpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.name,
         dslaLpSymbol: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.symbol,
         dslaSpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.name,

@@ -1859,30 +1859,37 @@ subtask(SUB_TASK_NAMES.SET_PRECOORDINATOR, undefined).setAction(
         });
       }
     }
-    const preCoordinatorConfiguration = await getPreCoordinatorConfiguration(
-      stacktical.chainlink.nodesConfiguration,
-      messenger.useCaseName,
-      oracle.address
-    );
-    console.log('PreCoordinator configuration from nodes information:');
-    console.log(preCoordinatorConfiguration);
-    const precoordinator = await PreCoordinator__factory.connect(
-      (
-        await get(CONTRACT_NAMES.PreCoordinator)
-      ).address,
-      signer
-    );
-    const minResponses = 1;
-    const tx = await precoordinator.createServiceAgreement(
-      minResponses,
-      preCoordinatorConfiguration.oracles,
-      preCoordinatorConfiguration.jobIds,
-      preCoordinatorConfiguration.payments
-    );
-    const receipt = await tx.wait();
-    console.log('Service agreement created: ');
-    console.log(receipt.events[0].args);
-    return receipt.events[0].args.saId;
+    // const preCoordinatorConfiguration = await getPreCoordinatorConfiguration(
+    //   stacktical.chainlink.nodesConfiguration,
+    //   messenger.useCaseName,
+    //   oracle.address
+    // );
+    // console.log('PreCoordinator configuration from nodes information:');
+    // console.log(preCoordinatorConfiguration);
+    // const precoordinator = await PreCoordinator__factory.connect(
+    //   (
+    //     await get(CONTRACT_NAMES.PreCoordinator)
+    //   ).address,
+    //   signer
+    // );
+    // const minResponses = 1;
+    // const tx = await precoordinator.createServiceAgreement(
+    //   minResponses,
+    //   preCoordinatorConfiguration.oracles,
+    //   preCoordinatorConfiguration.jobIds,
+    //   preCoordinatorConfiguration.payments
+    // );
+    // const receipt = await tx.wait();
+    // console.log('Service agreement created: ');
+    // console.log(receipt.events[0].args);
+    // return receipt.events[0].args.saId;
+
+      // let tx = await messenger.setChainlinkJobID(
+      //   saId,
+      //   serviceAgreement.payments.length
+      // );
+      // await tx.wait();
+      // consola.success('Service agreeement id updated in ' + messengerName);
   }
 );
 
@@ -2047,7 +2054,7 @@ subtask(SUB_TASK_NAMES.FULFILL_SLI, undefined).setAction(
     //   // eslint-disable-next-line global-require,import/no-dynamic-require
     //   data: {
     //     data: {
-    //       job_type: 'staking_efficiency',
+    //       job_type: 'STAKING_REWARDS',
     //       network_analytics_address: networkAnalytics.address,
     //       period_id: taskArgs.periodId,
     //       sla_address: toChecksumAddress(taskArgs.address),
