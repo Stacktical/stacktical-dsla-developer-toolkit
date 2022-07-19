@@ -182,7 +182,6 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
 
   let slaRegistryDeployment;
   let periodRegistryDeployment;
-  let slaDeployment;
   let detailsDeployment;
   let dslaTokenDeployment;
 
@@ -197,7 +196,6 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
 
     slaRegistryDeployment = await deployments.get(CONTRACT_NAMES.SLARegistry);
     periodRegistryDeployment = await deployments.get(CONTRACT_NAMES.PeriodRegistry);
-    slaDeployment = await deployments.get(CONTRACT_NAMES.SLA);
     detailsDeployment = await deployments.get(CONTRACT_NAMES.Details);
     dslaTokenDeployment = await deployments.get(CONTRACT_NAMES.DSLA);
 
@@ -212,18 +210,11 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
       new ethers.Contract(await slaRegistry.periodRegistry(), periodRegistryDeployment.abi, signer)
     );
 
-
-
-
-    sla = <SLA>(
-      new ethers.Contract(allSLAs[18], slaDeployment.abi, signer)
-    );
-
+    sla = <SLA>await ethers.getContractAt(CONTRACT_NAMES.SLA, allSLAs[18]);
 
     details = <Details>(
       new ethers.Contract(detailsDeployment.address, detailsDeployment.abi, signer)
     );
-
 
     [
       provider_1_account,
