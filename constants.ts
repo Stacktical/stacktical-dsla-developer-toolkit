@@ -35,6 +35,7 @@ export enum CONTRACT_NAMES {
   AvalancheERC20 = 'AvalancheERC20',
   FantomERC20 = 'FantomERC20',
   FujiERC20 = 'FujiERC20',
+  // Needs to match the correspondig Oracle .sol file
   BaseOracle = 'BaseOracle',
   AssetFloorOracle = 'AssetFloorOracle',
   AssetPegOracle = 'AssetPegOracle',
@@ -66,6 +67,7 @@ export enum DEPLOYMENT_TAGS {
   DummyTokens = 'dummy-tokens',
 }
 
+// Matches the messenger' folder name
 export enum USE_CASES {
   STAKING_REWARDS = 'staking-apr',
   STAKING_UPTIME = 'staking-uptime',
@@ -111,7 +113,7 @@ const INFLATION_SPECS = JSON.parse(
 );
 
 export enum NETWORKS {
-  DEVELOP = 'develop',
+  HARDHAT = 'hardhat',
   DEVELOP_AVALANCHE = 'develop_avalanche',
   MUMBAI = 'mumbai',
   HARMONYTESTNET = 'harmonytestnet',
@@ -127,7 +129,7 @@ export enum NETWORKS {
 }
 
 export const GRAPH_NETWORKS = {
-  [NETWORKS.DEVELOP]: 'mainnet',
+  [NETWORKS.HARDHAT]: 'hardhat',
   [NETWORKS.DEVELOP_AVALANCHE]: 'mainnet',
   [NETWORKS.ETHEREUM]: 'mainnet',
   [NETWORKS.HARMONY]: 'mainnet',

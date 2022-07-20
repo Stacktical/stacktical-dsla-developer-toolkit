@@ -3,8 +3,8 @@ require('dotenv').config({ path: './.env' });
 import { networks } from './networks';
 import { HardhatUserConfig } from 'hardhat/types';
 import 'hardhat-deploy';
-import '@nomiclabs/hardhat-waffle';
-import '@nomiclabs/hardhat-ethers';
+import "@nomicfoundation/hardhat-chai-matchers";
+// import '@nomiclabs/hardhat-ethers';
 import '@nomiclabs/hardhat-web3';
 import '@nomiclabs/hardhat-etherscan';
 import 'babel-polyfill';
@@ -29,7 +29,7 @@ const getEnabledNetworks = () =>
     );
 
 const config: HardhatUserConfig = {
-  defaultNetwork: 'develop',
+  defaultNetwork: 'hardhat',
   networks: getEnabledNetworks(),
   solidity: {
     compilers: [
@@ -84,9 +84,8 @@ const config: HardhatUserConfig = {
   },
   abiExporter: {
     path: './exported-data/abi',
-    clear: true,
-    spacing: 2,
-  },
+    clear: true
+  }
 };
 
 // extendEnvironment((env) => {

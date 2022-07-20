@@ -35,7 +35,9 @@ services:
       POSTGRES_PASSWORD: let-me-in
       POSTGRES_DB: graph-node
     volumes:
-      - ./postgres:/var/lib/postgresql/data
+      - "pgdata:/var/lib/postgresql/data"
+volumes:
+  pgdata:
 networks:
   dsla-test:
     name: graph

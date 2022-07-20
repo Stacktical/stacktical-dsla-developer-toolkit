@@ -80,32 +80,32 @@ export const develop: NetworkUserConfig = {
         {
           contract: CONTRACT_NAMES.BaseOracle,
           token: CONTRACT_NAMES.LinkToken,
-          allowance: '100',
+          allowance: '10',
         },
         {
           contract: CONTRACT_NAMES.StakingRewardsOracle,
           token: CONTRACT_NAMES.LinkToken,
-          allowance: '100',
+          allowance: '10',
         },
         {
           contract: CONTRACT_NAMES.StakingUptimeOracle,
           token: CONTRACT_NAMES.LinkToken,
-          allowance: '100',
+          allowance: '10',
         },
         {
           contract: CONTRACT_NAMES.InflationOracle,
           token: CONTRACT_NAMES.LinkToken,
-          allowance: '100',
+          allowance: '10',
         },
         {
           contract: CONTRACT_NAMES.AssetFloorOracle,
           token: CONTRACT_NAMES.LinkToken,
-          allowance: '100',
+          allowance: '10',
         },
         {
           contract: CONTRACT_NAMES.AssetPegOracle,
           token: CONTRACT_NAMES.LinkToken,
-          allowance: '100',
+          allowance: '10',
         },
       ],
       registry: {

@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { loadFixture } from 'ethereum-waffle';
+import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { fixture } from '../../fixtures/basic';
 import { fromWei, toWei } from 'web3-utils';
 import { network, deployments, ethers, getNamedAccounts, getUnnamedAccounts } from 'hardhat';
@@ -20,11 +20,11 @@ import {
   SLA,
   SLORegistry,
   PeriodRegistry,
+  Details
 } from '../../../typechain';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { evm_increaseTime } from '../../helper';
-
-const consola = require('consola');
+import consola from 'consola';
 
 describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Capped', () => {
   const { get } = deployments;
@@ -180,6 +180,11 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
   let slaStaticDetailsP4: any;
   let slaStaticDetailsP5: any;
 
+  let slaRegistryDeployment;
+  let periodRegistryDeployment;
+  let detailsDeployment;
+  let dslaTokenDeployment;
+
   before(async function () {
     this.timeout(0);
     await loadFixture(fixture);
@@ -189,17 +194,28 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
 
     unnamedAccounts = await getUnnamedAccounts();
 
-    slaRegistry = <SLARegistry>await ethers.getContract(CONTRACT_NAMES.SLARegistry, signer);
+    slaRegistryDeployment = await deployments.get(CONTRACT_NAMES.SLARegistry);
+    periodRegistryDeployment = await deployments.get(CONTRACT_NAMES.PeriodRegistry);
+    detailsDeployment = await deployments.get(CONTRACT_NAMES.Details);
+    dslaTokenDeployment = await deployments.get(CONTRACT_NAMES.DSLA);
+
+    slaRegistry = <SLARegistry>(
+      new ethers.Contract(slaRegistryDeployment.address, slaRegistryDeployment.abi, signer)
+    );
     allSLAs = await slaRegistry.allSLAs();
     _sloRegistry = await slaRegistry.sloRegistry();
-    periodRegistry = await ethers.getContractAt(
-      CONTRACT_NAMES.PeriodRegistry,
-      await slaRegistry.periodRegistry()
+
+
+    periodRegistry = <PeriodRegistry>(
+      new ethers.Contract(await slaRegistry.periodRegistry(), periodRegistryDeployment.abi, signer)
     );
 
-    // get the contract INDEX 18, Contract for IT staking tests: Not Respected case reward capped
-    sla = await ethers.getContractAt(CONTRACT_NAMES.SLA, allSLAs[18]);
-    details = await ethers.getContract(CONTRACT_NAMES.Details);
+    sla = <SLA>await ethers.getContractAt(CONTRACT_NAMES.SLA, allSLAs[18]);
+
+    details = <Details>(
+      new ethers.Contract(detailsDeployment.address, detailsDeployment.abi, signer)
+    );
+
     [
       provider_1_account,
       provider_2_account,
@@ -209,9 +225,9 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
       user_3_account,
     ] = await ethers.getSigners();
 
-    // Get dslaToken contract
-    const dslaToken: ERC20PresetMinterPauser = await ethers.getContract(
-      CONTRACT_NAMES.DSLA
+
+    const dslaToken = <ERC20PresetMinterPauser>(
+      new ethers.Contract(dslaTokenDeployment.address, dslaTokenDeployment.abi, signer)
     );
 
     // Approve allocation of amount to dslaToken address
@@ -330,8 +346,9 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
       //it('Shoud perform a succesful request SLI for P1', async function () {
       it('Shoud perform a succesful request SLI for P1', async () => {
         const ownerApproval = true;
-        const dslaToken: ERC20PresetMinterPauser = await ethers.getContract(
-          CONTRACT_NAMES.DSLA
+
+        const dslaToken = <ERC20PresetMinterPauser>(
+          new ethers.Contract(dslaTokenDeployment.address, dslaTokenDeployment.abi)
         );
 
         const periodId_p1 = Number(0)
@@ -356,7 +373,6 @@ describe('DSLA Protocol Staking Simulation - v1.5 - SLA Not Respected, Reward Ca
         ))
           .to.emit(slaRegistry, 'SLIRequested')
 
-        //const messenger: BaseOracle = await ethers.getContract(CONTRACT_NAMES.BaseOracle);
         const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
 
         await new Promise((resolve) => sla.on('SLICreated', () => resolve(null)));

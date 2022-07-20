@@ -1,14 +1,13 @@
-
 import { expect } from 'chai';
-import { loadFixture } from 'ethereum-waffle';
+import { loadFixture } from '@nomicfoundation/hardhat-network-helpers';
 import { fixture } from '../fixtures/basic';
-const hre = require('hardhat');
+import hre from 'hardhat';
 import { CONTRACT_NAMES, SERVICE_CREDITS } from '../../constants';
 import { SLA, SLARegistry__factory } from '../../typechain';
 import { BaseOracle } from '../../typechain/BaseOracle';
 import { InflationOracle } from '../../typechain/InflationOracle';
-const consola = require('consola');
-
+import consola from 'consola';
+let signer;
 describe('Fixtures', () => {
   const { deployments, ethers, getNamedAccounts } = hre;
   let allSLAs: string[];
@@ -19,7 +18,7 @@ describe('Fixtures', () => {
     consola.success('LODADED FIXTURE');
     const { get } = deployments;
     const { deployer } = await getNamedAccounts();
-    const signer = await ethers.getSigner(deployer);
+    signer = await ethers.getSigner(deployer);
     const slaRegistry = await SLARegistry__factory.connect(
       (
         await get(CONTRACT_NAMES.SLARegistry)
@@ -29,20 +28,50 @@ describe('Fixtures', () => {
     allSLAs = await slaRegistry.allSLAs();
   });
 
+  //
+
+  //
   it('needs to be written', async () => {
-    const sla: SLA = await ethers.getContractAt(CONTRACT_NAMES.SLA, allSLAs[0]);
+    const slaDeployment = await deployments.get(CONTRACT_NAMES.SLA);
+    const sla = <SLA>new ethers.Contract(allSLAs[0], slaDeployment.abi, signer);
   });
 
-  describe("check SP & LP token names of messenger contracts", async () => {
+  describe('check SP & LP token names of messenger contracts', async () => {
     it(CONTRACT_NAMES.BaseOracle, async () => {
-      const base_messenger: BaseOracle = await ethers.getContract(CONTRACT_NAMES.BaseOracle);
-      expect(await base_messenger.lpName()).to.be.eq(SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.name);
-      expect(await base_messenger.spName()).to.be.eq(SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.name);
-    })
+      const baseOracleDeployment = await deployments.get(
+        CONTRACT_NAMES.BaseOracle
+      );
+      const base_messenger = <BaseOracle>(
+        new ethers.Contract(
+          baseOracleDeployment.address,
+          baseOracleDeployment.abi,
+          signer
+        )
+      );
+      expect(await base_messenger.lpName()).to.be.eq(
+        SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.name
+      );
+      expect(await base_messenger.spName()).to.be.eq(
+        SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.name
+      );
+    });
     it(CONTRACT_NAMES.InflationOracle, async () => {
-      const inflation_messenger: InflationOracle = await ethers.getContract(CONTRACT_NAMES.InflationOracle);
-      expect(await inflation_messenger.lpName()).to.be.eq(SERVICE_CREDITS.INFLATION.DSLA_LP.name);
-      expect(await inflation_messenger.spName()).to.be.eq(SERVICE_CREDITS.INFLATION.DSLA_SP.name);
-    })
-  })
+      const inflationOracleDeployment = await deployments.get(
+        CONTRACT_NAMES.InflationOracle
+      );
+      const inflation_messenger = <InflationOracle>(
+        new ethers.Contract(
+          inflationOracleDeployment.address,
+          inflationOracleDeployment.abi,
+          signer
+        )
+      );
+      expect(await inflation_messenger.lpName()).to.be.eq(
+        SERVICE_CREDITS.INFLATION.DSLA_LP.name
+      );
+      expect(await inflation_messenger.spName()).to.be.eq(
+        SERVICE_CREDITS.INFLATION.DSLA_SP.name
+      );
+    });
+  });
 });

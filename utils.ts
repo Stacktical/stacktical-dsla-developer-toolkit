@@ -7,11 +7,11 @@ import { getChainlinkJobs } from './chainlink-utils';
 import { toWei, padRight, toChecksumAddress } from 'web3-utils';
 
 const moment = require('moment');
-const createClient = require('ipfs-http-client');
+import { create } from 'ipfs-http-client';
 
 // Writes on IPFS and returns the IPFS hash
 export async function getIPFSHash(ipfsData, ipfsURI) {
-  const ipfsClient = createClient({ url: ipfsURI });
+  const ipfsClient = create({ url: ipfsURI });
   const dataString = JSON.stringify(ipfsData);
   const buffer = Buffer.from(dataString, 'utf-8');
   const { path: ipfsHash } = await ipfsClient.add(buffer);
@@ -95,16 +95,37 @@ export const getPreCoordinatorConfiguration = async (
     jobIds: [],
     payments: [],
   };
+  console.log("getPreCoordinatorConfiguration")
   for (let node of nodes) {
     const jobs = await getChainlinkJobs(node);
+
+    console.log('looking for usecase : ', useCaseName)
+    console.log("jobs samples [0]")
+    console.log(jobs[0])
+
+    console.log("jobs [0] attributes samples")
+    console.log(jobs[0]['attributes'])
+
+    //console.log(jobs[1]['attributes'])
+    /*console.log("jobs attributes tasks samples")
+    console.log(jobs[0]['attributes']['tasks'])*/
+
+    console.log("jobs")
+    console.log(jobs)
+
     const job = jobs.find(
       (postedJob) =>
-        postedJob.attributes.tasks.some((task) => task.type === useCaseName) &&
+        postedJob.attributes.tasks.some((task) => task.type === useCaseName) 
+        
+        // Filter that prevent results -> to investigate
+        &&
         postedJob.attributes.initiators.some(
           (initiator) =>
             toChecksumAddress(initiator.params.address) ===
             oracleContractAddress
         )
+
+
     );
     preCoordinatorConfiguration.payments.push(toWei('0.1'));
     preCoordinatorConfiguration.jobIds.push(padRight('0x' + job.id, 64));

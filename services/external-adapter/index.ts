@@ -3,8 +3,8 @@ const express = require('express');
 const axios = require('axios');
 const Web3 = require('web3');
 const { SLAABI, MessengerABI } = require('./abis');
-let web3Uri;
-let nextPeriod;
+let web3Uri:any;
+let nextPeriod:any;
 
 type SLAData = {
   serviceName: string;
@@ -26,7 +26,7 @@ type RequestData = {
   sla_monitoring_end: number;
 };
 
-async function getSLAData(address): Promise<SLAData> {
+async function getSLAData(address:string): Promise<SLAData> {
   const web3 = new Web3(web3Uri);
   const slaContract = new web3.eth.Contract(SLAABI, address);
   const ipfsCID = await slaContract.methods.ipfsHash().call();
@@ -69,7 +69,7 @@ async function getSLI(requestData: RequestData) {
 const app = express();
 app.use(express.json());
 
-app.post('/', async (req, res) => {
+app.post('/', async (req:any, res:any) => {
   const { id, data } = req.body;
   console.log('Request Body:');
   console.log(req.body);
@@ -93,3 +93,5 @@ app.post('/', async (req, res) => {
 app.listen(6070, () => {
   console.log(`External adapter initialized at http://localhost:${6070}`);
 });
+
+export {};
