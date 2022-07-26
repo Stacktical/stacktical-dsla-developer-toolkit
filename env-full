@@ -34,10 +34,12 @@ FANTOM_URI="http://localhost:1234"
 FANTOM_WS_URI="http://localhost:1234"
 
 ## External adapters
-STAKING_REWARDS_ADAPTER="http://localhost:1234"
-STAKING_UPTIME_ADAPTER="http://localhost:1234"
-INFLATION_INDEXER_URI="http://localhost:1234"
-DEVELOP_ADAPTER="http://host.docker.internal:6060"
+DEVELOP_INDEXER_URI="http://host.docker.internal:6070"
+STAKING_REWARDS_ADAPTER="http://host.docker.internal:6070"
+STAKING_UPTIME_ADAPTER="http://host.docker.internal:6070"
+INFLATION_ADAPTER="http://host.docker.internal:6070"
+ASSET_FLOOR_ADAPTER="http://host.docker.internal:6070"
+ASSET_PEG_ADAPTER="http://host.docker.internal:6070"
 
 ## Chainlink nodes
 ETHEREUM_CHAINLINK_NODE_1_URL="http://localhost"

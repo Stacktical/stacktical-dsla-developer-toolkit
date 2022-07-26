@@ -28,11 +28,16 @@ BSC_URI="http://localhost:1234"
 BSC_WS_URI="http://localhost:1234"
 FUJI_URI="http://localhost:1234"
 FUJI_WS_URI="http://localhost:1234"
-DEVELOP_ADAPTER="https://ipfs.dsla.network"
-STAKING_REWARDS_ADAPTER="http://localhost:1234"
-STAKING_UPTIME_ADAPTER="http://localhost:1234"
 FANTOM_URI="http://localhost:1234"
 FANTOM_WS_URI="http://localhost:1234"
+
+## External adapters
+DEVELOP_INDEXER_URI="http://host.docker.internal:6070"
+STAKING_REWARDS_ADAPTER="http://host.docker.internal:6070"
+STAKING_UPTIME_ADAPTER="http://host.docker.internal:6070"
+INFLATION_ADAPTER="http://host.docker.internal:6070"
+ASSET_FLOOR_ADAPTER="http://host.docker.internal:6070"
+ASSET_PEG_ADAPTER="http://host.docker.internal:6070"
 
 
 ETHEREUM_CHAINLINK_NODE_1_URL="http://localhost"
