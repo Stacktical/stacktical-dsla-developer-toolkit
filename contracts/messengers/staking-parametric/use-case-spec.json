@@ -1,0 +1,23 @@
+{
+  "useCaseName": "Parametric Staking",
+  "symbol": "PRICE",
+  "sp": {
+    "name": "Parametric Staking Service Credit",
+    "symbol": "🔺PRICE"
+  },
+  "lp": {
+    "name": "Parametric Service Service Credit",
+    "symbol": "🔻PRICE"
+  },
+  "ownerUrl": "https://dsla.network",
+  "useCaseDocs": "https://dsla.network/metaverse",
+  "externalAdapterRepo": "https://github.com/Stacktical/",
+  "unit": "%",
+  "keywords": ["pos", "uptime", "staking", "rewards", "validator"],
+  "timestamp": "2022-04-07T00:00:00+00:00",
+  "version": {
+    "major": 0,
+    "minor": 0,
+    "patch": 1
+  }
+}

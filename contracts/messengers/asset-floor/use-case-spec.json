@@ -2,12 +2,12 @@
   "useCaseName": "Digital Asset Floor",
   "symbol": "FLOOR",
   "sp": {
-    "name": "Floor Credit",
-    "symbol": "FLOOR"
+    "name": "Floor Service Credit",
+    "symbol": "🔻FLOOR"
   },
   "lp": {
-    "name": "Floor Credit",
-    "symbol": "FLOOR"
+    "name": "Floor Service Credit",
+    "symbol": "🔺FLOOR"
   },
   "ownerUrl": "https://dsla.network",
   "useCaseDocs": "https://dsla.network/metaverse",

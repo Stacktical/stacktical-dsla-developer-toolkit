@@ -1,13 +1,13 @@
 {
   "useCaseName": "Staking Uptime",
-  "symbol": "POS-UP",
+  "symbol": "UPTIME",
   "sp": {
-    "name": "Staking Credit",
-    "symbol": "POS-UP"
+    "name": "Staking Service Credit (Uptime)",
+    "symbol": "🔻UPTIME"
   },
   "lp": {
-    "name": "Staking Credit",
-    "symbol": "POS-UP"
+    "name": "Staking Service Credit (Uptime)",
+    "symbol": "🔺UPTIME"
   },
   "ownerUrl": "https://dsla.network",
   "useCaseDocs": "https://dsla.network/metaverse",

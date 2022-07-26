@@ -1,13 +1,13 @@
 {
   "useCaseName": "Staking APR",
-  "symbol": "POS-APR",
+  "symbol": "APR",
   "sp": {
-    "name": "Staking Credit",
-    "symbol": "POS-APR"
+    "name": "Staking Service Credit (APR)",
+    "symbol": "🔻APR"
   },
   "lp": {
-    "name": "Staking Credit",
-    "symbol": "POS-APR"
+    "name": "Staking Service Credit (APR)",
+    "symbol": "🔺APR"
   },
   "ownerUrl": "https://dsla.network",
   "useCaseDocs": "https://dsla.network/metaverse",
