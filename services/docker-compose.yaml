@@ -4,7 +4,7 @@ services:
     container_name: postgres-dsla-env
     image: postgres:13.1-alpine
     volumes:
-      - ./postgres:/var/lib/postgresql/data
+      - "pgdata:/var/lib/postgresql/data"
     environment:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: chainlink
@@ -47,5 +47,5 @@ networks:
   dsla-test:
     name: dsla-local-environment
 volumes:
-  postgres: null
-  chainlink: null
+  pgdata:
+  chainlink:

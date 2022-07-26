@@ -35,6 +35,7 @@ export enum CONTRACT_NAMES {
   AvalancheERC20 = 'AvalancheERC20',
   FantomERC20 = 'FantomERC20',
   FujiERC20 = 'FujiERC20',
+  // Needs to match the correspondig Oracle .sol file
   BaseOracle = 'BaseOracle',
   AssetFloorOracle = 'AssetFloorOracle',
   AssetPegOracle = 'AssetPegOracle',
@@ -66,6 +67,7 @@ export enum DEPLOYMENT_TAGS {
   DummyTokens = 'dummy-tokens',
 }
 
+// Matches the messenger' folder name
 export enum USE_CASES {
   STAKING_REWARDS = 'staking-apr',
   STAKING_UPTIME = 'staking-uptime',
@@ -180,47 +182,47 @@ export const SERVICE_CREDITS = {
     },
     DSLA_SP: {
       name: STAKING_REWARDS_SPECS.name,
-      symbol: 'APR.du',
+      symbol:  STAKING_REWARDS_SPECS.symbol,
     },
   },
   STAKING_UPTIME: {
     DSLA_LP: {
-      name: 'Staking Uptime Credit',
-      symbol: 'UPTIME.dp',
+      name: STAKING_UPTIME_SPECS.name,
+      symbol: STAKING_UPTIME_SPECS.symbol,
     },
     DSLA_SP: {
-      name: 'Staking Uptime Credit',
-      symbol: 'UPTIME.du',
+      name: STAKING_UPTIME_SPECS.name,
+      symbol: STAKING_UPTIME_SPECS.symbol,
     },
   },
   INFLATION: {
     DSLA_LP: {
-      name: 'Inflation Credit',
-      symbol: 'INFLATION.dp',
+      name: INFLATION_SPECS.name,
+      symbol: INFLATION_SPECS.symbol,
     },
     DSLA_SP: {
-      name: 'Inflation Credit',
-      symbol: 'INFLATION.du',
+      name: INFLATION_SPECS.name,
+      symbol: INFLATION_SPECS.symbol,
     },
   },
   ASSET_PEG: {
     DSLA_LP: {
-      name: 'Peg Parity Credit',
-      symbol: 'PEG.dp',
+      name: ASSET_PEG_SPECS.name,
+      symbol: ASSET_PEG_SPECS.symbol,
     },
     DSLA_SP: {
-      name: 'Peg Parity Credit',
-      symbol: 'PEG.du',
+      name: ASSET_PEG_SPECS.name,
+      symbol: ASSET_PEG_SPECS.symbol,
     },
   },
   ASSET_FLOOR: {
     DSLA_LP: {
-      name: 'Floor Credit',
-      symbol: 'FLOOR.dp',
+      name: ASSET_FLOOR_SPECS.name,
+      symbol: ASSET_FLOOR_SPECS.symbol,
     },
     DSLA_SP: {
-      name: 'Floor Credit',
-      symbol: 'FLOOR.du',
+      name: ASSET_FLOOR_SPECS.name,
+      symbol: ASSET_FLOOR_SPECS.symbol,
     },
   },
 };

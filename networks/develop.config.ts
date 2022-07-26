@@ -80,45 +80,60 @@ export const develop: NetworkUserConfig = {
         {
           contract: CONTRACT_NAMES.BaseOracle,
           token: CONTRACT_NAMES.LinkToken,
-          allowance: '100',
+          allowance: '10',
         },
         {
           contract: CONTRACT_NAMES.StakingRewardsOracle,
           token: CONTRACT_NAMES.LinkToken,
-          allowance: '100',
+          allowance: '10',
         },
         {
           contract: CONTRACT_NAMES.StakingUptimeOracle,
           token: CONTRACT_NAMES.LinkToken,
-          allowance: '100',
+          allowance: '10',
         },
         {
-          contract: CONTRACT_NAMES.InflationOracle,
+          contract: CONTRACT_NAMES.StakingRewardsOracle,
           token: CONTRACT_NAMES.LinkToken,
-          allowance: '100',
+          allowance: '10',
         },
         {
           contract: CONTRACT_NAMES.AssetFloorOracle,
           token: CONTRACT_NAMES.LinkToken,
-          allowance: '100',
+          allowance: '10',
         },
         {
           contract: CONTRACT_NAMES.AssetPegOracle,
           token: CONTRACT_NAMES.LinkToken,
-          allowance: '100',
+          allowance: '10',
         },
+        {
+          contract: CONTRACT_NAMES.StakingUptimeOracle,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
+       {
+         contract: CONTRACT_NAMES.InflationOracle,
+         token: CONTRACT_NAMES.LinkToken,
+         allowance: '10',
+       },
       ],
       registry: {
         periods: [
           {
+            periodType: PERIOD_TYPE.DAILY,
+            amountOfPeriods: 365, // Number of periods from now
+            expiredPeriods: 0,
+          },
+          {
             periodType: PERIOD_TYPE.WEEKLY,
             amountOfPeriods: 52, // Number of periods from now
-            expiredPeriods: 12,
+            expiredPeriods: 0,
           },
           {
             periodType: PERIOD_TYPE.MONTHLY,
-            amountOfPeriods: 12,
-            expiredPeriods: 6,
+            amountOfPeriods: 12, // Number of periods from now
+            expiredPeriods: 0,
           },
         ],
         stake: {
