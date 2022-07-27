@@ -8,6 +8,7 @@ import { toWei, padRight, toChecksumAddress } from 'web3-utils';
 
 const moment = require('moment');
 const createClient = require('ipfs-http-client');
+const consola = require('consola');
 
 // Writes on IPFS and returns the IPFS hash
 export async function getIPFSHash(ipfsData, ipfsURI) {
@@ -97,14 +98,13 @@ export const getPreCoordinatorConfiguration = async (
   };
   for (let node of nodes) {
     const jobs = await getChainlinkJobs(node);
+
+    consola.info('Jobs ' + JSON.stringify(jobs));
+
+    // Need to ensure we also pick a job where initiatior.params.address = oracle
     const job = jobs.find(
       (postedJob) =>
-        postedJob.attributes.tasks.some((task) => task.type === useCaseName) &&
-        postedJob.attributes.initiators.some(
-          (initiator) =>
-            toChecksumAddress(initiator.params.address) ===
-            oracleContractAddress
-        )
+        postedJob.attributes.tasks.some((task) => task.type === useCaseName)
     );
     preCoordinatorConfiguration.payments.push(toWei('0.1'));
     preCoordinatorConfiguration.jobIds.push(padRight('0x' + job.id, 64));

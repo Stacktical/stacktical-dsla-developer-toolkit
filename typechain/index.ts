@@ -55,6 +55,7 @@ export type { AssetFloorOracle } from "./AssetFloorOracle";
 export type { AssetPegOracle } from "./AssetPegOracle";
 export type { BaseOracle } from "./BaseOracle";
 export type { InflationOracle } from "./InflationOracle";
+export type { StakingAprOracle } from "./StakingAprOracle";
 export type { StakingParametricOracle } from "./StakingParametricOracle";
 export type { StakingRewardsOracle } from "./StakingRewardsOracle";
 export type { StakingUptimeOracle } from "./StakingUptimeOracle";
@@ -116,6 +117,7 @@ export { AssetFloorOracle__factory } from "./factories/AssetFloorOracle__factory
 export { AssetPegOracle__factory } from "./factories/AssetPegOracle__factory";
 export { BaseOracle__factory } from "./factories/BaseOracle__factory";
 export { InflationOracle__factory } from "./factories/InflationOracle__factory";
+export { StakingAprOracle__factory } from "./factories/StakingAprOracle__factory";
 export { StakingParametricOracle__factory } from "./factories/StakingParametricOracle__factory";
 export { StakingRewardsOracle__factory } from "./factories/StakingRewardsOracle__factory";
 export { StakingUptimeOracle__factory } from "./factories/StakingUptimeOracle__factory";

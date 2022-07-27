@@ -1192,7 +1192,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
     const { deployer } = await getNamedAccounts();
     const signer = await ethers.getSigner(deployer);
     const { get, deploy } = deployments;
-    const { messengers } = hre.network.config.stacktical;
+    const { messengers } = network.config.stacktical;
     printSeparator();
     consola.start('Starting automated jobs to register messengers');
     const slaRegistry = await SLARegistry__factory.connect(
@@ -1219,11 +1219,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
     const linkToken = await get(CONTRACT_NAMES.LinkToken);
     const ipfs = hre.network.config.stacktical.ipfs;
     const feeMultiplier =
-      hre.network.config.stacktical.chainlink.nodesConfiguration.length;
-    consola.info(
-      'using' +
-        hre.network.config.stacktical.chainlink.nodesConfiguration.length
-    );
+      network.config.stacktical.chainlink.nodesConfiguration.length;
 
     try {
       const deployedMessenger = await deploy(messenger.contract, {
@@ -1235,7 +1231,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
           feeMultiplier,
           periodRegistry.address,
           stakeRegistry.address,
-          formatBytes32String(hre.network.name),
+          formatBytes32String(network.name),
           messenger.dslaLpName,
           messenger.dslaLpSymbol,
           messenger.dslaSpName,
@@ -1245,7 +1241,6 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
           StringUtils: stringUtils.address,
         },
       });
-
       if (deployedMessenger.newlyDeployed) {
         consola.success(
           messenger.contract +
@@ -1276,7 +1271,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
         const seMessengerSpecIPFS = await getIPFSHash(updatedSpec, ipfs);
         let tx = await slaRegistry.registerMessenger(
           deployedMessenger.address,
-          `${hre.network.config.stacktical.ipfs}/ipfs/${seMessengerSpecIPFS}`
+          `${network.config.stacktical.ipfs}/ipfs/${seMessengerSpecIPFS}`
         );
         await tx.wait();
         consola.success(
@@ -1295,13 +1290,15 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
           messenger.contract + ' already registered on MessengerRegistry'
         );
       }
-      consola.ready(
-        'Finishing automated jobs to register messenger: ' + messenger.contract
-      );
-      printSeparator();
     } catch (error) {
-      throw error;
+      consola.error(error);
     }
+
+    consola.ready(
+      'Finishing automated jobs to register messenger: ' + messenger.contract
+    );
+    
+    printSeparator();
   }
 );
 
@@ -1899,53 +1896,54 @@ subtask(SUB_TASK_NAMES.SET_PRECOORDINATOR, undefined).setAction(
     const messenger = stacktical.messengers[taskArgs.index];
     for (let node of stacktical.chainlink.nodesConfiguration) {
       const jobs = await getChainlinkJobs(node);
-      const job = jobs.find(
-        (postedJob) =>
-          postedJob.attributes.tasks.some(
-            (task) => task.type === messenger.useCaseName
-          ) &&
-          postedJob.attributes.initiators.some(
-            (initiator) =>
-              toChecksumAddress(initiator.params.address) === oracle.address
-          )
+
+      // Need to ensure we also pick a job where initiatior.params.address = oracle
+      const job = jobs.find((postedJob) =>
+        postedJob.attributes.tasks.some(
+          (task) => task.type === messenger.useCaseName
+        )
       );
+      consola.info('Found job! ', job);
+
       if (!job) {
         await hre.run(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, {
           index: taskArgs.index,
         });
       }
     }
-    // const preCoordinatorConfiguration = await getPreCoordinatorConfiguration(
-    //   stacktical.chainlink.nodesConfiguration,
-    //   messenger.useCaseName,
-    //   oracle.address
-    // );
-    // console.log('PreCoordinator configuration from nodes information:');
-    // console.log(preCoordinatorConfiguration);
-    // const precoordinator = await PreCoordinator__factory.connect(
-    //   (
-    //     await get(CONTRACT_NAMES.PreCoordinator)
-    //   ).address,
-    //   signer
-    // );
-    // const minResponses = 1;
-    // const tx = await precoordinator.createServiceAgreement(
-    //   minResponses,
-    //   preCoordinatorConfiguration.oracles,
-    //   preCoordinatorConfiguration.jobIds,
-    //   preCoordinatorConfiguration.payments
-    // );
-    // const receipt = await tx.wait();
-    // console.log('Service agreement created: ');
-    // console.log(receipt.events[0].args);
-    // return receipt.events[0].args.saId;
 
-    // let tx = await messenger.setChainlinkJobID(
-    //   saId,
-    //   serviceAgreement.payments.length
-    // );
-    // await tx.wait();
-    // consola.success('Service agreeement id updated in ' + messengerName);
+    consola.info('SA node: ', stacktical.chainlink.nodesConfiguration);
+
+    consola.info('SA messenger: ', messenger.useCaseName);
+
+    consola.info('SA oracle ', oracle.address);
+
+    const preCoordinatorConfiguration = await getPreCoordinatorConfiguration(
+      stacktical.chainlink.nodesConfiguration,
+      messenger.useCaseName,
+      oracle.address
+    );
+
+    console.log('PreCoordinator configuration from nodes information:');
+    console.log(preCoordinatorConfiguration);
+
+    const precoordinator = await PreCoordinator__factory.connect(
+      (
+        await get(CONTRACT_NAMES.PreCoordinator)
+      ).address,
+      signer
+    );
+    const minResponses = 1;
+    const tx = await precoordinator.createServiceAgreement(
+      minResponses,
+      preCoordinatorConfiguration.oracles,
+      preCoordinatorConfiguration.jobIds,
+      preCoordinatorConfiguration.payments
+    );
+    const receipt = await tx.wait();
+    console.log('Service agreement created: ');
+    console.log(receipt.events[0].args);
+    return receipt.events[0].args.saId;
   }
 );
 
@@ -2110,7 +2108,7 @@ subtask(SUB_TASK_NAMES.FULFILL_SLI, undefined).setAction(
     //   // eslint-disable-next-line global-require,import/no-dynamic-require
     //   data: {
     //     data: {
-    //       job_type: 'STAKING_REWARDS',
+    //       job_type: 'staking_efficiency',
     //       network_analytics_address: networkAnalytics.address,
     //       period_id: taskArgs.periodId,
     //       sla_address: toChecksumAddress(taskArgs.address),
