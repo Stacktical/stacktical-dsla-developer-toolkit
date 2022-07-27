@@ -69,7 +69,7 @@ export enum DEPLOYMENT_TAGS {
 
 // Matches the messenger' folder name
 export enum USE_CASES {
-  STAKING_REWARDS = 'staking-apr',
+  STAKING_REWARDS = 'staking-rewards',
   STAKING_UPTIME = 'staking-uptime',
   BASE_MESSENGER = 'base',
   ASSET_PEG = 'asset-peg',
@@ -175,6 +175,16 @@ export enum PARAMS_NAMES {
 }
 
 export const SERVICE_CREDITS = {
+  BASE: {
+    DSLA_LP: {
+      name: "Dummy Service Credit",
+      symbol: "🔺FOO",
+    },
+    DSLA_SP: {
+      name: "Dummy Service Credit",
+      symbol: "🔻BAR",
+    },
+  },
   STAKING_REWARDS: {
     DSLA_LP: {
       name: STAKING_REWARDS_SPECS.name,

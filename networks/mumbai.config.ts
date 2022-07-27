@@ -72,7 +72,7 @@ export const mumbai: NetworkUserConfig = {
           restApiUrl: 'http://localhost',
           restApiPort: '6688',
           email: 'foo@bar.com',
-          password: 'N@::K@::M070_H3n5h1n',
+          password: 'foobar12345',
         },
       ],
     },

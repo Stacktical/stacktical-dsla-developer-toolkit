@@ -1,5 +1,5 @@
 {
-  "useCaseName": "Staking APR",
+  "useCaseName": "Staking Rewards",
   "symbol": "APR",
   "sp": {
     "name": "Staking Service Credit (APR)",
