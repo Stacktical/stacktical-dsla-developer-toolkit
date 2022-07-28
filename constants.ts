@@ -77,7 +77,7 @@ export enum USE_CASES {
   INFLATION = 'inflation-rate',
 }
 
-const STAKING_REWARDS_SPECS = JSON.parse(
+export const STAKING_REWARDS_SPECS = JSON.parse(
   // @ts-ignore
   fs.readFileSync(
     `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_REWARDS}/use-case-spec.json`
@@ -187,52 +187,52 @@ export const SERVICE_CREDITS = {
   },
   STAKING_REWARDS: {
     DSLA_LP: {
-      name: STAKING_REWARDS_SPECS.name,
-      symbol: STAKING_REWARDS_SPECS.symbol,
+      name: STAKING_REWARDS_SPECS.lp.name,
+      symbol: STAKING_REWARDS_SPECS.lp.symbol,
     },
     DSLA_SP: {
-      name: STAKING_REWARDS_SPECS.name,
-      symbol:  STAKING_REWARDS_SPECS.symbol,
+      name: STAKING_REWARDS_SPECS.sp.name,
+      symbol:  STAKING_REWARDS_SPECS.sp.symbol,
     },
   },
   STAKING_UPTIME: {
     DSLA_LP: {
-      name: STAKING_UPTIME_SPECS.name,
-      symbol: STAKING_UPTIME_SPECS.symbol,
+      name: STAKING_UPTIME_SPECS.lp.name,
+      symbol: STAKING_UPTIME_SPECS.lp.symbol,
     },
     DSLA_SP: {
-      name: STAKING_UPTIME_SPECS.name,
-      symbol: STAKING_UPTIME_SPECS.symbol,
+      name: STAKING_UPTIME_SPECS.sp.name,
+      symbol: STAKING_UPTIME_SPECS.sp.symbol,
     },
   },
   INFLATION: {
     DSLA_LP: {
-      name: INFLATION_SPECS.name,
-      symbol: INFLATION_SPECS.symbol,
+      name: INFLATION_SPECS.lp.name,
+      symbol: INFLATION_SPECS.lp.symbol,
     },
     DSLA_SP: {
-      name: INFLATION_SPECS.name,
-      symbol: INFLATION_SPECS.symbol,
+      name: INFLATION_SPECS.sp.name,
+      symbol: INFLATION_SPECS.sp.symbol,
     },
   },
   ASSET_PEG: {
     DSLA_LP: {
-      name: ASSET_PEG_SPECS.name,
-      symbol: ASSET_PEG_SPECS.symbol,
+      name: ASSET_PEG_SPECS.lp.name,
+      symbol: ASSET_PEG_SPECS.lp.symbol,
     },
     DSLA_SP: {
-      name: ASSET_PEG_SPECS.name,
-      symbol: ASSET_PEG_SPECS.symbol,
+      name: ASSET_PEG_SPECS.sp.name,
+      symbol: ASSET_PEG_SPECS.sp.symbol,
     },
   },
   ASSET_FLOOR: {
     DSLA_LP: {
-      name: ASSET_FLOOR_SPECS.name,
-      symbol: ASSET_FLOOR_SPECS.symbol,
+      name: ASSET_FLOOR_SPECS.lp.name,
+      symbol: ASSET_FLOOR_SPECS.lp.symbol,
     },
     DSLA_SP: {
-      name: ASSET_FLOOR_SPECS.name,
-      symbol: ASSET_FLOOR_SPECS.symbol,
+      name: ASSET_FLOOR_SPECS.sp.name,
+      symbol: ASSET_FLOOR_SPECS.sp.symbol,
     },
   },
 };

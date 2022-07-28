@@ -99,12 +99,17 @@ export const getPreCoordinatorConfiguration = async (
   for (let node of nodes) {
     const jobs = await getChainlinkJobs(node);
 
-    consola.info('Jobs ' + JSON.stringify(jobs));
+    // consola.info('Jobs ' + JSON.stringify(jobs));
 
     // Need to ensure we also pick a job where initiatior.params.address = oracle
     const job = jobs.find(
       (postedJob) =>
-        postedJob.attributes.tasks.some((task) => task.type === useCaseName)
+        postedJob.attributes.tasks.some((task) => task.type === useCaseName) &&
+        postedJob.attributes.initiators.some(
+          (initiator) =>
+            toChecksumAddress(initiator.params.address) ===
+            toChecksumAddress(oracleContractAddress)
+        )
     );
     preCoordinatorConfiguration.payments.push(toWei('0.1'));
     preCoordinatorConfiguration.jobIds.push(padRight('0x' + job.id, 64));

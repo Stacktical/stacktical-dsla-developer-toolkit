@@ -588,7 +588,7 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
           // eslint-disable-next-line no-await-in-loop
           job = await updatedJob(node, messenger.useCaseName);
         }
-        console.log(`Job created! Job ID: ${job.id}.`);
+        console.log(`Job created! Job ID: ${JSON.parse(JSON.stringify(job))}.`);
       }
 
       // Fund node
@@ -1219,7 +1219,9 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
     const linkToken = await get(CONTRACT_NAMES.LinkToken);
     const ipfs = hre.network.config.stacktical.ipfs;
     const feeMultiplier =
-      network.config.stacktical.chainlink.nodesConfiguration.length;
+      hre.network.config.stacktical.chainlink.nodesConfiguration.length;
+
+    consola.info('Fee multiplier: ' + feeMultiplier);
 
     try {
       const deployedMessenger = await deploy(messenger.contract, {
@@ -1231,7 +1233,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
           feeMultiplier,
           periodRegistry.address,
           stakeRegistry.address,
-          formatBytes32String(network.name),
+          formatBytes32String(hre.network.name),
           messenger.dslaLpName,
           messenger.dslaLpSymbol,
           messenger.dslaSpName,
@@ -1297,7 +1299,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
     consola.ready(
       'Finishing automated jobs to register messenger: ' + messenger.contract
     );
-    
+
     printSeparator();
   }
 );
@@ -1897,11 +1899,26 @@ subtask(SUB_TASK_NAMES.SET_PRECOORDINATOR, undefined).setAction(
     for (let node of stacktical.chainlink.nodesConfiguration) {
       const jobs = await getChainlinkJobs(node);
 
+      // consola.info('Founds jobs!', JSON.parse(JSON.stringify(jobs)));
+      consola.info('Founds jobs!', JSON.stringify(jobs));
+
+      consola.info('Oracle', oracle.address);
+      consola.info(
+        'Test initiator',
+        JSON.parse(JSON.stringify(jobs[0].attributes.initiators))
+      );
+
       // Need to ensure we also pick a job where initiatior.params.address = oracle
-      const job = jobs.find((postedJob) =>
-        postedJob.attributes.tasks.some(
-          (task) => task.type === messenger.useCaseName
-        )
+      const job = jobs.find(
+        (postedJob) =>
+          postedJob.attributes.tasks.some(
+            (task) => task.type === messenger.useCaseName
+          ) &&
+          postedJob.attributes.initiators.some(
+            (initiator) =>
+              initiator.params.address.toLowerCase() ===
+              oracle.address.toLowerCase()
+          )
       );
       consola.info('Found job! ', job);
 
