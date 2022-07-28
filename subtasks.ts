@@ -1899,20 +1899,16 @@ subtask(SUB_TASK_NAMES.SET_PRECOORDINATOR, undefined).setAction(
     for (let node of stacktical.chainlink.nodesConfiguration) {
       const jobs = await getChainlinkJobs(node);
 
-      // consola.info('Founds jobs!', JSON.parse(JSON.stringify(jobs)));
-      consola.info('Founds jobs!', JSON.stringify(jobs));
+      // consola.info('Founds jobs!', JSON.stringify(jobs));
 
       consola.info('Oracle', oracle.address);
-      consola.info(
-        'Test initiator',
-        JSON.parse(JSON.stringify(jobs[0].attributes.initiators))
-      );
 
-      // Need to ensure we also pick a job where initiatior.params.address = oracle
+      // Need to ensure we also pick a job where initiator.params.address = oracle
       const job = jobs.find(
         (postedJob) =>
           postedJob.attributes.tasks.some(
-            (task) => task.type === messenger.useCaseName
+            (task) =>
+              task.type.toLowerCase() === messenger.useCaseName.toLowerCase()
           ) &&
           postedJob.attributes.initiators.some(
             (initiator) =>
@@ -1927,6 +1923,8 @@ subtask(SUB_TASK_NAMES.SET_PRECOORDINATOR, undefined).setAction(
           index: taskArgs.index,
         });
       }
+
+      consola.info('SA initiator: ', JSON.parse(job.attributes.initiators));
     }
 
     consola.info('SA node: ', stacktical.chainlink.nodesConfiguration);

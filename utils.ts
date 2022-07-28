@@ -101,14 +101,16 @@ export const getPreCoordinatorConfiguration = async (
 
     // consola.info('Jobs ' + JSON.stringify(jobs));
 
-    // Need to ensure we also pick a job where initiatior.params.address = oracle
+    // Need to ensure we also pick a job where initiator.params.address = oracle
     const job = jobs.find(
       (postedJob) =>
-        postedJob.attributes.tasks.some((task) => task.type === useCaseName) &&
+        postedJob.attributes.tasks.some(
+          (task) => task.type.toLowerCase() === useCaseName.toLowerCase()
+        ) &&
         postedJob.attributes.initiators.some(
           (initiator) =>
-            toChecksumAddress(initiator.params.address) ===
-            toChecksumAddress(oracleContractAddress)
+            initiator.params.address.toLowerCase() ===
+            oracleContractAddress.toLowerCase()
         )
     );
     preCoordinatorConfiguration.payments.push(toWei('0.1'));
