@@ -588,7 +588,7 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
           // eslint-disable-next-line no-await-in-loop
           job = await updatedJob(node, messenger.useCaseName);
         }
-        console.log(`Job created! Job ID: ${JSON.parse(JSON.stringify(job))}.`);
+        console.log(`Job created! Job ID: ${job.id}.`);
       }
 
       // Fund node
@@ -1538,11 +1538,13 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_PERIOD_REGISTRY, undefined).setAction(
       );
       console.log(periodStartsDate, periodEndsDate);
       console.log(periodStarts, periodEnds);
+
       let tx = await periodRegistry.initializePeriod(
         periodType,
         periodStarts,
         periodEnds
       );
+      
       await tx.wait();
     }
 
