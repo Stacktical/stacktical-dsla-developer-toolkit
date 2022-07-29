@@ -1924,7 +1924,7 @@ subtask(SUB_TASK_NAMES.SET_PRECOORDINATOR, undefined).setAction(
         });
       }
 
-      consola.info('SA initiator: ', JSON.parse(job.attributes.initiators));
+      consola.info('SA initiator: ', JSON.parse(JSON.stringify(job.attributes.initiators)));
     }
 
     consola.info('SA node: ', stacktical.chainlink.nodesConfiguration);
