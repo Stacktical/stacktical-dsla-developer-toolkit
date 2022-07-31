@@ -1925,15 +1925,7 @@ subtask(SUB_TASK_NAMES.SET_PRECOORDINATOR, undefined).setAction(
           index: taskArgs.index,
         });
       }
-
-      consola.info('SA initiator: ', JSON.parse(JSON.stringify(job.attributes.initiators)));
     }
-
-    consola.info('SA node: ', stacktical.chainlink.nodesConfiguration);
-
-    consola.info('SA messenger: ', messenger.useCaseName);
-
-    consola.info('SA oracle ', oracle.address);
 
     const preCoordinatorConfiguration = await getPreCoordinatorConfiguration(
       stacktical.chainlink.nodesConfiguration,
