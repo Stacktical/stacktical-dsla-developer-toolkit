@@ -120,11 +120,11 @@ export const develop: NetworkUserConfig = {
       ],
       registry: {
         periods: [
-          // {
-          //   periodType: PERIOD_TYPE.DAILY,
-          //   amountOfPeriods: 365, // Number of periods from now
-          //   expiredPeriods: 0,
-          // },
+          {
+            periodType: PERIOD_TYPE.DAILY,
+            amountOfPeriods: 31, // Number of periods from now
+            expiredPeriods: 0,
+          },
           {
             periodType: PERIOD_TYPE.WEEKLY,
             amountOfPeriods: 52, // Number of periods from now
