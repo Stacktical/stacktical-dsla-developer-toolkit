@@ -1,18 +1,18 @@
 steps:
   - id: prepare-env
-    name: node:lts-gallium
+    name: node:16.16.0
     entrypoint: cp
     args: ['env-min', '.env']
   - id: npm-ci
-    name: node:lts-gallium
+    name: node:16.16.0
     entrypoint: npm
     args: ['ci', "--legacy-peer-deps"]
   - id: compile
-    name: node:lts-gallium
+    name: node:16.16.0
     entrypoint: npx
     args: ['hardhat', 'compile', '--force']
   - id: test
-    name: node:lts-gallium
+    name: node:16.16.0
     entrypoint: npx
     args: ['hardhat', 'test']
     env:
