@@ -1,17 +1,17 @@
 version: '3.5'
 services:
   postgres:
-    container_name: postgres-dsla-env
-    image: postgres:14.5-alpine
+    container_name: postgres-hardhat-node-1
+    image: postgres:13.1-alpine
     volumes:
-      - "pgdata:/var/lib/postgresql/data"
+      - pgdata:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: chainlink
     networks:
-      - dsla-test
+      - hardhat-node-1-network
   chainlink:
-    container_name: chainlink-dsla-env
+    container_name: chainlink-hardhat-node-1
     image: smartcontract/chainlink:0.10.15
     ports:
       - '6688:6688'
@@ -25,7 +25,7 @@ services:
       - LOG_LEVEL=info
       - MIN_INCOMING_CONFIRMATIONS=1
       - MIN_OUTGOING_CONFIRMATIONS=1
-      - LINK_CONTRACT_ADDRESS=0x7414e38377D6DAf6045626EC8a8ABB8a1BC4B97a
+      - LINK_CONTRACT_ADDRESS=0xD833215cBcc3f914bD1C9ece3EE7BF8B14f841bb
       - CHAINLINK_TLS_PORT=0
       - SECURE_COOKIES=false
       - GAS_UPDATER_ENABLED=false
@@ -34,18 +34,19 @@ services:
       - ETH_URL=ws://host.docker.internal:8545
       - ETH_HTTP_URL=http://host.docker.internal:8545
       - DEFAULT_HTTP_TIMEOUT=200s
-      - DATABASE_URL=postgresql://postgres:password@postgres:5432/chainlink?sslmode=disable
+      - >-
+        DATABASE_URL=postgresql://postgres:password@postgres:5432/chainlink?sslmode=disable
     command: local n -p /chainlink/.password -a /chainlink/.api
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - host.docker.internal:host-gateway
     networks:
-      - dsla-test
+      - hardhat-node-1-network
     depends_on:
       - postgres
     restart: on-failure
 networks:
-  dsla-test:
-    name: dsla-local-environment
+  hardhat-node-1-network:
+    name: hardhat-node-1-developer-toolkit-network
 volumes:
-  pgdata:
-  chainlink:
+  pgdata: null
+  chainlink: null

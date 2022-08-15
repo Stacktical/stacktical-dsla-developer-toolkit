@@ -1,4 +1,5 @@
 import {
+  appRoot,
   CONTRACT_NAMES,
   PERIOD_TYPE,
   SERVICE_CREDITS,
@@ -12,9 +13,10 @@ import { scripts } from '../scripts.config';
 import Joi from 'joi';
 
 const schema = Joi.object({
-  DEVELOP_MNEMONIC: Joi.string().required(),
-  DEVELOP_URI: Joi.string().required(),
-  DEVELOP_WS_URI: Joi.string().required(),
+  MAINNET_MNEMONIC: Joi.string().required(),
+  optimism_URI: Joi.string().required(),
+  optimism_WS_URI: Joi.string().required(),
+  STAKING_REWARDS_ADAPTER: Joi.string().required(),
 }).unknown();
 
 const { error, value } = schema.validate(process.env);
@@ -25,63 +27,82 @@ if (error) {
   process.env = value;
 }
 
-export const develop: NetworkUserConfig = {
-  chainId: 1337,
+export const optimism: NetworkUserConfig = {
+  chainId: 137,
+  //gasPrice: 200 * 10 ** 9,
+  //gas: 10000000,
+  //accounts: [process.env.PRIV_KEY],
   accounts: {
-    mnemonic: process.env.DEVELOP_MNEMONIC,
+    mnemonic: process.env.MAINNET_MNEMONIC,
   },
-  url: 'http://localhost:8545',
+  url: process.env.optimism_URI,
   stacktical: {
-    checkPastPeriods: false,
-    deployTokens: true,
-    ipfs: process.env.DEVELOP_IPFS_URI,
-    chainlink: {
-      deployLocal: true, // Deploys local dockers everytime
-      deleteOldJobs: true,
-      cleanLocalFolder: true,
-      nodeFunds: '10',
-      ethWsUrl: 'ws://host.docker.internal:8545',
-      ethHttpUrl: 'http://host.docker.internal:8545',
-      nodesConfiguration: [
-        {
-          name: 'node-1',
-          restApiUrl: 'http://localhost',
-          restApiPort: '6688',
-          email: 'test@stacktical.com',
-          password: 'FOObar123567BARfoo!*@$',
-        },
-      ],
-    },
-    addresses: {},
+    deployTokens: false,
+    checkPastPeriods: true,
     tokens: [
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.DSLA,
+        address: '0x00',
       },
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.DAI,
+        address: '0x00',
       },
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.USDC,
+        address: '0x00',
       },
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.USDT,
+        address: '0x00',
       },
       {
         factory: EthereumERC20__factory,
-        name: TOKEN_NAMES.WETH,
+        name: TOKEN_NAMES.WMATIC,
+        address: '0x00',
       },
     ],
+    ipfs: process.env.IPFS_URI,
+    chainlink: {
+      deployLocal: false,
+      deleteOldJobs: true,
+      cleanLocalFolder: false,
+      nodeFunds: '1',
+      ethWsUrl: process.env.optimism_WS_URI,
+      nodesConfiguration: [
+        {
+          name: 'Berlin',
+          restApiUrl: process.env.optimism_CHAINLINK_NODE_1_URL,
+          restApiPort: process.env.optimism_CHAINLINK_NODE_1_PORT,
+          email: process.env.optimism_CHAINLINK_NODE_1_USER,
+          password: process.env.optimism_CHAINLINK_NODE_1_PASS,
+        },
+        {
+          name: 'NewYork',
+          restApiUrl: process.env.optimism_CHAINLINK_NODE_2_URL,
+          restApiPort: process.env.optimism_CHAINLINK_NODE_2_PORT,
+          email: process.env.optimism_CHAINLINK_NODE_2_USER,
+          password: process.env.optimism_CHAINLINK_NODE_2_PASS,
+        },
+        {
+          name: 'Paris',
+          restApiUrl: process.env.optimism_CHAINLINK_NODE_3_URL,
+          restApiPort: process.env.optimism_CHAINLINK_NODE_3_PORT,
+          email: process.env.optimism_CHAINLINK_NODE_3_USER,
+          password: process.env.optimism_CHAINLINK_NODE_3_PASS,
+        },
+      ],
+    },
+    addresses: {
+      /** https://pegswap.chain.link/ */
+      [CONTRACT_NAMES.LinkToken]: '0x00',
+    },
     bootstrap: {
       allowance: [
-        {
-          contract: CONTRACT_NAMES.BaseOracle,
-          token: CONTRACT_NAMES.LinkToken,
-          allowance: '10',
-        },
         {
           contract: CONTRACT_NAMES.StakingRewardsOracle,
           token: CONTRACT_NAMES.LinkToken,
@@ -122,7 +143,7 @@ export const develop: NetworkUserConfig = {
         periods: [
           {
             periodType: PERIOD_TYPE.DAILY,
-            amountOfPeriods: 31, // Number of periods from now
+            amountOfPeriods: 365, // Number of periods from now
             expiredPeriods: 0,
           },
           {
@@ -138,26 +159,17 @@ export const develop: NetworkUserConfig = {
         ],
         stake: {
           stakingParameters: {
-            dslaBurnedByVerification: '10000',
-            dslaPlatformReward: '75',
+            dslaBurnedByVerification: '0',
+            dslaPlatformReward: '10075',
             dslaDepositByPeriod: '25000',
             dslaMessengerReward: '4925',
             dslaUserReward: '10000',
-            burnDSLA: true,
+            burnDSLA: false,
           },
         },
       },
     },
     messengers: [
-      {
-        contract: CONTRACT_NAMES.BaseOracle,
-        useCaseName: USE_CASES.BASE_MESSENGER,
-        externalAdapterUrl: 'http://host.docker.internal:6070',
-        dslaLpName: SERVICE_CREDITS.BASE.DSLA_LP.name,
-        dslaLpSymbol: SERVICE_CREDITS.BASE.DSLA_LP.symbol,
-        dslaSpName: SERVICE_CREDITS.BASE.DSLA_SP.name,
-        dslaSpSymbol: SERVICE_CREDITS.BASE.DSLA_SP.symbol,
-      },
       {
         contract: CONTRACT_NAMES.StakingRewardsOracle,
         useCaseName: USE_CASES.STAKING_REWARDS,
