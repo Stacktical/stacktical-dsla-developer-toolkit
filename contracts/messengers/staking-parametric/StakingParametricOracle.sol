@@ -13,7 +13,7 @@ import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
 import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 import '@openzeppelin/contracts/utils/Strings.sol';
 
-contract StakingAprOracle is ChainlinkClient, IMessenger, ReentrancyGuard {
+contract StakingParametricOracle is ChainlinkClient, IMessenger, ReentrancyGuard {
     using SafeERC20 for ERC20;
     using Chainlink for Chainlink.Request;
 

@@ -1,6 +1,14 @@
 {
-  "useCaseName": "Staking APR",
-  "symbol": "POS-APR",
+  "useCaseName": "Staking Rewards",
+  "symbol": "APR",
+  "sp": {
+    "name": "Staking Service Credit (APR)",
+    "symbol": "🔻APR"
+  },
+  "lp": {
+    "name": "Staking Service Credit (APR)",
+    "symbol": "🔺APR"
+  },
   "ownerUrl": "https://dsla.network",
   "useCaseDocs": "https://dsla.network/metaverse",
   "externalAdapterRepo": "https://github.com/Stacktical/",
@@ -37,7 +45,7 @@
       "name": "Service Ticker",
       "type": "string",
       "description": "The Validator service ticker",
-      "values": ["ONE", "DOT", "ATOM", "BAND", "eGLD", "XTZ", "AVAX", "ROSE"]
+      "values": ["ETH", "ONE", "DOT", "ATOM", "eGLD", "XTZ", "AVAX", "ROSE"]
     }
   },
   "version": {

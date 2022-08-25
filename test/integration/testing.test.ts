@@ -36,13 +36,15 @@ describe('Fixtures', () => {
   describe("check SP & LP token names of messenger contracts", async () => {
     it(CONTRACT_NAMES.BaseOracle, async () => {
       const base_messenger: BaseOracle = await ethers.getContract(CONTRACT_NAMES.BaseOracle);
-      expect(await base_messenger.lpName()).to.be.eq(SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.name);
-      expect(await base_messenger.spName()).to.be.eq(SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.name);
+      expect(await base_messenger.lpName()).to.be.eq('Dummy Service Credit');
+      expect(await base_messenger.spName()).to.be.eq('Dummy Service Credit');
+      expect(await base_messenger.lpSymbol()).to.be.eq('🔺FOO');
+      expect(await base_messenger.spSymbol()).to.be.eq('🔻BAR');
     })
     it(CONTRACT_NAMES.InflationOracle, async () => {
       const inflation_messenger: InflationOracle = await ethers.getContract(CONTRACT_NAMES.InflationOracle);
-      expect(await inflation_messenger.lpName()).to.be.eq(SERVICE_CREDITS.INFLATION_RATE.DSLA_LP.name);
-      expect(await inflation_messenger.spName()).to.be.eq(SERVICE_CREDITS.INFLATION_RATE.DSLA_SP.name);
+      expect(await inflation_messenger.lpName()).to.be.eq(SERVICE_CREDITS.INFLATION.DSLA_LP.name);
+      expect(await inflation_messenger.spName()).to.be.eq(SERVICE_CREDITS.INFLATION.DSLA_SP.name);
     })
   })
 });

@@ -11,7 +11,7 @@ import * as fs from 'fs';
 const SEMessengerSpec = JSON.parse(
   // @ts-ignore
   fs.readFileSync(
-    `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_EFFICIENCY}/use-case-spec.json`
+    `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_REWARDS}/use-case-spec.json`
   )
 );
 const SENetworkNames = SEMessengerSpec.ipfsData.serviceTicker.values;

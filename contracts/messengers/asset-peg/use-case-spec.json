@@ -1,6 +1,14 @@
 {
   "useCaseName": "Digital Asset Peg",
   "symbol": "PEG",
+  "sp": {
+    "name": "Peg Service Credit",
+    "symbol": "🔻PEG"
+  },
+  "lp": {
+    "name": "Peg Service Credit",
+    "symbol": "🔺PEG"
+  },
   "ownerUrl": "https://dsla.network",
   "useCaseDocs": "https://dsla.network/metaverse",
   "externalAdapterRepo": "https://github.com/Stacktical/",

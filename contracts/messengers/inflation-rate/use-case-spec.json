@@ -1,11 +1,19 @@
 {
   "useCaseName": "Inflation Rate",
-  "symbol": "CPI",
+  "symbol": "INFLATION",
+  "sp": {
+    "name": "Inflation Service Credit",
+    "symbol": "🔺INFLATION"
+  },
+  "lp": {
+    "name": "Inflation Service Credit",
+    "symbol": "🔻INFLATION"
+  },
   "ownerUrl": "https://dsla.network",
   "useCaseDocs": "https://dsla.network/metaverse",
   "externalAdapterRepo": "https://github.com/Stacktical/",
   "unit": "%",
-  "keywords": ["cpi", "wpi", "inflation"],
+  "keywords": ["cpi", "wpi", "inflation", "truflation"],
   "timestamp": "2022-04-12T00:00:00+00:00",
   "version": {
     "major": 0,
