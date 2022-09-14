@@ -81,7 +81,7 @@ export const arbitrum: NetworkUserConfig = {
       ],
     },
     addresses: {
-      [CONTRACT_NAMES.LinkToken]: '0x514910771af9ca656af840dff83e8264ecf986ca',
+      [CONTRACT_NAMES.LinkToken]: '0xf97f4df75117a78c1A5a0DBb814Af92458539FB4',
     },
     bootstrap: {
       allowance: [
