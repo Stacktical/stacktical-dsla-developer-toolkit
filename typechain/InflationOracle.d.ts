@@ -23,6 +23,7 @@ interface InflationOracleInterface extends ethers.utils.Interface {
   functions: {
     "fee()": FunctionFragment;
     "fulfillSLI(bytes32,uint256)": FunctionFragment;
+    "fulfillYoyInflation(bytes32,bytes)": FunctionFragment;
     "fulfillsCounter()": FunctionFragment;
     "jobId()": FunctionFragment;
     "lpName()": FunctionFragment;
@@ -51,6 +52,10 @@ interface InflationOracleInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "fulfillSLI",
     values: [BytesLike, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "fulfillYoyInflation",
+    values: [BytesLike, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "fulfillsCounter",
@@ -122,6 +127,10 @@ interface InflationOracleInterface extends ethers.utils.Interface {
 
   decodeFunctionResult(functionFragment: "fee", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "fulfillSLI", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "fulfillYoyInflation",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "fulfillsCounter",
     data: BytesLike
@@ -286,6 +295,12 @@ export class InflationOracle extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    fulfillYoyInflation(
+      _requestId: BytesLike,
+      answer: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     fulfillsCounter(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     jobId(overrides?: CallOverrides): Promise<[string]>;
@@ -371,6 +386,12 @@ export class InflationOracle extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  fulfillYoyInflation(
+    _requestId: BytesLike,
+    answer: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   fulfillsCounter(overrides?: CallOverrides): Promise<BigNumber>;
 
   jobId(overrides?: CallOverrides): Promise<string>;
@@ -451,6 +472,12 @@ export class InflationOracle extends BaseContract {
     fulfillSLI(
       _requestId: BytesLike,
       _chainlinkResponse: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    fulfillYoyInflation(
+      _requestId: BytesLike,
+      answer: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -644,6 +671,12 @@ export class InflationOracle extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    fulfillYoyInflation(
+      _requestId: BytesLike,
+      answer: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     fulfillsCounter(overrides?: CallOverrides): Promise<BigNumber>;
 
     jobId(overrides?: CallOverrides): Promise<BigNumber>;
@@ -725,6 +758,12 @@ export class InflationOracle extends BaseContract {
     fulfillSLI(
       _requestId: BytesLike,
       _chainlinkResponse: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    fulfillYoyInflation(
+      _requestId: BytesLike,
+      answer: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

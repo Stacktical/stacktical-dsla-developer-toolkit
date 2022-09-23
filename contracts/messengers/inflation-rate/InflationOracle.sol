@@ -1,20 +1,20 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.9;
+pragma solidity ^0.8.9;
 
 import '@chainlink/contracts/src/v0.8/ChainlinkClient.sol';
 
 import '@dsla-protocol/core/contracts/interfaces/IMessenger.sol';
 import '@dsla-protocol/core/contracts/SLA.sol';
 import '@dsla-protocol/core/contracts/PeriodRegistry.sol';
-import '@dsla-protocol/core/contracts/libraries/StringUtils.sol';
 import '@dsla-protocol/core/contracts/StakeRegistry.sol';
 
-import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
 import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 import '@openzeppelin/contracts/utils/Strings.sol';
 
+import '../../libraries/StringUtils.sol';
+
 contract InflationOracle is ChainlinkClient, IMessenger, ReentrancyGuard {
-    using SafeERC20 for ERC20;
+    using SafeERC20 for IERC20;
     using Chainlink for Chainlink.Request;
 
     mapping(bytes32 => SLIRequest) public requestIdToSLIRequest;
@@ -22,7 +22,7 @@ contract InflationOracle is ChainlinkClient, IMessenger, ReentrancyGuard {
     address private _slaRegistryAddress;
     address private immutable _oracle;
     bytes32 private _jobId;
-    uint256 private constant _baseFee = 0.1 ether;
+    uint256 private constant _baseFee = 0.01 ether;
     uint256 private _fee;
     uint256 private constant _messengerPrecision = 10**6;
 
@@ -95,15 +95,14 @@ contract InflationOracle is ChainlinkClient, IMessenger, ReentrancyGuard {
         address _callerAddress
     ) public override onlySLARegistry nonReentrant {
         require(_jobId != 0, '_jobId empty');
-        SLA sla = SLA(_slaAddress);
         if (_messengerOwnerApproval) {
-            ERC20(chainlinkTokenAddress()).safeTransferFrom(
+            IERC20(chainlinkTokenAddress()).safeTransferFrom(
                 owner(),
                 address(this),
                 _fee
             );
         } else {
-            ERC20(chainlinkTokenAddress()).safeTransferFrom(
+            IERC20(chainlinkTokenAddress()).safeTransferFrom(
                 _callerAddress,
                 address(this),
                 _fee
@@ -112,22 +111,11 @@ contract InflationOracle is ChainlinkClient, IMessenger, ReentrancyGuard {
         Chainlink.Request memory request = buildChainlinkRequest(
             _jobId,
             address(this),
-            this.fulfillSLI.selector
+            this.fulfillYoyInflation.selector
         );
-        (
-            uint256 sla_monitoring_start,
-            uint256 sla_monitoring_end
-        ) = periodRegistry.getPeriodStartAndEnd(sla.periodType(), _periodId);
-        request.add(
-            'sla_monitoring_start',
-            StringUtils.uintToStr(sla_monitoring_start)
-        );
-        request.add(
-            'sla_monitoring_end',
-            StringUtils.uintToStr(sla_monitoring_end)
-        );
-        request.add('sla_address', StringUtils.addressToString(_slaAddress));
-        request.add('network_name', StringUtils.bytes32ToStr(networkName));
+        request.add('service', 'truflation/current');
+        request.add('keypath', 'yearOverYearInflation');
+        request.add('abi', 'json');
 
         // Sends the request with 0.1 LINK to the oracle contract
         bytes32 requestId = sendChainlinkRequestTo(_oracle, request, _fee);
@@ -143,25 +131,28 @@ contract InflationOracle is ChainlinkClient, IMessenger, ReentrancyGuard {
         emit SLIRequested(_callerAddress, _requestsCounter, requestId);
     }
 
-    function fulfillSLI(bytes32 _requestId, uint256 _chainlinkResponse)
+    function fulfillYoyInflation(bytes32 _requestId, bytes memory answer)
         external
-        override
         nonReentrant
         recordChainlinkFulfillment(_requestId)
     {
         SLIRequest memory request = requestIdToSLIRequest[_requestId];
+        uint256 sli = (StringUtils.stringFloatToUnit(answer) *
+            _messengerPrecision) / 10**18;
         emit SLIReceived(
             request.slaAddress,
             request.periodId,
             _requestId,
-            bytes32(_chainlinkResponse)
+            bytes32(answer)
         );
         _fulfillsCounter += 1;
-        SLA(request.slaAddress).registerSLI(
-            _chainlinkResponse,
-            request.periodId
-        );
+        SLA(request.slaAddress).registerSLI(sli, request.periodId);
     }
+
+    function fulfillSLI(bytes32 _requestId, uint256 _chainlinkResponse)
+        external
+        override
+    {}
 
     function retryRequest(address _slaAddress, uint256 _periodId)
         external

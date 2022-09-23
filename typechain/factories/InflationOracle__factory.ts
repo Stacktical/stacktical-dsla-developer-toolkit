@@ -245,6 +245,24 @@ const _abi = [
     type: "function",
   },
   {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "_requestId",
+        type: "bytes32",
+      },
+      {
+        internalType: "bytes",
+        name: "answer",
+        type: "bytes",
+      },
+    ],
+    name: "fulfillYoyInflation",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "fulfillsCounter",
     outputs: [
