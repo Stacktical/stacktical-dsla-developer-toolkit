@@ -13,8 +13,8 @@ import Joi from 'joi';
 
 const schema = Joi.object({
   MAINNET_MNEMONIC: Joi.string().required(),
-  ARBITRUM_URI: Joi.string().required(),
-  ARBITRUM_WS_URI: Joi.string().required(),
+  ARBITRUMV2_URI: Joi.string().required(),
+  ARBITRUMV2_WS_URI: Joi.string().required(),
   STAKING_REWARDS_ADAPTER: Joi.string().required(),
 }).unknown();
 
@@ -26,17 +26,17 @@ if (error) {
   process.env = value;
 }
 
-export const arbitrum: NetworkUserConfig = {
-  chainId: 42170,
+export const arbitrumv2: NetworkUserConfig = {
+  chainId: 42161,
   accounts: {
     mnemonic: process.env.MAINNET_MNEMONIC,
   },
-  url: process.env.ARBITRUM_URI,
+  url: process.env.ARBITRUMV2_URI,
   stacktical: {
     checkPastPeriods: true,
     deployTokens: false,
     tokens: [
-      /**  */
+      /** https://nova-explorer.arbitrum.io/token/0x19255F9332aed0142AcB96C271bDe0e1152BE3e1/token-transfers */
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.DSLA,
@@ -50,17 +50,17 @@ export const arbitrum: NetworkUserConfig = {
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.USDC,
-        address: '0x750ba8b76187092B0D1E87E28daaf484d1b5273b',
+        address: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
       },
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.USDT,
-        address: '0x52484E1ab2e2B22420a25c20FA49E173a26202Cd',
+        address: '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9',
       },
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.WETH,    // REPLACE WITH ARBITRUM NATIVE TOKEN WHENEVER RELEASED
-        address: '0x722E8BdD2ce80A4422E880164f2079488e115365',
+        address: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
       },
     ],
     ipfs: process.env.IPFS_URI,
@@ -69,14 +69,15 @@ export const arbitrum: NetworkUserConfig = {
       deleteOldJobs: false,
       cleanLocalFolder: false,
       nodeFunds: '1',
-      ethWsUrl: process.env.ARBITRUM_WS_URI,
+      ethHttpUrl: process.env.ARBITRUMV2_URI,
+      ethWsUrl: process.env.ARBITRUMV2_WS_URI,
       nodesConfiguration: [
         {
           name: 'newyork',
-          restApiUrl: process.env.ARBITRUM_CHAINLINK_NODE_2_URL,
-          restApiPort: process.env.ARBITRUM_CHAINLINK_NODE_2_PORT,
-          email: process.env.ARBITRUM_CHAINLINK_NODE_2_USER,
-          password: process.env.ARBITRUM_CHAINLINK_NODE_2_PASS,
+          restApiUrl: process.env.ARBITRUMV2_CHAINLINK_NODE_1_URL,
+          restApiPort: process.env.ARBITRUMV2_CHAINLINK_NODE_1_PORT,
+          email: process.env.ARBITRUMV2_CHAINLINK_NODE_1_USER,
+          password: process.env.ARBITRUMV2_CHAINLINK_NODE_1_PASS,
         },
       ],
     },

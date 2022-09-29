@@ -26,17 +26,17 @@ if (error) {
   process.env = value;
 }
 
-export const arbitrum: NetworkUserConfig = {
-  chainId: 42161,
+export const arbitrumnova: NetworkUserConfig = {
+  chainId: 42170,
   accounts: {
     mnemonic: process.env.MAINNET_MNEMONIC,
   },
-  url: process.env.ARBITRUM_URI,
+  url: process.env.ARBITRUMNOVA_URI,
   stacktical: {
     checkPastPeriods: true,
     deployTokens: false,
     tokens: [
-      /** https://nova-explorer.arbitrum.io/token/0x19255F9332aed0142AcB96C271bDe0e1152BE3e1/token-transfers */
+      /**  */
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.DSLA,
@@ -50,17 +50,17 @@ export const arbitrum: NetworkUserConfig = {
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.USDC,
-        address: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
+        address: '0x750ba8b76187092B0D1E87E28daaf484d1b5273b',
       },
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.USDT,
-        address: '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9',
+        address: '0x52484E1ab2e2B22420a25c20FA49E173a26202Cd',
       },
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.WETH,    // REPLACE WITH ARBITRUM NATIVE TOKEN WHENEVER RELEASED
-        address: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
+        address: '0x722E8BdD2ce80A4422E880164f2079488e115365',
       },
     ],
     ipfs: process.env.IPFS_URI,
