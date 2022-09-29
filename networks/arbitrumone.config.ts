@@ -1,4 +1,5 @@
 import {
+  appRoot,
   CONTRACT_NAMES,
   PERIOD_TYPE,
   SERVICE_CREDITS,
@@ -8,13 +9,13 @@ import {
 import { EthereumERC20__factory } from '../typechain';
 import { NetworkUserConfig } from 'hardhat/types';
 import { scripts } from '../scripts.config';
-
 import Joi from 'joi';
 
 const schema = Joi.object({
-  DEVELOP_MNEMONIC: Joi.string().required(),
-  DEVELOP_URI: Joi.string().required(),
-  DEVELOP_WS_URI: Joi.string().required(),
+  MAINNET_MNEMONIC: Joi.string().required(),
+  ARBITRUM_URI: Joi.string().required(),
+  ARBITRUM_WS_URI: Joi.string().required(),
+  STAKING_REWARDS_ADAPTER: Joi.string().required(),
 }).unknown();
 
 const { error, value } = schema.validate(process.env);
@@ -25,63 +26,65 @@ if (error) {
   process.env = value;
 }
 
-export const develop: NetworkUserConfig = {
-  chainId: 1337,
+export const arbitrum: NetworkUserConfig = {
+  chainId: 42161,
   accounts: {
-    mnemonic: process.env.DEVELOP_MNEMONIC,
+    mnemonic: process.env.MAINNET_MNEMONIC,
   },
-  url: 'http://localhost:8545',
+  url: process.env.ARBITRUM_URI,
   stacktical: {
-    checkPastPeriods: false,
-    deployTokens: true,
-    ipfs: process.env.DEVELOP_IPFS_URI,
-    chainlink: {
-      deployLocal: true, // Deploys local dockers everytime
-      deleteOldJobs: true,
-      cleanLocalFolder: true,
-      nodeFunds: '10',
-      ethWsUrl: 'ws://host.docker.internal:8545',
-      ethHttpUrl: 'http://host.docker.internal:8545',
-      nodesConfiguration: [
-        {
-          name: 'node-1',
-          restApiUrl: 'http://localhost',
-          restApiPort: '6688',
-          email: 'test@stacktical.com',
-          password: 'FOObar123567BARfoo!*@$',
-        },
-      ],
-    },
-    addresses: {},
+    checkPastPeriods: true,
+    deployTokens: false,
     tokens: [
+      /** https://nova-explorer.arbitrum.io/token/0x19255F9332aed0142AcB96C271bDe0e1152BE3e1/token-transfers */
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.DSLA,
+        address: '0x19255F9332aed0142AcB96C271bDe0e1152BE3e1',
       },
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.DAI,
+        address: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
       },
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.USDC,
+        address: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
       },
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.USDT,
+        address: '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9',
       },
       {
         factory: EthereumERC20__factory,
-        name: TOKEN_NAMES.WETH,
+        name: TOKEN_NAMES.WETH,    // REPLACE WITH ARBITRUM NATIVE TOKEN WHENEVER RELEASED
+        address: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
       },
     ],
+    ipfs: process.env.IPFS_URI,
+    chainlink: {
+      deployLocal: false,
+      deleteOldJobs: false,
+      cleanLocalFolder: false,
+      nodeFunds: '1',
+      ethWsUrl: process.env.ARBITRUM_WS_URI,
+      nodesConfiguration: [
+        {
+          name: 'newyork',
+          restApiUrl: process.env.ARBITRUM_CHAINLINK_NODE_2_URL,
+          restApiPort: process.env.ARBITRUM_CHAINLINK_NODE_2_PORT,
+          email: process.env.ARBITRUM_CHAINLINK_NODE_2_USER,
+          password: process.env.ARBITRUM_CHAINLINK_NODE_2_PASS,
+        },
+      ],
+    },
+    addresses: {
+      [CONTRACT_NAMES.LinkToken]: '0xf97f4df75117a78c1A5a0DBb814Af92458539FB4',
+    },
     bootstrap: {
       allowance: [
-        {
-          contract: CONTRACT_NAMES.BaseOracle,
-          token: CONTRACT_NAMES.LinkToken,
-          allowance: '10',
-        },
         {
           contract: CONTRACT_NAMES.StakingRewardsOracle,
           token: CONTRACT_NAMES.LinkToken,
@@ -122,7 +125,7 @@ export const develop: NetworkUserConfig = {
         periods: [
           {
             periodType: PERIOD_TYPE.DAILY,
-            amountOfPeriods: 31, // Number of periods from now
+            amountOfPeriods: 365, // Number of periods from now
             expiredPeriods: 0,
           },
           {
@@ -149,15 +152,6 @@ export const develop: NetworkUserConfig = {
       },
     },
     messengers: [
-      {
-        contract: CONTRACT_NAMES.BaseOracle,
-        useCaseName: USE_CASES.BASE_MESSENGER,
-        externalAdapterUrl: 'http://host.docker.internal:6070',
-        dslaLpName: SERVICE_CREDITS.BASE.DSLA_LP.name,
-        dslaLpSymbol: SERVICE_CREDITS.BASE.DSLA_LP.symbol,
-        dslaSpName: SERVICE_CREDITS.BASE.DSLA_SP.name,
-        dslaSpSymbol: SERVICE_CREDITS.BASE.DSLA_SP.symbol,
-      },
       {
         contract: CONTRACT_NAMES.StakingRewardsOracle,
         useCaseName: USE_CASES.STAKING_REWARDS,
