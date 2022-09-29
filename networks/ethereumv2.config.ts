@@ -77,27 +77,13 @@ export const ethereumv2: NetworkUserConfig = {
       nodeFunds: '1',
       ethWsUrl: process.env.ETHEREUM_WS_URI,
       nodesConfiguration: [
-        // {
-        //   name: 'berlin',
-        //   restApiUrl: process.env.ETHEREUM_CHAINLINK_NODE_1_URL,
-        //   restApiPort: process.env.ETHEREUM_CHAINLINK_NODE_1_PORT,
-        //   email: process.env.ETHEREUM_CHAINLINK_NODE_1_USER,
-        //   password: process.env.ETHEREUM_CHAINLINK_NODE_1_PASS,
-        // },
         {
           name: 'newyork',
-          restApiUrl: process.env.ETHEREUMV2_CHAINLINK_NODE_2_URL,
-          restApiPort: process.env.ETHEREUMV2_CHAINLINK_NODE_2_PORT,
-          email: process.env.ETHEREUMV2_CHAINLINK_NODE_2_USER,
-          password: process.env.ETHEREUMV2_CHAINLINK_NODE_2_PASS,
-        },
-        //{
-        //  name: 'paris',
-        //  restApiUrl: process.env.ETHEREUM_CHAINLINK_NODE_3_URL,
-        //  restApiPort: process.env.ETHEREUM_CHAINLINK_NODE_3_PORT,
-        //  email: process.env.ETHEREUM_CHAINLINK_NODE_3_USER,
-        //  password: process.env.ETHEREUM_CHAINLINK_NODE_3_PASS,
-        //},
+          restApiUrl: process.env.ETHEREUMV2_CHAINLINK_NODE_1_URL,
+          restApiPort: process.env.ETHEREUMV2_CHAINLINK_NODE_1_PORT,
+          email: process.env.ETHEREUMV2_CHAINLINK_NODE_1_USER,
+          password: process.env.ETHEREUMV2_CHAINLINK_NODE_1_PASS,
+        }
       ],
     },
     addresses: {
