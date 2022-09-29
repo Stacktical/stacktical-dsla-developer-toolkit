@@ -42,7 +42,6 @@ export enum CONTRACT_NAMES {
   StakingRewardsOracle = 'StakingRewardsOracle',
   StakingUptimeOracle = 'StakingUptimeOracle',
   InflationOracle = 'InflationOracle',
-  InflationOracle = 'InflationOracle',
   StakingParametricOracle = 'StakingParametricOracle',
 }
 
