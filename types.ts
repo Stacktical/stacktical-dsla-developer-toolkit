@@ -112,6 +112,7 @@ export type DeploySLAConfiguration = {
     serviceUseTestExternalAdapter: boolean;
     serviceSliMockingPlan: Array<number>;
   };
+  oracleUseCaseSpec: any,
   sloValue: number;
   sloType: SLO_TYPE;
   periodType: PERIOD_TYPE;
