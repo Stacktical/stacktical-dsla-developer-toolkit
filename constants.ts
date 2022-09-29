@@ -77,6 +77,7 @@ export enum USE_CASES {
   ASSET_PEG = 'asset-peg',
   ASSET_FLOOR = 'asset-floor',
   INFLATION = 'inflation-rate',
+  STAKING_PARAMETRIC = 'staking-parametric',
 }
 
 export const STAKING_REWARDS_SPECS = JSON.parse(
@@ -111,6 +112,13 @@ const INFLATION_SPECS = JSON.parse(
   // @ts-ignore
   fs.readFileSync(
     `${appRoot.path}/contracts/messengers/${USE_CASES.INFLATION}/use-case-spec.json`
+  )
+);
+
+const STAKING_PARAMETRIC_SPECS = JSON.parse(
+  // @ts-ignore
+  fs.readFileSync(
+    `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_PARAMETRIC}/use-case-spec.json`
   )
 );
 
@@ -237,6 +245,16 @@ export const SERVICE_CREDITS = {
     DSLA_SP: {
       name: ASSET_FLOOR_SPECS.sp.name,
       symbol: ASSET_FLOOR_SPECS.sp.symbol,
+    },
+  },
+  STAKING_PARAMETRIC: {
+    DSLA_LP: {
+      name: STAKING_PARAMETRIC_SPECS.lp.name,
+      symbol: STAKING_PARAMETRIC_SPECS.lp.symbol,
+    },
+    DSLA_SP: {
+      name: STAKING_PARAMETRIC_SPECS.sp.name,
+      symbol: STAKING_PARAMETRIC_SPECS.sp.symbol,
     },
   },
 };
