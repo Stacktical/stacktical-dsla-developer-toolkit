@@ -39,7 +39,6 @@ export const scripts: ScriptsConfiguration = {
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
       leverage: 20,
-      oracleUseCaseSpec: {},
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -67,7 +66,6 @@ export const scripts: ScriptsConfiguration = {
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
       leverage: 20,
-      oracleUseCaseSpec: {},
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -95,7 +93,6 @@ export const scripts: ScriptsConfiguration = {
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
       leverage: 50,
-      oracleUseCaseSpec: {},
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -123,7 +120,6 @@ export const scripts: ScriptsConfiguration = {
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
       leverage: 50,
-      oracleUseCaseSpec: {},
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -151,7 +147,6 @@ export const scripts: ScriptsConfiguration = {
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
       leverage: 20,
-      oracleUseCaseSpec: {},
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -179,7 +174,6 @@ export const scripts: ScriptsConfiguration = {
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
       leverage: 20,
-      oracleUseCaseSpec: {},
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -207,7 +201,6 @@ export const scripts: ScriptsConfiguration = {
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
       leverage: 20,
-      oracleUseCaseSpec: {},
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -235,7 +228,6 @@ export const scripts: ScriptsConfiguration = {
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
       leverage: 20,
-      oracleUseCaseSpec: {},
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -263,7 +255,6 @@ export const scripts: ScriptsConfiguration = {
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
       leverage: 20,
-      oracleUseCaseSpec: {},
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -291,7 +282,6 @@ export const scripts: ScriptsConfiguration = {
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
       leverage: 20,
-      oracleUseCaseSpec: {},
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -319,7 +309,6 @@ export const scripts: ScriptsConfiguration = {
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
       leverage: 20,
-      oracleUseCaseSpec: {},
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -347,7 +336,6 @@ export const scripts: ScriptsConfiguration = {
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
       leverage: 20,
-      oracleUseCaseSpec: {},
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -375,7 +363,6 @@ export const scripts: ScriptsConfiguration = {
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 2,
       leverage: 50, // 100 / 50 = 2% premium
-      oracleUseCaseSpec: {},
       serviceMetadata: {
         serviceName: 'Federal Reserve',
         serviceDescription:
@@ -403,7 +390,6 @@ export const scripts: ScriptsConfiguration = {
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 2,
       leverage: 50, // 100 / 50 = 2% premium
-      oracleUseCaseSpec: {},
       serviceMetadata: {
         serviceName: 'Federal Reserve',
         serviceDescription:
@@ -431,7 +417,6 @@ export const scripts: ScriptsConfiguration = {
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 2,
       leverage: 50, // 100 / 50 = 2% premium
-      oracleUseCaseSpec: {},
       serviceMetadata: {
         serviceName: 'Federal Reserve',
         serviceDescription:
@@ -459,7 +444,6 @@ export const scripts: ScriptsConfiguration = {
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 2,
       leverage: 50, // 100 / 50 = 2% premium
-      oracleUseCaseSpec: {},
       serviceMetadata: {
         serviceName: 'Federal Reserve',
         serviceDescription:
@@ -487,7 +471,6 @@ export const scripts: ScriptsConfiguration = {
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 2,
       leverage: 50, // 100 / 50 = 2% premium
-      oracleUseCaseSpec: {},
       serviceMetadata: {
         serviceName: 'Federal Reserve',
         serviceDescription:
@@ -515,7 +498,6 @@ export const scripts: ScriptsConfiguration = {
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
       leverage: 1,
-      oracleUseCaseSpec: {},
       serviceMetadata: {
         serviceName: 'Staking Integration test moked Not Respected case reward not capped',
         serviceDescription:
@@ -543,7 +525,6 @@ export const scripts: ScriptsConfiguration = {
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
       leverage: 1,
-      oracleUseCaseSpec: {},
       serviceMetadata: {
         serviceName: 'Staking Integration test moked Not Respected case reward capped',
         serviceDescription:
@@ -571,7 +552,6 @@ export const scripts: ScriptsConfiguration = {
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
       leverage: 1,
-      oracleUseCaseSpec: {},
       serviceMetadata: {
         serviceName: 'Staking Integration test moked Respected case reward not capped',
         serviceDescription:
@@ -599,7 +579,6 @@ export const scripts: ScriptsConfiguration = {
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
       leverage: 1,
-      oracleUseCaseSpec: {},
       serviceMetadata: {
         serviceName: 'Staking Integration test moked Respected case reward capped',
         serviceDescription:
