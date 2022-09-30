@@ -26,7 +26,7 @@ if (error) {
 }
 
 export const develop: NetworkUserConfig = {
-  chainId: 1337,
+  chainId: 13370101,
   accounts: {
     mnemonic: process.env.DEVELOP_MNEMONIC,
   },
@@ -112,11 +112,11 @@ export const develop: NetworkUserConfig = {
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
-       {
-         contract: CONTRACT_NAMES.InflationOracle,
-         token: CONTRACT_NAMES.LinkToken,
-         allowance: '10',
-       },
+      //  {
+      //    contract: CONTRACT_NAMES.InflationOracle,
+      //    token: CONTRACT_NAMES.LinkToken,
+      //    allowance: '10',
+      //  },
       ],
       registry: {
         periods: [

@@ -2,16 +2,13 @@ version: "3.5"
 services:
   ganache:
     container_name: ganache-service
-    image: trufflesuite/ganache-cli:v6.12.2
-    environment:
-      - ETH_CHAIN_ID=13370101
+    image: trufflesuite/ganache:v7.4.0
     ports:
       - 8545:8545
     networks:
       - dsla-test
-    command: --accounts 10 --defaultBalanceEther 100000 -d -i 1 --chainId 13370101 -l 99000000 -h 0.0.0.0
+    command: --accounts 10 --defaultBalanceEther 100000 -d -i 1 --chain.chainId 13370101 -l 99000000 -h
 
 networks:
   dsla-test:
     name: ganache-network
-
