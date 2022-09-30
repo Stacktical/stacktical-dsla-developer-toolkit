@@ -161,13 +161,21 @@ interface IMessengerInterface extends ethers.utils.Interface {
   ): Result;
 
   events: {
+    "JobIdModified(address,bytes32,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "SLIReceived(address,uint256,bytes32,bytes32)": EventFragment;
+    "SLIRequested(address,uint256,bytes32)": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "JobIdModified"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SLIReceived"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SLIRequested"): EventFragment;
 }
+
+export type JobIdModifiedEvent = TypedEvent<
+  [string, string, BigNumber] & { owner: string; jobId: string; fee: BigNumber }
+>;
 
 export type OwnershipTransferredEvent = TypedEvent<
   [string, string] & { previousOwner: string; newOwner: string }
@@ -179,6 +187,14 @@ export type SLIReceivedEvent = TypedEvent<
     periodId: BigNumber;
     requestId: string;
     chainlinkResponse: string;
+  }
+>;
+
+export type SLIRequestedEvent = TypedEvent<
+  [string, BigNumber, string] & {
+    caller: string;
+    requestsCounter: BigNumber;
+    requestId: string;
   }
 >;
 
@@ -230,7 +246,7 @@ export class IMessenger extends BaseContract {
 
     fulfillSLI(
       _requestId: BytesLike,
-      _chainlinkResponseUint256: BigNumberish,
+      answer: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -304,7 +320,7 @@ export class IMessenger extends BaseContract {
 
   fulfillSLI(
     _requestId: BytesLike,
-    _chainlinkResponseUint256: BigNumberish,
+    answer: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -378,7 +394,7 @@ export class IMessenger extends BaseContract {
 
     fulfillSLI(
       _requestId: BytesLike,
-      _chainlinkResponseUint256: BigNumberish,
+      answer: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -445,6 +461,24 @@ export class IMessenger extends BaseContract {
   };
 
   filters: {
+    "JobIdModified(address,bytes32,uint256)"(
+      owner?: string | null,
+      jobId?: null,
+      fee?: null
+    ): TypedEventFilter<
+      [string, string, BigNumber],
+      { owner: string; jobId: string; fee: BigNumber }
+    >;
+
+    JobIdModified(
+      owner?: string | null,
+      jobId?: null,
+      fee?: null
+    ): TypedEventFilter<
+      [string, string, BigNumber],
+      { owner: string; jobId: string; fee: BigNumber }
+    >;
+
     "OwnershipTransferred(address,address)"(
       previousOwner?: string | null,
       newOwner?: string | null
@@ -490,6 +524,24 @@ export class IMessenger extends BaseContract {
         chainlinkResponse: string;
       }
     >;
+
+    "SLIRequested(address,uint256,bytes32)"(
+      caller?: string | null,
+      requestsCounter?: null,
+      requestId?: null
+    ): TypedEventFilter<
+      [string, BigNumber, string],
+      { caller: string; requestsCounter: BigNumber; requestId: string }
+    >;
+
+    SLIRequested(
+      caller?: string | null,
+      requestsCounter?: null,
+      requestId?: null
+    ): TypedEventFilter<
+      [string, BigNumber, string],
+      { caller: string; requestsCounter: BigNumber; requestId: string }
+    >;
   };
 
   estimateGas: {
@@ -497,7 +549,7 @@ export class IMessenger extends BaseContract {
 
     fulfillSLI(
       _requestId: BytesLike,
-      _chainlinkResponseUint256: BigNumberish,
+      answer: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -572,7 +624,7 @@ export class IMessenger extends BaseContract {
 
     fulfillSLI(
       _requestId: BytesLike,
-      _chainlinkResponseUint256: BigNumberish,
+      answer: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
