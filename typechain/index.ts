@@ -20,7 +20,6 @@ export type { LinkTokenReceiver } from "./LinkTokenReceiver";
 export type { Oracle } from "./Oracle";
 export type { ENSResolver } from "./ENSResolver";
 export type { Ownable } from "./Ownable";
-export type { AggregatorV3Interface } from "./AggregatorV3Interface";
 export type { OperatorInterface } from "./OperatorInterface";
 export type { Details } from "./Details";
 export type { DToken } from "./DToken";
@@ -82,7 +81,6 @@ export { LinkTokenReceiver__factory } from "./factories/LinkTokenReceiver__facto
 export { Oracle__factory } from "./factories/Oracle__factory";
 export { ENSResolver__factory } from "./factories/ENSResolver__factory";
 export { Ownable__factory } from "./factories/Ownable__factory";
-export { AggregatorV3Interface__factory } from "./factories/AggregatorV3Interface__factory";
 export { OperatorInterface__factory } from "./factories/OperatorInterface__factory";
 export { Details__factory } from "./factories/Details__factory";
 export { DToken__factory } from "./factories/DToken__factory";
