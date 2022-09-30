@@ -133,7 +133,7 @@ export const develop: NetworkUserConfig = {
           {
             periodType: PERIOD_TYPE.MONTHLY,
             amountOfPeriods: 12, // Number of periods from now
-            expiredPeriods: 0,
+            expiredPeriods: 6,
           },
         ],
         stake: {
