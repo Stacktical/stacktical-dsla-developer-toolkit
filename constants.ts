@@ -76,6 +76,7 @@ export enum USE_CASES {
   ASSET_PEG = 'asset-peg',
   ASSET_FLOOR = 'asset-floor',
   INFLATION = 'inflation-rate',
+  STAKING_PARAMETRIC = 'staking-parametric',
 }
 
 export const STAKING_REWARDS_SPECS = JSON.parse(
@@ -113,12 +114,20 @@ const INFLATION_SPECS = JSON.parse(
   )
 );
 
+const STAKING_PARAMETRIC_SPECS = JSON.parse(
+  // @ts-ignore
+  fs.readFileSync(
+    `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_PARAMETRIC}/use-case-spec.json`
+  )
+);
+
 export enum NETWORKS {
   DEVELOP = 'develop',
   DEVELOP_AVALANCHE = 'develop_avalanche',
   MUMBAI = 'mumbai',
   HARMONYTESTNET = 'harmonytestnet',
   ETHEREUM = 'ethereum',
+  ETHEREUMV2 = 'ethereumv2',
   POLYGON = 'polygon',
   HARMONY = 'harmony',
   FANTOM = 'fantom',
@@ -133,6 +142,7 @@ export const GRAPH_NETWORKS = {
   [NETWORKS.DEVELOP]: 'mainnet',
   [NETWORKS.DEVELOP_AVALANCHE]: 'mainnet',
   [NETWORKS.ETHEREUM]: 'mainnet',
+  [NETWORKS.ETHEREUMV2]: 'mainnet',
   [NETWORKS.HARMONY]: 'mainnet',
   [NETWORKS.FANTOM]: 'mainnet',
   [NETWORKS.HARMONYTESTNET]: 'testnet',
@@ -234,6 +244,16 @@ export const SERVICE_CREDITS = {
     DSLA_SP: {
       name: ASSET_FLOOR_SPECS.sp.name,
       symbol: ASSET_FLOOR_SPECS.sp.symbol,
+    },
+  },
+  STAKING_PARAMETRIC: {
+    DSLA_LP: {
+      name: STAKING_PARAMETRIC_SPECS.lp.name,
+      symbol: STAKING_PARAMETRIC_SPECS.lp.symbol,
+    },
+    DSLA_SP: {
+      name: STAKING_PARAMETRIC_SPECS.sp.name,
+      symbol: STAKING_PARAMETRIC_SPECS.sp.symbol,
     },
   },
 };
