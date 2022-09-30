@@ -93,11 +93,6 @@ export const develop: NetworkUserConfig = {
           allowance: '10',
         },
         {
-          contract: CONTRACT_NAMES.StakingRewardsOracle,
-          token: CONTRACT_NAMES.LinkToken,
-          allowance: '10',
-        },
-        {
           contract: CONTRACT_NAMES.AssetFloorOracle,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
@@ -114,6 +109,11 @@ export const develop: NetworkUserConfig = {
         },
         {
           contract: CONTRACT_NAMES.InflationOracle,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
+        {
+          contract: CONTRACT_NAMES.StakingParametricOracle,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
