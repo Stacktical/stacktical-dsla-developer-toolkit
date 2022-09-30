@@ -627,7 +627,6 @@ export const scripts: ScriptsConfiguration = {
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
       leverage: 1,
-      oracleUseCaseSpec: StakingParametricMessengerSpec,
       serviceMetadata: {
         serviceName: 'Staking Parametric Integration test moked Not Respected case',
         serviceDescription:
@@ -638,7 +637,8 @@ export const scripts: ScriptsConfiguration = {
         serviceTicker: 'PH',
         // TODO Moove this in new parameter "testConfig"
         serviceUseTestExternalAdapter: true, // as sloValue is multiplied by prescision before comparison an slo of 90 will be rised to 90000 if precision is 1000
-        serviceSliMockingPlan: [1, 7, 0] // mocked sli values must be prepared acordingly
+        serviceSliMockingPlan: [1, 7, 0], // mocked sli values must be prepared acordingly
+        ...StakingParametricMessengerSpec
       },
     },
   ],

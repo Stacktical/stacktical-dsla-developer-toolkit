@@ -102,17 +102,7 @@ export type MessengerConfiguration = {
 };
 
 export type DeploySLAConfiguration = {
-  serviceMetadata: {
-    serviceName: string;
-    serviceDescription: string;
-    serviceImage: string;
-    serviceURL: string;
-    serviceAddress: string;
-    serviceTicker: string;
-    serviceUseTestExternalAdapter: boolean;
-    serviceSliMockingPlan: Array<number>;
-  };
-  oracleUseCaseSpec: any,
+  serviceMetadata: any;
   sloValue: number;
   sloType: SLO_TYPE;
   periodType: PERIOD_TYPE;
