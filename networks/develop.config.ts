@@ -112,11 +112,11 @@ export const develop: NetworkUserConfig = {
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
-      //  {
-      //    contract: CONTRACT_NAMES.InflationOracle,
-      //    token: CONTRACT_NAMES.LinkToken,
-      //    allowance: '10',
-      //  },
+        {
+          contract: CONTRACT_NAMES.InflationOracle,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
       ],
       registry: {
         periods: [
