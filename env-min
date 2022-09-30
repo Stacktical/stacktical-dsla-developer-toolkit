@@ -40,6 +40,7 @@ STAKING_UPTIME_ADAPTER="http://host.docker.internal:6070"
 INFLATION_ADAPTER="http://host.docker.internal:6070"
 ASSET_FLOOR_ADAPTER="http://host.docker.internal:6070"
 ASSET_PEG_ADAPTER="http://host.docker.internal:6070"
+STAKING_PARAMETRIC_ADAPTER="http://host.docker.internal:6070"
 
 
 ETHEREUM_CHAINLINK_NODE_1_URL="http://localhost"
