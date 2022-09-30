@@ -28,6 +28,7 @@ interface IStakeRegistryInterface extends ethers.utils.Interface {
     "isAllowedToken(address)": FunctionFragment;
     "lockDSLAValue(address,address,uint256)": FunctionFragment;
     "owner()": FunctionFragment;
+    "periodIsVerified(address,uint256)": FunctionFragment;
     "registerStakedSla(address)": FunctionFragment;
     "returnLockedValue(address)": FunctionFragment;
     "setSLARegistry()": FunctionFragment;
@@ -58,6 +59,10 @@ interface IStakeRegistryInterface extends ethers.utils.Interface {
     values: [string, string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "periodIsVerified",
+    values: [string, BigNumberish]
+  ): string;
   encodeFunctionData(
     functionFragment: "registerStakedSla",
     values: [string]
@@ -96,6 +101,10 @@ interface IStakeRegistryInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "periodIsVerified",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "registerStakedSla",
     data: BytesLike
@@ -212,6 +221,12 @@ export class IStakeRegistry extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
+    periodIsVerified(
+      _sla: string,
+      _periodId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
     registerStakedSla(
       _owner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -282,6 +297,12 @@ export class IStakeRegistry extends BaseContract {
   ): Promise<ContractTransaction>;
 
   owner(overrides?: CallOverrides): Promise<string>;
+
+  periodIsVerified(
+    _sla: string,
+    _periodId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
 
   registerStakedSla(
     _owner: string,
@@ -354,6 +375,12 @@ export class IStakeRegistry extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<string>;
 
+    periodIsVerified(
+      _sla: string,
+      _periodId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
     registerStakedSla(
       _owner: string,
       overrides?: CallOverrides
@@ -398,6 +425,12 @@ export class IStakeRegistry extends BaseContract {
     ): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
+
+    periodIsVerified(
+      _sla: string,
+      _periodId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     registerStakedSla(
       _owner: string,
@@ -448,6 +481,12 @@ export class IStakeRegistry extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    periodIsVerified(
+      _sla: string,
+      _periodId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     registerStakedSla(
       _owner: string,

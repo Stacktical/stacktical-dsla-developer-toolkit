@@ -187,6 +187,30 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
+        name: "_sla",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_periodId",
+        type: "uint256",
+      },
+    ],
+    name: "periodIsVerified",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
         name: "_owner",
         type: "address",
       },

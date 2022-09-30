@@ -13,6 +13,31 @@ const _abi = [
       {
         indexed: true,
         internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "bytes32",
+        name: "jobId",
+        type: "bytes32",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "fee",
+        type: "uint256",
+      },
+    ],
+    name: "JobIdModified",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
         name: "previousOwner",
         type: "address",
       },
@@ -58,6 +83,31 @@ const _abi = [
     type: "event",
   },
   {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "caller",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "requestsCounter",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "bytes32",
+        name: "requestId",
+        type: "bytes32",
+      },
+    ],
+    name: "SLIRequested",
+    type: "event",
+  },
+  {
     inputs: [],
     name: "fee",
     outputs: [
@@ -79,7 +129,7 @@ const _abi = [
       },
       {
         internalType: "uint256",
-        name: "_chainlinkResponseUint256",
+        name: "answer",
         type: "uint256",
       },
     ],

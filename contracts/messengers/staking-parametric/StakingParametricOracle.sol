@@ -13,7 +13,11 @@ import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
 import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 import '@openzeppelin/contracts/utils/Strings.sol';
 
-contract StakingParametricOracle is ChainlinkClient, IMessenger, ReentrancyGuard {
+contract StakingParametricOracle is
+    ChainlinkClient,
+    IMessenger,
+    ReentrancyGuard
+{
     using SafeERC20 for ERC20;
     using Chainlink for Chainlink.Request;
 
@@ -62,14 +66,6 @@ contract StakingParametricOracle is ChainlinkClient, IMessenger, ReentrancyGuard
         spName = _spName;
         spSymbol = _spSymbol;
     }
-
-    event JobIdModified(address indexed owner, bytes32 jobId, uint256 fee);
-
-    event SLIRequested(
-        address indexed caller,
-        uint256 requestsCounter,
-        bytes32 requestId
-    );
 
     modifier onlySLARegistry() {
         if (!retry) {
