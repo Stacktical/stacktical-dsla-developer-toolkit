@@ -1,4 +1,5 @@
 import {
+  appRoot,
   CONTRACT_NAMES,
   PERIOD_TYPE,
   SERVICE_CREDITS,
@@ -8,13 +9,13 @@ import {
 import { EthereumERC20__factory } from '../typechain';
 import { NetworkUserConfig } from 'hardhat/types';
 import { scripts } from '../scripts.config';
-
 import Joi from 'joi';
 
 const schema = Joi.object({
-  DEVELOP_MNEMONIC: Joi.string().required(),
-  DEVELOP_URI: Joi.string().required(),
-  DEVELOP_WS_URI: Joi.string().required(),
+  TESTNET_MNEMONIC: Joi.string().required(),
+  ARBITRUMTESTNET_URI: Joi.string().required(),
+  ARBITRUMTESTNET_WS_URI: Joi.string().required(),
+  STAKING_REWARDS_ADAPTER: Joi.string().required(),
 }).unknown();
 
 const { error, value } = schema.validate(process.env);
@@ -25,35 +26,17 @@ if (error) {
   process.env = value;
 }
 
-export const develop: NetworkUserConfig = {
-  chainId: 13370101,
+export const arbitrumtestnet: NetworkUserConfig = {
+  chainId: 421613,
   accounts: {
-    mnemonic: process.env.DEVELOP_MNEMONIC,
+    mnemonic: process.env.TESTNET_MNEMONIC,
   },
-  url: 'http://localhost:8545',
+  url: process.env.ARBITRUMTESTNET_URI,
   stacktical: {
     checkPastPeriods: false,
     deployTokens: true,
-    ipfs: process.env.DEVELOP_IPFS_URI,
-    chainlink: {
-      deployLocal: true, // Deploys local dockers everytime
-      deleteOldJobs: true,
-      cleanLocalFolder: true,
-      nodeFunds: '10',
-      ethWsUrl: 'ws://host.docker.internal:8545',
-      ethHttpUrl: 'http://host.docker.internal:8545',
-      nodesConfiguration: [
-        {
-          name: 'node-1',
-          restApiUrl: 'http://localhost',
-          restApiPort: '6688',
-          email: 'test@stacktical.com',
-          password: 'FOObar123567BARfoo!*@$',
-        },
-      ],
-    },
-    addresses: {},
     tokens: [
+      /**  */
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.DSLA,
@@ -72,16 +55,29 @@ export const develop: NetworkUserConfig = {
       },
       {
         factory: EthereumERC20__factory,
-        name: TOKEN_NAMES.WETH,
+        name: TOKEN_NAMES.WETH,    // REPLACE WITH ARBITRUMTESTNET NATIVE TOKEN WHENEVER RELEASED
       },
     ],
+    ipfs: process.env.IPFS_URI,
+    chainlink: {
+      deployLocal: false,
+      deleteOldJobs: false,
+      cleanLocalFolder: false,
+      nodeFunds: '0.01',
+      ethWsUrl: process.env.ARBITRUMTESTNET_WS_URI,
+      nodesConfiguration: [
+        {
+          name: 'newyork',
+          restApiUrl: process.env.ARBITRUMTESTNET_CHAINLINK_NODE_2_URL,
+          restApiPort: process.env.ARBITRUMTESTNET_CHAINLINK_NODE_2_PORT,
+          email: process.env.ARBITRUMTESTNET_CHAINLINK_NODE_2_USER,
+          password: process.env.ARBITRUMTESTNET_CHAINLINK_NODE_2_PASS,
+        },
+      ],
+    },
+    addresses: {},
     bootstrap: {
       allowance: [
-        {
-          contract: CONTRACT_NAMES.BaseOracle,
-          token: CONTRACT_NAMES.LinkToken,
-          allowance: '10',
-        },
         {
           contract: CONTRACT_NAMES.StakingRewardsOracle,
           token: CONTRACT_NAMES.LinkToken,
@@ -89,6 +85,11 @@ export const develop: NetworkUserConfig = {
         },
         {
           contract: CONTRACT_NAMES.StakingUptimeOracle,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
+        {
+          contract: CONTRACT_NAMES.StakingRewardsOracle,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
@@ -107,22 +108,17 @@ export const develop: NetworkUserConfig = {
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
-        {
-          contract: CONTRACT_NAMES.InflationOracle,
-          token: CONTRACT_NAMES.LinkToken,
-          allowance: '10',
-        },
-        {
-          contract: CONTRACT_NAMES.StakingParametricOracle,
-          token: CONTRACT_NAMES.LinkToken,
-          allowance: '10',
-        },
+       {
+         contract: CONTRACT_NAMES.InflationOracle,
+         token: CONTRACT_NAMES.LinkToken,
+         allowance: '10',
+       },
       ],
       registry: {
         periods: [
           {
             periodType: PERIOD_TYPE.DAILY,
-            amountOfPeriods: 31, // Number of periods from now
+            amountOfPeriods: 365, // Number of periods from now
             expiredPeriods: 0,
           },
           {
@@ -149,15 +145,6 @@ export const develop: NetworkUserConfig = {
       },
     },
     messengers: [
-      {
-        contract: CONTRACT_NAMES.BaseOracle,
-        useCaseName: USE_CASES.BASE_MESSENGER,
-        externalAdapterUrl: 'http://host.docker.internal:6070',
-        dslaLpName: SERVICE_CREDITS.BASE.DSLA_LP.name,
-        dslaLpSymbol: SERVICE_CREDITS.BASE.DSLA_LP.symbol,
-        dslaSpName: SERVICE_CREDITS.BASE.DSLA_SP.name,
-        dslaSpSymbol: SERVICE_CREDITS.BASE.DSLA_SP.symbol,
-      },
       {
         contract: CONTRACT_NAMES.StakingRewardsOracle,
         useCaseName: USE_CASES.STAKING_REWARDS,
@@ -203,15 +190,6 @@ export const develop: NetworkUserConfig = {
         dslaSpName: SERVICE_CREDITS.ASSET_PEG.DSLA_SP.name,
         dslaSpSymbol: SERVICE_CREDITS.ASSET_PEG.DSLA_SP.symbol,
       },
-      {
-        contract: CONTRACT_NAMES.StakingParametricOracle,
-        useCaseName: USE_CASES.STAKING_PARAMETRIC,
-        externalAdapterUrl: process.env.STAKING_PARAMETRIC_ADAPTER,
-        dslaLpName: SERVICE_CREDITS.STAKING_PARAMETRIC.DSLA_LP.name,
-        dslaLpSymbol: SERVICE_CREDITS.STAKING_PARAMETRIC.DSLA_LP.symbol,
-        dslaSpName: SERVICE_CREDITS.STAKING_PARAMETRIC.DSLA_SP.name,
-        dslaSpSymbol: SERVICE_CREDITS.STAKING_PARAMETRIC.DSLA_SP.symbol,
-      },    
     ],
     scripts: scripts,
   },
