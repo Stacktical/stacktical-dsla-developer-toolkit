@@ -1,5 +1,61 @@
 [
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_messengerChainlinkOracle",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_feeMultiplier",
+        "type": "uint256"
+      },
+      {
+        "internalType": "contract PeriodRegistry",
+        "name": "_periodRegistry",
+        "type": "address"
+      },
+      {
+        "internalType": "contract StakeRegistry",
+        "name": "_stakeRegistry",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "_networkName",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "string",
+        "name": "_lpName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_lpSymbol",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_spName",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_spSymbol",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -121,7 +177,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "answer",
+        "name": "_chainlinkResponse",
         "type": "uint256"
       }
     ],
@@ -211,6 +267,37 @@
         "type": "uint256"
       }
     ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_periodId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_chainlinkResponse",
+        "type": "uint256"
+      }
+    ],
+    "name": "mockFulfillSLI",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "networkName",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -250,6 +337,30 @@
   {
     "inputs": [
       {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "name": "requestIdToSLIRequest",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "slaAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "periodId",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "_periodId",
         "type": "uint256"
@@ -261,7 +372,7 @@
       },
       {
         "internalType": "bool",
-        "name": "_ownerApproval",
+        "name": "",
         "type": "bool"
       },
       {
@@ -273,6 +384,25 @@
     "name": "requestSLI",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "requests",
+    "outputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
