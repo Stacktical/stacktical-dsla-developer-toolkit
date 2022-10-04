@@ -98,10 +98,7 @@ export function handleStake(event: Stake): void {
   let sla = SLA.load(event.address.toHexString())!;
   let deposit = new Deposit(event.transaction.hash.toHexString());
   let slaContract = SLAContract.bind(event.address);
-  deposit.type =
-    sla.owner!.toHexString() == event.params.caller.toHexString()
-      ? 'provider'
-      : 'user';
+  deposit.position = event.params.position == 0 ? 'OK' : 'KO';
   deposit.amount = event.params.amount;
   deposit.tokenAddress = event.params.tokenAddress;
   deposit.callerAddress = event.params.caller;
@@ -154,7 +151,7 @@ export function handleProviderWithdraw(event: ProviderWithdraw): void {
   let sla = SLA.load(event.address.toHexString())!;
   let slaContract = SLAContract.bind(event.address);
   let withdrawal = new Withdrawal(event.transaction.hash.toHexString());
-  withdrawal.type = 'provider';
+  withdrawal.position = 'OK';
   withdrawal.amount = event.params.amount;
   withdrawal.tokenAddress = event.params.tokenAddress;
   withdrawal.callerAddress = event.params.caller;
@@ -204,7 +201,7 @@ export function handleUserWithdraw(event: ProviderWithdraw): void {
   }
   let slaContract = SLAContract.bind(event.address);
   let withdrawal = new Withdrawal(event.transaction.hash.toHexString());
-  withdrawal.type = 'user';
+  withdrawal.position = 'KO';
   withdrawal.amount = event.params.amount;
   withdrawal.tokenAddress = event.params.tokenAddress;
   withdrawal.callerAddress = event.params.caller;
@@ -273,7 +270,7 @@ export function handleDTokensCreated(event: DTokensCreated): void {
   let spToken = new DToken(event.params.duTokenAddress.toHexString());
   let spTokenContract = ERC20.bind(event.params.duTokenAddress);
   spToken.name = spTokenContract.name();
-  spToken.type = 'user';
+  spToken.position = 'KO';
   spToken.address = event.params.duTokenAddress;
   spToken.symbol = spTokenContract.symbol();
   spToken.slaAddress = event.address;
@@ -289,7 +286,7 @@ export function handleDTokensCreated(event: DTokensCreated): void {
   let lpToken = new DToken(event.params.dpTokenAddress.toHexString());
   let lpTokenContract = ERC20.bind(event.params.dpTokenAddress);
   lpToken.name = lpTokenContract.name();
-  lpToken.type = 'provider';
+  lpToken.position = 'OK';
   lpToken.address = event.params.dpTokenAddress;
   lpToken.symbol = lpTokenContract.symbol();
   lpToken.slaAddress = event.address;
@@ -308,7 +305,7 @@ export function handleDTokensCreated(event: DTokensCreated): void {
 export function handleValueLocked(event: ValueLocked): void {
   let deposit = new Deposit(event.transaction.hash.toHexString());
   let stakeRegistryContract = StakeRegistry.bind(event.address);
-  deposit.type = 'dsla-locked';
+  deposit.position = 'dsla-locked';
   deposit.amount = event.params.amount;
   deposit.slaAddress = event.params.sla;
   deposit.callerAddress = event.params.owner;
@@ -333,7 +330,7 @@ export function handleValueLocked(event: ValueLocked): void {
 export function handleLockedValueReturned(event: LockedValueReturned): void {
   let withdrawal = new Withdrawal(event.transaction.hash.toHexString());
   let stakeRegistryContract = StakeRegistry.bind(event.address);
-  withdrawal.type = 'dsla-returned';
+  withdrawal.position = 'dsla-returned';
   withdrawal.amount = event.params.amount;
   withdrawal.slaAddress = event.params.sla;
   withdrawal.callerAddress = event.params.owner;

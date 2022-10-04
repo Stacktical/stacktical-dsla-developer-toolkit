@@ -35,7 +35,7 @@ type SLI @entity {
 type DToken @entity {
   id: ID!
   name: String!
-  type: String!
+  position: String!
   symbol: String!
   address: Bytes!
   slaAddress: Bytes!
@@ -45,7 +45,7 @@ type DToken @entity {
 
 type Deposit @entity {
   id: ID!
-  type: String!
+  position: String!
   amount: BigInt!
   tokenAddress: Bytes!
   callerAddress: Bytes!
@@ -54,7 +54,7 @@ type Deposit @entity {
 
 type Withdrawal @entity {
   id: ID!
-  type: String!
+  position: String!
   amount: BigInt!
   tokenAddress: Bytes!
   callerAddress: Bytes!
