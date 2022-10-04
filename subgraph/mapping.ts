@@ -112,7 +112,7 @@ export function handleStake(event: Stake): void {
   }
   sla.deposits = sla.deposits!.concat([deposit.id]);
   sla.maxHedge = slaContract
-    .providerPool(event.params.tokenAddress)
+    .providersPool(event.params.tokenAddress)
     .div(sla.leverage)
     .minus(slaContract.usersPool(event.params.tokenAddress));
   if (sla.maxHedge!.lt(BigInt.fromI32(0))) {
@@ -165,7 +165,7 @@ export function handleProviderWithdraw(event: ProviderWithdraw): void {
   }
   sla.withdrawals = sla.withdrawals!.concat([withdrawal.id]);
   sla.maxHedge = slaContract
-    .providerPool(event.params.tokenAddress)
+    .providersPool(event.params.tokenAddress)
     .div(sla.leverage)
     .minus(slaContract.usersPool(event.params.tokenAddress));
   if (sla.maxHedge!.lt(BigInt.fromI32(0))) {
@@ -215,7 +215,7 @@ export function handleUserWithdraw(event: ProviderWithdraw): void {
   }
   sla.withdrawals = sla.withdrawals!.concat([withdrawal.id]);
   sla.maxHedge = slaContract
-    .providerPool(event.params.tokenAddress)
+    .providersPool(event.params.tokenAddress)
     .div(sla.leverage)
     .minus(slaContract.usersPool(event.params.tokenAddress));
   if (sla.maxHedge!.lt(BigInt.fromI32(0))) {
