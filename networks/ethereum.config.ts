@@ -135,11 +135,11 @@ export const ethereum: NetworkUserConfig = {
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
-       {
-         contract: CONTRACT_NAMES.InflationOracle,
-         token: CONTRACT_NAMES.LinkToken,
-         allowance: '10',
-       },
+        {
+          contract: CONTRACT_NAMES.InflationOracle,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
       ],
       registry: {
         periods: [
@@ -161,12 +161,13 @@ export const ethereum: NetworkUserConfig = {
         ],
         stake: {
           stakingParameters: {
-            dslaBurnedByVerification: '10000',
-            dslaPlatformReward: '75',
-            dslaDepositByPeriod: '25000',
-            dslaMessengerReward: '4925',
-            dslaUserReward: '10000',
+            dslaBurnedByVerification: '100000',
+            dslaPlatformReward: '750',
+            dslaDepositByPeriod: '250000',
+            dslaMessengerReward: '49250',
+            dslaUserReward: '100000',
             burnDSLA: true,
+            maxLeverage: '4',
           },
         },
       },
