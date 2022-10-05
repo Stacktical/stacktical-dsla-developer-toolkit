@@ -115,6 +115,7 @@ export function handleStake(event: Stake): void {
   if (sla.maxHedge!.lt(BigInt.fromI32(0))) {
     sla.maxHedge = BigInt.fromI32(0);
   }
+  sla.stakersCount = slaContract.getStakersLength();
   sla.save();
   let user = User.load(event.params.caller.toHexString());
   if (!user) {
