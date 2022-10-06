@@ -32,7 +32,7 @@ export const scripts: ScriptsConfiguration = {
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
-      leverage: 20,
+      leverage: 4,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -59,7 +59,7 @@ export const scripts: ScriptsConfiguration = {
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
-      leverage: 20,
+      leverage: 4,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -86,7 +86,7 @@ export const scripts: ScriptsConfiguration = {
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
-      leverage: 50,
+      leverage: 2,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -113,7 +113,7 @@ export const scripts: ScriptsConfiguration = {
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
-      leverage: 50,
+      leverage: 2,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -140,7 +140,7 @@ export const scripts: ScriptsConfiguration = {
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
-      leverage: 20,
+      leverage: 4,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -167,7 +167,7 @@ export const scripts: ScriptsConfiguration = {
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
-      leverage: 20,
+      leverage: 4,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -194,7 +194,7 @@ export const scripts: ScriptsConfiguration = {
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
-      leverage: 20,
+      leverage: 4,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -221,7 +221,7 @@ export const scripts: ScriptsConfiguration = {
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
-      leverage: 20,
+      leverage: 4,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -248,7 +248,7 @@ export const scripts: ScriptsConfiguration = {
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
-      leverage: 20,
+      leverage: 4,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -275,7 +275,7 @@ export const scripts: ScriptsConfiguration = {
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
-      leverage: 20,
+      leverage: 4,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -302,7 +302,7 @@ export const scripts: ScriptsConfiguration = {
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
-      leverage: 20,
+      leverage: 4,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -329,7 +329,7 @@ export const scripts: ScriptsConfiguration = {
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
-      leverage: 20,
+      leverage: 4,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -356,7 +356,7 @@ export const scripts: ScriptsConfiguration = {
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 2,
-      leverage: 50, // 100 / 50 = 2% premium
+      leverage: 2, // 100 / 50 = 2% premium
       serviceMetadata: {
         serviceName: 'Federal Reserve',
         serviceDescription:
@@ -383,7 +383,7 @@ export const scripts: ScriptsConfiguration = {
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 2,
-      leverage: 50, // 100 / 50 = 2% premium
+      leverage: 2, // 100 / 50 = 2% premium
       serviceMetadata: {
         serviceName: 'Federal Reserve',
         serviceDescription:
@@ -410,7 +410,7 @@ export const scripts: ScriptsConfiguration = {
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 2,
-      leverage: 50, // 100 / 50 = 2% premium
+      leverage: 2, // 100 / 50 = 2% premium
       serviceMetadata: {
         serviceName: 'Federal Reserve',
         serviceDescription:
@@ -437,7 +437,7 @@ export const scripts: ScriptsConfiguration = {
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 2,
-      leverage: 50, // 100 / 50 = 2% premium
+      leverage: 2, // 100 / 50 = 2% premium
       serviceMetadata: {
         serviceName: 'Federal Reserve',
         serviceDescription:
@@ -464,7 +464,7 @@ export const scripts: ScriptsConfiguration = {
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 2,
-      leverage: 50, // 100 / 50 = 2% premium
+      leverage: 2, // 100 / 50 = 2% premium
       serviceMetadata: {
         serviceName: 'Federal Reserve',
         serviceDescription:
