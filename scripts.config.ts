@@ -591,7 +591,8 @@ export const scripts: ScriptsConfiguration = {
         serviceSliMockingPlan: [90000, 90000, 90000, 90000, 90000] // mocked sli values must be prepared acordingly
       },
     },
-    // INDEX 21, Contract for IT staking parametric tests: Breached case
+    // INDEX 21, Contract for IT staking parametric tests: Breached case, minimum compensation of 1%
+    // Cases: price stable, price drop, price huge drop (capped lowest reward)
     {
       sloValue: 1,
       sloType: SLO_TYPE.SmallerThan,
@@ -602,7 +603,7 @@ export const scripts: ScriptsConfiguration = {
       finalPeriodId: 2,
       extraData: [],
       initialTokenSupply: '0',
-      initialTokenSupplyDivisor: 0,
+      initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
       leverage: 1,
@@ -614,9 +615,37 @@ export const scripts: ScriptsConfiguration = {
         serviceURL: '',
         serviceAddress: '',
         serviceTicker: 'PH',
-        // TODO Moove this in new parameter "testConfig"
-        serviceUseTestExternalAdapter: true, // as sloValue is multiplied by prescision before comparison an slo of 90 will be rised to 90000 if precision is 1000
-        serviceSliMockingPlan: [1, 7, 0], // mocked sli values must be prepared acordingly
+        serviceUseTestExternalAdapter: true,
+        serviceSliMockingPlan: [1000, 1000, 1000],
+        ...StakingParametricMessengerSpec
+      },
+    },
+    // INDEX 22, Contract for IT staking parametric tests: Breached case, max compensation of 25%
+    // Cases: price rise,  price huge rise (capped reward)
+    {
+      sloValue: 1,
+      sloType: SLO_TYPE.SmallerThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.StakingParametricOracle,
+      initialPeriodId: 0,
+      finalPeriodId: 2,
+      extraData: [],
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 100,
+      deployerStakeTimes: 100,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Staking Parametric Integration test moked Not Respected case',
+        serviceDescription:
+          'Parametric staking APR based on DSLA Token value variation between months',
+        serviceImage: 'https://via.placeholder.com/1200x600',
+        serviceURL: '',
+        serviceAddress: '',
+        serviceTicker: 'PH',
+        serviceUseTestExternalAdapter: true,
+        serviceSliMockingPlan: [1000, 3000, 25000],
         ...StakingParametricMessengerSpec
       },
     },
