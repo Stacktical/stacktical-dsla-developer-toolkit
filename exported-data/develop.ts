@@ -17,4 +17,5 @@ export const develop = {
   InflationOracle: '0x5017A545b09ab9a30499DE7F431DF0855bCb7275',
   AssetFloorOracle: '0x2D8BE6BF0baA74e0A907016679CaE9190e80dD0A',
   AssetPegOracle: '0xEC5d4F247aF81A843612eb1371CBCfa88b762119',
+  StakingParametricOracle: '0x7414e38377D6DAf6045626EC8a8ABB8a1BC4B97a',
 };
