@@ -1,6 +1,6 @@
 {
   "name": "stacktical-developer-toolkit",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "description": "Toolkit to deploy develop Chainlink Node, Graph Node, IPFS node, dev blockchain and DSLA contracts to multiple networks seamlessly",
   "scripts": {
     "hardhat-node": "hardhat node",
@@ -17,7 +17,8 @@
     "release:major": "standard-version --release-as major",
     "graph:deploy:production": "sh subgraph/deploy-subgraphs.sh",
     "graph:deploy:develop": "sh subgraph/deploy-develop.sh",
-    "postinstall": "./node_modules/.bin/pm2 install typescript"
+    "postinstall": "./node_modules/.bin/pm2 install typescript",
+    "types": "typechain --target=ethers-v5 'artifacts/**/*.json' --out-dir src/typechain --always-generate-overloads"
   },
   "repository": {
     "type": "git",
@@ -43,7 +44,7 @@
   "homepage": "https://github.com/Stacktical/stacktical-developer-toolkit#readme",
   "dependencies": {
     "@chainlink/token": "^1.1.0",
-    "@dsla-protocol/core": "^2.0.0",
+    "@dsla-protocol/core": "^2.1.0",
     "@graphprotocol/graph-cli": "^0.26.0",
     "@graphprotocol/graph-ts": "^0.24.1",
     "@harmony-js/core": "^0.1.57",
