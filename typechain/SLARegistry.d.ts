@@ -24,7 +24,7 @@ interface SLARegistryInterface extends ethers.utils.Interface {
     "SLAs(uint256)": FunctionFragment;
     "allSLAs()": FunctionFragment;
     "checkPastPeriod()": FunctionFragment;
-    "createSLA(uint120,uint8,bool,address,uint8,uint128,uint128,string,bytes32[],uint64)": FunctionFragment;
+    "createSLA(uint120,uint8,bool,address,uint8,uint128,uint128,string,uint256[],uint256[],uint64)": FunctionFragment;
     "isRegisteredSLA(address)": FunctionFragment;
     "messengerRegistry()": FunctionFragment;
     "periodRegistry()": FunctionFragment;
@@ -53,7 +53,8 @@ interface SLARegistryInterface extends ethers.utils.Interface {
       BigNumberish,
       BigNumberish,
       string,
-      BytesLike[],
+      BigNumberish[],
+      BigNumberish[],
       BigNumberish
     ]
   ): string;
@@ -215,7 +216,8 @@ export class SLARegistry extends BaseContract {
       initialPeriodId_: BigNumberish,
       finalPeriodId_: BigNumberish,
       ipfsHash_: string,
-      extraData_: BytesLike[],
+      severity_: BigNumberish[],
+      penalty_: BigNumberish[],
       leverage_: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -272,7 +274,8 @@ export class SLARegistry extends BaseContract {
     initialPeriodId_: BigNumberish,
     finalPeriodId_: BigNumberish,
     ipfsHash_: string,
-    extraData_: BytesLike[],
+    severity_: BigNumberish[],
+    penalty_: BigNumberish[],
     leverage_: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -326,7 +329,8 @@ export class SLARegistry extends BaseContract {
       initialPeriodId_: BigNumberish,
       finalPeriodId_: BigNumberish,
       ipfsHash_: string,
-      extraData_: BytesLike[],
+      severity_: BigNumberish[],
+      penalty_: BigNumberish[],
       leverage_: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -418,7 +422,8 @@ export class SLARegistry extends BaseContract {
       initialPeriodId_: BigNumberish,
       finalPeriodId_: BigNumberish,
       ipfsHash_: string,
-      extraData_: BytesLike[],
+      severity_: BigNumberish[],
+      penalty_: BigNumberish[],
       leverage_: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -476,7 +481,8 @@ export class SLARegistry extends BaseContract {
       initialPeriodId_: BigNumberish,
       finalPeriodId_: BigNumberish,
       ipfsHash_: string,
-      extraData_: BytesLike[],
+      severity_: BigNumberish[],
+      penalty_: BigNumberish[],
       leverage_: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;

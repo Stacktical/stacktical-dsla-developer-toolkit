@@ -111,7 +111,8 @@ export type DeploySLAConfiguration = {
   leverage: number;
   messengerContract: CONTRACT_NAMES;
   whitelisted: boolean;
-  extraData: Array<string>;
+  severity: Array<number>;
+  penalty: Array<number>;
   initialTokenSupply: string;
   initialTokenSupplyDivisor: number;
   deployerStakeTimes: number;
