@@ -616,8 +616,8 @@ export const scripts: ScriptsConfiguration = {
         serviceSliMockingPlan: [90000, 90000, 90000, 90000, 90000], // mocked sli values must be prepared acordingly
       },
     },
-    // INDEX 21, Contract for IT staking parametric tests: Breached case, minimum compensation of 1%
-    // Cases: price stable, price drop, price huge drop (capped lowest reward)
+    // INDEX 21, Contract for IT staking parametric tests: Edge cases
+    // Cases: price close to next severity level, negative severity
     {
       sloValue: 1,
       sloType: SLO_TYPE.SmallerThan,
@@ -643,12 +643,12 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: '',
         serviceTicker: 'PH',
         serviceUseTestExternalAdapter: true,
-        serviceSliMockingPlan: [1000, 1000, 1000],
+        serviceSliMockingPlan: [1000, 100000, 250000],
         ...StakingParametricMessengerSpec,
       },
     },
     // INDEX 22, Contract for IT staking parametric tests: Breached case, max compensation of 25%
-    // Cases: price rise,  price huge rise (capped reward)
+    // Cases: price stable, price rise,  price huge rise (capped reward)
     {
       sloValue: 1,
       sloType: SLO_TYPE.SmallerThan,
@@ -674,7 +674,7 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: '',
         serviceTicker: 'PH',
         serviceUseTestExternalAdapter: true,
-        serviceSliMockingPlan: [1000, 3000, 25000],
+        serviceSliMockingPlan: [1000, 100000, 250000],
         ...StakingParametricMessengerSpec,
       },
     },

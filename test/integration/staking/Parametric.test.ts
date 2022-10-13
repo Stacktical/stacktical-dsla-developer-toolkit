@@ -87,9 +87,9 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
     let P2StakeBalanceUser2 = "";
     let P2StakeBalanceUser3 = "";
     // POOLS BALANCE
-    let P2ProviderPool = "284250";
-    let P2UserPool = "281250";
-    let P2TotalStake = "565500";
+    let P2ProviderPool = "288900";
+    let P2UserPool = "111100";
+    let P2TotalStake = "400000";
     let P2NumberOfStakers = 6;
   
     // Stacking constants P3
@@ -102,9 +102,9 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
     let P3StakeBalanceUser2 = "";
     let P3StakeBalanceUser3 = "";
     // POOLS BALANCE
-    let P3ProviderPool = "213937.50";
-    let P3UserPool = "351562.50";
-    let P3TotalStake = "565500";
+    let P3ProviderPool = "261125";
+    let P3UserPool = "138875";
+    let P3TotalStake = "400000";
     let P3NumberOfStakers = 6;
   
   
@@ -256,12 +256,9 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         });
     });
 
-
-
   // P1 tests
   describe("P1", function () {
     describe("request SLI P1", function () {
-      //it('Shoud perform a succesful request SLI for P1', async function () {
       it('Shoud perform a succesful request SLI for P1', async () => {
         const ownerApproval = true;
         const dslaToken: ERC20PresetMinterPauser = await ethers.getContract(
@@ -269,10 +266,7 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         );
 
         const periodId_p1 = Number(0)
-        const usersStake = 10
-        const expectedCompensation = 100
 
-        console.log("before request SLI P1 --DEBUG 1 ")
         const periodStartEnd = await periodRegistry.getPeriodStartAndEnd(
           PERIOD_TYPE.MONTHLY, periodId_p1
         );
@@ -289,9 +283,6 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
           }
         ))
           .to.emit(slaRegistry, 'SLIRequested')
-
-        //const messenger: BaseOracle = await ethers.getContract(CONTRACT_NAMES.BaseOracle);
-        //const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
 
         await new Promise((resolve) => sla.on('SLICreated', () => resolve(null)));
         const createdSLI = await sla.periodSLIs(periodId_p1); //nextVerifiablePeriod
@@ -330,12 +321,141 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         expect(currentP1TotalStake.toString()).equals(toWei(P1TotalStake.toString()));
       });
     });
+
+  });
+
+
+  // P2 tests
+  describe("P2", function () {
+    describe("request SLI P2", function () {
+      it('Shoud perform a succesful request SLI for P2', async () => {
+        const ownerApproval = true;
+        const dslaToken: ERC20PresetMinterPauser = await ethers.getContract(
+          CONTRACT_NAMES.DSLA
+        );
+        const periodId_p2 = Number(1)
+        const periodStartEnd = await periodRegistry.getPeriodStartAndEnd(
+          PERIOD_TYPE.MONTHLY, periodId_p2
+        );
+        console.log("Period starts and ends", periodStartEnd.start.toNumber(), periodStartEnd.end.toNumber())
+        await evm_increaseTime(periodStartEnd.end.toNumber());
+        await expect(slaRegistry.requestSLI(
+          periodId_p2,
+          sla.address,
+          ownerApproval,
+          {
+            ...(network.config.gas !== 'auto' && {
+              gasLimit: network.config.gas,
+            }),
+          }
+        ))
+          .to.emit(slaRegistry, 'SLIRequested')
+
+        await new Promise((resolve) => sla.on('SLICreated', () => resolve(null)));
+        const createdSLI = await sla.periodSLIs(periodId_p2); //nextVerifiablePeriod
+        const { timestamp, sli, status } = createdSLI;
+        slaDetailsP2 = await details.getSLADetailsArrays(sla.address)
+
+        currentP2ProviderPool = slaDetailsP2.tokensStake[0].providersPool;
+        currentP2UsersPool = slaDetailsP2.tokensStake[0].usersPool;
+        currentP2TotalStake = slaDetailsP2.tokensStake[0].totalStake;
+
+        slaStaticDetailsP2 = await details.getSLAStaticDetails(sla.address, _sloRegistry)
+
+        const slaContractSloValue = slaStaticDetailsP2.sloValue
+
+        console.log("--------------------------------------------------------------")
+        console.log('SLO: ', slaContractSloValue.toString())
+        console.log('SLI: ', sli.toString())
+        console.log('sla.address: ', sla.address);
+        console.log('Created SLI timestamp: ', timestamp.toString());
+        console.log('Created SLI sli: ', sli.toString());
+        console.log('Created SLI status: ', PERIOD_STATUS[status]);
+        console.log('SLI request process finished  for P2');
+        console.log("--------------------------------------------------------------")
+
+      });
+    });
+
+    describe("P2 tests execution", function () {
+      it('Total Provider Pool should be equal to P2 expected value', function () {
+        expect(currentP2ProviderPool.toString()).equals(toWei(P2ProviderPool.toString()));
+      });
+      it('Total User Pool should be equal to P2 expected value', function () {
+        expect(currentP2UsersPool.toString()).equals(toWei(P2UserPool.toString()));
+      });
+      it('Total Liquidity Pool should be equal to P2 expected value', function () {
+        expect(currentP2TotalStake.toString()).equals(toWei(P2TotalStake.toString()));
+      });
+    });
   });
 
 
 
+  // P3 tests
+  describe("P3", function () {
+    describe("request SLI P3", function () {
+      it('Shoud perform a succesful request SLI for P3', async () => {
+        const ownerApproval = true;
+        const dslaToken: ERC20PresetMinterPauser = await ethers.getContract(
+          CONTRACT_NAMES.DSLA
+        );
+        const periodId_p3 = Number(2)
+        const periodStartEnd = await periodRegistry.getPeriodStartAndEnd(
+          PERIOD_TYPE.MONTHLY, periodId_p3
+        );
+        console.log("Period starts and ends", periodStartEnd.start.toNumber(), periodStartEnd.end.toNumber())
+        await evm_increaseTime(periodStartEnd.end.toNumber());
+        await expect(slaRegistry.requestSLI(
+          periodId_p3,
+          sla.address,
+          ownerApproval,
+          {
+            ...(network.config.gas !== 'auto' && {
+              gasLimit: network.config.gas,
+            }),
+          }
+        ))
+          .to.emit(slaRegistry, 'SLIRequested')
 
+        await new Promise((resolve) => sla.on('SLICreated', () => resolve(null)));
+        const createdSLI = await sla.periodSLIs(periodId_p3); //nextVerifiablePeriod
+        const { timestamp, sli, status } = createdSLI;
+        slaDetailsP3 = await details.getSLADetailsArrays(sla.address)
 
+        currentP3ProviderPool = slaDetailsP3.tokensStake[0].providersPool;
+        currentP3UsersPool = slaDetailsP3.tokensStake[0].usersPool;
+        currentP3TotalStake = slaDetailsP3.tokensStake[0].totalStake;
+
+        slaStaticDetailsP3 = await details.getSLAStaticDetails(sla.address, _sloRegistry)
+
+        const slaContractSloValue = slaStaticDetailsP3.sloValue
+
+        console.log("--------------------------------------------------------------")
+        console.log('SLO: ', slaContractSloValue.toString())
+        console.log('SLI: ', sli.toString())
+        console.log('sla.address: ', sla.address);
+        console.log('Created SLI timestamp: ', timestamp.toString());
+        console.log('Created SLI sli: ', sli.toString());
+        console.log('Created SLI status: ', PERIOD_STATUS[status]);
+        console.log('SLI request process finished  for P3');
+        console.log("--------------------------------------------------------------")
+
+      });
+    });
+
+    describe("P3 tests execution", function () {
+      it('Total Provider Pool should be equal to P3 expected value', function () {
+        expect(currentP3ProviderPool.toString()).equals(toWei(P3ProviderPool.toString()));
+      });
+      it('Total User Pool should be equal to P3 expected value', function () {
+        expect(currentP3UsersPool.toString()).equals(toWei(P3UserPool.toString()));
+      });
+      it('Total Liquidity Pool should be equal to P3 expected value', function () {
+        expect(currentP3TotalStake.toString()).equals(toWei(P3TotalStake.toString()));
+      });
+    });
+  });
 
 
 });
