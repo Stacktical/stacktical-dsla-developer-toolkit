@@ -626,8 +626,8 @@ export const scripts: ScriptsConfiguration = {
       messengerContract: CONTRACT_NAMES.StakingParametricOracle,
       initialPeriodId: 0,
       finalPeriodId: 2,
-      severity: [],
-      penalty: [],
+      severity: [0, 100000, 250000], // [0%, 100%, 250%] (1000 == 1%) [price stable or down, up 100%, up 250%]
+      penalty: [100, 1000, 2500], // [1%, 10%, 25%]
       initialTokenSupply: '0',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
@@ -657,8 +657,8 @@ export const scripts: ScriptsConfiguration = {
       messengerContract: CONTRACT_NAMES.StakingParametricOracle,
       initialPeriodId: 0,
       finalPeriodId: 2,
-      severity: [],
-      penalty: [],
+      severity: [0, 100000, 250000], // [0%, 100%, 250%] (1000 == 1%) [price stable or down, up 100%, up 250%]
+      penalty: [100, 1000, 2500], // [1%, 10%, 25%]
       initialTokenSupply: '0',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
