@@ -26,19 +26,20 @@ export const scripts: ScriptsConfiguration = {
   deploy_sla: [
     // INDEX 0 | Should be BREACHED
     {
-      sloValue: 100,  // Breached as SL0 > SLi is false
+      sloValue: 100, // Breached as SL0 > SLi is false
       sloType: SLO_TYPE.GreaterThan,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseOracle, // BaseOracle returns SLIs (0~100)
       initialPeriodId: 0,
       finalPeriodId: 51,
-      extraData: [],
+      severity: [],
+      penalty: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
-      leverage: 20,
+      leverage: 4,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -48,24 +49,25 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
         serviceUseTestExternalAdapter: true,
-        serviceSliMockingPlan: []
+        serviceSliMockingPlan: [],
       },
     },
     // INDEX 1 | Should be HONORED
     {
-      sloValue: 0,  // Honored SLO > SLI of 0 is true
+      sloValue: 0, // Honored SLO > SLI of 0 is true
       sloType: SLO_TYPE.GreaterThan,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseOracle,
       initialPeriodId: 0,
       finalPeriodId: 51,
-      extraData: [],
+      severity: [],
+      penalty: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
-      leverage: 20,
+      leverage: 4,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -75,7 +77,7 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
         serviceUseTestExternalAdapter: false,
-        serviceSliMockingPlan:[],
+        serviceSliMockingPlan: [],
       },
     },
     // INDEX 2 | Should be HONORED
@@ -87,12 +89,13 @@ export const scripts: ScriptsConfiguration = {
       messengerContract: CONTRACT_NAMES.BaseOracle,
       initialPeriodId: 0,
       finalPeriodId: 51,
-      extraData: [],
+      severity: [],
+      penalty: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
-      leverage: 50,
+      leverage: 2,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -102,7 +105,7 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
         serviceUseTestExternalAdapter: false,
-        serviceSliMockingPlan:[],
+        serviceSliMockingPlan: [],
       },
     },
     // INDEX 3 | Should be BREACHED
@@ -114,12 +117,13 @@ export const scripts: ScriptsConfiguration = {
       messengerContract: CONTRACT_NAMES.BaseOracle,
       initialPeriodId: 0,
       finalPeriodId: 51,
-      extraData: [],
+      severity: [],
+      penalty: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
-      leverage: 50,
+      leverage: 2,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -129,24 +133,25 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
         serviceUseTestExternalAdapter: false,
-        serviceSliMockingPlan:[],
+        serviceSliMockingPlan: [],
       },
     },
     // INDEX 4 | Should be HONORED
     {
-      sloValue: 100,  // Honored as SLI 50 < SLO 100 is true
+      sloValue: 100, // Honored as SLI 50 < SLO 100 is true
       sloType: SLO_TYPE.SmallerThan,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseOracle, // BaseOracle returns SLIs (0~100)
       initialPeriodId: 0,
       finalPeriodId: 51,
-      extraData: [],
+      severity: [],
+      penalty: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
-      leverage: 20,
+      leverage: 4,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -156,24 +161,25 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
         serviceUseTestExternalAdapter: false,
-        serviceSliMockingPlan:[],
+        serviceSliMockingPlan: [],
       },
     },
     // INDEX 5 | Should be BREACHED
     {
-      sloValue: 10,  // Breached as SLI 50 < SLO 10 is false
+      sloValue: 10, // Breached as SLI 50 < SLO 10 is false
       sloType: SLO_TYPE.SmallerThan,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseOracle, // BaseOracle returns SLIs (0~100)
       initialPeriodId: 0,
       finalPeriodId: 51,
-      extraData: [],
+      severity: [],
+      penalty: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
-      leverage: 20,
+      leverage: 4,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -183,24 +189,25 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
         serviceUseTestExternalAdapter: false,
-        serviceSliMockingPlan:[],
+        serviceSliMockingPlan: [],
       },
     },
     // INDEX 6 | Should be HONORED
     {
-      sloValue: 60,  // Honored as SLI 50 < SLO 60 is true
+      sloValue: 60, // Honored as SLI 50 < SLO 60 is true
       sloType: SLO_TYPE.SmallerOrEqualTo,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseOracle, // BaseOracle returns SLIs (0~100)
       initialPeriodId: 0,
       finalPeriodId: 51,
-      extraData: [],
+      severity: [],
+      penalty: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
-      leverage: 20,
+      leverage: 4,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -210,24 +217,25 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
         serviceUseTestExternalAdapter: false,
-        serviceSliMockingPlan:[],
+        serviceSliMockingPlan: [],
       },
     },
     // INDEX 7 | Should be BREACHED
     {
-      sloValue: 40,  // Breached as SLI 50 < SLO 60 is false
+      sloValue: 40, // Breached as SLI 50 < SLO 60 is false
       sloType: SLO_TYPE.SmallerOrEqualTo,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseOracle, // BaseOracle returns SLIs (0~100)
       initialPeriodId: 0,
       finalPeriodId: 51,
-      extraData: [],
+      severity: [],
+      penalty: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
-      leverage: 20,
+      leverage: 4,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -237,24 +245,25 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
         serviceUseTestExternalAdapter: false,
-        serviceSliMockingPlan:[],
+        serviceSliMockingPlan: [],
       },
     },
     // INDEX 8 | Should be HONORED
     {
-      sloValue: 50,  // Breached as SLI 50 = SLO 50 is true
+      sloValue: 50, // Breached as SLI 50 = SLO 50 is true
       sloType: SLO_TYPE.EqualTo,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseOracle, // BaseOracle returns SLIs (0~100)
       initialPeriodId: 0,
       finalPeriodId: 51,
-      extraData: [],
+      severity: [],
+      penalty: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
-      leverage: 20,
+      leverage: 4,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -264,24 +273,25 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
         serviceUseTestExternalAdapter: false,
-        serviceSliMockingPlan:[],
+        serviceSliMockingPlan: [],
       },
     },
     // INDEX 9 | Should be BREACHED
     {
-      sloValue: 51,  // Breached as SLI 50 = SLO 51 is false
+      sloValue: 51, // Breached as SLI 50 = SLO 51 is false
       sloType: SLO_TYPE.EqualTo,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseOracle, // BaseOracle returns SLIs (0~100)
       initialPeriodId: 0,
       finalPeriodId: 51,
-      extraData: [],
+      severity: [],
+      penalty: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
-      leverage: 20,
+      leverage: 4,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -291,24 +301,25 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
         serviceUseTestExternalAdapter: false,
-        serviceSliMockingPlan:[],
+        serviceSliMockingPlan: [],
       },
     },
     // INDEX 10 | Should be HONORED
     {
-      sloValue: 51,  // Breached as SLI 50 != SLO 51 is true
+      sloValue: 51, // Breached as SLI 50 != SLO 51 is true
       sloType: SLO_TYPE.NotEqualTo,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseOracle, // BaseOracle returns SLIs (0~100)
       initialPeriodId: 0,
       finalPeriodId: 51,
-      extraData: [],
+      severity: [],
+      penalty: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
-      leverage: 20,
+      leverage: 4,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -318,24 +329,25 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
         serviceUseTestExternalAdapter: false,
-        serviceSliMockingPlan:[],
+        serviceSliMockingPlan: [],
       },
     },
     // INDEX 11 | Should be BREACHED
     {
-      sloValue: 50,  // Breached as SLI 50 != SLO 50 is false
+      sloValue: 50, // Breached as SLI 50 != SLO 50 is false
       sloType: SLO_TYPE.NotEqualTo,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.BaseOracle, // BaseOracle returns SLIs (0~100)
       initialPeriodId: 0,
       finalPeriodId: 51,
-      extraData: [],
+      severity: [],
+      penalty: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
-      leverage: 20,
+      leverage: 4,
       serviceMetadata: {
         serviceName: 'P-OPS',
         serviceDescription: 'Official bDSLA Beta Partner.',
@@ -345,7 +357,7 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: 'one1kf42rl6yg2avkjsu34ch2jn8yjs64ycn4n9wdj',
         serviceTicker: SENetworkNames[0],
         serviceUseTestExternalAdapter: false,
-        serviceSliMockingPlan:[],
+        serviceSliMockingPlan: [],
       },
     },
     // INDEX 12
@@ -357,12 +369,13 @@ export const scripts: ScriptsConfiguration = {
       messengerContract: CONTRACT_NAMES.InflationOracle,
       initialPeriodId: 0,
       finalPeriodId: 11,
-      extraData: [],
+      severity: [],
+      penalty: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 2,
-      leverage: 50, // 100 / 50 = 2% premium
+      leverage: 2, // 100 / 50 = 2% premium
       serviceMetadata: {
         serviceName: 'Federal Reserve',
         serviceDescription:
@@ -372,7 +385,7 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
         serviceUseTestExternalAdapter: false,
-        serviceSliMockingPlan:[],
+        serviceSliMockingPlan: [],
       },
     },
     // INDEX 13
@@ -384,12 +397,13 @@ export const scripts: ScriptsConfiguration = {
       messengerContract: CONTRACT_NAMES.InflationOracle,
       initialPeriodId: 0,
       finalPeriodId: 11,
-      extraData: [],
+      severity: [],
+      penalty: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 2,
-      leverage: 50, // 100 / 50 = 2% premium
+      leverage: 2, // 100 / 50 = 2% premium
       serviceMetadata: {
         serviceName: 'Federal Reserve',
         serviceDescription:
@@ -399,7 +413,7 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
         serviceUseTestExternalAdapter: false,
-        serviceSliMockingPlan:[],
+        serviceSliMockingPlan: [],
       },
     },
     // INDEX 14
@@ -411,12 +425,13 @@ export const scripts: ScriptsConfiguration = {
       messengerContract: CONTRACT_NAMES.InflationOracle,
       initialPeriodId: 0,
       finalPeriodId: 11,
-      extraData: [],
+      severity: [],
+      penalty: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 2,
-      leverage: 50, // 100 / 50 = 2% premium
+      leverage: 2, // 100 / 50 = 2% premium
       serviceMetadata: {
         serviceName: 'Federal Reserve',
         serviceDescription:
@@ -426,7 +441,7 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
         serviceUseTestExternalAdapter: false,
-        serviceSliMockingPlan:[],
+        serviceSliMockingPlan: [],
       },
     },
     // INDEX 15
@@ -438,12 +453,13 @@ export const scripts: ScriptsConfiguration = {
       messengerContract: CONTRACT_NAMES.InflationOracle,
       initialPeriodId: 0,
       finalPeriodId: 11,
-      extraData: [],
+      severity: [],
+      penalty: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 2,
-      leverage: 50, // 100 / 50 = 2% premium
+      leverage: 2, // 100 / 50 = 2% premium
       serviceMetadata: {
         serviceName: 'Federal Reserve',
         serviceDescription:
@@ -453,7 +469,7 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
         serviceUseTestExternalAdapter: false,
-        serviceSliMockingPlan:[],
+        serviceSliMockingPlan: [],
       },
     },
     // INDEX 16
@@ -465,12 +481,13 @@ export const scripts: ScriptsConfiguration = {
       messengerContract: CONTRACT_NAMES.InflationOracle,
       initialPeriodId: 0,
       finalPeriodId: 11,
-      extraData: [],
+      severity: [],
+      penalty: [],
       initialTokenSupply: '10000000',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 2,
-      leverage: 50, // 100 / 50 = 2% premium
+      leverage: 2, // 100 / 50 = 2% premium
       serviceMetadata: {
         serviceName: 'Federal Reserve',
         serviceDescription:
@@ -480,7 +497,7 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
         serviceUseTestExternalAdapter: false,
-        serviceSliMockingPlan:[],
+        serviceSliMockingPlan: [],
       },
     },
     // INDEX 17, Contract for IT staking tests: Not Respected case
@@ -492,14 +509,16 @@ export const scripts: ScriptsConfiguration = {
       messengerContract: CONTRACT_NAMES.BaseOracle,
       initialPeriodId: 0,
       finalPeriodId: 5,
-      extraData: [],
+      severity: [],
+      penalty: [],
       initialTokenSupply: '0',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
       leverage: 1,
       serviceMetadata: {
-        serviceName: 'Staking Integration test moked Not Respected case reward not capped',
+        serviceName:
+          'Staking Integration test moked Not Respected case reward not capped',
         serviceDescription:
           'The U.S. Federal Reserve (FED) inflation-driven monetary policy updates.',
         serviceImage: 'https://via.placeholder.com/1200x600',
@@ -507,7 +526,7 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
         serviceUseTestExternalAdapter: true, // as sloValue is multiplied by prescision before comparison an slo of 90 will be rised to 90000 if precision is 1000
-        serviceSliMockingPlan: [45000, 45000, 45000, 45000, 45000] // mocked sli values must be prepared acordingly
+        serviceSliMockingPlan: [45000, 45000, 45000, 45000, 45000], // mocked sli values must be prepared acordingly
       },
     },
     // INDEX 18, Contract for IT staking tests: Not Respected case
@@ -519,14 +538,16 @@ export const scripts: ScriptsConfiguration = {
       messengerContract: CONTRACT_NAMES.BaseOracle,
       initialPeriodId: 0,
       finalPeriodId: 5,
-      extraData: [],
+      severity: [],
+      penalty: [],
       initialTokenSupply: '0',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
       leverage: 1,
       serviceMetadata: {
-        serviceName: 'Staking Integration test moked Not Respected case reward capped',
+        serviceName:
+          'Staking Integration test moked Not Respected case reward capped',
         serviceDescription:
           'The U.S. Federal Reserve (FED) inflation-driven monetary policy updates.',
         serviceImage: 'https://via.placeholder.com/1200x600',
@@ -534,7 +555,7 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
         serviceUseTestExternalAdapter: true, // as sloValue is multiplied by prescision before comparison an slo of 90 will be rised to 90000 if precision is 1000
-        serviceSliMockingPlan: [30000, 30000, 30000, 30000, 30000] // mocked sli values must be prepared acordingly
+        serviceSliMockingPlan: [30000, 30000, 30000, 30000, 30000], // mocked sli values must be prepared acordingly
       },
     },
     // INDEX 19, Contract for IT staking tests: Respected case
@@ -546,14 +567,16 @@ export const scripts: ScriptsConfiguration = {
       messengerContract: CONTRACT_NAMES.BaseOracle,
       initialPeriodId: 0,
       finalPeriodId: 5,
-      extraData: [],
+      severity: [],
+      penalty: [],
       initialTokenSupply: '0',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
       leverage: 1,
       serviceMetadata: {
-        serviceName: 'Staking Integration test moked Respected case reward not capped',
+        serviceName:
+          'Staking Integration test moked Respected case reward not capped',
         serviceDescription:
           'The U.S. Federal Reserve (FED) inflation-driven monetary policy updates.',
         serviceImage: 'https://via.placeholder.com/1200x600',
@@ -561,7 +584,7 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
         serviceUseTestExternalAdapter: true, // as sloValue is multiplied by prescision before comparison an slo of 90 will be rised to 90000 if precision is 1000
-        serviceSliMockingPlan: [60000, 60000, 60000, 60000, 60000] // mocked sli values must be prepared acordingly
+        serviceSliMockingPlan: [60000, 60000, 60000, 60000, 60000], // mocked sli values must be prepared acordingly
       },
     },
     // INDEX 20, Contract for IT staking tests: Respected case
@@ -573,14 +596,16 @@ export const scripts: ScriptsConfiguration = {
       messengerContract: CONTRACT_NAMES.BaseOracle,
       initialPeriodId: 0,
       finalPeriodId: 5,
-      extraData: [],
+      severity: [],
+      penalty: [],
       initialTokenSupply: '0',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
       leverage: 1,
       serviceMetadata: {
-        serviceName: 'Staking Integration test moked Respected case reward capped',
+        serviceName:
+          'Staking Integration test moked Respected case reward capped',
         serviceDescription:
           'The U.S. Federal Reserve (FED) inflation-driven monetary policy updates.',
         serviceImage: 'https://via.placeholder.com/1200x600',
@@ -588,11 +613,11 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: '0x0000000000000000000000000000000000000000',
         serviceTicker: 'CPI',
         serviceUseTestExternalAdapter: true, // as sloValue is multiplied by prescision before comparison an slo of 90 will be rised to 90000 if precision is 1000
-        serviceSliMockingPlan: [90000, 90000, 90000, 90000, 90000] // mocked sli values must be prepared acordingly
+        serviceSliMockingPlan: [90000, 90000, 90000, 90000, 90000], // mocked sli values must be prepared acordingly
       },
     },
-    // INDEX 21, Contract for IT staking parametric tests: Breached case, minimum compensation of 1%
-    // Cases: price stable, price drop, price huge drop (capped lowest reward)
+    // INDEX 21, Contract for IT staking parametric tests: Edge cases
+    // Cases: price close to next severity level, negative severity
     {
       sloValue: 1,
       sloType: SLO_TYPE.SmallerThan,
@@ -601,14 +626,16 @@ export const scripts: ScriptsConfiguration = {
       messengerContract: CONTRACT_NAMES.StakingParametricOracle,
       initialPeriodId: 0,
       finalPeriodId: 2,
-      extraData: [],
+      severity: [0, 100000, 250000], // [0%, 100%, 250%] (1000 == 1%) [price stable or down, up 100%, up 250%]
+      penalty: [100, 1000, 2500], // [1%, 10%, 25%]
       initialTokenSupply: '0',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
       leverage: 1,
       serviceMetadata: {
-        serviceName: 'Staking Parametric Integration test moked Not Respected case',
+        serviceName:
+          'Staking Parametric Integration test moked Not Respected case',
         serviceDescription:
           'Parametric staking APR based on DSLA Token value variation between months',
         serviceImage: 'https://via.placeholder.com/1200x600',
@@ -616,12 +643,12 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: '',
         serviceTicker: 'PH',
         serviceUseTestExternalAdapter: true,
-        serviceSliMockingPlan: [1000, 1000, 1000],
-        ...StakingParametricMessengerSpec
+        serviceSliMockingPlan: [1000, 100000, 250000],
+        ...StakingParametricMessengerSpec,
       },
     },
     // INDEX 22, Contract for IT staking parametric tests: Breached case, max compensation of 25%
-    // Cases: price rise,  price huge rise (capped reward)
+    // Cases: price stable, price rise,  price huge rise (capped reward)
     {
       sloValue: 1,
       sloType: SLO_TYPE.SmallerThan,
@@ -630,14 +657,16 @@ export const scripts: ScriptsConfiguration = {
       messengerContract: CONTRACT_NAMES.StakingParametricOracle,
       initialPeriodId: 0,
       finalPeriodId: 2,
-      extraData: [],
+      severity: [0, 100000, 250000], // [0%, 100%, 250%] (1000 == 1%) [price stable or down, up 100%, up 250%]
+      penalty: [100, 1000, 2500], // [1%, 10%, 25%]
       initialTokenSupply: '0',
       initialTokenSupplyDivisor: 100,
       deployerStakeTimes: 100,
       notDeployerStakeTimes: 1,
       leverage: 1,
       serviceMetadata: {
-        serviceName: 'Staking Parametric Integration test moked Not Respected case',
+        serviceName:
+          'Staking Parametric Integration test moked Not Respected case',
         serviceDescription:
           'Parametric staking APR based on DSLA Token value variation between months',
         serviceImage: 'https://via.placeholder.com/1200x600',
@@ -645,8 +674,8 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: '',
         serviceTicker: 'PH',
         serviceUseTestExternalAdapter: true,
-        serviceSliMockingPlan: [1000, 3000, 25000],
-        ...StakingParametricMessengerSpec
+        serviceSliMockingPlan: [1000, 100000, 250000],
+        ...StakingParametricMessengerSpec,
       },
     },
   ],

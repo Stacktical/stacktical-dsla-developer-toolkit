@@ -160,11 +160,12 @@ export const polygon: NetworkUserConfig = {
         stake: {
           stakingParameters: {
             dslaBurnedByVerification: '0',
-            dslaPlatformReward: '10075',
-            dslaDepositByPeriod: '25000',
-            dslaMessengerReward: '4925',
-            dslaUserReward: '10000',
+            dslaPlatformReward: '100750',
+            dslaDepositByPeriod: '250000',
+            dslaMessengerReward: '49250',
+            dslaUserReward: '100000',
             burnDSLA: false,
+            maxLeverage: '4',
           },
         },
       },

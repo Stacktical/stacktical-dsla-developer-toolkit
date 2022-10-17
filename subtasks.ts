@@ -1655,7 +1655,8 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
         periodType,
         initialPeriodId,
         finalPeriodId,
-        extraData,
+        severity,
+        penalty,
         leverage,
         initialTokenSupply,
         initialTokenSupplyDivisor,
@@ -1711,7 +1712,8 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
         initialPeriodId,
         finalPeriodId,
         ipfsHash,
-        extraData,
+        severity,
+        penalty,
         leverage,
         {
           ...(hre.network.config.gas !== 'auto' && {

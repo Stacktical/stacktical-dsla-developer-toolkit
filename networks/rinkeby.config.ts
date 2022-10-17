@@ -122,11 +122,11 @@ export const rinkeby: NetworkUserConfig = {
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
-       {
-         contract: CONTRACT_NAMES.InflationOracle,
-         token: CONTRACT_NAMES.LinkToken,
-         allowance: '10',
-       },
+        {
+          contract: CONTRACT_NAMES.InflationOracle,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
       ],
       registry: {
         periods: [
@@ -154,6 +154,7 @@ export const rinkeby: NetworkUserConfig = {
             dslaMessengerReward: '4925',
             dslaUserReward: '10000',
             burnDSLA: true,
+            maxLeverage: '4',
           },
         },
       },

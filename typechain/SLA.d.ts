@@ -29,7 +29,6 @@ interface SLAInterface extends ethers.utils.Interface {
     "creationBlockNumber()": FunctionFragment;
     "dpTokenRegistry(address)": FunctionFragment;
     "duTokenRegistry(address)": FunctionFragment;
-    "extraData(uint256)": FunctionFragment;
     "finalPeriodId()": FunctionFragment;
     "getAllowedTokensLength()": FunctionFragment;
     "getStakersLength()": FunctionFragment;
@@ -43,6 +42,7 @@ interface SLAInterface extends ethers.utils.Interface {
     "messengerAddress()": FunctionFragment;
     "nextVerifiablePeriod()": FunctionFragment;
     "owner()": FunctionFragment;
+    "penalty(uint256)": FunctionFragment;
     "periodSLIs(uint256)": FunctionFragment;
     "periodType()": FunctionFragment;
     "providersPool(address)": FunctionFragment;
@@ -50,6 +50,7 @@ interface SLAInterface extends ethers.utils.Interface {
     "registeredStakers(address)": FunctionFragment;
     "removeUsersFromWhitelist(address[])": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
+    "severity(uint256)": FunctionFragment;
     "slaID()": FunctionFragment;
     "stakeTokens(uint256,address,uint8)": FunctionFragment;
     "stakersNum()": FunctionFragment;
@@ -92,10 +93,6 @@ interface SLAInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "duTokenRegistry",
     values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "extraData",
-    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "finalPeriodId",
@@ -141,6 +138,10 @@ interface SLAInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "penalty",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "periodSLIs",
     values: [BigNumberish]
   ): string;
@@ -167,6 +168,10 @@ interface SLAInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "severity",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "slaID", values?: undefined): string;
   encodeFunctionData(
@@ -228,7 +233,6 @@ interface SLAInterface extends ethers.utils.Interface {
     functionFragment: "duTokenRegistry",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "extraData", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "finalPeriodId",
     data: BytesLike
@@ -272,6 +276,7 @@ interface SLAInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "penalty", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "periodSLIs", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "periodType", data: BytesLike): Result;
   decodeFunctionResult(
@@ -294,6 +299,7 @@ interface SLAInterface extends ethers.utils.Interface {
     functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "severity", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "slaID", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "stakeTokens",
@@ -481,8 +487,6 @@ export class SLA extends BaseContract {
 
     duTokenRegistry(arg0: string, overrides?: CallOverrides): Promise<[string]>;
 
-    extraData(arg0: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
-
     finalPeriodId(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     getAllowedTokensLength(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -521,6 +525,11 @@ export class SLA extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
+    penalty(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     periodSLIs(
       arg0: BigNumberish,
       overrides?: CallOverrides
@@ -558,6 +567,11 @@ export class SLA extends BaseContract {
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    severity(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     slaID(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -616,8 +630,6 @@ export class SLA extends BaseContract {
 
   duTokenRegistry(arg0: string, overrides?: CallOverrides): Promise<string>;
 
-  extraData(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
-
   finalPeriodId(overrides?: CallOverrides): Promise<BigNumber>;
 
   getAllowedTokensLength(overrides?: CallOverrides): Promise<BigNumber>;
@@ -653,6 +665,8 @@ export class SLA extends BaseContract {
 
   owner(overrides?: CallOverrides): Promise<string>;
 
+  penalty(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
   periodSLIs(
     arg0: BigNumberish,
     overrides?: CallOverrides
@@ -684,6 +698,8 @@ export class SLA extends BaseContract {
   renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  severity(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
   slaID(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -745,8 +761,6 @@ export class SLA extends BaseContract {
 
     duTokenRegistry(arg0: string, overrides?: CallOverrides): Promise<string>;
 
-    extraData(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
-
     finalPeriodId(overrides?: CallOverrides): Promise<BigNumber>;
 
     getAllowedTokensLength(overrides?: CallOverrides): Promise<BigNumber>;
@@ -782,6 +796,8 @@ export class SLA extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<string>;
 
+    penalty(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
     periodSLIs(
       arg0: BigNumberish,
       overrides?: CallOverrides
@@ -814,6 +830,8 @@ export class SLA extends BaseContract {
     ): Promise<void>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    severity(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     slaID(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1122,11 +1140,6 @@ export class SLA extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    extraData(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     finalPeriodId(overrides?: CallOverrides): Promise<BigNumber>;
 
     getAllowedTokensLength(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1162,6 +1175,8 @@ export class SLA extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
+    penalty(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
     periodSLIs(
       arg0: BigNumberish,
       overrides?: CallOverrides
@@ -1190,6 +1205,8 @@ export class SLA extends BaseContract {
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    severity(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     slaID(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1260,11 +1277,6 @@ export class SLA extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    extraData(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     finalPeriodId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getAllowedTokensLength(
@@ -1307,6 +1319,11 @@ export class SLA extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    penalty(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     periodSLIs(
       arg0: BigNumberish,
       overrides?: CallOverrides
@@ -1337,6 +1354,11 @@ export class SLA extends BaseContract {
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    severity(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     slaID(overrides?: CallOverrides): Promise<PopulatedTransaction>;

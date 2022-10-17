@@ -21,7 +21,7 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface SLORegistryInterface extends ethers.utils.Interface {
   functions: {
-    "getDeviation(uint256,address)": FunctionFragment;
+    "getDeviation(uint256,address,uint256[],uint256[])": FunctionFragment;
     "isRespected(uint256,address)": FunctionFragment;
     "registerSLO(uint120,uint8,address)": FunctionFragment;
     "registeredSLO(address)": FunctionFragment;
@@ -30,7 +30,7 @@ interface SLORegistryInterface extends ethers.utils.Interface {
 
   encodeFunctionData(
     functionFragment: "getDeviation",
-    values: [BigNumberish, string]
+    values: [BigNumberish, string, BigNumberish[], BigNumberish[]]
   ): string;
   encodeFunctionData(
     functionFragment: "isRespected",
@@ -132,6 +132,8 @@ export class SLORegistry extends BaseContract {
     getDeviation(
       _sli: BigNumberish,
       _slaAddress: string,
+      severity: BigNumberish[],
+      penalty: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
@@ -161,6 +163,8 @@ export class SLORegistry extends BaseContract {
   getDeviation(
     _sli: BigNumberish,
     _slaAddress: string,
+    severity: BigNumberish[],
+    penalty: BigNumberish[],
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -190,6 +194,8 @@ export class SLORegistry extends BaseContract {
     getDeviation(
       _sli: BigNumberish,
       _slaAddress: string,
+      severity: BigNumberish[],
+      penalty: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -238,6 +244,8 @@ export class SLORegistry extends BaseContract {
     getDeviation(
       _sli: BigNumberish,
       _slaAddress: string,
+      severity: BigNumberish[],
+      penalty: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -265,6 +273,8 @@ export class SLORegistry extends BaseContract {
     getDeviation(
       _sli: BigNumberish,
       _slaAddress: string,
+      severity: BigNumberish[],
+      penalty: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
