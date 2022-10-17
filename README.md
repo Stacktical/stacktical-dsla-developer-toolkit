@@ -31,3 +31,50 @@ hh test
 *Troubleshoot*
 
 `sudo chown -R $(whoami): $(pwd)/services`
+
+## Typechain Generation Steps
+1. Run `hh clean` to clean up hardhat project
+2. Disable task importing in `hardhat.config.ts`
+```
+import './stacktical.validation';
+import './type-extensions';
+// import './tasks';
+```
+3. Disable typechain imports in `/networks/develop.config.ts`
+```
+// import { EthereumERC20__factory } from '../typechain';
+import { NetworkUserConfig } from 'hardhat/types';
+import { scripts } from '../scripts.config';
+```
+4. Reset token settings of develop configs too.
+```
+export const develop: NetworkUserConfig = {
+  ...
+  stacktical: {
+    ...
+    addresses: {},
+    tokens: [],
+    // tokens: [
+    //   {
+    //     factory: EthereumERC20__factory,
+    //     name: TOKEN_NAMES.DSLA,
+    //   },
+    //   {
+    //     factory: EthereumERC20__factory,
+    //     name: TOKEN_NAMES.DAI,
+    //   },
+    //   {
+    //     factory: EthereumERC20__factory,
+    //     name: TOKEN_NAMES.USDC,
+    //   },
+    //   {
+    //     factory: EthereumERC20__factory,
+    //     name: TOKEN_NAMES.USDT,
+    //   },
+    //   {
+    //     factory: EthereumERC20__factory,
+    //     name: TOKEN_NAMES.WETH,
+    //   },
+    // ],
+```
+5. Run `hh compile --force` to generate typechains
