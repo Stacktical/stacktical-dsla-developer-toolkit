@@ -54,6 +54,8 @@ interface SLAInterface extends ethers.utils.Interface {
     "slaID()": FunctionFragment;
     "stakeTokens(uint256,address,uint8)": FunctionFragment;
     "stakersNum()": FunctionFragment;
+    "terminateContract()": FunctionFragment;
+    "toggleTermination()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "usersPool(address)": FunctionFragment;
     "whitelist(address)": FunctionFragment;
@@ -183,6 +185,14 @@ interface SLAInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "terminateContract",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "toggleTermination",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [string]
   ): string;
@@ -307,6 +317,14 @@ interface SLAInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "stakersNum", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "terminateContract",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "toggleTermination",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
@@ -332,6 +350,7 @@ interface SLAInterface extends ethers.utils.Interface {
     "ProviderWithdraw(address,uint256,address,uint256)": EventFragment;
     "SLICreated(uint256,uint256,uint256)": EventFragment;
     "Stake(address,uint256,address,uint256,uint8)": EventFragment;
+    "ToggleTermination(bool)": EventFragment;
     "UserCompensationGenerated(uint256,address,uint256,uint256,uint256)": EventFragment;
     "UserWithdraw(address,uint256,address,uint256)": EventFragment;
   };
@@ -342,6 +361,7 @@ interface SLAInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "ProviderWithdraw"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SLICreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Stake"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ToggleTermination"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "UserCompensationGenerated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "UserWithdraw"): EventFragment;
 }
@@ -397,6 +417,10 @@ export type StakeEvent = TypedEvent<
     amount: BigNumber;
     position: number;
   }
+>;
+
+export type ToggleTerminationEvent = TypedEvent<
+  [boolean] & { termination: boolean }
 >;
 
 export type UserCompensationGeneratedEvent = TypedEvent<
@@ -584,6 +608,12 @@ export class SLA extends BaseContract {
 
     stakersNum(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    terminateContract(overrides?: CallOverrides): Promise<[boolean]>;
+
+    toggleTermination(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -711,6 +741,12 @@ export class SLA extends BaseContract {
   ): Promise<ContractTransaction>;
 
   stakersNum(overrides?: CallOverrides): Promise<BigNumber>;
+
+  terminateContract(overrides?: CallOverrides): Promise<boolean>;
+
+  toggleTermination(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   transferOwnership(
     newOwner: string,
@@ -843,6 +879,10 @@ export class SLA extends BaseContract {
     ): Promise<void>;
 
     stakersNum(overrides?: CallOverrides): Promise<BigNumber>;
+
+    terminateContract(overrides?: CallOverrides): Promise<boolean>;
+
+    toggleTermination(overrides?: CallOverrides): Promise<void>;
 
     transferOwnership(
       newOwner: string,
@@ -1043,6 +1083,14 @@ export class SLA extends BaseContract {
       }
     >;
 
+    "ToggleTermination(bool)"(
+      termination?: null
+    ): TypedEventFilter<[boolean], { termination: boolean }>;
+
+    ToggleTermination(
+      termination?: null
+    ): TypedEventFilter<[boolean], { termination: boolean }>;
+
     "UserCompensationGenerated(uint256,address,uint256,uint256,uint256)"(
       periodId?: BigNumberish | null,
       tokenAddress?: string | null,
@@ -1219,6 +1267,12 @@ export class SLA extends BaseContract {
 
     stakersNum(overrides?: CallOverrides): Promise<BigNumber>;
 
+    terminateContract(overrides?: CallOverrides): Promise<BigNumber>;
+
+    toggleTermination(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1371,6 +1425,12 @@ export class SLA extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     stakersNum(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    terminateContract(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    toggleTermination(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     transferOwnership(
       newOwner: string,
