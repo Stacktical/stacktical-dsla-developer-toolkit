@@ -123,12 +123,12 @@ export const develop: NetworkUserConfig = {
           {
             periodType: PERIOD_TYPE.DAILY,
             amountOfPeriods: 31, // Number of periods from now
-            expiredPeriods: 0,
+            expiredPeriods: 14,
           },
           {
             periodType: PERIOD_TYPE.WEEKLY,
             amountOfPeriods: 52, // Number of periods from now
-            expiredPeriods: 0,
+            expiredPeriods: 26,
           },
           {
             periodType: PERIOD_TYPE.MONTHLY,
