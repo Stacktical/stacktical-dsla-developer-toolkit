@@ -38,6 +38,7 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
     let sla: SLA;
     let details;
     let unnamedAccounts;
+    let sla_owner;
   
     let provider_1_account: SignerWithAddress;
     let provider_2_account: SignerWithAddress;
@@ -164,6 +165,7 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         // get the contract INDEX 21, Contract for IT staking tests: Not Respected case reward capped
         sla = await ethers.getContractAt(CONTRACT_NAMES.SLA, allSLAs[22]);
         details = await ethers.getContract(CONTRACT_NAMES.Details);
+        sla_owner = await sla.owner();
         [
           provider_1_account,
           provider_2_account,
@@ -180,7 +182,7 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
     
         // Approve allocation of amount to dslaToken address
         consola.info('Approve allocation of amount to dslaToken address');
-        let amount = 563500;
+        let amount = 400000;
         tx = await dslaToken.approve(sla.address, amount);
     
         consola.info('Stake DSLA tokens for providers');
@@ -294,6 +296,19 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         currentP1TotalStake = slaDetailsP1.tokensStake[0].totalStake;
 
         slaStaticDetailsP1 = await details.getSLAStaticDetails(sla.address, _sloRegistry)
+        const slaDTokensDetailsP1 = await details.getDTokensDetails(sla.address, sla_owner)
+
+        const providerPoolRawChangeP1 = currentP1ProviderPool.sub(toWei(initialProviderPool))
+        const userPoolRawChangeP1 = currentP1UsersPool.sub(initialUserPool)
+
+        const providerPoolPctChangeP1 = currentP1ProviderPool.div(toWei(initialProviderPool)).mul(100)
+        const userPoolPctChangeP1 = currentP1UsersPool.div(toWei(initialUserPool)).mul(100)
+        // pourcentage = (montant partiel / montant total) x 100
+
+        //const userPoolRawChangeP1 = //currentUsersPool currentProviderPool
+        
+        /*const providerPoolPctChangeP1 = 0
+        const providerPoolPctChangeP1 = 0*/
 
         const slaContractSloValue = slaStaticDetailsP1.sloValue
 
@@ -305,6 +320,17 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         console.log('Created SLI sli: ', sli.toString());
         console.log('Created SLI status: ', PERIOD_STATUS[status]);
         console.log('SLI request process finished  for P1');
+        console.log("dpTokens balance: ", slaDTokensDetailsP1.dpTokens[0].balance.toString())
+        console.log("duTokens balance: ", slaDTokensDetailsP1.duTokens[0].balance.toString())
+
+        console.log("dpTokens totalSupply: ", slaDTokensDetailsP1.dpTokens[0].totalSupply.toString())
+        console.log("duTokens totalSupply: ", slaDTokensDetailsP1.duTokens[0].totalSupply.toString())
+
+        console.log("Provider Pool balance: ", currentP1ProviderPool.toString())
+        console.log("User Pool balance: ", currentP1UsersPool.toString())
+
+        console.log("provider Pool PctChange P1: ", providerPoolPctChangeP1.toString())
+        console.log("user Pool Pct Change P1: ", userPoolPctChangeP1.toString())
         console.log("--------------------------------------------------------------")
 
       });
@@ -361,6 +387,7 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         currentP2TotalStake = slaDetailsP2.tokensStake[0].totalStake;
 
         slaStaticDetailsP2 = await details.getSLAStaticDetails(sla.address, _sloRegistry)
+        const slaDTokensDetailsP2 = await details.getDTokensDetails(sla.address, sla_owner)
 
         const slaContractSloValue = slaStaticDetailsP2.sloValue
 
@@ -372,6 +399,12 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         console.log('Created SLI sli: ', sli.toString());
         console.log('Created SLI status: ', PERIOD_STATUS[status]);
         console.log('SLI request process finished  for P2');
+        console.log("dpTokens balance: ", slaDTokensDetailsP2.dpTokens[0].balance.toString())
+        console.log("duTokens balance: ", slaDTokensDetailsP2.duTokens[0].balance.toString())
+        console.log("dpTokens totalSupply: ", slaDTokensDetailsP2.dpTokens[0].totalSupply.toString())
+        console.log("duTokens totalSupply: ", slaDTokensDetailsP2.duTokens[0].totalSupply.toString())
+        console.log("Provider Pool balance: ", currentP2ProviderPool.toString())
+        console.log("User Pool balance: ", currentP2UsersPool.toString())
         console.log("--------------------------------------------------------------")
 
       });
@@ -428,6 +461,7 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         currentP3TotalStake = slaDetailsP3.tokensStake[0].totalStake;
 
         slaStaticDetailsP3 = await details.getSLAStaticDetails(sla.address, _sloRegistry)
+        const slaDTokensDetailsP3 = await details.getDTokensDetails(sla.address, sla_owner)
 
         const slaContractSloValue = slaStaticDetailsP3.sloValue
 
@@ -439,6 +473,12 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         console.log('Created SLI sli: ', sli.toString());
         console.log('Created SLI status: ', PERIOD_STATUS[status]);
         console.log('SLI request process finished  for P3');
+        console.log("dpTokens balance: ", slaDTokensDetailsP3.dpTokens[0].balance.toString())
+        console.log("duTokens balance: ", slaDTokensDetailsP3.duTokens[0].balance.toString())
+        console.log("dpTokens totalSupply: ", slaDTokensDetailsP3.dpTokens[0].totalSupply.toString())
+        console.log("duTokens totalSupply: ", slaDTokensDetailsP3.duTokens[0].totalSupply.toString())
+        console.log("Provider Pool balance: ", currentP3ProviderPool.toString())
+        console.log("User Pool balance: ", currentP3UsersPool.toString())
         console.log("--------------------------------------------------------------")
 
       });
