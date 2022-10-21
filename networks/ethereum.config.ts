@@ -105,38 +105,38 @@ export const ethereum: NetworkUserConfig = {
     },
     bootstrap: {
       allowance: [
+        // {
+        //   contract: CONTRACT_NAMES.StakingRewardsOracle,
+        //   token: CONTRACT_NAMES.LinkToken,
+        //   allowance: '10',
+        // },
+        // {
+        //   contract: CONTRACT_NAMES.StakingUptimeOracle,
+        //   token: CONTRACT_NAMES.LinkToken,
+        //   allowance: '10',
+        // },
+        // {
+        //   contract: CONTRACT_NAMES.StakingRewardsOracle,
+        //   token: CONTRACT_NAMES.LinkToken,
+        //   allowance: '10',
+        // },
+        // {
+        //   contract: CONTRACT_NAMES.AssetFloorOracle,
+        //   token: CONTRACT_NAMES.LinkToken,
+        //   allowance: '10',
+        // },
+        // {
+        //   contract: CONTRACT_NAMES.AssetPegOracle,
+        //   token: CONTRACT_NAMES.LinkToken,
+        //   allowance: '10',
+        // },
+        // {
+        //   contract: CONTRACT_NAMES.InflationOracle,
+        //   token: CONTRACT_NAMES.LinkToken,
+        //   allowance: '10',
+        // },
         {
-          contract: CONTRACT_NAMES.StakingRewardsOracle,
-          token: CONTRACT_NAMES.LinkToken,
-          allowance: '10',
-        },
-        {
-          contract: CONTRACT_NAMES.StakingUptimeOracle,
-          token: CONTRACT_NAMES.LinkToken,
-          allowance: '10',
-        },
-        {
-          contract: CONTRACT_NAMES.StakingRewardsOracle,
-          token: CONTRACT_NAMES.LinkToken,
-          allowance: '10',
-        },
-        {
-          contract: CONTRACT_NAMES.AssetFloorOracle,
-          token: CONTRACT_NAMES.LinkToken,
-          allowance: '10',
-        },
-        {
-          contract: CONTRACT_NAMES.AssetPegOracle,
-          token: CONTRACT_NAMES.LinkToken,
-          allowance: '10',
-        },
-        {
-          contract: CONTRACT_NAMES.StakingUptimeOracle,
-          token: CONTRACT_NAMES.LinkToken,
-          allowance: '10',
-        },
-        {
-          contract: CONTRACT_NAMES.InflationOracle,
+          contract: CONTRACT_NAMES.StakingParametricOracle,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
@@ -144,8 +144,13 @@ export const ethereum: NetworkUserConfig = {
       registry: {
         periods: [
           {
+            periodType: PERIOD_TYPE.HOURLY,
+            amountOfPeriods: 48, // Number of periods from now
+            expiredPeriods: 0,
+          },
+          {
             periodType: PERIOD_TYPE.DAILY,
-            amountOfPeriods: 365, // Number of periods from now
+            amountOfPeriods: 31, // Number of periods from now
             expiredPeriods: 0,
           },
           {
@@ -173,50 +178,59 @@ export const ethereum: NetworkUserConfig = {
       },
     },
     messengers: [
+      // {
+      //   contract: CONTRACT_NAMES.StakingRewardsOracle,
+      //   useCaseName: USE_CASES.STAKING_REWARDS,
+      //   externalAdapterUrl: process.env.STAKING_REWARDS_ADAPTER,
+      //   dslaLpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.name,
+      //   dslaLpSymbol: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.symbol,
+      //   dslaSpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.name,
+      //   dslaSpSymbol: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.symbol,
+      // },
+      // {
+      //   contract: CONTRACT_NAMES.StakingUptimeOracle,
+      //   useCaseName: USE_CASES.STAKING_UPTIME,
+      //   externalAdapterUrl: process.env.STAKING_UPTIME_ADAPTER,
+      //   dslaLpName: SERVICE_CREDITS.STAKING_UPTIME.DSLA_LP.name,
+      //   dslaLpSymbol: SERVICE_CREDITS.STAKING_UPTIME.DSLA_LP.symbol,
+      //   dslaSpName: SERVICE_CREDITS.STAKING_UPTIME.DSLA_SP.name,
+      //   dslaSpSymbol: SERVICE_CREDITS.STAKING_UPTIME.DSLA_SP.symbol,
+      // },
+      // {
+      //   contract: CONTRACT_NAMES.InflationOracle,
+      //   useCaseName: USE_CASES.INFLATION,
+      //   externalAdapterUrl: process.env.INFLATION_ADAPTER,
+      //   dslaLpName: SERVICE_CREDITS.INFLATION.DSLA_LP.name,
+      //   dslaLpSymbol: SERVICE_CREDITS.INFLATION.DSLA_LP.symbol,
+      //   dslaSpName: SERVICE_CREDITS.INFLATION.DSLA_SP.name,
+      //   dslaSpSymbol: SERVICE_CREDITS.INFLATION.DSLA_SP.symbol,
+      // },
+      // {
+      //   contract: CONTRACT_NAMES.AssetFloorOracle,
+      //   useCaseName: USE_CASES.ASSET_FLOOR,
+      //   externalAdapterUrl: process.env.ASSET_FLOOR_ADAPTER,
+      //   dslaLpName: SERVICE_CREDITS.ASSET_FLOOR.DSLA_LP.name,
+      //   dslaLpSymbol: SERVICE_CREDITS.ASSET_FLOOR.DSLA_LP.symbol,
+      //   dslaSpName: SERVICE_CREDITS.ASSET_FLOOR.DSLA_SP.name,
+      //   dslaSpSymbol: SERVICE_CREDITS.ASSET_FLOOR.DSLA_SP.symbol,
+      // },
+      // {
+      //   contract: CONTRACT_NAMES.AssetPegOracle,
+      //   useCaseName: USE_CASES.ASSET_PEG,
+      //   externalAdapterUrl: process.env.ASSET_PEG_ADAPTER,
+      //   dslaLpName: SERVICE_CREDITS.ASSET_PEG.DSLA_LP.name,
+      //   dslaLpSymbol: SERVICE_CREDITS.ASSET_PEG.DSLA_LP.symbol,
+      //   dslaSpName: SERVICE_CREDITS.ASSET_PEG.DSLA_SP.name,
+      //   dslaSpSymbol: SERVICE_CREDITS.ASSET_PEG.DSLA_SP.symbol,
+      // },
       {
-        contract: CONTRACT_NAMES.StakingRewardsOracle,
-        useCaseName: USE_CASES.STAKING_REWARDS,
-        externalAdapterUrl: process.env.STAKING_REWARDS_ADAPTER,
-        dslaLpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.name,
-        dslaLpSymbol: SERVICE_CREDITS.STAKING_REWARDS.DSLA_LP.symbol,
-        dslaSpName: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.name,
-        dslaSpSymbol: SERVICE_CREDITS.STAKING_REWARDS.DSLA_SP.symbol,
-      },
-      {
-        contract: CONTRACT_NAMES.StakingUptimeOracle,
-        useCaseName: USE_CASES.STAKING_UPTIME,
-        externalAdapterUrl: process.env.STAKING_UPTIME_ADAPTER,
-        dslaLpName: SERVICE_CREDITS.STAKING_UPTIME.DSLA_LP.name,
-        dslaLpSymbol: SERVICE_CREDITS.STAKING_UPTIME.DSLA_LP.symbol,
-        dslaSpName: SERVICE_CREDITS.STAKING_UPTIME.DSLA_SP.name,
-        dslaSpSymbol: SERVICE_CREDITS.STAKING_UPTIME.DSLA_SP.symbol,
-      },
-      {
-        contract: CONTRACT_NAMES.InflationOracle,
-        useCaseName: USE_CASES.INFLATION,
-        externalAdapterUrl: process.env.INFLATION_ADAPTER,
-        dslaLpName: SERVICE_CREDITS.INFLATION.DSLA_LP.name,
-        dslaLpSymbol: SERVICE_CREDITS.INFLATION.DSLA_LP.symbol,
-        dslaSpName: SERVICE_CREDITS.INFLATION.DSLA_SP.name,
-        dslaSpSymbol: SERVICE_CREDITS.INFLATION.DSLA_SP.symbol,
-      },
-      {
-        contract: CONTRACT_NAMES.AssetFloorOracle,
-        useCaseName: USE_CASES.ASSET_FLOOR,
-        externalAdapterUrl: process.env.ASSET_FLOOR_ADAPTER,
-        dslaLpName: SERVICE_CREDITS.ASSET_FLOOR.DSLA_LP.name,
-        dslaLpSymbol: SERVICE_CREDITS.ASSET_FLOOR.DSLA_LP.symbol,
-        dslaSpName: SERVICE_CREDITS.ASSET_FLOOR.DSLA_SP.name,
-        dslaSpSymbol: SERVICE_CREDITS.ASSET_FLOOR.DSLA_SP.symbol,
-      },
-      {
-        contract: CONTRACT_NAMES.AssetPegOracle,
-        useCaseName: USE_CASES.ASSET_PEG,
-        externalAdapterUrl: process.env.ASSET_PEG_ADAPTER,
-        dslaLpName: SERVICE_CREDITS.ASSET_PEG.DSLA_LP.name,
-        dslaLpSymbol: SERVICE_CREDITS.ASSET_PEG.DSLA_LP.symbol,
-        dslaSpName: SERVICE_CREDITS.ASSET_PEG.DSLA_SP.name,
-        dslaSpSymbol: SERVICE_CREDITS.ASSET_PEG.DSLA_SP.symbol,
+        contract: CONTRACT_NAMES.StakingParametricOracle,
+        useCaseName: USE_CASES.STAKING_PARAMETRIC,
+        externalAdapterUrl: process.env.STAKING_PARAMETRIC_ADAPTER,
+        dslaLpName: SERVICE_CREDITS.STAKING_PARAMETRIC.DSLA_LP.name,
+        dslaLpSymbol: SERVICE_CREDITS.STAKING_PARAMETRIC.DSLA_LP.symbol,
+        dslaSpName: SERVICE_CREDITS.STAKING_PARAMETRIC.DSLA_SP.name,
+        dslaSpSymbol: SERVICE_CREDITS.STAKING_PARAMETRIC.DSLA_SP.symbol,
       },
     ],
     scripts: scripts,

@@ -684,15 +684,15 @@ export const scripts: ScriptsConfiguration = {
       sloValue: 1,
       sloType: SLO_TYPE.SmallerThan,
       whitelisted: false,
-      periodType: PERIOD_TYPE.MONTHLY,
+      periodType: PERIOD_TYPE.HOURLY,
       messengerContract: CONTRACT_NAMES.StakingParametricOracle,
       initialPeriodId: 0,
-      finalPeriodId: 3,
+      finalPeriodId: 23,
       severity: [0, 100000, 250000], // [0%, 100%, 250%] (1000 == 1%) [price stable or down, up 100%, up 250%]
-      penalty: [100, 1000, 2500], // [1%, 10%, 25%]
+      penalty: [1000, 10000, 25000], // [1%, 10%, 25%]
       initialTokenSupply: '1000000',
-      initialTokenSupplyDivisor: 100,
-      deployerStakeTimes: 100,
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
       notDeployerStakeTimes: 1,
       leverage: 1,
       serviceMetadata: {
@@ -705,7 +705,7 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: 'dsla.eth',
         serviceTicker: 'PS',
         serviceUseTestExternalAdapter: true,
-        serviceSliMockingPlan: [1000, 100000, 250000],
+        serviceSliMockingPlan: [1000, 10000, 25000],
         ...StakingParametricMessengerSpec,
       },
     },
