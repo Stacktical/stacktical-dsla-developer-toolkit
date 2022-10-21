@@ -1,14 +1,12 @@
 export { ethereum } from './ethereum';
+export { develop } from './develop';
 export { harmony } from './harmony';
 export { fantom } from './fantom';
 export { avalanche } from './avalanche';
 export { polygon } from './polygon';
 export { bsc } from './bsc';
 export { fantom } from './fantom';
-export { develop } from './develop';
 export { fuji } from './fuji';
 export { harmonytestnet } from './harmonytestnet';
-export { develop } from './develop';
 export { develop_avalanche } from './develop_avalanche';
-export { ethereum } from './ethereum';
-export { harmonytestnet } from './harmonytestnet';
+export { ethereumv2 } from './ethereumv2';
