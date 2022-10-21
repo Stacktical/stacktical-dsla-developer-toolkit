@@ -103,11 +103,6 @@ export const develop: NetworkUserConfig = {
           allowance: '10',
         },
         {
-          contract: CONTRACT_NAMES.StakingUptimeOracle,
-          token: CONTRACT_NAMES.LinkToken,
-          allowance: '10',
-        },
-        {
           contract: CONTRACT_NAMES.InflationOracle,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
@@ -120,6 +115,11 @@ export const develop: NetworkUserConfig = {
       ],
       registry: {
         periods: [
+          {
+            periodType: PERIOD_TYPE.HOURLY,
+            amountOfPeriods: 48, // Number of periods from now
+            expiredPeriods: 24,
+          },
           {
             periodType: PERIOD_TYPE.DAILY,
             amountOfPeriods: 31, // Number of periods from now

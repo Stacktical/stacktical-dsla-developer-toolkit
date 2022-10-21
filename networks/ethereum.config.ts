@@ -131,12 +131,12 @@ export const ethereum: NetworkUserConfig = {
           allowance: '10',
         },
         {
-          contract: CONTRACT_NAMES.StakingUptimeOracle,
+          contract: CONTRACT_NAMES.InflationOracle,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
         {
-          contract: CONTRACT_NAMES.InflationOracle,
+          contract: CONTRACT_NAMES.StakingParametricOracle,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
@@ -144,8 +144,13 @@ export const ethereum: NetworkUserConfig = {
       registry: {
         periods: [
           {
+            periodType: PERIOD_TYPE.HOURLY,
+            amountOfPeriods: 48, // Number of periods from now
+            expiredPeriods: 0,
+          },
+          {
             periodType: PERIOD_TYPE.DAILY,
-            amountOfPeriods: 365, // Number of periods from now
+            amountOfPeriods: 31, // Number of periods from now
             expiredPeriods: 0,
           },
           {
@@ -217,6 +222,15 @@ export const ethereum: NetworkUserConfig = {
         dslaLpSymbol: SERVICE_CREDITS.ASSET_PEG.DSLA_LP.symbol,
         dslaSpName: SERVICE_CREDITS.ASSET_PEG.DSLA_SP.name,
         dslaSpSymbol: SERVICE_CREDITS.ASSET_PEG.DSLA_SP.symbol,
+      },
+      {
+        contract: CONTRACT_NAMES.StakingParametricOracle,
+        useCaseName: USE_CASES.STAKING_PARAMETRIC,
+        externalAdapterUrl: process.env.STAKING_PARAMETRIC_ADAPTER,
+        dslaLpName: SERVICE_CREDITS.STAKING_PARAMETRIC.DSLA_LP.name,
+        dslaLpSymbol: SERVICE_CREDITS.STAKING_PARAMETRIC.DSLA_LP.symbol,
+        dslaSpName: SERVICE_CREDITS.STAKING_PARAMETRIC.DSLA_SP.name,
+        dslaSpSymbol: SERVICE_CREDITS.STAKING_PARAMETRIC.DSLA_SP.symbol,
       },
     ],
     scripts: scripts,
