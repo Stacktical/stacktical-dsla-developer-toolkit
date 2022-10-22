@@ -163,7 +163,7 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         );
     
         // get the contract INDEX 21, Contract for IT staking tests: Not Respected case reward capped
-        sla = await ethers.getContractAt(CONTRACT_NAMES.SLA, allSLAs[22]);
+        sla = await ethers.getContractAt(CONTRACT_NAMES.SLA, allSLAs[22]);//22
         details = await ethers.getContract(CONTRACT_NAMES.Details);
         sla_owner = await sla.owner();
         [
@@ -289,6 +289,17 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         await new Promise((resolve) => sla.on('SLICreated', () => resolve(null)));
         const createdSLI = await sla.periodSLIs(periodId_p1); //nextVerifiablePeriod
         const { timestamp, sli, status } = createdSLI;
+
+        // Withdraw
+        
+        /*const notDeployerSLA = SLA__factory.connect(
+          sla.address,
+          await ethers.getSigner(notDeployer)
+        );*/
+        //const user1WithdrawAmount = 1024
+        //tx = await sla.connect(user_2_account).withdrawUserTokens(user1WithdrawAmount, dslaToken.address);
+        //await sla.withdrawUserTokens(user1WithdrawAmount, dslaToken.address)
+
         slaDetailsP1 = await details.getSLADetailsArrays(sla.address)
 
         currentP1ProviderPool = slaDetailsP1.tokensStake[0].providersPool;
@@ -301,7 +312,9 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         const providerPoolRawChangeP1 = currentP1ProviderPool.sub(toWei(initialProviderPool))
         const userPoolRawChangeP1 = currentP1UsersPool.sub(initialUserPool)
 
-        const providerPoolPctChangeP1 = currentP1ProviderPool.div(toWei(initialProviderPool)).mul(100)
+        let providerPoolPctChangeP1 = currentP1ProviderPool.div(toWei(initialProviderPool))
+        providerPoolPctChangeP1 = providerPoolPctChangeP1.mul(100)
+        
         const userPoolPctChangeP1 = currentP1UsersPool.div(toWei(initialUserPool)).mul(100)
         // pourcentage = (montant partiel / montant total) x 100
 
@@ -325,6 +338,9 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
 
         console.log("dpTokens totalSupply: ", slaDTokensDetailsP1.dpTokens[0].totalSupply.toString())
         console.log("duTokens totalSupply: ", slaDTokensDetailsP1.duTokens[0].totalSupply.toString())
+
+        console.log("dpTokens allowance: ", slaDTokensDetailsP1.dpTokens[0].allowance.toString())
+        console.log("duTokens allowance: ", slaDTokensDetailsP1.duTokens[0].allowance.toString())
 
         console.log("Provider Pool balance: ", currentP1ProviderPool.toString())
         console.log("User Pool balance: ", currentP1UsersPool.toString())
@@ -391,6 +407,44 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
 
         const slaContractSloValue = slaStaticDetailsP2.sloValue
 
+        /*
+        // Withdraw
+        
+        //const notDeployerSLA = SLA__factory.connect(
+        //  sla.address,
+        //  await ethers.getSigner(notDeployer)
+        //);
+        //sla.instance
+        //await dslaToken.increaseAllowance(user_2_account.address, 1024)
+        
+        const user1WithdrawAmount = 1024
+        tx = await sla.connect(user_2_account).withdrawUserTokens(user1WithdrawAmount, dslaToken.address);
+        //await sla.withdrawUserTokens(user1WithdrawAmount, dslaToken.address)
+        //await dslaToken.connect(user_3_account).approve(sla.address, toWei(initialStakeBalanceUser3));
+        //duTokens
+
+
+        // get du token
+        const duToken: ERC20PresetMinterPauser = await ethers.getContract(
+          CONTRACT_NAMES.ERC20
+        );
+
+        // get dp token contract
+        // get du token contract
+        // approve transfer on du token
+        // approve transfer on dp token
+        // perform Withdraw
+
+        slaDTokensDetailsP2.duTokens[0].dTokenAddress
+
+        dslaToken.connect(user_2_account).approve(sla.address, toWei(initialStakeBalanceUser3));*/
+
+        
+        // WIP Withdraw test
+        const user2WithdrawAmount = 1024
+        await dslaToken.connect(user_2_account).approve(slaDTokensDetailsP2.dpTokens[0].dTokenAddress, toWei("1024"));
+        tx = await sla.connect(user_2_account).withdrawProviderTokens(toWei("1024"), slaDTokensDetailsP2.dpTokens[0].dTokenAddress);
+
         console.log("--------------------------------------------------------------")
         console.log('SLO: ', slaContractSloValue.toString())
         console.log('SLI: ', sli.toString())
@@ -401,6 +455,8 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         console.log('SLI request process finished  for P2');
         console.log("dpTokens balance: ", slaDTokensDetailsP2.dpTokens[0].balance.toString())
         console.log("duTokens balance: ", slaDTokensDetailsP2.duTokens[0].balance.toString())
+        console.log("dpTokens allowance: ", slaDTokensDetailsP2.dpTokens[0].allowance.toString())
+        console.log("duTokens allowance: ", slaDTokensDetailsP2.duTokens[0].allowance.toString())
         console.log("dpTokens totalSupply: ", slaDTokensDetailsP2.dpTokens[0].totalSupply.toString())
         console.log("duTokens totalSupply: ", slaDTokensDetailsP2.duTokens[0].totalSupply.toString())
         console.log("Provider Pool balance: ", currentP2ProviderPool.toString())
@@ -475,6 +531,8 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         console.log('SLI request process finished  for P3');
         console.log("dpTokens balance: ", slaDTokensDetailsP3.dpTokens[0].balance.toString())
         console.log("duTokens balance: ", slaDTokensDetailsP3.duTokens[0].balance.toString())
+        console.log("dpTokens allowance: ", slaDTokensDetailsP3.dpTokens[0].allowance.toString())
+        console.log("duTokens allowance: ", slaDTokensDetailsP3.duTokens[0].allowance.toString())
         console.log("dpTokens totalSupply: ", slaDTokensDetailsP3.dpTokens[0].totalSupply.toString())
         console.log("duTokens totalSupply: ", slaDTokensDetailsP3.duTokens[0].totalSupply.toString())
         console.log("Provider Pool balance: ", currentP3ProviderPool.toString())
