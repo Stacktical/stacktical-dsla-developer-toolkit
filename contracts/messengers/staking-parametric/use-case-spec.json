@@ -1,6 +1,6 @@
 {
   "useCaseName": "DSLA Parametric Staking",
-  "symbol": "DSLA",
+  "symbol": "xDSLA",
   "sp": {
     "name": "Staking Service Credit",
     "symbol": "xDSLA"
