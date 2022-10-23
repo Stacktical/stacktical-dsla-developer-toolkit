@@ -68,7 +68,7 @@ export const arbitrumv2: NetworkUserConfig = {
       deployLocal: false,
       deleteOldJobs: false,
       cleanLocalFolder: false,
-      nodeFunds: '1',
+      nodeFunds: '0.01',
       ethHttpUrl: process.env.ARBITRUMV2_URI,
       ethWsUrl: process.env.ARBITRUMV2_WS_URI,
       nodesConfiguration: [

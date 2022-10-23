@@ -1,0 +1,129 @@
+specVersion: 0.0.3
+description: DSLA protocol
+repository: https://github.com/Stacktical/stacktical-dsla-contracts
+schema:
+  file: ../schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: SLARegistry
+    network: arbitrum
+    source:
+      address: "0x9986B2ec991D58954A3AE6f3Ab754FFE2EDE21a4"
+      startBlock: 32005808
+      abi: SLARegistry
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - SLA
+      abis:
+        - name: SLARegistry
+          file: ../abis/SLARegistry.json
+        - name: SLA
+          file: ../abis/SLA.json
+      eventHandlers:
+        - event: SLACreated(indexed address,indexed address)
+          handler: handleNewSLA
+      file: ../mapping.ts
+  - kind: ethereum/contract
+    name: SLORegistry
+    network: arbitrum
+    source:
+      address: "0x7a257FAC68626827e5f6d46A9D5416a6D6B38464"
+      startBlock: 32005786
+      abi: SLORegistry
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - SLA
+      abis:
+        - name: SLORegistry
+          file: ../abis/SLORegistry.json
+        - name: SLA
+          file: ../abis/SLA.json
+      eventHandlers:
+        - event: SLORegistered(indexed address,uint256,uint8)
+          handler: handleSLORegistered
+      file: ../mapping.ts
+  - kind: ethereum/contract
+    name: StakeRegistry
+    network: arbitrum
+    source:
+      address: "0xe744E91660683765feDC36893D05bCC4B5Ac29C4"
+      startBlock: 32005798
+      abi: StakeRegistry
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - StakeRegistry
+      abis:
+        - name: StakeRegistry
+          file: ../abis/StakeRegistry.json
+      eventHandlers:
+        - event: ValueLocked(indexed address,indexed address,uint256)
+          handler: handleValueLocked
+        - event: LockedValueReturned(indexed address,indexed address,uint256)
+          handler: handleLockedValueReturned
+      file: ../mapping.ts
+  - kind: ethereum/contract
+    name: MessengerRegistry
+    network: arbitrum
+    source:
+      address: "0xddB17A5368ACA9FEdaF427FFbc2EDBDD5c00FafF"
+      startBlock: 32005794
+      abi: MessengerRegistry
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - MessengerRegistry
+        - IMessenger
+      abis:
+        - name: MessengerRegistry
+          file: ../abis/MessengerRegistry.json
+        - name: IMessenger
+          file: ../abis/IMessenger.json
+      eventHandlers:
+        - event: MessengerRegistered(indexed address,indexed address,string,uint256,uint256)
+          handler: handleMessengerRegistered
+        - event: MessengerModified(indexed address,indexed address,string,uint256,uint256)
+          handler: handleMessengerModified
+      file: ../mapping.ts
+templates:
+  - kind: ethereum/contract
+    name: SLA
+    network: arbitrum
+    source:
+      abi: SLA
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ../mapping.ts
+      entities:
+        - SLA
+        - DToken
+        - ERC20
+        - SLI
+      eventHandlers:
+        - event: SLICreated(uint256,uint256,uint256)
+          handler: handleSLICreated
+        - event: Stake(indexed address,indexed uint256,indexed address,uint256,uint8)
+          handler: handleStake
+        - event: ProviderWithdraw(indexed address,indexed uint256,indexed address,uint256)
+          handler: handleProviderWithdraw
+        - event: UserWithdraw(indexed address,indexed uint256,indexed address,uint256)
+          handler: handleUserWithdraw
+        - event: DTokensCreated(indexed address,indexed address,string,string,indexed address,string,string)
+          handler: handleDTokensCreated
+      abis:
+        - name: SLA
+          file: ../abis/SLA.json
+        - name: ERC20
+          file: ../abis/ERC20PresetMinterPauser.json
