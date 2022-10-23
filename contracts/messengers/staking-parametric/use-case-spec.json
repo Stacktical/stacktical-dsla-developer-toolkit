@@ -1,19 +1,19 @@
 {
   "useCaseName": "Parametric Staking",
-  "symbol": "PRICE",
+  "symbol": "DSLA",
   "sp": {
     "name": "Parametric Staking Service Credit",
-    "symbol": "🔺PRICE"
+    "symbol": "DSLA-UP"
   },
   "lp": {
-    "name": "Parametric Service Service Credit",
-    "symbol": "🔻PRICE"
+    "name": "Parametric Staking Service Credit",
+    "symbol": "DSLA-DOWN"
   },
   "ownerUrl": "https://dsla.network",
   "useCaseDocs": "https://dsla.network/metaverse",
   "externalAdapterRepo": "https://github.com/Stacktical/",
   "unit": "%",
-  "keywords": ["pos", "uptime", "staking", "rewards", "validator"],
+  "keywords": ["dsla", "parametric", "staking", "upside", "hedge"],
   "timestamp": "2022-04-07T00:00:00+00:00",
   "version": {
     "major": 0,
