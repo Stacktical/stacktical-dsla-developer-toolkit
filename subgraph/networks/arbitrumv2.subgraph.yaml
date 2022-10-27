@@ -8,8 +8,8 @@ dataSources:
     name: SLARegistry
     network: arbitrum
     source:
-      address: "0x9986B2ec991D58954A3AE6f3Ab754FFE2EDE21a4"
-      startBlock: 32005808
+      address: "0x38b0cd8BB4C4608E32EE75b25A8846459cEAd513"
+      startBlock: 33078752
       abi: SLARegistry
     mapping:
       kind: ethereum/events
@@ -30,8 +30,8 @@ dataSources:
     name: SLORegistry
     network: arbitrum
     source:
-      address: "0x7a257FAC68626827e5f6d46A9D5416a6D6B38464"
-      startBlock: 32005786
+      address: "0x837Def7a9AA8FC9480d3f5bC1D61aF276eEEfE73"
+      startBlock: 33078709
       abi: SLORegistry
     mapping:
       kind: ethereum/events
@@ -52,8 +52,8 @@ dataSources:
     name: StakeRegistry
     network: arbitrum
     source:
-      address: "0xe744E91660683765feDC36893D05bCC4B5Ac29C4"
-      startBlock: 32005798
+      address: "0x834B065cf4Ac904E4bFfd983Ec2b2A6c8Af8AD7E"
+      startBlock: 33078736
       abi: StakeRegistry
     mapping:
       kind: ethereum/events
@@ -74,8 +74,8 @@ dataSources:
     name: MessengerRegistry
     network: arbitrum
     source:
-      address: "0xddB17A5368ACA9FEdaF427FFbc2EDBDD5c00FafF"
-      startBlock: 32005794
+      address: "0xfFC6DC11002A688F7995Fb1CA85232c939b0139D"
+      startBlock: 33078722
       abi: MessengerRegistry
     mapping:
       kind: ethereum/events

@@ -40,7 +40,7 @@ export const arbitrumv2: NetworkUserConfig = {
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.DSLA,
-        address: '0x19255F9332aed0142AcB96C271bDe0e1152BE3e1',
+        address: '0x7ce746b45eabd0c4321538dec1b849c79a9a8476',
       },
       {
         factory: EthereumERC20__factory,
