@@ -6,10 +6,10 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: SLARegistry
-    network: mainnet
+    network: arbitrum
     source:
-      address: "0xD79d6ec24016357f1Bdf17AEfA84C198D2396E52"
-      startBlock: 15809405
+      address: "0x38b0cd8BB4C4608E32EE75b25A8846459cEAd513"
+      startBlock: 33078752
       abi: SLARegistry
     mapping:
       kind: ethereum/events
@@ -28,10 +28,10 @@ dataSources:
       file: ../mapping.ts
   - kind: ethereum/contract
     name: SLORegistry
-    network: mainnet
+    network: arbitrum
     source:
-      address: "0x997da42D2C6D0F92a0Dea7152cD138C255EeeFCA"
-      startBlock: 15809401
+      address: "0x837Def7a9AA8FC9480d3f5bC1D61aF276eEEfE73"
+      startBlock: 33078709
       abi: SLORegistry
     mapping:
       kind: ethereum/events
@@ -50,10 +50,10 @@ dataSources:
       file: ../mapping.ts
   - kind: ethereum/contract
     name: StakeRegistry
-    network: mainnet
+    network: arbitrum
     source:
-      address: "0x35e82356aCD57B980ddaaA77D9043C5ea3085F9D"
-      startBlock: 15809404
+      address: "0x834B065cf4Ac904E4bFfd983Ec2b2A6c8Af8AD7E"
+      startBlock: 33078736
       abi: StakeRegistry
     mapping:
       kind: ethereum/events
@@ -72,10 +72,10 @@ dataSources:
       file: ../mapping.ts
   - kind: ethereum/contract
     name: MessengerRegistry
-    network: mainnet
+    network: arbitrum
     source:
-      address: "0x9eEEE6a8af558829226Cc13410Fb70Ca206265Ce"
-      startBlock: 15809403
+      address: "0xfFC6DC11002A688F7995Fb1CA85232c939b0139D"
+      startBlock: 33078722
       abi: MessengerRegistry
     mapping:
       kind: ethereum/events
@@ -98,7 +98,7 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: SLA
-    network: mainnet
+    network: arbitrum
     source:
       abi: SLA
     mapping:

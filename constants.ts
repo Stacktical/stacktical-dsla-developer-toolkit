@@ -153,7 +153,7 @@ export const GRAPH_NETWORKS = {
   [NETWORKS.POLYGON]: 'polygon',
   [NETWORKS.AVALANCHE]: 'avalanche',
   [NETWORKS.ARBITRUMNOVA]: 'arbitrumnova',
-  [NETWORKS.ARBITRUMV2]: 'arbitrumv2',
+  [NETWORKS.ARBITRUMV2]: 'arbitrum',
   [NETWORKS.ARBITRUMTESTNET]: 'arbitrumtestnet',
   [NETWORKS.KOVAN]: 'kovan',
   [NETWORKS.FUJI]: 'fuji',
