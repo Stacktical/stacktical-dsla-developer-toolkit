@@ -212,7 +212,7 @@ export const develop: NetworkUserConfig = {
         dslaLpSymbol: SERVICE_CREDITS.STAKING_PARAMETRIC.DSLA_LP.symbol,
         dslaSpName: SERVICE_CREDITS.STAKING_PARAMETRIC.DSLA_SP.name,
         dslaSpSymbol: SERVICE_CREDITS.STAKING_PARAMETRIC.DSLA_SP.symbol,
-      },    
+      },
     ],
     scripts: scripts,
   },

@@ -1,34 +1,24 @@
-// SPDX-License-Identifier: MIT
-pragma solidity 0.8.9;
+// SPDX-License-Identifier: BUSL-1.1
+pragma solidity ^0.8.9;
 
-import '@chainlink/contracts/src/v0.8/ChainlinkClient.sol';
+import '@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol';
+
+import '@openzeppelin/contracts/utils/Strings.sol';
+import '@openzeppelin/contracts/utils/math/SafeCast.sol';
 
 import '@dsla-protocol/core/contracts/interfaces/IMessenger.sol';
 import '@dsla-protocol/core/contracts/SLA.sol';
-import '@dsla-protocol/core/contracts/PeriodRegistry.sol';
-import '@dsla-protocol/core/contracts/libraries/StringUtils.sol';
 import '@dsla-protocol/core/contracts/StakeRegistry.sol';
 
-import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
-import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
-import '@openzeppelin/contracts/utils/Strings.sol';
+contract AssetFloorOracle is IMessenger, ReentrancyGuard {
+    using SafeCast for int256;
 
-contract AssetFloorOracle is ChainlinkClient, IMessenger, ReentrancyGuard {
-    using SafeERC20 for ERC20;
-    using Chainlink for Chainlink.Request;
-
-    mapping(bytes32 => SLIRequest) public requestIdToSLIRequest;
-    bytes32[] public requests;
     address private _slaRegistryAddress;
     address private immutable _oracle;
-    bytes32 private _jobId;
-    uint256 private constant _baseFee = 0.1 ether;
-    uint256 private _fee;
     uint256 private constant _messengerPrecision = 10**6;
 
     uint256 private _requestsCounter;
     uint256 private _fulfillsCounter;
-    PeriodRegistry private periodRegistry;
     StakeRegistry private stakeRegistry;
     bool private retry = false;
     bytes32 public networkName;
@@ -41,9 +31,9 @@ contract AssetFloorOracle is ChainlinkClient, IMessenger, ReentrancyGuard {
 
     constructor(
         address _messengerChainlinkOracle,
-        address _messengerChainlinkToken,
-        uint256 _feeMultiplier,
-        PeriodRegistry _periodRegistry,
+        address,
+        uint256,
+        address,
         StakeRegistry _stakeRegistry,
         bytes32 _networkName,
         string memory _lpName,
@@ -51,10 +41,7 @@ contract AssetFloorOracle is ChainlinkClient, IMessenger, ReentrancyGuard {
         string memory _spName,
         string memory _spSymbol
     ) {
-        setChainlinkToken(_messengerChainlinkToken);
         _oracle = _messengerChainlinkOracle;
-        _fee = _feeMultiplier * _baseFee;
-        periodRegistry = _periodRegistry;
         stakeRegistry = _stakeRegistry;
         networkName = _networkName;
         lpName = _lpName;
@@ -91,77 +78,27 @@ contract AssetFloorOracle is ChainlinkClient, IMessenger, ReentrancyGuard {
     function requestSLI(
         uint256 _periodId,
         address _slaAddress,
-        bool _messengerOwnerApproval,
+        bool,
         address _callerAddress
     ) public override onlySLARegistry nonReentrant {
-        require(_jobId != 0, '_jobId empty');
         SLA sla = SLA(_slaAddress);
-        if (_messengerOwnerApproval) {
-            ERC20(chainlinkTokenAddress()).safeTransferFrom(
-                owner(),
-                address(this),
-                _fee
-            );
-        } else {
-            ERC20(chainlinkTokenAddress()).safeTransferFrom(
-                _callerAddress,
-                address(this),
-                _fee
-            );
-        }
-        Chainlink.Request memory request = buildChainlinkRequest(
-            _jobId,
-            address(this),
-            this.fulfillSLI.selector
-        );
-        (
-            uint256 sla_monitoring_start,
-            uint256 sla_monitoring_end
-        ) = periodRegistry.getPeriodStartAndEnd(sla.periodType(), _periodId);
-        request.add(
-            'sla_monitoring_start',
-            StringUtils.uintToStr(sla_monitoring_start)
-        );
-        request.add(
-            'sla_monitoring_end',
-            StringUtils.uintToStr(sla_monitoring_end)
-        );
-        request.add('sla_address', StringUtils.addressToString(_slaAddress));
-        request.add('network_name', StringUtils.bytes32ToStr(networkName));
 
-        // Sends the request with 0.1 LINK to the oracle contract
-        bytes32 requestId = sendChainlinkRequestTo(_oracle, request, _fee);
-
-        requests.push(requestId);
-
-        requestIdToSLIRequest[requestId] = SLIRequest({
-            slaAddress: _slaAddress,
-            periodId: _periodId
-        });
+        (, int256 answer, , , ) = AggregatorV3Interface(_oracle)
+            .latestRoundData();
+        uint8 decimals = AggregatorV3Interface(_oracle).decimals();
+        uint256 sli = (answer.toUint256() * _messengerPrecision) / 10**decimals;
+        sla.registerSLI(sli, _periodId);
 
         _requestsCounter += 1;
-        emit SLIRequested(_callerAddress, _requestsCounter, requestId);
+        _fulfillsCounter += 1;
+        emit SLIRequested(_callerAddress, _requestsCounter, bytes32(0));
+        emit SLIReceived(_slaAddress, _periodId, bytes32(0), bytes32(sli));
     }
 
     function fulfillSLI(bytes32 _requestId, uint256 _chainlinkResponse)
         external
         override
-        nonReentrant
-        recordChainlinkFulfillment(_requestId)
-    {
-        SLIRequest memory request = requestIdToSLIRequest[_requestId];
-        emit SLIReceived(
-            request.slaAddress,
-            request.periodId,
-            _requestId,
-            bytes32(_chainlinkResponse)
-        );
-        _fulfillsCounter += 1;
-        SLA(request.slaAddress).registerSLI(
-            _chainlinkResponse,
-            request.periodId
-        );
-    }
+    {}
 
     function retryRequest(address _slaAddress, uint256 _periodId)
         external
@@ -178,15 +115,7 @@ contract AssetFloorOracle is ChainlinkClient, IMessenger, ReentrancyGuard {
         requestSLI(_periodId, _slaAddress, false, msg.sender);
     }
 
-    function setChainlinkJobID(bytes32 _newJobId, uint256 _feeMultiplier)
-        external
-        override
-        onlyOwner
-    {
-        _jobId = _newJobId;
-        _fee = _feeMultiplier * _baseFee;
-        emit JobIdModified(msg.sender, _newJobId, _fee);
-    }
+    function setChainlinkJobID(bytes32, uint256) external override onlyOwner {}
 
     function slaRegistryAddress() external view override returns (address) {
         return _slaRegistryAddress;
@@ -200,13 +129,9 @@ contract AssetFloorOracle is ChainlinkClient, IMessenger, ReentrancyGuard {
         return _oracle;
     }
 
-    function jobId() external view override returns (bytes32) {
-        return _jobId;
-    }
+    function jobId() external view override returns (bytes32) {}
 
-    function fee() external view override returns (uint256) {
-        return _fee;
-    }
+    function fee() external view override returns (uint256) {}
 
     function requestsCounter() external view override returns (uint256) {
         return _requestsCounter;
