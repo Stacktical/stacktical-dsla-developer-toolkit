@@ -1673,7 +1673,6 @@ subtask(SUB_TASK_NAMES.DEPLOY_DETAILS, undefined).setAction(
     console.log('Details deployment process started');
     await deploy(CONTRACT_NAMES.Details, {
       ...baseOptions,
-      gasPrice: BigNumber.from(hre.network.config.gas),
     });
     console.log('Details deployment process finished');
   }
@@ -2038,7 +2037,6 @@ subtask(SUB_TASK_NAMES.DEPLOY_CHAINLINK_CONTRACTS, undefined).setAction(
       from: deployer,
       log: true,
       skipIfAlreadyDeployed: true,
-      gasPrice: BigNumber.from(hre.network.config.gas),
     });
 
     const linkToken = await get(CONTRACT_NAMES.LinkToken);
@@ -2047,14 +2045,12 @@ subtask(SUB_TASK_NAMES.DEPLOY_CHAINLINK_CONTRACTS, undefined).setAction(
       args: [linkToken.address],
       log: true,
       skipIfAlreadyDeployed: true,
-      gasPrice: BigNumber.from(hre.network.config.gas),
     });
 
     await deploy(CONTRACT_NAMES.PreCoordinator, {
       from: deployer,
       log: true,
       args: [linkToken.address],
-      gasPrice: BigNumber.from(hre.network.config.gas),
     });
   }
 );
