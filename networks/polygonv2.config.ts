@@ -29,9 +29,8 @@ if (error) {
 
 export const polygonv2: NetworkUserConfig = {
   chainId: 137,
-  //gasPrice: 200 * 10 ** 9,
-  //gas: 10000000,
-  //accounts: [process.env.PRIV_KEY],
+  gasPrice: 3 * 10 ** 9, // 3 B = 3 GEWI
+  // gasMultiplier: 2,
   accounts: {
     mnemonic: process.env.MAINNET_MNEMONIC,
   },
@@ -76,10 +75,10 @@ export const polygonv2: NetworkUserConfig = {
       nodesConfiguration: [
         {
           name: 'NewYork',
-          restApiUrl: process.env.POLYGONV2_CHAINLINK_NODE_2_URL,
-          restApiPort: process.env.POLYGONV2_CHAINLINK_NODE_2_PORT,
-          email: process.env.POLYGONV2_CHAINLINK_NODE_2_USER,
-          password: process.env.POLYGONV2_CHAINLINK_NODE_2_PASS,
+          restApiUrl: process.env.POLYGONV2_CHAINLINK_NODE_1_URL,
+          restApiPort: process.env.POLYGONV2_CHAINLINK_NODE_1_PORT,
+          email: process.env.POLYGONV2_CHAINLINK_NODE_1_USER,
+          password: process.env.POLYGONV2_CHAINLINK_NODE_1_PASS,
         },
       ],
     },
@@ -92,7 +91,7 @@ export const polygonv2: NetworkUserConfig = {
         {
           contract: CONTRACT_NAMES.StakingParametricOracle,
           token: CONTRACT_NAMES.LinkToken,
-          allowance: '10',
+          allowance: '1',
         },
       ],
       registry: {
