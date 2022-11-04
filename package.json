@@ -97,7 +97,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.22.1",
     "ethereum-waffle": "^3.4.4",
-    "ethers": "^5.6.9",
+    "ethers": "^5.7.2",
     "hardhat": "^2.2.1",
     "hardhat-deploy": "^0.7.5",
     "hardhat-docgen": "^1.1.1",
