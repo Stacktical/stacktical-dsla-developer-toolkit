@@ -56,7 +56,7 @@ import {
 import axios from 'axios';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { formatBytes32String } from 'ethers/lib/utils';
-import { BigNumber } from 'ethers';
+import { ethers, BigNumber } from 'ethers';
 
 const prettier = require('prettier');
 const appRoot = require('app-root-path');
@@ -110,6 +110,29 @@ export enum SUB_TASK_NAMES {
   UNLOCK_TOKENS = 'UNLOCK_TOKENS',
   GET_SLA_FROM_TX = 'GET_SLA_FROM_TX',
   UPDATE_MESSENGER_SPEC = 'UPDATE_MESSENGER_SPEC',
+}
+
+function parse(data) {
+  return ethers.utils.parseUnits(Math.ceil(data) + '', 'gwei');
+}
+
+async function polygonGasEstimate(gasEstimated) {
+  let gas = {
+    gasLimit: gasEstimated, //.mul(110).div(100)
+    maxFeePerGas: ethers.BigNumber.from(50000000000),
+    maxPriorityFeePerGas: ethers.BigNumber.from(50000000000),
+  };
+  try {
+    const { data } = await axios({
+      method: 'get',
+      url: 'https://gasstation-mainnet.matic.network/v2',
+    });
+    gas.maxFeePerGas = parse(data.fast.maxFee);
+    gas.maxPriorityFeePerGas = parse(data.fast.maxPriorityFee);
+  } catch (error) {
+    console.log('Cannot estimate Polygon network gas.', error);
+  }
+  return gas;
 }
 
 subtask(SUB_TASK_NAMES.GET_SLA_FROM_TX, undefined).setAction(
@@ -605,14 +628,23 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
       const { nodeFunds } = stacktical.chainlink;
       const [defaultAccount] = await web3.eth.getAccounts();
       let balance = await web3.eth.getBalance(chainlinkNodeAddress);
+
+      if (hre.network.config.chainId == 137) {
+      }
+
       if (Number(web3.utils.fromWei(balance)) < Number(nodeFunds)) {
         await web3.eth.sendTransaction({
           from: defaultAccount,
           to: chainlinkNodeAddress,
           value: web3.utils.toWei(String(nodeFunds), 'ether'),
-          ...(network.config.gas !== 'auto' && {
-            gasLimit: network.config.gas,
-          }),
+          ...(hre.network.config.gas !== 'auto' &&
+            hre.network.config.chainId != 137 && {
+              gasLimit: hre.network.config.gas,
+            }),
+          ...(hre.network.config.gas !== 'auto' &&
+            hre.network.config.chainId == 137 && {
+              gas: hre.network.config.gas,
+            }),
         });
       }
       balance = await web3.eth.getBalance(chainlinkNodeAddress);
@@ -633,9 +665,14 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
           chainlinkNodeAddress,
           true,
           {
-            ...(network.config.gas !== 'auto' && {
-              gasLimit: network.config.gas,
-            }),
+            ...(hre.network.config.gas !== 'auto' &&
+              hre.network.config.chainId != 137 && {
+                gasLimit: hre.network.config.gas,
+              }),
+            ...(hre.network.config.gas !== 'auto' &&
+              hre.network.config.chainId == 137 && {
+                gasPrice: hre.network.config.gas,
+              }),
           }
         );
         await tx.wait();
@@ -1089,9 +1126,14 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
             ? stakingParameters.burnDSLA
             : currentStakingParameters.burnDSLA,
           {
-            ...(network.config.gas !== 'auto' && {
-              gasLimit: network.config.gas,
-            }),
+            ...(hre.network.config.gas !== 'auto' &&
+              hre.network.config.chainId != 137 && {
+                gasLimit: hre.network.config.gas,
+              }),
+            ...(hre.network.config.gas !== 'auto' &&
+              hre.network.config.chainId == 137 && {
+                gasPrice: hre.network.config.gas,
+              }),
           }
         );
         consola.info('Transaction receipt:');
@@ -1243,7 +1285,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
         libraries: {
           StringUtils: stringUtils.address,
         },
-        gasPrice: BigNumber.from(network.config.gas)
+        gasPrice: BigNumber.from(network.config.gas),
       });
       if (deployedMessenger.newlyDeployed) {
         consola.success(
@@ -1615,7 +1657,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_DETAILS, undefined).setAction(
     console.log('Details deployment process started');
     await deploy(CONTRACT_NAMES.Details, {
       ...baseOptions,
-      gasPrice: BigNumber.from(hre.network.config.gas)
+      gasPrice: BigNumber.from(hre.network.config.gas),
     });
     console.log('Details deployment process finished');
   }
@@ -1719,9 +1761,14 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
         penalty,
         leverage,
         {
-          ...(hre.network.config.gas !== 'auto' && {
-            gasLimit: hre.network.config.gas,
-          }),
+          ...(hre.network.config.gas !== 'auto' &&
+            hre.network.config.chainId != 137 && {
+              gasLimit: hre.network.config.gas,
+            }),
+          ...(hre.network.config.gas !== 'auto' &&
+            hre.network.config.chainId == 137 && {
+              gasPrice: hre.network.config.gas,
+            }),
         }
       );
       await tx.wait();
@@ -1827,9 +1874,14 @@ subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
         sla.address,
         ownerApproval,
         {
-          ...(network.config.gas !== 'auto' && {
-            gasLimit: network.config.gas,
-          }),
+          ...(hre.network.config.gas !== 'auto' &&
+            hre.network.config.chainId != 137 && {
+              gasLimit: hre.network.config.gas,
+            }),
+          ...(hre.network.config.gas !== 'auto' &&
+            hre.network.config.chainId == 137 && {
+              gasPrice: hre.network.config.gas,
+            }),
         }
       );
     }
@@ -1970,7 +2022,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_CHAINLINK_CONTRACTS, undefined).setAction(
       from: deployer,
       log: true,
       skipIfAlreadyDeployed: true,
-      gasPrice: BigNumber.from(hre.network.config.gas)
+      gasPrice: BigNumber.from(hre.network.config.gas),
     });
 
     const linkToken = await get(CONTRACT_NAMES.LinkToken);
@@ -1979,14 +2031,14 @@ subtask(SUB_TASK_NAMES.DEPLOY_CHAINLINK_CONTRACTS, undefined).setAction(
       args: [linkToken.address],
       log: true,
       skipIfAlreadyDeployed: true,
-      gasPrice: BigNumber.from(hre.network.config.gas)
+      gasPrice: BigNumber.from(hre.network.config.gas),
     });
 
     await deploy(CONTRACT_NAMES.PreCoordinator, {
       from: deployer,
       log: true,
       args: [linkToken.address],
-      gasPrice: BigNumber.from(hre.network.config.gas)
+      gasPrice: BigNumber.from(hre.network.config.gas),
     });
   }
 );
