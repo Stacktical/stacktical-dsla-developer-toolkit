@@ -74,10 +74,10 @@ export const polygonv2: NetworkUserConfig = {
       nodesConfiguration: [
         {
           name: 'NewYork',
-          restApiUrl: process.env.POLYGONV2_CHAINLINK_NODE_2_URL,
-          restApiPort: process.env.POLYGONV2_CHAINLINK_NODE_2_PORT,
-          email: process.env.POLYGONV2_CHAINLINK_NODE_2_USER,
-          password: process.env.POLYGONV2_CHAINLINK_NODE_2_PASS,
+          restApiUrl: process.env.POLYGONV2_CHAINLINK_NODE_1_URL,
+          restApiPort: process.env.POLYGONV2_CHAINLINK_NODE_1_PORT,
+          email: process.env.POLYGONV2_CHAINLINK_NODE_1_USER,
+          password: process.env.POLYGONV2_CHAINLINK_NODE_1_PASS,
         },
       ],
     },
