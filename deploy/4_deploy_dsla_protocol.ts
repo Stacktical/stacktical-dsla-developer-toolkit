@@ -42,7 +42,7 @@ module.exports = async ({ getNamedAccounts, deployments, network }) => {
       StringUtils: stringUtils.address,
     },
     gasPrice: BigNumber.from(network.config.gas),
-    maxFeePerGas: network.config.gas * 3
+    maxFeePerGas: BigNumber.from(network.config.gas).mul(3),
   });
 };
 
