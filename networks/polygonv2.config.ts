@@ -29,7 +29,7 @@ if (error) {
 
 export const polygonv2: NetworkUserConfig = {
   chainId: 137,
-  gas: 300000000000,
+  gas: 501000000000,  // 500 GWEI
   accounts: {
     mnemonic: process.env.MAINNET_MNEMONIC,
   },

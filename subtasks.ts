@@ -630,6 +630,7 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
       let balance = await web3.eth.getBalance(chainlinkNodeAddress);
 
       if (hre.network.config.chainId == 137) {
+        console.log("Sandeep is here");
       }
 
       if (Number(web3.utils.fromWei(balance)) < Number(nodeFunds)) {
@@ -644,6 +645,7 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
           ...(hre.network.config.gas !== 'auto' &&
             hre.network.config.chainId == 137 && {
               gas: hre.network.config.gas,
+              maxFeePerGas: hre.network.config.gas * 3,
             }),
         });
       }
