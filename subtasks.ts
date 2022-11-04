@@ -1301,7 +1301,11 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
         libraries: {
           StringUtils: stringUtils.address,
         },
-        gasPrice: BigNumber.from(network.config.gas),
+        ...(network.config.gas !== 'auto' &&
+          network.config.chainId == 137 && {
+            gasPrice: BigNumber.from(network.config.gas),
+            maxFeePerGas: BigNumber.from(network.config.gas).mul(3),
+          }),
       });
       if (deployedMessenger.newlyDeployed) {
         consola.success(
