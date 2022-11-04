@@ -630,7 +630,7 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
       let balance = await web3.eth.getBalance(chainlinkNodeAddress);
 
       if (hre.network.config.chainId == 137) {
-        console.log("Sandeep is here");
+        console.log('Sandeep is here');
       }
 
       if (Number(web3.utils.fromWei(balance)) < Number(nodeFunds)) {
@@ -663,6 +663,16 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
         chainlinkNodeAddress
       );
       if (!permissions) {
+        console.log('Need to set permissions for this node.');
+
+        const gasEstimated =
+          await oracleContract.estimateGas.setFulfillmentPermission(
+            chainlinkNodeAddress,
+            true
+          );
+
+        const gas = await polygonGasEstimate(gasEstimated);
+
         const tx = await oracleContract.setFulfillmentPermission(
           chainlinkNodeAddress,
           true,
@@ -672,12 +682,12 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
                 gasLimit: hre.network.config.gas,
               }),
             ...(hre.network.config.gas !== 'auto' &&
-              hre.network.config.chainId == 137 && {
-                gasPrice: hre.network.config.gas,
-              }),
+              hre.network.config.chainId == 137 &&
+              gas),
           }
         );
         await tx.wait();
+        console.log('Setting permissions...');
       }
       permissions = await oracleContract.getAuthorizationStatus(
         chainlinkNodeAddress
