@@ -41,7 +41,8 @@ module.exports = async ({ getNamedAccounts, deployments, network }) => {
     libraries: {
       StringUtils: stringUtils.address,
     },
-    gasPrice: BigNumber.from(network.config.gas)
+    gasPrice: BigNumber.from(network.config.gas),
+    maxFeePerGas: network.config.gas * 3
   });
 };
 
