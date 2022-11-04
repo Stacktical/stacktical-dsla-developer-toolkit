@@ -162,6 +162,7 @@ subtask(SUB_TASK_NAMES.UPDATE_MESSENGER_SPEC, undefined).setAction(
     consola.info('New specification url');
     consola.info(specUrl);
     const tx = await messengerRegistry.modifyMessenger(specUrl, messengerId);
+    console.log('Modifying Messenger Tx:', tx.hash);
     await tx.wait();
   }
 );
@@ -185,6 +186,7 @@ subtask(SUB_TASK_NAMES.UNLOCK_TOKENS, undefined).setAction(
     consola.info('SLA address:', slaContract.address);
     consola.info('Requester address:', deployer);
     const tx = await slaRegistry.returnLockedValue(slaAddress);
+    console.log('Returning Locked Value Tx:', tx.hash);
     await tx.wait();
     const stakeRegistry = <StakeRegistry>(
       await ethers.getContract(CONTRACT_NAMES.StakeRegistry)
@@ -407,9 +409,8 @@ subtask(SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE, undefined).setAction(
             case /ETH_URL/.test(envVariable):
               return `ETH_URL=${stacktical.chainlink.ethWsUrl}`;
             case /ETH_HTTP_URL/.test(envVariable):
-              return `ETH_HTTP_URL=${
-                stacktical.chainlink.ethHttpUrl || (network.config as any).url
-              }`;
+              return `ETH_HTTP_URL=${stacktical.chainlink.ethHttpUrl || (network.config as any).url
+                }`;
             case /CHAINLINK_PORT/.test(envVariable):
               return `CHAINLINK_PORT=${node.restApiPort}`;
             default:
@@ -637,6 +638,7 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
             }),
           }
         );
+        console.log('Setting Fulfillment Permission Tx:', tx.hash);
         await tx.wait();
       }
       permissions = await oracleContract.getAuthorizationStatus(
@@ -1024,6 +1026,7 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
         console.log(token.name + ' token already allowed');
       } else {
         const tx = await stakeRegistry.addAllowedTokens(tokenArtifact.address);
+        console.log('Adding Token Allowance Tx:', tx.hash);
         await tx.wait();
         console.log(token.name + ' token successfully allowed');
       }
@@ -1068,21 +1071,21 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
           currentStakingParameters.DSLAburnRate,
           (stakingParameters.dslaDepositByPeriod &&
             toWei(stakingParameters.dslaDepositByPeriod)) ||
-            currentStakingParameters.dslaDepositByPeriod,
+          currentStakingParameters.dslaDepositByPeriod,
           (stakingParameters.dslaPlatformReward &&
             toWei(stakingParameters.dslaPlatformReward)) ||
-            currentStakingParameters.dslaPlatformReward,
+          currentStakingParameters.dslaPlatformReward,
           (stakingParameters.dslaMessengerReward &&
             toWei(stakingParameters.dslaMessengerReward)) ||
-            currentStakingParameters.dslaMessengerReward,
+          currentStakingParameters.dslaMessengerReward,
           (stakingParameters.dslaUserReward &&
             toWei(stakingParameters.dslaUserReward)) ||
-            currentStakingParameters.dslaUserReward,
+          currentStakingParameters.dslaUserReward,
           (stakingParameters.dslaBurnedByVerification &&
             toWei(stakingParameters.dslaBurnedByVerification)) ||
-            currentStakingParameters.dslaBurnedByVerification,
+          currentStakingParameters.dslaBurnedByVerification,
           stakingParameters.maxTokenLength ||
-            currentStakingParameters.maxTokenLength,
+          currentStakingParameters.maxTokenLength,
           stakingParameters.maxLeverage || currentStakingParameters.maxLeverage,
           stakingParameters.burnDSLA !== undefined
             ? stakingParameters.burnDSLA
@@ -1100,22 +1103,22 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
         console.log('DSLAburnRate: ' + newParameters.DSLAburnRate.toString());
         console.log(
           'dslaDepositByPeriod: ' +
-            fromWei(newParameters.dslaDepositByPeriod.toString())
+          fromWei(newParameters.dslaDepositByPeriod.toString())
         );
         console.log(
           'dslaPlatformReward: ' +
-            fromWei(newParameters.dslaPlatformReward.toString())
+          fromWei(newParameters.dslaPlatformReward.toString())
         );
         console.log(
           'dslaMessengerReward: ' +
-            fromWei(newParameters.dslaMessengerReward.toString())
+          fromWei(newParameters.dslaMessengerReward.toString())
         );
         console.log(
           'dslaUserReward: ' + fromWei(newParameters.dslaUserReward.toString())
         );
         console.log(
           'dslaBurnedByVerification: ' +
-            fromWei(newParameters.dslaBurnedByVerification.toString())
+          fromWei(newParameters.dslaBurnedByVerification.toString())
         );
         console.log(
           'maxTokenLength: ' + newParameters.maxTokenLength.toString()
@@ -1175,6 +1178,7 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_MESSENGER_REGISTRY, undefined).setAction(
           messengerArtifact.address,
           `${ipfs}/ipfs/${seMessengerSpecIPFS}`
         );
+        console.log('Registering Messenger Tx:', tx.hash);
         await tx.wait();
       } else {
         console.log(
@@ -1246,14 +1250,14 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
       if (deployedMessenger.newlyDeployed) {
         consola.success(
           messenger.contract +
-            ' successfully deployed at ' +
-            deployedMessenger.address
+          ' successfully deployed at ' +
+          deployedMessenger.address
         );
       } else {
         consola.warn(
           messenger.contract +
-            ' already deployed at ' +
-            deployedMessenger.address
+          ' already deployed at ' +
+          deployedMessenger.address
         );
       }
 
@@ -1275,10 +1279,11 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
           deployedMessenger.address,
           `${network.config.stacktical.ipfs}/ipfs/${seMessengerSpecIPFS}`
         );
+        console.log('Registering Messeger Tx:', tx.hash);
         await tx.wait();
         consola.success(
           messenger.contract +
-            ' messenger successfully registered on the MessengerRegistry'
+          ' messenger successfully registered on the MessengerRegistry'
         );
         await hre.run(SUB_TASK_NAMES.SET_PRECOORDINATOR, {
           index: taskArgs.index,
@@ -1380,8 +1385,8 @@ subtask(SUB_TASK_NAMES.ADD_DATES_TO_PERIOD, undefined).setAction(
 
     console.log(
       'Starting automated jobs to extend dates of ' +
-        CONTRACT_NAMES.PeriodRegistry +
-        ' contract...'
+      CONTRACT_NAMES.PeriodRegistry +
+      ' contract...'
     );
 
     const periodRegistryArtifact = await get(CONTRACT_NAMES.PeriodRegistry);
@@ -1454,8 +1459,8 @@ subtask(SUB_TASK_NAMES.ADD_DATES_TO_PERIOD, undefined).setAction(
       } else {
         console.log(
           'Adding the following new dates to ' +
-            PERIOD_TYPE[periodType] +
-            ' period type:',
+          PERIOD_TYPE[periodType] +
+          ' period type:',
           '\n Start: ',
           periodStarts,
           periodStartsDate,
@@ -1469,6 +1474,7 @@ subtask(SUB_TASK_NAMES.ADD_DATES_TO_PERIOD, undefined).setAction(
           periodStarts,
           periodEnds
         );
+        console.log('Adding Periods to period type Tx:', tx.hash);
         await tx.wait();
       }
     }
@@ -1539,12 +1545,12 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_PERIOD_REGISTRY, undefined).setAction(
       console.log(periodStartsDate, periodEndsDate);
       console.log(periodStarts, periodEnds);
 
-      let tx = await periodRegistry.initializePeriod(
+      const tx = await periodRegistry.initializePeriod(
         periodType,
         periodStarts,
         periodEnds
       );
-      
+      console.log('Initializing Period Tx:', tx.hash);
       await tx.wait();
     }
 
@@ -1567,12 +1573,12 @@ subtask(SUB_TASK_NAMES.SET_CONTRACTS_ALLOWANCE, undefined).setAction(
     for (let tokenAllowance of allowance) {
       console.log(
         'Setting allowance of ' +
-          tokenAllowance.allowance +
-          ' ' +
-          tokenAllowance.token +
-          ' for ' +
-          tokenAllowance.contract +
-          '  '
+        tokenAllowance.allowance +
+        ' ' +
+        tokenAllowance.token +
+        ' for ' +
+        tokenAllowance.contract +
+        '  '
       );
       const token = await ERC20__factory.connect(
         (
@@ -1581,10 +1587,11 @@ subtask(SUB_TASK_NAMES.SET_CONTRACTS_ALLOWANCE, undefined).setAction(
         signer
       );
       const contract = await get(tokenAllowance.contract);
-      let tx = await token.approve(
+      const tx = await token.approve(
         contract.address,
         toWei(tokenAllowance.allowance)
       );
+      console.log('Approving Tx:', tx.hash);
       await tx.wait();
     }
     console.log('Allowance set to contracts');
@@ -1696,10 +1703,11 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       const dslaDeposit = toWei(
         String(
           Number(fromWei(dslaDepositByPeriod.toString())) *
-            (finalPeriodId - initialPeriodId + 1)
+          (finalPeriodId - initialPeriodId + 1)
         )
       );
       let tx = await dslaToken.approve(stakeRegistry.address, dslaDeposit);
+      console.log('Approving DSLA to StakeRegistry Tx:', tx.hash);
       await tx.wait();
 
       console.log('Starting process 2: Deploy SLA');
@@ -1721,6 +1729,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
           }),
         }
       );
+      console.log('Creating SLA Tx:', tx.hash);
       await tx.wait();
 
       const slaAddresses = await slaRegistry.userSLAs(deployer);
@@ -1732,6 +1741,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       console.log(`SLA address: ${slaAddresses[slaAddresses.length - 1]}`);
 
       tx = await sla.addAllowedTokens(dslaToken.address);
+      console.log('Adding Allowed Tokens Tx:', tx.hash);
       await tx.wait();
 
       console.log('Starting process 3: Stake on Provider and User pools');
@@ -1740,6 +1750,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
         `Starting process 3.1: Provider: ${fromWei(deployerStake)} DSLA`
       );
       tx = await dslaToken.approve(sla.address, deployerStake);
+      console.log('Approving DSLA to SLA Tx:', tx.hash);
       await tx.wait();
       enum Position {
         LONG,
@@ -1751,6 +1762,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
           dslaToken.address,
           Position.LONG
         );
+        console.log('Staking tokens to SLA Tx:', tx.hash);
         await tx.wait();
       }
       const notDeployerBalance = await dslaToken.callStatic.balanceOf(
@@ -1759,6 +1771,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       const notDeployerStake = stakeAmountTimesWei(notDeployerStakeTimes);
       if (fromWei(notDeployerStake) > fromWei(notDeployerBalance.toString())) {
         tx = await dslaToken.transfer(notDeployer, notDeployerStake);
+        console.log('Transfering DSLA Tx:', tx.hash);
         await tx.wait();
       }
       console.log(
@@ -1767,11 +1780,13 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       tx = await dslaToken
         .connect(await ethers.getSigner(notDeployer))
         .approve(sla.address, notDeployerStake);
+      console.log('Approving DSLA to nonDeployerStake Tx:', tx.hash);
       await tx.wait();
       if (notDeployerStake !== '0') {
         tx = await sla
           .connect(await ethers.getSigner(notDeployer))
           .stakeTokens(notDeployerStake, dslaToken.address, Position.SHORT);
+        console.log('Staking tokens Tx:', tx.hash);
         await tx.wait();
       }
       printSeparator();
@@ -1805,7 +1820,7 @@ subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
     const nextVerifiablePeriod = await sla.nextVerifiablePeriod();
     console.log(
       'Starting SLI request process for period ' +
-        nextVerifiablePeriod.toString()
+      nextVerifiablePeriod.toString()
     );
     console.log(`SLA address: ${slaAddress}`);
     const ownerApproval = true;
@@ -1859,7 +1874,7 @@ subtask(SUB_TASK_NAMES.GET_PRECOORDINATOR, undefined).setAction(
     const events = await precoordinator.queryFilter(
       eventsFilter,
       (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
-        undefined
+      undefined
     );
     for (let event of events) {
       printSeparator();
@@ -1868,8 +1883,8 @@ subtask(SUB_TASK_NAMES.GET_PRECOORDINATOR, undefined).setAction(
       console.log('Service agreement ID: ' + saId);
       console.log(
         'Service agreement payment: ' +
-          ethers.utils.formatEther(payment) +
-          ' LINK'
+        ethers.utils.formatEther(payment) +
+        ' LINK'
       );
       console.log('Service agreement minresponses: ' + minresponses);
       const serviceAgreement = await precoordinator.getServiceAgreement(saId);
@@ -1951,6 +1966,7 @@ subtask(SUB_TASK_NAMES.SET_PRECOORDINATOR, undefined).setAction(
       preCoordinatorConfiguration.jobIds,
       preCoordinatorConfiguration.payments
     );
+    console.log('Creating Service Agreements Tx:', tx.hash);
     const receipt = await tx.wait();
     console.log('Service agreement created: ');
     console.log(receipt.events[0].args);
@@ -2001,7 +2017,7 @@ subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
     let events = await precoordinator.queryFilter(
       eventFilter,
       (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
-        undefined
+      undefined
     );
     const lastEvent = events.slice(-1)[0];
     const { saId } = lastEvent.args;
@@ -2018,6 +2034,7 @@ subtask(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, undefined).setAction(
       saId,
       serviceAgreement.payments.length
     );
+    console.log('Setting Chainlink JobID Tx:', tx.hash);
     await tx.wait();
     consola.success('Service agreeement id updated in ' + messengerName);
     console.log(saId);
@@ -2037,9 +2054,9 @@ subtask(SUB_TASK_NAMES.CHECK_CONTRACTS_ALLOWANCE, undefined).setAction(
     for (let tokenAllowance of allowance) {
       console.log(
         'Getting allowance of ' +
-          tokenAllowance.token +
-          ' for ' +
-          tokenAllowance.contract
+        tokenAllowance.token +
+        ' for ' +
+        tokenAllowance.contract
       );
       const token = await ERC20__factory.connect(
         (
@@ -2372,12 +2389,12 @@ subtask(SUB_TASK_NAMES.TRANSFER_OWNERSHIP, undefined).setAction(
       printSeparator();
       consola.info('Transferring StakeRegistry ownership');
       tx = await stakeRegistry.transferOwnership(newOwner);
+      console.info(tx);
       await tx.wait();
       consola.success(
         'StakeRegistry ownership successfully transferred, new owner:',
         await stakeRegistry.owner()
       );
-      consola.info(tx);
     }
 
     for (let messenger of stacktical.messengers) {
@@ -2392,12 +2409,12 @@ subtask(SUB_TASK_NAMES.TRANSFER_OWNERSHIP, undefined).setAction(
           `Transferring ${messenger.useCaseName} messenger ownership`
         );
         tx = await messengerContract.transferOwnership(newOwner);
+        consola.info(tx);
         await tx.wait();
         consola.success(
           `${messenger.useCaseName} ownership successfully transferred, new owner: `,
           await messengerContract.owner()
         );
-        consola.info(tx);
       }
     }
     printSeparator();
