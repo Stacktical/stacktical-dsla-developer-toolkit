@@ -1242,6 +1242,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
         libraries: {
           StringUtils: stringUtils.address,
         },
+        gasLimit: network.config.gas,
       });
       if (deployedMessenger.newlyDeployed) {
         consola.success(
@@ -1544,7 +1545,7 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_PERIOD_REGISTRY, undefined).setAction(
         periodStarts,
         periodEnds
       );
-      
+
       await tx.wait();
     }
 

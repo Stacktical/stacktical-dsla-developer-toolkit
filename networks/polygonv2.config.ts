@@ -29,9 +29,7 @@ if (error) {
 
 export const polygonv2: NetworkUserConfig = {
   chainId: 137,
-  //gasPrice: 200 * 10 ** 9,
-  //gas: 10000000,
-  //accounts: [process.env.PRIV_KEY],
+  gas: 200000000000,
   accounts: {
     mnemonic: process.env.MAINNET_MNEMONIC,
   },
