@@ -56,6 +56,7 @@ import {
 import axios from 'axios';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { formatBytes32String } from 'ethers/lib/utils';
+import { BigNumber } from 'ethers';
 
 const prettier = require('prettier');
 const appRoot = require('app-root-path');
@@ -1243,6 +1244,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
           StringUtils: stringUtils.address,
         },
         gasLimit: network.config.gas,
+        gasPrice: BigNumber.from(network.config.gas)
       });
       if (deployedMessenger.newlyDeployed) {
         consola.success(
@@ -1614,6 +1616,8 @@ subtask(SUB_TASK_NAMES.DEPLOY_DETAILS, undefined).setAction(
     console.log('Details deployment process started');
     await deploy(CONTRACT_NAMES.Details, {
       ...baseOptions,
+      gasLimit: hre.network.config.gas,
+      gasPrice: BigNumber.from(hre.network.config.gas)
     });
     console.log('Details deployment process finished');
   }
@@ -1968,6 +1972,8 @@ subtask(SUB_TASK_NAMES.DEPLOY_CHAINLINK_CONTRACTS, undefined).setAction(
       from: deployer,
       log: true,
       skipIfAlreadyDeployed: true,
+      gasLimit: hre.network.config.gas,
+      gasPrice: BigNumber.from(hre.network.config.gas)
     });
 
     const linkToken = await get(CONTRACT_NAMES.LinkToken);
@@ -1976,12 +1982,16 @@ subtask(SUB_TASK_NAMES.DEPLOY_CHAINLINK_CONTRACTS, undefined).setAction(
       args: [linkToken.address],
       log: true,
       skipIfAlreadyDeployed: true,
+      gasLimit: hre.network.config.gas,
+      gasPrice: BigNumber.from(hre.network.config.gas)
     });
 
     await deploy(CONTRACT_NAMES.PreCoordinator, {
       from: deployer,
       log: true,
       args: [linkToken.address],
+      gasLimit: hre.network.config.gas,
+      gasPrice: BigNumber.from(hre.network.config.gas)
     });
   }
 );
