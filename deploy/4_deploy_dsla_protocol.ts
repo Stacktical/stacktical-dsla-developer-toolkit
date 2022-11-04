@@ -1,6 +1,7 @@
 import { StackticalConfiguration } from '../types';
 import { DeployOptionsBase } from 'hardhat-deploy/dist/types';
 import { CONTRACT_NAMES, DEPLOYMENT_TAGS } from '../constants';
+import { BigNumber } from 'ethers';
 
 module.exports = async ({ getNamedAccounts, deployments, network }) => {
   const { stacktical }: { stacktical: StackticalConfiguration } =
@@ -30,7 +31,6 @@ module.exports = async ({ getNamedAccounts, deployments, network }) => {
   const stringUtils = await get(CONTRACT_NAMES.StringUtils);
   await deploy(CONTRACT_NAMES.SLARegistry, {
     ...baseOptions,
-    ...(network.config.gas !== 'auto' && { gasLimit: network.config.gas }),
     args: [
       sloRegistry.address,
       periodRegistry.address,
@@ -41,6 +41,7 @@ module.exports = async ({ getNamedAccounts, deployments, network }) => {
     libraries: {
       StringUtils: stringUtils.address,
     },
+    gasPrice: BigNumber.from(network.config.gas)
   });
 };
 

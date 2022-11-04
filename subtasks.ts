@@ -671,7 +671,11 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
             true
           );
 
-        const gas = await polygonGasEstimate(gasEstimated);
+        let gas = {};
+
+        if (hre.network.config.chainId == 137) {
+          gas = await polygonGasEstimate(gasEstimated);
+        }
 
         const tx = await oracleContract.setFulfillmentPermission(
           chainlinkNodeAddress,
