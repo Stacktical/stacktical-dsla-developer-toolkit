@@ -73,10 +73,10 @@ export const avalanchev2: NetworkUserConfig = {
       nodesConfiguration: [
         {
           name: 'newyork',
-          restApiUrl: process.env.AVALANCHE_CHAINLINK_NODE_2_URL,
-          restApiPort: process.env.AVALANCHE_CHAINLINK_NODE_2_PORT,
-          email: process.env.AVALANCHE_CHAINLINK_NODE_2_USER,
-          password: process.env.AVALANCHE_CHAINLINK_NODE_2_PASS,
+          restApiUrl: process.env.AVALANCHE_CHAINLINK_NODE_1_URL,
+          restApiPort: process.env.AVALANCHE_CHAINLINK_NODE_1_PORT,
+          email: process.env.AVALANCHE_CHAINLINK_NODE_1_USER,
+          password: process.env.AVALANCHE_CHAINLINK_NODE_1_PASS,
         },
       ],
     },
