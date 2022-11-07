@@ -56,6 +56,7 @@ import {
 import axios from 'axios';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { formatBytes32String } from 'ethers/lib/utils';
+import { ethers, BigNumber } from 'ethers';
 
 const prettier = require('prettier');
 const appRoot = require('app-root-path');
@@ -109,6 +110,29 @@ export enum SUB_TASK_NAMES {
   UNLOCK_TOKENS = 'UNLOCK_TOKENS',
   GET_SLA_FROM_TX = 'GET_SLA_FROM_TX',
   UPDATE_MESSENGER_SPEC = 'UPDATE_MESSENGER_SPEC',
+}
+
+function parse(data) {
+  return ethers.utils.parseUnits(Math.ceil(data) + '', 'gwei');
+}
+
+async function polygonGasEstimate(gasEstimated) {
+  let gas = {
+    gasLimit: gasEstimated, //.mul(110).div(100)
+    maxFeePerGas: ethers.BigNumber.from(50000000000),
+    maxPriorityFeePerGas: ethers.BigNumber.from(50000000000),
+  };
+  try {
+    const { data } = await axios({
+      method: 'get',
+      url: 'https://gasstation-mainnet.matic.network/v2',
+    });
+    gas.maxFeePerGas = parse(data.fast.maxFee);
+    gas.maxPriorityFeePerGas = parse(data.fast.maxPriorityFee);
+  } catch (error) {
+    console.log('Cannot estimate Polygon network gas.', error);
+  }
+  return gas;
 }
 
 subtask(SUB_TASK_NAMES.GET_SLA_FROM_TX, undefined).setAction(
@@ -604,14 +628,25 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
       const { nodeFunds } = stacktical.chainlink;
       const [defaultAccount] = await web3.eth.getAccounts();
       let balance = await web3.eth.getBalance(chainlinkNodeAddress);
+
+      if (hre.network.config.chainId == 137) {
+        console.log('Sandeep is here');
+      }
+
       if (Number(web3.utils.fromWei(balance)) < Number(nodeFunds)) {
         await web3.eth.sendTransaction({
           from: defaultAccount,
           to: chainlinkNodeAddress,
           value: web3.utils.toWei(String(nodeFunds), 'ether'),
-          ...(network.config.gas !== 'auto' && {
-            gasLimit: network.config.gas,
-          }),
+          ...(hre.network.config.gas !== 'auto' &&
+            hre.network.config.chainId != 137 && {
+              gasLimit: hre.network.config.gas,
+            }),
+          ...(hre.network.config.gas !== 'auto' &&
+            hre.network.config.chainId == 137 && {
+              gas: hre.network.config.gas,
+              maxFeePerGas: hre.network.config.gas * 3,
+            }),
         });
       }
       balance = await web3.eth.getBalance(chainlinkNodeAddress);
@@ -628,16 +663,35 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
         chainlinkNodeAddress
       );
       if (!permissions) {
+        console.log('Need to set permissions for this node.');
+
+        const gasEstimated =
+          await oracleContract.estimateGas.setFulfillmentPermission(
+            chainlinkNodeAddress,
+            true
+          );
+
+        let gas = {};
+
+        if (hre.network.config.chainId == 137) {
+          gas = await polygonGasEstimate(gasEstimated);
+        }
+
         const tx = await oracleContract.setFulfillmentPermission(
           chainlinkNodeAddress,
           true,
           {
-            ...(network.config.gas !== 'auto' && {
-              gasLimit: network.config.gas,
-            }),
+            ...(hre.network.config.gas !== 'auto' &&
+              hre.network.config.chainId != 137 && {
+                gasLimit: hre.network.config.gas,
+              }),
+            ...(hre.network.config.gas !== 'auto' &&
+              hre.network.config.chainId == 137 &&
+              gas),
           }
         );
         await tx.wait();
+        console.log('Setting permissions...');
       }
       permissions = await oracleContract.getAuthorizationStatus(
         chainlinkNodeAddress
@@ -1088,9 +1142,14 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_STAKE_REGISTRY, undefined).setAction(
             ? stakingParameters.burnDSLA
             : currentStakingParameters.burnDSLA,
           {
-            ...(network.config.gas !== 'auto' && {
-              gasLimit: network.config.gas,
-            }),
+            ...(hre.network.config.gas !== 'auto' &&
+              hre.network.config.chainId != 137 && {
+                gasLimit: hre.network.config.gas,
+              }),
+            ...(hre.network.config.gas !== 'auto' &&
+              hre.network.config.chainId == 137 && {
+                gasPrice: hre.network.config.gas,
+              }),
           }
         );
         consola.info('Transaction receipt:');
@@ -1242,6 +1301,11 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
         libraries: {
           StringUtils: stringUtils.address,
         },
+        ...(network.config.gas !== 'auto' &&
+          network.config.chainId == 137 && {
+            gasPrice: BigNumber.from(network.config.gas),
+            maxFeePerGas: BigNumber.from(network.config.gas).mul(3),
+          }),
       });
       if (deployedMessenger.newlyDeployed) {
         consola.success(
@@ -1544,7 +1608,7 @@ subtask(SUB_TASK_NAMES.BOOTSTRAP_PERIOD_REGISTRY, undefined).setAction(
         periodStarts,
         periodEnds
       );
-      
+
       await tx.wait();
     }
 
@@ -1716,9 +1780,14 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
         penalty,
         leverage,
         {
-          ...(hre.network.config.gas !== 'auto' && {
-            gasLimit: hre.network.config.gas,
-          }),
+          ...(hre.network.config.gas !== 'auto' &&
+            hre.network.config.chainId != 137 && {
+              gasLimit: hre.network.config.gas,
+            }),
+          ...(hre.network.config.gas !== 'auto' &&
+            hre.network.config.chainId == 137 && {
+              gasPrice: hre.network.config.gas,
+            }),
         }
       );
       await tx.wait();
@@ -1824,9 +1893,14 @@ subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
         sla.address,
         ownerApproval,
         {
-          ...(network.config.gas !== 'auto' && {
-            gasLimit: network.config.gas,
-          }),
+          ...(hre.network.config.gas !== 'auto' &&
+            hre.network.config.chainId != 137 && {
+              gasLimit: hre.network.config.gas,
+            }),
+          ...(hre.network.config.gas !== 'auto' &&
+            hre.network.config.chainId == 137 && {
+              gasPrice: hre.network.config.gas,
+            }),
         }
       );
     }

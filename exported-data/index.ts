@@ -10,3 +10,5 @@ export { fuji } from './fuji';
 export { harmonytestnet } from './harmonytestnet';
 export { develop_avalanche } from './develop_avalanche';
 export { ethereumv2 } from './ethereumv2';
+export { develop } from './develop';
+export { polygonv2 } from './polygonv2';
