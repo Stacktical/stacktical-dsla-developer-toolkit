@@ -409,25 +409,6 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
 
         /*
         // Withdraw
-        
-        //const notDeployerSLA = SLA__factory.connect(
-        //  sla.address,
-        //  await ethers.getSigner(notDeployer)
-        //);
-        //sla.instance
-        //await dslaToken.increaseAllowance(user_2_account.address, 1024)
-        
-        const user1WithdrawAmount = 1024
-        tx = await sla.connect(user_2_account).withdrawUserTokens(user1WithdrawAmount, dslaToken.address);
-        //await sla.withdrawUserTokens(user1WithdrawAmount, dslaToken.address)
-        //await dslaToken.connect(user_3_account).approve(sla.address, toWei(initialStakeBalanceUser3));
-        //duTokens
-
-
-        // get du token
-        const duToken: ERC20PresetMinterPauser = await ethers.getContract(
-          CONTRACT_NAMES.ERC20
-        );
 
         // get dp token contract
         // get du token contract
@@ -441,9 +422,47 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
 
         
         // WIP Withdraw test
-        const user2WithdrawAmount = 1024
-        await dslaToken.connect(user_2_account).approve(slaDTokensDetailsP2.dpTokens[0].dTokenAddress, toWei("1024"));
-        tx = await sla.connect(user_2_account).withdrawProviderTokens(toWei("1024"), slaDTokensDetailsP2.dpTokens[0].dTokenAddress);
+        const withdrawAmount = 1024
+        /*await dslaToken.connect(user_2_account).approve(sla.address, toWei("1024"));
+        //tx = await sla.connect(user_2_account).withdrawProviderTokens(toWei("1024"), slaDTokensDetailsP2.dpTokens[0].dTokenAddress);
+        await sla.connect(user_2_account).withdrawProviderTokens(toWei("1024"), sla.address);*/
+
+
+        // WIP Withdraw test V2
+        consola.info('SLA address:', sla.address);
+        consola.info('Requester address:', provider_2_account);
+        const LPtokenAddress = await sla.dpTokenRegistry(
+          dslaToken.address
+        );
+        consola.info('LP token address:', LPtokenAddress);
+        const lpToken = <ERC20PresetMinterPauser>(
+          await ethers.getContractAt('ERC20PresetMinterPauser', LPtokenAddress)
+        );
+        consola.info('Preparing to get balance for user :', provider_2_account.address);
+        const lpTokenUserBalance = await lpToken.balanceOf(provider_2_account.address);
+        consola.info(
+          'LP token user balance:',
+          fromWei(lpTokenUserBalance.toString())
+        );
+
+        const supply = await lpToken.totalSupply();
+        consola.info('LP token total supply:', fromWei(supply.toString()));
+
+        const slaProvidersPool = await sla.providersPool(
+          dslaToken.address
+        );
+        const slaUsersPool = await sla.usersPool(dslaToken.address);
+        consola.info(
+          'SLA provider pool balance:',
+          fromWei(slaProvidersPool.toString())
+        );
+
+        await lpToken.approve(sla.address, lpTokenUserBalance);
+
+        await sla.withdrawProviderTokens(
+          withdrawAmount,
+          dslaToken.address
+        );
 
         console.log("--------------------------------------------------------------")
         console.log('SLO: ', slaContractSloValue.toString())
