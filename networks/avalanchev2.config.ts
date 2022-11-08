@@ -62,6 +62,11 @@ export const avalanchev2: NetworkUserConfig = {
         name: TOKEN_NAMES.WAVAX,
         address: '0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7',
       },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.WETH,
+        address: '0x49D5c2BdFfac6CE2BFdB6640F4F80f226bc10bAB',
+      },
     ],
     ipfs: process.env.IPFS_URI,
     chainlink: {
