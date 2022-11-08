@@ -86,7 +86,7 @@ export const avalanchev2: NetworkUserConfig = {
       ],
     },
     addresses: {
-      [CONTRACT_NAMES.LinkToken]: '0xB3fe5374F67D7a22886A0eE082b2E2f9d2651651',
+      [CONTRACT_NAMES.LinkToken]: '0x5947BB275c521040051D82396192181b413227A3',
     },
     bootstrap: {
       allowance: [
