@@ -1,0 +1,290 @@
+{
+  "address": "0x4835dfe3d873dacF82a1ac49462F399E8C13B12F",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "sla",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "sloValue",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "enum SLORegistry.SLOType",
+          "name": "sloType",
+          "type": "uint8"
+        }
+      ],
+      "name": "SLORegistered",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_sli",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_slaAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "severity",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "penalty",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "getDeviation",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_value",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_slaAddress",
+          "type": "address"
+        }
+      ],
+      "name": "isRespected",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint120",
+          "name": "_sloValue",
+          "type": "uint120"
+        },
+        {
+          "internalType": "enum SLORegistry.SLOType",
+          "name": "_sloType",
+          "type": "uint8"
+        },
+        {
+          "internalType": "address",
+          "name": "_slaAddress",
+          "type": "address"
+        }
+      ],
+      "name": "registerSLO",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "registeredSLO",
+      "outputs": [
+        {
+          "internalType": "uint120",
+          "name": "sloValue",
+          "type": "uint120"
+        },
+        {
+          "internalType": "enum SLORegistry.SLOType",
+          "name": "sloType",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "setSLARegistry",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x8c4f4761b593b6546d012d320c3a1b0f356a725f177ff8213710203d03e5ddb5",
+  "receipt": {
+    "to": null,
+    "from": "0x972614782a893ad3139418Ef00e17fE95896A7c6",
+    "contractAddress": "0x4835dfe3d873dacF82a1ac49462F399E8C13B12F",
+    "transactionIndex": 6,
+    "gasUsed": "539326",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0x15695846c2f3309d1edfec4860807a0f74948b1b3c66488122ba88fa5706a53d",
+    "transactionHash": "0x8c4f4761b593b6546d012d320c3a1b0f356a725f177ff8213710203d03e5ddb5",
+    "logs": [],
+    "blockNumber": 22207320,
+    "cumulativeGasUsed": "995015",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [],
+  "solcInputHash": "b47b1da8947805f3b521fd14a441e1c8",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.9+commit.e5eed63a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sla\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"sloValue\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"enum SLORegistry.SLOType\",\"name\":\"sloType\",\"type\":\"uint8\"}],\"name\":\"SLORegistered\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_sli\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_slaAddress\",\"type\":\"address\"},{\"internalType\":\"uint256[]\",\"name\":\"severity\",\"type\":\"uint256[]\"},{\"internalType\":\"uint256[]\",\"name\":\"penalty\",\"type\":\"uint256[]\"}],\"name\":\"getDeviation\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_value\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_slaAddress\",\"type\":\"address\"}],\"name\":\"isRespected\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint120\",\"name\":\"_sloValue\",\"type\":\"uint120\"},{\"internalType\":\"enum SLORegistry.SLOType\",\"name\":\"_sloType\",\"type\":\"uint8\"},{\"internalType\":\"address\",\"name\":\"_slaAddress\",\"type\":\"address\"}],\"name\":\"registerSLO\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"registeredSLO\",\"outputs\":[{\"internalType\":\"uint120\",\"name\":\"sloValue\",\"type\":\"uint120\"},{\"internalType\":\"enum SLORegistry.SLOType\",\"name\":\"sloType\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"setSLARegistry\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"details\":\"SLORegistry is a contract for handling creation of service level objectives and querying those service level objectives\",\"events\":{\"SLORegistered(address,uint256,uint8)\":{\"details\":\"SLO Registered event\"}},\"kind\":\"dev\",\"methods\":{\"getDeviation(uint256,address,uint256[],uint256[])\":{\"details\":\"external view function to get the percentage difference between SLI and SLO\",\"params\":{\"_slaAddress\":\"The SLO value to check against the SLI\",\"_sli\":\"The SLI value to check against the SLO\"},\"returns\":{\"_0\":\"uint256 with the deviation value for the selected sli and sla, base 10000\"}},\"isRespected(uint256,address)\":{\"details\":\"external view function to check a value against the SLO\",\"params\":{\"_value\":\"The SLI value to check against the SLO\"},\"returns\":{\"_0\":\"boolean with the SLO honoured state\"}},\"registerSLO(uint120,uint8,address)\":{\"details\":\"only SLARegistry can call this function\",\"params\":{\"_slaAddress\":\"3. -\",\"_sloType\":\"2. -\",\"_sloValue\":\"1. -\"}},\"setSLARegistry()\":{\"details\":\"this function can be called only once\"}},\"stateVariables\":{\"registeredSLO\":{\"details\":\"sla address => SLO mapping\"}},\"title\":\"SLORegistry\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"registerSLO(uint120,uint8,address)\":{\"notice\":\"public function for creating service level objectives\"},\"setSLARegistry()\":{\"notice\":\"function to set SLARegistry address\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"@dsla-protocol/core/contracts/SLORegistry.sol\":\"SLORegistry\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"@dsla-protocol/core/contracts/SLORegistry.sol\":{\"content\":\"// SPDX-License-Identifier: BUSL-1.1\\npragma solidity 0.8.9;\\n\\n/**\\n * @title SLORegistry\\n * @dev SLORegistry is a contract for handling creation of service level\\n * objectives and querying those service level objectives\\n */\\ncontract SLORegistry {\\n    enum SLOType {\\n        EqualTo,\\n        NotEqualTo,\\n        SmallerThan,\\n        SmallerOrEqualTo,\\n        GreaterThan,\\n        GreaterOrEqualTo\\n    }\\n\\n    struct SLO {\\n        // half storage slot\\n        uint120 sloValue;\\n        SLOType sloType;\\n    }\\n\\n    /// @dev SLO Registered event\\n    event SLORegistered(address indexed sla, uint256 sloValue, SLOType sloType);\\n\\n    /// @notice maximum cap of deviation percent = 25%, base 10000\\n    uint16 private constant deviationCapRate = 2500;\\n    /// @notice address of SLARegistry contract\\n    address private slaRegistry;\\n    /// @dev sla address => SLO mapping\\n    mapping(address => SLO) public registeredSLO;\\n\\n    /// @dev Modifier ensuring that certain function can only be called by SLARegistry\\n    modifier onlySLARegistry() {\\n        require(\\n            msg.sender == slaRegistry,\\n            'Should only be called using the SLARegistry contract'\\n        );\\n        _;\\n    }\\n\\n    /**\\n     * @notice function to set SLARegistry address\\n     * @dev this function can be called only once\\n     */\\n    function setSLARegistry() public {\\n        // Only able to trigger this function once\\n        require(\\n            address(slaRegistry) == address(0),\\n            'SLARegistry address has already been set'\\n        );\\n        slaRegistry = msg.sender;\\n    }\\n\\n    /**\\n     * @notice public function for creating service level objectives\\n     * @dev only SLARegistry can call this function\\n     * @param _sloValue 1. -\\n     * @param _sloType 2. -\\n     * @param _slaAddress 3. -\\n     */\\n    function registerSLO(\\n        uint120 _sloValue,\\n        SLOType _sloType,\\n        address _slaAddress\\n    ) public onlySLARegistry {\\n        registeredSLO[_slaAddress] = SLO({\\n            sloValue: _sloValue,\\n            sloType: _sloType\\n        });\\n        emit SLORegistered(_slaAddress, _sloValue, _sloType);\\n    }\\n\\n    /**\\n     * @dev external view function to check a value against the SLO\\n     * @param _value The SLI value to check against the SLO\\n     * @return boolean with the SLO honoured state\\n     */\\n    function isRespected(uint256 _value, address _slaAddress)\\n        external\\n        view\\n        returns (bool)\\n    {\\n        SLOType sloType = registeredSLO[_slaAddress].sloType;\\n        uint256 sloValue = registeredSLO[_slaAddress].sloValue;\\n\\n        if (sloType == SLOType.EqualTo) {\\n            return _value == sloValue;\\n        } else if (sloType == SLOType.NotEqualTo) {\\n            return _value != sloValue;\\n        } else if (sloType == SLOType.SmallerThan) {\\n            return _value < sloValue;\\n        } else if (sloType == SLOType.SmallerOrEqualTo) {\\n            return _value <= sloValue;\\n        } else if (sloType == SLOType.GreaterThan) {\\n            return _value > sloValue;\\n        } else {\\n            // sloType == SLOType.GreaterOrEqualTo\\n            return _value >= sloValue;\\n        }\\n    }\\n\\n    /**\\n     * @dev external view function to get the percentage difference between SLI and SLO\\n     * @param _sli The SLI value to check against the SLO\\n     * @param _slaAddress The SLO value to check against the SLI\\n     * @return uint256 with the deviation value for the selected sli and sla, base 10000\\n     */\\n    function getDeviation(\\n        uint256 _sli,\\n        address _slaAddress,\\n        uint256[] memory severity,\\n        uint256[] memory penalty\\n    ) external view returns (uint256) {\\n        SLOType sloType = registeredSLO[_slaAddress].sloType;\\n        uint256 sloValue = registeredSLO[_slaAddress].sloValue;\\n\\n        uint256 deviation = 0;\\n\\n        for (uint256 i = 0; i < severity.length; i++) {\\n            if (_sli >= severity[i]) {\\n                deviation = penalty[i];\\n            }\\n        }\\n\\n        if (deviation == 0) {\\n            // Ensures a positive deviation for greater / small comparisons\\n            // The deviation is the percentage difference between SLI and SLO\\n            //                          | sloValue - sli |\\n            // formula =>  deviation = -------------------- %\\n            //                          (sli + sloValue) / 2\\n            deviation =\\n                ((_sli >= sloValue ? _sli - sloValue : sloValue - _sli) *\\n                    20000) /\\n                (_sli + sloValue);\\n        }\\n\\n        // Enforces a deviation capped at 25%\\n        if (deviation > deviationCapRate) {\\n            deviation = deviationCapRate;\\n        }\\n\\n        if (sloType == SLOType.EqualTo) {\\n            // Fixed deviation for this comparison, the reward percentage is the cap\\n            return deviationCapRate;\\n        } else if (sloType == SLOType.NotEqualTo) {\\n            // Fixed deviation for this comparison, the reward percentage is the cap\\n            return deviationCapRate;\\n        } else if (sloType == SLOType.SmallerThan) {\\n            return deviation;\\n        } else if (sloType == SLOType.SmallerOrEqualTo) {\\n            return deviation;\\n        } else if (sloType == SLOType.GreaterThan) {\\n            return deviation;\\n        } else {\\n            // sloType == SLOType.GreaterOrEqualTo\\n            return deviation;\\n        }\\n    }\\n}\\n\",\"keccak256\":\"0xc7816d775fc8218a24936bd260e15208c53f29cbff9e4935414cf1bde7ce78ca\",\"license\":\"BUSL-1.1\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b506108cb806100206000396000f3fe608060405234801561001057600080fd5b50600436106100575760003560e01c80631993b9df1461005c5780634c3fb2631461008457806358326f49146100a5578063a7b72ac5146100ba578063f3881589146100fd575b600080fd5b61006f61006a3660046105b5565b610105565b60405190151581526020015b60405180910390f35b610097610092366004610692565b6101fe565b60405190815260200161007b565b6100b86100b3366004610710565b6103ad565b005b6100ef6100c8366004610767565b6001602052600090815260409020546001600160781b03811690600160781b900460ff1682565b60405161007b9291906107c1565b6100b861051b565b6001600160a01b03811660009081526001602052604081205460ff600160781b820416906001600160781b03168282600581111561014557610145610789565b141561015657841491506101f89050565b600182600581111561016a5761016a610789565b141561017c5784141591506101f89050565b600282600581111561019057610190610789565b14156101a157841091506101f89050565b60038260058111156101b5576101b5610789565b14156101c75784111591506101f89050565b60048260058111156101db576101db610789565b14156101ec57841191506101f89050565b84101591506101f89050565b92915050565b6001600160a01b03831660009081526001602052604081205460ff600160781b820416906001600160781b031682805b865181101561028657868181518110610249576102496107de565b6020026020010151891061027457858181518110610269576102696107de565b602002602001015191505b8061027e8161080a565b91505061022e565b50806102d0576102968289610825565b828910156102ad576102a8898461083d565b6102b7565b6102b7838a61083d565b6102c390614e20610854565b6102cd9190610873565b90505b6109c48111156102df57506109c45b60008360058111156102f3576102f3610789565b141561030757506109c492506103a5915050565b600183600581111561031b5761031b610789565b141561032f57506109c492506103a5915050565b600283600581111561034357610343610789565b14156103535792506103a5915050565b600383600581111561036757610367610789565b14156103775792506103a5915050565b600483600581111561038b5761038b610789565b141561039b5792506103a5915050565b92506103a5915050565b949350505050565b6000546001600160a01b031633146104295760405162461bcd60e51b815260206004820152603460248201527f53686f756c64206f6e6c792062652063616c6c6564207573696e67207468652060448201527314d310549959da5cdd1c9e4818dbdb9d1c9858dd60621b60648201526084015b60405180910390fd5b6040518060400160405280846001600160781b0316815260200183600581111561045557610455610789565b90526001600160a01b0382166000908152600160209081526040909120825181546001600160781b039091166effffffffffffffffffffffffffffff1982168117835592840151919283916fffffffffffffffffffffffffffffffff191617600160781b8360058111156104cb576104cb610789565b0217905550905050806001600160a01b03167fc382b63ab3cdf2c0a86390b2ea6449f63ca4135a3feb56acebddc929412d45a9848460405161050e9291906107c1565b60405180910390a2505050565b6000546001600160a01b0316156105855760405162461bcd60e51b815260206004820152602860248201527f534c41526567697374727920616464726573732068617320616c7265616479206044820152671899595b881cd95d60c21b6064820152608401610420565b600080546001600160a01b03191633179055565b80356001600160a01b03811681146105b057600080fd5b919050565b600080604083850312156105c857600080fd5b823591506105d860208401610599565b90509250929050565b634e487b7160e01b600052604160045260246000fd5b600082601f83011261060857600080fd5b8135602067ffffffffffffffff80831115610625576106256105e1565b8260051b604051601f19603f8301168101818110848211171561064a5761064a6105e1565b60405293845285810183019383810192508785111561066857600080fd5b83870191505b848210156106875781358352918301919083019061066e565b979650505050505050565b600080600080608085870312156106a857600080fd5b843593506106b860208601610599565b9250604085013567ffffffffffffffff808211156106d557600080fd5b6106e1888389016105f7565b935060608701359150808211156106f757600080fd5b50610704878288016105f7565b91505092959194509250565b60008060006060848603121561072557600080fd5b83356001600160781b038116811461073c57600080fd5b925060208401356006811061075057600080fd5b915061075e60408501610599565b90509250925092565b60006020828403121561077957600080fd5b61078282610599565b9392505050565b634e487b7160e01b600052602160045260246000fd5b600681106107bd57634e487b7160e01b600052602160045260246000fd5b9052565b6001600160781b038316815260408101610782602083018461079f565b634e487b7160e01b600052603260045260246000fd5b634e487b7160e01b600052601160045260246000fd5b600060001982141561081e5761081e6107f4565b5060010190565b60008219821115610838576108386107f4565b500190565b60008282101561084f5761084f6107f4565b500390565b600081600019048311821515161561086e5761086e6107f4565b500290565b60008261089057634e487b7160e01b600052601260045260246000fd5b50049056fea2646970667358221220306147fca5b6751c5861178108efcf3e081f8108120c7632b3a53fe902ef1a5464736f6c63430008090033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100575760003560e01c80631993b9df1461005c5780634c3fb2631461008457806358326f49146100a5578063a7b72ac5146100ba578063f3881589146100fd575b600080fd5b61006f61006a3660046105b5565b610105565b60405190151581526020015b60405180910390f35b610097610092366004610692565b6101fe565b60405190815260200161007b565b6100b86100b3366004610710565b6103ad565b005b6100ef6100c8366004610767565b6001602052600090815260409020546001600160781b03811690600160781b900460ff1682565b60405161007b9291906107c1565b6100b861051b565b6001600160a01b03811660009081526001602052604081205460ff600160781b820416906001600160781b03168282600581111561014557610145610789565b141561015657841491506101f89050565b600182600581111561016a5761016a610789565b141561017c5784141591506101f89050565b600282600581111561019057610190610789565b14156101a157841091506101f89050565b60038260058111156101b5576101b5610789565b14156101c75784111591506101f89050565b60048260058111156101db576101db610789565b14156101ec57841191506101f89050565b84101591506101f89050565b92915050565b6001600160a01b03831660009081526001602052604081205460ff600160781b820416906001600160781b031682805b865181101561028657868181518110610249576102496107de565b6020026020010151891061027457858181518110610269576102696107de565b602002602001015191505b8061027e8161080a565b91505061022e565b50806102d0576102968289610825565b828910156102ad576102a8898461083d565b6102b7565b6102b7838a61083d565b6102c390614e20610854565b6102cd9190610873565b90505b6109c48111156102df57506109c45b60008360058111156102f3576102f3610789565b141561030757506109c492506103a5915050565b600183600581111561031b5761031b610789565b141561032f57506109c492506103a5915050565b600283600581111561034357610343610789565b14156103535792506103a5915050565b600383600581111561036757610367610789565b14156103775792506103a5915050565b600483600581111561038b5761038b610789565b141561039b5792506103a5915050565b92506103a5915050565b949350505050565b6000546001600160a01b031633146104295760405162461bcd60e51b815260206004820152603460248201527f53686f756c64206f6e6c792062652063616c6c6564207573696e67207468652060448201527314d310549959da5cdd1c9e4818dbdb9d1c9858dd60621b60648201526084015b60405180910390fd5b6040518060400160405280846001600160781b0316815260200183600581111561045557610455610789565b90526001600160a01b0382166000908152600160209081526040909120825181546001600160781b039091166effffffffffffffffffffffffffffff1982168117835592840151919283916fffffffffffffffffffffffffffffffff191617600160781b8360058111156104cb576104cb610789565b0217905550905050806001600160a01b03167fc382b63ab3cdf2c0a86390b2ea6449f63ca4135a3feb56acebddc929412d45a9848460405161050e9291906107c1565b60405180910390a2505050565b6000546001600160a01b0316156105855760405162461bcd60e51b815260206004820152602860248201527f534c41526567697374727920616464726573732068617320616c7265616479206044820152671899595b881cd95d60c21b6064820152608401610420565b600080546001600160a01b03191633179055565b80356001600160a01b03811681146105b057600080fd5b919050565b600080604083850312156105c857600080fd5b823591506105d860208401610599565b90509250929050565b634e487b7160e01b600052604160045260246000fd5b600082601f83011261060857600080fd5b8135602067ffffffffffffffff80831115610625576106256105e1565b8260051b604051601f19603f8301168101818110848211171561064a5761064a6105e1565b60405293845285810183019383810192508785111561066857600080fd5b83870191505b848210156106875781358352918301919083019061066e565b979650505050505050565b600080600080608085870312156106a857600080fd5b843593506106b860208601610599565b9250604085013567ffffffffffffffff808211156106d557600080fd5b6106e1888389016105f7565b935060608701359150808211156106f757600080fd5b50610704878288016105f7565b91505092959194509250565b60008060006060848603121561072557600080fd5b83356001600160781b038116811461073c57600080fd5b925060208401356006811061075057600080fd5b915061075e60408501610599565b90509250925092565b60006020828403121561077957600080fd5b61078282610599565b9392505050565b634e487b7160e01b600052602160045260246000fd5b600681106107bd57634e487b7160e01b600052602160045260246000fd5b9052565b6001600160781b038316815260408101610782602083018461079f565b634e487b7160e01b600052603260045260246000fd5b634e487b7160e01b600052601160045260246000fd5b600060001982141561081e5761081e6107f4565b5060010190565b60008219821115610838576108386107f4565b500190565b60008282101561084f5761084f6107f4565b500390565b600081600019048311821515161561086e5761086e6107f4565b500290565b60008261089057634e487b7160e01b600052601260045260246000fd5b50049056fea2646970667358221220306147fca5b6751c5861178108efcf3e081f8108120c7632b3a53fe902ef1a5464736f6c63430008090033",
+  "devdoc": {
+    "details": "SLORegistry is a contract for handling creation of service level objectives and querying those service level objectives",
+    "events": {
+      "SLORegistered(address,uint256,uint8)": {
+        "details": "SLO Registered event"
+      }
+    },
+    "kind": "dev",
+    "methods": {
+      "getDeviation(uint256,address,uint256[],uint256[])": {
+        "details": "external view function to get the percentage difference between SLI and SLO",
+        "params": {
+          "_slaAddress": "The SLO value to check against the SLI",
+          "_sli": "The SLI value to check against the SLO"
+        },
+        "returns": {
+          "_0": "uint256 with the deviation value for the selected sli and sla, base 10000"
+        }
+      },
+      "isRespected(uint256,address)": {
+        "details": "external view function to check a value against the SLO",
+        "params": {
+          "_value": "The SLI value to check against the SLO"
+        },
+        "returns": {
+          "_0": "boolean with the SLO honoured state"
+        }
+      },
+      "registerSLO(uint120,uint8,address)": {
+        "details": "only SLARegistry can call this function",
+        "params": {
+          "_slaAddress": "3. -",
+          "_sloType": "2. -",
+          "_sloValue": "1. -"
+        }
+      },
+      "setSLARegistry()": {
+        "details": "this function can be called only once"
+      }
+    },
+    "stateVariables": {
+      "registeredSLO": {
+        "details": "sla address => SLO mapping"
+      }
+    },
+    "title": "SLORegistry",
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "registerSLO(uint120,uint8,address)": {
+        "notice": "public function for creating service level objectives"
+      },
+      "setSLARegistry()": {
+        "notice": "function to set SLARegistry address"
+      }
+    },
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 4740,
+        "contract": "@dsla-protocol/core/contracts/SLORegistry.sol:SLORegistry",
+        "label": "slaRegistry",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_address"
+      },
+      {
+        "astId": 4746,
+        "contract": "@dsla-protocol/core/contracts/SLORegistry.sol:SLORegistry",
+        "label": "registeredSLO",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_mapping(t_address,t_struct(SLO)4723_storage)"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_enum(SLOType)4717": {
+        "encoding": "inplace",
+        "label": "enum SLORegistry.SLOType",
+        "numberOfBytes": "1"
+      },
+      "t_mapping(t_address,t_struct(SLO)4723_storage)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => struct SLORegistry.SLO)",
+        "numberOfBytes": "32",
+        "value": "t_struct(SLO)4723_storage"
+      },
+      "t_struct(SLO)4723_storage": {
+        "encoding": "inplace",
+        "label": "struct SLORegistry.SLO",
+        "members": [
+          {
+            "astId": 4719,
+            "contract": "@dsla-protocol/core/contracts/SLORegistry.sol:SLORegistry",
+            "label": "sloValue",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint120"
+          },
+          {
+            "astId": 4722,
+            "contract": "@dsla-protocol/core/contracts/SLORegistry.sol:SLORegistry",
+            "label": "sloType",
+            "offset": 15,
+            "slot": "0",
+            "type": "t_enum(SLOType)4717"
+          }
+        ],
+        "numberOfBytes": "32"
+      },
+      "t_uint120": {
+        "encoding": "inplace",
+        "label": "uint120",
+        "numberOfBytes": "15"
+      }
+    }
+  }
+}
