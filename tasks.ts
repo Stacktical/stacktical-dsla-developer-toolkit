@@ -330,7 +330,7 @@ task(TASK_NAMES.GET_REVERT_MESSAGE, 'Get revert message for transaction hash')
     await hre.run(SUB_TASK_NAMES.GET_REVERT_MESSAGE, taskArgs);
   });
 
-task(TASK_NAMES.DEPLOY_MESSENGER, 'deploy a messenger in the MessengerRegistry')
+task(TASK_NAMES.DEPLOY_MESSENGER, 'Deploy a messenger in the MessengerRegistry')
   .addParam(
     PARAMS_NAMES.INDEX,
     'Id of the messenger on the messengers list of the network config'

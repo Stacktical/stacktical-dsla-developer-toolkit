@@ -155,7 +155,7 @@ export const GRAPH_NETWORKS = {
   [NETWORKS.POLYGON]: 'polygon',
   [NETWORKS.POLYGONV2]: 'polygon',
   [NETWORKS.AVALANCHE]: 'avalanche',
-  [NETWORKS.AVALANCHE]: 'avalanchev2',
+  [NETWORKS.AVALANCHEV2]: 'avalanche',
   [NETWORKS.ARBITRUMNOVA]: 'arbitrumnova',
   [NETWORKS.ARBITRUMV2]: 'arbitrum',
   [NETWORKS.ARBITRUMTESTNET]: 'arbitrumtestnet',
