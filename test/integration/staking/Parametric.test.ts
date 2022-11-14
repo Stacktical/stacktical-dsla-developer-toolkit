@@ -163,7 +163,7 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         );
     
         // get the contract INDEX 21, Contract for IT staking tests: Not Respected case reward capped
-        sla = await ethers.getContractAt(CONTRACT_NAMES.SLA, allSLAs[22]);//22
+        sla = await ethers.getContractAt(CONTRACT_NAMES.SLA, allSLAs[0]);//22
         details = await ethers.getContract(CONTRACT_NAMES.Details);
         sla_owner = await sla.owner();
         [
@@ -420,33 +420,28 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
 
         dslaToken.connect(user_2_account).approve(sla.address, toWei(initialStakeBalanceUser3));*/
 
-        
-        // WIP Withdraw test
-        const withdrawAmount = 1024
-        /*await dslaToken.connect(user_2_account).approve(sla.address, toWei("1024"));
-        //tx = await sla.connect(user_2_account).withdrawProviderTokens(toWei("1024"), slaDTokensDetailsP2.dpTokens[0].dTokenAddress);
-        await sla.connect(user_2_account).withdrawProviderTokens(toWei("1024"), sla.address);*/
-
-
         // WIP Withdraw test V2
         consola.info('SLA address:', sla.address);
-        consola.info('Requester address:', provider_2_account);
+        consola.info('Requester address:', user_2_account);
         const LPtokenAddress = await sla.dpTokenRegistry(
+          dslaToken.address
+        );
+        const DUtokenAddress = await sla.duTokenRegistry(
           dslaToken.address
         );
         consola.info('LP token address:', LPtokenAddress);
         const lpToken = <ERC20PresetMinterPauser>(
           await ethers.getContractAt('ERC20PresetMinterPauser', LPtokenAddress)
         );
-        consola.info('Preparing to get balance for user :', provider_2_account.address);
-        const lpTokenUserBalance = await lpToken.balanceOf(provider_2_account.address);
-        consola.info(
-          'LP token user balance:',
-          fromWei(lpTokenUserBalance.toString())
+        const duToken = <ERC20PresetMinterPauser>(
+          await ethers.getContractAt('ERC20PresetMinterPauser', DUtokenAddress)
         );
 
-        const supply = await lpToken.totalSupply();
-        consola.info('LP token total supply:', fromWei(supply.toString()));
+        const lpsupply = await lpToken.totalSupply();
+        consola.info('LP token total supply:', fromWei(lpsupply.toString()));
+
+        const dusupply = await duToken.totalSupply();
+        consola.info('DU token total supply:', fromWei(dusupply.toString()));
 
         const slaProvidersPool = await sla.providersPool(
           dslaToken.address
@@ -456,12 +451,49 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
           'SLA provider pool balance:',
           fromWei(slaProvidersPool.toString())
         );
+        consola.info(
+          'SLA user pool balance:',
+          fromWei(slaUsersPool.toString())
+        );
 
-        await lpToken.approve(sla.address, lpTokenUserBalance);
+        console.log("--------------------------------------------------------------")
 
-        await sla.withdrawProviderTokens(
+        consola.info('Preparing to get balance for user :', user_2_account.address);
+        const lpTokenUserBalance = await lpToken.balanceOf(user_2_account.address);
+        const duTokenUserBalance = await duToken.balanceOf(user_2_account.address);
+
+        consola.info(
+          'LP token user balance:',
+          fromWei(lpTokenUserBalance.toString())
+        );
+        consola.info(
+          'DU token user balance:',
+          fromWei(duTokenUserBalance.toString())
+        );
+
+        await duToken.approve(sla.address, duTokenUserBalance);
+        let duwithdrawAmount = duTokenUserBalance.div(4) //.sub(1000) // 1024 
+
+        consola.info(
+          'duwithdrawAmount: ',
+          fromWei(duwithdrawAmount.toString())
+        );
+
+        await sla.withdrawUserTokens(
+          duwithdrawAmount,
+          dslaToken.address
+        );
+
+        /*await sla.withdrawProviderTokens(
           withdrawAmount,
           dslaToken.address
+        );*/
+
+        const duTokenUserBalanceAfterW = await duToken.balanceOf(user_2_account.address);
+
+        consola.info(
+          'DU token user balance after withdraw:',
+          fromWei(duTokenUserBalanceAfterW.toString())
         );
 
         console.log("--------------------------------------------------------------")
