@@ -403,8 +403,8 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         const deviationAndDetails = getDeviationAndDetails(severities, penalties, sli)
 
         //this is to fix
-        const presumablyAppliedSeverity = scripts.deploy_sla[sla_script_index].severity[periodId_p1]
-        const presumablyAppliedPenalty = scripts.deploy_sla[sla_script_index].penalty[periodId_p1]
+        const presumablyAppliedSeverity = deviationAndDetails[2].severity;
+        const presumablyAppliedPenalty = deviationAndDetails[2].penalty;
 
         // Presumably applied severity
         // Presumably applied penalty
