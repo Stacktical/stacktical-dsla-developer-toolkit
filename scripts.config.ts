@@ -25,7 +25,7 @@ const StakingParametricMessengerSpec = JSON.parse(
 export const scripts: ScriptsConfiguration = {
   deploy_sla: [
     // INDEX 0 | Should be BREACHED
-    {
+    /*{
       sloValue: 100, // Breached as SL0 > SLi is false
       sloType: SLO_TYPE.GreaterThan,
       whitelisted: false,
@@ -646,7 +646,7 @@ export const scripts: ScriptsConfiguration = {
         serviceSliMockingPlan: [1000, 100000, 250000],
         ...StakingParametricMessengerSpec,
       },
-    },
+    },*/
     // INDEX 22, Contract for IT staking parametric tests: Breached case, max compensation of 25%
     // Cases: price stable, price rise,  price huge rise (capped reward)
     {
@@ -674,14 +674,14 @@ export const scripts: ScriptsConfiguration = {
         serviceAddress: '',
         serviceTicker: 'PH',
         serviceUseTestExternalAdapter: true,
-        serviceSliMockingPlan: [1000, 100000, 250000],
+        serviceSliMockingPlan: [11730, 100000, 250000],
         ...StakingParametricMessengerSpec,
       },
     },
     // INDEX 23, Contract for IT staking parametric tests: Breached case, max compensation of 25%
     // Cases: price stable, price rise,  price huge rise (capped reward)
     {
-      sloValue: 1,
+      sloValue: 102,
       sloType: SLO_TYPE.SmallerThan,
       whitelisted: false,
       periodType: PERIOD_TYPE.HOURLY,
@@ -710,7 +710,7 @@ export const scripts: ScriptsConfiguration = {
     },
     // INDEX 24, Contract for mainnet deployment of DSLA Parametric Staking
     {
-      sloValue: 1,
+      sloValue: 103,
       sloType: SLO_TYPE.SmallerThan,
       whitelisted: false,
       periodType: PERIOD_TYPE.MONTHLY,
