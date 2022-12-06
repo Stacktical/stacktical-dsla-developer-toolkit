@@ -52,7 +52,6 @@ function getDeviationAndDetails(severities, penalties, sli){
   }
 
   return [deviation, severity, deviationDetailsObject]
-
 }
 
 describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
@@ -140,7 +139,9 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
     let P3TotalStake = "400000";
     let P3NumberOfStakers = 6;
   
-  
+    let duTokenUser1BalanceAfterStakeP0: BigNumber = BigNumber.from("0");
+    let lpTokenProvider1BalanceAfterStakeP0: BigNumber = BigNumber.from("0");
+
     let P0ProviderPool: BigNumber = BigNumber.from("0");
     let P0UsersPool: BigNumber = BigNumber.from("0");
     let P0TotalStake: BigNumber = BigNumber.from("0");
@@ -148,6 +149,12 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
 
     let P0P1ProviderPoolDelta: BigNumber = BigNumber.from("0");
     let P0P1UsersPoolDelta: BigNumber = BigNumber.from("0");
+
+    let P1P2ProviderPoolDelta: BigNumber = BigNumber.from("0");
+    let P1P2UsersPoolDelta: BigNumber = BigNumber.from("0");
+
+    let P2P3ProviderPoolDelta: BigNumber = BigNumber.from("0");
+    let P2P3UsersPoolDelta: BigNumber = BigNumber.from("0");
   
     let currentP1ProviderPool: BigNumber = BigNumber.from("0");
     let currentP1UsersPool: BigNumber = BigNumber.from("0");
@@ -214,6 +221,18 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         const dslaToken: ERC20PresetMinterPauser = await ethers.getContract(
           CONTRACT_NAMES.DSLA
         );
+        const LPtokenAddress = await sla.dpTokenRegistry(
+          dslaToken.address
+        );
+        const DUtokenAddress = await sla.duTokenRegistry(
+          dslaToken.address
+        );
+        const lpToken = <ERC20PresetMinterPauser>(
+          await ethers.getContractAt('ERC20PresetMinterPauser', LPtokenAddress)
+        );
+        const duToken = <ERC20PresetMinterPauser>(
+          await ethers.getContractAt('ERC20PresetMinterPauser', DUtokenAddress)
+        );
     
         // Approve allocation of amount to dslaToken address
         consola.info('Approve allocation of amount to dslaToken address');
@@ -249,9 +268,15 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         tx = await sla.connect(user_1_account).stakeTokens(toWei(initialStakeBalanceUser1), dslaToken.address, Position.SHORT);
         tx = await sla.connect(user_2_account).stakeTokens(toWei(initialStakeBalanceUser2), dslaToken.address, Position.SHORT);
         tx = await sla.connect(user_3_account).stakeTokens(toWei(initialStakeBalanceUser3), dslaToken.address, Position.SHORT);
-    
+
         consola.info('Initial Staking DONE');
-    
+
+        // Getting balance for sample user
+        duTokenUser1BalanceAfterStakeP0 = await duToken.balanceOf(user_1_account.address);
+
+        // Getting balance for sample provider
+        lpTokenProvider1BalanceAfterStakeP0 = await lpToken.balanceOf(provider_1_account.address);
+        
         let slaDynamicDetails = await details.getSLADynamicDetails(sla.address);
     
         stakersLength = await sla.getStakersLength();
@@ -273,6 +298,8 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         P0ProviderPool = slaDetailsP0.tokensStake[0].providersPool;
         P0UsersPool = slaDetailsP0.tokensStake[0].usersPool;
         P0TotalStake = slaDetailsP0.tokensStake[0].totalStake;
+
+        //POUser1DuTokenBalance = 
     
       });
 
@@ -280,6 +307,12 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         describe("P0 tests execution", function () {
           it('StakersLength should be equal to initialNumberOfStakers', function () {
             expect(stakersLength).equals(initialNumberOfStakers);
+          });
+          it('Sample Provider Balance should be equal to Initial stake value', function () {
+            expect(fromWei(duTokenUser1BalanceAfterStakeP0.toString())).equals(initialStakeBalanceUser1.toString());
+          });
+          it('Sample User Balance should be equal to Initial stake value', function () {
+            expect(fromWei(duTokenUser1BalanceAfterStakeP0.toString())).equals(initialStakeBalanceUser1.toString());
           });
           it('Total Provider Pool should be equal to initialized value', function () {
             expect(toWei(initialProviderPool)).equals(P0ProviderPool.toString());
@@ -324,8 +357,10 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
           PERIOD_TYPE.MONTHLY, periodId_p1
         );
 
-        consola.info('Preparing to get balance before P1 request SLI for user :', user_2_account.address);
-        const duTokenUserBalanceBeforeP1 = await duToken.balanceOf(user_2_account.address);
+        consola.info('Preparing to get balance before P1 request SLI for user 2:', user_2_account.address);
+        const duTokenUser2BalanceBeforeP1 = await duToken.balanceOf(user_2_account.address);
+        consola.info('Preparing to get balance before P1 request SLI for user 3:', user_3_account.address);
+        const duTokenUser3BalanceBeforeP1 = await duToken.balanceOf(user_3_account.address);
 
 
         console.log("Period starts and ends", periodStartEnd.start.toNumber(), periodStartEnd.end.toNumber())
@@ -356,15 +391,6 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
 
         console.log("--------------------------------------------------------------")
 
-        consola.info('Preparing to get balance Before P1 request SLI for user :', user_2_account.address);
-        const duTokenUserBalanceAfterP1 = await duToken.balanceOf(user_2_account.address);
-
-        const providerPoolRawChangeP1 = currentP1ProviderPool.sub(toWei(initialProviderPool))
-        const userPoolRawChangeP1 = currentP1UsersPool.sub(initialUserPool)
-
-        // const providerPoolPctChangeP1 = currentP1ProviderPool.div(toWei(initialProviderPool)).mul(100)
-        const userPoolPctChangeP1 = currentP1UsersPool.div(toWei(initialUserPool)).mul(100)
-
         P0P1UsersPoolDelta = currentP1UsersPool.sub(P0UsersPool)
         P0P1ProviderPoolDelta = currentP1ProviderPool.sub(P0ProviderPool)
 
@@ -373,45 +399,19 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         const P0P1UsersPoolDeltaBy100andPrescision = P0P1UsersPoolDelta.mul(100).mul(percentPrescision);
         const userPoolPctChangeP0toP1mulByPrescision = P0P1UsersPoolDeltaBy100andPrescision.div(P0UsersPool);
         const userPoolPctChangeP0toP1 = userPoolPctChangeP0toP1mulByPrescision.div(percentPrescision);
-        //const userPoolPctChangeP0toP1mulByPrescision = (P0P1UsersPoolDelta.mul(100)).div(P0UsersPool);
-        //const userPoolPctChangeP0toP1mulByPrescision = P0UsersPool.mul("100").div(currentP1UsersPool);
 
         const P0P1PrividerPoolDeltaBy100andPrescision = P0P1ProviderPoolDelta.mul(100).mul(percentPrescision);
         const providerPoolPctChangeP0toP1mulByPrescision = P0P1PrividerPoolDeltaBy100andPrescision.div(P0ProviderPool);
         const providerPoolPctChangeP0toP1 = providerPoolPctChangeP0toP1mulByPrescision.div(percentPrescision);
-        //const providerPoolPctChangeP0toP1 = P0ProviderPool.mul("100").div(currentP1ProviderPool);
-
-
-
-        
-        //const providerPoolPctChangeP1 = (priceChangeOverPeriod * 100) / startOfPeriodPrice;
-
-        // pourcentage = (montant partiel / montant total) x 100
-
-        //const userPoolRawChangeP1 = //P0UsersPool P0ProviderPool
-        
-        /*const providerPoolPctChangeP1 = 0
-        const providerPoolPctChangeP1 = 0*/
 
         const slaContractSloValue = slaStaticDetailsP1.sloValue
 
-
-
-        // To fix
         const severities = scripts.deploy_sla[sla_script_index].severity
         const penalties = scripts.deploy_sla[sla_script_index].penalty
         const deviationAndDetails = getDeviationAndDetails(severities, penalties, sli)
 
-        //this is to fix
         const presumablyAppliedSeverity = deviationAndDetails[2].severity;
         const presumablyAppliedPenalty = deviationAndDetails[2].penalty;
-
-        // Presumably applied severity
-        // Presumably applied penalty
-
-        
-        consola.info('DU token user balance before P1:',fromWei(duTokenUserBalanceBeforeP1.toString()));
-        consola.info('DU token user balance after P1:',fromWei(duTokenUserBalanceAfterP1.toString()));
 
         console.log("--------------------------------------------------------------")
         console.log('SLO: ', slaContractSloValue.toString())
@@ -430,21 +430,19 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         console.log("dpTokens totalSupply: ", slaDTokensDetailsP1.dpTokens[0].totalSupply.toString())
         console.log("duTokens totalSupply: ", slaDTokensDetailsP1.duTokens[0].totalSupply.toString())
 
-
         console.log("----")
         console.log("Provider Pool bal P0: ",  P0ProviderPool.toString())
         console.log("Provider Pool balance P1: ",  currentP1ProviderPool.toString())
         console.log("Provider Delta P0 to P1: ", P0P1ProviderPoolDelta.toString())
         console.log("Provider Pool PctChange P1 10 **4: ", providerPoolPctChangeP0toP1mulByPrescision.toString())
-        console.log("Provider Pool PctChange P1: ", providerPoolPctChangeP0toP1.toString())
+        console.log("Provider Pool PctChange P1: ", providerPoolPctChangeP0toP1.toString(), "%")
         
-
         console.log("----")
         console.log("User Pool balance P0: ", P0UsersPool.toString())
         console.log("User Pool balance P1: ", currentP1UsersPool.toString())
         console.log("User Delta P0 to P1: ", P0P1UsersPoolDelta.toString())
         console.log("User Pool PctChange P1  10 **4: ", userPoolPctChangeP0toP1mulByPrescision.toString())
-        console.log("User Pool PctChange P1: ", userPoolPctChangeP0toP1.toString())
+        console.log("User Pool PctChange P1: ", userPoolPctChangeP0toP1.toString(), "%")
         console.log("----")
         
         console.log("--------------------------------------------------------------")
@@ -507,9 +505,32 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
 
         const slaContractSloValue = slaStaticDetailsP2.sloValue
 
+        P1P2UsersPoolDelta = currentP2UsersPool.sub(currentP1UsersPool)
+        P1P2ProviderPoolDelta = currentP2ProviderPool.sub(currentP1ProviderPool)
+
+        const percentPrescision = 10**4
+
+        const P1P2UsersPoolDeltaBy100andPrescision = P1P2UsersPoolDelta.mul(100).mul(percentPrescision);
+        const userPoolPctChangeP1toP2mulByPrescision = P1P2UsersPoolDeltaBy100andPrescision.div(currentP2ProviderPool);
+        const userPoolPctChangeP1toP2 = userPoolPctChangeP1toP2mulByPrescision.div(percentPrescision);
+
+        const P1P2PrividerPoolDeltaBy100andPrescision = P1P2ProviderPoolDelta.mul(100).mul(percentPrescision);
+        const providerPoolPctChangeP1toP2mulByPrescision = P1P2PrividerPoolDeltaBy100andPrescision.div(currentP1ProviderPool);
+        const providerPoolPctChangeP1toP2 = providerPoolPctChangeP1toP2mulByPrescision.div(percentPrescision);
+
+        const severities = scripts.deploy_sla[sla_script_index].severity
+        const penalties = scripts.deploy_sla[sla_script_index].penalty
+        const deviationAndDetails = getDeviationAndDetails(severities, penalties, sli)
+
+        const presumablyAppliedSeverity = deviationAndDetails[2].severity;
+        const presumablyAppliedPenalty = deviationAndDetails[2].penalty;
+
         console.log("--------------------------------------------------------------")
         console.log('SLO: ', slaContractSloValue.toString())
         console.log('SLI: ', sli.toString())
+        console.log('deviationAndDetails: ', deviationAndDetails)
+        console.log('presumablyAppliedSeverity: ', presumablyAppliedSeverity.toString())
+        console.log('presumablyAppliedPenalty: ', presumablyAppliedPenalty.toString())
         console.log('sla.address: ', sla.address);
         console.log('Created SLI timestamp: ', timestamp.toString());
         console.log('Created SLI sli: ', sli.toString());
@@ -517,10 +538,25 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         console.log('SLI request process finished  for P2');
         console.log("dpTokens balance: ", slaDTokensDetailsP2.dpTokens[0].balance.toString())
         console.log("duTokens balance: ", slaDTokensDetailsP2.duTokens[0].balance.toString())
+
         console.log("dpTokens totalSupply: ", slaDTokensDetailsP2.dpTokens[0].totalSupply.toString())
         console.log("duTokens totalSupply: ", slaDTokensDetailsP2.duTokens[0].totalSupply.toString())
-        console.log("Provider Pool balance: ", currentP2ProviderPool.toString())
-        console.log("User Pool balance: ", currentP2UsersPool.toString())
+
+        console.log("----")
+        console.log("Provider Pool bal P1: ",  currentP1ProviderPool.toString())
+        console.log("Provider Pool balance P2: ",  currentP2ProviderPool.toString())
+        console.log("Provider Delta P1 to P2: ", P1P2ProviderPoolDelta.toString())
+        console.log("Provider Pool PctChange P2 10 **4: ", providerPoolPctChangeP1toP2mulByPrescision.toString())
+        console.log("Provider Pool PctChange P2: ", providerPoolPctChangeP1toP2.toString(), "%")
+        
+        console.log("----")
+        console.log("User Pool balance P1: ", currentP1ProviderPool.toString())
+        console.log("User Pool balance P2: ", currentP1UsersPool.toString())
+        console.log("User Delta P1 to P2: ", P1P2UsersPoolDelta.toString())
+        console.log("User Pool PctChange P2  10 **4: ", userPoolPctChangeP1toP2mulByPrescision.toString())
+        console.log("User Pool PctChange P2: ", userPoolPctChangeP1toP2.toString(), "%")
+        console.log("----")
+        
         console.log("--------------------------------------------------------------")
 
       });
@@ -581,9 +617,32 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
 
         const slaContractSloValue = slaStaticDetailsP3.sloValue
 
+        P2P3UsersPoolDelta = currentP3UsersPool.sub(currentP2UsersPool)
+        P2P3ProviderPoolDelta = currentP3ProviderPool.sub(currentP2ProviderPool)
+
+        const percentPrescision = 10**4
+
+        const P2P3UsersPoolDeltaBy100andPrescision = P2P3UsersPoolDelta.mul(100).mul(percentPrescision);
+        const userPoolPctChangeP2toP3mulByPrescision = P2P3UsersPoolDeltaBy100andPrescision.div(currentP3ProviderPool);
+        const userPoolPctChangeP2toP3 = userPoolPctChangeP2toP3mulByPrescision.div(percentPrescision);
+
+        const P2P3PrividerPoolDeltaBy100andPrescision = P2P3ProviderPoolDelta.mul(100).mul(percentPrescision);
+        const providerPoolPctChangeP2toP3mulByPrescision = P2P3PrividerPoolDeltaBy100andPrescision.div(currentP2ProviderPool);
+        const providerPoolPctChangeP2toP3 = providerPoolPctChangeP2toP3mulByPrescision.div(percentPrescision);
+
+        const severities = scripts.deploy_sla[sla_script_index].severity
+        const penalties = scripts.deploy_sla[sla_script_index].penalty
+        const deviationAndDetails = getDeviationAndDetails(severities, penalties, sli)
+
+        const presumablyAppliedSeverity = deviationAndDetails[2].severity;
+        const presumablyAppliedPenalty = deviationAndDetails[2].penalty;
+
         console.log("--------------------------------------------------------------")
         console.log('SLO: ', slaContractSloValue.toString())
         console.log('SLI: ', sli.toString())
+        console.log('deviationAndDetails: ', deviationAndDetails)
+        console.log('presumablyAppliedSeverity: ', presumablyAppliedSeverity.toString())
+        console.log('presumablyAppliedPenalty: ', presumablyAppliedPenalty.toString())
         console.log('sla.address: ', sla.address);
         console.log('Created SLI timestamp: ', timestamp.toString());
         console.log('Created SLI sli: ', sli.toString());
@@ -591,11 +650,28 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         console.log('SLI request process finished  for P3');
         console.log("dpTokens balance: ", slaDTokensDetailsP3.dpTokens[0].balance.toString())
         console.log("duTokens balance: ", slaDTokensDetailsP3.duTokens[0].balance.toString())
+
         console.log("dpTokens totalSupply: ", slaDTokensDetailsP3.dpTokens[0].totalSupply.toString())
         console.log("duTokens totalSupply: ", slaDTokensDetailsP3.duTokens[0].totalSupply.toString())
-        console.log("Provider Pool balance: ", currentP3ProviderPool.toString())
-        console.log("User Pool balance: ", currentP3UsersPool.toString())
+
+        console.log("----")
+        console.log("Provider Pool bal P2: ",  currentP2ProviderPool.toString())
+        console.log("Provider Pool balance P3: ",  currentP3ProviderPool.toString())
+        console.log("Provider Delta P2 to P3: ", P2P3ProviderPoolDelta.toString())
+        console.log("Provider Pool PctChange P3 10 **4: ", providerPoolPctChangeP2toP3mulByPrescision.toString())
+        console.log("Provider Pool PctChange P3: ", providerPoolPctChangeP2toP3.toString(), "%")
+        
+        console.log("----")
+        console.log("User Pool balance P2: ", currentP2UsersPool.toString())
+        console.log("User Pool balance P3: ", currentP3UsersPool.toString())
+        console.log("User Delta P2 to P3: ", P2P3UsersPoolDelta.toString())
+        console.log("User Pool PctChange P3  10 **4: ", userPoolPctChangeP2toP3mulByPrescision.toString())
+        console.log("User Pool PctChange P3: ", userPoolPctChangeP2toP3.toString(), "%")
+        console.log("----")
+        
         console.log("--------------------------------------------------------------")
+
+
 
       });
     });
