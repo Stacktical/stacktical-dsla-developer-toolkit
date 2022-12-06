@@ -80,7 +80,7 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
     const sla_script_index = 0
     // Stacking constants INITIAL
     // PROVIDERS BALANCE
-    let initialStakeBalanceProvider1 = "100000";
+    let initialStakeBalanceProvider1 = "900000"; //100000
     let initialStakeBalanceProvider2 = "100000";
     let initialStakeBalanceProvider3 = "100000";
   
@@ -89,9 +89,9 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
     let initialStakeBalanceUser2 = "40000";
     let initialStakeBalanceUser3 = "50000";
   
-    let initialProviderPool = "300000";
+    let initialProviderPool = "1100000"; //300000
     let initialUserPool = "100000";
-    let initialTotalStake = "400000";
+    let initialTotalStake = "1200000"; //400000
     let initialNumberOfStakers = 6;
   
     // Stacking constants P1
@@ -357,12 +357,6 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
           PERIOD_TYPE.MONTHLY, periodId_p1
         );
 
-        consola.info('Preparing to get balance before P1 request SLI for user 2:', user_2_account.address);
-        const duTokenUser2BalanceBeforeP1 = await duToken.balanceOf(user_2_account.address);
-        consola.info('Preparing to get balance before P1 request SLI for user 3:', user_3_account.address);
-        const duTokenUser3BalanceBeforeP1 = await duToken.balanceOf(user_3_account.address);
-
-
         console.log("Period starts and ends", periodStartEnd.start.toNumber(), periodStartEnd.end.toNumber())
         await evm_increaseTime(periodStartEnd.end.toNumber());
         await expect(slaRegistry.requestSLI(
@@ -511,11 +505,11 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         const percentPrescision = 10**4
 
         const P1P2UsersPoolDeltaBy100andPrescision = P1P2UsersPoolDelta.mul(100).mul(percentPrescision);
-        const userPoolPctChangeP1toP2mulByPrescision = P1P2UsersPoolDeltaBy100andPrescision.div(currentP2ProviderPool);
+        const userPoolPctChangeP1toP2mulByPrescision = P1P2UsersPoolDeltaBy100andPrescision.div(currentP2UsersPool);
         const userPoolPctChangeP1toP2 = userPoolPctChangeP1toP2mulByPrescision.div(percentPrescision);
 
-        const P1P2PrividerPoolDeltaBy100andPrescision = P1P2ProviderPoolDelta.mul(100).mul(percentPrescision);
-        const providerPoolPctChangeP1toP2mulByPrescision = P1P2PrividerPoolDeltaBy100andPrescision.div(currentP1ProviderPool);
+        const P1P2ProviderPoolDeltaBy100andPrescision = P1P2ProviderPoolDelta.mul(100).mul(percentPrescision);
+        const providerPoolPctChangeP1toP2mulByPrescision = P1P2ProviderPoolDeltaBy100andPrescision.div(currentP1ProviderPool);
         const providerPoolPctChangeP1toP2 = providerPoolPctChangeP1toP2mulByPrescision.div(percentPrescision);
 
         const severities = scripts.deploy_sla[sla_script_index].severity
@@ -550,8 +544,8 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         console.log("Provider Pool PctChange P2: ", providerPoolPctChangeP1toP2.toString(), "%")
         
         console.log("----")
-        console.log("User Pool balance P1: ", currentP1ProviderPool.toString())
-        console.log("User Pool balance P2: ", currentP1UsersPool.toString())
+        console.log("User Pool balance P1: ", currentP1UsersPool.toString())
+        console.log("User Pool balance P2: ", currentP2UsersPool.toString())
         console.log("User Delta P1 to P2: ", P1P2UsersPoolDelta.toString())
         console.log("User Pool PctChange P2  10 **4: ", userPoolPctChangeP1toP2mulByPrescision.toString())
         console.log("User Pool PctChange P2: ", userPoolPctChangeP1toP2.toString(), "%")
@@ -623,11 +617,11 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         const percentPrescision = 10**4
 
         const P2P3UsersPoolDeltaBy100andPrescision = P2P3UsersPoolDelta.mul(100).mul(percentPrescision);
-        const userPoolPctChangeP2toP3mulByPrescision = P2P3UsersPoolDeltaBy100andPrescision.div(currentP3ProviderPool);
+        const userPoolPctChangeP2toP3mulByPrescision = P2P3UsersPoolDeltaBy100andPrescision.div(currentP3UsersPool);
         const userPoolPctChangeP2toP3 = userPoolPctChangeP2toP3mulByPrescision.div(percentPrescision);
 
-        const P2P3PrividerPoolDeltaBy100andPrescision = P2P3ProviderPoolDelta.mul(100).mul(percentPrescision);
-        const providerPoolPctChangeP2toP3mulByPrescision = P2P3PrividerPoolDeltaBy100andPrescision.div(currentP2ProviderPool);
+        const P2P3ProviderPoolDeltaBy100andPrescision = P2P3ProviderPoolDelta.mul(100).mul(percentPrescision);
+        const providerPoolPctChangeP2toP3mulByPrescision = P2P3ProviderPoolDeltaBy100andPrescision.div(currentP2ProviderPool);
         const providerPoolPctChangeP2toP3 = providerPoolPctChangeP2toP3mulByPrescision.div(percentPrescision);
 
         const severities = scripts.deploy_sla[sla_script_index].severity
@@ -670,7 +664,6 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         console.log("----")
         
         console.log("--------------------------------------------------------------")
-
 
 
       });
