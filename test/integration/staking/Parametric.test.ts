@@ -108,6 +108,10 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
     let P1UserPool = "101000";
     let P1TotalStake = "400000";
     let P1NumberOfStakers = 6;
+
+    let P1expectedUserPoolChangePct10f4 = "10000"
+    let P2expectedUserPoolChangePct10f4 = "100000"
+    let P3expectedUserPoolChangePct10f4 = "250000"
   
     // Stacking constants P2
     // PROVIDERS BALANCE
@@ -155,6 +159,14 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
 
     let P2P3ProviderPoolDelta: BigNumber = BigNumber.from("0");
     let P2P3UsersPoolDelta: BigNumber = BigNumber.from("0");
+
+    let providerPoolPctChangeP0toP1mulByPrescision: BigNumber = BigNumber.from("0");
+    let providerPoolPctChangeP1toP2mulByPrescision: BigNumber = BigNumber.from("0");
+    let providerPoolPctChangeP2toP3mulByPrescision: BigNumber = BigNumber.from("0");
+
+    let userPoolPctChangeP0toP1mulByPrescision: BigNumber = BigNumber.from("0");
+    let userPoolPctChangeP1toP2mulByPrescision: BigNumber = BigNumber.from("0");
+    let userPoolPctChangeP2toP3mulByPrescision: BigNumber = BigNumber.from("0");
   
     let currentP1ProviderPool: BigNumber = BigNumber.from("0");
     let currentP1UsersPool: BigNumber = BigNumber.from("0");
@@ -391,11 +403,11 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         const percentPrescision = 10**4
 
         const P0P1UsersPoolDeltaBy100andPrescision = P0P1UsersPoolDelta.mul(100).mul(percentPrescision);
-        const userPoolPctChangeP0toP1mulByPrescision = P0P1UsersPoolDeltaBy100andPrescision.div(P0UsersPool);
+        userPoolPctChangeP0toP1mulByPrescision = P0P1UsersPoolDeltaBy100andPrescision.div(P0UsersPool);
         const userPoolPctChangeP0toP1 = userPoolPctChangeP0toP1mulByPrescision.div(percentPrescision);
 
         const P0P1PrividerPoolDeltaBy100andPrescision = P0P1ProviderPoolDelta.mul(100).mul(percentPrescision);
-        const providerPoolPctChangeP0toP1mulByPrescision = P0P1PrividerPoolDeltaBy100andPrescision.div(P0ProviderPool);
+        providerPoolPctChangeP0toP1mulByPrescision = P0P1PrividerPoolDeltaBy100andPrescision.div(P0ProviderPool);
         const providerPoolPctChangeP0toP1 = providerPoolPctChangeP0toP1mulByPrescision.div(percentPrescision);
 
         const slaContractSloValue = slaStaticDetailsP1.sloValue
@@ -451,6 +463,9 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
       it('Total User Pool should be equal to P1 expected value', function () {
         expect(currentP1UsersPool.toString()).equals(toWei(P1UserPool.toString()));
       });
+      it('User Pool change percent (10 **4) from P0 to P1 should be expected value', function () {
+        expect(userPoolPctChangeP0toP1mulByPrescision.toString()).equals(P1expectedUserPoolChangePct10f4.toString());
+      });
       it('Total Liquidity Pool should be equal to P1 expected value', function () {
         expect(currentP1TotalStake.toString()).equals(toWei(P1TotalStake.toString()));
       });
@@ -504,11 +519,11 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         const percentPrescision = 10**4
 
         const P1P2UsersPoolDeltaBy100andPrescision = P1P2UsersPoolDelta.mul(100).mul(percentPrescision);
-        const userPoolPctChangeP1toP2mulByPrescision = P1P2UsersPoolDeltaBy100andPrescision.div(currentP1UsersPool);
+        userPoolPctChangeP1toP2mulByPrescision = P1P2UsersPoolDeltaBy100andPrescision.div(currentP1UsersPool);
         const userPoolPctChangeP1toP2 = userPoolPctChangeP1toP2mulByPrescision.div(percentPrescision);
 
         const P1P2ProviderPoolDeltaBy100andPrescision = P1P2ProviderPoolDelta.mul(100).mul(percentPrescision);
-        const providerPoolPctChangeP1toP2mulByPrescision = P1P2ProviderPoolDeltaBy100andPrescision.div(currentP1ProviderPool);
+        providerPoolPctChangeP1toP2mulByPrescision = P1P2ProviderPoolDeltaBy100andPrescision.div(currentP1ProviderPool);
         const providerPoolPctChangeP1toP2 = providerPoolPctChangeP1toP2mulByPrescision.div(percentPrescision);
 
         const severities = scripts.deploy_sla[sla_script_index].severity
@@ -561,6 +576,9 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
       });
       it('Total User Pool should be equal to P2 expected value', function () {
         expect(currentP2UsersPool.toString()).equals(toWei(P2UserPool.toString()));
+      });
+      it('User Pool change percent (10 **4) from P0 to P1 should be expected value', function () {
+        expect(userPoolPctChangeP1toP2mulByPrescision.toString()).equals(P2expectedUserPoolChangePct10f4.toString());
       });
       it('Total Liquidity Pool should be equal to P2 expected value', function () {
         expect(currentP2TotalStake.toString()).equals(toWei(P2TotalStake.toString()));
@@ -616,11 +634,11 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         const percentPrescision = 10**4
 
         const P2P3UsersPoolDeltaBy100andPrescision = P2P3UsersPoolDelta.mul(100).mul(percentPrescision);
-        const userPoolPctChangeP2toP3mulByPrescision = P2P3UsersPoolDeltaBy100andPrescision.div(currentP2UsersPool);
+        userPoolPctChangeP2toP3mulByPrescision = P2P3UsersPoolDeltaBy100andPrescision.div(currentP2UsersPool);
         const userPoolPctChangeP2toP3 = userPoolPctChangeP2toP3mulByPrescision.div(percentPrescision);
 
         const P2P3ProviderPoolDeltaBy100andPrescision = P2P3ProviderPoolDelta.mul(100).mul(percentPrescision);
-        const providerPoolPctChangeP2toP3mulByPrescision = P2P3ProviderPoolDeltaBy100andPrescision.div(currentP2ProviderPool);
+        providerPoolPctChangeP2toP3mulByPrescision = P2P3ProviderPoolDeltaBy100andPrescision.div(currentP2ProviderPool);
         const providerPoolPctChangeP2toP3 = providerPoolPctChangeP2toP3mulByPrescision.div(percentPrescision);
 
         const severities = scripts.deploy_sla[sla_script_index].severity
@@ -674,6 +692,9 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
       });
       it('Total User Pool should be equal to P3 expected value', function () {
         expect(currentP3UsersPool.toString()).equals(toWei(P3UserPool.toString()));
+      });
+      it('User Pool change percent (10 **4) from P2 to P3 should be expected value', function () {
+        expect(userPoolPctChangeP2toP3mulByPrescision.toString()).equals(P3expectedUserPoolChangePct10f4.toString());
       });
       it('Total Liquidity Pool should be equal to P3 expected value', function () {
         expect(currentP3TotalStake.toString()).equals(toWei(P3TotalStake.toString()));
