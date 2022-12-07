@@ -25,7 +25,7 @@ const StakingParametricMessengerSpec = JSON.parse(
 export const scripts: ScriptsConfiguration = {
   deploy_sla: [
     // INDEX 0 | Should be BREACHED
-    /*{
+    {
       sloValue: 100, // Breached as SL0 > SLi is false
       sloType: SLO_TYPE.GreaterThan,
       whitelisted: false,
@@ -646,7 +646,7 @@ export const scripts: ScriptsConfiguration = {
         serviceSliMockingPlan: [1000, 100000, 250000],
         ...StakingParametricMessengerSpec,
       },
-    },*/
+    },
     // INDEX 22, Contract for IT staking parametric tests: Breached case, max compensation of 25%
     // Cases: price stable, price rise,  price huge rise (capped reward) USED CONTRACT CONF
     {

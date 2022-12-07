@@ -77,10 +77,10 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
 
 
     // get the contract INDEX XX, Contract for IT staking test
-    const sla_script_index = 0
+    const sla_script_index = 22;
     // Stacking constants INITIAL
     // PROVIDERS BALANCE
-    let initialStakeBalanceProvider1 = "100000"; //100000
+    let initialStakeBalanceProvider1 = "100000";
     let initialStakeBalanceProvider2 = "100000";
     let initialStakeBalanceProvider3 = "100000";
   
@@ -89,9 +89,9 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
     let initialStakeBalanceUser2 = "40000";
     let initialStakeBalanceUser3 = "50000";
   
-    let initialProviderPool = "1100000"; //300000
+    let initialProviderPool = "300000";
     let initialUserPool = "100000";
-    let initialTotalStake = "400000"; //400000
+    let initialTotalStake = "400000";
     let initialNumberOfStakers = 6;
   
     // Stacking constants P1
