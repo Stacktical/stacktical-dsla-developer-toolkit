@@ -80,7 +80,7 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
     const sla_script_index = 0
     // Stacking constants INITIAL
     // PROVIDERS BALANCE
-    let initialStakeBalanceProvider1 = "900000"; //100000
+    let initialStakeBalanceProvider1 = "100000"; //100000
     let initialStakeBalanceProvider2 = "100000";
     let initialStakeBalanceProvider3 = "100000";
   
@@ -91,7 +91,7 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
   
     let initialProviderPool = "1100000"; //300000
     let initialUserPool = "100000";
-    let initialTotalStake = "1200000"; //400000
+    let initialTotalStake = "400000"; //400000
     let initialNumberOfStakers = 6;
   
     // Stacking constants P1
@@ -455,7 +455,6 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         expect(currentP1TotalStake.toString()).equals(toWei(P1TotalStake.toString()));
       });
     });
-
   });
 
 
@@ -505,7 +504,7 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         const percentPrescision = 10**4
 
         const P1P2UsersPoolDeltaBy100andPrescision = P1P2UsersPoolDelta.mul(100).mul(percentPrescision);
-        const userPoolPctChangeP1toP2mulByPrescision = P1P2UsersPoolDeltaBy100andPrescision.div(currentP2UsersPool);
+        const userPoolPctChangeP1toP2mulByPrescision = P1P2UsersPoolDeltaBy100andPrescision.div(currentP1UsersPool);
         const userPoolPctChangeP1toP2 = userPoolPctChangeP1toP2mulByPrescision.div(percentPrescision);
 
         const P1P2ProviderPoolDeltaBy100andPrescision = P1P2ProviderPoolDelta.mul(100).mul(percentPrescision);
@@ -617,7 +616,7 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         const percentPrescision = 10**4
 
         const P2P3UsersPoolDeltaBy100andPrescision = P2P3UsersPoolDelta.mul(100).mul(percentPrescision);
-        const userPoolPctChangeP2toP3mulByPrescision = P2P3UsersPoolDeltaBy100andPrescision.div(currentP3UsersPool);
+        const userPoolPctChangeP2toP3mulByPrescision = P2P3UsersPoolDeltaBy100andPrescision.div(currentP2UsersPool);
         const userPoolPctChangeP2toP3 = userPoolPctChangeP2toP3mulByPrescision.div(percentPrescision);
 
         const P2P3ProviderPoolDeltaBy100andPrescision = P2P3ProviderPoolDelta.mul(100).mul(percentPrescision);
