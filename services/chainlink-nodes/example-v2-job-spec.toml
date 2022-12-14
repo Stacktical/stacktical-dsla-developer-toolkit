@@ -1,6 +1,6 @@
 type = "directrequest"
 schemaVersion = 1
-name = "StakingParametricRequestJob"
+name = "StakingParametricReq"
 forwardingAllowed = false
 maxTaskDuration = "0s"
 contractAddress = "0x6Dc1147ca16C020579642D90042CeA252474fD67"
@@ -15,7 +15,7 @@ observationSource = """
     parse        [type=jsonparse path="data,result" data="$(fetch)"]
     encode_data  [type=ethabiencode abi="(uint256 value)" data="{ \\"value\\": $(parse) }"]
     encode_tx    [type=ethabiencode
-                  abi="fulfillOracleRequest2(bytes32 requestId, uint256 payment, address callbackAddress, bytes4 callbackFunctionId, uint256 expiration, bytes calldata data)"
+                  abi="fulfillOracleRequest(bytes32 requestId, uint256 payment, address callbackAddress, bytes4 callbackFunctionId, uint256 expiration, bytes32 data)"
                   data="{\\"requestId\\": $(decode_log.requestId), \\"payment\\": $(decode_log.payment), \\"callbackAddress\\": $(decode_log.callbackAddr), \\"callbackFunctionId\\": $(decode_log.callbackFunctionId), \\"expiration\\": $(decode_log.cancelExpiration), \\"data\\": $(encode_data)}"
                  ]
     submit_tx    [type=ethtx to="0x6Dc1147ca16C020579642D90042CeA252474fD67" data="$(encode_tx)"]
