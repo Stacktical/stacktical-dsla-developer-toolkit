@@ -1,0 +1,52 @@
+version: '3.5'
+services:
+  postgres:
+    container_name: postgres-dsla-env
+    image: postgres:14.5-alpine
+    volumes:
+      - "pgdata:/var/lib/postgresql/data"
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: chainlink
+    networks:
+      - dsla-test
+  chainlink:
+    container_name: chainlink-dsla-env
+    image: smartcontract/chainlink:1.9.0
+    ports:
+      - '6688:6688'
+    volumes:
+      - ./chainlink:/chainlink
+      - ./chainlink/.api:/chainlink/.api
+      - ./chainlink/.password:/chainlink/.password
+    environment:
+      - ROOT=/chainlink
+      - ETH_CHAIN_ID=1337
+      - LOG_LEVEL=info
+      - MIN_INCOMING_CONFIRMATIONS=1
+      - MIN_OUTGOING_CONFIRMATIONS=1
+      - CHAINLINK_TLS_PORT=0
+      - SECURE_COOKIES=false
+      - GAS_UPDATER_ENABLED=false
+      - ALLOW_ORIGINS=*
+      - CHAINLINK_PORT=6688
+      - ETH_URL=ws://host.docker.internal:8545
+      - ETH_HTTP_URL=http://host.docker.internal:8545
+      - DEFAULT_HTTP_TIMEOUT=200s
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/chainlink?sslmode=disable
+      - SKIP_DATABASE_PASSWORD_COMPLEXITY_CHECK=true
+      - FEATURE_WEBHOOK_V2=true
+    command: local n -p /chainlink/.password -a /chainlink/.api
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - dsla-test
+    depends_on:
+      - postgres
+    restart: on-failure
+networks:
+  dsla-test:
+    name: dsla-local-environment
+volumes:
+  pgdata:
+  chainlink:

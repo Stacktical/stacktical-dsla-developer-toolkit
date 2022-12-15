@@ -136,6 +136,7 @@ export enum NETWORKS {
   AVALANCHEV2 = 'avalanchev2',
   ARBITRUMNOVA = 'arbitrumnova',
   ARBITRUMV2 = 'arbitrumv2',
+  ARBITRUMTESTNETV2 = 'arbitrumtestnetv2',
   ARBITRUMTESTNET = 'arbitrumtestnet',
   KOVAN = 'kovan',
   FUJI = 'fuji',
