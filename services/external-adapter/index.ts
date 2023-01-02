@@ -17,6 +17,8 @@ type SLAData = {
   serviceSliMockingPlan: Array<number>;
   periodType: number;
   messengerAddress: string;
+  trackingNumber: string;
+  courier: string;
 };
 
 type RequestData = {
@@ -44,25 +46,47 @@ async function getSLI(requestData: RequestData) {
   const slaData = await getSLAData(requestData.sla_address);
   console.log('SLA Data:');
   console.log(slaData);
-  const web3 = new Web3(web3Uri);
-  const messenger = new web3.eth.Contract(
-    MessengerABI,
-    slaData.messengerAddress
-  );
-  const precision = await messenger.methods.messengerPrecision().call();
 
-  if ((slaData.serviceUseTestExternalAdapter) &&
-    (slaData.serviceSliMockingPlan !== undefined)){
-      console.log('Using pre specified mock sli');
-      const sli = slaData['serviceSliMockingPlan'][nextPeriod]
-      console.log('mocking sli value ' + sli + ' for period ' + nextPeriod)
-      return sli
-  }
-  else {
-    // Just a random SLI, multiplied by 100 to get percentage
-    const sli = Math.random() * 100;
-    // times messenger precision to calculate on chain
-    return Math.floor(sli * precision);
+  if (
+    slaData.serviceUseTestExternalAdapter &&
+    slaData.serviceSliMockingPlan !== undefined
+  ) {
+    console.log('Using pre specified mock sli');
+    const sli = slaData['serviceSliMockingPlan'][nextPeriod];
+    console.log('mocking sli value ' + sli + ' for period ' + nextPeriod);
+    return sli;
+  } else {
+    if (slaData.courier === 'dhl') {
+      const options = {
+        method: 'GET',
+        url: 'https://api-eu.dhl.com/track/shipments',
+        params: { trackingNumber: slaData.trackingNumber },
+        headers: { 'DHL-API-Key': process.env.DHL_API_KEY },
+      };
+      try {
+        let response = await axios.get(options).json();
+
+        if (response.status === 200) {
+          let shipments = response.data.shipments;
+          const sli = shipments.every(
+            (item) => item.status.status === 'DELIVERED'
+          );
+          return sli ? 1 : 0;
+        } else {
+          console.log(
+            'did not receive a 200 status code, received instead: ',
+            response.status
+          );
+          return;
+        }
+      } catch (error) {
+        console.log(error);
+        return;
+      }
+    } else {
+      console.log('invalid courier external adapter failed');
+      return;
+    }
   }
 }
 
