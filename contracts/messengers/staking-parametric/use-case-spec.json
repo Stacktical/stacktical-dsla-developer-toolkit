@@ -3,11 +3,11 @@
   "symbol": "xDSLA",
   "sp": {
     "name": "Staking Service Credit",
-    "symbol": "xDSLA"
+    "symbol": "NOT_DELIVERED"
   },
   "lp": {
     "name": "Staking Service Credit",
-    "symbol": "xDSLA-LP"
+    "symbol": "DELIVERED"
   },
   "ownerUrl": "https://dsla.network",
   "useCaseDocs": "https://dsla.network/metaverse",

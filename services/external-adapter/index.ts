@@ -26,6 +26,8 @@ type RequestData = {
   network_name: string;
   sla_monitoring_start: number;
   sla_monitoring_end: number;
+  tracking_number: string;
+  courier: string;
 };
 
 async function getSLAData(address): Promise<SLAData> {
@@ -63,6 +65,7 @@ async function getSLI(requestData: RequestData) {
         params: { trackingNumber: slaData.trackingNumber },
         headers: { 'DHL-API-Key': process.env.DHL_API_KEY },
       };
+
       try {
         let response = await axios.get(options).json();
 
@@ -102,6 +105,8 @@ app.post('/', async (req, res) => {
     network_name: data.network_name,
     sla_monitoring_start: data.sla_monitoring_start,
     sla_monitoring_end: data.sla_monitoring_end,
+    tracking_number: data.tracking_number,
+    courier: data.courier,
   };
   web3Uri = process.env[`${requestData.network_name.toUpperCase()}_URI`];
   const result = await getSLI(requestData);

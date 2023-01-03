@@ -43,6 +43,7 @@ export enum CONTRACT_NAMES {
   StakingUptimeOracle = 'StakingUptimeOracle',
   InflationOracle = 'InflationOracle',
   StakingParametricOracle = 'StakingParametricOracle',
+  ShipementOracle = 'ShipmentOracle',
 }
 
 export enum TOKEN_NAMES {
@@ -77,6 +78,7 @@ export enum USE_CASES {
   ASSET_FLOOR = 'asset-floor',
   INFLATION = 'inflation-rate',
   STAKING_PARAMETRIC = 'staking-parametric',
+  SHIPMENT = 'shipment',
 }
 
 export const STAKING_REWARDS_SPECS = JSON.parse(
@@ -118,6 +120,13 @@ const STAKING_PARAMETRIC_SPECS = JSON.parse(
   // @ts-ignore
   fs.readFileSync(
     `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_PARAMETRIC}/use-case-spec.json`
+  )
+);
+
+const SHIPMENT_SPECS = JSON.parse(
+  // @ts-ignore
+  fs.readFileSync(
+    `${appRoot.path}/contracts/messengers/${USE_CASES.SHIPMENT}/use-case-spec.json`
   )
 );
 
@@ -198,12 +207,12 @@ export enum PARAMS_NAMES {
 export const SERVICE_CREDITS = {
   BASE: {
     DSLA_LP: {
-      name: "Dummy Service Credit",
-      symbol: "🔺FOO",
+      name: 'Dummy Service Credit',
+      symbol: '🔺FOO',
     },
     DSLA_SP: {
-      name: "Dummy Service Credit",
-      symbol: "🔻BAR",
+      name: 'Dummy Service Credit',
+      symbol: '🔻BAR',
     },
   },
   STAKING_REWARDS: {
@@ -213,7 +222,7 @@ export const SERVICE_CREDITS = {
     },
     DSLA_SP: {
       name: STAKING_REWARDS_SPECS.sp.name,
-      symbol:  STAKING_REWARDS_SPECS.sp.symbol,
+      symbol: STAKING_REWARDS_SPECS.sp.symbol,
     },
   },
   STAKING_UPTIME: {
@@ -264,6 +273,16 @@ export const SERVICE_CREDITS = {
     DSLA_SP: {
       name: STAKING_PARAMETRIC_SPECS.sp.name,
       symbol: STAKING_PARAMETRIC_SPECS.sp.symbol,
+    },
+  },
+  SHIPMENT: {
+    DSLA_LP: {
+      name: SHIPMENT_SPECS.lp.name,
+      symbol: SHIPMENT_SPECS.lp.symbol,
+    },
+    DSLA_SP: {
+      name: SHIPMENT_SPECS.sp.name,
+      symbol: SHIPMENT_SPECS.sp.symbol,
     },
   },
 };
