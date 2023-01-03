@@ -737,5 +737,34 @@ export const scripts: ScriptsConfiguration = {
         ...StakingParametricMessengerSpec,
       },
     },
+    // INDEX 25, Contract for mainnet deployment of DSLA Parametric Staking v2.0
+    {
+      sloValue: 1,
+      sloType: SLO_TYPE.SmallerThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.StakingParametricOracle,
+      initialPeriodId: 2,
+      finalPeriodId: 7,
+      severity: [0, 100000, 250000], // [0%, 100%, 250%] (1000 == 1%) [price stable or down, up 100%, up 250%]
+      penalty: [100, 1000, 2500], // [1%, 10%, 25%]
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'DSLA Parametric Staking',
+        serviceDescription:
+          'Upside Hedging SLA. A DSLA staking experience where the APR is indexed on the Month-on-Month upside price performance of the DSLA token.',
+        serviceImage: 'https://storage.googleapis.com/dsla-network/dsla.png',
+        serviceURL: 'https://dsla.network',
+        serviceAddress: 'dsla.eth',
+        serviceTicker: 'DSLA',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [1000, 100000, 250000],
+        ...StakingParametricMessengerSpec,
+      },
+    },
   ],
 };

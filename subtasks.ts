@@ -1803,46 +1803,46 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       tx = await sla.addAllowedTokens(dslaToken.address);
       await tx.wait();
 
-      console.log('Starting process 3: Stake on Provider and User pools');
-      const deployerStake = stakeAmountTimesWei(deployerStakeTimes);
-      console.log(
-        `Starting process 3.1: Provider: ${fromWei(deployerStake)} DSLA`
-      );
-      tx = await dslaToken.approve(sla.address, deployerStake);
-      await tx.wait();
-      enum Position {
-        LONG,
-        SHORT,
-      }
-      if (deployerStake !== '0') {
-        tx = await sla.stakeTokens(
-          deployerStake,
-          dslaToken.address,
-          Position.LONG
-        );
-        await tx.wait();
-      }
-      const notDeployerBalance = await dslaToken.callStatic.balanceOf(
-        notDeployer
-      );
-      const notDeployerStake = stakeAmountTimesWei(notDeployerStakeTimes);
-      if (fromWei(notDeployerStake) > fromWei(notDeployerBalance.toString())) {
-        tx = await dslaToken.transfer(notDeployer, notDeployerStake);
-        await tx.wait();
-      }
-      console.log(
-        `Starting process 3.2: User: ${fromWei(notDeployerStake)} DSLA`
-      );
-      tx = await dslaToken
-        .connect(await ethers.getSigner(notDeployer))
-        .approve(sla.address, notDeployerStake);
-      await tx.wait();
-      if (notDeployerStake !== '0') {
-        tx = await sla
-          .connect(await ethers.getSigner(notDeployer))
-          .stakeTokens(notDeployerStake, dslaToken.address, Position.SHORT);
-        await tx.wait();
-      }
+      // console.log('Starting process 3: Stake on Provider and User pools');
+      // const deployerStake = stakeAmountTimesWei(deployerStakeTimes);
+      // console.log(
+      //   `Starting process 3.1: Provider: ${fromWei(deployerStake)} DSLA`
+      // );
+      // tx = await dslaToken.approve(sla.address, deployerStake);
+      // await tx.wait();
+      // enum Position {
+      //   LONG,
+      //   SHORT,
+      // }
+      // if (deployerStake !== '0') {
+      //   tx = await sla.stakeTokens(
+      //     deployerStake,
+      //     dslaToken.address,
+      //     Position.LONG
+      //   );
+      //   await tx.wait();
+      // }
+      // const notDeployerBalance = await dslaToken.callStatic.balanceOf(
+      //   notDeployer
+      // );
+      // const notDeployerStake = stakeAmountTimesWei(notDeployerStakeTimes);
+      // if (fromWei(notDeployerStake) > fromWei(notDeployerBalance.toString())) {
+      //   tx = await dslaToken.transfer(notDeployer, notDeployerStake);
+      //   await tx.wait();
+      // }
+      // console.log(
+      //   `Starting process 3.2: User: ${fromWei(notDeployerStake)} DSLA`
+      // );
+      // tx = await dslaToken
+      //   .connect(await ethers.getSigner(notDeployer))
+      //   .approve(sla.address, notDeployerStake);
+      // await tx.wait();
+      // if (notDeployerStake !== '0') {
+      //   tx = await sla
+      //     .connect(await ethers.getSigner(notDeployer))
+      //     .stakeTokens(notDeployerStake, dslaToken.address, Position.SHORT);
+      //   await tx.wait();
+      // }
       printSeparator();
     }
     console.log('SLA deployment process finished');
