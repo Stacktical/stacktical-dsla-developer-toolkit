@@ -33,9 +33,7 @@ interface AssetFloorOracleInterface extends ethers.utils.Interface {
     "oracle()": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
-    "requestIdToSLIRequest(bytes32)": FunctionFragment;
     "requestSLI(uint256,address,bool,address)": FunctionFragment;
-    "requests(uint256)": FunctionFragment;
     "requestsCounter()": FunctionFragment;
     "retryRequest(address,uint256)": FunctionFragment;
     "setChainlinkJobID(bytes32,uint256)": FunctionFragment;
@@ -78,16 +76,8 @@ interface AssetFloorOracleInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "requestIdToSLIRequest",
-    values: [BytesLike]
-  ): string;
-  encodeFunctionData(
     functionFragment: "requestSLI",
     values: [BigNumberish, string, boolean, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "requests",
-    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "requestsCounter",
@@ -147,12 +137,7 @@ interface AssetFloorOracleInterface extends ethers.utils.Interface {
     functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "requestIdToSLIRequest",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "requestSLI", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "requests", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "requestsCounter",
     data: BytesLike
@@ -185,29 +170,17 @@ interface AssetFloorOracleInterface extends ethers.utils.Interface {
   ): Result;
 
   events: {
-    "ChainlinkCancelled(bytes32)": EventFragment;
-    "ChainlinkFulfilled(bytes32)": EventFragment;
-    "ChainlinkRequested(bytes32)": EventFragment;
     "JobIdModified(address,bytes32,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "SLIReceived(address,uint256,bytes32,bytes32)": EventFragment;
     "SLIRequested(address,uint256,bytes32)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "ChainlinkCancelled"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "ChainlinkFulfilled"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "ChainlinkRequested"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "JobIdModified"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SLIReceived"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SLIRequested"): EventFragment;
 }
-
-export type ChainlinkCancelledEvent = TypedEvent<[string] & { id: string }>;
-
-export type ChainlinkFulfilledEvent = TypedEvent<[string] & { id: string }>;
-
-export type ChainlinkRequestedEvent = TypedEvent<[string] & { id: string }>;
 
 export type JobIdModifiedEvent = TypedEvent<
   [string, string, BigNumber] & { owner: string; jobId: string; fee: BigNumber }
@@ -311,22 +284,13 @@ export class AssetFloorOracle extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    requestIdToSLIRequest(
-      arg0: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<
-      [string, BigNumber] & { slaAddress: string; periodId: BigNumber }
-    >;
-
     requestSLI(
       _periodId: BigNumberish,
       _slaAddress: string,
-      _messengerOwnerApproval: boolean,
+      arg2: boolean,
       _callerAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-
-    requests(arg0: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
 
     requestsCounter(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -337,8 +301,8 @@ export class AssetFloorOracle extends BaseContract {
     ): Promise<ContractTransaction>;
 
     setChainlinkJobID(
-      _newJobId: BytesLike,
-      _feeMultiplier: BigNumberish,
+      arg0: BytesLike,
+      arg1: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -396,20 +360,13 @@ export class AssetFloorOracle extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  requestIdToSLIRequest(
-    arg0: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<[string, BigNumber] & { slaAddress: string; periodId: BigNumber }>;
-
   requestSLI(
     _periodId: BigNumberish,
     _slaAddress: string,
-    _messengerOwnerApproval: boolean,
+    arg2: boolean,
     _callerAddress: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
-
-  requests(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
   requestsCounter(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -420,8 +377,8 @@ export class AssetFloorOracle extends BaseContract {
   ): Promise<ContractTransaction>;
 
   setChainlinkJobID(
-    _newJobId: BytesLike,
-    _feeMultiplier: BigNumberish,
+    arg0: BytesLike,
+    arg1: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -477,22 +434,13 @@ export class AssetFloorOracle extends BaseContract {
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
-    requestIdToSLIRequest(
-      arg0: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<
-      [string, BigNumber] & { slaAddress: string; periodId: BigNumber }
-    >;
-
     requestSLI(
       _periodId: BigNumberish,
       _slaAddress: string,
-      _messengerOwnerApproval: boolean,
+      arg2: boolean,
       _callerAddress: string,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    requests(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
     requestsCounter(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -503,8 +451,8 @@ export class AssetFloorOracle extends BaseContract {
     ): Promise<void>;
 
     setChainlinkJobID(
-      _newJobId: BytesLike,
-      _feeMultiplier: BigNumberish,
+      arg0: BytesLike,
+      arg1: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -528,30 +476,6 @@ export class AssetFloorOracle extends BaseContract {
   };
 
   filters: {
-    "ChainlinkCancelled(bytes32)"(
-      id?: BytesLike | null
-    ): TypedEventFilter<[string], { id: string }>;
-
-    ChainlinkCancelled(
-      id?: BytesLike | null
-    ): TypedEventFilter<[string], { id: string }>;
-
-    "ChainlinkFulfilled(bytes32)"(
-      id?: BytesLike | null
-    ): TypedEventFilter<[string], { id: string }>;
-
-    ChainlinkFulfilled(
-      id?: BytesLike | null
-    ): TypedEventFilter<[string], { id: string }>;
-
-    "ChainlinkRequested(bytes32)"(
-      id?: BytesLike | null
-    ): TypedEventFilter<[string], { id: string }>;
-
-    ChainlinkRequested(
-      id?: BytesLike | null
-    ): TypedEventFilter<[string], { id: string }>;
-
     "JobIdModified(address,bytes32,uint256)"(
       owner?: string | null,
       jobId?: null,
@@ -669,20 +593,13 @@ export class AssetFloorOracle extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    requestIdToSLIRequest(
-      arg0: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     requestSLI(
       _periodId: BigNumberish,
       _slaAddress: string,
-      _messengerOwnerApproval: boolean,
+      arg2: boolean,
       _callerAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
-
-    requests(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     requestsCounter(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -693,8 +610,8 @@ export class AssetFloorOracle extends BaseContract {
     ): Promise<BigNumber>;
 
     setChainlinkJobID(
-      _newJobId: BytesLike,
-      _feeMultiplier: BigNumberish,
+      arg0: BytesLike,
+      arg1: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -755,22 +672,12 @@ export class AssetFloorOracle extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    requestIdToSLIRequest(
-      arg0: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     requestSLI(
       _periodId: BigNumberish,
       _slaAddress: string,
-      _messengerOwnerApproval: boolean,
+      arg2: boolean,
       _callerAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    requests(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     requestsCounter(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -782,8 +689,8 @@ export class AssetFloorOracle extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     setChainlinkJobID(
-      _newJobId: BytesLike,
-      _feeMultiplier: BigNumberish,
+      arg0: BytesLike,
+      arg1: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
