@@ -36,6 +36,7 @@ export const develop: NetworkUserConfig = {
     deployTokens: true,
     ipfs: process.env.DEVELOP_IPFS_URI,
     chainlink: {
+      nodeApiVersion: 2,
       deployLocal: true, // Deploys local dockers everytime
       deleteOldJobs: true,
       cleanLocalFolder: true,

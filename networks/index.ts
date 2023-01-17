@@ -1,7 +1,7 @@
 import { NETWORKS } from '../constants';
 
 export const networks = [
-  { name: NETWORKS.DEVELOP, enabled: false },
+  { name: NETWORKS.DEVELOP, enabled: true },
   { name: NETWORKS.KOVAN, enabled: false },
   { name: NETWORKS.MUMBAI, enabled: false },
   { name: NETWORKS.HARMONYTESTNET, enabled: false },

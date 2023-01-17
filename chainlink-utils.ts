@@ -135,6 +135,59 @@ const postChainlinkJob = async (
   return data;
 };
 
+const postChainlinkJobV2 = async (
+  node: ChainlinkNodeConfiguration,
+  jobName: any,
+  oracleContractAddress: string
+) => {
+  const sessionCookie = await getChainlinkSessionCookie(node);
+  const jobSpec = {
+    operationName: "CreateJob",
+    variables: {
+      input: {
+        TOML:`
+          type = "directrequest"
+          schemaVersion = 1
+          name = "${jobName}"
+          forwardingAllowed = false
+          maxTaskDuration = "0s"
+          contractAddress = "${oracleContractAddress}"
+          minContractPaymentLinkJuels = "100000000000000000"
+          observationSource = """
+          decode_log   [type="ethabidecodelog"
+          abi="OracleRequest(bytes32 indexed specId, address requester, bytes32 requestId, uint256 payment, address callbackAddr, bytes4 callbackFunctionId, uint256 cancelExpiration, uint256 dataVersion, bytes data)"
+          data="$(jobRun.logData)"
+          topics="$(jobRun.logTopics)"]
+decode_cbor  [type="cborparse" data="$(decode_log.data)"]
+fetch        [type="http" method=GET url="$(decode_cbor.url)"]
+parse        [type="jsonparse" path="$(decode_cbor.path)" data="$(fetch)"]
+encode_data  [type="ethabiencode" abi="(uint256 value)" data="{ \\"value\\": $(parse) }"]
+encode_tx    [type="ethabiencode"
+          abi="fulfillOracleRequest2(bytes32 requestId, uint256 payment, address callbackAddress, bytes4 callbackFunctionId, uint256 expiration, bytes32 data)"
+          data="{\\"requestId\\": $(decode_log.requestId), \\"payment\\": $(decode_log.payment), \\"callbackAddress\\": $(decode_log.callbackAddr), \\"callbackFunctionId\\": $(decode_log.callbackFunctionId), \\"expiration\\": $(decode_log.cancelExpiration), \\"data\\": $(encode_data)}"]
+          submit_tx    [type="ethtx" to="${oracleContractAddress}" data="$(encode_tx)"]
+          decode_log -> decode_cbor -> fetch -> parse -> encode_data -> encode_tx -> submit_tx
+        """
+      }
+    },
+    query: "mutation CreateJob($input: CreateJobInput!) {\n  createJob(input: $input) {\n    ... on CreateJobSuccess {\n      job {\n        id\n        __typename\n      }\n      __typename\n    }\n    ... on InputErrors {\n      errors {\n        path\n        message\n        code\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"`}
+    }
+  };
+  const { data } = await axios({
+  method: 'post',
+  url: `${node.restApiUrl}${
+    node.restApiPort ? ':' + node.restApiPort : undefined
+  }/v2/specs`,
+  headers: {
+    Cookie: sessionCookie,
+    'Content-Type': 'application/json',
+  },
+  data: JSON.stringify(jobSpec),
+  withCredentials: true,
+});
+return data;
+};
+
 const postChainlinkBridge = async (
   node: ChainlinkNodeConfiguration,
   useCaseName: string,
@@ -178,6 +231,7 @@ const deleteJob = async (node: ChainlinkNodeConfiguration, jobId: string) => {
 export {
   deleteJob,
   postChainlinkJob,
+  postChainlinkJobV2,
   postChainlinkBridge,
   getChainlinkJobs,
   getChainlinkJobId,

@@ -11,6 +11,7 @@ import {
   getChainlinkJobs,
   postChainlinkBridge,
   postChainlinkJob,
+  postChainlinkJobV2,
 } from './chainlink-utils';
 import { subtask } from 'hardhat/config';
 import { ChainlinkNodeConfiguration } from './types';
@@ -57,6 +58,7 @@ import axios from 'axios';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { formatBytes32String } from 'ethers/lib/utils';
 import { ethers, BigNumber } from 'ethers';
+import { config } from 'hardhat';
 
 const prettier = require('prettier');
 const appRoot = require('app-root-path');
@@ -546,12 +548,21 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
           console.log('Deleting existing jobId: ' + postedJob.id);
           await deleteJob(node, postedJob.id);
         }
-        const httpRequestJobRes = await postChainlinkJob(
-          node,
-          jobName,
-          oracle.address
-        );
-        return httpRequestJobRes.data;
+        if (stacktical.chainlink.nodeApiVersion == 2) {
+          const httpRequestJobRes = await postChainlinkJobV2(
+            node,
+            jobName,
+            oracle.address
+          );
+          return httpRequestJobRes.data;
+        } else {
+          const httpRequestJobRes = await postChainlinkJob(
+            node,
+            jobName,
+            oracle.address
+          );
+          return httpRequestJobRes.data;
+        }
       } catch (error) {
         return false;
       }

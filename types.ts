@@ -39,6 +39,7 @@ export type DeployedContractAddresses = {
 };
 
 export type ChainlinkConfiguration = {
+  nodeApiVersion: number,
   deployLocal: boolean;
   deleteOldJobs: boolean;
   cleanLocalFolder: boolean;
