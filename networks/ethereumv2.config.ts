@@ -106,11 +106,11 @@ export const ethereumv2: NetworkUserConfig = {
         //   token: CONTRACT_NAMES.LinkToken,
         //   allowance: '10',
         // },
-        // {
-        //   contract: CONTRACT_NAMES.AssetFloorOracle,
-        //   token: CONTRACT_NAMES.LinkToken,
-        //   allowance: '10',
-        // },
+        {
+          contract: CONTRACT_NAMES.AssetFloorOracle,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
         // {
         //   contract: CONTRACT_NAMES.AssetPegOracle,
         //   token: CONTRACT_NAMES.LinkToken,
@@ -181,6 +181,15 @@ export const ethereumv2: NetworkUserConfig = {
         dslaLpSymbol: SERVICE_CREDITS.STAKING_PARAMETRIC.DSLA_LP.symbol,
         dslaSpName: SERVICE_CREDITS.STAKING_PARAMETRIC.DSLA_SP.name,
         dslaSpSymbol: SERVICE_CREDITS.STAKING_PARAMETRIC.DSLA_SP.symbol,
+      },
+      {
+        contract: CONTRACT_NAMES.AssetFloorOracle,
+        useCaseName: USE_CASES.ASSET_FLOOR,
+        externalAdapterUrl: process.env.ASSET_FLOOR_ADAPTER,
+        dslaLpName: SERVICE_CREDITS.ASSET_FLOOR.DSLA_LP.name,
+        dslaLpSymbol: SERVICE_CREDITS.ASSET_FLOOR.DSLA_LP.symbol,
+        dslaSpName: SERVICE_CREDITS.ASSET_FLOOR.DSLA_SP.name,
+        dslaSpSymbol: SERVICE_CREDITS.ASSET_FLOOR.DSLA_SP.symbol,
       },
     ],
     scripts: scripts,

@@ -22,6 +22,13 @@ const StakingParametricMessengerSpec = JSON.parse(
   )
 );
 
+const AssetFloorOracleSpecs = JSON.parse(
+  // @ts-ignore
+  fs.readFileSync(
+    `${appRoot.path}/contracts/messengers/${USE_CASES.ASSET_FLOOR}/use-case-spec.json`
+  )
+);
+
 export const scripts: ScriptsConfiguration = {
   deploy_sla: [
     // INDEX 0 | Should be BREACHED
@@ -764,6 +771,156 @@ export const scripts: ScriptsConfiguration = {
         serviceUseTestExternalAdapter: false,
         serviceSliMockingPlan: [1000, 100000, 250000],
         ...StakingParametricMessengerSpec,
+      },
+    },
+    // INDEX 26, Contract for 1st official NFT listing (DSLA Astromancer)
+    {
+      sloValue: 0.075,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.WEEKLY,
+      messengerContract: CONTRACT_NAMES.AssetFloorOracle,
+      initialPeriodId: 11, // 09/01/2023 00:00:00
+      finalPeriodId: 15, // 06/02/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'DSLA Astromancers',
+        serviceDescription:
+          '10,000 unique collectibles on the Ethereum blockchain. Official DSLA collection.',
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/collections/astromancer.jpg',
+        serviceURL: 'https://dsla.network/metaverse',
+        serviceAddress: '0xd88329bF3b7776Bff90D0c942F160Cb55bf5BaeC',
+        serviceTicker: 'ASTRO',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+        ...AssetFloorOracleSpecs,
+      },
+    },
+    // INDEX 27, Contract for 1st official NFT listing (BAYC)
+    {
+      sloValue: 80,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.WEEKLY,
+      messengerContract: CONTRACT_NAMES.AssetFloorOracle,
+      initialPeriodId: 11, // 09/01/2023 00:00:00
+      finalPeriodId: 15, // 06/02/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Bored Ape Yacht Club',
+        serviceDescription:
+          '10,000 unique collectibles on the Ethereum blockchain.',
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/collections/bayc.jpg',
+        serviceURL: 'https://boredapeyachtclub.com/',
+        serviceAddress: '0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D',
+        serviceTicker: 'BAYC',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+        ...AssetFloorOracleSpecs,
+      },
+    },
+    // INDEX 28, Contract for 1st official NFT listing (MAYC)
+    {
+      sloValue: 18,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.WEEKLY,
+      messengerContract: CONTRACT_NAMES.AssetFloorOracle,
+      initialPeriodId: 11, // 09/01/2023 00:00:00
+      finalPeriodId: 15, // 06/02/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Mutant Ape Yacht Club',
+        serviceDescription:
+          '20,000 unique collectibles on the Ethereum blockchain.',
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/collections/mayc.jpg',
+        serviceURL: 'https://boredapeyachtclub.com/',
+        serviceAddress: '0x60E4d786628Fea6478F785A6d7e704777c86a7c6',
+        serviceTicker: 'MAYC',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+        ...AssetFloorOracleSpecs,
+      },
+    },
+    // INDEX 29, Contract for 1st official NFT listing (Azuki)
+    {
+      sloValue: 18,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.WEEKLY,
+      messengerContract: CONTRACT_NAMES.AssetFloorOracle,
+      initialPeriodId: 11, // 09/01/2023 00:00:00
+      finalPeriodId: 15, // 06/02/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Azuki',
+        serviceDescription:
+          '10,000 unique collectibles on the Ethereum blockchain.',
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/collections/azuki.jpg',
+        serviceURL: 'https://www.azuki.com/',
+        serviceAddress: '0xED5AF388653567Af2F388E6224dC7C4b3241C544',
+        serviceTicker: 'AZUKI',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+        ...AssetFloorOracleSpecs,
+      },
+    },
+    // INDEX 30, Contract for 1st official NFT listing (Pudgy Penguins)
+    {
+      sloValue: 7,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.WEEKLY,
+      messengerContract: CONTRACT_NAMES.AssetFloorOracle,
+      initialPeriodId: 11, // 09/01/2023 00:00:00
+      finalPeriodId: 15, // 06/02/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Pudgy Penguins',
+        serviceDescription:
+          '8,888 unique collectibles on the Ethereum blockchain.',
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/collections/pudgypenguins.jpg',
+        serviceURL: 'https://www.pudgypenguins.com/',
+        serviceAddress: '0xBd3531dA5CF5857e7CfAA92426877b022e612cf8',
+        serviceTicker: 'PPG',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+        ...AssetFloorOracleSpecs,
       },
     },
   ],

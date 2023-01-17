@@ -1422,7 +1422,29 @@ subtask(SUB_TASK_NAMES.GET_START_STOP_PERIODS, undefined).setAction(
         '\n From ',
         periodStartsDate.at(0),
         '\n Until',
-        periodEndsDate.at(-1)
+        periodEndsDate.at(-1),
+        '\n',
+        periodDefinitions.reduce(
+          (r, definition, index) => ({
+            ...r,
+            [PERIOD_TYPE[index]]: {
+              initialized: definition.initialized,
+              starts: definition.starts.map((start) =>
+                moment(Number(start.toString()) * 1000)
+                  .utc(0)
+                  .format('DD/MM/YYYY HH:mm:ss')
+              ),
+              startsUnix: definition.starts.map((start) => start.toString()),
+              ends: definition.ends.map((end) =>
+                moment(Number(end.toString()) * 1000)
+                  .utc(0)
+                  .format('DD/MM/YYYY HH:mm:ss')
+              ),
+              endsUnix: definition.ends.map((end) => end.toString()),
+            },
+          }),
+          {}
+        )
       );
     }
   }
