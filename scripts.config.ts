@@ -780,8 +780,8 @@ export const scripts: ScriptsConfiguration = {
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.AssetFloorOracle,
-      initialPeriodId: 11, // 09/01/2023 00:00:00
-      finalPeriodId: 15, // 06/02/2023 00:00:00
+      initialPeriodId: 13, // 09/01/2023 00:00:00
+      finalPeriodId: 17, // 06/02/2023 00:00:00
       severity: [], // SLI vs SLO Deviation
       penalty: [], // SLI vs SLO Deviation
       initialTokenSupply: '0',
