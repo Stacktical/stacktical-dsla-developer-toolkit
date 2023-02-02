@@ -70,6 +70,7 @@ const Mustache = require('mustache');
 
 export enum SUB_TASK_NAMES {
   PREPARE_CHAINLINK_NODES = 'PREPARE_CHAINLINK_NODES',
+  CHAINLINK_NODES_AUTH = 'CHAINLINK_NODES_AUTH',
   SETUP_DOCKER_COMPOSE = 'SETUP_DOCKER_COMPOSE',
   STOP_LOCAL_CHAINLINK_NODES = 'STOP_LOCAL_CHAINLINK_NODES',
   START_LOCAL_CHAINLINK_NODES = 'START_LOCAL_CHAINLINK_NODES',
@@ -701,6 +702,72 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
       printSeparator();
     }
     console.log('Automated configuration finished for all nodes');
+  }
+);
+
+subtask(SUB_TASK_NAMES.CHAINLINK_NODES_AUTH, undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    const { deployments, network, ethers, getNamedAccounts, web3 } = hre;
+    const { deployer } = await getNamedAccounts();
+    const { get } = deployments;
+    const { stacktical } = network.config;
+    const oracle = await get(CONTRACT_NAMES.Oracle);
+    function wait(timeout) {
+      return new Promise((resolve) => {
+        setTimeout(resolve, timeout);
+      });
+    }
+
+    let chainlinkNodeAddress = taskArgs.node;
+    console.log('Getting authorization status of ', chainlinkNodeAddress);
+
+    // Authorize node
+    const oracleContract = Oracle__factory.connect(
+      oracle.address,
+      await ethers.getSigner(deployer)
+    );
+    let permissions = await oracleContract.getAuthorizationStatus(
+      chainlinkNodeAddress
+    );
+
+    // if (!permissions) {
+    //   console.log('Need to set permissions for this node.');
+
+    //   const gasEstimated =
+    //     await oracleContract.estimateGas.setFulfillmentPermission(
+    //       chainlinkNodeAddress,
+    //       true
+    //     );
+
+    //   let gas = {};
+
+    //   if (hre.network.config.chainId == 137) {
+    //     gas = await polygonGasEstimate(gasEstimated);
+    //   }
+
+    //   const tx = await oracleContract.setFulfillmentPermission(
+    //     chainlinkNodeAddress,
+    //     true,
+    //     {
+    //       ...(hre.network.config.gas !== 'auto' &&
+    //         hre.network.config.chainId != 137 && {
+    //           gasLimit: hre.network.config.gas,
+    //         }),
+    //       ...(hre.network.config.gas !== 'auto' &&
+    //         hre.network.config.chainId == 137 &&
+    //         gas),
+    //     }
+    //   );
+    //   await tx.wait();
+    //   console.log('Setting permissions...');
+    // }
+
+    // permissions = await oracleContract.getAuthorizationStatus(
+    //   chainlinkNodeAddress
+    // );
+
+    console.log(`Chainlink Node Fullfillment permissions: ${permissions}`);
+    printSeparator();
   }
 );
 
@@ -1977,8 +2044,10 @@ subtask(SUB_TASK_NAMES.GET_PRECOORDINATOR, undefined).setAction(
     const eventsFilter = precoordinator.filters.NewServiceAgreement();
     const events = await precoordinator.queryFilter(
       eventsFilter,
-      (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
-        undefined
+      // (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
+      //   undefined
+      15809000,
+      15810000
     );
     for (let event of events) {
       printSeparator();

@@ -193,17 +193,18 @@ export enum PARAMS_NAMES {
   SLA_ADDRESS = 'slaAddress',
   INDEX = 'index',
   TRANSACTION_HASH = 'transactionHash',
+  CHAINLINK_NODE_WALLET = 'node',
 }
 
 export const SERVICE_CREDITS = {
   BASE: {
     DSLA_LP: {
-      name: "Dummy Service Credit",
-      symbol: "🔺FOO",
+      name: 'Dummy Service Credit',
+      symbol: '🔺FOO',
     },
     DSLA_SP: {
-      name: "Dummy Service Credit",
-      symbol: "🔻BAR",
+      name: 'Dummy Service Credit',
+      symbol: '🔻BAR',
     },
   },
   STAKING_REWARDS: {
@@ -213,7 +214,7 @@ export const SERVICE_CREDITS = {
     },
     DSLA_SP: {
       name: STAKING_REWARDS_SPECS.sp.name,
-      symbol:  STAKING_REWARDS_SPECS.sp.symbol,
+      symbol: STAKING_REWARDS_SPECS.sp.symbol,
     },
   },
   STAKING_UPTIME: {

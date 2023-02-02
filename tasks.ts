@@ -17,6 +17,7 @@ export enum TASK_NAMES {
   SET_PRECOORDINATOR = 'stacktical:set-precoordinator',
   CHAINLINK_DOCKER_COMPOSE = 'stacktical:chainlink-docker-compose',
   PREPARE_CHAINLINK_NODES = 'stacktical:prepare-chainlink-nodes',
+  CHAINLINK_NODES_AUTH = 'stacktical:chainlink-nodes-auth',
   FULFILL_SLI = 'stacktical:fulfill-sli',
   INITIALIZE_DEFAULT_ADDRESSES = 'stacktical:initialize-addresses',
   RESTART_CHAINLINK_NODES = 'stacktical:restart-chainlink-nodes',
@@ -197,6 +198,15 @@ task(
 ).setAction(async (taskArgs, { run }) => {
   await run(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES);
 });
+
+task(
+  TASK_NAMES.CHAINLINK_NODES_AUTH,
+  'Get Chainlink nodes authorization status'
+)
+  .addParam(PARAMS_NAMES.CHAINLINK_NODE_WALLET, 'The Chainlink node wallet')
+  .setAction(async (taskArgs, { run }) => {
+    await run(SUB_TASK_NAMES.CHAINLINK_NODES_AUTH, taskArgs);
+  });
 
 task(
   TASK_NAMES.RESTART_SERVICES,
