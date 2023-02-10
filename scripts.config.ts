@@ -923,5 +923,63 @@ export const scripts: ScriptsConfiguration = {
         ...AssetFloorOracleSpecs,
       },
     },
+    // INDEX 31, Contract for 1st official LSD listing (stETH)
+    {
+      sloValue: 99,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.AssetPegOracle,
+      initialPeriodId: 4, // 03/01/2023 00:00:00
+      finalPeriodId: 7, // 06/01/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'stETH by Lido',
+        serviceDescription:
+          'stETH is a liquid staking derivative (LSD) by Lido pegged 1:1 against ETH.',
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/services/LIDO.png',
+        serviceURL: 'https://lido.fi/',
+        serviceAddress: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
+        serviceTicker: 'stETH',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+      },
+    },
+    // INDEX 32, Contract for 1st official LSD listing (frxETH)
+    {
+      sloValue: 99,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.AssetPegOracle,
+      initialPeriodId: 4, // 03/01/2023 00:00:00
+      finalPeriodId: 7, // 06/01/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'frxETH by Frax',
+        serviceDescription:
+          'frxETH is an liquid staking derivative (LSD) by Frax pegged 1:1 against ETH.',
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/services/FRAX.svg',
+        serviceURL: 'https://frax.finance/',
+        serviceAddress: '0x5E8422345238F34275888049021821E8E08CAa1f',
+        serviceTicker: 'frxETH',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+      },
+    },
   ],
 };

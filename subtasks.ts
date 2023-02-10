@@ -1419,9 +1419,13 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
           index: taskArgs.index,
         });
       } else {
-        consola.warn(
-          messenger.contract + ' already registered on MessengerRegistry'
-        );
+        await hre.run(SUB_TASK_NAMES.SET_PRECOORDINATOR, {
+          index: taskArgs.index,
+        });
+        consola.info('Creating saId in messenger ' + messenger.contract);
+        await hre.run(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, {
+          index: taskArgs.index,
+        });
       }
     } catch (error) {
       consola.error(error);
@@ -1863,45 +1867,45 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
         slaRegistryArtifact.address,
         signer
       );
-      // console.log(
-      //   'Starting process 1: Allowance on Stake registry to deploy SLA'
-      // );
-      // const { dslaDepositByPeriod } =
-      //   await stakeRegistry.callStatic.getStakingParameters();
-      // const dslaDeposit = toWei(
-      //   String(
-      //     Number(fromWei(dslaDepositByPeriod.toString())) *
-      //       (finalPeriodId - initialPeriodId + 1)
-      //   )
-      // );
-      // let tx = await dslaToken.approve(stakeRegistry.address, dslaDeposit);
-      // await tx.wait();
+      console.log(
+        'Starting process 1: Allowance on Stake registry to deploy SLA'
+      );
+      const { dslaDepositByPeriod } =
+        await stakeRegistry.callStatic.getStakingParameters();
+      const dslaDeposit = toWei(
+        String(
+          Number(fromWei(dslaDepositByPeriod.toString())) *
+            (finalPeriodId - initialPeriodId + 1)
+        )
+      );
+      let tx = await dslaToken.approve(stakeRegistry.address, dslaDeposit);
+      await tx.wait();
 
-      // console.log('Starting process 2: Deploy SLA');
-      // tx = await slaRegistry.createSLA(
-      //   sloValue * Number(await messenger.messengerPrecision()),
-      //   sloType,
-      //   whitelisted,
-      //   messenger.address,
-      //   periodType,
-      //   initialPeriodId,
-      //   finalPeriodId,
-      //   ipfsHash,
-      //   severity,
-      //   penalty,
-      //   leverage,
-      //   {
-      //     ...(hre.network.config.gas !== 'auto' &&
-      //       hre.network.config.chainId != 137 && {
-      //         gasLimit: hre.network.config.gas,
-      //       }),
-      //     ...(hre.network.config.gas !== 'auto' &&
-      //       hre.network.config.chainId == 137 && {
-      //         gasPrice: hre.network.config.gas,
-      //       }),
-      //   }
-      // );
-      // await tx.wait();
+      console.log('Starting process 2: Deploy SLA');
+      tx = await slaRegistry.createSLA(
+        sloValue * Number(await messenger.messengerPrecision()),
+        sloType,
+        whitelisted,
+        messenger.address,
+        periodType,
+        initialPeriodId,
+        finalPeriodId,
+        ipfsHash,
+        severity,
+        penalty,
+        leverage,
+        {
+          ...(hre.network.config.gas !== 'auto' &&
+            hre.network.config.chainId != 137 && {
+              gasLimit: hre.network.config.gas,
+            }),
+          ...(hre.network.config.gas !== 'auto' &&
+            hre.network.config.chainId == 137 && {
+              gasPrice: hre.network.config.gas,
+            }),
+        }
+      );
+      await tx.wait();
 
       const slaAddresses = await slaRegistry.userSLAs(deployer);
       const sla = await SLA__factory.connect(
@@ -1912,7 +1916,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       console.log(`SLA address: ${slaAddresses[slaAddresses.length - 1]}`);
 
       // tx = await sla.addAllowedTokens(dslaToken.address);
-      const tx = await sla.addAllowedTokens(wethToken.address);
+      tx = await sla.addAllowedTokens(wethToken.address);
       await tx.wait();
 
       // console.log('Starting process 3: Stake on Provider and User pools');
