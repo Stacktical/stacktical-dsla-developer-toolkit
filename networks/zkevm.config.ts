@@ -26,7 +26,7 @@ if (error) {
 }
 
 export const zkevm: NetworkUserConfig = {
-  chainId: 1,
+  chainId: 59140,
   accounts: {
     mnemonic: process.env.MAINNET_MNEMONIC,
   },
