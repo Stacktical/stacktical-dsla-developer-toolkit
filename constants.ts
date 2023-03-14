@@ -49,6 +49,7 @@ export enum TOKEN_NAMES {
   DSLA = 'DSLA',
   DAI = 'DAI',
   USDC = 'USDC',
+  crUSDC = 'crUSDC',
   USDT = 'USDT',
   WETH = 'WETH',
   WAVAX = 'WAVAX',
@@ -128,6 +129,7 @@ export enum NETWORKS {
   HARMONYTESTNET = 'harmonytestnet',
   ETHEREUM = 'ethereum',
   ETHEREUMV2 = 'ethereumv2',
+  ZKEVM = 'zkevm',
   POLYGON = 'polygon',
   POLYGONV2 = 'polygonv2',
   HARMONY = 'harmony',
@@ -137,9 +139,7 @@ export enum NETWORKS {
   ARBITRUMNOVA = 'arbitrumnova',
   ARBITRUMV2 = 'arbitrumv2',
   ARBITRUMTESTNET = 'arbitrumtestnet',
-  KOVAN = 'kovan',
   FUJI = 'fuji',
-  RINKEBY = 'rinkeby',
   BSC = 'bsc',
 }
 
@@ -148,6 +148,7 @@ export const GRAPH_NETWORKS = {
   [NETWORKS.DEVELOP_AVALANCHE]: 'mainnet',
   [NETWORKS.ETHEREUM]: 'mainnet',
   [NETWORKS.ETHEREUMV2]: 'mainnet',
+  [NETWORKS.ZKEVM]: 'testnet',
   [NETWORKS.HARMONY]: 'mainnet',
   [NETWORKS.FANTOM]: 'mainnet',
   [NETWORKS.HARMONYTESTNET]: 'testnet',
@@ -159,9 +160,7 @@ export const GRAPH_NETWORKS = {
   [NETWORKS.ARBITRUMNOVA]: 'arbitrumnova',
   [NETWORKS.ARBITRUMV2]: 'arbitrum',
   [NETWORKS.ARBITRUMTESTNET]: 'arbitrumtestnet',
-  [NETWORKS.KOVAN]: 'kovan',
   [NETWORKS.FUJI]: 'fuji',
-  [NETWORKS.RINKEBY]: 'rinkeby',
   [NETWORKS.BSC]: 'bsc',
 };
 
