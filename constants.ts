@@ -58,6 +58,7 @@ export enum TOKEN_NAMES {
   WFTM = 'WFTM',
   WMATIC = 'WMATIC',
   WSTETH = 'WSTETH',
+  CRETH = 'CRETH',
 }
 
 export enum DEPLOYMENT_TAGS {
