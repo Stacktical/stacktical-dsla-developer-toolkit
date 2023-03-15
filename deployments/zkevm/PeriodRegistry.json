@@ -1,0 +1,572 @@
+{
+  "address": "0x05223875f0a5Df90666dA1Eb054e584fF9eAE4F8",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "enum IPeriodRegistry.PeriodType",
+          "name": "periodType",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "periodsAdded",
+          "type": "uint256"
+        }
+      ],
+      "name": "PeriodInitialized",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "enum IPeriodRegistry.PeriodType",
+          "name": "periodType",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "periodsAdded",
+          "type": "uint256"
+        }
+      ],
+      "name": "PeriodModified",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum IPeriodRegistry.PeriodType",
+          "name": "_periodType",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "_periodStarts",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "_periodEnds",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "addPeriodsToPeriodType",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPeriodDefinitions",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "bool",
+              "name": "initialized",
+              "type": "bool"
+            },
+            {
+              "internalType": "uint256[]",
+              "name": "starts",
+              "type": "uint256[]"
+            },
+            {
+              "internalType": "uint256[]",
+              "name": "ends",
+              "type": "uint256[]"
+            }
+          ],
+          "internalType": "struct PeriodRegistry.PeriodDefinition[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum IPeriodRegistry.PeriodType",
+          "name": "_periodType",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_periodId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getPeriodStartAndEnd",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "start",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "end",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum IPeriodRegistry.PeriodType",
+          "name": "_periodType",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "_periodStarts",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "_periodEnds",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "initializePeriod",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum IPeriodRegistry.PeriodType",
+          "name": "_periodType",
+          "type": "uint8"
+        }
+      ],
+      "name": "isInitializedPeriod",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "initialized",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum IPeriodRegistry.PeriodType",
+          "name": "_periodType",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_periodId",
+          "type": "uint256"
+        }
+      ],
+      "name": "isValidPeriod",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "valid",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum IPeriodRegistry.PeriodType",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "name": "periodDefinitions",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "initialized",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum IPeriodRegistry.PeriodType",
+          "name": "_periodType",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_periodId",
+          "type": "uint256"
+        }
+      ],
+      "name": "periodHasStarted",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "started",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum IPeriodRegistry.PeriodType",
+          "name": "_periodType",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_periodId",
+          "type": "uint256"
+        }
+      ],
+      "name": "periodIsFinished",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "finished",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x6b00f8dfd1ce49ba90127ff58733b919858232e9a0b8bd83c47ee127baee37b5",
+  "receipt": {
+    "to": null,
+    "from": "0x972614782a893ad3139418Ef00e17fE95896A7c6",
+    "contractAddress": "0x05223875f0a5Df90666dA1Eb054e584fF9eAE4F8",
+    "transactionIndex": 3,
+    "gasUsed": "1250400",
+    "logsBloom": "0x00000000000000400000000000000000000000000000000000800000000002000040000000000000000000000000000000000000000000000000000000000000000000000000000000000040000000000001000000000000000000000000000000000000020000000000000000000800000000000000000000000000000000400000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000010000000000000000000000000000",
+    "blockHash": "0x9ef300241fb4c7ce22533c375898ea1c079c4c9b2ee2ddd060d8109725b89140",
+    "transactionHash": "0x6b00f8dfd1ce49ba90127ff58733b919858232e9a0b8bd83c47ee127baee37b5",
+    "logs": [
+      {
+        "transactionIndex": 3,
+        "blockNumber": 257825,
+        "transactionHash": "0x6b00f8dfd1ce49ba90127ff58733b919858232e9a0b8bd83c47ee127baee37b5",
+        "address": "0x05223875f0a5Df90666dA1Eb054e584fF9eAE4F8",
+        "topics": [
+          "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x000000000000000000000000972614782a893ad3139418ef00e17fe95896a7c6"
+        ],
+        "data": "0x",
+        "logIndex": 6,
+        "blockHash": "0x9ef300241fb4c7ce22533c375898ea1c079c4c9b2ee2ddd060d8109725b89140"
+      }
+    ],
+    "blockNumber": 257825,
+    "cumulativeGasUsed": "1518759",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [],
+  "solcInputHash": "b47b1da8947805f3b521fd14a441e1c8",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.9+commit.e5eed63a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"enum IPeriodRegistry.PeriodType\",\"name\":\"periodType\",\"type\":\"uint8\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"periodsAdded\",\"type\":\"uint256\"}],\"name\":\"PeriodInitialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"enum IPeriodRegistry.PeriodType\",\"name\":\"periodType\",\"type\":\"uint8\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"periodsAdded\",\"type\":\"uint256\"}],\"name\":\"PeriodModified\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"enum IPeriodRegistry.PeriodType\",\"name\":\"_periodType\",\"type\":\"uint8\"},{\"internalType\":\"uint256[]\",\"name\":\"_periodStarts\",\"type\":\"uint256[]\"},{\"internalType\":\"uint256[]\",\"name\":\"_periodEnds\",\"type\":\"uint256[]\"}],\"name\":\"addPeriodsToPeriodType\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPeriodDefinitions\",\"outputs\":[{\"components\":[{\"internalType\":\"bool\",\"name\":\"initialized\",\"type\":\"bool\"},{\"internalType\":\"uint256[]\",\"name\":\"starts\",\"type\":\"uint256[]\"},{\"internalType\":\"uint256[]\",\"name\":\"ends\",\"type\":\"uint256[]\"}],\"internalType\":\"struct PeriodRegistry.PeriodDefinition[]\",\"name\":\"\",\"type\":\"tuple[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"enum IPeriodRegistry.PeriodType\",\"name\":\"_periodType\",\"type\":\"uint8\"},{\"internalType\":\"uint256\",\"name\":\"_periodId\",\"type\":\"uint256\"}],\"name\":\"getPeriodStartAndEnd\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"start\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"end\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"enum IPeriodRegistry.PeriodType\",\"name\":\"_periodType\",\"type\":\"uint8\"},{\"internalType\":\"uint256[]\",\"name\":\"_periodStarts\",\"type\":\"uint256[]\"},{\"internalType\":\"uint256[]\",\"name\":\"_periodEnds\",\"type\":\"uint256[]\"}],\"name\":\"initializePeriod\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"enum IPeriodRegistry.PeriodType\",\"name\":\"_periodType\",\"type\":\"uint8\"}],\"name\":\"isInitializedPeriod\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"initialized\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"enum IPeriodRegistry.PeriodType\",\"name\":\"_periodType\",\"type\":\"uint8\"},{\"internalType\":\"uint256\",\"name\":\"_periodId\",\"type\":\"uint256\"}],\"name\":\"isValidPeriod\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"valid\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"enum IPeriodRegistry.PeriodType\",\"name\":\"\",\"type\":\"uint8\"}],\"name\":\"periodDefinitions\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"initialized\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"enum IPeriodRegistry.PeriodType\",\"name\":\"_periodType\",\"type\":\"uint8\"},{\"internalType\":\"uint256\",\"name\":\"_periodId\",\"type\":\"uint256\"}],\"name\":\"periodHasStarted\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"started\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"enum IPeriodRegistry.PeriodType\",\"name\":\"_periodType\",\"type\":\"uint8\"},{\"internalType\":\"uint256\",\"name\":\"_periodId\",\"type\":\"uint256\"}],\"name\":\"periodIsFinished\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"finished\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"events\":{\"PeriodInitialized(uint8,uint256)\":{\"params\":{\"periodType\":\"1. period type i.e. Hourly, Daily, Weekly, BiWeekly, Monthly, Yearly\",\"periodsAdded\":\"2. amount of periods added\"}},\"PeriodModified(uint8,uint256)\":{\"details\":\"event to log that a period is modified\",\"params\":{\"periodType\":\"1. period type i.e. Hourly, Daily, Weekly, BiWeekly, Monthly, Yearly\",\"periodsAdded\":\"2. amount of periods added\"}}},\"kind\":\"dev\",\"methods\":{\"addPeriodsToPeriodType(uint8,uint256[],uint256[])\":{\"details\":\"only owner can call this function\",\"params\":{\"_periodEnds\":\"3. array of the period ending timestamps to add\",\"_periodStarts\":\"array of the period starting timestamps to add\",\"_periodType\":\"type of period to add\"}},\"getPeriodDefinitions()\":{\"returns\":{\"_0\":\"array of period definitions\"}},\"getPeriodStartAndEnd(uint8,uint256)\":{\"params\":{\"_periodId\":\"id of period to check\",\"_periodType\":\"type of period to check\"},\"returns\":{\"end\":\"ending timestamp\",\"start\":\"starting timestamp\"}},\"initializePeriod(uint8,uint256[],uint256[])\":{\"params\":{\"_periodEnds\":\"3. array of the ends of the period\",\"_periodStarts\":\"2. array of the starts of the period\",\"_periodType\":\"1. period type i.e. Hourly, Daily, Weekly, BiWeekly, Monthly, Yearly\"}},\"isInitializedPeriod(uint8)\":{\"params\":{\"_periodType\":\"type of period to check\"},\"returns\":{\"initialized\":\"if initialized or not\"}},\"isValidPeriod(uint8,uint256)\":{\"params\":{\"_periodId\":\"id of period to check\",\"_periodType\":\"type of period to check\"},\"returns\":{\"valid\":\"if valid or invalid\"}},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"periodHasStarted(uint8,uint256)\":{\"params\":{\"_periodId\":\"id of period to check\",\"_periodType\":\"type of period to check\"},\"returns\":{\"started\":\"if started or not\"}},\"periodIsFinished(uint8,uint256)\":{\"params\":{\"_periodId\":\"id of period to check\",\"_periodType\":\"type of period to check\"},\"returns\":{\"finished\":\"if finished or not\"}},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}},\"stateVariables\":{\"periodDefinitions\":{\"details\":\"period types are hourly / weekly / biWeekly / monthly / yearly\"}},\"title\":\"PeriodRegistry\",\"version\":1},\"userdoc\":{\"events\":{\"PeriodInitialized(uint8,uint256)\":{\"notice\":\"event to log that a period is initialized\"}},\"kind\":\"user\",\"methods\":{\"addPeriodsToPeriodType(uint8,uint256[],uint256[])\":{\"notice\":\"External function to add a new period definition\"},\"getPeriodDefinitions()\":{\"notice\":\"public function to get the definitions of period for all period types\"},\"getPeriodStartAndEnd(uint8,uint256)\":{\"notice\":\"public function to get the start and end of a period\"},\"initializePeriod(uint8,uint256[],uint256[])\":{\"notice\":\"External function for creating canonical service level agreements\"},\"isInitializedPeriod(uint8)\":{\"notice\":\"public function to check if the period definition is initialized by period type\"},\"isValidPeriod(uint8,uint256)\":{\"notice\":\"public function to check if a period id is valid i.e. it belongs to the added id array\"},\"periodDefinitions(uint8)\":{\"notice\":\"(periodType=>PeriodDefinition) period definitions by period type\"},\"periodHasStarted(uint8,uint256)\":{\"notice\":\"public function to check if a period has started\"},\"periodIsFinished(uint8,uint256)\":{\"notice\":\"public function to check if a period has finished\"}},\"notice\":\"PeriodRegistry is a contract for management of period definitions\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"@dsla-protocol/core/contracts/PeriodRegistry.sol\":\"PeriodRegistry\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"@dsla-protocol/core/contracts/PeriodRegistry.sol\":{\"content\":\"// SPDX-License-Identifier: BUSL-1.1\\npragma solidity 0.8.9;\\n\\nimport '@openzeppelin/contracts/access/Ownable.sol';\\nimport './interfaces/IPeriodRegistry.sol';\\n\\n/**\\n * @title PeriodRegistry\\n * @notice PeriodRegistry is a contract for management of period definitions\\n */\\ncontract PeriodRegistry is IPeriodRegistry, Ownable {\\n    /// @notice struct to store the definition of a period\\n    struct PeriodDefinition {\\n        bool initialized;\\n        uint256[] starts;\\n        uint256[] ends;\\n    }\\n\\n    /// @notice (periodType=>PeriodDefinition) period definitions by period type\\n    /// @dev period types are hourly / weekly / biWeekly / monthly / yearly\\n    mapping(PeriodType => PeriodDefinition) public periodDefinitions;\\n\\n    /**\\n     * @notice event to log that a period is initialized\\n     * @param periodType 1. period type i.e. Hourly, Daily, Weekly, BiWeekly, Monthly, Yearly\\n     * @param periodsAdded 2. amount of periods added\\n     */\\n    event PeriodInitialized(PeriodType periodType, uint256 periodsAdded);\\n\\n    /**\\n     * @dev event to log that a period is modified\\n     * @param periodType 1. period type i.e. Hourly, Daily, Weekly, BiWeekly, Monthly, Yearly\\n     * @param periodsAdded 2. amount of periods added\\n     */\\n    event PeriodModified(PeriodType periodType, uint256 periodsAdded);\\n\\n    /**\\n     * @notice External function for creating canonical service level agreements\\n     * @param _periodType 1. period type i.e. Hourly, Daily, Weekly, BiWeekly, Monthly, Yearly\\n     * @param _periodStarts 2. array of the starts of the period\\n     * @param _periodEnds 3. array of the ends of the period\\n     */\\n    function initializePeriod(\\n        PeriodType _periodType,\\n        uint256[] memory _periodStarts,\\n        uint256[] memory _periodEnds\\n    ) external onlyOwner {\\n        _addPeriods(false, _periodType, _periodStarts, _periodEnds);\\n        emit PeriodInitialized(_periodType, _periodStarts.length);\\n    }\\n\\n    /**\\n     * @notice External function to add a new period definition\\n     * @dev only owner can call this function\\n     * @param _periodType type of period to add\\n     * @param _periodStarts array of the period starting timestamps to add\\n     * @param _periodEnds 3. array of the period ending timestamps to add\\n     */\\n    function addPeriodsToPeriodType(\\n        PeriodType _periodType,\\n        uint256[] memory _periodStarts,\\n        uint256[] memory _periodEnds\\n    ) external onlyOwner {\\n        _addPeriods(true, _periodType, _periodStarts, _periodEnds);\\n        emit PeriodModified(_periodType, _periodStarts.length);\\n    }\\n\\n    /**\\n     * @notice Internal function that add or update a period definition\\n     * @param _periodType type of period\\n     * @param _periodStarts array of the period starting timestamps\\n     * @param _periodEnds array of the period ending timestamps\\n     */\\n    function _addPeriods(\\n        bool _initialized,\\n        PeriodType _periodType,\\n        uint256[] memory _periodStarts,\\n        uint256[] memory _periodEnds\\n    ) internal {\\n        require(_periodStarts.length > 0, \\\"Period length can't be 0\\\");\\n        require(\\n            _periodStarts.length == _periodEnds.length,\\n            'Period length in start and end arrays should match'\\n        );\\n        PeriodDefinition storage periodDefinition = periodDefinitions[\\n            _periodType\\n        ];\\n        if (_initialized)\\n            require(\\n                periodDefinition.initialized,\\n                'Period was not initialized yet'\\n            );\\n        else\\n            require(\\n                !periodDefinition.initialized,\\n                'Period type already initialized'\\n            );\\n\\n        for (uint256 index = 0; index < _periodStarts.length; index++) {\\n            require(\\n                _periodStarts[index] < _periodEnds[index],\\n                'Start should be before end'\\n            );\\n            if (index < _periodStarts.length - 1) {\\n                require(\\n                    _periodStarts[index + 1] - _periodEnds[index] == 1,\\n                    'Start of a period should be 1 second after the end of the previous period'\\n                );\\n            }\\n            periodDefinition.starts.push(_periodStarts[index]);\\n            periodDefinition.ends.push(_periodEnds[index]);\\n        }\\n        periodDefinition.initialized = true;\\n    }\\n\\n    /**\\n     * @notice public function to get the start and end of a period\\n     * @param _periodType type of period to check\\n     * @param _periodId id of period to check\\n     * @return start starting timestamp\\n     * @return end ending timestamp\\n     */\\n    function getPeriodStartAndEnd(PeriodType _periodType, uint256 _periodId)\\n        external\\n        view\\n        override\\n        returns (uint256 start, uint256 end)\\n    {\\n        require(\\n            _periodId < periodDefinitions[_periodType].starts.length,\\n            'Invalid period id'\\n        );\\n        start = periodDefinitions[_periodType].starts[_periodId];\\n        end = periodDefinitions[_periodType].ends[_periodId];\\n    }\\n\\n    /**\\n     * @notice public function to check if the period definition is initialized by period type\\n     * @param _periodType type of period to check\\n     * @return initialized if initialized or not\\n     */\\n    function isInitializedPeriod(PeriodType _periodType)\\n        external\\n        view\\n        override\\n        returns (bool initialized)\\n    {\\n        initialized = periodDefinitions[_periodType].initialized;\\n    }\\n\\n    /**\\n     * @notice public function to check if a period id is valid i.e. it belongs to the added id array\\n     * @param _periodType type of period to check\\n     * @param _periodId id of period to check\\n     * @return valid if valid or invalid\\n     */\\n    function isValidPeriod(PeriodType _periodType, uint256 _periodId)\\n        public\\n        view\\n        override\\n        returns (bool valid)\\n    {\\n        valid = periodDefinitions[_periodType].starts.length - 1 >= _periodId;\\n    }\\n\\n    /**\\n     * @notice public function to check if a period has finished\\n     * @param _periodType type of period to check\\n     * @param _periodId id of period to check\\n     * @return finished if finished or not\\n     */\\n    function periodIsFinished(PeriodType _periodType, uint256 _periodId)\\n        external\\n        view\\n        override\\n        returns (bool finished)\\n    {\\n        require(\\n            isValidPeriod(_periodType, _periodId),\\n            'Period data is not valid'\\n        );\\n        finished =\\n            periodDefinitions[_periodType].ends[_periodId] < block.timestamp;\\n    }\\n\\n    /**\\n     * @notice public function to check if a period has started\\n     * @param _periodType type of period to check\\n     * @param _periodId id of period to check\\n     * @return started if started or not\\n     */\\n    function periodHasStarted(PeriodType _periodType, uint256 _periodId)\\n        external\\n        view\\n        override\\n        returns (bool started)\\n    {\\n        require(\\n            isValidPeriod(_periodType, _periodId),\\n            'Period data is not valid'\\n        );\\n        started =\\n            periodDefinitions[_periodType].starts[_periodId] < block.timestamp;\\n    }\\n\\n    /**\\n     * @notice public function to get the definitions of period for all period types\\n     * @return array of period definitions\\n     */\\n    function getPeriodDefinitions()\\n        public\\n        view\\n        returns (PeriodDefinition[] memory)\\n    {\\n        // 6 period types\\n        PeriodDefinition[] memory periodDefinition = new PeriodDefinition[](6);\\n        periodDefinition[0] = periodDefinitions[PeriodType.Hourly];\\n        periodDefinition[1] = periodDefinitions[PeriodType.Daily];\\n        periodDefinition[2] = periodDefinitions[PeriodType.Weekly];\\n        periodDefinition[3] = periodDefinitions[PeriodType.BiWeekly];\\n        periodDefinition[4] = periodDefinitions[PeriodType.Monthly];\\n        periodDefinition[5] = periodDefinitions[PeriodType.Yearly];\\n        return periodDefinition;\\n    }\\n}\\n\",\"keccak256\":\"0x9901538e0376ce698ac6bf6be72fc776e3d91a7be4b38502141ecce5be1ed7a2\",\"license\":\"BUSL-1.1\"},\"@dsla-protocol/core/contracts/interfaces/IPeriodRegistry.sol\":{\"content\":\"// SPDX-License-Identifier: BUSL-1.1\\npragma solidity 0.8.9;\\n\\ninterface IPeriodRegistry {\\n    enum PeriodType {\\n        Hourly,\\n        Daily,\\n        Weekly,\\n        BiWeekly,\\n        Monthly,\\n        Yearly\\n    }\\n\\n    function getPeriodStartAndEnd(PeriodType _periodType, uint256 _periodId)\\n        external\\n        view\\n        returns (uint256, uint256);\\n\\n    function isValidPeriod(PeriodType _periodType, uint256 _periodId)\\n        external\\n        view\\n        returns (bool);\\n\\n    function isInitializedPeriod(PeriodType _periodType)\\n        external\\n        view\\n        returns (bool);\\n\\n    function periodHasStarted(PeriodType _periodType, uint256 _periodId)\\n        external\\n        view\\n        returns (bool);\\n\\n    function periodIsFinished(PeriodType _periodType, uint256 _periodId)\\n        external\\n        view\\n        returns (bool);\\n}\\n\",\"keccak256\":\"0xa3b4321be33c6a0f8dd7d1cebc53fb9755fb970e4b0e6048ec03cc84aa09a55d\",\"license\":\"BUSL-1.1\"},\"@openzeppelin/contracts/access/Ownable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v4.7.0) (access/Ownable.sol)\\n\\npragma solidity ^0.8.0;\\n\\nimport \\\"../utils/Context.sol\\\";\\n\\n/**\\n * @dev Contract module which provides a basic access control mechanism, where\\n * there is an account (an owner) that can be granted exclusive access to\\n * specific functions.\\n *\\n * By default, the owner account will be the one that deploys the contract. This\\n * can later be changed with {transferOwnership}.\\n *\\n * This module is used through inheritance. It will make available the modifier\\n * `onlyOwner`, which can be applied to your functions to restrict their use to\\n * the owner.\\n */\\nabstract contract Ownable is Context {\\n    address private _owner;\\n\\n    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);\\n\\n    /**\\n     * @dev Initializes the contract setting the deployer as the initial owner.\\n     */\\n    constructor() {\\n        _transferOwnership(_msgSender());\\n    }\\n\\n    /**\\n     * @dev Throws if called by any account other than the owner.\\n     */\\n    modifier onlyOwner() {\\n        _checkOwner();\\n        _;\\n    }\\n\\n    /**\\n     * @dev Returns the address of the current owner.\\n     */\\n    function owner() public view virtual returns (address) {\\n        return _owner;\\n    }\\n\\n    /**\\n     * @dev Throws if the sender is not the owner.\\n     */\\n    function _checkOwner() internal view virtual {\\n        require(owner() == _msgSender(), \\\"Ownable: caller is not the owner\\\");\\n    }\\n\\n    /**\\n     * @dev Leaves the contract without owner. It will not be possible to call\\n     * `onlyOwner` functions anymore. Can only be called by the current owner.\\n     *\\n     * NOTE: Renouncing ownership will leave the contract without an owner,\\n     * thereby removing any functionality that is only available to the owner.\\n     */\\n    function renounceOwnership() public virtual onlyOwner {\\n        _transferOwnership(address(0));\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Can only be called by the current owner.\\n     */\\n    function transferOwnership(address newOwner) public virtual onlyOwner {\\n        require(newOwner != address(0), \\\"Ownable: new owner is the zero address\\\");\\n        _transferOwnership(newOwner);\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Internal function without access restriction.\\n     */\\n    function _transferOwnership(address newOwner) internal virtual {\\n        address oldOwner = _owner;\\n        _owner = newOwner;\\n        emit OwnershipTransferred(oldOwner, newOwner);\\n    }\\n}\\n\",\"keccak256\":\"0xa94b34880e3c1b0b931662cb1c09e5dfa6662f31cba80e07c5ee71cd135c9673\",\"license\":\"MIT\"},\"@openzeppelin/contracts/utils/Context.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts v4.4.1 (utils/Context.sol)\\n\\npragma solidity ^0.8.0;\\n\\n/**\\n * @dev Provides information about the current execution context, including the\\n * sender of the transaction and its data. While these are generally available\\n * via msg.sender and msg.data, they should not be accessed in such a direct\\n * manner, since when dealing with meta-transactions the account sending and\\n * paying for execution may not be the actual sender (as far as an application\\n * is concerned).\\n *\\n * This contract is only required for intermediate, library-like contracts.\\n */\\nabstract contract Context {\\n    function _msgSender() internal view virtual returns (address) {\\n        return msg.sender;\\n    }\\n\\n    function _msgData() internal view virtual returns (bytes calldata) {\\n        return msg.data;\\n    }\\n}\\n\",\"keccak256\":\"0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b5061001a3361001f565b61006f565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b6115348061007e6000396000f3fe608060405234801561001057600080fd5b50600436106100b45760003560e01c8063a163f02011610071578063a163f0201461014f578063c7b6ceb414610162578063d62e307514610175578063ddfc4fde1461018a578063f2fde38b1461019d578063ffa61235146101b057600080fd5b80635c98d157146100b9578063715018a6146100f15780637a1d83bc146100fb5780638da5cb5b1461010e5780638fdec1da14610129578063963a470b1461013c575b600080fd5b6100dc6100c73660046111de565b60016020526000908152604090205460ff1681565b60405190151581526020015b60405180910390f35b6100f96101d8565b005b6100dc610109366004611200565b6101ec565b6000546040516001600160a01b0390911681526020016100e8565b6100dc6101373660046111de565b6102a2565b6100f961014a3660046112db565b6102e5565b6100f961015d3660046112db565b610339565b6100dc610170366004611200565b610380565b61017d61041d565b6040516100e8919061138a565b6100dc610198366004611200565b610b7a565b6100f96101ab36600461141d565b610bcc565b6101c36101be366004611200565b610c45565b604080519283526020830191909152016100e8565b6101e0610d78565b6101ea6000610dd2565b565b60006101f88383610b7a565b6102445760405162461bcd60e51b815260206004820152601860248201527714195c9a5bd90819185d18481a5cc81b9bdd081d985b1a5960421b60448201526064015b60405180910390fd5b426001600085600581111561025b5761025b611446565b600581111561026c5761026c611446565b8152602001908152602001600020600101838154811061028e5761028e61145c565b906000526020600020015410905092915050565b6000600160008360058111156102ba576102ba611446565b60058111156102cb576102cb611446565b815260208101919091526040016000205460ff1692915050565b6102ed610d78565b6102fa6001848484610e22565b7f22453266e5e1e7468fee2b84c776e3bd5917bfd8a60abb3c0b95561bb22062da83835160405161032c929190611472565b60405180910390a1505050565b610341610d78565b61034e6000848484610e22565b7f2b0f2d8c9036efbd14cb23d06c56d37fca048c5062ada3454a3ab584762d630183835160405161032c929190611472565b600061038c8383610b7a565b6103d35760405162461bcd60e51b815260206004820152601860248201527714195c9a5bd90819185d18481a5cc81b9bdd081d985b1a5960421b604482015260640161023b565b42600160008560058111156103ea576103ea611446565b60058111156103fb576103fb611446565b8152602001908152602001600020600201838154811061028e5761028e61145c565b60408051600680825260e0820190925260609160009190816020015b61045f604051806060016040528060001515815260200160608152602001606081525090565b8152602001906001900390816104395750506000805260016020908152604080516060810182527fa6eef7e35abe7026729641147f7915573c7e97b47efa546f5f6e3230263bcb49805460ff16151582527fa6eef7e35abe7026729641147f7915573c7e97b47efa546f5f6e3230263bcb4a8054845181870281018701909552808552959650919490938581019392919083018282801561051f57602002820191906000526020600020905b81548152602001906001019080831161050b575b505050505081526020016002820180548060200260200160405190810160405280929190818152602001828054801561057757602002820191906000526020600020905b815481526020019060010190808311610563575b505050505081525050816000815181106105935761059361145c565b602090810291909101810191909152600160008190528152604080516060810182527fcc69885fda6bcc1a4ace058b4a62bf5e179ea78fd58a1ccd71c22cc9b688792f805460ff16151582527fcc69885fda6bcc1a4ace058b4a62bf5e179ea78fd58a1ccd71c22cc9b688793080548451818702810187019095528085529294919385830193909283018282801561064a57602002820191906000526020600020905b815481526020019060010190808311610636575b50505050508152602001600282018054806020026020016040519081016040528092919081815260200182805480156106a257602002820191906000526020600020905b81548152602001906001019080831161068e575b505050505081525050816001815181106106be576106be61145c565b602090810291909101810191909152600260005260018152604080516060810182527fd9d16d34ffb15ba3a3d852f0d403e2ce1d691fb54de27ac87cd2f993f3ec330f805460ff16151582527fd9d16d34ffb15ba3a3d852f0d403e2ce1d691fb54de27ac87cd2f993f3ec331080548451818702810187019095528085529294919385830193909283018282801561077557602002820191906000526020600020905b815481526020019060010190808311610761575b50505050508152602001600282018054806020026020016040519081016040528092919081815260200182805480156107cd57602002820191906000526020600020905b8154815260200190600101908083116107b9575b505050505081525050816002815181106107e9576107e961145c565b602090810291909101810191909152600360005260018152604080516060810182527f7dfe757ecd65cbd7922a9c0161e935dd7fdbcc0e999689c7d31633896b1fc60b805460ff16151582527f7dfe757ecd65cbd7922a9c0161e935dd7fdbcc0e999689c7d31633896b1fc60c8054845181870281018701909552808552929491938583019390928301828280156108a057602002820191906000526020600020905b81548152602001906001019080831161088c575b50505050508152602001600282018054806020026020016040519081016040528092919081815260200182805480156108f857602002820191906000526020600020905b8154815260200190600101908083116108e4575b505050505081525050816003815181106109145761091461145c565b602090810291909101810191909152600460005260018152604080516060810182527fedc95719e9a3b28dd8e80877cb5880a9be7de1a13fc8b05e7999683b6b567643805460ff16151582527fedc95719e9a3b28dd8e80877cb5880a9be7de1a13fc8b05e7999683b6b5676448054845181870281018701909552808552929491938583019390928301828280156109cb57602002820191906000526020600020905b8154815260200190600101908083116109b7575b5050505050815260200160028201805480602002602001604051908101604052809291908181526020018280548015610a2357602002820191906000526020600020905b815481526020019060010190808311610a0f575b50505050508152505081600481518110610a3f57610a3f61145c565b602090810291909101810191909152600560005260018152604080516060810182527fe2689cd4a84e23ad2f564004f1c9013e9589d260bde6380aba3ca7e09e4df40c805460ff16151582527fe2689cd4a84e23ad2f564004f1c9013e9589d260bde6380aba3ca7e09e4df40d805484518187028101870190955280855292949193858301939092830182828015610af657602002820191906000526020600020905b815481526020019060010190808311610ae2575b5050505050815260200160028201805480602002602001604051908101604052809291908181526020018280548015610b4e57602002820191906000526020600020905b815481526020019060010190808311610b3a575b50505050508152505081600581518110610b6a57610b6a61145c565b6020908102919091010152919050565b6000816001806000866005811115610b9457610b94611446565b6005811115610ba557610ba5611446565b8152602081019190915260400160002060010154610bc391906114b4565b10159392505050565b610bd4610d78565b6001600160a01b038116610c395760405162461bcd60e51b815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201526564647265737360d01b606482015260840161023b565b610c4281610dd2565b50565b60008060016000856005811115610c5e57610c5e611446565b6005811115610c6f57610c6f611446565b81526020810191909152604001600020600101548310610cc55760405162461bcd60e51b8152602060048201526011602482015270125b9d985b1a59081c195c9a5bd9081a59607a1b604482015260640161023b565b60016000856005811115610cdb57610cdb611446565b6005811115610cec57610cec611446565b81526020019081526020016000206001018381548110610d0e57610d0e61145c565b9060005260206000200154915060016000856005811115610d3157610d31611446565b6005811115610d4257610d42611446565b81526020019081526020016000206002018381548110610d6457610d6461145c565b906000526020600020015490509250929050565b6000546001600160a01b031633146101ea5760405162461bcd60e51b815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015260640161023b565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b6000825111610e735760405162461bcd60e51b815260206004820152601860248201527f506572696f64206c656e6774682063616e277420626520300000000000000000604482015260640161023b565b8051825114610edf5760405162461bcd60e51b815260206004820152603260248201527f506572696f64206c656e67746820696e20737461727420616e6420656e6420616044820152710e4e4c2f2e640e6d0deead8c840dac2e8c6d60731b606482015260840161023b565b600060016000856005811115610ef757610ef7611446565b6005811115610f0857610f08611446565b815260200190815260200160002090508415610f7457805460ff16610f6f5760405162461bcd60e51b815260206004820152601e60248201527f506572696f6420776173206e6f7420696e697469616c697a6564207965740000604482015260640161023b565b610fc6565b805460ff1615610fc65760405162461bcd60e51b815260206004820152601f60248201527f506572696f64207479706520616c726561647920696e697469616c697a656400604482015260640161023b565b60005b83518110156111b857828181518110610fe457610fe461145c565b6020026020010151848281518110610ffe57610ffe61145c565b6020026020010151106110535760405162461bcd60e51b815260206004820152601a60248201527f53746172742073686f756c64206265206265666f726520656e64000000000000604482015260640161023b565b6001845161106191906114b4565b8110156111395782818151811061107a5761107a61145c565b60200260200101518482600161109091906114cb565b815181106110a0576110a061145c565b60200260200101516110b291906114b4565b6001146111395760405162461bcd60e51b815260206004820152604960248201527f5374617274206f66206120706572696f642073686f756c64206265203120736560448201527f636f6e642061667465722074686520656e64206f66207468652070726576696f6064820152681d5cc81c195c9a5bd960ba1b608482015260a40161023b565b8160010184828151811061114f5761114f61145c565b60209081029190910181015182546001810184556000938452919092200155825160028301908490839081106111875761118761145c565b60209081029190910181015182546001810184556000938452919092200155806111b0816114e3565b915050610fc9565b50805460ff1916600117905550505050565b8035600681106111d957600080fd5b919050565b6000602082840312156111f057600080fd5b6111f9826111ca565b9392505050565b6000806040838503121561121357600080fd5b61121c836111ca565b946020939093013593505050565b634e487b7160e01b600052604160045260246000fd5b600082601f83011261125157600080fd5b8135602067ffffffffffffffff8083111561126e5761126e61122a565b8260051b604051601f19603f830116810181811084821117156112935761129361122a565b6040529384528581018301938381019250878511156112b157600080fd5b83870191505b848210156112d0578135835291830191908301906112b7565b979650505050505050565b6000806000606084860312156112f057600080fd5b6112f9846111ca565b9250602084013567ffffffffffffffff8082111561131657600080fd5b61132287838801611240565b9350604086013591508082111561133857600080fd5b5061134586828701611240565b9150509250925092565b600081518084526020808501945080840160005b8381101561137f57815187529582019590820190600101611363565b509495945050505050565b60006020808301818452808551808352604092508286019150828160051b87010184880160005b8381101561140f57603f198984030185528151606081511515855288820151818a8701526113e18287018261134f565b915050878201519150848103888601526113fb818361134f565b9689019694505050908601906001016113b1565b509098975050505050505050565b60006020828403121561142f57600080fd5b81356001600160a01b03811681146111f957600080fd5b634e487b7160e01b600052602160045260246000fd5b634e487b7160e01b600052603260045260246000fd5b604081016006841061149457634e487b7160e01b600052602160045260246000fd5b9281526020015290565b634e487b7160e01b600052601160045260246000fd5b6000828210156114c6576114c661149e565b500390565b600082198211156114de576114de61149e565b500190565b60006000198214156114f7576114f761149e565b506001019056fea26469706673582212208c2ca60e871b838cf0927f110afb74f1fdfa474e13e5f4adc5687f5a9d5aa23764736f6c63430008090033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100b45760003560e01c8063a163f02011610071578063a163f0201461014f578063c7b6ceb414610162578063d62e307514610175578063ddfc4fde1461018a578063f2fde38b1461019d578063ffa61235146101b057600080fd5b80635c98d157146100b9578063715018a6146100f15780637a1d83bc146100fb5780638da5cb5b1461010e5780638fdec1da14610129578063963a470b1461013c575b600080fd5b6100dc6100c73660046111de565b60016020526000908152604090205460ff1681565b60405190151581526020015b60405180910390f35b6100f96101d8565b005b6100dc610109366004611200565b6101ec565b6000546040516001600160a01b0390911681526020016100e8565b6100dc6101373660046111de565b6102a2565b6100f961014a3660046112db565b6102e5565b6100f961015d3660046112db565b610339565b6100dc610170366004611200565b610380565b61017d61041d565b6040516100e8919061138a565b6100dc610198366004611200565b610b7a565b6100f96101ab36600461141d565b610bcc565b6101c36101be366004611200565b610c45565b604080519283526020830191909152016100e8565b6101e0610d78565b6101ea6000610dd2565b565b60006101f88383610b7a565b6102445760405162461bcd60e51b815260206004820152601860248201527714195c9a5bd90819185d18481a5cc81b9bdd081d985b1a5960421b60448201526064015b60405180910390fd5b426001600085600581111561025b5761025b611446565b600581111561026c5761026c611446565b8152602001908152602001600020600101838154811061028e5761028e61145c565b906000526020600020015410905092915050565b6000600160008360058111156102ba576102ba611446565b60058111156102cb576102cb611446565b815260208101919091526040016000205460ff1692915050565b6102ed610d78565b6102fa6001848484610e22565b7f22453266e5e1e7468fee2b84c776e3bd5917bfd8a60abb3c0b95561bb22062da83835160405161032c929190611472565b60405180910390a1505050565b610341610d78565b61034e6000848484610e22565b7f2b0f2d8c9036efbd14cb23d06c56d37fca048c5062ada3454a3ab584762d630183835160405161032c929190611472565b600061038c8383610b7a565b6103d35760405162461bcd60e51b815260206004820152601860248201527714195c9a5bd90819185d18481a5cc81b9bdd081d985b1a5960421b604482015260640161023b565b42600160008560058111156103ea576103ea611446565b60058111156103fb576103fb611446565b8152602001908152602001600020600201838154811061028e5761028e61145c565b60408051600680825260e0820190925260609160009190816020015b61045f604051806060016040528060001515815260200160608152602001606081525090565b8152602001906001900390816104395750506000805260016020908152604080516060810182527fa6eef7e35abe7026729641147f7915573c7e97b47efa546f5f6e3230263bcb49805460ff16151582527fa6eef7e35abe7026729641147f7915573c7e97b47efa546f5f6e3230263bcb4a8054845181870281018701909552808552959650919490938581019392919083018282801561051f57602002820191906000526020600020905b81548152602001906001019080831161050b575b505050505081526020016002820180548060200260200160405190810160405280929190818152602001828054801561057757602002820191906000526020600020905b815481526020019060010190808311610563575b505050505081525050816000815181106105935761059361145c565b602090810291909101810191909152600160008190528152604080516060810182527fcc69885fda6bcc1a4ace058b4a62bf5e179ea78fd58a1ccd71c22cc9b688792f805460ff16151582527fcc69885fda6bcc1a4ace058b4a62bf5e179ea78fd58a1ccd71c22cc9b688793080548451818702810187019095528085529294919385830193909283018282801561064a57602002820191906000526020600020905b815481526020019060010190808311610636575b50505050508152602001600282018054806020026020016040519081016040528092919081815260200182805480156106a257602002820191906000526020600020905b81548152602001906001019080831161068e575b505050505081525050816001815181106106be576106be61145c565b602090810291909101810191909152600260005260018152604080516060810182527fd9d16d34ffb15ba3a3d852f0d403e2ce1d691fb54de27ac87cd2f993f3ec330f805460ff16151582527fd9d16d34ffb15ba3a3d852f0d403e2ce1d691fb54de27ac87cd2f993f3ec331080548451818702810187019095528085529294919385830193909283018282801561077557602002820191906000526020600020905b815481526020019060010190808311610761575b50505050508152602001600282018054806020026020016040519081016040528092919081815260200182805480156107cd57602002820191906000526020600020905b8154815260200190600101908083116107b9575b505050505081525050816002815181106107e9576107e961145c565b602090810291909101810191909152600360005260018152604080516060810182527f7dfe757ecd65cbd7922a9c0161e935dd7fdbcc0e999689c7d31633896b1fc60b805460ff16151582527f7dfe757ecd65cbd7922a9c0161e935dd7fdbcc0e999689c7d31633896b1fc60c8054845181870281018701909552808552929491938583019390928301828280156108a057602002820191906000526020600020905b81548152602001906001019080831161088c575b50505050508152602001600282018054806020026020016040519081016040528092919081815260200182805480156108f857602002820191906000526020600020905b8154815260200190600101908083116108e4575b505050505081525050816003815181106109145761091461145c565b602090810291909101810191909152600460005260018152604080516060810182527fedc95719e9a3b28dd8e80877cb5880a9be7de1a13fc8b05e7999683b6b567643805460ff16151582527fedc95719e9a3b28dd8e80877cb5880a9be7de1a13fc8b05e7999683b6b5676448054845181870281018701909552808552929491938583019390928301828280156109cb57602002820191906000526020600020905b8154815260200190600101908083116109b7575b5050505050815260200160028201805480602002602001604051908101604052809291908181526020018280548015610a2357602002820191906000526020600020905b815481526020019060010190808311610a0f575b50505050508152505081600481518110610a3f57610a3f61145c565b602090810291909101810191909152600560005260018152604080516060810182527fe2689cd4a84e23ad2f564004f1c9013e9589d260bde6380aba3ca7e09e4df40c805460ff16151582527fe2689cd4a84e23ad2f564004f1c9013e9589d260bde6380aba3ca7e09e4df40d805484518187028101870190955280855292949193858301939092830182828015610af657602002820191906000526020600020905b815481526020019060010190808311610ae2575b5050505050815260200160028201805480602002602001604051908101604052809291908181526020018280548015610b4e57602002820191906000526020600020905b815481526020019060010190808311610b3a575b50505050508152505081600581518110610b6a57610b6a61145c565b6020908102919091010152919050565b6000816001806000866005811115610b9457610b94611446565b6005811115610ba557610ba5611446565b8152602081019190915260400160002060010154610bc391906114b4565b10159392505050565b610bd4610d78565b6001600160a01b038116610c395760405162461bcd60e51b815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201526564647265737360d01b606482015260840161023b565b610c4281610dd2565b50565b60008060016000856005811115610c5e57610c5e611446565b6005811115610c6f57610c6f611446565b81526020810191909152604001600020600101548310610cc55760405162461bcd60e51b8152602060048201526011602482015270125b9d985b1a59081c195c9a5bd9081a59607a1b604482015260640161023b565b60016000856005811115610cdb57610cdb611446565b6005811115610cec57610cec611446565b81526020019081526020016000206001018381548110610d0e57610d0e61145c565b9060005260206000200154915060016000856005811115610d3157610d31611446565b6005811115610d4257610d42611446565b81526020019081526020016000206002018381548110610d6457610d6461145c565b906000526020600020015490509250929050565b6000546001600160a01b031633146101ea5760405162461bcd60e51b815260206004820181905260248201527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604482015260640161023b565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b6000825111610e735760405162461bcd60e51b815260206004820152601860248201527f506572696f64206c656e6774682063616e277420626520300000000000000000604482015260640161023b565b8051825114610edf5760405162461bcd60e51b815260206004820152603260248201527f506572696f64206c656e67746820696e20737461727420616e6420656e6420616044820152710e4e4c2f2e640e6d0deead8c840dac2e8c6d60731b606482015260840161023b565b600060016000856005811115610ef757610ef7611446565b6005811115610f0857610f08611446565b815260200190815260200160002090508415610f7457805460ff16610f6f5760405162461bcd60e51b815260206004820152601e60248201527f506572696f6420776173206e6f7420696e697469616c697a6564207965740000604482015260640161023b565b610fc6565b805460ff1615610fc65760405162461bcd60e51b815260206004820152601f60248201527f506572696f64207479706520616c726561647920696e697469616c697a656400604482015260640161023b565b60005b83518110156111b857828181518110610fe457610fe461145c565b6020026020010151848281518110610ffe57610ffe61145c565b6020026020010151106110535760405162461bcd60e51b815260206004820152601a60248201527f53746172742073686f756c64206265206265666f726520656e64000000000000604482015260640161023b565b6001845161106191906114b4565b8110156111395782818151811061107a5761107a61145c565b60200260200101518482600161109091906114cb565b815181106110a0576110a061145c565b60200260200101516110b291906114b4565b6001146111395760405162461bcd60e51b815260206004820152604960248201527f5374617274206f66206120706572696f642073686f756c64206265203120736560448201527f636f6e642061667465722074686520656e64206f66207468652070726576696f6064820152681d5cc81c195c9a5bd960ba1b608482015260a40161023b565b8160010184828151811061114f5761114f61145c565b60209081029190910181015182546001810184556000938452919092200155825160028301908490839081106111875761118761145c565b60209081029190910181015182546001810184556000938452919092200155806111b0816114e3565b915050610fc9565b50805460ff1916600117905550505050565b8035600681106111d957600080fd5b919050565b6000602082840312156111f057600080fd5b6111f9826111ca565b9392505050565b6000806040838503121561121357600080fd5b61121c836111ca565b946020939093013593505050565b634e487b7160e01b600052604160045260246000fd5b600082601f83011261125157600080fd5b8135602067ffffffffffffffff8083111561126e5761126e61122a565b8260051b604051601f19603f830116810181811084821117156112935761129361122a565b6040529384528581018301938381019250878511156112b157600080fd5b83870191505b848210156112d0578135835291830191908301906112b7565b979650505050505050565b6000806000606084860312156112f057600080fd5b6112f9846111ca565b9250602084013567ffffffffffffffff8082111561131657600080fd5b61132287838801611240565b9350604086013591508082111561133857600080fd5b5061134586828701611240565b9150509250925092565b600081518084526020808501945080840160005b8381101561137f57815187529582019590820190600101611363565b509495945050505050565b60006020808301818452808551808352604092508286019150828160051b87010184880160005b8381101561140f57603f198984030185528151606081511515855288820151818a8701526113e18287018261134f565b915050878201519150848103888601526113fb818361134f565b9689019694505050908601906001016113b1565b509098975050505050505050565b60006020828403121561142f57600080fd5b81356001600160a01b03811681146111f957600080fd5b634e487b7160e01b600052602160045260246000fd5b634e487b7160e01b600052603260045260246000fd5b604081016006841061149457634e487b7160e01b600052602160045260246000fd5b9281526020015290565b634e487b7160e01b600052601160045260246000fd5b6000828210156114c6576114c661149e565b500390565b600082198211156114de576114de61149e565b500190565b60006000198214156114f7576114f761149e565b506001019056fea26469706673582212208c2ca60e871b838cf0927f110afb74f1fdfa474e13e5f4adc5687f5a9d5aa23764736f6c63430008090033",
+  "devdoc": {
+    "events": {
+      "PeriodInitialized(uint8,uint256)": {
+        "params": {
+          "periodType": "1. period type i.e. Hourly, Daily, Weekly, BiWeekly, Monthly, Yearly",
+          "periodsAdded": "2. amount of periods added"
+        }
+      },
+      "PeriodModified(uint8,uint256)": {
+        "details": "event to log that a period is modified",
+        "params": {
+          "periodType": "1. period type i.e. Hourly, Daily, Weekly, BiWeekly, Monthly, Yearly",
+          "periodsAdded": "2. amount of periods added"
+        }
+      }
+    },
+    "kind": "dev",
+    "methods": {
+      "addPeriodsToPeriodType(uint8,uint256[],uint256[])": {
+        "details": "only owner can call this function",
+        "params": {
+          "_periodEnds": "3. array of the period ending timestamps to add",
+          "_periodStarts": "array of the period starting timestamps to add",
+          "_periodType": "type of period to add"
+        }
+      },
+      "getPeriodDefinitions()": {
+        "returns": {
+          "_0": "array of period definitions"
+        }
+      },
+      "getPeriodStartAndEnd(uint8,uint256)": {
+        "params": {
+          "_periodId": "id of period to check",
+          "_periodType": "type of period to check"
+        },
+        "returns": {
+          "end": "ending timestamp",
+          "start": "starting timestamp"
+        }
+      },
+      "initializePeriod(uint8,uint256[],uint256[])": {
+        "params": {
+          "_periodEnds": "3. array of the ends of the period",
+          "_periodStarts": "2. array of the starts of the period",
+          "_periodType": "1. period type i.e. Hourly, Daily, Weekly, BiWeekly, Monthly, Yearly"
+        }
+      },
+      "isInitializedPeriod(uint8)": {
+        "params": {
+          "_periodType": "type of period to check"
+        },
+        "returns": {
+          "initialized": "if initialized or not"
+        }
+      },
+      "isValidPeriod(uint8,uint256)": {
+        "params": {
+          "_periodId": "id of period to check",
+          "_periodType": "type of period to check"
+        },
+        "returns": {
+          "valid": "if valid or invalid"
+        }
+      },
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "periodHasStarted(uint8,uint256)": {
+        "params": {
+          "_periodId": "id of period to check",
+          "_periodType": "type of period to check"
+        },
+        "returns": {
+          "started": "if started or not"
+        }
+      },
+      "periodIsFinished(uint8,uint256)": {
+        "params": {
+          "_periodId": "id of period to check",
+          "_periodType": "type of period to check"
+        },
+        "returns": {
+          "finished": "if finished or not"
+        }
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      }
+    },
+    "stateVariables": {
+      "periodDefinitions": {
+        "details": "period types are hourly / weekly / biWeekly / monthly / yearly"
+      }
+    },
+    "title": "PeriodRegistry",
+    "version": 1
+  },
+  "userdoc": {
+    "events": {
+      "PeriodInitialized(uint8,uint256)": {
+        "notice": "event to log that a period is initialized"
+      }
+    },
+    "kind": "user",
+    "methods": {
+      "addPeriodsToPeriodType(uint8,uint256[],uint256[])": {
+        "notice": "External function to add a new period definition"
+      },
+      "getPeriodDefinitions()": {
+        "notice": "public function to get the definitions of period for all period types"
+      },
+      "getPeriodStartAndEnd(uint8,uint256)": {
+        "notice": "public function to get the start and end of a period"
+      },
+      "initializePeriod(uint8,uint256[],uint256[])": {
+        "notice": "External function for creating canonical service level agreements"
+      },
+      "isInitializedPeriod(uint8)": {
+        "notice": "public function to check if the period definition is initialized by period type"
+      },
+      "isValidPeriod(uint8,uint256)": {
+        "notice": "public function to check if a period id is valid i.e. it belongs to the added id array"
+      },
+      "periodDefinitions(uint8)": {
+        "notice": "(periodType=>PeriodDefinition) period definitions by period type"
+      },
+      "periodHasStarted(uint8,uint256)": {
+        "notice": "public function to check if a period has started"
+      },
+      "periodIsFinished(uint8,uint256)": {
+        "notice": "public function to check if a period has finished"
+      }
+    },
+    "notice": "PeriodRegistry is a contract for management of period definitions",
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 8619,
+        "contract": "@dsla-protocol/core/contracts/PeriodRegistry.sol:PeriodRegistry",
+        "label": "_owner",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_address"
+      },
+      {
+        "astId": 3104,
+        "contract": "@dsla-protocol/core/contracts/PeriodRegistry.sol:PeriodRegistry",
+        "label": "periodDefinitions",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_mapping(t_enum(PeriodType)7386,t_struct(PeriodDefinition)3097_storage)"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_array(t_uint256)dyn_storage": {
+        "base": "t_uint256",
+        "encoding": "dynamic_array",
+        "label": "uint256[]",
+        "numberOfBytes": "32"
+      },
+      "t_bool": {
+        "encoding": "inplace",
+        "label": "bool",
+        "numberOfBytes": "1"
+      },
+      "t_enum(PeriodType)7386": {
+        "encoding": "inplace",
+        "label": "enum IPeriodRegistry.PeriodType",
+        "numberOfBytes": "1"
+      },
+      "t_mapping(t_enum(PeriodType)7386,t_struct(PeriodDefinition)3097_storage)": {
+        "encoding": "mapping",
+        "key": "t_enum(PeriodType)7386",
+        "label": "mapping(enum IPeriodRegistry.PeriodType => struct PeriodRegistry.PeriodDefinition)",
+        "numberOfBytes": "32",
+        "value": "t_struct(PeriodDefinition)3097_storage"
+      },
+      "t_struct(PeriodDefinition)3097_storage": {
+        "encoding": "inplace",
+        "label": "struct PeriodRegistry.PeriodDefinition",
+        "members": [
+          {
+            "astId": 3090,
+            "contract": "@dsla-protocol/core/contracts/PeriodRegistry.sol:PeriodRegistry",
+            "label": "initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_bool"
+          },
+          {
+            "astId": 3093,
+            "contract": "@dsla-protocol/core/contracts/PeriodRegistry.sol:PeriodRegistry",
+            "label": "starts",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_uint256)dyn_storage"
+          },
+          {
+            "astId": 3096,
+            "contract": "@dsla-protocol/core/contracts/PeriodRegistry.sol:PeriodRegistry",
+            "label": "ends",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_array(t_uint256)dyn_storage"
+          }
+        ],
+        "numberOfBytes": "96"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}
