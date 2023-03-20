@@ -2044,10 +2044,10 @@ subtask(SUB_TASK_NAMES.GET_PRECOORDINATOR, undefined).setAction(
     const eventsFilter = precoordinator.filters.NewServiceAgreement();
     const events = await precoordinator.queryFilter(
       eventsFilter,
-      // (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
-      //   undefined
-      16595846,
-      16599846
+      (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
+        undefined
+      // 16595846,
+      // 16599846
     );
     for (let event of events) {
       printSeparator();
