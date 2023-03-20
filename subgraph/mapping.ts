@@ -139,13 +139,13 @@ export function handleStake(event: Stake): void {
   duToken.totalSupply = duTokenContract.totalSupply();
   duToken.save();
 
-  let tvl = TVL.load(event.params.tokenAddress.toHexString());
-  if (!tvl) {
-    tvl = new TVL(event.params.tokenAddress.toHexString());
-  }
-  tvl.amount = tvl.amount!.plus(event.params.amount);
-  tvl.deposits = tvl.deposits!.concat([deposit.id]);
-  tvl.save();
+  // let tvl = TVL.load(event.params.tokenAddress.toHexString());
+  // if (!tvl) {
+  //   tvl = new TVL(event.params.tokenAddress.toHexString());
+  // }
+  // tvl.amount = tvl.amount!.plus(event.params.amount);
+  // tvl.deposits = tvl.deposits!.concat([deposit.id]);
+  // tvl.save();
 }
 
 export function handleProviderWithdraw(event: ProviderWithdraw): void {
@@ -183,16 +183,16 @@ export function handleProviderWithdraw(event: ProviderWithdraw): void {
   dpToken.totalSupply = dpTokenContract.totalSupply();
   dpToken.save();
 
-  let tvl = TVL.load(event.params.tokenAddress.toHexString());
-  if (!tvl) {
-    tvl = new TVL(event.params.tokenAddress.toHexString());
-  }
-  if (!tvl.amount) {
-    tvl.amount = BigInt.fromI32(0);
-  }
-  tvl.amount = tvl.amount!.minus(event.params.amount);
-  tvl.withdrawals = tvl.withdrawals!.concat([withdrawal.id]);
-  tvl.save();
+  // let tvl = TVL.load(event.params.tokenAddress.toHexString());
+  // if (!tvl) {
+  //   tvl = new TVL(event.params.tokenAddress.toHexString());
+  // }
+  // if (!tvl.amount) {
+  //   tvl.amount = BigInt.fromI32(0);
+  // }
+  // tvl.amount = tvl.amount!.minus(event.params.amount);
+  // tvl.withdrawals = tvl.withdrawals!.concat([withdrawal.id]);
+  // tvl.save();
 }
 
 export function handleUserWithdraw(event: ProviderWithdraw): void {
@@ -236,19 +236,19 @@ export function handleUserWithdraw(event: ProviderWithdraw): void {
   duToken.totalSupply = duTokenContract.totalSupply();
   duToken.save();
 
-  let tvl = TVL.load(event.params.tokenAddress.toHexString());
-  if (!tvl) {
-    tvl = new TVL(event.params.tokenAddress.toHexString());
-  }
-  if (!tvl.amount) {
-    tvl.amount = BigInt.fromI32(0);
-  }
-  if (!tvl.withdrawals) {
-    tvl.withdrawals = [];
-  }
-  tvl.amount = tvl.amount!.minus(event.params.amount);
-  tvl.withdrawals = tvl.withdrawals!.concat([withdrawal.id]);
-  tvl.save();
+  // let tvl = TVL.load(event.params.tokenAddress.toHexString());
+  // if (!tvl) {
+  //   tvl = new TVL(event.params.tokenAddress.toHexString());
+  // }
+  // if (!tvl.amount) {
+  //   tvl.amount = BigInt.fromI32(0);
+  // }
+  // if (!tvl.withdrawals) {
+  //   tvl.withdrawals = [];
+  // }
+  // tvl.amount = tvl.amount!.minus(event.params.amount);
+  // tvl.withdrawals = tvl.withdrawals!.concat([withdrawal.id]);
+  // tvl.save();
 }
 
 export function handleSLORegistered(event: SLORegistered): void {
@@ -313,19 +313,19 @@ export function handleValueLocked(event: ValueLocked): void {
   deposit.tokenAddress = stakeRegistryContract.DSLATokenAddress();
   deposit.save();
 
-  let tvl = TVL.load(stakeRegistryContract.DSLATokenAddress().toHexString());
-  if (!tvl) {
-    tvl = new TVL(stakeRegistryContract.DSLATokenAddress().toHexString());
-  }
-  if (!tvl.amount) {
-    tvl.amount = BigInt.fromI32(0);
-  }
-  if (!tvl.deposits) {
-    tvl.deposits = [];
-  }
-  tvl.amount = tvl.amount!.plus(event.params.amount);
-  tvl.deposits = tvl.deposits!.concat([deposit.id]);
-  tvl.save();
+  // let tvl = TVL.load(stakeRegistryContract.DSLATokenAddress().toHexString());
+  // if (!tvl) {
+  //   tvl = new TVL(stakeRegistryContract.DSLATokenAddress().toHexString());
+  // }
+  // if (!tvl.amount) {
+  //   tvl.amount = BigInt.fromI32(0);
+  // }
+  // if (!tvl.deposits) {
+  //   tvl.deposits = [];
+  // }
+  // tvl.amount = tvl.amount!.plus(event.params.amount);
+  // tvl.deposits = tvl.deposits!.concat([deposit.id]);
+  // tvl.save();
 }
 
 export function handleLockedValueReturned(event: LockedValueReturned): void {
@@ -338,19 +338,19 @@ export function handleLockedValueReturned(event: LockedValueReturned): void {
   withdrawal.tokenAddress = stakeRegistryContract.DSLATokenAddress();
   withdrawal.save();
 
-  let tvl = TVL.load(stakeRegistryContract.DSLATokenAddress().toHexString());
-  if (!tvl) {
-    tvl = new TVL(stakeRegistryContract.DSLATokenAddress().toHexString());
-  }
-  if (!tvl.amount) {
-    tvl.amount = BigInt.fromI32(0);
-  }
-  if (!tvl.withdrawals) {
-    tvl.withdrawals = [];
-  }
-  tvl.amount = tvl.amount!.minus(event.params.amount);
-  tvl.withdrawals = tvl.withdrawals!.concat([withdrawal.id]);
-  tvl.save();
+  // let tvl = TVL.load(stakeRegistryContract.DSLATokenAddress().toHexString());
+  // if (!tvl) {
+  //   tvl = new TVL(stakeRegistryContract.DSLATokenAddress().toHexString());
+  // }
+  // if (!tvl.amount) {
+  //   tvl.amount = BigInt.fromI32(0);
+  // }
+  // if (!tvl.withdrawals) {
+  //   tvl.withdrawals = [];
+  // }
+  // tvl.amount = tvl.amount!.minus(event.params.amount);
+  // tvl.withdrawals = tvl.withdrawals!.concat([withdrawal.id]);
+  // tvl.save();
 }
 
 export function handleMessengerRegistered(event: MessengerRegistered): void {

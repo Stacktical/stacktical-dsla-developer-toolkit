@@ -1419,13 +1419,9 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
           index: taskArgs.index,
         });
       } else {
-        await hre.run(SUB_TASK_NAMES.SET_PRECOORDINATOR, {
-          index: taskArgs.index,
-        });
-        consola.info('Creating saId in messenger ' + messenger.contract);
-        await hre.run(SUB_TASK_NAMES.UPDATE_PRECOORDINATOR, {
-          index: taskArgs.index,
-        });
+        consola.warn(
+          messenger.contract + ' already registered on MessengerRegistry'
+        );
       }
     } catch (error) {
       consola.error(error);
@@ -2050,8 +2046,8 @@ subtask(SUB_TASK_NAMES.GET_PRECOORDINATOR, undefined).setAction(
       eventsFilter,
       // (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
       //   undefined
-      15809000,
-      15810000
+      16595846,
+      16599846
     );
     for (let event of events) {
       printSeparator();

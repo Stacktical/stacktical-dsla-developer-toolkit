@@ -981,5 +981,33 @@ export const scripts: ScriptsConfiguration = {
         serviceSliMockingPlan: [5, 15, 25],
       },
     },
+    // INDEX 33, Contract for 1st official stablecoin listing (BUSD)
+    {
+      sloValue: 99,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.AssetPegOracle,
+      initialPeriodId: 4, // 03/01/2023 00:00:00
+      finalPeriodId: 7, // 06/01/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Binance USD',
+        serviceDescription: 'BUSD is an USD stablecoin issued by Paxos and used by the Binance exchange.',
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/currencies/BUSD.svg',
+        serviceURL: 'https://paxos.com/',
+        serviceAddress: '0x4Fabb145d64652a948d72533023f6E7A623C7C53',
+        serviceTicker: 'BUSD',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+      },
+    },
   ],
 };
