@@ -730,41 +730,41 @@ subtask(SUB_TASK_NAMES.CHAINLINK_NODES_AUTH, undefined).setAction(
       chainlinkNodeAddress
     );
 
-    // if (!permissions) {
-    //   console.log('Need to set permissions for this node.');
+    if (!permissions) {
+      console.log('Need to set permissions for this node.');
 
-    //   const gasEstimated =
-    //     await oracleContract.estimateGas.setFulfillmentPermission(
-    //       chainlinkNodeAddress,
-    //       true
-    //     );
+      const gasEstimated =
+        await oracleContract.estimateGas.setFulfillmentPermission(
+          chainlinkNodeAddress,
+          true
+        );
 
-    //   let gas = {};
+      let gas = {};
 
-    //   if (hre.network.config.chainId == 137) {
-    //     gas = await polygonGasEstimate(gasEstimated);
-    //   }
+      if (hre.network.config.chainId == 137) {
+        gas = await polygonGasEstimate(gasEstimated);
+      }
 
-    //   const tx = await oracleContract.setFulfillmentPermission(
-    //     chainlinkNodeAddress,
-    //     true,
-    //     {
-    //       ...(hre.network.config.gas !== 'auto' &&
-    //         hre.network.config.chainId != 137 && {
-    //           gasLimit: hre.network.config.gas,
-    //         }),
-    //       ...(hre.network.config.gas !== 'auto' &&
-    //         hre.network.config.chainId == 137 &&
-    //         gas),
-    //     }
-    //   );
-    //   await tx.wait();
-    //   console.log('Setting permissions...');
-    // }
+      const tx = await oracleContract.setFulfillmentPermission(
+        chainlinkNodeAddress,
+        true,
+        {
+          ...(hre.network.config.gas !== 'auto' &&
+            hre.network.config.chainId != 137 && {
+              gasLimit: hre.network.config.gas,
+            }),
+          ...(hre.network.config.gas !== 'auto' &&
+            hre.network.config.chainId == 137 &&
+            gas),
+        }
+      );
+      await tx.wait();
+      console.log('Setting permissions...');
+    }
 
-    // permissions = await oracleContract.getAuthorizationStatus(
-    //   chainlinkNodeAddress
-    // );
+    permissions = await oracleContract.getAuthorizationStatus(
+      chainlinkNodeAddress
+    );
 
     console.log(`Chainlink Node Fullfillment permissions: ${permissions}`);
     printSeparator();
