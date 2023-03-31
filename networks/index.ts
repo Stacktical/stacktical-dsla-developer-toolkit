@@ -1,7 +1,7 @@
 import { NETWORKS } from '../constants';
 
 export const networks = [
-  { name: NETWORKS.DEVELOP, enabled: false },
+  { name: NETWORKS.DEVELOP, enabled: true },
   { name: NETWORKS.KOVAN, enabled: false },
   { name: NETWORKS.MUMBAI, enabled: false },
   { name: NETWORKS.HARMONYTESTNET, enabled: false },
@@ -14,7 +14,7 @@ export const networks = [
   { name: NETWORKS.BSC, enabled: false },
   { name: NETWORKS.AVALANCHE, enabled: false },
   { name: NETWORKS.AVALANCHEV2, enabled: false },
-  { name: NETWORKS.ARBITRUMV2, enabled: true },
+  { name: NETWORKS.ARBITRUMV2, enabled: false },
   { name: NETWORKS.ARBITRUMNOVA, enabled: false },
   { name: NETWORKS.ARBITRUMTESTNET, enabled: false },
   { name: NETWORKS.DEVELOP_AVALANCHE, enabled: false },
