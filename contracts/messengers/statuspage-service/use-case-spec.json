@@ -1,0 +1,24 @@
+{
+    "useCaseName": "OpenAI Status Page",
+    "symbol": "xGPTQUALITY",
+    "sp": {
+      "name": "OpenAI GPT Quality Service Credit",
+      "symbol": "xGPTQUALITY"
+    },
+    "lp": {
+      "name": "OpenAI GPT Quality Service Credit LP",
+      "symbol": "xGPTQUALITY-LP"
+    },
+    "ownerUrl": "https://dsla.network",
+    "useCaseDocs": "https://dsla.network/metaverse",
+    "externalAdapterRepo": "https://github.com/Stacktical/",
+    "unit": "%",
+    "keywords": ["openai", "statuspage", "service", "quality"],
+    "timestamp": "2023-03-24T00:00:00+00:00",
+    "version": {
+      "major": 0,
+      "minor": 0,
+      "patch": 1
+    }
+  }
+  

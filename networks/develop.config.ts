@@ -112,6 +112,11 @@ export const develop: NetworkUserConfig = {
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
+        {
+          contract: CONTRACT_NAMES.OpenAIStatusPageOracle,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
       ],
       registry: {
         periods: [
@@ -212,7 +217,16 @@ export const develop: NetworkUserConfig = {
         dslaLpSymbol: SERVICE_CREDITS.STAKING_PARAMETRIC.DSLA_LP.symbol,
         dslaSpName: SERVICE_CREDITS.STAKING_PARAMETRIC.DSLA_SP.name,
         dslaSpSymbol: SERVICE_CREDITS.STAKING_PARAMETRIC.DSLA_SP.symbol,
-      },    
+      },
+      {
+        contract: CONTRACT_NAMES.OpenAIStatusPageOracle,
+        useCaseName: USE_CASES.STATUSPAGE_SERVICE,
+        externalAdapterUrl: process.env.STATUSPAGE_SERVICE_ADAPTER,
+        dslaLpName: SERVICE_CREDITS.STATUSPAGE_SERVICE.DSLA_LP.name,
+        dslaLpSymbol: SERVICE_CREDITS.STATUSPAGE_SERVICE.DSLA_LP.symbol,
+        dslaSpName: SERVICE_CREDITS.STATUSPAGE_SERVICE.DSLA_SP.name,
+        dslaSpSymbol: SERVICE_CREDITS.STATUSPAGE_SERVICE.DSLA_SP.symbol,
+      },
     ],
     scripts: scripts,
   },
