@@ -58,15 +58,15 @@ export function handleNewSLA(event: SLACreated): void {
   sla.finished = slaContract.contractFinished();
   sla.save();
   SLATemplate.create(event.params.sla);
-  let user = User.load(event.params.owner.toHexString());
-  if (!user) {
-    user = new User(event.params.owner.toHexString());
-  }
-  if (!user.slas) {
-    user.slas = [];
-  }
-  user.slas = user.slas!.concat([sla.id]);
-  user.save();
+  // let user = User.load(event.params.owner.toHexString());
+  // if (!user) {
+  //   user = new User(event.params.owner.toHexString());
+  // }
+  // if (!user.slas) {
+  //   user.slas = [];
+  // }
+  // user.slas = user.slas!.concat([sla.id]);
+  // user.save();
 }
 
 export function handleSLICreated(event: SLICreated): void {
@@ -117,15 +117,15 @@ export function handleStake(event: Stake): void {
   }
   sla.stakersCount = slaContract.getStakersLength();
   sla.save();
-  let user = User.load(event.params.caller.toHexString());
-  if (!user) {
-    user = new User(event.params.caller.toHexString());
-  }
-  if (!user.deposits) {
-    user.deposits = [];
-  }
-  user.deposits = user.deposits!.concat([deposit.id]);
-  user.save();
+  // let user = User.load(event.params.caller.toHexString());
+  // if (!user) {
+  //   user = new User(event.params.caller.toHexString());
+  // }
+  // if (!user.deposits) {
+  //   user.deposits = [];
+  // }
+  // user.deposits = user.deposits!.concat([deposit.id]);
+  // user.save();
 
   let dpTokenAddress = slaContract.dpTokenRegistry(event.params.tokenAddress);
   let dpTokenContract = ERC20.bind(dpTokenAddress);
@@ -170,12 +170,12 @@ export function handleProviderWithdraw(event: ProviderWithdraw): void {
     sla.maxHedge = BigInt.fromI32(0);
   }
   sla.save();
-  let user = User.load(event.params.caller.toHexString());
-  if (!user) {
-    user = new User(event.params.caller.toHexString());
-  }
-  user.withdrawals = user.withdrawals!.concat([withdrawal.id]);
-  user.save();
+  // let user = User.load(event.params.caller.toHexString());
+  // if (!user) {
+  //   user = new User(event.params.caller.toHexString());
+  // }
+  // user.withdrawals = user.withdrawals!.concat([withdrawal.id]);
+  // user.save();
 
   let dpTokenAddress = slaContract.dpTokenRegistry(event.params.tokenAddress);
   let dpTokenContract = ERC20.bind(dpTokenAddress);
@@ -220,15 +220,15 @@ export function handleUserWithdraw(event: ProviderWithdraw): void {
     sla.maxHedge = BigInt.fromI32(0);
   }
   sla.save();
-  let user = User.load(event.params.caller.toHexString());
-  if (!user) {
-    user = new User(event.params.caller.toHexString());
-  }
-  if (!user.withdrawals) {
-    user.withdrawals = [];
-  }
-  user.withdrawals = user.withdrawals!.concat([withdrawal.id]);
-  user.save();
+  // let user = User.load(event.params.caller.toHexString());
+  // if (!user) {
+  //   user = new User(event.params.caller.toHexString());
+  // }
+  // if (!user.withdrawals) {
+  //   user.withdrawals = [];
+  // }
+  // user.withdrawals = user.withdrawals!.concat([withdrawal.id]);
+  // user.save();
 
   let duTokenAddress = slaContract.duTokenRegistry(event.params.tokenAddress);
   let duTokenContract = ERC20.bind(duTokenAddress);
