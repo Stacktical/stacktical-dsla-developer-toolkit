@@ -44,8 +44,8 @@ function calculateServiceQualityPercentage(
       // console.log('Request body:', req.body);
   
       // Log the timestamp values received and their converted date representations
-      console.log('Timestamps received:', { periodStart, periodEnd });
-      console.log('Dates received:', {
+      // console.log('Timestamps received:', { periodStart, periodEnd });
+      // console.log('Dates received:', {
         periodStartDate: new Date(Number(periodStart) * 1000).toLocaleString(),
         periodEndDate: new Date(Number(periodEnd) * 1000).toLocaleString(),
       });
