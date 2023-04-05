@@ -88,7 +88,7 @@ contract OpenAIStatusPageOracle is ChainlinkClient, IMessenger, ReentrancyGuard 
         _slaRegistryAddress = msg.sender;
     }
 
-    function requestSLI(
+function requestSLI(
     uint256 _periodId,
     address _slaAddress,
     bool _messengerOwnerApproval,
@@ -125,6 +125,12 @@ contract OpenAIStatusPageOracle is ChainlinkClient, IMessenger, ReentrancyGuard 
     request.add("period_start", StringUtils.uintToStr(periodStart));
     request.add("period_end", StringUtils.uintToStr(periodEnd));
 
+    // Add the 'sla_address' parameter to the request
+    request.add('sla_address', StringUtils.addressToString(_slaAddress));
+
+    // Add the 'network_name' parameter to the request
+    request.add('network_name', StringUtils.bytes32ToStr(networkName));
+
     // Add other OpenAI StatusPage specific request parameters if needed
 
     // Sends the request with 0.1 LINK to the oracle contract
@@ -140,7 +146,6 @@ contract OpenAIStatusPageOracle is ChainlinkClient, IMessenger, ReentrancyGuard 
     _requestsCounter += 1;
     emit SLIRequested(_callerAddress, _requestsCounter, requestId);
 }
-
 
     function fulfillSLI(bytes32 _requestId, uint256 _chainlinkResponse)
         external
