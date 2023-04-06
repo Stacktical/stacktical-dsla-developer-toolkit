@@ -123,8 +123,3 @@ const PORT = Number(process.env.PORT) || 6070;
 app.listen(PORT, HOST, () => {
   console.log(`Server is running on port ${PORT}`);
 });
-
-
-// app.listen(PORT, () => {
-//   console.log(`Server is running on port ${PORT}`);
-// });
