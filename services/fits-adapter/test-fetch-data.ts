@@ -7,7 +7,7 @@ async function testFetchData() {
     const params = {
         location: '40.7128,-74.0060',
         startDate: '2023-04-02',
-        endDate: '2023-04-08',
+        endDate: '2023-04-05',
     };
 
     try {
