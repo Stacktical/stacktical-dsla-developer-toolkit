@@ -117,6 +117,11 @@ export const develop: NetworkUserConfig = {
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
+        {
+          contract: CONTRACT_NAMES.FITSOracle,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
       ],
       registry: {
         periods: [
@@ -226,6 +231,15 @@ export const develop: NetworkUserConfig = {
         dslaLpSymbol: SERVICE_CREDITS.STATUSPAGE_SERVICE.DSLA_LP.symbol,
         dslaSpName: SERVICE_CREDITS.STATUSPAGE_SERVICE.DSLA_SP.name,
         dslaSpSymbol: SERVICE_CREDITS.STATUSPAGE_SERVICE.DSLA_SP.symbol,
+      },
+      {
+        contract: CONTRACT_NAMES.FITSOracle,
+        useCaseName: USE_CASES.FITS,
+        externalAdapterUrl: process.env.FITS_ADAPTER,
+        dslaLpName: SERVICE_CREDITS.FITS.DSLA_LP.name,
+        dslaLpSymbol: SERVICE_CREDITS.FITS.DSLA_LP.symbol,
+        dslaSpName: SERVICE_CREDITS.FITS.DSLA_SP.name,
+        dslaSpSymbol: SERVICE_CREDITS.FITS.DSLA_SP.symbol,
       },
     ],
     scripts: scripts,

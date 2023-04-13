@@ -1,0 +1,28 @@
+{
+  "useCaseName": "Fun In The Sun Travel Coverage",
+  "symbol": "xFITS",
+  "sp": {
+    "name": "FITS Service Credit",
+    "symbol": "xFITS"
+  },
+  "lp": {
+    "name": "FITS Service Credit LP",
+    "symbol": "xFITS-LP"
+  },
+  "ownerUrl": "https://dsla.network",
+  "useCaseDocs": "https://dsla.network/metaverse",
+  "externalAdapterRepo": "https://github.com/Stacktical/",
+  "unit": "%",
+  "keywords": [
+    "fits",
+    "travel",
+    "weather",
+    "experience"
+  ],
+  "timestamp": "2023-03-24T00:00:00+00:00",
+  "version": {
+    "major": 0,
+    "minor": 0,
+    "patch": 1
+  }
+}

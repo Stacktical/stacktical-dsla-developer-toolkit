@@ -901,5 +901,6 @@ export const scripts: ScriptsConfiguration = {
         serviceSliMockingPlan: [95, 95, 95],
       },
     },
+    // INDEX 31 -- ADD FITS TEST CASES HERE
   ],
 };
