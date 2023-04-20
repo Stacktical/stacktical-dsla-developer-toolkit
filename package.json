@@ -9,6 +9,7 @@
     "custom-ganache": "ganache-cli --accounts 10 --defaultBalanceEther 100000 -d -i 1337 -l 12000000 -h 0.0.0.0",
     "external-adapter": "pm2 delete external-adapter 2> /dev/null || true && pm2 start services/external-adapter/index.ts --name external-adapter --watch ./services/external-adapter --no-daemon",
     "external-adapter-daemon": "pm2 delete external-adapter 2> /dev/null || true && pm2 start services/external-adapter/index.ts --name external-adapter --watch ./services/external-adapter",
+    "statuspage-service-adapter": "pm2 delete statuspage-service-adapter 2> /dev/null || true && pm2 start services/statuspage-service-adapter/index.ts --name statuspage-service-adapter --watch ./services/statuspage-service-adapter --no-daemon",
     "sls:deploy": "sls deploy",
     "sls:offline": "sls offline",
     "export-data": "hh stacktical:export-data",
