@@ -13,7 +13,7 @@ import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
 import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 import '@openzeppelin/contracts/utils/Strings.sol';
 
-contract OpenAIStatusPageOracle is ChainlinkClient, IMessenger, ReentrancyGuard {
+contract FITSOracle is ChainlinkClient, IMessenger, ReentrancyGuard {
     using SafeERC20 for ERC20;
     using Chainlink for Chainlink.Request;
 
@@ -24,7 +24,7 @@ contract OpenAIStatusPageOracle is ChainlinkClient, IMessenger, ReentrancyGuard 
     bytes32 private _jobId;
     uint256 private constant _baseFee = 0.1 ether;
     uint256 private _fee;
-    uint256 private constant _messengerPrecision = 10**6;
+    uint256 private constant _messengerPrecision = 10 ** 6;
 
     uint256 private _requestsCounter;
     uint256 private _fulfillsCounter;
@@ -88,71 +88,67 @@ contract OpenAIStatusPageOracle is ChainlinkClient, IMessenger, ReentrancyGuard 
         _slaRegistryAddress = msg.sender;
     }
 
-function requestSLI(
-    uint256 _periodId,
-    address _slaAddress,
-    bool _messengerOwnerApproval,
-    address _callerAddress
-) public override onlySLARegistry nonReentrant {
-    require(_jobId != 0, '_jobId empty');
-    
-    if (_messengerOwnerApproval) {
-        ERC20(chainlinkTokenAddress()).safeTransferFrom(
-            owner(),
+    function requestSLI(
+        uint256 _periodId,
+        address _slaAddress,
+        bool _messengerOwnerApproval,
+        address _callerAddress
+    ) public override onlySLARegistry nonReentrant {
+        require(_jobId != 0, '_jobId empty');
+
+        if (_messengerOwnerApproval) {
+            ERC20(chainlinkTokenAddress()).safeTransferFrom(
+                owner(),
+                address(this),
+                _fee
+            );
+        } else {
+            ERC20(chainlinkTokenAddress()).safeTransferFrom(
+                _callerAddress,
+                address(this),
+                _fee
+            );
+        }
+        Chainlink.Request memory request = buildChainlinkRequest(
+            _jobId,
             address(this),
-            _fee
+            this.fulfillSLI.selector
         );
-    } else {
-        ERC20(chainlinkTokenAddress()).safeTransferFrom(
-            _callerAddress,
-            address(this),
-            _fee
-        );
+
+        // Get period start and end from the periodRegistry
+        (uint256 periodStart, uint256 periodEnd) = periodRegistry
+            .getPeriodStartAndEnd(SLA(_slaAddress).periodType(), _periodId);
+
+        // Add period start and end as request parameters
+        request.add('period_start', StringUtils.uintToStr(periodStart));
+        request.add('period_end', StringUtils.uintToStr(periodEnd));
+
+        // Add the 'sla_address' parameter to the request
+        request.add('sla_address', StringUtils.addressToString(_slaAddress));
+
+        // Add the 'network_name' parameter to the request
+        request.add('network_name', StringUtils.bytes32ToStr(networkName));
+
+        // Add other FITSOracle specific request parameters if needed
+
+        // Sends the request with 0.1 LINK to the oracle contract
+        bytes32 requestId = sendChainlinkRequestTo(_oracle, request, _fee);
+
+        requests.push(requestId);
+
+        requestIdToSLIRequest[requestId] = SLIRequest({
+            slaAddress: _slaAddress,
+            periodId: _periodId
+        });
+
+        _requestsCounter += 1;
+        emit SLIRequested(_callerAddress, _requestsCounter, requestId);
     }
-    Chainlink.Request memory request = buildChainlinkRequest(
-        _jobId,
-        address(this),
-        this.fulfillSLI.selector
-    );
 
-    // Get period start and end from the periodRegistry
-    (uint256 periodStart, uint256 periodEnd) = periodRegistry.getPeriodStartAndEnd(
-        SLA(_slaAddress).periodType(),
-        _periodId
-    );
-
-    // Add period start and end as request parameters
-    request.add("period_start", StringUtils.uintToStr(periodStart));
-    request.add("period_end", StringUtils.uintToStr(periodEnd));
-
-    // Add the 'sla_address' parameter to the request
-    request.add('sla_address', StringUtils.addressToString(_slaAddress));
-
-    // Add the 'network_name' parameter to the request
-    request.add('network_name', StringUtils.bytes32ToStr(networkName));
-
-    // Add other OpenAI StatusPage specific request parameters if needed
-
-    // Sends the request with 0.1 LINK to the oracle contract
-    bytes32 requestId = sendChainlinkRequestTo(_oracle, request, _fee);
-
-    requests.push(requestId);
-
-    requestIdToSLIRequest[requestId] = SLIRequest({
-        slaAddress: _slaAddress,
-        periodId: _periodId
-    });
-
-    _requestsCounter += 1;
-    emit SLIRequested(_callerAddress, _requestsCounter, requestId);
-}
-
-    function fulfillSLI(bytes32 _requestId, uint256 _chainlinkResponse)
-        external
-        override
-        nonReentrant
-        recordChainlinkFulfillment(_requestId)
-    {
+    function fulfillSLI(
+        bytes32 _requestId,
+        uint256 _chainlinkResponse
+    ) external override nonReentrant recordChainlinkFulfillment(_requestId) {
         SLIRequest memory request = requestIdToSLIRequest[_requestId];
         emit SLIReceived(
             request.slaAddress,
@@ -167,11 +163,10 @@ function requestSLI(
         );
     }
 
-    function retryRequest(address _slaAddress, uint256 _periodId)
-        external
-        override
-        retryLock
-    {
+    function retryRequest(
+        address _slaAddress,
+        uint256 _periodId
+    ) external override retryLock {
         require(
             stakeRegistry.periodIsVerified(_slaAddress, _periodId),
             'StakeRegistry: not verified'
@@ -182,11 +177,10 @@ function requestSLI(
         requestSLI(_periodId, _slaAddress, false, msg.sender);
     }
 
-    function setChainlinkJobID(bytes32 _newJobId, uint256 _feeMultiplier)
-        external
-        override
-        onlyOwner
-    {
+    function setChainlinkJobID(
+        bytes32 _newJobId,
+        uint256 _feeMultiplier
+    ) external override onlyOwner {
         _jobId = _newJobId;
         _fee = _feeMultiplier * _baseFee;
         emit JobIdModified(msg.sender, _newJobId, _fee);
@@ -220,21 +214,15 @@ function requestSLI(
         return _fulfillsCounter;
     }
 
-    function lpSymbolSlaId(uint128 slaId)
-        external
-        view
-        override
-        returns (string memory)
-    {
+    function lpSymbolSlaId(
+        uint128 slaId
+    ) external view override returns (string memory) {
         return string(abi.encodePacked(lpSymbol, '-', Strings.toString(slaId)));
     }
 
-    function spSymbolSlaId(uint128 slaId)
-        external
-        view
-        override
-        returns (string memory)
-    {
+    function spSymbolSlaId(
+        uint128 slaId
+    ) external view override returns (string memory) {
         return string(abi.encodePacked(spSymbol, '-', Strings.toString(slaId)));
     }
 }

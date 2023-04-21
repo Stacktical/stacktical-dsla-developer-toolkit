@@ -5,10 +5,8 @@ import Web3 from 'web3';
 import { AbiItem } from 'web3-utils';
 import { SLAABI, MessengerABI } from './abis';
 
-// import { fetchOpenWeatherData, fetchWeatherbitData, fetchNoaaData, fetchWeatherSourceData } from './weather-data-sources';
-import { fetchWeatherSourceData } from './weather-data-sources';
-
-const networkName = process.env.NETWORK_NAME;
+// import { fetchVisualCrossingData, fetchOpenWeatherData, fetchWeatherbitData, fetchWeatherSourceData, fetchTomorrowIOData } from './weather-data-sources';
+import { fetchVisualCrossingData } from './weather-data-sources';
 
 type SLAData = {
     serviceName: string;
@@ -21,15 +19,29 @@ type SLAData = {
     serviceSliMockingPlan: Array<number>;
     periodType: number;
     messengerAddress: string;
+    coordinates: {
+        lat: number;
+        long: number;
+    };
+    maxDeviation: number;
 };
 
 async function getSLAData(address: string, networkName: string): Promise<SLAData> {
-    console.log('[SLA] networkName:', networkName);
+    console.log('[SLA] Contract address:', address); // Log the contract address
+    console.log('[SLA] Network name:', networkName); // Log the network name
     const web3 = new Web3(process.env[`${networkName.toUpperCase()}_URI`]);
     const slaContract = new web3.eth.Contract(SLAABI as AbiItem[], address);
-    const ipfsCID = await slaContract.methods.ipfsHash().call();
+    console.log('[SLA] Successfully instantiated web3 and slaContract variables'); // Log progress
+
     const periodType = await slaContract.methods.periodType().call();
+    console.log('[SLA] Period type:', periodType); // Log the period type
+
+    const ipfsCID = await slaContract.methods.ipfsHash().call();
+    console.log('[SLA] IPFS CID:', ipfsCID); // Log the IPFS CID
+
     const messengerAddress = await slaContract.methods.messengerAddress().call();
+    console.log('[SLA] Messenger address:', messengerAddress); // Log the messenger address
+
     const { data } = await axios.get(`${process.env.IPFS_GATEWAY_URI}/ipfs/${ipfsCID}`);
     return { ...data, periodType, messengerAddress };
 }
@@ -45,188 +57,118 @@ const app = express();
 app.use(express.json());
 
 async function fetchWeatherData(location, startDate, endDate) {
-    const history = await fetchWeatherSourceData({ location, startDate, endDate });
+    // Convert Unix timestamps to ISO date strings for weather API calls
+    const startDateISO = new Date(startDate * 1000).toISOString().split('T')[0];
+    const endDateISO = new Date(endDate * 1000).toISOString().split('T')[0];
 
-    console.log('[WEATHER] fetchWeatherData in index.ts:', { history });
+    const visualCrossingData = await fetchVisualCrossingData({ location, startDate: startDateISO, endDate: endDateISO });
+    // Add additional data source calls here
 
-    return { history };
+    console.log('[WEATHER] fetchVisualCrossingData in index.ts:', { visualCrossingData });
+
+    const weatherDataSources = [
+        visualCrossingData,
+    ];
+
+    return weatherDataSources;
 }
 
-/*
-function processDataAndCalculateSLI(weatherData, periodStart, periodEnd, precision, coverageType) {
-    const deviations = [];
-
-    // Calculate z-scores for each data source
-    const zScores = calculateZScores(weatherData);
-
-    console.log('[PROCESS] processDataAndCalculateSLI: zScores:', zScores);
-
-    for (const day in weatherData) {
-        const dailyDeviations = [];
-
-        for (const source in weatherData[day]) {
-            const deviation = zScores[day][source];
-            dailyDeviations.push(deviation);
-        }
-
-        // Calculate the weighted average of z-scores for the day
-        const weightedAvgZScore = calculateWeightedAverage(dailyDeviations);
-        deviations.push(weightedAvgZScore);
-    }
-
-    // Calculate the average deviation across all days in the vacation period
-    const avgDeviation = deviations.reduce((sum, deviation) => sum + deviation, 0) / deviations.length;
-
-    // Determine if the deviation meets the criteria for compensation
-    let compensation = false;
-
-    if (coverageType === 'tooCold' && avgDeviation < 0) {
-        compensation = true;
-    } else if (coverageType === 'tooHot' && avgDeviation > 0) {
-        compensation = true;
-    } else if (coverageType === 'both' && avgDeviation !== 0) {
-        compensation = true;
-    }
-
-    // Calculate the SLI based on the compensation status and the average deviation
-    const SLI = compensation ? precision * (1 + Math.abs(avgDeviation)) : precision * (1 - Math.abs(avgDeviation));
-
-    return SLI;
+function calculatePercentageDifference(actual: number, historical: number) {
+    return Math.abs(((actual - historical) / historical) * 100);
 }
 
-function calculateZScores(weatherData) {
-    const zScores = {};
-    const deviationsBySource = {};
+function processDataAndCalculateSLI(weatherDataSources: any[], messengerPrecision, slaData: SLAData) {
+    const totalDays = weatherDataSources[0].length;
+    const totalDataSources = weatherDataSources.length;
+    const maxDeviation = slaData.maxDeviation / messengerPrecision;
 
-    const historyData = weatherData.weatherSourceData.history;
+    console.log('[SLO] maxDeviation:', maxDeviation);
 
-    for (const day in historyData) {
-        zScores[day] = {};
+    const daysNotMetMaxDeviation = Array.from({ length: totalDays }, (_, i) => {
+        const dailyData = weatherDataSources.map(source => source[i]);
 
-        for (const source in historyData[day]) {
+        // Calculate the average of each parameter across all data sources
+        const avgActualTemperature = dailyData.reduce((sum, day) => sum + day.actualTemperature.avg, 0) / totalDataSources;
+        const avgActualPrecipitation = dailyData.reduce((sum, day) => sum + day.actualPrecipitation, 0) / totalDataSources;
+        const avgHistoricalTemperature = dailyData.reduce((sum, day) => sum + day.historicalTemperature.avg, 0) / totalDataSources;
+        const avgHistoricalPrecipitation = dailyData.reduce((sum, day) => sum + day.historicalPrecipitation, 0) / totalDataSources;
 
-            const historicalAvg = historyData[day][source].historicalAvg;
-            const dailyAvg = historyData[day][source].dailyAvg;
-            const deviation = dailyAvg - historicalAvg;
+        console.log('[SLI] readableDate:', new Date(dailyData[0].date).toLocaleDateString());
+        console.log('[SLI] rawDate:', dailyData[0].date);
+        console.log('[SLI] avgActualTemperature:', avgActualTemperature);
+        console.log('[SLI] avgActualPrecipitation:', avgActualPrecipitation);
+        console.log('[SLI] avgHistoricalTemperature:', avgHistoricalTemperature);
+        console.log('[SLI] avgHistoricalPrecipitation:', avgHistoricalPrecipitation);
 
-            if (!deviationsBySource[source]) {
-                deviationsBySource[source] = [];
-            }
+        // Calculate the percentage difference for temperature and precipitation
+        const temperatureDifference = calculatePercentageDifference(avgActualTemperature, avgHistoricalTemperature);
+        const precipitationDifference = calculatePercentageDifference(avgActualPrecipitation, avgHistoricalPrecipitation);
 
-            deviationsBySource[source].push(deviation);
-        }
-    }
+        console.log('[SLI] temperatureDifference:', temperatureDifference);
+        console.log('[SLI] precipitationDifference:', precipitationDifference);
 
-    const sourceStats = {};
+        // Check if the day met the maxDeviation parameter
+        // maxDeviation is the maximum variance from historical normal considered acceptable in the SLA
+        // Currently we check for days that were cooler by greater than maxDeviation or days that received more precipitation.
+        // if either is true, we consider the day as not meeting target performance
+        return (avgActualTemperature < avgHistoricalTemperature && temperatureDifference > maxDeviation) ||
+            (avgActualPrecipitation > avgHistoricalPrecipitation && precipitationDifference > maxDeviation);
+    }).reduce((count, notMetMaxDeviation) => count + (notMetMaxDeviation ? 1 : 0), 0);
 
-    for (const source in deviationsBySource) {
-        const mean = calculateMean(deviationsBySource[source]);
-        const standardDeviation = calculateStandardDeviation(deviationsBySource[source], mean);
+    console.log('[SLI] daysNotMetMaxDeviation:', daysNotMetMaxDeviation);
 
-        sourceStats[source] = { mean, standardDeviation };
-    }
+    // Calculate the SLI based on the number of days not meeting the SLO
+    const SLI = (daysNotMetMaxDeviation / totalDays) * 100;
 
-    console.log('[CALCULATE] sourceStats:', JSON.stringify(sourceStats, null, 2));
-    console.log('[CALCULATE] deviationsBySource:', JSON.stringify(deviationsBySource, null, 2));
+    console.log('[SLI] SLI:', SLI);
 
-    for (const day in historyData) {
-        for (const source in historyData[day]) {
-
-            if (sourceStats[source]) {
-                const { mean, standardDeviation } = sourceStats[source];
-                const deviation = historyData[day][source].dailyAvg - historyData[day][source].historicalAvg;
-
-                zScores[day][source] = (deviation - mean) / standardDeviation;
-            } else {
-                zScores[day][source] = null;
-            }
-        }
-    }
-
-    console.log('[CALCULATE] calculated zScores:', zScores);
-
-    return zScores;
-}
-*/
-
-function processDataAndCalculateSLI(weatherData, periodStart, periodEnd, precision, coverageType) {
-    const deviations = [];
-
-    // Calculate percentage deviations for each data source
-    console.log('[PROCESS] weatherData: ', weatherData);
-    for (const day in weatherData) {
-        const dailyDeviations = [];
-
-        for (const source in weatherData[day]) {
-
-            // console.log('[PROCESS] weatherData[day]: ', weatherData[day]);
-
-            const historicalAvg = weatherData[day][source].historicalAvg;
-            const dailyAvg = weatherData[day][source].dailyAvg;
-            const deviation = ((dailyAvg - historicalAvg) / historicalAvg) * 100;
-            dailyDeviations.push(deviation);
-        }
-
-        // Calculate the weighted average of percentage deviations for the day
-        const weightedAvgPercentageDeviation = calculateWeightedAverage(dailyDeviations);
-        deviations.push(weightedAvgPercentageDeviation);
-    }
-
-    // Calculate the average deviation across all days in the vacation period
-    const avgDeviation = deviations.reduce((sum, deviation) => sum + deviation, 0) / deviations.length;
-
-    return avgDeviation;
-}
-
-function calculateMean(data) {
-    const sum = data.reduce((a, b) => a + b, 0);
-    const mean = sum / data.length;
-    return mean;
-}
-
-function calculateStandardDeviation(data, mean) {
-    const squaredDifferences = data.map((value) => (value - mean) ** 2);
-    const meanOfSquaredDifferences = calculateMean(squaredDifferences);
-    const standardDeviation = Math.sqrt(meanOfSquaredDifferences);
-    return standardDeviation;
-}
-
-function calculateWeightedAverage(dailyDeviations) {
-    // Calculate the weighted average of deviations for the day
-    // This can be customized based on the reliability or quality of each data source
-    // For simplicity, I assume equal weights for all sources in this example
-    const sum = dailyDeviations.reduce((accumulator, deviation) => accumulator + deviation, 0);
-    return sum / dailyDeviations.length;
+    return Math.round(SLI * messengerPrecision);
 }
 
 app.post('/', async (req: Request, res: Response) => {
     try {
         const { data } = req.body;
-        const { period_start: periodStart, period_end: periodEnd, address: slaAddress, network_name: networkName, location, coverageType } = data;
+        const { period_start: periodStart, period_end: periodEnd, network_name: networkName, coverageType } = data;
 
         // Log entire request body
+        console.log(`[POST] Request received with periodStart: ${periodStart}, periodEnd: ${periodEnd}, networkName: ${networkName}, coverageType: ${coverageType}`);
         console.log('[POST] Request body:', req.body);
 
-        const slaData = await getSLAData(slaAddress, networkName);
-        const messengerPrecision = await getMessengerPrecision(slaData.messengerAddress, networkName);
+        const requestData = {
+            sla_address: data.sla_address,
+        };
 
-        const weatherData = await fetchWeatherData(location, periodStart, periodEnd);
+        const slaData = await getSLAData(requestData.sla_address, networkName);
+        console.log('[POST] SLA Data:', slaData);
+
+        const location = slaData.coordinates;
+        const locationString = `${slaData.coordinates.lat},${slaData.coordinates.long}`;
+        console.log('[POST] SLA Data retrieved with location:', location);
+        console.log('[POST] Location string conversion:', locationString);
+
+        const messengerPrecision = await getMessengerPrecision(slaData.messengerAddress, networkName);
+        console.log('[POST] Messenger Precision:', messengerPrecision);
+
+        const weatherData = await fetchWeatherData(locationString, periodStart, periodEnd);
 
         console.log("[POST] Fetched weather data:", weatherData);
 
-        const serviceQualityPercentage = processDataAndCalculateSLI(weatherData, periodStart, periodEnd, messengerPrecision, coverageType);
-        res.status(200).json({ data: { result: serviceQualityPercentage } });
+        const SLI = processDataAndCalculateSLI(weatherData, messengerPrecision, slaData);
+        console.log('[POST] Calculated SLI:', SLI);
+
+        res.status(200).json({ data: { result: SLI } });
     } catch (error: any) {
         console.error('Error:', error.message);
         res.status(500).json({ error: error.message });
     }
 });
 
+// Testing endpoint for use when adding new data sources to allow testing without full SLA / DTK deployment
 app.post('/test-sli', async (req: Request, res: Response) => {
     try {
         const { data } = req.body;
-        const { period_start: periodStart, period_end: periodEnd, location, coverageType } = data;
-        const precision = 1; // Replace with a suitable precision value for testing
+        const { period_start: periodStart, period_end: periodEnd, location, maxDeviation, coordinates, coverageType } = data;
+        const precision = 1000000; // Replace with a suitable precision value for testing
 
         console.log('[POST] Request body:', req.body);
 
@@ -234,8 +176,24 @@ app.post('/test-sli', async (req: Request, res: Response) => {
 
         console.log("[POST] Fetched weather data:", weatherData);
 
-        const serviceQualityPercentage = processDataAndCalculateSLI(weatherData, periodStart, periodEnd, precision, coverageType);
-        res.status(200).json({ data: { result: serviceQualityPercentage } });
+        // Create a custom slaData object using values from the request body
+        const customSLAData: SLAData = {
+            serviceName: "Test Service",
+            serviceDescription: "Test Service Description",
+            serviceImage: "",
+            serviceURL: "",
+            serviceAddress: "",
+            serviceTicker: "",
+            serviceUseTestExternalAdapter: false,
+            serviceSliMockingPlan: [],
+            periodType: 0,
+            messengerAddress: "",
+            coordinates: coordinates,
+            maxDeviation: maxDeviation,
+        };
+
+        const SLI = processDataAndCalculateSLI(weatherData, precision, customSLAData);
+        res.status(200).json({ data: { result: SLI } });
     } catch (error: any) {
         console.error('Error:', error.message);
         res.status(500).json({ error: error.message });
@@ -243,9 +201,7 @@ app.post('/test-sli', async (req: Request, res: Response) => {
 });
 
 const HOST = process.env.HOST || '0.0.0.0';
-// const PORT = Number(process.env.PORT) || 6070;
-const PORT = 3002;
-
+const PORT = Number(process.env.PORT) || 6070;
 
 app.listen(PORT, HOST, () => {
     console.log(`Server is running on port ${PORT}`);

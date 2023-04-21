@@ -13,6 +13,21 @@
   "useCaseDocs": "https://dsla.network/metaverse",
   "externalAdapterRepo": "https://github.com/Stacktical/",
   "unit": "%",
+  "location": {
+    "name": "Location",
+    "type": "string",
+    "description": "The human-readable location for the weather monitoring"
+  },
+  "coordinates": {
+    "name": "Coordinates",
+    "type": "object",
+    "description": "The latitude and longitude coordinates for the selected location weather monitoring"
+  },
+  "maxDeviation": {
+    "name": "Maximum Deviation",
+    "type": "number",
+    "description": "The maximum deviation from historical normal temperature and precipitation for the selected location"
+  },
   "keywords": [
     "fits",
     "travel",
