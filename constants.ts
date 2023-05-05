@@ -162,7 +162,7 @@ export const GRAPH_NETWORKS = {
   [NETWORKS.HARMONYTESTNET]: 'testnet',
   [NETWORKS.MUMBAI]: 'mumbai',
   [NETWORKS.POLYGON]: 'polygon',
-  [NETWORKS.POLYGONV2]: 'polygon',
+  [NETWORKS.POLYGONV2]: 'matic',
   [NETWORKS.AVALANCHE]: 'avalanche',
   [NETWORKS.AVALANCHEV2]: 'avalanche',
   [NETWORKS.ARBITRUMNOVA]: 'arbitrumnova',
