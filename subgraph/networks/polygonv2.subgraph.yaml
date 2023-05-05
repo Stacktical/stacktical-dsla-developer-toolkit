@@ -1,4 +1,4 @@
-specVersion: 0.0.4
+specVersion: 0.0.3
 description: DSLA protocol
 repository: https://github.com/Stacktical/stacktical-dsla-contracts
 schema:
@@ -13,7 +13,7 @@ dataSources:
       abi: SLARegistry
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - SLA
@@ -35,7 +35,7 @@ dataSources:
       abi: SLORegistry
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - SLA
@@ -57,7 +57,7 @@ dataSources:
       abi: StakeRegistry
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - StakeRegistry
@@ -79,7 +79,7 @@ dataSources:
       abi: MessengerRegistry
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
         - MessengerRegistry
@@ -103,7 +103,7 @@ templates:
       abi: SLA
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ../mapping.ts
       entities:

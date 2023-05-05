@@ -166,7 +166,7 @@ export const GRAPH_NETWORKS = {
   [NETWORKS.AVALANCHE]: 'avalanche',
   [NETWORKS.AVALANCHEV2]: 'avalanche',
   [NETWORKS.ARBITRUMNOVA]: 'arbitrumnova',
-  [NETWORKS.ARBITRUMV2]: 'arbitrum',
+  [NETWORKS.ARBITRUMV2]: 'arbitrum-one',
   [NETWORKS.ARBITRUMTESTNET]: 'arbitrumtestnet',
   [NETWORKS.KOVAN]: 'kovan',
   [NETWORKS.FUJI]: 'fuji',
