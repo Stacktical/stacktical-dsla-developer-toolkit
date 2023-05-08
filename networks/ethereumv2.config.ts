@@ -126,6 +126,11 @@ export const ethereumv2: NetworkUserConfig = {
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
+        {
+          contract: CONTRACT_NAMES.L2UptimeOracle,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
       ],
       registry: {
         periods: [
@@ -199,6 +204,15 @@ export const ethereumv2: NetworkUserConfig = {
         dslaLpSymbol: SERVICE_CREDITS.ASSET_PEG.DSLA_LP.symbol,
         dslaSpName: SERVICE_CREDITS.ASSET_PEG.DSLA_SP.name,
         dslaSpSymbol: SERVICE_CREDITS.ASSET_PEG.DSLA_SP.symbol,
+      },
+      {
+        contract: CONTRACT_NAMES.L2UptimeOracle,
+        useCaseName: USE_CASES.L2_UPTIME,
+        externalAdapterUrl: process.env.L2_UPTIME_ADAPTER,
+        dslaLpName: SERVICE_CREDITS.L2_UPTIME.DSLA_LP.name,
+        dslaLpSymbol: SERVICE_CREDITS.L2_UPTIME.DSLA_LP.symbol,
+        dslaSpName: SERVICE_CREDITS.L2_UPTIME.DSLA_SP.name,
+        dslaSpSymbol: SERVICE_CREDITS.L2_UPTIME.DSLA_SP.symbol,
       },
     ],
     scripts: scripts,

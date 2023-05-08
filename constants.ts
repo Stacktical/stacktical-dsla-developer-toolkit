@@ -43,6 +43,7 @@ export enum CONTRACT_NAMES {
   StakingUptimeOracle = 'StakingUptimeOracle',
   InflationOracle = 'InflationOracle',
   StakingParametricOracle = 'StakingParametricOracle',
+  L2UptimeOracle = 'L2UptimeOracle',
 }
 
 export enum TOKEN_NAMES {
@@ -77,6 +78,7 @@ export enum USE_CASES {
   ASSET_FLOOR = 'asset-floor',
   INFLATION = 'inflation-rate',
   STAKING_PARAMETRIC = 'staking-parametric',
+  L2_UPTIME = 'l2-uptime',
 }
 
 export const STAKING_REWARDS_SPECS = JSON.parse(
@@ -118,6 +120,13 @@ const STAKING_PARAMETRIC_SPECS = JSON.parse(
   // @ts-ignore
   fs.readFileSync(
     `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_PARAMETRIC}/use-case-spec.json`
+  )
+);
+
+const L2_UPTIME_SPECS = JSON.parse(
+  // @ts-ignore
+  fs.readFileSync(
+    `${appRoot.path}/contracts/messengers/${USE_CASES.L2_UPTIME}/use-case-spec.json`
   )
 );
 
@@ -265,6 +274,16 @@ export const SERVICE_CREDITS = {
     DSLA_SP: {
       name: STAKING_PARAMETRIC_SPECS.sp.name,
       symbol: STAKING_PARAMETRIC_SPECS.sp.symbol,
+    },
+  },
+  L2_UPTIME: {
+    DSLA_LP: {
+      name: L2_UPTIME_SPECS.lp.name,
+      symbol: L2_UPTIME_SPECS.lp.symbol,
+    },
+    DSLA_SP: {
+      name: L2_UPTIME_SPECS.sp.name,
+      symbol: L2_UPTIME_SPECS.sp.symbol,
     },
   },
 };
