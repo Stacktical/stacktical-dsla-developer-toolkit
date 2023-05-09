@@ -1835,29 +1835,28 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       );
 
       try {
-      const wstethTokenArtifact = await get(CONTRACT_NAMES.WSTETH);
+        const wstethTokenArtifact = await get(CONTRACT_NAMES.WSTETH);
+        const wstethTokenConfig = stacktical.tokens.find(
+          (token) => token.name === TOKEN_NAMES.WSTETH
+        );
+
+        const wstethToken = await wstethTokenConfig.factory.connect(
+          wstethTokenArtifact.address,
+          signer
+        );
+
+        const wethTokenArtifact = await get(CONTRACT_NAMES.WETH);
+
+        const wethTokenConfig = stacktical.tokens.find(
+          (token) => token.name === TOKEN_NAMES.WETH
+        );
+        const wethToken = await wethTokenConfig.factory.connect(
+          wethTokenArtifact.address,
+          signer
+        );
       } catch (e) {
         console.log('WSTETH not deployed yet or not defined in network config');
       }
-      
-      const wstethTokenConfig = stacktical.tokens.find(
-        (token) => token.name === TOKEN_NAMES.WSTETH
-      );
-
-      const wstethToken = await wstethTokenConfig.factory.connect(
-        wstethTokenArtifact.address,
-        signer
-      );
-
-      const wethTokenArtifact = await get(CONTRACT_NAMES.WETH);
-
-      const wethTokenConfig = stacktical.tokens.find(
-        (token) => token.name === TOKEN_NAMES.WETH
-      );
-      const wethToken = await wethTokenConfig.factory.connect(
-        wethTokenArtifact.address,
-        signer
-      );
 
       const stakeRegistry = await StakeRegistry__factory.connect(
         stakeRegistryArtifact.address,
