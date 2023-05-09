@@ -114,7 +114,6 @@ export const develop: NetworkUserConfig = {
         },
         {
           contract: CONTRACT_NAMES.L2UptimeOracle,
-          contract: CONTRACT_NAMES.OpenAIStatusPageOracle,
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
