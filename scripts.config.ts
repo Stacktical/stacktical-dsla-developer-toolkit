@@ -22,6 +22,13 @@ const StakingParametricMessengerSpec = JSON.parse(
   )
 );
 
+const AssetFloorOracleSpecs = JSON.parse(
+  // @ts-ignore
+  fs.readFileSync(
+    `${appRoot.path}/contracts/messengers/${USE_CASES.ASSET_FLOOR}/use-case-spec.json`
+  )
+);
+
 export const scripts: ScriptsConfiguration = {
   deploy_sla: [
     // INDEX 0 | Should be BREACHED
@@ -764,6 +771,242 @@ export const scripts: ScriptsConfiguration = {
         serviceUseTestExternalAdapter: false,
         serviceSliMockingPlan: [1000, 100000, 250000],
         ...StakingParametricMessengerSpec,
+      },
+    },
+    // INDEX 26, Contract for 1st official NFT listing (DSLA Astromancer)
+    {
+      sloValue: 0.075,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.WEEKLY,
+      messengerContract: CONTRACT_NAMES.AssetFloorOracle,
+      initialPeriodId: 13, // 09/01/2023 00:00:00
+      finalPeriodId: 17, // 06/02/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'DSLA Astromancers',
+        serviceDescription:
+          '10,000 unique collectibles on the Ethereum blockchain. Official DSLA collection.',
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/collections/astromancer.jpg',
+        serviceURL: 'https://dsla.network/metaverse',
+        serviceAddress: '0xd88329bF3b7776Bff90D0c942F160Cb55bf5BaeC',
+        serviceTicker: 'ASTRO',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+        ...AssetFloorOracleSpecs,
+      },
+    },
+    // INDEX 27, Contract for 1st official NFT listing (BAYC)
+    {
+      sloValue: 80,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.WEEKLY,
+      messengerContract: CONTRACT_NAMES.AssetFloorOracle,
+      initialPeriodId: 11, // 09/01/2023 00:00:00
+      finalPeriodId: 15, // 06/02/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Bored Ape Yacht Club',
+        serviceDescription:
+          '10,000 unique collectibles on the Ethereum blockchain.',
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/collections/bayc.jpg',
+        serviceURL: 'https://boredapeyachtclub.com/',
+        serviceAddress: '0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D',
+        serviceTicker: 'BAYC',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+        ...AssetFloorOracleSpecs,
+      },
+    },
+    // INDEX 28, Contract for 1st official NFT listing (MAYC)
+    {
+      sloValue: 18,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.WEEKLY,
+      messengerContract: CONTRACT_NAMES.AssetFloorOracle,
+      initialPeriodId: 11, // 09/01/2023 00:00:00
+      finalPeriodId: 15, // 06/02/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Mutant Ape Yacht Club',
+        serviceDescription:
+          '20,000 unique collectibles on the Ethereum blockchain.',
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/collections/mayc.jpg',
+        serviceURL: 'https://boredapeyachtclub.com/',
+        serviceAddress: '0x60E4d786628Fea6478F785A6d7e704777c86a7c6',
+        serviceTicker: 'MAYC',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+        ...AssetFloorOracleSpecs,
+      },
+    },
+    // INDEX 29, Contract for 1st official NFT listing (Azuki)
+    {
+      sloValue: 18,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.WEEKLY,
+      messengerContract: CONTRACT_NAMES.AssetFloorOracle,
+      initialPeriodId: 11, // 09/01/2023 00:00:00
+      finalPeriodId: 15, // 06/02/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Azuki',
+        serviceDescription:
+          '10,000 unique collectibles on the Ethereum blockchain.',
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/collections/azuki.jpg',
+        serviceURL: 'https://www.azuki.com/',
+        serviceAddress: '0xED5AF388653567Af2F388E6224dC7C4b3241C544',
+        serviceTicker: 'AZUKI',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+        ...AssetFloorOracleSpecs,
+      },
+    },
+    // INDEX 30, Contract for 1st official NFT listing (Pudgy Penguins)
+    {
+      sloValue: 7,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.WEEKLY,
+      messengerContract: CONTRACT_NAMES.AssetFloorOracle,
+      initialPeriodId: 11, // 09/01/2023 00:00:00
+      finalPeriodId: 15, // 06/02/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Pudgy Penguins',
+        serviceDescription:
+          '8,888 unique collectibles on the Ethereum blockchain.',
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/collections/pudgypenguins.jpg',
+        serviceURL: 'https://www.pudgypenguins.com/',
+        serviceAddress: '0xBd3531dA5CF5857e7CfAA92426877b022e612cf8',
+        serviceTicker: 'PPG',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+        ...AssetFloorOracleSpecs,
+      },
+    },
+    // INDEX 31, Contract for 1st official LSD listing (stETH)
+    {
+      sloValue: 99,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.AssetPegOracle,
+      initialPeriodId: 4, // 03/01/2023 00:00:00
+      finalPeriodId: 7, // 06/01/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'stETH by Lido',
+        serviceDescription:
+          'stETH is a liquid staking derivative (LSD) by Lido pegged 1:1 against ETH.',
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/services/LIDO.png',
+        serviceURL: 'https://lido.fi/',
+        serviceAddress: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
+        serviceTicker: 'stETH',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+      },
+    },
+    // INDEX 32, Contract for 1st official LSD listing (frxETH)
+    {
+      sloValue: 99,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.AssetPegOracle,
+      initialPeriodId: 4, // 03/01/2023 00:00:00
+      finalPeriodId: 7, // 06/01/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'frxETH by Frax',
+        serviceDescription:
+          'frxETH is an liquid staking derivative (LSD) by Frax pegged 1:1 against ETH.',
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/services/FRAX.svg',
+        serviceURL: 'https://frax.finance/',
+        serviceAddress: '0x5E8422345238F34275888049021821E8E08CAa1f',
+        serviceTicker: 'frxETH',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+      },
+    },
+    // INDEX 33, Contract for 1st official stablecoin listing (BUSD)
+    {
+      sloValue: 99,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.AssetPegOracle,
+      initialPeriodId: 4, // 03/01/2023 00:00:00
+      finalPeriodId: 7, // 06/01/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Binance USD',
+        serviceDescription: 'BUSD is an USD stablecoin issued by Paxos and used by the Binance exchange.',
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/currencies/BUSD.svg',
+        serviceURL: 'https://paxos.com/',
+        serviceAddress: '0x4Fabb145d64652a948d72533023f6E7A623C7C53',
+        serviceTicker: 'BUSD',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
       },
     },
   ],

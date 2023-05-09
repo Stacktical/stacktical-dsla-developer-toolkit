@@ -1,0 +1,23 @@
+{
+  "useCaseName": "L2 Sequencer Uptime",
+  "symbol": "xUPTIME",
+  "sp": {
+    "name": "Uptime Service Credit",
+    "symbol": "xUPTIME"
+  },
+  "lp": {
+    "name": "Uptime Service Credit",
+    "symbol": "xUPTIME-LP"
+  },
+  "ownerUrl": "https://dsla.network",
+  "useCaseDocs": "https://dsla.network/metaverse",
+  "externalAdapterRepo": "https://github.com/Stacktical/",
+  "unit": "Ξ",
+  "keywords": ["l2", "sequencer", "uptime"],
+  "timestamp": "2023-03-09T00:00:00+00:00",
+  "version": {
+    "major": 0,
+    "minor": 0,
+    "patch": 2
+  }
+}

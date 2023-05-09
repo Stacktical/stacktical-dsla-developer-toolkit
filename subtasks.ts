@@ -70,6 +70,7 @@ const Mustache = require('mustache');
 
 export enum SUB_TASK_NAMES {
   PREPARE_CHAINLINK_NODES = 'PREPARE_CHAINLINK_NODES',
+  CHAINLINK_NODES_AUTH = 'CHAINLINK_NODES_AUTH',
   SETUP_DOCKER_COMPOSE = 'SETUP_DOCKER_COMPOSE',
   STOP_LOCAL_CHAINLINK_NODES = 'STOP_LOCAL_CHAINLINK_NODES',
   START_LOCAL_CHAINLINK_NODES = 'START_LOCAL_CHAINLINK_NODES',
@@ -701,6 +702,72 @@ subtask(SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES, undefined).setAction(
       printSeparator();
     }
     console.log('Automated configuration finished for all nodes');
+  }
+);
+
+subtask(SUB_TASK_NAMES.CHAINLINK_NODES_AUTH, undefined).setAction(
+  async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    const { deployments, network, ethers, getNamedAccounts, web3 } = hre;
+    const { deployer } = await getNamedAccounts();
+    const { get } = deployments;
+    const { stacktical } = network.config;
+    const oracle = await get(CONTRACT_NAMES.Oracle);
+    function wait(timeout) {
+      return new Promise((resolve) => {
+        setTimeout(resolve, timeout);
+      });
+    }
+
+    let chainlinkNodeAddress = taskArgs.node;
+    console.log('Getting authorization status of ', chainlinkNodeAddress);
+
+    // Authorize node
+    const oracleContract = Oracle__factory.connect(
+      oracle.address,
+      await ethers.getSigner(deployer)
+    );
+    let permissions = await oracleContract.getAuthorizationStatus(
+      chainlinkNodeAddress
+    );
+
+    if (!permissions) {
+      console.log('Need to set permissions for this node.');
+
+      const gasEstimated =
+        await oracleContract.estimateGas.setFulfillmentPermission(
+          chainlinkNodeAddress,
+          true
+        );
+
+      let gas = {};
+
+      if (hre.network.config.chainId == 137) {
+        gas = await polygonGasEstimate(gasEstimated);
+      }
+
+      const tx = await oracleContract.setFulfillmentPermission(
+        chainlinkNodeAddress,
+        true,
+        {
+          ...(hre.network.config.gas !== 'auto' &&
+            hre.network.config.chainId != 137 && {
+              gasLimit: hre.network.config.gas,
+            }),
+          ...(hre.network.config.gas !== 'auto' &&
+            hre.network.config.chainId == 137 &&
+            gas),
+        }
+      );
+      await tx.wait();
+      console.log('Setting permissions...');
+    }
+
+    permissions = await oracleContract.getAuthorizationStatus(
+      chainlinkNodeAddress
+    );
+
+    console.log(`Chainlink Node Fullfillment permissions: ${permissions}`);
+    printSeparator();
   }
 );
 
@@ -1422,7 +1489,29 @@ subtask(SUB_TASK_NAMES.GET_START_STOP_PERIODS, undefined).setAction(
         '\n From ',
         periodStartsDate.at(0),
         '\n Until',
-        periodEndsDate.at(-1)
+        periodEndsDate.at(-1),
+        '\n',
+        periodDefinitions.reduce(
+          (r, definition, index) => ({
+            ...r,
+            [PERIOD_TYPE[index]]: {
+              initialized: definition.initialized,
+              starts: definition.starts.map((start) =>
+                moment(Number(start.toString()) * 1000)
+                  .utc(0)
+                  .format('DD/MM/YYYY HH:mm:ss')
+              ),
+              startsUnix: definition.starts.map((start) => start.toString()),
+              ends: definition.ends.map((end) =>
+                moment(Number(end.toString()) * 1000)
+                  .utc(0)
+                  .format('DD/MM/YYYY HH:mm:ss')
+              ),
+              endsUnix: definition.ends.map((end) => end.toString()),
+            },
+          }),
+          {}
+        )
       );
     }
   }
@@ -1744,6 +1833,31 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
         dslaTokenArtifact.address,
         signer
       );
+
+      try {
+        const wstethTokenArtifact = await get(CONTRACT_NAMES.WSTETH);
+        const wstethTokenConfig = stacktical.tokens.find(
+          (token) => token.name === TOKEN_NAMES.WSTETH
+        );
+
+        const wstethToken = await wstethTokenConfig.factory.connect(
+          wstethTokenArtifact.address,
+          signer
+        );
+
+        const wethTokenArtifact = await get(CONTRACT_NAMES.WETH);
+
+        const wethTokenConfig = stacktical.tokens.find(
+          (token) => token.name === TOKEN_NAMES.WETH
+        );
+        const wethToken = await wethTokenConfig.factory.connect(
+          wethTokenArtifact.address,
+          signer
+        );
+      } catch (e) {
+        console.log('WSTETH not deployed yet or not defined in network config');
+      }
+
       const stakeRegistry = await StakeRegistry__factory.connect(
         stakeRegistryArtifact.address,
         signer
@@ -1801,48 +1915,49 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
       console.log(`SLA address: ${slaAddresses[slaAddresses.length - 1]}`);
 
       tx = await sla.addAllowedTokens(dslaToken.address);
+      // tx = await sla.addAllowedTokens(wethToken.address);
       await tx.wait();
 
-      // console.log('Starting process 3: Stake on Provider and User pools');
-      // const deployerStake = stakeAmountTimesWei(deployerStakeTimes);
-      // console.log(
-      //   `Starting process 3.1: Provider: ${fromWei(deployerStake)} DSLA`
-      // );
-      // tx = await dslaToken.approve(sla.address, deployerStake);
-      // await tx.wait();
-      // enum Position {
-      //   LONG,
-      //   SHORT,
-      // }
-      // if (deployerStake !== '0') {
-      //   tx = await sla.stakeTokens(
-      //     deployerStake,
-      //     dslaToken.address,
-      //     Position.LONG
-      //   );
-      //   await tx.wait();
-      // }
-      // const notDeployerBalance = await dslaToken.callStatic.balanceOf(
-      //   notDeployer
-      // );
-      // const notDeployerStake = stakeAmountTimesWei(notDeployerStakeTimes);
-      // if (fromWei(notDeployerStake) > fromWei(notDeployerBalance.toString())) {
-      //   tx = await dslaToken.transfer(notDeployer, notDeployerStake);
-      //   await tx.wait();
-      // }
-      // console.log(
-      //   `Starting process 3.2: User: ${fromWei(notDeployerStake)} DSLA`
-      // );
-      // tx = await dslaToken
-      //   .connect(await ethers.getSigner(notDeployer))
-      //   .approve(sla.address, notDeployerStake);
-      // await tx.wait();
-      // if (notDeployerStake !== '0') {
-      //   tx = await sla
-      //     .connect(await ethers.getSigner(notDeployer))
-      //     .stakeTokens(notDeployerStake, dslaToken.address, Position.SHORT);
-      //   await tx.wait();
-      // }
+      console.log('Starting process 3: Stake on Provider and User pools');
+      const deployerStake = stakeAmountTimesWei(deployerStakeTimes);
+      console.log(
+        `Starting process 3.1: Provider: ${fromWei(deployerStake)} DSLA`
+      );
+      tx = await dslaToken.approve(sla.address, deployerStake);
+      await tx.wait();
+      enum Position {
+        LONG,
+        SHORT,
+      }
+      if (deployerStake !== '0') {
+        tx = await sla.stakeTokens(
+          deployerStake,
+          dslaToken.address,
+          Position.LONG
+        );
+        await tx.wait();
+      }
+      const notDeployerBalance = await dslaToken.callStatic.balanceOf(
+        notDeployer
+      );
+      const notDeployerStake = stakeAmountTimesWei(notDeployerStakeTimes);
+      if (fromWei(notDeployerStake) > fromWei(notDeployerBalance.toString())) {
+        tx = await dslaToken.transfer(notDeployer, notDeployerStake);
+        await tx.wait();
+      }
+      console.log(
+        `Starting process 3.2: User: ${fromWei(notDeployerStake)} DSLA`
+      );
+      tx = await dslaToken
+        .connect(await ethers.getSigner(notDeployer))
+        .approve(sla.address, notDeployerStake);
+      await tx.wait();
+      if (notDeployerStake !== '0') {
+        tx = await sla
+          .connect(await ethers.getSigner(notDeployer))
+          .stakeTokens(notDeployerStake, dslaToken.address, Position.SHORT);
+        await tx.wait();
+      }
       printSeparator();
     }
     console.log('SLA deployment process finished');
