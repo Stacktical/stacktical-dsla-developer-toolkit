@@ -1,6 +1,6 @@
 # export DEVELOP_IPFS_URI="https://api.thegraph.com/ipfs/"
 export DEVELOP_IPFS_URI="https://api.thegraph.com/ipfs/"
-export DEVELOP_GRAPH_NODE="http://127.0.0.1:8020"
+export DEVELOP_GRAPH_NODE="https://ethv2.graph.node.dsla.network/"
 
 npx hardhat stacktical:graph-manifestos
 

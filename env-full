@@ -51,6 +51,8 @@ INFLATION_ADAPTER="http://host.docker.internal:6070"
 ASSET_FLOOR_ADAPTER="http://host.docker.internal:6070"
 ASSET_PEG_ADAPTER="http://host.docker.internal:6070"
 STAKING_PARAMETRIC_ADAPTER="http://host.docker.internal:6070"
+STATUSPAGE_SERVICE_ADAPTER="http://host.docker.internal:6070"
+L2_UPTIME_ADAPTER="http://host.docker.internal:6070"
 
 ## Chainlink nodes
 ETHEREUM_CHAINLINK_NODE_1_URL="http://localhost"
@@ -97,6 +99,11 @@ AVALANCHE_CHAINLINK_NODE_1_URL="http://localhost"
 AVALANCHE_CHAINLINK_NODE_1_PORT="1234"
 AVALANCHE_CHAINLINK_NODE_1_USER="user@mail.com"
 AVALANCHE_CHAINLINK_NODE_1_PASS="password"
+
+AVALANCHEV2_CHAINLINK_NODE_1_URL="http://localhost"
+AVALANCHEV2_CHAINLINK_NODE_1_PORT="1234"
+AVALANCHEV2_CHAINLINK_NODE_1_USER="user@mail.com"
+AVALANCHEV2_CHAINLINK_NODE_1_PASS="password"
 
 BSC_CHAINLINK_NODE_2_URL="http://localhost"
 BSC_CHAINLINK_NODE_2_PORT="1234"

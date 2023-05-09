@@ -1,23 +1,23 @@
 {
   "useCaseName": "Digital Asset Floor",
-  "symbol": "FLOOR",
+  "symbol": "xFLOOR",
   "sp": {
     "name": "Floor Service Credit",
-    "symbol": "🔻FLOOR"
+    "symbol": "xFLOOR"
   },
   "lp": {
     "name": "Floor Service Credit",
-    "symbol": "🔺FLOOR"
+    "symbol": "xFLOOR-LP"
   },
   "ownerUrl": "https://dsla.network",
   "useCaseDocs": "https://dsla.network/metaverse",
   "externalAdapterRepo": "https://github.com/Stacktical/",
-  "unit": "%",
-  "keywords": ["nft", "floor"],
-  "timestamp": "2022-03-18T00:00:00+00:00",
+  "unit": "Ξ",
+  "keywords": ["nft", "floor", "price"],
+  "timestamp": "2023-01-09T00:00:00+00:00",
   "version": {
     "major": 0,
     "minor": 0,
-    "patch": 1
+    "patch": 2
   }
 }

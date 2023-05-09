@@ -17,6 +17,7 @@ export enum TASK_NAMES {
   SET_PRECOORDINATOR = 'stacktical:set-precoordinator',
   CHAINLINK_DOCKER_COMPOSE = 'stacktical:chainlink-docker-compose',
   PREPARE_CHAINLINK_NODES = 'stacktical:prepare-chainlink-nodes',
+  CHAINLINK_NODES_AUTH = 'stacktical:chainlink-nodes-auth',
   FULFILL_SLI = 'stacktical:fulfill-sli',
   INITIALIZE_DEFAULT_ADDRESSES = 'stacktical:initialize-addresses',
   RESTART_CHAINLINK_NODES = 'stacktical:restart-chainlink-nodes',
@@ -199,6 +200,15 @@ task(
 });
 
 task(
+  TASK_NAMES.CHAINLINK_NODES_AUTH,
+  'Get Chainlink nodes authorization status'
+)
+  .addParam(PARAMS_NAMES.CHAINLINK_NODE_WALLET, 'The Chainlink node wallet')
+  .setAction(async (taskArgs, { run }) => {
+    await run(SUB_TASK_NAMES.CHAINLINK_NODES_AUTH, taskArgs);
+  });
+
+task(
   TASK_NAMES.RESTART_SERVICES,
   'Deploy or reset the local services (IPFS, Ganache, Graph protocol node)'
 ).setAction(async (_, { run }) => {
@@ -330,7 +340,7 @@ task(TASK_NAMES.GET_REVERT_MESSAGE, 'Get revert message for transaction hash')
     await hre.run(SUB_TASK_NAMES.GET_REVERT_MESSAGE, taskArgs);
   });
 
-task(TASK_NAMES.DEPLOY_MESSENGER, 'deploy a messenger in the MessengerRegistry')
+task(TASK_NAMES.DEPLOY_MESSENGER, 'Deploy a messenger in the MessengerRegistry')
   .addParam(
     PARAMS_NAMES.INDEX,
     'Id of the messenger on the messengers list of the network config'

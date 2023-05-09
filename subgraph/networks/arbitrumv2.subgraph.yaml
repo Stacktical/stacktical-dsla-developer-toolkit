@@ -6,7 +6,7 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: SLARegistry
-    network: arbitrum
+    network: arbitrum-one
     source:
       address: "0x38b0cd8BB4C4608E32EE75b25A8846459cEAd513"
       startBlock: 33078752
@@ -28,7 +28,7 @@ dataSources:
       file: ../mapping.ts
   - kind: ethereum/contract
     name: SLORegistry
-    network: arbitrum
+    network: arbitrum-one
     source:
       address: "0x837Def7a9AA8FC9480d3f5bC1D61aF276eEEfE73"
       startBlock: 33078709
@@ -50,7 +50,7 @@ dataSources:
       file: ../mapping.ts
   - kind: ethereum/contract
     name: StakeRegistry
-    network: arbitrum
+    network: arbitrum-one
     source:
       address: "0x834B065cf4Ac904E4bFfd983Ec2b2A6c8Af8AD7E"
       startBlock: 33078736
@@ -72,7 +72,7 @@ dataSources:
       file: ../mapping.ts
   - kind: ethereum/contract
     name: MessengerRegistry
-    network: arbitrum
+    network: arbitrum-one
     source:
       address: "0xfFC6DC11002A688F7995Fb1CA85232c939b0139D"
       startBlock: 33078722
@@ -98,7 +98,7 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: SLA
-    network: arbitrum
+    network: arbitrum-one
     source:
       abi: SLA
     mapping:
