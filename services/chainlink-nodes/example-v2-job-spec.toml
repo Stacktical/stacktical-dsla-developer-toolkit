@@ -3,7 +3,7 @@ schemaVersion = 1
 name = "StakingParametricReq"
 forwardingAllowed = false
 maxTaskDuration = "0s"
-contractAddress = "0x6Dc1147ca16C020579642D90042CeA252474fD67"
+contractAddress = "0xFooBar"
 minContractPaymentLinkJuels = "0"
 observationSource = """
     decode_log   [type=ethabidecodelog
@@ -18,6 +18,6 @@ observationSource = """
                   abi="fulfillOracleRequest(bytes32 requestId, uint256 payment, address callbackAddress, bytes4 callbackFunctionId, uint256 expiration, bytes32 data)"
                   data="{\\"requestId\\": $(decode_log.requestId), \\"payment\\": $(decode_log.payment), \\"callbackAddress\\": $(decode_log.callbackAddr), \\"callbackFunctionId\\": $(decode_log.callbackFunctionId), \\"expiration\\": $(decode_log.cancelExpiration), \\"data\\": $(encode_data)}"
                  ]
-    submit_tx    [type=ethtx to="0x6Dc1147ca16C020579642D90042CeA252474fD67" data="$(encode_tx)"]
+    submit_tx    [type=ethtx to="0xFooBar" data="$(encode_tx)"]
     decode_log -> decode_cbor -> fetch -> parse -> encode_data -> encode_tx -> submit_tx
 """
