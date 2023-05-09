@@ -58,15 +58,15 @@ export function handleNewSLA(event: SLACreated): void {
   sla.finished = slaContract.contractFinished();
   sla.save();
   SLATemplate.create(event.params.sla);
-  let user = User.load(event.params.owner.toHexString());
-  if (!user) {
-    user = new User(event.params.owner.toHexString());
-  }
-  if (!user.slas) {
-    user.slas = [];
-  }
-  user.slas = user.slas!.concat([sla.id]);
-  user.save();
+  // let user = User.load(event.params.owner.toHexString());
+  // if (!user) {
+  //   user = new User(event.params.owner.toHexString());
+  // }
+  // if (!user.slas) {
+  //   user.slas = [];
+  // }
+  // user.slas = user.slas!.concat([sla.id]);
+  // user.save();
 }
 
 export function handleSLICreated(event: SLICreated): void {
@@ -117,15 +117,15 @@ export function handleStake(event: Stake): void {
   }
   sla.stakersCount = slaContract.getStakersLength();
   sla.save();
-  let user = User.load(event.params.caller.toHexString());
-  if (!user) {
-    user = new User(event.params.caller.toHexString());
-  }
-  if (!user.deposits) {
-    user.deposits = [];
-  }
-  user.deposits = user.deposits!.concat([deposit.id]);
-  user.save();
+  // let user = User.load(event.params.caller.toHexString());
+  // if (!user) {
+  //   user = new User(event.params.caller.toHexString());
+  // }
+  // if (!user.deposits) {
+  //   user.deposits = [];
+  // }
+  // user.deposits = user.deposits!.concat([deposit.id]);
+  // user.save();
 
   let dpTokenAddress = slaContract.dpTokenRegistry(event.params.tokenAddress);
   let dpTokenContract = ERC20.bind(dpTokenAddress);
@@ -139,13 +139,13 @@ export function handleStake(event: Stake): void {
   duToken.totalSupply = duTokenContract.totalSupply();
   duToken.save();
 
-  let tvl = TVL.load(event.params.tokenAddress.toHexString());
-  if (!tvl) {
-    tvl = new TVL(event.params.tokenAddress.toHexString());
-  }
-  tvl.amount = tvl.amount!.plus(event.params.amount);
-  tvl.deposits = tvl.deposits!.concat([deposit.id]);
-  tvl.save();
+  // let tvl = TVL.load(event.params.tokenAddress.toHexString());
+  // if (!tvl) {
+  //   tvl = new TVL(event.params.tokenAddress.toHexString());
+  // }
+  // tvl.amount = tvl.amount!.plus(event.params.amount);
+  // tvl.deposits = tvl.deposits!.concat([deposit.id]);
+  // tvl.save();
 }
 
 export function handleProviderWithdraw(event: ProviderWithdraw): void {
@@ -170,12 +170,12 @@ export function handleProviderWithdraw(event: ProviderWithdraw): void {
     sla.maxHedge = BigInt.fromI32(0);
   }
   sla.save();
-  let user = User.load(event.params.caller.toHexString());
-  if (!user) {
-    user = new User(event.params.caller.toHexString());
-  }
-  user.withdrawals = user.withdrawals!.concat([withdrawal.id]);
-  user.save();
+  // let user = User.load(event.params.caller.toHexString());
+  // if (!user) {
+  //   user = new User(event.params.caller.toHexString());
+  // }
+  // user.withdrawals = user.withdrawals!.concat([withdrawal.id]);
+  // user.save();
 
   let dpTokenAddress = slaContract.dpTokenRegistry(event.params.tokenAddress);
   let dpTokenContract = ERC20.bind(dpTokenAddress);
@@ -183,16 +183,16 @@ export function handleProviderWithdraw(event: ProviderWithdraw): void {
   dpToken.totalSupply = dpTokenContract.totalSupply();
   dpToken.save();
 
-  let tvl = TVL.load(event.params.tokenAddress.toHexString());
-  if (!tvl) {
-    tvl = new TVL(event.params.tokenAddress.toHexString());
-  }
-  if (!tvl.amount) {
-    tvl.amount = BigInt.fromI32(0);
-  }
-  tvl.amount = tvl.amount!.minus(event.params.amount);
-  tvl.withdrawals = tvl.withdrawals!.concat([withdrawal.id]);
-  tvl.save();
+  // let tvl = TVL.load(event.params.tokenAddress.toHexString());
+  // if (!tvl) {
+  //   tvl = new TVL(event.params.tokenAddress.toHexString());
+  // }
+  // if (!tvl.amount) {
+  //   tvl.amount = BigInt.fromI32(0);
+  // }
+  // tvl.amount = tvl.amount!.minus(event.params.amount);
+  // tvl.withdrawals = tvl.withdrawals!.concat([withdrawal.id]);
+  // tvl.save();
 }
 
 export function handleUserWithdraw(event: ProviderWithdraw): void {
@@ -220,15 +220,15 @@ export function handleUserWithdraw(event: ProviderWithdraw): void {
     sla.maxHedge = BigInt.fromI32(0);
   }
   sla.save();
-  let user = User.load(event.params.caller.toHexString());
-  if (!user) {
-    user = new User(event.params.caller.toHexString());
-  }
-  if (!user.withdrawals) {
-    user.withdrawals = [];
-  }
-  user.withdrawals = user.withdrawals!.concat([withdrawal.id]);
-  user.save();
+  // let user = User.load(event.params.caller.toHexString());
+  // if (!user) {
+  //   user = new User(event.params.caller.toHexString());
+  // }
+  // if (!user.withdrawals) {
+  //   user.withdrawals = [];
+  // }
+  // user.withdrawals = user.withdrawals!.concat([withdrawal.id]);
+  // user.save();
 
   let duTokenAddress = slaContract.duTokenRegistry(event.params.tokenAddress);
   let duTokenContract = ERC20.bind(duTokenAddress);
@@ -236,19 +236,19 @@ export function handleUserWithdraw(event: ProviderWithdraw): void {
   duToken.totalSupply = duTokenContract.totalSupply();
   duToken.save();
 
-  let tvl = TVL.load(event.params.tokenAddress.toHexString());
-  if (!tvl) {
-    tvl = new TVL(event.params.tokenAddress.toHexString());
-  }
-  if (!tvl.amount) {
-    tvl.amount = BigInt.fromI32(0);
-  }
-  if (!tvl.withdrawals) {
-    tvl.withdrawals = [];
-  }
-  tvl.amount = tvl.amount!.minus(event.params.amount);
-  tvl.withdrawals = tvl.withdrawals!.concat([withdrawal.id]);
-  tvl.save();
+  // let tvl = TVL.load(event.params.tokenAddress.toHexString());
+  // if (!tvl) {
+  //   tvl = new TVL(event.params.tokenAddress.toHexString());
+  // }
+  // if (!tvl.amount) {
+  //   tvl.amount = BigInt.fromI32(0);
+  // }
+  // if (!tvl.withdrawals) {
+  //   tvl.withdrawals = [];
+  // }
+  // tvl.amount = tvl.amount!.minus(event.params.amount);
+  // tvl.withdrawals = tvl.withdrawals!.concat([withdrawal.id]);
+  // tvl.save();
 }
 
 export function handleSLORegistered(event: SLORegistered): void {
@@ -313,19 +313,19 @@ export function handleValueLocked(event: ValueLocked): void {
   deposit.tokenAddress = stakeRegistryContract.DSLATokenAddress();
   deposit.save();
 
-  let tvl = TVL.load(stakeRegistryContract.DSLATokenAddress().toHexString());
-  if (!tvl) {
-    tvl = new TVL(stakeRegistryContract.DSLATokenAddress().toHexString());
-  }
-  if (!tvl.amount) {
-    tvl.amount = BigInt.fromI32(0);
-  }
-  if (!tvl.deposits) {
-    tvl.deposits = [];
-  }
-  tvl.amount = tvl.amount!.plus(event.params.amount);
-  tvl.deposits = tvl.deposits!.concat([deposit.id]);
-  tvl.save();
+  // let tvl = TVL.load(stakeRegistryContract.DSLATokenAddress().toHexString());
+  // if (!tvl) {
+  //   tvl = new TVL(stakeRegistryContract.DSLATokenAddress().toHexString());
+  // }
+  // if (!tvl.amount) {
+  //   tvl.amount = BigInt.fromI32(0);
+  // }
+  // if (!tvl.deposits) {
+  //   tvl.deposits = [];
+  // }
+  // tvl.amount = tvl.amount!.plus(event.params.amount);
+  // tvl.deposits = tvl.deposits!.concat([deposit.id]);
+  // tvl.save();
 }
 
 export function handleLockedValueReturned(event: LockedValueReturned): void {
@@ -338,19 +338,19 @@ export function handleLockedValueReturned(event: LockedValueReturned): void {
   withdrawal.tokenAddress = stakeRegistryContract.DSLATokenAddress();
   withdrawal.save();
 
-  let tvl = TVL.load(stakeRegistryContract.DSLATokenAddress().toHexString());
-  if (!tvl) {
-    tvl = new TVL(stakeRegistryContract.DSLATokenAddress().toHexString());
-  }
-  if (!tvl.amount) {
-    tvl.amount = BigInt.fromI32(0);
-  }
-  if (!tvl.withdrawals) {
-    tvl.withdrawals = [];
-  }
-  tvl.amount = tvl.amount!.minus(event.params.amount);
-  tvl.withdrawals = tvl.withdrawals!.concat([withdrawal.id]);
-  tvl.save();
+  // let tvl = TVL.load(stakeRegistryContract.DSLATokenAddress().toHexString());
+  // if (!tvl) {
+  //   tvl = new TVL(stakeRegistryContract.DSLATokenAddress().toHexString());
+  // }
+  // if (!tvl.amount) {
+  //   tvl.amount = BigInt.fromI32(0);
+  // }
+  // if (!tvl.withdrawals) {
+  //   tvl.withdrawals = [];
+  // }
+  // tvl.amount = tvl.amount!.minus(event.params.amount);
+  // tvl.withdrawals = tvl.withdrawals!.concat([withdrawal.id]);
+  // tvl.save();
 }
 
 export function handleMessengerRegistered(event: MessengerRegistered): void {

@@ -13,7 +13,7 @@ export const networks = [
   { name: NETWORKS.BSC, enabled: false },
   { name: NETWORKS.AVALANCHE, enabled: false },
   { name: NETWORKS.AVALANCHEV2, enabled: false },
-  { name: NETWORKS.ARBITRUMV2, enabled: true },
+  { name: NETWORKS.ARBITRUMV2, enabled: false },
   { name: NETWORKS.ARBITRUMNOVA, enabled: false },
   { name: NETWORKS.ARBITRUMTESTNET, enabled: false },
   { name: NETWORKS.DEVELOP_AVALANCHE, enabled: false },

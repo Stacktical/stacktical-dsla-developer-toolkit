@@ -43,6 +43,8 @@ export enum CONTRACT_NAMES {
   StakingUptimeOracle = 'StakingUptimeOracle',
   InflationOracle = 'InflationOracle',
   StakingParametricOracle = 'StakingParametricOracle',
+  L2UptimeOracle = 'L2UptimeOracle',
+  OpenAIStatusPageOracle = 'OpenAIStatusPageOracle',
 }
 
 export enum TOKEN_NAMES {
@@ -79,6 +81,8 @@ export enum USE_CASES {
   ASSET_FLOOR = 'asset-floor',
   INFLATION = 'inflation-rate',
   STAKING_PARAMETRIC = 'staking-parametric',
+  L2_UPTIME = 'l2-uptime',
+  STATUSPAGE_SERVICE = 'statuspage-service',
 }
 
 export const STAKING_REWARDS_SPECS = JSON.parse(
@@ -123,6 +127,21 @@ const STAKING_PARAMETRIC_SPECS = JSON.parse(
   )
 );
 
+const L2_UPTIME_SPECS = JSON.parse(
+  // @ts-ignore
+  fs.readFileSync(
+    `${appRoot.path}/contracts/messengers/${USE_CASES.L2_UPTIME}/use-case-spec.json`
+  )
+);
+
+
+const STATUSPAGE_SERVICE_SPECS = JSON.parse(
+  // @ts-ignore
+  fs.readFileSync(
+    `${appRoot.path}/contracts/messengers/${USE_CASES.STATUSPAGE_SERVICE}/use-case-spec.json`
+  )
+);
+
 export enum NETWORKS {
   DEVELOP = 'develop',
   DEVELOP_AVALANCHE = 'develop_avalanche',
@@ -155,11 +174,11 @@ export const GRAPH_NETWORKS = {
   [NETWORKS.HARMONYTESTNET]: 'testnet',
   [NETWORKS.MUMBAI]: 'mumbai',
   [NETWORKS.POLYGON]: 'polygon',
-  [NETWORKS.POLYGONV2]: 'polygon',
+  [NETWORKS.POLYGONV2]: 'matic',
   [NETWORKS.AVALANCHE]: 'avalanche',
   [NETWORKS.AVALANCHEV2]: 'avalanche',
   [NETWORKS.ARBITRUMNOVA]: 'arbitrumnova',
-  [NETWORKS.ARBITRUMV2]: 'arbitrum',
+  [NETWORKS.ARBITRUMV2]: 'arbitrum-one',
   [NETWORKS.ARBITRUMTESTNET]: 'arbitrumtestnet',
   [NETWORKS.FUJI]: 'fuji',
   [NETWORKS.BSC]: 'bsc',
@@ -193,17 +212,18 @@ export enum PARAMS_NAMES {
   SLA_ADDRESS = 'slaAddress',
   INDEX = 'index',
   TRANSACTION_HASH = 'transactionHash',
+  CHAINLINK_NODE_WALLET = 'node',
 }
 
 export const SERVICE_CREDITS = {
   BASE: {
     DSLA_LP: {
-      name: "Dummy Service Credit",
-      symbol: "🔺FOO",
+      name: 'Dummy Service Credit',
+      symbol: '🔺FOO',
     },
     DSLA_SP: {
-      name: "Dummy Service Credit",
-      symbol: "🔻BAR",
+      name: 'Dummy Service Credit',
+      symbol: '🔻BAR',
     },
   },
   STAKING_REWARDS: {
@@ -213,7 +233,7 @@ export const SERVICE_CREDITS = {
     },
     DSLA_SP: {
       name: STAKING_REWARDS_SPECS.sp.name,
-      symbol:  STAKING_REWARDS_SPECS.sp.symbol,
+      symbol: STAKING_REWARDS_SPECS.sp.symbol,
     },
   },
   STAKING_UPTIME: {
@@ -264,6 +284,26 @@ export const SERVICE_CREDITS = {
     DSLA_SP: {
       name: STAKING_PARAMETRIC_SPECS.sp.name,
       symbol: STAKING_PARAMETRIC_SPECS.sp.symbol,
+    },
+  },
+  L2_UPTIME: {
+    DSLA_LP: {
+      name: L2_UPTIME_SPECS.lp.name,
+      symbol: L2_UPTIME_SPECS.lp.symbol,
+    },
+    DSLA_SP: {
+      name: L2_UPTIME_SPECS.sp.name,
+      symbol: L2_UPTIME_SPECS.sp.symbol,
+    },
+  },
+  STATUSPAGE_SERVICE: {
+    DSLA_LP: {
+      name: STATUSPAGE_SERVICE_SPECS.lp.name,
+      symbol: STATUSPAGE_SERVICE_SPECS.lp.symbol,
+    },
+    DSLA_SP: {
+      name: STATUSPAGE_SERVICE_SPECS.sp.name,
+      symbol: STATUSPAGE_SERVICE_SPECS.sp.symbol,
     },
   },
 };
