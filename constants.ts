@@ -43,6 +43,7 @@ export enum CONTRACT_NAMES {
   StakingUptimeOracle = 'StakingUptimeOracle',
   InflationOracle = 'InflationOracle',
   StakingParametricOracle = 'StakingParametricOracle',
+  L2UptimeOracle = 'L2UptimeOracle',
   OpenAIStatusPageOracle = 'OpenAIStatusPageOracle',
 }
 
@@ -78,6 +79,7 @@ export enum USE_CASES {
   ASSET_FLOOR = 'asset-floor',
   INFLATION = 'inflation-rate',
   STAKING_PARAMETRIC = 'staking-parametric',
+  L2_UPTIME = 'l2-uptime',
   STATUSPAGE_SERVICE = 'statuspage-service',
 }
 
@@ -122,6 +124,14 @@ const STAKING_PARAMETRIC_SPECS = JSON.parse(
     `${appRoot.path}/contracts/messengers/${USE_CASES.STAKING_PARAMETRIC}/use-case-spec.json`
   )
 );
+
+const L2_UPTIME_SPECS = JSON.parse(
+  // @ts-ignore
+  fs.readFileSync(
+    `${appRoot.path}/contracts/messengers/${USE_CASES.L2_UPTIME}/use-case-spec.json`
+  )
+);
+
 
 const STATUSPAGE_SERVICE_SPECS = JSON.parse(
   // @ts-ignore
@@ -202,17 +212,18 @@ export enum PARAMS_NAMES {
   SLA_ADDRESS = 'slaAddress',
   INDEX = 'index',
   TRANSACTION_HASH = 'transactionHash',
+  CHAINLINK_NODE_WALLET = 'node',
 }
 
 export const SERVICE_CREDITS = {
   BASE: {
     DSLA_LP: {
-      name: "Dummy Service Credit",
-      symbol: "🔺FOO",
+      name: 'Dummy Service Credit',
+      symbol: '🔺FOO',
     },
     DSLA_SP: {
-      name: "Dummy Service Credit",
-      symbol: "🔻BAR",
+      name: 'Dummy Service Credit',
+      symbol: '🔻BAR',
     },
   },
   STAKING_REWARDS: {
@@ -222,7 +233,7 @@ export const SERVICE_CREDITS = {
     },
     DSLA_SP: {
       name: STAKING_REWARDS_SPECS.sp.name,
-      symbol:  STAKING_REWARDS_SPECS.sp.symbol,
+      symbol: STAKING_REWARDS_SPECS.sp.symbol,
     },
   },
   STAKING_UPTIME: {
@@ -273,6 +284,16 @@ export const SERVICE_CREDITS = {
     DSLA_SP: {
       name: STAKING_PARAMETRIC_SPECS.sp.name,
       symbol: STAKING_PARAMETRIC_SPECS.sp.symbol,
+    },
+  },
+  L2_UPTIME: {
+    DSLA_LP: {
+      name: L2_UPTIME_SPECS.lp.name,
+      symbol: L2_UPTIME_SPECS.lp.symbol,
+    },
+    DSLA_SP: {
+      name: L2_UPTIME_SPECS.sp.name,
+      symbol: L2_UPTIME_SPECS.sp.symbol,
     },
   },
   STATUSPAGE_SERVICE: {
