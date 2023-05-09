@@ -74,6 +74,11 @@ export const develop: NetworkUserConfig = {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.WETH,
       },
+      {
+        /** https://docs.lido.fi/contracts/wsteth/ */
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.WSTETH,
+      },
     ],
     bootstrap: {
       allowance: [

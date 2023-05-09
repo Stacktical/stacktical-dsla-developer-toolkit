@@ -1834,8 +1834,12 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
         signer
       );
 
+      try {
       const wstethTokenArtifact = await get(CONTRACT_NAMES.WSTETH);
-
+      } catch (e) {
+        console.log('WSTETH not deployed yet or not defined in network config');
+      }
+      
       const wstethTokenConfig = stacktical.tokens.find(
         (token) => token.name === TOKEN_NAMES.WSTETH
       );
@@ -2044,10 +2048,8 @@ subtask(SUB_TASK_NAMES.GET_PRECOORDINATOR, undefined).setAction(
     const eventsFilter = precoordinator.filters.NewServiceAgreement();
     const events = await precoordinator.queryFilter(
       eventsFilter,
-      // (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
-      //   undefined
-      16595888,
-      16599888
+      (await get(CONTRACT_NAMES.PreCoordinator))?.receipt?.blockNumber ||
+        undefined
     );
     for (let event of events) {
       printSeparator();
