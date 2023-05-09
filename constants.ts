@@ -44,6 +44,7 @@ export enum CONTRACT_NAMES {
   InflationOracle = 'InflationOracle',
   StakingParametricOracle = 'StakingParametricOracle',
   L2UptimeOracle = 'L2UptimeOracle',
+  OpenAIStatusPageOracle = 'OpenAIStatusPageOracle',
 }
 
 export enum TOKEN_NAMES {
@@ -79,6 +80,7 @@ export enum USE_CASES {
   INFLATION = 'inflation-rate',
   STAKING_PARAMETRIC = 'staking-parametric',
   L2_UPTIME = 'l2-uptime',
+  STATUSPAGE_SERVICE = 'statuspage-service',
 }
 
 export const STAKING_REWARDS_SPECS = JSON.parse(
@@ -130,6 +132,14 @@ const L2_UPTIME_SPECS = JSON.parse(
   )
 );
 
+
+const STATUSPAGE_SERVICE_SPECS = JSON.parse(
+  // @ts-ignore
+  fs.readFileSync(
+    `${appRoot.path}/contracts/messengers/${USE_CASES.STATUSPAGE_SERVICE}/use-case-spec.json`
+  )
+);
+
 export enum NETWORKS {
   DEVELOP = 'develop',
   DEVELOP_AVALANCHE = 'develop_avalanche',
@@ -162,11 +172,11 @@ export const GRAPH_NETWORKS = {
   [NETWORKS.HARMONYTESTNET]: 'testnet',
   [NETWORKS.MUMBAI]: 'mumbai',
   [NETWORKS.POLYGON]: 'polygon',
-  [NETWORKS.POLYGONV2]: 'polygon',
+  [NETWORKS.POLYGONV2]: 'matic',
   [NETWORKS.AVALANCHE]: 'avalanche',
   [NETWORKS.AVALANCHEV2]: 'avalanche',
   [NETWORKS.ARBITRUMNOVA]: 'arbitrumnova',
-  [NETWORKS.ARBITRUMV2]: 'arbitrum',
+  [NETWORKS.ARBITRUMV2]: 'arbitrum-one',
   [NETWORKS.ARBITRUMTESTNET]: 'arbitrumtestnet',
   [NETWORKS.KOVAN]: 'kovan',
   [NETWORKS.FUJI]: 'fuji',
@@ -284,6 +294,16 @@ export const SERVICE_CREDITS = {
     DSLA_SP: {
       name: L2_UPTIME_SPECS.sp.name,
       symbol: L2_UPTIME_SPECS.sp.symbol,
+    },
+  },
+  STATUSPAGE_SERVICE: {
+    DSLA_LP: {
+      name: STATUSPAGE_SERVICE_SPECS.lp.name,
+      symbol: STATUSPAGE_SERVICE_SPECS.lp.symbol,
+    },
+    DSLA_SP: {
+      name: STATUSPAGE_SERVICE_SPECS.sp.name,
+      symbol: STATUSPAGE_SERVICE_SPECS.sp.symbol,
     },
   },
 };

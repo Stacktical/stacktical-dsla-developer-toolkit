@@ -9,5 +9,5 @@
   "messengerRegistryStartBlock": 33078722,
   "periodRegistryAddress": "0x9dB0B1692a56789603BaEE953635b4eC631a7399",
   "periodRegistryStartBlock": 33078698,
-  "graphNetwork": "arbitrum"
+  "graphNetwork": "arbitrum-one"
 }
