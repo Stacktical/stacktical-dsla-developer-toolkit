@@ -901,13 +901,13 @@ export const scripts: ScriptsConfiguration = {
         serviceSliMockingPlan: [95, 95, 95],
       },
     },
-    // INDEX 31 -- FITS TEST SLA: 
+    // INDEX 31 -- TRAVEL TEST SLA: 
     {
       sloValue: 14,
       sloType: SLO_TYPE.SmallerThan,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
-      messengerContract: CONTRACT_NAMES.FITSOracle,
+      messengerContract: CONTRACT_NAMES.TravelOracle,
       initialPeriodId: 0,
       finalPeriodId: 2,
       severity: [14000, 41000, 70000], // [14%, 41%, 70%] (1000 == 1%) [1-2 days (out of 7) poor weather, 3-4 days, 5+ days]
@@ -918,26 +918,27 @@ export const scripts: ScriptsConfiguration = {
       notDeployerStakeTimes: 1,
       leverage: 1,
       serviceMetadata: {
-        serviceName: 'Fun In The Sun Travel Coverage - Respected Case',
-        serviceDescription: 'SLA for FITS Travel Coverage',
+        serviceName: 'Travel Coverage - Respected Case',
+        serviceDescription: 'SLA for Travel Coverage',
         serviceImage: 'https://via.placeholder.com/1200x600',
         serviceURL: 'https://travala.com/',
         serviceAddress: '0x0000000000000000000000000000000000000000',
-        serviceTicker: 'FITS',
-        maxDeviation: 50000000, // max deviation 5%
+        serviceTicker: 'xMILE',
+        coverageType: 'temperature',
+        maxDeviation: 6000000, // max deviation 6%
         coordinates: { 'lat': 25.7617, 'long': -80.1918 },
         location: 'Miami, Fl',
         serviceUseTestExternalAdapter: true,
         serviceSliMockingPlan: [1000, 41000, 70000],
       },
     },
-    // INDEX 32 -- FITS TEST SLA: 
+    // INDEX 32 -- Travel TEST SLA: 
     {
       sloValue: 14,
       sloType: SLO_TYPE.SmallerThan,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
-      messengerContract: CONTRACT_NAMES.FITSOracle,
+      messengerContract: CONTRACT_NAMES.TravelOracle,
       initialPeriodId: 0,
       finalPeriodId: 2,
       severity: [14000, 41000, 70000], // [14%, 41%, 70%] (1000 == 1%) [1-2 days (out of 7) poor weather, 3-4 days, 5+ days]
@@ -948,12 +949,13 @@ export const scripts: ScriptsConfiguration = {
       notDeployerStakeTimes: 1,
       leverage: 1,
       serviceMetadata: {
-        serviceName: 'Fun In The Sun Travel Coverage - Not Respected Case (2x temperature days)',
-        serviceDescription: 'SLA for FITS Travel Coverage',
+        serviceName: 'Travel Coverage - Not Respected Case (2x temperature days)',
+        serviceDescription: 'SLA for Travel Coverage',
         serviceImage: 'https://via.placeholder.com/1200x600',
         serviceURL: 'https://travala.com/',
         serviceAddress: '0x0000000000000000000000000000000000000000',
-        serviceTicker: 'FITS',
+        serviceTicker: 'xMILE',
+        coverageType: 'temperature',
         maxDeviation: 1000000, // max deviation 1%
         coordinates: { 'lat': 25.7617, 'long': -80.1918 },
         location: 'Miami, Fl',
@@ -961,13 +963,13 @@ export const scripts: ScriptsConfiguration = {
         serviceSliMockingPlan: [1000, 41000, 70000],
       },
     },
-    // INDEX 33 -- FITS TEST SLA: 
+    // INDEX 33 -- Travel TEST SLA: 
     {
       sloValue: 14,
       sloType: SLO_TYPE.SmallerThan,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
-      messengerContract: CONTRACT_NAMES.FITSOracle,
+      messengerContract: CONTRACT_NAMES.TravelOracle,
       initialPeriodId: 0,
       finalPeriodId: 2,
       severity: [14000, 41000, 70000], // [14%, 41%, 70%] (1000 == 1%) [1-2 days (out of 7) poor weather, 3-4 days, 5+ days]
@@ -978,12 +980,13 @@ export const scripts: ScriptsConfiguration = {
       notDeployerStakeTimes: 1,
       leverage: 1,
       serviceMetadata: {
-        serviceName: 'Fun In The Sun Travel Coverage - Respected Case',
-        serviceDescription: 'SLA for FITS Travel Coverage',
+        serviceName: 'Travel Coverage - Respected Case',
+        serviceDescription: 'SLA for Travel Coverage',
         serviceImage: 'https://via.placeholder.com/1200x600',
         serviceURL: 'https://travala.com/',
         serviceAddress: '0x0000000000000000000000000000000000000000',
-        serviceTicker: 'FITS',
+        serviceTicker: 'xMILE',
+        coverageType: 'precipitation',
         maxDeviation: 5000000, // max deviation 5%
         coordinates: { 'lat': 21.1743, 'long': -86.8466 },
         location: 'Cancun, Mexico',
@@ -991,13 +994,13 @@ export const scripts: ScriptsConfiguration = {
         serviceSliMockingPlan: [1000, 41000, 70000],
       },
     },
-    // INDEX 34 -- FITS TEST SLA: 
+    // INDEX 34 -- Travel TEST SLA: 
     {
       sloValue: 14,
       sloType: SLO_TYPE.SmallerThan,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
-      messengerContract: CONTRACT_NAMES.FITSOracle,
+      messengerContract: CONTRACT_NAMES.TravelOracle,
       initialPeriodId: 0,
       finalPeriodId: 2,
       severity: [14000, 41000, 70000], // [14%, 41%, 70%] (1000 == 1%) [1-2 days (out of 7) poor weather, 3-4 days, 5+ days]
@@ -1008,26 +1011,27 @@ export const scripts: ScriptsConfiguration = {
       notDeployerStakeTimes: 1,
       leverage: 1,
       serviceMetadata: {
-        serviceName: 'Fun In The Sun Travel Coverage - Not Respected Case (1x precipitation days)',
-        serviceDescription: 'SLA for FITS Travel Coverage',
+        serviceName: 'Travel Coverage - Not Respected Case (2x precipitation days)',
+        serviceDescription: 'SLA for Travel Coverage',
         serviceImage: 'https://via.placeholder.com/1200x600',
         serviceURL: 'https://travala.com/',
         serviceAddress: '0x0000000000000000000000000000000000000000',
-        serviceTicker: 'FITS',
-        maxDeviation: 50000000, // max deviation 5%
+        serviceTicker: 'xMILE',
+        coverageType: 'precipitation',
+        maxDeviation: 5000000, // max deviation 5%
         coordinates: { 'lat': 25.059999, 'long': -77.345001 },
         location: 'Nassau, Bahamas',
         serviceUseTestExternalAdapter: true,
         serviceSliMockingPlan: [1000, 41000, 70000],
       },
     },
-    // INDEX 35 -- FITS TEST SLA: 
+    // INDEX 35 -- Travel TEST SLA: 
     {
       sloValue: 14,
       sloType: SLO_TYPE.SmallerThan,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
-      messengerContract: CONTRACT_NAMES.FITSOracle,
+      messengerContract: CONTRACT_NAMES.TravelOracle,
       initialPeriodId: 0,
       finalPeriodId: 2,
       severity: [14000, 41000, 70000], // [14%, 41%, 70%] (1000 == 1%) [1-2 days (out of 7) poor weather, 3-4 days, 5+ days]
@@ -1038,13 +1042,14 @@ export const scripts: ScriptsConfiguration = {
       notDeployerStakeTimes: 1,
       leverage: 1,
       serviceMetadata: {
-        serviceName: 'Fun In The Sun Travel Coverage - Not Respected Case (2x temperature days, 2x precipitation days)',
-        serviceDescription: 'SLA for FITS Travel Coverage',
+        serviceName: 'Travel Coverage - Not Respected Case (7x temperature days)',
+        serviceDescription: 'SLA for Travel Coverage',
         serviceImage: 'https://via.placeholder.com/1200x600',
         serviceURL: 'https://travala.com/',
         serviceAddress: '0x0000000000000000000000000000000000000000',
-        serviceTicker: 'FITS',
-        maxDeviation: 50000000, // max deviation 5%
+        serviceTicker: 'xMILE',
+        coverageType: 'temperature',
+        maxDeviation: 5000000, // max deviation 5%
         coordinates: { 'lat': 40.7128, 'long': -74.0060 },
         location: 'New York, NY',
         serviceUseTestExternalAdapter: true,

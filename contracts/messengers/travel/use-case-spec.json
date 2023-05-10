@@ -1,18 +1,23 @@
 {
-  "useCaseName": "Fun In The Sun Travel Coverage",
-  "symbol": "xFITS",
+  "useCaseName": "DSLA Travel Coverage",
+  "symbol": "xMILE",
   "sp": {
-    "name": "FITS Service Credit",
-    "symbol": "xFITS"
+    "name": "xMILE Service Credit",
+    "symbol": "xMILE"
   },
   "lp": {
-    "name": "FITS Service Credit LP",
-    "symbol": "xFITS-LP"
+    "name": "xMILE Service Credit LP",
+    "symbol": "xMILE-LP"
   },
   "ownerUrl": "https://dsla.network",
   "useCaseDocs": "https://dsla.network/metaverse",
   "externalAdapterRepo": "https://github.com/Stacktical/",
   "unit": "%",
+  "coverageType": {
+    "name": "Coverage Type",
+    "type": "string",
+    "description": "The type of parameter being covered by the SLA. ie. temperature, precipitation, cloudcover, flightdelay, luggagedelay, etc."
+  },
   "location": {
     "name": "Location",
     "type": "string",
@@ -29,10 +34,12 @@
     "description": "The maximum deviation from historical normal temperature and precipitation for the selected location"
   },
   "keywords": [
-    "fits",
+    "xMILE",
     "travel",
     "weather",
-    "experience"
+    "experience",
+    "climate",
+    "guarantee"
   ],
   "timestamp": "2023-03-24T00:00:00+00:00",
   "version": {

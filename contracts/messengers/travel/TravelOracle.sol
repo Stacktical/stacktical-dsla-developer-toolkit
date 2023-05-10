@@ -13,7 +13,7 @@ import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
 import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 import '@openzeppelin/contracts/utils/Strings.sol';
 
-contract FITSOracle is ChainlinkClient, IMessenger, ReentrancyGuard {
+contract TravelOracle is ChainlinkClient, IMessenger, ReentrancyGuard {
     using SafeERC20 for ERC20;
     using Chainlink for Chainlink.Request;
 
@@ -129,7 +129,7 @@ contract FITSOracle is ChainlinkClient, IMessenger, ReentrancyGuard {
         // Add the 'network_name' parameter to the request
         request.add('network_name', StringUtils.bytes32ToStr(networkName));
 
-        // Add other FITSOracle specific request parameters if needed
+        // Add other TravelOracle specific request parameters if needed
 
         // Sends the request with 0.1 LINK to the oracle contract
         bytes32 requestId = sendChainlinkRequestTo(_oracle, request, _fee);

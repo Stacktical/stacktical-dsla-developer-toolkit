@@ -44,7 +44,7 @@ export enum CONTRACT_NAMES {
   InflationOracle = 'InflationOracle',
   StakingParametricOracle = 'StakingParametricOracle',
   OpenAIStatusPageOracle = 'OpenAIStatusPageOracle',
-  FITSOracle = 'FITSOracle',
+  TravelOracle = 'TravelOracle',
 }
 
 export enum TOKEN_NAMES {
@@ -80,7 +80,7 @@ export enum USE_CASES {
   INFLATION = 'inflation-rate',
   STAKING_PARAMETRIC = 'staking-parametric',
   STATUSPAGE_SERVICE = 'statuspage-service',
-  FITS = 'fits',
+  TRAVEL = 'travel',
 }
 
 export const STAKING_REWARDS_SPECS = JSON.parse(
@@ -132,10 +132,10 @@ const STATUSPAGE_SERVICE_SPECS = JSON.parse(
   )
 );
 
-const FITS_SPECS = JSON.parse(
+const TRAVEL_SPECS = JSON.parse(
   // @ts-ignore
   fs.readFileSync(
-    `${appRoot.path}/contracts/messengers/${USE_CASES.FITS}/use-case-spec.json`
+    `${appRoot.path}/contracts/messengers/${USE_CASES.TRAVEL}/use-case-spec.json`
   )
 );
 
@@ -294,14 +294,14 @@ export const SERVICE_CREDITS = {
       symbol: STATUSPAGE_SERVICE_SPECS.sp.symbol,
     },
   },
-  FITS: {
+  TRAVEL: {
     DSLA_LP: {
-      name: FITS_SPECS.lp.name,
-      symbol: FITS_SPECS.lp.symbol,
+      name: TRAVEL_SPECS.lp.name,
+      symbol: TRAVEL_SPECS.lp.symbol,
     },
     DSLA_SP: {
-      name: FITS_SPECS.sp.name,
-      symbol: FITS_SPECS.sp.symbol,
+      name: TRAVEL_SPECS.sp.name,
+      symbol: TRAVEL_SPECS.sp.symbol,
     },
   },
 };

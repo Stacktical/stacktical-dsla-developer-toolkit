@@ -10,7 +10,7 @@
     "external-adapter": "pm2 delete external-adapter 2> /dev/null || true && pm2 start services/external-adapter/index.ts --name external-adapter --watch ./services/external-adapter --no-daemon",
     "external-adapter-daemon": "pm2 delete external-adapter 2> /dev/null || true && pm2 start services/external-adapter/index.ts --name external-adapter --watch ./services/external-adapter",
     "statuspage-service-adapter": "pm2 delete statuspage-service-adapter 2> /dev/null || true && pm2 start services/statuspage-service-adapter/index.ts --name statuspage-service-adapter --watch ./services/statuspage-service-adapter --no-daemon",
-    "fits-adapter": "pm2 delete fits-adapter 2> /dev/null || true && pm2 start services/fits-adapter/index.ts --name fits-adapter --watch ./services/fits-adapter --no-daemon",
+    "travel-adapter": "pm2 delete fits-adapter 2> /dev/null || true && pm2 start services/travel-adapter/index.ts --name travel-adapter --watch ./services/travel-adapter --no-daemon",
     "sls:deploy": "sls deploy",
     "sls:offline": "sls offline",
     "export-data": "hh stacktical:export-data",

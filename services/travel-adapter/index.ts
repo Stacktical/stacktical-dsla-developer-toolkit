@@ -19,6 +19,7 @@ type SLAData = {
     serviceSliMockingPlan: Array<number>;
     periodType: number;
     messengerAddress: string;
+    coverageType: string;
     coordinates: {
         lat: number;
         long: number;
@@ -108,11 +109,15 @@ function processDataAndCalculateSLI(weatherDataSources: any[], messengerPrecisio
         console.log('[SLI] precipitationDifference:', precipitationDifference);
 
         // Check if the day met the maxDeviation parameter
-        // maxDeviation is the maximum variance from historical normal considered acceptable in the SLA
-        // Currently we check for days that were cooler by greater than maxDeviation or days that received more precipitation.
-        // if either is true, we consider the day as not meeting target performance
-        return (avgActualTemperature < avgHistoricalTemperature && temperatureDifference > maxDeviation) ||
-            (avgActualPrecipitation > avgHistoricalPrecipitation && precipitationDifference > maxDeviation);
+        if (slaData.coverageType === 'temperature') {
+            // For temperature coverage type, we only care about temperature difference
+            return (avgActualTemperature < avgHistoricalTemperature && temperatureDifference > maxDeviation);
+        } else if (slaData.coverageType === 'precipitation') {
+            // For precipitation coverage type, we only care about precipitation difference
+            return (avgActualPrecipitation > avgHistoricalPrecipitation && precipitationDifference > maxDeviation);
+        }
+
+        return false;
     }).reduce((count, notMetMaxDeviation) => count + (notMetMaxDeviation ? 1 : 0), 0);
 
     console.log('[SLI] daysNotMetMaxDeviation:', daysNotMetMaxDeviation);
@@ -188,6 +193,7 @@ app.post('/test-sli', async (req: Request, res: Response) => {
             serviceSliMockingPlan: [],
             periodType: 0,
             messengerAddress: "",
+            coverageType: coverageType,
             coordinates: coordinates,
             maxDeviation: maxDeviation,
         };
