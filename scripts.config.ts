@@ -903,8 +903,8 @@ export const scripts: ScriptsConfiguration = {
     },
     // INDEX 31 -- TRAVEL TEST SLA: 
     {
-      sloValue: 14,
-      sloType: SLO_TYPE.SmallerThan,
+      sloValue: 100,
+      sloType: SLO_TYPE.GreaterOrEqualTo,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.TravelOracle,
@@ -918,13 +918,15 @@ export const scripts: ScriptsConfiguration = {
       notDeployerStakeTimes: 1,
       leverage: 1,
       serviceMetadata: {
-        serviceName: 'Travel Coverage - Respected Case',
+        serviceName: 'Travel Coverage - Respected Case; 3/3 Actual Temperature > Historical',
         serviceDescription: 'SLA for Travel Coverage',
         serviceImage: 'https://via.placeholder.com/1200x600',
         serviceURL: 'https://travala.com/',
         serviceAddress: '0x0000000000000000000000000000000000000000',
-        serviceTicker: 'xMILE',
+        serviceTicker: 'xMILES',
         coverageType: 'temperature',
+        tripStartDate: 1669334400, // 25-Nov-2022
+        tripEndDate: 1669766400, // 30-Nov-2022
         maxDeviation: 6000000, // max deviation 6%
         coordinates: { 'lat': 25.7617, 'long': -80.1918 },
         location: 'Miami, Fl',
@@ -934,8 +936,8 @@ export const scripts: ScriptsConfiguration = {
     },
     // INDEX 32 -- Travel TEST SLA: 
     {
-      sloValue: 14,
-      sloType: SLO_TYPE.SmallerThan,
+      sloValue: 100,
+      sloType: SLO_TYPE.GreaterOrEqualTo,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.TravelOracle,
@@ -949,13 +951,15 @@ export const scripts: ScriptsConfiguration = {
       notDeployerStakeTimes: 1,
       leverage: 1,
       serviceMetadata: {
-        serviceName: 'Travel Coverage - Not Respected Case (2x temperature days)',
+        serviceName: 'Travel Coverage - Respected Case 7/7 Days Actual Temperature > Historical Temperature',
         serviceDescription: 'SLA for Travel Coverage',
         serviceImage: 'https://via.placeholder.com/1200x600',
         serviceURL: 'https://travala.com/',
         serviceAddress: '0x0000000000000000000000000000000000000000',
-        serviceTicker: 'xMILE',
+        serviceTicker: 'xMILES',
         coverageType: 'temperature',
+        tripStartDate: 1668988800, // 21-Nov-2022
+        tripEndDate: 1670025600, // 03-Dec-2022
         maxDeviation: 1000000, // max deviation 1%
         coordinates: { 'lat': 25.7617, 'long': -80.1918 },
         location: 'Miami, Fl',
@@ -965,8 +969,8 @@ export const scripts: ScriptsConfiguration = {
     },
     // INDEX 33 -- Travel TEST SLA: 
     {
-      sloValue: 14,
-      sloType: SLO_TYPE.SmallerThan,
+      sloValue: 100,
+      sloType: SLO_TYPE.GreaterOrEqualTo,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.TravelOracle,
@@ -980,13 +984,48 @@ export const scripts: ScriptsConfiguration = {
       notDeployerStakeTimes: 1,
       leverage: 1,
       serviceMetadata: {
-        serviceName: 'Travel Coverage - Respected Case',
+        serviceName: 'Travel Coverage - Not Respected Case 1/7 Days Actual Precipitation > Historical Precipitation',
         serviceDescription: 'SLA for Travel Coverage',
         serviceImage: 'https://via.placeholder.com/1200x600',
         serviceURL: 'https://travala.com/',
         serviceAddress: '0x0000000000000000000000000000000000000000',
-        serviceTicker: 'xMILE',
+        serviceTicker: 'xMILES',
         coverageType: 'precipitation',
+        tripStartDate: 1668988800, // 21-Nov-2022
+        tripEndDate: 1670025600, // 03-Dec-2022
+        maxDeviation: 1000000, // max deviation 1%
+        coordinates: { 'lat': 25.7617, 'long': -80.1918 },
+        location: 'Miami, Fl',
+        serviceUseTestExternalAdapter: true,
+        serviceSliMockingPlan: [1000, 41000, 70000],
+      },
+    },
+    // INDEX 34 -- Travel TEST SLA: 
+    {
+      sloValue: 100,
+      sloType: SLO_TYPE.GreaterOrEqualTo,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.WEEKLY,
+      messengerContract: CONTRACT_NAMES.TravelOracle,
+      initialPeriodId: 0,
+      finalPeriodId: 2,
+      severity: [14000, 41000, 70000], // [14%, 41%, 70%] (1000 == 1%) [1-2 days (out of 7) poor weather, 3-4 days, 5+ days]
+      penalty: [1000, 10000, 25000], // [1%, 10%, 25%]
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 100,
+      deployerStakeTimes: 100,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Travel Coverage - Respected Case; 6/6 Trip Days Actual Precipitation <= Historical',
+        serviceDescription: 'SLA for Travel Coverage',
+        serviceImage: 'https://via.placeholder.com/1200x600',
+        serviceURL: 'https://travala.com/',
+        serviceAddress: '0x0000000000000000000000000000000000000000',
+        serviceTicker: 'xMILES',
+        coverageType: 'precipitation',
+        tripStartDate: 1668470400, // 15-Nov-2022
+        tripEndDate: 1669420800, // 26-Nov-2022
         maxDeviation: 5000000, // max deviation 5%
         coordinates: { 'lat': 21.1743, 'long': -86.8466 },
         location: 'Cancun, Mexico',
@@ -994,10 +1033,10 @@ export const scripts: ScriptsConfiguration = {
         serviceSliMockingPlan: [1000, 41000, 70000],
       },
     },
-    // INDEX 34 -- Travel TEST SLA: 
+    // INDEX 35 -- Travel TEST SLA: 
     {
-      sloValue: 14,
-      sloType: SLO_TYPE.SmallerThan,
+      sloValue: 100,
+      sloType: SLO_TYPE.GreaterOrEqualTo,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.TravelOracle,
@@ -1011,13 +1050,15 @@ export const scripts: ScriptsConfiguration = {
       notDeployerStakeTimes: 1,
       leverage: 1,
       serviceMetadata: {
-        serviceName: 'Travel Coverage - Not Respected Case (2x precipitation days)',
+        serviceName: 'Travel Coverage - Respected Case; 3/3 Trip Days Actual Precipitation <= Historical',
         serviceDescription: 'SLA for Travel Coverage',
         serviceImage: 'https://via.placeholder.com/1200x600',
         serviceURL: 'https://travala.com/',
         serviceAddress: '0x0000000000000000000000000000000000000000',
-        serviceTicker: 'xMILE',
+        serviceTicker: 'xMILES',
         coverageType: 'precipitation',
+        tripStartDate: 1669334400, // 25-Nov-2022
+        tripEndDate: 1669766400, // 30-Nov-2022
         maxDeviation: 5000000, // max deviation 5%
         coordinates: { 'lat': 25.059999, 'long': -77.345001 },
         location: 'Nassau, Bahamas',
@@ -1025,10 +1066,10 @@ export const scripts: ScriptsConfiguration = {
         serviceSliMockingPlan: [1000, 41000, 70000],
       },
     },
-    // INDEX 35 -- Travel TEST SLA: 
+    // INDEX 36 -- Travel TEST SLA: 
     {
-      sloValue: 14,
-      sloType: SLO_TYPE.SmallerThan,
+      sloValue: 100,
+      sloType: SLO_TYPE.GreaterOrEqualTo,
       whitelisted: false,
       periodType: PERIOD_TYPE.WEEKLY,
       messengerContract: CONTRACT_NAMES.TravelOracle,
@@ -1042,14 +1083,16 @@ export const scripts: ScriptsConfiguration = {
       notDeployerStakeTimes: 1,
       leverage: 1,
       serviceMetadata: {
-        serviceName: 'Travel Coverage - Not Respected Case (7x temperature days)',
+        serviceName: 'Travel Coverage - Not Respected Case; 2/3 Trip Days Actual Temperature <= Historical',
         serviceDescription: 'SLA for Travel Coverage',
         serviceImage: 'https://via.placeholder.com/1200x600',
         serviceURL: 'https://travala.com/',
         serviceAddress: '0x0000000000000000000000000000000000000000',
-        serviceTicker: 'xMILE',
+        serviceTicker: 'xMILES',
         coverageType: 'temperature',
-        maxDeviation: 5000000, // max deviation 5%
+        tripStartDate: 1668556800, // 16-Nov-2022
+        tripEndDate: 1669161600, // 23-Nov-2022
+        maxDeviation: 1000000, // max deviation 1%
         coordinates: { 'lat': 40.7128, 'long': -74.0060 },
         location: 'New York, NY',
         serviceUseTestExternalAdapter: true,

@@ -1,13 +1,13 @@
 {
   "useCaseName": "DSLA Travel Coverage",
-  "symbol": "xMILE",
+  "symbol": "xMILES",
   "sp": {
-    "name": "xMILE Service Credit",
-    "symbol": "xMILE"
+    "name": "xMILES Service Credit",
+    "symbol": "xMILES"
   },
   "lp": {
-    "name": "xMILE Service Credit LP",
-    "symbol": "xMILE-LP"
+    "name": "xMILES Service Credit LP",
+    "symbol": "xMILES-LP"
   },
   "ownerUrl": "https://dsla.network",
   "useCaseDocs": "https://dsla.network/metaverse",
@@ -17,6 +17,16 @@
     "name": "Coverage Type",
     "type": "string",
     "description": "The type of parameter being covered by the SLA. ie. temperature, precipitation, cloudcover, flightdelay, luggagedelay, etc."
+  },
+  "tripStartDate": {
+    "name": "Trip Start Date",
+    "type": "number",
+    "description": "The start date of the trip that is being covered by the SLA, as a Unix timestamp, to allow personalized SLAs that do not align exactly with Period Dates from the PeriodRegistry."
+  },
+  "tripEndDate": {
+    "name": "Trip End Date",
+    "type": "number",
+    "description": "The end date of the trip that is being covered by the SLA, as a Unix timestamp, to allow personalized SLAs that do not align exactly with Period Dates from the PeriodRegistry."
   },
   "location": {
     "name": "Location",

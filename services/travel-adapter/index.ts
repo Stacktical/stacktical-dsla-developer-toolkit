@@ -20,6 +20,8 @@ type SLAData = {
     periodType: number;
     messengerAddress: string;
     coverageType: string;
+    tripStartDate: number;
+    tripEndDate: number;
     coordinates: {
         lat: number;
         long: number;
@@ -75,7 +77,11 @@ async function fetchWeatherData(location, startDate, endDate) {
 }
 
 function calculatePercentageDifference(actual: number, historical: number) {
-    return Math.abs(((actual - historical) / historical) * 100);
+    if (historical === 0) {
+        return actual === 0 ? 0 : 100;
+    } else {
+        return Math.abs(((actual - historical) / historical) * 100);
+    }
 }
 
 function processDataAndCalculateSLI(weatherDataSources: any[], messengerPrecision, slaData: SLAData) {
@@ -84,46 +90,82 @@ function processDataAndCalculateSLI(weatherDataSources: any[], messengerPrecisio
     const maxDeviation = slaData.maxDeviation / messengerPrecision;
 
     console.log('[SLO] maxDeviation:', maxDeviation);
+    console.log('[SLO] coverageType:', slaData.coverageType);
 
-    const daysNotMetMaxDeviation = Array.from({ length: totalDays }, (_, i) => {
+    let daysMetMaxDeviation = 0;
+    let daysInTrip = 0;
+
+    // Get start and end dates Unix timestamp
+    const tripStartDateTimestamp = slaData.tripStartDate;
+    const tripEndDateTimestamp = slaData.tripEndDate;
+    console.log('[SLI] tripStartDateTimeStamp:', tripStartDateTimestamp, ' - readable:', new Date(tripStartDateTimestamp * 1000).toUTCString());
+    console.log('[SLI] tripEndDateTimeStamp:', tripEndDateTimestamp, ' - readable:', new Date(tripEndDateTimestamp * 1000).toUTCString());
+
+
+    // Iterate over the days
+    for (let i = 0; i < totalDays; i++) {
         const dailyData = weatherDataSources.map(source => source[i]);
 
-        // Calculate the average of each parameter across all data sources
-        const avgActualTemperature = dailyData.reduce((sum, day) => sum + day.actualTemperature.avg, 0) / totalDataSources;
-        const avgActualPrecipitation = dailyData.reduce((sum, day) => sum + day.actualPrecipitation, 0) / totalDataSources;
-        const avgHistoricalTemperature = dailyData.reduce((sum, day) => sum + day.historicalTemperature.avg, 0) / totalDataSources;
-        const avgHistoricalPrecipitation = dailyData.reduce((sum, day) => sum + day.historicalPrecipitation, 0) / totalDataSources;
+        // Convert the raw date to a Unix timestamp
+        const rawDateTimestamp = new Date(dailyData[0].date).getTime() / 1000;
 
-        console.log('[SLI] readableDate:', new Date(dailyData[0].date).toLocaleDateString());
-        console.log('[SLI] rawDate:', dailyData[0].date);
-        console.log('[SLI] avgActualTemperature:', avgActualTemperature);
-        console.log('[SLI] avgActualPrecipitation:', avgActualPrecipitation);
-        console.log('[SLI] avgHistoricalTemperature:', avgHistoricalTemperature);
-        console.log('[SLI] avgHistoricalPrecipitation:', avgHistoricalPrecipitation);
+        console.log('[SLI] rawDateTimeStamp:', rawDateTimestamp, ' - readable:', new Date(rawDateTimestamp * 1000).toUTCString());
 
-        // Calculate the percentage difference for temperature and precipitation
-        const temperatureDifference = calculatePercentageDifference(avgActualTemperature, avgHistoricalTemperature);
-        const precipitationDifference = calculatePercentageDifference(avgActualPrecipitation, avgHistoricalPrecipitation);
+        // Check if the date is within the trip dates
+        if (rawDateTimestamp >= tripStartDateTimestamp && rawDateTimestamp <= tripEndDateTimestamp) {
+            daysInTrip++;
 
-        console.log('[SLI] temperatureDifference:', temperatureDifference);
-        console.log('[SLI] precipitationDifference:', precipitationDifference);
+            const avgActualTemperature = dailyData.reduce((sum, day) => sum + day.actualTemperature.avg, 0) / totalDataSources;
+            const avgActualPrecipitation = dailyData.reduce((sum, day) => sum + day.actualPrecipitation, 0) / totalDataSources;
+            const avgHistoricalTemperature = dailyData.reduce((sum, day) => sum + day.historicalTemperature.avg, 0) / totalDataSources;
+            const avgHistoricalPrecipitation = dailyData.reduce((sum, day) => sum + day.historicalPrecipitation, 0) / totalDataSources;
 
-        // Check if the day met the maxDeviation parameter
-        if (slaData.coverageType === 'temperature') {
-            // For temperature coverage type, we only care about temperature difference
-            return (avgActualTemperature < avgHistoricalTemperature && temperatureDifference > maxDeviation);
-        } else if (slaData.coverageType === 'precipitation') {
-            // For precipitation coverage type, we only care about precipitation difference
-            return (avgActualPrecipitation > avgHistoricalPrecipitation && precipitationDifference > maxDeviation);
+            console.log('[SLI-TRIP] readableDate:', new Date(dailyData[0].date).toUTCString());
+            console.log('[SLI-TRIP] rawDate:', dailyData[0].date);
+            console.log('[SLI-TRIP] avgActualTemperature:', avgActualTemperature);
+            console.log('[SLI-TRIP] avgActualPrecipitation:', avgActualPrecipitation);
+            console.log('[SLI-TRIP] avgHistoricalTemperature:', avgHistoricalTemperature);
+            console.log('[SLI-TRIP] avgHistoricalPrecipitation:', avgHistoricalPrecipitation);
+
+            // Calculate the percentage difference for temperature and precipitation
+            const temperatureDifference = calculatePercentageDifference(avgActualTemperature, avgHistoricalTemperature);
+            const precipitationDifference = calculatePercentageDifference(avgActualPrecipitation, avgHistoricalPrecipitation);
+
+            console.log('[SLI-TRIP] temperatureDifference:', temperatureDifference);
+            console.log('[SLI-TRIP] precipitationDifference:', precipitationDifference);
+
+            // Check if the day met the maxDeviation parameter
+            if (slaData.coverageType === 'temperature') {
+                // For temperature coverage type, we only care about temperature difference
+                if (avgActualTemperature < avgHistoricalTemperature) {
+                    if (temperatureDifference <= maxDeviation) {
+                        daysMetMaxDeviation++;
+                    }
+                } else {
+                    daysMetMaxDeviation++; // Actual temperature is greater than or equal to Historical, so it meets the SLA
+                }
+            } else if (slaData.coverageType === 'precipitation') {
+                // For precipitation coverage type, we only care about precipitation difference
+                if (avgActualPrecipitation > avgHistoricalPrecipitation) {
+                    if (precipitationDifference <= maxDeviation) {
+                        daysMetMaxDeviation++;
+                    }
+                } else {
+                    daysMetMaxDeviation++; // Actual precipitation is less than or equal to Historical, so it meets the SLA
+                }
+            }
+
         }
+    }
 
-        return false;
-    }).reduce((count, notMetMaxDeviation) => count + (notMetMaxDeviation ? 1 : 0), 0);
+    console.log('[SLI] daysInTrip:', daysInTrip);
+    console.log('[SLI] daysMetMaxDeviation:', daysMetMaxDeviation);
 
-    console.log('[SLI] daysNotMetMaxDeviation:', daysNotMetMaxDeviation);
-
-    // Calculate the SLI based on the number of days not meeting the SLO
-    const SLI = (daysNotMetMaxDeviation / totalDays) * 100;
+    // Calculate the SLI based on the number of days meeting the SLO within the trip dates
+    let SLI = 0;
+    if (daysInTrip > 0) {
+        SLI = (daysMetMaxDeviation / daysInTrip) * 100;
+    }
 
     console.log('[SLI] SLI:', SLI);
 
@@ -172,7 +214,7 @@ app.post('/', async (req: Request, res: Response) => {
 app.post('/test-sli', async (req: Request, res: Response) => {
     try {
         const { data } = req.body;
-        const { period_start: periodStart, period_end: periodEnd, location, maxDeviation, coordinates, coverageType } = data;
+        const { period_start: periodStart, period_end: periodEnd, location, maxDeviation, coordinates, coverageType, tripStartDate, tripEndDate } = data;
         const precision = 1000000; // Replace with a suitable precision value for testing
 
         console.log('[POST] Request body:', req.body);
@@ -194,6 +236,8 @@ app.post('/test-sli', async (req: Request, res: Response) => {
             periodType: 0,
             messengerAddress: "",
             coverageType: coverageType,
+            tripStartDate: tripStartDate,
+            tripEndDate: tripEndDate,
             coordinates: coordinates,
             maxDeviation: maxDeviation,
         };
