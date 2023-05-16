@@ -2,6 +2,7 @@ import { DeployOptionsBase } from 'hardhat-deploy/dist/types';
 import { DEPLOYMENT_TAGS } from '../constants';
 import { StackticalConfiguration } from '../types';
 
+console.log("-- 🚀 Deploying dummy tokens");
 module.exports = async ({ getNamedAccounts, deployments, network }) => {
   const { stacktical }: { stacktical: StackticalConfiguration } =
     network.config;
@@ -18,5 +19,6 @@ module.exports = async ({ getNamedAccounts, deployments, network }) => {
     await deploy(token.name, options);
   }
 };
+console.log("-- 🚀 All dummy tokens deployed");
 
 module.exports.tags = [DEPLOYMENT_TAGS.DummyTokens];

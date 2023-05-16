@@ -775,7 +775,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_LOCAL_CHAINLINK_NODES, undefined).setAction(
   async (_, hre: HardhatRuntimeEnvironment) => {
     const localServicesSubtasks = [
       SUB_TASK_NAMES.SETUP_DOCKER_COMPOSE,
-      SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES,
+      // SUB_TASK_NAMES.STOP_LOCAL_CHAINLINK_NODES,
       SUB_TASK_NAMES.START_LOCAL_CHAINLINK_NODES,
       SUB_TASK_NAMES.PREPARE_CHAINLINK_NODES,
     ];
@@ -1373,7 +1373,7 @@ subtask(SUB_TASK_NAMES.DEPLOY_MESSENGER, undefined).setAction(
             gasPrice: BigNumber.from(network.config.gas),
             maxFeePerGas: BigNumber.from(network.config.gas).mul(3),
           }),
-      });
+      }).deployed();
       if (deployedMessenger.newlyDeployed) {
         consola.success(
           messenger.contract +

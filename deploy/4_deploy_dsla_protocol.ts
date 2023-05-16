@@ -3,6 +3,7 @@ import { DeployOptionsBase } from 'hardhat-deploy/dist/types';
 import { CONTRACT_NAMES, DEPLOYMENT_TAGS } from '../constants';
 import { BigNumber } from 'ethers';
 
+console.log("-- 🚀 Deploying dsla protocol");
 module.exports = async ({ getNamedAccounts, deployments, network }) => {
   const { stacktical }: { stacktical: StackticalConfiguration } =
     network.config;
@@ -13,6 +14,7 @@ module.exports = async ({ getNamedAccounts, deployments, network }) => {
     log: true,
   };
 
+  console.log("-- 🚀 Starting libraries deployment");
   await deploy(CONTRACT_NAMES.StringUtils, baseOptions);
   await deploy(CONTRACT_NAMES.PeriodRegistry, baseOptions);
   await deploy(CONTRACT_NAMES.SLORegistry, baseOptions);
