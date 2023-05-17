@@ -21,6 +21,10 @@ import {
   SLA,
   SLORegistry,
   PeriodRegistry,
+  StakingParametricOracle,
+  StakingParametricOracle__factory,
+  StakeRegistry,
+  StakeRegistry__factory,
 } from '../../../typechain';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { evm_increaseTime } from '../../helper';
@@ -28,7 +32,7 @@ import internal from 'stream';
 
 const consola = require('consola');
 
-// TODO Moove that somewhere else
+// TODO Move that somewhere else
 function getDeviationAndDetails(severities, penalties, sli){
   console.log("getDeviationAndDetails, sli ", sli.toString())
   let deviation;
@@ -62,6 +66,8 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
     let slaRegistry: SLARegistry;
     let _sloRegistry;
     let periodRegistry: PeriodRegistry;
+    let stakingParametricOracle: StakingParametricOracle;
+    let stakeRegistry : StakeRegistry;
   
     let sla: SLA;
     let details;
@@ -302,7 +308,21 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
           ).address,
           user_1_account
         );
+
+        stakingParametricOracle = await StakingParametricOracle__factory.connect(
+          (
+            await get(CONTRACT_NAMES.StakingParametricOracle)
+          ).address,
+          user_1_account
+        );
     
+        stakeRegistry = await StakeRegistry__factory.connect(
+          (
+            await get(CONTRACT_NAMES.StakeRegistry)
+          ).address,
+          user_1_account
+        );
+
         slaDetailsP0 = await details.getSLADetailsArrays(sla.address);
         console.log("slaDetails P0 (init)");
         console.log(slaDetailsP0);
@@ -338,6 +358,38 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         });
     });
 
+  // retryRequest tests
+  describe('retryRequest function', () => {
+    const periodId_p1 = Number(0);
+
+    it('Should fail when called by an unauthorized address', async () => {
+      const unauthorizedAccount = provider_1_account; // replace with an unauthorized account
+  
+      const periodStartEnd = await periodRegistry.getPeriodStartAndEnd(
+        PERIOD_TYPE.MONTHLY, periodId_p1
+      );
+
+      console.log("Period starts and ends", periodStartEnd.start.toNumber(), periodStartEnd.end.toNumber())
+      // Increase time to the period end
+      await evm_increaseTime(periodStartEnd.end.toNumber());
+
+      // // Verify the period
+      // await stakeRegistry.verifyPeriod(sla.address, periodId_p1, { from: sla_owner });
+      // await stakeRegistry.
+
+      // Then call the retryRequest function
+      await expect(stakingParametricOracle.connect(unauthorizedAccount).retryRequest(sla.address, 0))
+          .to.be.revertedWith('Can only be called by SLARegistry');
+    });
+
+    it('should succeed when called by the SLARegistry owner', async () => {
+        const slaRegistryAccount = sla_owner;
+
+        await expect(stakingParametricOracle.connect(slaRegistryAccount).retryRequest(sla.address, periodId_p1))
+            .to.emit(sla, 'SLIRequested');
+    });
+  });
+
   // P1 tests
   describe("P1", function () {
     describe("request SLI P1", function () {
@@ -370,7 +422,7 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
         );
 
         console.log("Period starts and ends", periodStartEnd.start.toNumber(), periodStartEnd.end.toNumber())
-        await evm_increaseTime(periodStartEnd.end.toNumber());
+        // await evm_increaseTime(periodStartEnd.end.toNumber());
         await expect(slaRegistry.requestSLI(
           periodId_p1,
           sla.address,
