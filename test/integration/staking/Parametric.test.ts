@@ -373,12 +373,11 @@ describe('DSLA Protocol Parametric Staking Simulation - v2.1.0', () => {
       // Increase time to the period end
       await evm_increaseTime(periodStartEnd.end.toNumber());
 
-      // // Verify the period
-      // await stakeRegistry.verifyPeriod(sla.address, periodId_p1, { from: sla_owner });
-      // await stakeRegistry.
-
       // Then call the retryRequest function
-      await expect(stakingParametricOracle.connect(unauthorizedAccount).retryRequest(sla.address, 0))
+      await expect(stakingParametricOracle.connect(
+          await sla.messengerAddress()
+        )
+          .retryRequest(sla.address, periodId_p1))
           .to.be.revertedWith('Can only be called by SLARegistry');
     });
 
