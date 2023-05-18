@@ -3,8 +3,9 @@ const express = require('express');
 const axios = require('axios');
 const Web3 = require('web3');
 const { SLAABI, MessengerABI } = require('./abis');
-let web3Uri;
-let nextPeriod;
+
+let web3Uri: string;
+let nextPeriod: number;
 
 type SLAData = {
   serviceName: string;
@@ -26,7 +27,7 @@ type RequestData = {
   sla_monitoring_end: number;
 };
 
-async function getSLAData(address): Promise<SLAData> {
+async function getSLAData(address: string): Promise<SLAData> {
   const web3 = new Web3(web3Uri);
   const slaContract = new web3.eth.Contract(SLAABI, address);
   const ipfsCID = await slaContract.methods.ipfsHash().call();
@@ -73,13 +74,18 @@ app.post('/', async (req, res) => {
   const { id, data } = req.body;
   console.log('Request Body:');
   console.log(req.body);
-  const requestData = {
+  const requestData: RequestData = {
     sla_address: data.sla_address,
     network_name: data.network_name,
     sla_monitoring_start: data.sla_monitoring_start,
     sla_monitoring_end: data.sla_monitoring_end,
   };
-  web3Uri = process.env[`${requestData.network_name.toUpperCase()}_URI`];
+  const uri = process.env[`${requestData.network_name.toUpperCase()}_URI`];
+  if (uri) {
+    web3Uri = uri;
+  } else {
+    console.log("No URI found for network " + requestData.network_name);
+  }
   const result = await getSLI(requestData);
   console.log('result:', result);
   res.send({

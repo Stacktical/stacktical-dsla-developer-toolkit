@@ -75,7 +75,9 @@ export const arbitrumtestnet: NetworkUserConfig = {
         },
       ],
     },
-    addresses: {},
+    addresses: {
+      [CONTRACT_NAMES.LinkToken]: '0xf97f4df75117a78c1A5a0DBb814Af92458539FB4',
+    },
     bootstrap: {
       allowance: [
         {
