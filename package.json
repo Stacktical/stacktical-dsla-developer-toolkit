@@ -47,7 +47,6 @@
     "@dsla-protocol/core": "^2.1.2",
     "@graphprotocol/graph-cli": "^0.48.0",
     "@graphprotocol/graph-ts": "^0.29.3",
-    "@harmony-js/core": "^0.1.57",
     "@openzeppelin/contracts": "^4.6.0",
     "@truffle/hdwallet-provider": "^1.3.0",
     "@typechain/ethers-v5": "^7.0.0",
