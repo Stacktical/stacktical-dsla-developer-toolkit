@@ -168,7 +168,7 @@ export const GRAPH_NETWORKS = {
   [NETWORKS.DEVELOP_AVALANCHE]: 'mainnet',
   [NETWORKS.ETHEREUM]: 'mainnet',
   [NETWORKS.ETHEREUMV2]: 'mainnet',
-  [NETWORKS.ZKEVM]: 'testnet',
+  [NETWORKS.ZKEVM]: 'polygon-zkevm',
   [NETWORKS.HARMONY]: 'mainnet',
   [NETWORKS.FANTOM]: 'mainnet',
   [NETWORKS.HARMONYTESTNET]: 'testnet',
