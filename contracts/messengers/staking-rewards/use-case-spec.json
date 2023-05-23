@@ -1,56 +1,26 @@
 {
   "useCaseName": "Staking Rewards",
-  "symbol": "APR",
+  "symbol": "xAPR",
   "sp": {
     "name": "Staking Service Credit (APR)",
-    "symbol": "🔻APR"
+    "symbol": "xAPR"
   },
   "lp": {
     "name": "Staking Service Credit (APR)",
-    "symbol": "🔺APR"
+    "symbol": "xAPR-LP"
   },
   "ownerUrl": "https://dsla.network",
   "useCaseDocs": "https://dsla.network/metaverse",
-  "externalAdapterRepo": "https://github.com/Stacktical/",
+  "externalAdapterRepo": "https://github.com/Stacktical",
   "unit": "%",
-  "keywords": ["post", "apr", "staking", "rewards", "delegator"],
-  "timestamp": "2022-04-07T00:00:00+00:00",
-  "ipfsData": {
-    "serviceName": {
-      "name": "Service Name",
-      "type": "string",
-      "description": "The Validator service name"
-    },
-    "serviceDescription": {
-      "name": "Service Description",
-      "type": "string",
-      "description": "The Validator service description"
-    },
-    "serviceImage": {
-      "name": "Service Image",
-      "type": "url",
-      "description": "The Validator service image url to display"
-    },
-    "serviceURL": {
-      "name": "Service URL",
-      "type": "url",
-      "description": "The Validator service URL"
-    },
-    "serviceAddress": {
-      "name": "Service Address",
-      "type": "address",
-      "description": "The Validator service blockchain address"
-    },
-    "serviceTicker": {
-      "name": "Service Ticker",
-      "type": "string",
-      "description": "The Validator service ticker",
-      "values": ["ETH", "ONE", "DOT", "ATOM", "eGLD", "XTZ", "AVAX", "ROSE"]
-    }
-  },
+  "trustSetup": "minimized",
+  "oracleSetup": "shared",
+  "riskParameter": "APR",
+  "keywords": ["pos", "apr", "staking", "rewards", "delegator"],
+  "timestamp": "2023-05-24T00:00:00+00:00",
   "version": {
     "major": 0,
     "minor": 0,
-    "patch": 1
+    "patch": 2
   }
 }

@@ -1,23 +1,26 @@
 {
   "useCaseName": "Inflation Rate",
-  "symbol": "INFLATION",
+  "symbol": "xCPI",
   "sp": {
     "name": "Inflation Service Credit",
-    "symbol": "🔺INFLATION"
+    "symbol": "xCPI"
   },
   "lp": {
     "name": "Inflation Service Credit",
-    "symbol": "🔻INFLATION"
+    "symbol": "xCPI-LP"
   },
   "ownerUrl": "https://dsla.network",
   "useCaseDocs": "https://dsla.network/metaverse",
-  "externalAdapterRepo": "https://github.com/Stacktical/",
+  "externalAdapterRepo": "https://github.com/Stacktical",
   "unit": "%",
-  "keywords": ["cpi", "wpi", "inflation", "truflation"],
-  "timestamp": "2022-04-12T00:00:00+00:00",
+  "trustSetup": "decentralized",
+  "oracleSetup": "shared",
+  "riskParameter": "inflation",
+  "keywords": ["cpi", "inflation"],
+  "timestamp": "2023-05-24T00:00:00+00:00",
   "version": {
     "major": 0,
     "minor": 0,
-    "patch": 1
+    "patch": 2
   }
 }

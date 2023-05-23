@@ -8,8 +8,8 @@ dataSources:
     name: SLARegistry
     network: mainnet
     source:
-      address: "0x630589690929E9cdEFDeF0734717a9eF3Ec7Fcfe"
-      startBlock: 16
+      address: "0x5b9b42d6e4B2e4Bf8d42Eba32D46918e10899B66"
+      startBlock: 35
       abi: SLARegistry
     mapping:
       kind: ethereum/events
@@ -30,8 +30,8 @@ dataSources:
     name: SLORegistry
     network: mainnet
     source:
-      address: "0x2612Af3A521c2df9EAF28422Ca335b04AdF3ac66"
-      startBlock: 13
+      address: "0xA586074FA4Fe3E546A132a16238abe37951D41fE"
+      startBlock: 32
       abi: SLORegistry
     mapping:
       kind: ethereum/events
@@ -52,8 +52,8 @@ dataSources:
     name: StakeRegistry
     network: mainnet
     source:
-      address: "0x26b4AFb60d6C903165150C6F0AA14F8016bE4aec"
-      startBlock: 15
+      address: "0x970e8f18ebfEa0B08810f33a5A40438b9530FBCF"
+      startBlock: 34
       abi: StakeRegistry
     mapping:
       kind: ethereum/events
@@ -74,8 +74,8 @@ dataSources:
     name: MessengerRegistry
     network: mainnet
     source:
-      address: "0xA57B8a5584442B467b4689F1144D269d096A3daF"
-      startBlock: 14
+      address: "0x2D8BE6BF0baA74e0A907016679CaE9190e80dD0A"
+      startBlock: 33
       abi: MessengerRegistry
     mapping:
       kind: ethereum/events
@@ -114,7 +114,7 @@ templates:
       eventHandlers:
         - event: SLICreated(uint256,uint256,uint256)
           handler: handleSLICreated
-        - event: Stake(indexed address,indexed uint256,indexed address,uint256,uint8)
+        - event: Stake(indexed address,indexed uint256,indexed address,uint256)
           handler: handleStake
         - event: ProviderWithdraw(indexed address,indexed uint256,indexed address,uint256)
           handler: handleProviderWithdraw
