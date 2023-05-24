@@ -59,6 +59,7 @@ export type { StakingParametricOracle } from "./StakingParametricOracle";
 export type { StakingRewardsOracle } from "./StakingRewardsOracle";
 export type { StakingUptimeOracle } from "./StakingUptimeOracle";
 export type { OpenAIStatusPageOracle } from "./OpenAIStatusPageOracle";
+export type { MockOracle } from "./MockOracle";
 export type { EthereumERC20 } from "./EthereumERC20";
 export type { FantomERC20 } from "./FantomERC20";
 export type { PolygonERC20 } from "./PolygonERC20";

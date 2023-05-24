@@ -45,6 +45,7 @@ export enum CONTRACT_NAMES {
   StakingParametricOracle = 'StakingParametricOracle',
   L2UptimeOracle = 'L2UptimeOracle',
   OpenAIStatusPageOracle = 'OpenAIStatusPageOracle',
+  MockOracle = 'MockOracle',
 }
 
 export enum TOKEN_NAMES {
@@ -83,6 +84,7 @@ export enum USE_CASES {
   STAKING_PARAMETRIC = 'staking-parametric',
   L2_UPTIME = 'l2-uptime',
   STATUSPAGE_SERVICE = 'statuspage-service',
+  MOCK_MESSENGER = 'mock-messenger',
 }
 
 export const STAKING_REWARDS_SPECS = JSON.parse(
