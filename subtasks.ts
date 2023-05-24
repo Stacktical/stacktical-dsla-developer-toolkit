@@ -1914,8 +1914,17 @@ subtask(SUB_TASK_NAMES.DEPLOY_SLA, undefined).setAction(
 
       console.log(`SLA address: ${slaAddresses[slaAddresses.length - 1]}`);
 
-      tx = await sla.addAllowedTokens(dslaToken.address);
-      // tx = await sla.addAllowedTokens(wethToken.address);
+      tx = await sla.addAllowedTokens(dslaToken.address, {
+        ...(hre.network.config.gas !== 'auto' &&
+          hre.network.config.chainId != 137 && {
+            gasLimit: hre.network.config.gas,
+          }),
+        ...(hre.network.config.gas !== 'auto' &&
+          hre.network.config.chainId == 137 && {
+            gasPrice: hre.network.config.gas,
+          }),
+      });
+      
       await tx.wait();
 
       console.log('Starting process 3: Stake on Provider and User pools');
