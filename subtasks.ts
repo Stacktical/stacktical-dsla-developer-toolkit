@@ -2005,11 +2005,37 @@ subtask(SUB_TASK_NAMES.REQUEST_SLI, undefined).setAction(
     let tx;
     if (taskArgs.retry) {
       console.log('Retrying request...');
+
+      // const linkToken = await get(CONTRACT_NAMES.LinkToken);
+
+      // const token = await ERC20__factory.connect(linkToken.address, signer);
+
+      // let approval = await token.approve(
+      //   '0x834B065cf4Ac904E4bFfd983Ec2b2A6c8Af8AD7E',
+      //   toWei('10')
+      // );
+
+      // approval.wait();
+
       const messenger = IMessenger__factory.connect(
         await sla.messengerAddress(),
         await ethers.getSigner(deployer)
       );
-      tx = await messenger.retryRequest(slaAddress, nextVerifiablePeriod);
+
+      tx = await messenger.retryRequest(
+        sla.address,
+        Number(nextVerifiablePeriod),
+        {
+          ...(hre.network.config.gas !== 'auto' &&
+            hre.network.config.chainId != 137 && {
+              gasLimit: hre.network.config.gas,
+            }),
+          ...(hre.network.config.gas !== 'auto' &&
+            hre.network.config.chainId == 137 && {
+              gasPrice: hre.network.config.gas,
+            }),
+        }
+      );
     } else {
       console.log('Requesting SLI...');
       tx = await slaRegistry.requestSLI(
