@@ -127,6 +127,11 @@ export const develop: NetworkUserConfig = {
           token: CONTRACT_NAMES.LinkToken,
           allowance: '10',
         },
+        {
+          contract: CONTRACT_NAMES.MockOracle,
+          token: CONTRACT_NAMES.LinkToken,
+          allowance: '10',
+        },
       ],
       registry: {
         periods: [
@@ -227,7 +232,7 @@ export const develop: NetworkUserConfig = {
         dslaLpSymbol: SERVICE_CREDITS.STAKING_PARAMETRIC.DSLA_LP.symbol,
         dslaSpName: SERVICE_CREDITS.STAKING_PARAMETRIC.DSLA_SP.name,
         dslaSpSymbol: SERVICE_CREDITS.STAKING_PARAMETRIC.DSLA_SP.symbol,
-      },    
+      },
       {
         contract: CONTRACT_NAMES.L2UptimeOracle,
         useCaseName: USE_CASES.L2_UPTIME,

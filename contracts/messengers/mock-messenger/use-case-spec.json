@@ -1,0 +1,29 @@
+{
+  "useCaseName": "Linea Testnet Mock Messenger",
+  "symbol": "xTEST",
+  "sp": {
+    "name": "Mock Service Credit",
+    "symbol": "xTEST"
+  },
+  "lp": {
+    "name": "Mock Service Credit",
+    "symbol": "xTEST-LP"
+  },
+  "ownerUrl": "https://dsla.network",
+  "useCaseDocs": "https://dsla.network/metaverse",
+  "externalAdapterRepo": "https://github.com/Stacktical/",
+  "unit": "%",
+  "keywords": [
+    "dsla",
+    "test",
+    "linea",
+    "zkevm",
+    "mock"
+  ],
+  "timestamp": "2023-05-04T00:00:00+00:00",
+  "version": {
+    "major": 0,
+    "minor": 0,
+    "patch": 1
+  }
+}
