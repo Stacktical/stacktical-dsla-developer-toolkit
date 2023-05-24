@@ -1,20 +1,23 @@
 {
   "useCaseName": "Staking Rewards",
-  "symbol": "APR",
+  "symbol": "xAPR",
   "sp": {
     "name": "Staking Service Credit (APR)",
-    "symbol": "🔻APR"
+    "symbol": "xAPR"
   },
   "lp": {
     "name": "Staking Service Credit (APR)",
-    "symbol": "🔺APR"
+    "symbol": "xAPR-LP"
   },
   "ownerUrl": "https://dsla.network",
   "useCaseDocs": "https://dsla.network/metaverse",
-  "externalAdapterRepo": "https://github.com/Stacktical/",
+  "externalAdapterRepo": "https://github.com/Stacktical",
   "unit": "%",
-  "keywords": ["post", "apr", "staking", "rewards", "delegator"],
-  "timestamp": "2022-04-07T00:00:00+00:00",
+  "trustSetup": "minimized",
+  "oracleSetup": "shared",
+  "riskParameter": "APR",
+  "keywords": ["pos", "apr", "staking", "rewards", "delegator"],
+  "timestamp": "2023-05-24T00:00:00+00:00",
   "ipfsData": {
     "serviceName": {
       "name": "Service Name",
@@ -51,6 +54,6 @@
   "version": {
     "major": 0,
     "minor": 0,
-    "patch": 1
+    "patch": 2
   }
 }

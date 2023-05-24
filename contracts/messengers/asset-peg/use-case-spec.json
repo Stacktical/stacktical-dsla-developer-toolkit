@@ -11,13 +11,16 @@
   },
   "ownerUrl": "https://dsla.network",
   "useCaseDocs": "https://dsla.network/metaverse",
-  "externalAdapterRepo": "https://github.com/Stacktical/",
+  "externalAdapterRepo": "https://github.com/Stacktical",
   "unit": "%",
+  "trustSetup": "minimized",
+  "oracleSetup": "shared",
+  "riskParameter": "peg",
   "keywords": ["peg", "liquid staking", "lsd", "synthetic", "stablecoin", "cdbc", "asset"],
-  "timestamp": "2023-02-08T00:00:00+00:00",
+  "timestamp": "2023-05-24T00:00:00+00:00",
   "version": {
     "major": 0,
     "minor": 0,
-    "patch": 1
+    "patch": 2
   }
 }

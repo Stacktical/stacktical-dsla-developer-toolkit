@@ -114,7 +114,7 @@ templates:
       eventHandlers:
         - event: SLICreated(uint256,uint256,uint256)
           handler: handleSLICreated
-        - event: Stake(indexed address,indexed uint256,indexed address,uint256,uint8)
+        - event: Stake(indexed address,indexed uint256,indexed address,uint256)
           handler: handleStake
         - event: ProviderWithdraw(indexed address,indexed uint256,indexed address,uint256)
           handler: handleProviderWithdraw

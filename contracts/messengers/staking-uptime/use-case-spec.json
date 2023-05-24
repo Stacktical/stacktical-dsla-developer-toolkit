@@ -1,20 +1,23 @@
 {
   "useCaseName": "Staking Uptime",
-  "symbol": "UPTIME",
+  "symbol": "xUPTIME",
   "sp": {
     "name": "Staking Service Credit (Uptime)",
-    "symbol": "🔻UPTIME"
+    "symbol": "xUPTIME"
   },
   "lp": {
     "name": "Staking Service Credit (Uptime)",
-    "symbol": "🔺UPTIME"
+    "symbol": "xUPTIME-LP"
   },
   "ownerUrl": "https://dsla.network",
   "useCaseDocs": "https://dsla.network/metaverse",
-  "externalAdapterRepo": "https://github.com/Stacktical/",
+  "externalAdapterRepo": "https://github.com/Stacktical",
   "unit": "%",
-  "keywords": ["pos", "uptime", "staking", "rewards", "validator"],
-  "timestamp": "2022-04-07T00:00:00+00:00",
+  "trustSetup": "minimized",
+  "oracleSetup": "shared",
+  "riskParameter": "APR",
+  "keywords": ["pos", "staking", "uptime", "validator"],
+  "timestamp": "2023-05-24T00:00:00+00:00",
   "ipfsData": {
     "serviceName": {
       "name": "Service Name",
@@ -51,6 +54,6 @@
   "version": {
     "major": 0,
     "minor": 0,
-    "patch": 1
+    "patch": 2
   }
 }
