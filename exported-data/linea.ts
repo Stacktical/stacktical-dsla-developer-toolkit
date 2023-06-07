@@ -1,4 +1,4 @@
-export const zkevm = {
+export const linea = {
   SLORegistry: '0x7a257FAC68626827e5f6d46A9D5416a6D6B38464',
   SLARegistry: '0x9986B2ec991D58954A3AE6f3Ab754FFE2EDE21a4',
   MessengerRegistry: '0xddB17A5368ACA9FEdaF427FFbc2EDBDD5c00FafF',

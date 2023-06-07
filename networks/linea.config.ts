@@ -13,7 +13,7 @@ import Joi from 'joi';
 
 const schema = Joi.object({
   MAINNET_MNEMONIC: Joi.string().required(),
-  ZKEVM_URI: Joi.string().required(),
+  LINEA_URI: Joi.string().required(),
   STAKING_REWARDS_ADAPTER: Joi.string().required(),
 }).unknown();
 
@@ -25,12 +25,12 @@ if (error) {
   process.env = value;
 }
 
-export const zkevm: NetworkUserConfig = {
+export const linea: NetworkUserConfig = {
   chainId: 59140,
   accounts: {
     mnemonic: process.env.MAINNET_MNEMONIC,
   },
-  url: process.env.ZKEVM_URI,
+  url: process.env.LINEA_URI,
   stacktical: {
     checkPastPeriods: true,
     deployTokens: true,
@@ -57,7 +57,7 @@ export const zkevm: NetworkUserConfig = {
       deleteOldJobs: false,
       cleanLocalFolder: false,
       nodeFunds: '1',
-      ethWsUrl: process.env.ZKEVM_URI,
+      ethWsUrl: process.env.LINEA_URI,
       nodesConfiguration: [],
     },
     addresses: {},
