@@ -45,6 +45,8 @@ FUJI_URI="http://localhost:1234"
 FUJI_WS_URI="ws://localhost:1234"
 FANTOM_URI="http://localhost:1234"
 FANTOM_WS_URI="ws://localhost:1234"
+LINEA_URI="http://localhost:1234"
+LINEA_WS_URI="http://localhost:1234"
 
 ## External adapters
 DEVELOP_INDEXER_URI="http://host.docker.internal:6070"
