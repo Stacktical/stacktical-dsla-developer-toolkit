@@ -1009,5 +1009,33 @@ export const scripts: ScriptsConfiguration = {
         serviceSliMockingPlan: [5, 15, 25],
       },
     },
+    // INDEX 34, Contract for listing Lybra Finance (eUSD)
+    {
+      sloValue: 99,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.AssetPegOracle,
+      initialPeriodId: 9, // 07/01/2023 00:00:00
+      finalPeriodId: 10, // 08/07/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Lybra eUSD',
+        serviceDescription: "The World's First Interest-Bearing Stablecoin Backed by LSD",
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/currencies/EUSD.png',
+        serviceURL: 'https://lybra.finance/',
+        serviceAddress: '0x97de57ec338ab5d51557da3434828c5dbfada371',
+        serviceTicker: 'EUSD',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+      },
+    },
   ],
 };
