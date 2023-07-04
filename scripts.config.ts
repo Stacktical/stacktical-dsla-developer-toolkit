@@ -1016,8 +1016,8 @@ export const scripts: ScriptsConfiguration = {
       whitelisted: false,
       periodType: PERIOD_TYPE.MONTHLY,
       messengerContract: CONTRACT_NAMES.AssetPegOracle,
-      initialPeriodId: 9, // 07/01/2023 00:00:00
-      finalPeriodId: 10, // 08/07/2023 00:00:00
+      initialPeriodId: 9, // 08/01/2023 00:00:00
+      finalPeriodId: 10, // 09/07/2023 00:00:00
       severity: [], // SLI vs SLO Deviation
       penalty: [], // SLI vs SLO Deviation
       initialTokenSupply: '0',
@@ -1027,12 +1027,12 @@ export const scripts: ScriptsConfiguration = {
       leverage: 1,
       serviceMetadata: {
         serviceName: 'Lybra eUSD',
-        serviceDescription: "The World's First Interest-Bearing Stablecoin Backed by LSD",
+        serviceDescription: "eUSD is an USD stablecoin issued by Lybra Finance that is backed by liquid staking tokens (LSD).",
         serviceImage:
           'https://storage.googleapis.com/dsla-network/currencies/EUSD.png',
         serviceURL: 'https://lybra.finance/',
         serviceAddress: '0x97de57ec338ab5d51557da3434828c5dbfada371',
-        serviceTicker: 'EUSD',
+        serviceTicker: 'eUSD',
         serviceUseTestExternalAdapter: false,
         serviceSliMockingPlan: [5, 15, 25],
       },
