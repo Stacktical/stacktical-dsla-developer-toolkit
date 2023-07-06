@@ -1037,5 +1037,392 @@ export const scripts: ScriptsConfiguration = {
         serviceSliMockingPlan: [5, 15, 25],
       },
     },
+    // INDEX 35, Contract for listing Lido (sTETH)
+    {
+      sloValue: 99,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.AssetPegOracle,
+      initialPeriodId: 9, // 08/01/2023 00:00:00
+      finalPeriodId: 11, // 31/10/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Lido stEPH',
+        serviceDescription: 'stETH is a token that represents staked ether in Lido, combining the value of initial deposit + staking rewards. stETH tokens are pegged 1:1 to the ETH staked with Lido and can be used as one would use ether, allowing users to earn Eth2 staking rewards whilst benefiting from Defi yields.',
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/currencies/STEPH.png',
+        serviceURL: 'https://stake.lido.fi/',
+        serviceAddress: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
+        serviceTicker: 'stETH',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+      },
+    },
+    // INDEX 36, Contract for listing Coinbase Wrapped Staked ETH (cbETH)
+    {
+      sloValue: 99,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.AssetPegOracle,
+      initialPeriodId: 9, // 08/01/2023 00:00:00
+      finalPeriodId: 11, // 31/10/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Coinbase Wrapped Staked ETH',
+        serviceDescription: 'Coinbase Wrapped Staked ETH (“cbETH”) is a utility token and liquid representation of ETH staked through Coinbase. cbETH gives customers the option to sell, transfer, or otherwise use their staked ETH in dapps while it remains locked by the Ethereum protocol.',
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/currencies/CBEPH.png',
+        serviceURL: 'https://stake.lido.fi/',
+        serviceAddress: '0xBe9895146f7AF43049ca1c1AE358B0541Ea49704',
+        serviceTicker: 'cbETH',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+      },
+    },
+    // INDEX 37, Contract for listing Rocket Pool ETH (rETH)
+    {
+      sloValue: 99,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.AssetPegOracle,
+      initialPeriodId: 9, // 08/01/2023 00:00:00
+      finalPeriodId: 11, // 31/10/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Rocket Pool ETH',
+        serviceDescription: 'Rocket Pool is a decentralised Ethereum Proof of Stake pool.',
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/currencies/RETH.png',
+        serviceURL: 'https://stake.lido.fi/',
+        serviceAddress: '0xae78736Cd615f374D3085123A210448E74Fc6393',
+        serviceTicker: 'rETH',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+      },
+    },
+    // INDEX 38, Contract for listing Staked Frax Ether (sfrxETH)
+    {
+      sloValue: 99,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.AssetPegOracle,
+      initialPeriodId: 9, // 08/01/2023 00:00:00
+      finalPeriodId: 11, // 31/10/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Staked Frax Ether sfrxETH',
+        serviceDescription: "sfrxETH is the version of frxETH which accrues staking yield. All profit generated from Frax Ether validators is distributed to sfrxETH holders. By exchanging frxETH for sfrxETH, one become's eligible for staking yield, which is redeemed upon converting sfrxETH back to frxETH.",
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/currencies/SFRXETH.png',
+        serviceURL: 'https://app.frax.finance/',
+        serviceAddress: '0xac3E018457B222d93114458476f3E3416Abbe38F',
+        serviceTicker: 'sfrxETH',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+      },
+    },
+    // INDEX 39, Contract for listing StakeWise Staked ETH2 (sETH2)
+    {
+      sloValue: 99,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.AssetPegOracle,
+      initialPeriodId: 9, // 08/01/2023 00:00:00
+      finalPeriodId: 11, // 31/10/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'StakeWise Staked ETH2',
+        serviceDescription: "sETH2 represents ETH that has been deposited into StakeWise Pool. It doesn't reflect the accrued staking rewards, only the principal amount, i.e. deposit.",
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/currencies/STETH2.png',
+        serviceURL: 'https://stakewise.io/',
+        serviceAddress: '0xFe2e637202056d30016725477c5da089Ab0A043A',
+        serviceTicker: 'sETH2',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+      },
+    },
+    // INDEX 40, Contract for listing Binance staked ETH
+    {
+      sloValue: 99,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.AssetPegOracle,
+      initialPeriodId: 9, // 08/01/2023 00:00:00
+      finalPeriodId: 11, // 31/10/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Binance staked ETH',
+        serviceDescription: 'WBETH is a new liquid staking token, where 1 WBETH represents 1 BETH and the total staking rewards accrued by the BETH token.',
+        serviceImage: 'https://storage.googleapis.com/dsla-network/currencies/WBETH.png',
+        serviceURL: 'https://www.binance.com/en/',
+        serviceAddress: '0xa2E3356610840701BDf5611a53974510Ae27E2e1',
+        serviceTicker: 'wBETH',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+      },
+    },
+    // INDEX 41, Contract for listing StakeHound stakedETH (stETH)
+    {
+      sloValue: 99,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.AssetPegOracle,
+      initialPeriodId: 9, // 08/01/2023 00:00:00
+      finalPeriodId: 11, // 31/10/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'StakeHound stakedETH (stETH)',
+        serviceDescription: "stakedETH (stETH) from StakeHound is a tokenized representation of ETH staked in Ethereum 2.0 mainnet which allows holders to earn Eth2 staking rewards while participating in the Ethereum DeFi ecosystem. Staking rewards are distributed directly into holders' wallets.",
+        serviceImage: 'https://storage.googleapis.com/dsla-network/currencies/STAKEDETH.png',
+        serviceURL: 'https://stakehound.com/',
+        serviceAddress: '0xDFe66B14D37C77F4E9b180cEb433d1b164f0281D',
+        serviceTicker: 'stETH',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+      },
+    },
+    // INDEX 42, Contract for listing Ankr Staked ETH (ankrETH)
+    {
+      sloValue: 99,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.AssetPegOracle,
+      initialPeriodId: 9, // 08/01/2023 00:00:00
+      finalPeriodId: 11, // 31/10/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Ankr Staked ETH ankrETH',
+        serviceDescription: "Ankr's Eth2 staking solution provides the best user experience and highest level of safety, combined with an attractive reward mechanism and instant staking liquidity through a bond-like synthetic token called aETH.",
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/currencies/ANKRETH.png',
+        serviceURL: 'https://www.ankr.com/staking-crypto/',
+        serviceAddress: '0xE95A203B1a91a908F9B9CE46459d101078c2c3cb',
+        serviceTicker: 'ankrETH',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+      },
+    },
+    // INDEX 42, Contract for listing SweLl Network swETH
+    {
+      sloValue: 99,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.AssetPegOracle,
+      initialPeriodId: 9, // 08/01/2023 00:00:00
+      finalPeriodId: 11, // 31/10/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'SweLl Network swETH',
+        serviceDescription: 'swETH is a decentralized and non-custodial liquid staking token that provides users with the opportunity to earn staking rewards while retaining liquidity over their Ethereum holdings.',
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/currencies/SWETH.png',
+        serviceURL: 'https://www.swellnetwork.io/',
+        serviceAddress: '0xf951E335afb289353dc249e82926178EaC7DEd78',
+        serviceTicker: 'swETH',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+      },
+    },
+    // INDEX 43, Contract for listing Cream ETH Token (CRETH2)
+    {
+      sloValue: 99,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.AssetPegOracle,
+      initialPeriodId: 9, // 08/01/2023 00:00:00
+      finalPeriodId: 11, // 31/10/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Cream ETH Token (CRETH2)',
+        serviceDescription: 'Cream.Finance offers flexible stake ETH with C.R.E.A.M. for Eth2.',
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/currencies/CRETH2.png',
+        serviceURL: 'https://classic.cream.finance/eth2/',
+        serviceAddress: '0x49D72e3973900A195A155a46441F0C08179FdB64',
+        serviceTicker: 'CRETH2',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+      },
+    },
+    // INDEX 44, Contract for listing StaFi Staked ETH
+    {
+      sloValue: 99,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.AssetPegOracle,
+      initialPeriodId: 9, // 08/01/2023 00:00:00
+      finalPeriodId: 11, // 31/10/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'StaFi Staked ETH',
+        serviceDescription: "StaFi protocol is the first decentralized protocol unlocking liquidity of Staked assets.StaFi aims to solve the contradiction between Mainnet security and token liquidity in PoS consensus.",
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/currencies/STAFIRETH.png',
+        serviceURL: 'https://app.stafi.io',
+        serviceAddress: '0x9559aaa82d9649c7a7b220e7c461d2e74c9a3593',
+        serviceTicker: 'rETH',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+      },
+    },    // INDEX 45, Contract for listing Guarded Ether (GETH)
+    {
+      sloValue: 99,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.AssetPegOracle,
+      initialPeriodId: 9, // 08/01/2023 00:00:00
+      finalPeriodId: 11, // 31/10/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'Guarded Ether GETH',
+        serviceDescription: 'Guarda Wallet is a non-custodial cryptocurrency wallet. Stake, exchange, earn and buy Ethereum, Bitcoin, and thousands of other assets. Guarded Ether is ETH2 stake token.',
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/currencies/GETH.png',
+        serviceURL: 'https://guarda.com/staking/ethereum-staking/',
+        serviceAddress: '0x3802c218221390025bceabbad5d8c59f40eb74b8',
+        serviceTicker: 'GETH',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+      },
+    },    // INDEX 46, Contract for listing NodeDAO ETH (nETH)
+    {
+      sloValue: 99,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.AssetPegOracle,
+      initialPeriodId: 9, // 08/01/2023 00:00:00
+      finalPeriodId: 11, // 31/10/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'NodeDAO nETH',
+        serviceDescription: 'NodeDAO has introduced nETH, a liquid staking token that is minted upon staking ETH',
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/currencies/NETH.png',
+        serviceURL: 'https://www.nodedao.com/',
+        serviceAddress: '0xC6572019548dfeBA782bA5a2093C836626C7789A',
+        serviceTicker: 'nETH',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+      },
+    },    // INDEX 47, Contract for listing Hord hETH
+    {
+      sloValue: 99,
+      sloType: SLO_TYPE.GreaterThan,
+      whitelisted: false,
+      periodType: PERIOD_TYPE.MONTHLY,
+      messengerContract: CONTRACT_NAMES.AssetPegOracle,
+      initialPeriodId: 9, // 08/01/2023 00:00:00
+      finalPeriodId: 11, // 31/10/2023 00:00:00
+      severity: [], // SLI vs SLO Deviation
+      penalty: [], // SLI vs SLO Deviation
+      initialTokenSupply: '0',
+      initialTokenSupplyDivisor: 1,
+      deployerStakeTimes: 1,
+      notDeployerStakeTimes: 1,
+      leverage: 1,
+      serviceMetadata: {
+        serviceName: 'HordETH hETH',
+        serviceDescription: 'Hord offers a safe and easy way for users to stake their ETH by taking care of the validators and the technical operation.',
+        serviceImage:
+          'https://storage.googleapis.com/dsla-network/currencies/HETH.png',
+        serviceURL: 'https://app.hord.fi/',
+        serviceAddress: '0x5bBe36152d3CD3eB7183A82470b39b29EedF068B',
+        serviceTicker: 'hETH',
+        serviceUseTestExternalAdapter: false,
+        serviceSliMockingPlan: [5, 15, 25],
+      },
+    }
   ],
 };
