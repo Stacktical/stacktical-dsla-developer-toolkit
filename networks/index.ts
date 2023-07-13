@@ -7,6 +7,7 @@ export const networks = [
   { name: NETWORKS.ETHEREUM, enabled: false },
   { name: NETWORKS.ETHEREUMV2, enabled: false },
   { name: NETWORKS.LINEA, enabled: false },
+  { name: NETWORKS.LINEATESTNET, enabled: false },
   { name: NETWORKS.ZKEVM, enabled: false },
   { name: NETWORKS.HARMONY, enabled: false },
   { name: NETWORKS.POLYGON, enabled: false },

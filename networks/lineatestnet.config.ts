@@ -13,7 +13,7 @@ import Joi from 'joi';
 
 const schema = Joi.object({
   MAINNET_MNEMONIC: Joi.string().required(),
-  LINEA_URI: Joi.string().required(),
+  LINEATESTNET_URI: Joi.string().required(),
   STAKING_REWARDS_ADAPTER: Joi.string().required(),
 }).unknown();
 
@@ -26,31 +26,29 @@ if (error) {
 }
 
 export const linea: NetworkUserConfig = {
-  chainId: 59144,
+  chainId: 59140,
   accounts: {
     mnemonic: process.env.MAINNET_MNEMONIC,
   },
-  url: process.env.LINEA_URI,
+  url: process.env.LINEATESTNET_URI,
   stacktical: {
-    deployTokens: false,
     checkPastPeriods: true,
+    deployTokens: true,
     tokens: [
       /** https://etherscan.io/tokens */
       {
         factory: EthereumERC20__factory,
-        name: TOKEN_NAMES.DSLA,
-        address: '',
-
+        name: TOKEN_NAMES.DSLA
       },
       {
         factory: EthereumERC20__factory,
-        name: TOKEN_NAMES.USDC,
-        address: '',
+        name: TOKEN_NAMES.crUSDC,
+        address: '0x964FF70695da981027c81020B1c58d833D49A640',
       },
       {
         factory: EthereumERC20__factory,
-        name: TOKEN_NAMES.USDT,
-        address: '',
+        name: TOKEN_NAMES.WETH,
+        address: '0x2C1b868d6596a18e32E61B901E4060C872647b6C',
       },
     ],
     ipfs: process.env.IPFS_URI,
@@ -59,7 +57,7 @@ export const linea: NetworkUserConfig = {
       deleteOldJobs: false,
       cleanLocalFolder: false,
       nodeFunds: '1',
-      ethWsUrl: process.env.LINEA_URI,
+      ethWsUrl: process.env.LINEATESTNET_URI,
       nodesConfiguration: [],
     },
     addresses: {},
