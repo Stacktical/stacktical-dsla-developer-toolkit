@@ -26,7 +26,7 @@ if (error) {
 }
 
 export const linea: NetworkUserConfig = {
-  chainId: 59144,
+  chainId: 5000,
   accounts: {
     mnemonic: process.env.MAINNET_MNEMONIC,
   },
