@@ -39,18 +39,13 @@ export const linea: NetworkUserConfig = {
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.DSLA,
-        address: '',
+        address: '0x70359c1eeB98eb3D12eE7178359a4541ff11Cc8E',
 
       },
       {
         factory: EthereumERC20__factory,
-        name: TOKEN_NAMES.USDC,
-        address: '',
-      },
-      {
-        factory: EthereumERC20__factory,
-        name: TOKEN_NAMES.USDT,
-        address: '',
+        name: TOKEN_NAMES.WETH,
+        address: '0xe5D7C2a44FfDDf6b295A15c148167daaAf5Cf34f',
       },
     ],
     ipfs: process.env.IPFS_URI,
