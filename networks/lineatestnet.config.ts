@@ -13,7 +13,7 @@ import Joi from 'joi';
 
 const schema = Joi.object({
   MAINNET_MNEMONIC: Joi.string().required(),
-  ZKEVM_URI: Joi.string().required(),
+  LINEATESTNET_URI: Joi.string().required(),
   STAKING_REWARDS_ADAPTER: Joi.string().required(),
 }).unknown();
 
@@ -25,30 +25,30 @@ if (error) {
   process.env = value;
 }
 
-export const zkevm: NetworkUserConfig = {
-  chainId: 1101,
+export const linea: NetworkUserConfig = {
+  chainId: 59140,
   accounts: {
     mnemonic: process.env.MAINNET_MNEMONIC,
   },
-  url: process.env.ZKEVM_URI,
+  url: process.env.LINEATESTNET_URI,
   stacktical: {
     checkPastPeriods: true,
-    deployTokens: false,
+    deployTokens: true,
     tokens: [
       /** https://etherscan.io/tokens */
       {
         factory: EthereumERC20__factory,
-        name: TOKEN_NAMES.DSLA      
+        name: TOKEN_NAMES.DSLA
       },
       {
         factory: EthereumERC20__factory,
-        name: TOKEN_NAMES.USDC,
-        address: '0xA8CE8aee21bC2A48a5EF670afCc9274C7bbbC035',
+        name: TOKEN_NAMES.crUSDC,
+        address: '0x964FF70695da981027c81020B1c58d833D49A640',
       },
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.WETH,
-        address: '0x4F9A0e7FD2Bf6067db6994CF12E4495Df938E6e9',
+        address: '0x2C1b868d6596a18e32E61B901E4060C872647b6C',
       },
     ],
     ipfs: process.env.IPFS_URI,
@@ -57,7 +57,7 @@ export const zkevm: NetworkUserConfig = {
       deleteOldJobs: false,
       cleanLocalFolder: false,
       nodeFunds: '1',
-      ethWsUrl: process.env.ZKEVM_URI,
+      ethWsUrl: process.env.LINEATESTNET_URI,
       nodesConfiguration: [],
     },
     addresses: {},

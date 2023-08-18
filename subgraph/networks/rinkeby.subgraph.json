@@ -8,6 +8,5 @@
   "messengerRegistryAddress": "0x45D5E52AFB831a56B7c667222522c944f797A858",
   "messengerRegistryStartBlock": 9091464,
   "periodRegistryAddress": "0x3E89f98519D9577A9370D9fbd74d642EEf733915",
-  "periodRegistryStartBlock": 9091462,
-  "graphNetwork": "rinkeby"
+  "periodRegistryStartBlock": 9091462
 }

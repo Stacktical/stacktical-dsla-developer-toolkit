@@ -1,4 +1,4 @@
-specVersion: 0.0.3
+specVersion: 0.0.4
 description: DSLA protocol
 repository: https://github.com/Stacktical/stacktical-dsla-contracts
 schema:
@@ -6,14 +6,14 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: SLARegistry
-    network: avalanche
+    network: linea
     source:
-      address: "0xBa4FC6E06276Fd5402e3edb52EE39Cf7b6B2E678"
-      startBlock: 5074796
+      address: "0x9986B2ec991D58954A3AE6f3Ab754FFE2EDE21a4"
+      startBlock: 257829
       abi: SLARegistry
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - SLA
@@ -28,14 +28,14 @@ dataSources:
       file: ../mapping.ts
   - kind: ethereum/contract
     name: SLORegistry
-    network: avalanche
+    network: linea
     source:
-      address: "0x2C092604e3A3a934DFE3D0Bc2c1CaeEc4AEb3E74"
-      startBlock: 5074782
+      address: "0x7a257FAC68626827e5f6d46A9D5416a6D6B38464"
+      startBlock: 257826
       abi: SLORegistry
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - SLA
@@ -50,14 +50,14 @@ dataSources:
       file: ../mapping.ts
   - kind: ethereum/contract
     name: StakeRegistry
-    network: avalanche
+    network: linea
     source:
-      address: "0x9c78f8FB7B5944255bDCA8f81083Fb0a452b10EE"
-      startBlock: 5074791
+      address: "0xe744E91660683765feDC36893D05bCC4B5Ac29C4"
+      startBlock: 257828
       abi: StakeRegistry
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - StakeRegistry
@@ -72,14 +72,14 @@ dataSources:
       file: ../mapping.ts
   - kind: ethereum/contract
     name: MessengerRegistry
-    network: avalanche
+    network: linea
     source:
-      address: "0xd41352bCacc58cbbF14E2F8c52D4cD3d41AB5697"
-      startBlock: 5074786
+      address: "0xddB17A5368ACA9FEdaF427FFbc2EDBDD5c00FafF"
+      startBlock: 257827
       abi: MessengerRegistry
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - MessengerRegistry
@@ -98,12 +98,12 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: SLA
-    network: avalanche
+    network: linea
     source:
       abi: SLA
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       file: ../mapping.ts
       entities:

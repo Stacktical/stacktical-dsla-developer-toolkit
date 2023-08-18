@@ -13,7 +13,7 @@ import Joi from 'joi';
 
 const schema = Joi.object({
   MAINNET_MNEMONIC: Joi.string().required(),
-  ZKEVM_URI: Joi.string().required(),
+  LINEA_URI: Joi.string().required(),
   STAKING_REWARDS_ADAPTER: Joi.string().required(),
 }).unknown();
 
@@ -25,30 +25,42 @@ if (error) {
   process.env = value;
 }
 
-export const zkevm: NetworkUserConfig = {
-  chainId: 1101,
+export const linea: NetworkUserConfig = {
+  chainId: 5000,
   accounts: {
     mnemonic: process.env.MAINNET_MNEMONIC,
   },
-  url: process.env.ZKEVM_URI,
+  url: process.env.LINEA_URI,
   stacktical: {
-    checkPastPeriods: true,
     deployTokens: false,
+    checkPastPeriods: true,
     tokens: [
       /** https://etherscan.io/tokens */
       {
         factory: EthereumERC20__factory,
-        name: TOKEN_NAMES.DSLA      
+        name: TOKEN_NAMES.DSLA,
+        address: '0x70359c1eeB98eb3D12eE7178359a4541ff11Cc8E',
+
+      },
+            {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.DAI,
+        address: '0x4AF15ec2A0BD43Db75dd04E62FAA3B8EF36b00d5',
       },
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.USDC,
-        address: '0xA8CE8aee21bC2A48a5EF670afCc9274C7bbbC035',
+        address: '0x176211869cA2b568f2A7D4EE941E073a821EE1ff',
+      },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.USDT,
+        address: '0x176211869cA2b568f2A7D4EE941E073a821EE1ff',
       },
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.WETH,
-        address: '0x4F9A0e7FD2Bf6067db6994CF12E4495Df938E6e9',
+        address: '0xe5D7C2a44FfDDf6b295A15c148167daaAf5Cf34f',
       },
     ],
     ipfs: process.env.IPFS_URI,
@@ -57,7 +69,7 @@ export const zkevm: NetworkUserConfig = {
       deleteOldJobs: false,
       cleanLocalFolder: false,
       nodeFunds: '1',
-      ethWsUrl: process.env.ZKEVM_URI,
+      ethWsUrl: process.env.LINEA_URI,
       nodesConfiguration: [],
     },
     addresses: {},
