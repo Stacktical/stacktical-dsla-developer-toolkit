@@ -42,6 +42,21 @@ export const linea: NetworkUserConfig = {
         address: '0x70359c1eeB98eb3D12eE7178359a4541ff11Cc8E',
 
       },
+            {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.DAI,
+        address: '0x4AF15ec2A0BD43Db75dd04E62FAA3B8EF36b00d5',
+      },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.USDC,
+        address: '0x176211869cA2b568f2A7D4EE941E073a821EE1ff',
+      },
+      {
+        factory: EthereumERC20__factory,
+        name: TOKEN_NAMES.USDT,
+        address: '0x176211869cA2b568f2A7D4EE941E073a821EE1ff',
+      },
       {
         factory: EthereumERC20__factory,
         name: TOKEN_NAMES.WETH,
